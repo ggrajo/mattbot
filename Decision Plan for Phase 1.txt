@@ -1,0 +1,462 @@
+MattBot Phase 1 recap (everything decided/discussed in this chat about the project)
+Note: This is NOT the technical plan chapter outline. This is the consolidated decisions, constraints, requirements, and open items we already discussed.
+
+============================================================
+1) What Phase 1 is (product promise)
+============================================================
+- Product: MattBot
+- Phase 1 promise (core value):
+  - A phone concierge MVP that answers calls when the user is busy or unreachable
+  - Screens callers with a short conversation
+  - Sends the user a clear summary and transcript
+  - Includes strong privacy and security controls as MVP scope (not “later”)
+
+- Phase 1 deliverable option selected:
+  - Option C: Mobile app + backend + inbound AI calling + call forwarding mode + live handoff included
+
+- Phase 1 is intentionally narrow (single main channel first):
+  - Phone calls only as the primary channel for Phase 1 (inbound focus)
+
+============================================================
+2) Who Phase 1 is for (market + constraints)
+============================================================
+- Target users for Phase 1: personal users only
+- Estimated users in first ~3 months after launch: 50 to 100 or less
+- Phase 1 launch country: US only
+- Supported languages in Phase 1: English only
+- Timezones in Phase 1: auto-detect per user
+- Platforms in Phase 1: iOS + Android (both)
+- Multi-device behavior:
+  - A single user account can be logged in on multiple devices at the same time: YES
+
+============================================================
+3) Core call handling modes (inbound)
+============================================================
+Phase 1 supports inbound call handling via two modes (users can enable either or both):
+
+A) Dedicated AI number mode
+- User is assigned an AI-managed phone number
+- Callers can dial this AI number directly
+- User controls who is allowed to reach this number (example rule types: everyone, contacts only, VIP only)
+- Provisioning approach: auto-provision at onboarding (assign the number during setup)
+
+B) Conditional call forwarding fallback mode (required in Phase 1)
+- User keeps their normal phone number
+- When the user is busy or unreachable, calls are forwarded to the AI
+- Key promise: AI only answers forwarded calls when the user cannot answer (not every call)
+
+Forwarding triggers (final selection not explicitly finalized in chat):
+- Forwarding is required in Phase 1
+- Trigger set to “best approach” (candidates discussed):
+  - busy only
+  - unreachable only
+  - busy + unreachable
+
+Carrier support constraints:
+- “Decide what’s best” was requested (no final list set in chat)
+
+Forwarding misconfiguration risk:
+- The product must detect and warn about unconditional forwarding (risk: AI answers every call)
+
+============================================================
+4) Live handoff (required in Phase 1 deliverable)
+============================================================
+- Live handoff is included (Option C chosen)
+- Live handoff concept:
+  - AI answers and screens first
+  - Under certain conditions, user can “take over” the call live
+- Live handoff condition settings discussed (from the master plan):
+  - Off
+  - VIP only
+  - Urgent only
+  - VIP + Urgent
+- The “loop” risk (explicit question raised):
+  - If handoff destination is the user’s real phone number and the user is still busy/unreachable, this could cause repeated forwarding/loops
+  - Best approach was requested, but not finalized in chat as a concrete rule set
+  - This remains a known risk item to design around in the technical plan
+
+Handoff destination (not finalized in chat):
+- Candidates discussed:
+  - User’s real phone number
+  - In-app VoIP call
+  - Choice per user
+
+Handoff failure behavior (required):
+- If handoff attempt fails, conversation must continue (no dead air)
+
+============================================================
+5) Screening conversation (what the AI does on the call)
+============================================================
+- Goal of screening:
+  - Collect only what the user needs to decide what to do next
+- Core capture targets:
+  - Who is calling
+  - Why they are calling
+  - How urgent it is
+  - How to reach them back
+- If caller refuses to answer screening questions:
+  - fallback to simple message-taking so the call still produces usable output
+
+Temperament and identity boundaries:
+- The assistant must present itself as an assistant (not pretend to be the user)
+- Avoid harassment/insults/threats
+- Avoid sharing sensitive info
+- Avoid strong claims without evidence
+- Focus on capturing message details, not “solving everything”
+
+============================================================
+6) Post-call artifacts (what the user receives)
+============================================================
+After each call, the user should have a call record that includes:
+- Concise summary (fast to read)
+- Full transcript (for detail)
+- Labels (example categories discussed: urgency, spam, sales, VIP, normal, unknown)
+- Label reasons (for transparency)
+- Optional recording link if recording is enabled
+
+Failure tolerance requirement:
+- If any AI component fails, the system must still create a call record and clearly mark missing parts
+
+============================================================
+7) Follow-up actions from call record
+============================================================
+User actions discussed as part of Phase 1 workflow:
+- Call back
+- Text back (approval-first behavior)
+- Add a note
+- Set a reminder
+- Block a number
+
+============================================================
+8) Texting behavior (Twilio)
+============================================================
+- Texting provider: Twilio
+- Approval-first texting:
+  - Always required (default behavior)
+- Templates:
+  - Provide an initial template list (example count discussed: ~10 common situations)
+- AI drafting texts:
+  - AI should draft texts automatically after every call: YES
+- Attachments:
+  - Not needed in Phase 1: NO attachments
+
+============================================================
+9) Notifications, privacy, quiet hours
+============================================================
+- Notification privacy default:
+  - Private by default: YES
+- Lock screen privacy rule (explicitly stated):
+  - Lock screen shows: “New call screened”
+  - No caller name
+  - No message content
+  - User opens app and unlocks to see details
+- Quiet hours:
+  - Required in Phase 1: YES
+- Notification reliability:
+  - Must have retry and delivery tracking (not “best effort only”)
+
+Important notifications (not fully finalized in chat):
+- Candidates discussed:
+  - VIP only
+  - urgent only
+  - VIP + urgent
+  - manual only
+
+============================================================
+10) Recording + voicemail detection + disclosures
+============================================================
+Call recording:
+- Recording behavior baseline (from the master plan + discussion):
+  - Recording is off by default
+  - User can enable it
+  - If enabled, recording playback must be protected (biometrics)
+- Recording consent announcement:
+  - If recording is enabled, AI announces recording at start: YES
+
+Voicemail detection:
+- Needed in Phase 1: YES
+
+Transcript/summarization disclosure:
+- “Should the AI mention calls are transcribed/summarized?”: YES
+- Exact disclosure mechanism not fully finalized in chat:
+  - Candidates discussed:
+    - AI says it during call
+    - Legal text only (terms/privacy)
+
+============================================================
+11) Memory rules (user-level “memory” inside the product)
+============================================================
+- Default memory: ON
+- Memory can store caller names and preferences: YES
+- Memory must be visible and deletable in-app: YES
+- Memory deletion controls are required as part of Phase 1 user controls
+
+============================================================
+12) Data retention + deletion
+============================================================
+- Default retention period:
+  - “90 days” was mentioned as an initial preference, but you also requested “decide what’s best”
+  - Final value not explicitly locked in chat
+- Retention applies to which objects:
+  - Discussed candidates:
+    - transcripts
+    - summaries
+    - recordings
+    - notes
+    - reminders
+    - audit logs
+- User can delete per call: YES
+- Account deletion rules (not finalized in chat):
+  - candidates: hard delete vs soft delete with retention period
+
+Export my data:
+- Not required in Phase 1: NO
+
+============================================================
+13) Authentication, sessions, MFA
+============================================================
+Authentication:
+- Google login + email/password
+- Require OTP setup
+- MFA requirement:
+  - Required in Phase 1
+
+Allowed MFA methods (explicitly stated):
+- TOTP authenticator apps (Microsoft Authenticator, Google Authenticator) (free)
+- Email OTP (free, weaker)
+
+Session policy (requested to be decided, not finalized in chat):
+- Needs definitions for:
+  - max session age
+  - idle timeout
+  - device revoke rules
+
+============================================================
+14) Admin / portal requirement
+============================================================
+Web admin portal in Phase 1:
+- YES, if “client-facing” means the client team building/operating this app
+- NO, if “client” means end consumers/personal users
+(So: an admin/operator portal is in-scope; a consumer web dashboard is not requested.)
+
+Internal admin role:
+- YES (for the web admin portal)
+
+============================================================
+15) Architecture preferences discussed (implementation-level)
+============================================================
+Backend languages:
+- You suggested a split:
+  - Python for most backend logic/services
+  - Node.js for real-time streaming/call media handling (because streaming is often simpler in Node)
+- Final selection was requested as “decide best,” but this Python + Node split is the stated preference direction
+
+Realtime needs:
+- Websockets for live call events to the app: YES
+
+Queue system:
+- SQS discussed (cost notes were mentioned but not as a final architecture decision blocker)
+
+Database:
+- PostgreSQL (RDS option discussed)
+
+File storage:
+- S3 bucket (pricing notes discussed)
+
+Cloud provider:
+- AWS
+
+Deployment style:
+- Docker on VM (not Kubernetes/serverless)
+
+Environments:
+- Final decision: dev + production only
+- Staging:
+  - You asked what it is and cost impact
+  - Final decision: NO staging for now
+
+CI/CD:
+- GitHub Actions
+
+Release strategy:
+- Requested to be decided, not finalized in chat:
+  - manual vs automatic
+  - feature flags required yes/no (requested to be decided, not finalized)
+  - safe rollout expectations exist because telephony changes are risky
+
+Observability/logging:
+- Final decision: Sentry self-hosted
+
+Monitoring/alerts:
+- YES, and must include alerts for:
+  - failed calls
+  - failed summaries
+  - queue backlog
+  - cost spikes
+
+============================================================
+16) Security baseline (must be defined because personal data)
+============================================================
+Security expectations explicitly treated as mandatory MVP scope:
+- Data protection in transit and at rest
+- Strong access controls to prevent cross-user data exposure
+- Biometric protection for call content (transcripts, recordings, and sensitive fields per policy)
+- Clear retention and deletion behavior
+- Audit logs for sensitive actions (device changes, deletions, etc.)
+- Abuse prevention controls (rate limits, blocking)
+
+Encryption at rest requirement:
+- Everything sensitive (server-side + any cached client-side content)
+
+Local storage rules (mobile):
+- If summaries/transcripts are cached:
+  - store encrypted on device
+  - clear cache on logout, device revoke, delete-all, account deletion
+  - enforce biometric gating before display, based on selected policy
+
+Network + DB security (raised as a gap to define):
+- You explicitly asked to ensure network security and DB security are fully defined because of personal data
+- Concrete implementation choices were not fully enumerated in chat as final decisions
+- This remains a required section to lock down in the technical plan
+
+Abuse prevention (requested to decide, not finalized in chat):
+- rate limits per user, per IP, per phone number, etc.
+
+============================================================
+17) Secrets management (cost-sensitive)
+============================================================
+- You raised that a managed secrets manager is not free and asked for free alternatives
+- Preferred handling direction discussed:
+  - Local development: .env file (must be gitignored, never committed)
+  - CI/CD: GitHub Secrets
+- “Is it safe to store secrets locally?” was asked:
+  - Safety depends on: never committing them, OS permissions, and avoiding embedding secrets in mobile builds
+- Final “free alternative” choice beyond .env + GitHub Secrets was not explicitly locked as a named service in chat
+
+============================================================
+18) Testing + QA
+============================================================
+Testing level requirements:
+- All: unit tests + integration tests + end-to-end tests
+
+Device testing:
+- Plan for emulator testing and real device testing
+
+Call forwarding test plan:
+- YES, required
+
+QA evidence:
+- You asked about supporting documentation and video proof from QA (not finalized as a hard rule in chat)
+
+============================================================
+19) Delivery, timeline, people, sign-off
+============================================================
+Deadline:
+- 2 months after February 16, 2026
+  - Target completion window: around April 16, 2026 (subject to exact project start date alignment)
+
+Team composition:
+- 2 fullstack devs
+- 1 QA
+
+Acceptance/sign-off:
+- Acceptance owner: owner (you)
+
+Handoff / stakeholders note:
+- “Your team + Matt’s team” was mentioned in the chat as part of handoff-related answers
+
+Project management tool:
+- Asana
+
+Preferred development approach (requested to decide, not finalized in chat):
+- Scrum 2-week sprints vs Kanban vs other
+
+============================================================
+20) Out of scope (explicitly from the master plan)
+============================================================
+Explicitly out of scope for Phase 1 (master plan list):
+1) Inbox management for email and messaging channels
+2) Social media integrations
+3) Link and document reading features
+4) Full automation that takes actions without the user approving them
+5) Deep “always learning” browsing-based memory of user online activity
+6) Complex subagent orchestration beyond the call concierge workflow
+7) Web3 or on-chain functionality
+
+(Additional examples like outbound sales calls, appointment booking, CRM sync, WhatsApp, etc. were referenced as examples in chat, but the “authoritative” out-of-scope list you pointed to is the master plan.)
+
+============================================================
+21) Open items that were explicitly “decide for me” but not visibly finalized in chat
+============================================================
+These were requested to be decided, but the final chosen value is not explicitly present in the visible chat text:
+
+- Minimum OS versions:
+  - iOS: (15/16/17/other)
+  - Android: (8/10/12/other)
+
+- Mobile app tech stack selection:
+  - React Native vs Flutter vs other
+  - (You also referenced “write web code then deploy to iOS/Android,” which matches hybrid stacks; final selection not stated)
+
+- Web admin portal stack selection:
+  - React vs Next.js (final not stated)
+
+- Push notification provider approach:
+  - Firebase only vs APNS + FCM vs other (final not stated)
+
+- Call recording policy details beyond “off by default” and “announce if enabled”:
+  - admin enforce off? (not stated)
+
+- Latency targets:
+  - time-to-answer target seconds
+  - time-to-summary minutes
+
+- Concurrency expectations:
+  - max inbound calls at same time across all users
+
+- Uptime target:
+  - 99% vs 99.5% vs 99.9%
+
+- AI summarization/extraction model choice:
+  - use ElevenLabs built-in summary if sufficient vs OpenAI vs open source (final not stated)
+
+- Labels list and spam detection strictness:
+  - manual only vs AI suggestion vs AI auto-label allowed (final not stated)
+
+- Retention exact duration final value and which objects exactly are included:
+  - 90 days mentioned, but “decide best” requested
+
+- Account deletion model:
+  - hard delete vs soft delete
+
+- Feature flags requirement (yes/no):
+  - asked to decide, not finalized
+
+- API style:
+  - REST vs GraphQL vs both
+  - OpenAPI required yes/no (asked, not finalized)
+
+- Phone number normalization rule:
+  - E.164 required yes/no (asked, not finalized)
+
+- Call duration limits:
+  - non-VIP max minutes
+  - VIP max minutes
+
+- Fallback behavior when AI fails to answer:
+  - voicemail style message vs always forward vs end call message (asked, not finalized)
+
+- Carrier support policy:
+  - whether to support only some carriers at launch (asked, not finalized)
+
+- Audit logging scope:
+  - security events only vs all user actions vs everything including reads (asked, not finalized)
+
+- “Contacts as first-class feature” in Phase 1:
+  - yes/no (asked, not finalized)
+
+- Release strategy:
+  - manual vs auto on main, rollout steps (asked, not finalized)
+
+- Secrets free alternative beyond .env + GitHub Secrets:
+  - asked, not finalized as a named tool/service
