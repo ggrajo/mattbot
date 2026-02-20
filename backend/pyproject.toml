@@ -1,0 +1,72 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mattbot-backend"
+version = "0.1.0"
+description = "MattBot Phase 1 backend – identity, auth, sessions, devices, MFA"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.7.0",
+    "sqlalchemy[asyncio]>=2.0.36",
+    "asyncpg>=0.30.0",
+    "alembic>=1.14.0",
+    "argon2-cffi>=23.1.0",
+    "pyotp>=2.9.0",
+    "PyJWT>=2.10.0",
+    "cryptography>=44.0.0",
+    "google-auth>=2.37.0",
+    "requests>=2.32.0",
+    "httpx>=0.28.0",
+    "redis>=5.2.0",
+    "python-multipart>=0.0.18",
+    "email-validator>=2.2.0",
+    "qrcode>=8.0",
+    "sentry-sdk[fastapi]>=2.19.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.25.0",
+    "pytest-cov>=6.0.0",
+    "httpx>=0.28.0",
+    "fakeredis>=2.26.0",
+    "ruff>=0.8.0",
+    "mypy>=1.13.0",
+    "aiosqlite>=0.20.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "B", "SIM", "S"]
+ignore = ["S101", "S105", "S106", "B008"]
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["asyncpg.*", "argon2.*", "pyotp.*", "google.*", "fakeredis.*", "qrcode.*"]
+ignore_missing_imports = true

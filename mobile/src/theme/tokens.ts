@@ -1,0 +1,80 @@
+export const spacing = {
+  xs: 4,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 24,
+  xxl: 32,
+  xxxl: 48,
+} as const;
+
+export const radii = {
+  sm: 6,
+  md: 10,
+  lg: 16,
+  xl: 24,
+  full: 9999,
+} as const;
+
+export const typography = {
+  h1: { fontSize: 28, lineHeight: 36, fontWeight: '700' as const },
+  h2: { fontSize: 22, lineHeight: 30, fontWeight: '600' as const },
+  h3: { fontSize: 18, lineHeight: 26, fontWeight: '600' as const },
+  body: { fontSize: 16, lineHeight: 24, fontWeight: '400' as const },
+  bodySmall: { fontSize: 14, lineHeight: 20, fontWeight: '400' as const },
+  caption: { fontSize: 12, lineHeight: 16, fontWeight: '400' as const },
+  button: { fontSize: 16, lineHeight: 24, fontWeight: '600' as const },
+  mono: { fontSize: 14, lineHeight: 20, fontWeight: '500' as const, fontFamily: 'monospace' },
+} as const;
+
+export interface ColorTokens {
+  background: string;
+  surface: string;
+  surfaceVariant: string;
+  primary: string;
+  primaryContainer: string;
+  onPrimary: string;
+  secondary: string;
+  secondaryContainer: string;
+  error: string;
+  errorContainer: string;
+  onError: string;
+  success: string;
+  successContainer: string;
+  warning: string;
+  warningContainer: string;
+  textPrimary: string;
+  textSecondary: string;
+  textDisabled: string;
+  textInverse: string;
+  border: string;
+  borderFocused: string;
+  overlay: string;
+  skeleton: string;
+}
+
+export interface ShadowTokens {
+  card: {
+    shadowColor: string;
+    shadowOffset: { width: number; height: number };
+    shadowOpacity: number;
+    shadowRadius: number;
+    elevation: number;
+  };
+  modal: {
+    shadowColor: string;
+    shadowOffset: { width: number; height: number };
+    shadowOpacity: number;
+    shadowRadius: number;
+    elevation: number;
+  };
+}
+
+export interface Theme {
+  dark: boolean;
+  colors: ColorTokens;
+  spacing: typeof spacing;
+  radii: typeof radii;
+  typography: typeof typography;
+  shadows: ShadowTokens;
+}

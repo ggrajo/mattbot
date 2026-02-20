@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+dist/
+build/
+.venv/
+venv/
+*.so
+
+# Node / React Native
+node_modules/
+.expo/
+ios/Pods/
+android/.gradle/
+android/app/build/
+*.jks
+*.keystore
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+htmlcov/
+.coverage
+coverage/
+lcov.info
+
+# Testing
+.pytest_cache/
+.mypy_cache/
+
+# Build artifacts
+*.log
