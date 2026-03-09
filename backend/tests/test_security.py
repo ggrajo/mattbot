@@ -1,6 +1,5 @@
 """Unit tests for core/security.py"""
 
-import pytest
 
 from app.core.security import (
     constant_time_compare,

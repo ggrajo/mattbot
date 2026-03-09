@@ -1,8 +1,11 @@
 {
+  "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
     "target": "esnext",
     "module": "commonjs",
-    "lib": ["es2022"],
+    "lib": [
+      "es2022"
+    ],
     "jsx": "react-native",
     "strict": true,
     "moduleResolution": "node",
@@ -15,9 +18,20 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ]
     }
   },
-  "include": ["src/**/*", "index.js", "App.tsx", "jest.setup.js"],
-  "exclude": ["node_modules", "babel.config.js", "metro.config.js"]
+  "include": [
+    "src/**/*",
+    "index.js",
+    "App.tsx",
+    "jest.setup.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js"
+  ]
 }

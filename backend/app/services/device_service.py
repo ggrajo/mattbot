@@ -18,6 +18,7 @@ async def create_or_get_device(
     device_name: str | None = None,
     app_version: str | None = None,
     os_version: str | None = None,
+    last_ip: str | None = None,
 ) -> Device:
     device = Device(
         owner_user_id=owner_user_id,
@@ -25,6 +26,7 @@ async def create_or_get_device(
         device_name=device_name,
         app_version=app_version,
         os_version=os_version,
+        last_ip=last_ip,
         last_seen_at=datetime.now(UTC),
     )
     db.add(device)
@@ -48,6 +50,7 @@ async def update_device(
     device_name: str | None = None,
     app_version: str | None = None,
     os_version: str | None = None,
+    last_ip: str | None = None,
 ) -> Device:
     if device_name is not None:
         device.device_name = device_name
@@ -55,6 +58,8 @@ async def update_device(
         device.app_version = app_version
     if os_version is not None:
         device.os_version = os_version
+    if last_ip is not None:
+        device.last_ip = last_ip
     device.last_seen_at = datetime.now(UTC)
     await db.flush()
     return device

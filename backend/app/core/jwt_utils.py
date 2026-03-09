@@ -52,5 +52,7 @@ def decode_token(token: str, expected_type: str | None = None) -> dict:
         algorithms=[settings.JWT_ALGORITHM],
     )
     if expected_type and payload.get("type") != expected_type:
-        raise jwt.InvalidTokenError(f"Expected token type '{expected_type}', got '{payload.get('type')}'")
+        raise jwt.InvalidTokenError(
+            f"Expected token type '{expected_type}', got '{payload.get('type')}'"
+        )
     return payload

@@ -1,11 +1,23 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import CheckConstraint, ForeignKey, Index, String, Text, UniqueConstraint, text
+from sqlalchemy import (
+    CheckConstraint,
+    DateTime,
+    ForeignKey,
+    Index,
+    String,
+    Text,
+    text,
+)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
+
+
+def _tz() -> DateTime:
+    return DateTime(timezone=True)
 
 
 class PushToken(Base):
@@ -22,14 +34,20 @@ class PushToken(Base):
     provider: Mapped[str] = mapped_column(String(10), nullable=False)
     token: Mapped[str] = mapped_column(Text, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
-        nullable=False, server_default=text("now()")
+        _tz(), nullable=False, server_default=text("now()")
     )
-    revoked_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    revoked_at: Mapped[datetime | None] = mapped_column(_tz(), nullable=True)
 
     device: Mapped["Device"] = relationship(back_populates="push_tokens")  # noqa: F821
 
     __table_args__ = (
-        CheckConstraint("provider IN ('fcm')", name="ck_push_tokens_provider"),
-        UniqueConstraint("provider", "token", name="uq_push_tokens_provider_token"),
+        CheckConstraint("provider IN ('fcm', 'apns')", name="ck_push_tokens_provider"),
+        Index(
+            "uq_push_tokens_active_token",
+            "provider",
+            "token",
+            unique=True,
+            postgresql_where=text("revoked_at IS NULL"),
+        ),
         Index("push_tokens_device_idx", "device_id"),
     )

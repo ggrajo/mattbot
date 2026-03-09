@@ -36,3 +36,46 @@ def test_redact_dict_keys():
     assert redacted["password"] == "[REDACTED]"
     assert "user@test.com" not in redacted["email"]
     assert redacted["safe_field"] == "hello"
+
+
+def test_redact_cookie_header():
+    data = {"cookie": "session=abc123; token=xyz"}
+    redacted = redact_dict(data)
+    assert redacted["cookie"] == "[REDACTED]"
+
+
+def test_redact_twilio_signature():
+    data = {"x-twilio-signature": "sha256=abcdef1234567890"}
+    redacted = redact_dict(data)
+    assert redacted["x-twilio-signature"] == "[REDACTED]"
+
+
+def test_redact_webhook_secret():
+    data = {"x-webhook-secret": "whsec_abc123"}
+    redacted = redact_dict(data)
+    assert redacted["x-webhook-secret"] == "[REDACTED]"
+
+
+def test_redact_dict_key_containing_secret():
+    data = {"api_secret": "sk-12345", "my_token_value": "tok-xxx"}
+    redacted = redact_dict(data)
+    assert redacted["api_secret"] == "[REDACTED]"
+    assert redacted["my_token_value"] == "[REDACTED]"
+
+
+def test_redact_nested_dict():
+    data = {
+        "headers": {
+            "authorization": "Bearer tok",
+            "content-type": "application/json",
+        },
+        "body": {
+            "password": "secret",
+            "name": "Alice",
+        },
+    }
+    redacted = redact_dict(data)
+    assert redacted["headers"]["authorization"] == "[REDACTED]"
+    assert redacted["headers"]["content-type"] == "application/json"
+    assert redacted["body"]["password"] == "[REDACTED]"
+    assert redacted["body"]["name"] == "Alice"

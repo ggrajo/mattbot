@@ -16,6 +16,9 @@ async def register_push_token(
     provider: str,
     token: str,
 ) -> PushToken:
+    now = datetime.now(UTC)
+
+    # Revoke any existing active entries for this device+provider
     await db.execute(
         update(PushToken)
         .where(
@@ -23,7 +26,18 @@ async def register_push_token(
             PushToken.provider == provider,
             PushToken.revoked_at.is_(None),
         )
-        .values(revoked_at=datetime.now(UTC))
+        .values(revoked_at=now)
+    )
+
+    # Also revoke any other device holding the same token value
+    await db.execute(
+        update(PushToken)
+        .where(
+            PushToken.provider == provider,
+            PushToken.token == token,
+            PushToken.revoked_at.is_(None),
+        )
+        .values(revoked_at=now)
     )
 
     push_token = PushToken(

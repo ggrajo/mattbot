@@ -27,6 +27,11 @@ dependencies = [
     "email-validator>=2.2.0",
     "qrcode>=8.0",
     "sentry-sdk[fastapi]>=2.19.0",
+    "aiosmtplib>=5.0.0",
+    "stripe>=8.0.0",
+    "twilio>=9.0.0",
+    "firebase-admin>=6.0.0",
+    "websockets>=13.0",
 ]
 
 [project.optional-dependencies]
@@ -68,5 +73,13 @@ disallow_untyped_defs = true
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
-module = ["asyncpg.*", "argon2.*", "pyotp.*", "google.*", "fakeredis.*", "qrcode.*"]
+module = ["asyncpg.*", "argon2.*", "pyotp.*", "google.*", "fakeredis.*", "qrcode.*", "aiosmtplib.*", "stripe.*", "twilio.*"]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_defs = false
+
+[[tool.mypy.overrides]]
+module = ["app.models.*"]
+disable_error_code = ["name-defined"]

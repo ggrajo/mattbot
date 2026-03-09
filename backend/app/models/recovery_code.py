@@ -1,11 +1,15 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import ForeignKey, Index, String, UniqueConstraint, text
+from sqlalchemy import DateTime, ForeignKey, Index, String, UniqueConstraint, text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
+
+
+def _tz() -> DateTime:
+    return DateTime(timezone=True)
 
 
 class RecoveryCode(Base):
@@ -20,9 +24,9 @@ class RecoveryCode(Base):
         nullable=False,
     )
     code_hash: Mapped[str] = mapped_column(String(64), nullable=False)
-    used_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    used_at: Mapped[datetime | None] = mapped_column(_tz(), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
-        nullable=False, server_default=text("now()")
+        _tz(), nullable=False, server_default=text("now()")
     )
 
     user: Mapped["User"] = relationship(back_populates="recovery_codes")  # noqa: F821

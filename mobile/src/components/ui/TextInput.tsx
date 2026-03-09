@@ -3,16 +3,18 @@ import {
   View,
   TextInput as RNTextInput,
   Text,
-  TouchableOpacity,
-  StyleSheet,
   TextInputProps as RNTextInputProps,
+  Platform,
 } from 'react-native';
+import { Icon } from './Icon';
+import { IconButton } from './IconButton';
 import { useTheme } from '../../theme/ThemeProvider';
 
 interface Props extends Omit<RNTextInputProps, 'style'> {
   label: string;
   error?: string;
   isPassword?: boolean;
+  leftIcon?: string;
   containerStyle?: object;
 }
 
@@ -20,6 +22,7 @@ export function TextInput({
   label,
   error,
   isPassword = false,
+  leftIcon,
   containerStyle,
   ...rest
 }: Props) {
@@ -29,7 +32,20 @@ export function TextInput({
 
   const { colors, spacing, radii, typography } = theme;
 
-  const borderColor = error ? colors.error : focused ? colors.borderFocused : colors.border;
+  const borderColor = error
+    ? colors.error
+    : focused
+      ? colors.borderFocused
+      : colors.border;
+
+  const focusGlow = focused && !error && Platform.OS === 'ios'
+    ? {
+        shadowColor: colors.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+      }
+    : {};
 
   return (
     <View style={[{ marginBottom: spacing.lg }, containerStyle]}>
@@ -38,6 +54,7 @@ export function TextInput({
           ...typography.bodySmall,
           color: error ? colors.error : colors.textSecondary,
           marginBottom: spacing.xs,
+          fontWeight: '500',
         }}
         accessibilityRole="text"
       >
@@ -49,11 +66,20 @@ export function TextInput({
           alignItems: 'center',
           borderWidth: 1.5,
           borderColor,
-          borderRadius: radii.md,
+          borderRadius: radii.lg,
           backgroundColor: colors.surface,
           paddingHorizontal: spacing.md,
+          gap: spacing.sm,
+          ...focusGlow,
         }}
       >
+        {leftIcon && (
+          <Icon
+            name={leftIcon}
+            size="md"
+            color={focused ? colors.borderFocused : colors.textDisabled}
+          />
+        )}
         <RNTextInput
           {...rest}
           secureTextEntry={isPassword && !showPassword}
@@ -69,22 +95,20 @@ export function TextInput({
             flex: 1,
             ...typography.body,
             color: colors.textPrimary,
-            paddingVertical: spacing.md,
+            paddingVertical: spacing.md + 2,
           }}
           placeholderTextColor={colors.textDisabled}
           allowFontScaling
           accessibilityLabel={label}
         />
         {isPassword && (
-          <TouchableOpacity
+          <IconButton
+            icon={showPassword ? 'eye-off-outline' : 'eye-outline'}
             onPress={() => setShowPassword(!showPassword)}
             accessibilityLabel={showPassword ? 'Hide password' : 'Show password'}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <Text style={{ color: colors.textSecondary, ...typography.bodySmall }}>
-              {showPassword ? 'Hide' : 'Show'}
-            </Text>
-          </TouchableOpacity>
+            size="md"
+            color={colors.textSecondary}
+          />
         )}
       </View>
       {error && (

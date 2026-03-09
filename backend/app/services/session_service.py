@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.config import settings
 from app.core.jwt_utils import create_access_token
 from app.core.security import generate_token, hash_token
+from app.middleware.error_handler import AppError
 from app.models.session import Session
 from app.services import audit_service
 
@@ -33,11 +34,14 @@ async def create_session(
     access_expires = now + timedelta(minutes=settings.JWT_ACCESS_TOKEN_MINUTES)
     refresh_expires = now + timedelta(days=settings.REFRESH_TOKEN_DAYS)
 
+    temp_access_id = uuid.uuid4()
+    temp_access_hash = hash_token(generate_token(32))
+
     session = Session(
         owner_user_id=user_id,
         device_id=device_id,
-        access_token_id=uuid.uuid4(),
-        access_token_hash=hash_token("placeholder"),
+        access_token_id=temp_access_id,
+        access_token_hash=temp_access_hash,
         access_expires_at=access_expires,
         refresh_token_hash=refresh_hash,
         refresh_expires_at=refresh_expires,
@@ -50,6 +54,7 @@ async def create_session(
 
     access_token = create_access_token(user_id, session.id, device_id)
     session.access_token_hash = hash_token(access_token)
+    session.access_token_id = uuid.uuid4()
     await db.flush()
 
     await audit_service.log_event(
@@ -83,18 +88,24 @@ async def refresh_session(
     session = result.scalar_one_or_none()
 
     if session is None:
-        raise ValueError("Invalid refresh token")
+        raise AppError("INVALID_TOKEN", "Invalid refresh token", 401)
 
     if session.revoked_at is not None:
-        raise ValueError("Session has been revoked")
+        raise AppError("SESSION_REVOKED", "Session has been revoked", 401)
 
     now = datetime.now(UTC)
-    if session.refresh_expires_at.replace(tzinfo=UTC) < now:
-        raise ValueError("Refresh token has expired")
+    refresh_exp = session.refresh_expires_at
+    if refresh_exp.tzinfo is None:
+        refresh_exp = refresh_exp.replace(tzinfo=UTC)
+    if refresh_exp < now:
+        raise AppError("TOKEN_EXPIRED", "Refresh token has expired", 401)
 
-    absolute_age = (now - session.created_at.replace(tzinfo=UTC)).days
+    created = session.created_at
+    if created.tzinfo is None:
+        created = created.replace(tzinfo=UTC)
+    absolute_age = (now - created).days
     if absolute_age > settings.ABSOLUTE_SESSION_DAYS:
-        raise ValueError("Session exceeded maximum age")
+        raise AppError("SESSION_EXPIRED", "Session exceeded maximum age", 401)
 
     from app.models.device import Device
     device = await db.get(Device, session.device_id)
@@ -102,12 +113,12 @@ async def refresh_session(
         session.revoked_at = now
         session.revoke_reason = "device_revoked"
         await db.flush()
-        raise ValueError("Device has been revoked")
+        raise AppError("DEVICE_REVOKED", "Device has been revoked", 401)
 
     from app.models.user import User
     user = await db.get(User, session.owner_user_id)
     if user is None or user.status in ("deleted", "locked"):
-        raise ValueError("Account is disabled")
+        raise AppError("ACCOUNT_DISABLED", "Account is disabled", 401)
 
     session.revoked_at = now
     session.revoke_reason = "rotated"
@@ -117,11 +128,12 @@ async def refresh_session(
     access_expires = now + timedelta(minutes=settings.JWT_ACCESS_TOKEN_MINUTES)
     refresh_expires = now + timedelta(days=settings.REFRESH_TOKEN_DAYS)
 
+    new_temp_hash = hash_token(generate_token(32))
     new_session = Session(
         owner_user_id=session.owner_user_id,
         device_id=session.device_id,
         access_token_id=uuid.uuid4(),
-        access_token_hash=hash_token("placeholder"),
+        access_token_hash=new_temp_hash,
         access_expires_at=access_expires,
         refresh_token_hash=new_refresh_hash,
         refresh_expires_at=refresh_expires,
@@ -137,6 +149,7 @@ async def refresh_session(
         session.owner_user_id, new_session.id, session.device_id
     )
     new_session.access_token_hash = hash_token(access_token)
+    new_session.access_token_id = uuid.uuid4()
     await db.flush()
 
     await audit_service.log_event(
@@ -159,9 +172,22 @@ async def revoke_session(
     db: AsyncSession,
     session: Session,
     reason: str = "logout",
+    *,
+    ip: str | None = None,
 ) -> None:
     session.revoked_at = datetime.now(UTC)
     session.revoke_reason = reason
+
+    await audit_service.log_event(
+        db,
+        owner_user_id=session.owner_user_id,
+        event_type="session.revoked",
+        target_type="session",
+        target_id=session.id,
+        ip=ip,
+        details={"reason": reason},
+    )
+
     await db.flush()
 
 
@@ -178,7 +204,7 @@ async def revoke_all_user_sessions(
         .where(Session.owner_user_id == user_id, Session.revoked_at.is_(None))
         .values(revoked_at=now, revoke_reason=reason)
     )
-    count = result.rowcount or 0
+    count: int = getattr(result, "rowcount", 0) or 0
 
     await audit_service.log_event(
         db,

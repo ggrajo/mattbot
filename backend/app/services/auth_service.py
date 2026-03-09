@@ -1,5 +1,6 @@
 """Core authentication service: registration, login, OAuth, email verify, password reset."""
 
+import json
 import uuid
 from datetime import UTC, datetime, timedelta
 
@@ -9,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.config import settings
 from app.core.jwt_utils import create_partial_token
 from app.core.oauth import OAuthUserInfo
+from app.core.rate_limiter import _get_redis
 from app.core.security import (
     check_needs_rehash,
     generate_token,
@@ -25,9 +27,51 @@ from app.services.device_service import create_or_get_device
 from app.services.mfa_service import has_active_totp
 from app.services.session_service import create_session, revoke_all_user_sessions
 
-_verification_tokens: dict[str, tuple[uuid.UUID, datetime]] = {}
-_password_reset_tokens: dict[str, tuple[uuid.UUID, datetime]] = {}
-_email_otp_store: dict[str, tuple[str, uuid.UUID, datetime]] = {}
+_VERIFY_PREFIX = "verify_token:"
+_RESET_PREFIX = "reset_token:"
+_EMAIL_OTP_PREFIX = "email_otp:"
+
+
+async def _store_token(prefix: str, token_hash: str, data: dict, ttl_seconds: int) -> None:
+    r = await _get_redis()
+    payload = json.dumps(data, default=str)
+    if r is not None:
+        await r.setex(f"{prefix}{token_hash}", ttl_seconds, payload)
+    else:
+        _memory_fallback[f"{prefix}{token_hash}"] = (
+            payload, datetime.now(UTC) + timedelta(seconds=ttl_seconds)
+        )
+
+
+async def _get_token(prefix: str, token_hash: str) -> dict[str, str] | None:
+    r = await _get_redis()
+    if r is not None:
+        val = await r.get(f"{prefix}{token_hash}")
+        if val is None:
+            return None
+        result: dict[str, str] = json.loads(val)
+        return result
+    else:
+        entry = _memory_fallback.get(f"{prefix}{token_hash}")
+        if entry is None:
+            return None
+        payload, expires = entry
+        if datetime.now(UTC) > expires:
+            _memory_fallback.pop(f"{prefix}{token_hash}", None)
+            return None
+        result = json.loads(payload)
+        return result
+
+
+async def _delete_token(prefix: str, token_hash: str) -> None:
+    r = await _get_redis()
+    if r is not None:
+        await r.delete(f"{prefix}{token_hash}")
+    else:
+        _memory_fallback.pop(f"{prefix}{token_hash}", None)
+
+
+_memory_fallback: dict[str, tuple[str, datetime]] = {}
 
 
 def _validate_password(password: str) -> None:
@@ -96,9 +140,11 @@ async def register_with_email(
     )
 
     verification_token = generate_token(32)
-    _verification_tokens[hash_token(verification_token)] = (
-        user.id,
-        datetime.now(UTC) + timedelta(minutes=15),
+    await _store_token(
+        _VERIFY_PREFIX,
+        hash_token(verification_token),
+        {"user_id": str(user.id)},
+        ttl_seconds=settings.EMAIL_VERIFY_TOKEN_TTL,
     )
 
     await audit_service.log_event(
@@ -118,17 +164,13 @@ async def register_with_email(
 
 async def verify_email(db: AsyncSession, token: str) -> dict:
     token_hash = hash_token(token)
-    entry = _verification_tokens.get(token_hash)
+    entry = await _get_token(_VERIFY_PREFIX, token_hash)
     if entry is None:
         raise AppError("INVALID_TOKEN", "Invalid or expired verification token", 400)
 
-    user_id, expires_at = entry
-    if datetime.now(UTC) > expires_at:
-        _verification_tokens.pop(token_hash, None)
-        raise AppError("TOKEN_EXPIRED", "Verification token has expired", 400)
+    await _delete_token(_VERIFY_PREFIX, token_hash)
 
-    _verification_tokens.pop(token_hash, None)
-
+    user_id = uuid.UUID(entry["user_id"])
     user = await db.get(User, user_id)
     if user is None:
         raise AppError("USER_NOT_FOUND", "User not found", 404)
@@ -202,7 +244,8 @@ async def login_with_email(
 
     if mfa_enrolled:
         challenge_token = create_partial_token(
-            user.id, device.id, "mfa_challenge", expires_minutes=10
+            user.id, device.id, "mfa_challenge",
+            expires_minutes=settings.MFA_CHALLENGE_EXPIRY_MINUTES,
         )
         return {
             "requires_mfa": True,
@@ -210,7 +253,8 @@ async def login_with_email(
         }
     else:
         partial_token = create_partial_token(
-            user.id, device.id, "mfa_enrollment", expires_minutes=10
+            user.id, device.id, "mfa_enrollment",
+            expires_minutes=settings.MFA_CHALLENGE_EXPIRY_MINUTES,
         )
         return {
             "requires_mfa_enrollment": True,
@@ -281,12 +325,14 @@ async def handle_oauth_login(
         mfa_enrolled = await has_active_totp(db, user.id)
         if mfa_enrolled:
             challenge_token = create_partial_token(
-                user.id, device.id, "mfa_challenge", expires_minutes=10
+                user.id, device.id, "mfa_challenge",
+                expires_minutes=settings.MFA_CHALLENGE_EXPIRY_MINUTES,
             )
             return {"requires_mfa": True, "mfa_challenge_token": challenge_token}
         else:
             partial_token = create_partial_token(
-                user.id, device.id, "mfa_enrollment", expires_minutes=10
+                user.id, device.id, "mfa_enrollment",
+                expires_minutes=settings.MFA_CHALLENGE_EXPIRY_MINUTES,
             )
             return {"requires_mfa_enrollment": True, "partial_token": partial_token}
 
@@ -306,7 +352,8 @@ async def handle_oauth_login(
             )
             raise AppError(
                 "LINKING_REQUIRED",
-                "An account with this email already exists. Please sign in with your existing method first to link this provider.",
+                "An account with this email already exists. Please sign in with your "
+                "existing method first to link this provider.",
                 409,
             )
 
@@ -342,7 +389,7 @@ async def handle_oauth_login(
     )
 
     partial_token = create_partial_token(
-        user.id, device.id, "mfa_enrollment", expires_minutes=10
+        user.id, device.id, "mfa_enrollment", expires_minutes=settings.MFA_CHALLENGE_EXPIRY_MINUTES
     )
     return {"requires_mfa_enrollment": True, "partial_token": partial_token}
 
@@ -357,9 +404,11 @@ async def request_password_reset(db: AsyncSession, email: str) -> None:
         return
 
     token = generate_token(32)
-    _password_reset_tokens[hash_token(token)] = (
-        user.id,
-        datetime.now(UTC) + timedelta(minutes=15),
+    await _store_token(
+        _RESET_PREFIX,
+        hash_token(token),
+        {"user_id": str(user.id)},
+        ttl_seconds=settings.PASSWORD_RESET_TOKEN_TTL,
     )
 
     await audit_service.log_event(
@@ -381,17 +430,13 @@ async def confirm_password_reset(
     _validate_password(new_password)
 
     token_hash = hash_token(token)
-    entry = _password_reset_tokens.get(token_hash)
+    entry = await _get_token(_RESET_PREFIX, token_hash)
     if entry is None:
         raise AppError("INVALID_TOKEN", "Invalid or expired reset token", 400)
 
-    user_id, expires_at = entry
-    if datetime.now(UTC) > expires_at:
-        _password_reset_tokens.pop(token_hash, None)
-        raise AppError("TOKEN_EXPIRED", "Reset token has expired", 400)
+    await _delete_token(_RESET_PREFIX, token_hash)
 
-    _password_reset_tokens.pop(token_hash, None)
-
+    user_id = uuid.UUID(entry["user_id"])
     user = await db.get(User, user_id)
     if user is None:
         raise AppError("USER_NOT_FOUND", "User not found", 404)
@@ -410,36 +455,95 @@ async def confirm_password_reset(
     mfa_enrolled = await has_active_totp(db, user_id)
     if mfa_enrolled:
         challenge_token = create_partial_token(
-            user_id, device.id, "mfa_challenge", expires_minutes=10
+            user_id, device.id, "mfa_challenge",
+            expires_minutes=settings.MFA_CHALLENGE_EXPIRY_MINUTES,
         )
         return {"requires_mfa": True, "mfa_challenge_token": challenge_token}
 
     return {"status": "password_reset_complete"}
 
 
+async def change_password(
+    db: AsyncSession,
+    *,
+    user: User,
+    current_password: str | None,
+    new_password: str,
+    ip: str | None = None,
+) -> None:
+    _validate_password(new_password)
+
+    if user.password_hash is not None:
+        if not current_password:
+            raise AppError(
+                "CURRENT_PASSWORD_REQUIRED",
+                "Current password is required",
+                400,
+            )
+        if not verify_password(current_password, user.password_hash):
+            raise AppError("INVALID_CREDENTIALS", "Current password is incorrect", 401)
+
+    user.password_hash = hash_password(new_password)
+
+    existing_identity = (
+        await db.execute(
+            select(AuthIdentity).where(
+                AuthIdentity.owner_user_id == user.id,
+                AuthIdentity.provider == "email_password",
+            )
+        )
+    ).scalar_one_or_none()
+
+    if existing_identity is None and user.email:
+        identity = AuthIdentity(
+            owner_user_id=user.id,
+            provider="email_password",
+            provider_subject=user.email.lower(),
+            provider_email=user.email.lower(),
+            provider_email_verified=user.email_verified,
+        )
+        db.add(identity)
+
+    await revoke_all_user_sessions(
+        db, user.id, reason="password_changed", ip=ip,
+    )
+
+    event_type = (
+        "user.password.set" if current_password is None else "user.password.changed"
+    )
+    await audit_service.log_event(
+        db, owner_user_id=user.id, event_type=event_type, ip=ip,
+    )
+
+    if user.email:
+        await email_service.send_security_notification(
+            user.email,
+            "Your password has been changed. If you did not make this change, "
+            "please reset your password immediately.",
+        )
+
+    await db.flush()
+
+
 async def store_email_otp(
     db: AsyncSession, email: str, otp: str, user_id: uuid.UUID
 ) -> None:
     otp_hash = hash_token(otp)
-    _email_otp_store[email.lower()] = (
-        otp_hash,
-        user_id,
-        datetime.now(UTC) + timedelta(minutes=10),
+    await _store_token(
+        _EMAIL_OTP_PREFIX,
+        email.lower(),
+        {"otp_hash": otp_hash, "user_id": str(user_id)},
+        ttl_seconds=settings.EMAIL_OTP_TTL,
     )
 
 
 async def verify_email_otp(db: AsyncSession, email: str, otp: str) -> uuid.UUID | None:
-    entry = _email_otp_store.get(email.lower())
+    entry = await _get_token(_EMAIL_OTP_PREFIX, email.lower())
     if entry is None:
         return None
 
-    stored_hash, user_id, expires_at = entry
-    if datetime.now(UTC) > expires_at:
-        _email_otp_store.pop(email.lower(), None)
+    if hash_token(otp) != entry["otp_hash"]:
         return None
 
-    if hash_token(otp) != stored_hash:
-        return None
-
-    _email_otp_store.pop(email.lower(), None)
-    return user_id
+    await _delete_token(_EMAIL_OTP_PREFIX, email.lower())
+    return uuid.UUID(entry["user_id"])

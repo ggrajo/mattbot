@@ -1,20 +1,11 @@
 from logging.config import fileConfig
 
-from alembic import context
 from sqlalchemy import engine_from_config, pool
 
+from alembic import context
 from app.config import settings
 from app.database import Base
-from app.models import (  # noqa: F401 – ensure all models are registered
-    AuditEvent,
-    AuthIdentity,
-    Device,
-    MfaMethod,
-    PushToken,
-    RecoveryCode,
-    Session,
-    User,
-)
+from app.models import *  # noqa: F401,F403 – ensure all models are registered
 
 config = context.config
 if config.config_file_name is not None:

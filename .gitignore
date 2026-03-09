@@ -8,6 +8,9 @@ build/
 .venv/
 venv/
 *.so
+.pytest_cache/
+.mypy_cache/
+*.egg-info
 
 # Node / React Native
 node_modules/
@@ -15,13 +18,31 @@ node_modules/
 ios/Pods/
 android/.gradle/
 android/app/build/
+android/app/.cxx/
+mobile/android/app/.cxx/
+mobile/android/app/build/
 *.jks
 *.keystore
+dist/
+build/
+*.apk
+*.aab
 
 # Environment
 .env
 .env.local
+.env.dev
+.env.staging
+.env.prod
 .env.*.local
+.env.production.local
+
+# Secrets & Credentials
+firebase-service-account.json
+*.key
+*.pem
+credentials.json
+secrets.json
 
 # IDE
 .idea/
@@ -29,20 +50,52 @@ android/app/build/
 *.swp
 *.swo
 *~
+*.sublime-project
+*.sublime-workspace
 
 # OS
 .DS_Store
 Thumbs.db
+.AppleDouble
+.LSOverride
 
 # Coverage
 htmlcov/
 .coverage
 coverage/
 lcov.info
+coverage.xml
+*.cover
 
 # Testing
 .pytest_cache/
 .mypy_cache/
+test-results/
+junit.xml
 
 # Build artifacts
 *.log
+dist/
+build/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# Alembic
+alembic/versions/__pycache__/
+
+# Docker
+.dockerignore
+
+# Misc
+.cache/
+.DS_Store
+

@@ -6,6 +6,9 @@ export interface DeviceInfo {
   device_name: string | null;
   app_version: string | null;
   os_version: string | null;
+  last_ip: string | null;
+  last_location: string | null;
+  is_remembered: boolean;
   last_seen_at: string | null;
   created_at: string;
   is_current: boolean;
@@ -22,6 +25,13 @@ export async function revokeDevice(deviceId: string, stepUpToken: string) {
     {},
     { headers: { 'X-Step-Up-Token': stepUpToken } }
   );
+  return data;
+}
+
+export async function rememberDevice(deviceId: string, isRemembered: boolean) {
+  const { data } = await apiClient.post(`/devices/${deviceId}/remember`, {
+    is_remembered: isRemembered,
+  });
   return data;
 }
 

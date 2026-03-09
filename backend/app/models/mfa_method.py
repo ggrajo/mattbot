@@ -1,11 +1,15 @@
 import uuid
-from datetime import datetime
+from datetime import UTC, datetime
 
-from sqlalchemy import CheckConstraint, ForeignKey, Index, String, text
+from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Index, String, text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
+
+
+def _tz() -> DateTime:
+    return DateTime(timezone=True)
 
 
 class MfaMethod(Base):
@@ -24,13 +28,14 @@ class MfaMethod(Base):
     totp_secret_nonce: Mapped[bytes | None] = mapped_column(nullable=True)
     totp_secret_key_version: Mapped[int | None] = mapped_column(nullable=True)
     is_primary: Mapped[bool] = mapped_column(default=False, nullable=False)
-    enabled_at: Mapped[datetime | None] = mapped_column(nullable=True)
-    disabled_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    enabled_at: Mapped[datetime | None] = mapped_column(_tz(), nullable=True)
+    disabled_at: Mapped[datetime | None] = mapped_column(_tz(), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
-        nullable=False, server_default=text("now()")
+        _tz(), nullable=False, server_default=text("now()")
     )
     updated_at: Mapped[datetime] = mapped_column(
-        nullable=False, server_default=text("now()"), onupdate=datetime.utcnow
+        _tz(), nullable=False, server_default=text("now()"),
+        onupdate=lambda: datetime.now(UTC),
     )
 
     user: Mapped["User"] = relationship(back_populates="mfa_methods")  # noqa: F821
