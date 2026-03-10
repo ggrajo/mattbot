@@ -1,16 +1,16 @@
-name: Deploy Dev
+name: Deploy Production
 
 on:
   push:
-    branches: [main]
+    branches: [prod]
   workflow_dispatch:
 
 jobs:
   deploy:
     uses: ./.github/workflows/deploy.yml
     with:
-      environment: dev
-      branch: main
+      environment: production
+      branch: prod
     secrets:
       EC2_HOST: ${{ secrets.EC2_HOST }}
       EC2_USER: ${{ secrets.EC2_USER }}
