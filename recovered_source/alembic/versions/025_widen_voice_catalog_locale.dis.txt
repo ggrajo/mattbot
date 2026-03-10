@@ -1,0 +1,197 @@
+# Bytecode dump of: 025_widen_voice_catalog_locale.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\025_widen_voice_catalog_locale.py
+# co_names: ('__doc__', 'sqlalchemy', 'sa', 'alembic', 'op', 'revision', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Widen voice_catalog.locale to varchar(50) for ElevenLabs accent labels\n\nRevision ID: 025\nRevises: 024\nCreate Date: 2026-03-04\n', '025', '024']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'alter_column', 'sa', 'String', 'text')
+    # co_varnames: ()
+    # co_consts (strings): ['voice_catalog', 'locale', "'en'"]
+ 16           RESUME                   0
+
+ 17           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (alter_column)
+              PUSH_NULL
+
+ 18           LOAD_CONST               1 ('voice_catalog')
+
+ 19           LOAD_CONST               2 ('locale')
+
+ 20           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (String)
+              PUSH_NULL
+              LOAD_CONST               3 (50)
+              CALL                     1
+
+ 21           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (String)
+              PUSH_NULL
+              LOAD_CONST               4 (10)
+              CALL                     1
+
+ 22           LOAD_CONST               5 (False)
+
+ 23           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (text)
+              PUSH_NULL
+              LOAD_CONST               6 ("'en'")
+              CALL                     1
+
+ 17           LOAD_CONST               7 (('type_', 'existing_type', 'existing_nullable', 'existing_server_default'))
+              CALL_KW                  6
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'alter_column', 'sa', 'String', 'text')
+    # co_varnames: ()
+    # co_consts (strings): ['voice_catalog', 'locale', "'en'"]
+ 27           RESUME                   0
+
+ 28           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (alter_column)
+              PUSH_NULL
+
+ 29           LOAD_CONST               1 ('voice_catalog')
+
+ 30           LOAD_CONST               2 ('locale')
+
+ 31           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (String)
+              PUSH_NULL
+              LOAD_CONST               3 (10)
+              CALL                     1
+
+ 32           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (String)
+              PUSH_NULL
+              LOAD_CONST               4 (50)
+              CALL                     1
+
+ 33           LOAD_CONST               5 (False)
+
+ 34           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (text)
+              PUSH_NULL
+              LOAD_CONST               6 ("'en'")
+              CALL                     1
+
+ 28           LOAD_CONST               7 (('type_', 'existing_type', 'existing_nullable', 'existing_server_default'))
+              CALL_KW                  6
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Widen voice_catalog.locale to varchar(50) for ElevenLabs accent labels\n\nRevision ID: 025\nRevises: 024\nCreate Date: 2026-03-04\n')
+              STORE_NAME               0 (__doc__)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (sqlalchemy)
+              STORE_NAME               2 (sa)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('op',))
+              IMPORT_NAME              3 (alembic)
+              IMPORT_FROM              4 (op)
+              STORE_NAME               4 (op)
+              POP_TOP
+
+ 10           LOAD_CONST               4 ('025')
+              STORE_NAME               5 (revision)
+
+ 11           LOAD_CONST               5 ('024')
+              STORE_NAME               6 (down_revision)
+
+ 12           LOAD_CONST               2 (None)
+              STORE_NAME               7 (branch_labels)
+
+ 13           LOAD_CONST               2 (None)
+              STORE_NAME               8 (depends_on)
+
+ 16           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               6 (<code object upgrade at 0x00000185CB7D5E30, file "D:\fluence\Github\mattbot\backend\alembic\versions\025_widen_voice_catalog_locale.py", line 16>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME               9 (upgrade)
+
+ 27           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               7 (<code object downgrade at 0x00000185CB7D5CB0, file "D:\fluence\Github\mattbot\backend\alembic\versions\025_widen_voice_catalog_locale.py", line 27>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              10 (downgrade)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object upgrade at 0x00000185CB7D5E30, file "D:\fluence\Github\mattbot\backend\alembic\versions\025_widen_voice_catalog_locale.py", line 16>:
+ 16           RESUME                   0
+
+ 17           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (alter_column)
+              PUSH_NULL
+
+ 18           LOAD_CONST               1 ('voice_catalog')
+
+ 19           LOAD_CONST               2 ('locale')
+
+ 20           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (String)
+              PUSH_NULL
+              LOAD_CONST               3 (50)
+              CALL                     1
+
+ 21           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (String)
+              PUSH_NULL
+              LOAD_CONST               4 (10)
+              CALL                     1
+
+ 22           LOAD_CONST               5 (False)
+
+ 23           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (text)
+              PUSH_NULL
+              LOAD_CONST               6 ("'en'")
+              CALL                     1
+
+ 17           LOAD_CONST               7 (('type_', 'existing_type', 'existing_nullable', 'existing_server_default'))
+              CALL_KW                  6
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185CB7D5CB0, file "D:\fluence\Github\mattbot\backend\alembic\versions\025_widen_voice_catalog_locale.py", line 27>:
+ 27           RESUME                   0
+
+ 28           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (alter_column)
+              PUSH_NULL
+
+ 29           LOAD_CONST               1 ('voice_catalog')
+
+ 30           LOAD_CONST               2 ('locale')
+
+ 31           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (String)
+              PUSH_NULL
+              LOAD_CONST               3 (10)
+              CALL                     1
+
+ 32           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (String)
+              PUSH_NULL
+              LOAD_CONST               4 (50)
+              CALL                     1
+
+ 33           LOAD_CONST               5 (False)
+
+ 34           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (text)
+              PUSH_NULL
+              LOAD_CONST               6 ("'en'")
+              CALL                     1
+
+ 28           LOAD_CONST               7 (('type_', 'existing_type', 'existing_nullable', 'existing_server_default'))
+              CALL_KW                  6
+              POP_TOP
+              RETURN_CONST             0 (None)

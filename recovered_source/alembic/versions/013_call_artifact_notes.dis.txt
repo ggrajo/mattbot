@@ -1,0 +1,281 @@
+# Bytecode dump of: 013_call_artifact_notes.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\013_call_artifact_notes.py
+# co_names: ('__doc__', 'collections.abc', 'Sequence', 'sqlalchemy', 'sa', 'alembic', 'op', 'revision', 'str', '__annotations__', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Add encrypted notes columns to call_artifacts\n\nRevision ID: 013\nRevises: 012\nCreate Date: 2026-02-27\n\n', '013', 'revision', '012', 'down_revision', 'branch_labels', 'depends_on']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'add_column', 'sa', 'Column', 'LargeBinary', 'Integer')
+    # co_varnames: ()
+    # co_consts (strings): ['call_artifacts', 'notes_ciphertext', 'notes_nonce', 'notes_key_version']
+ 20           RESUME                   0
+
+ 21           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 22           LOAD_CONST               1 ('call_artifacts')
+
+ 23           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('notes_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+
+ 21           CALL                     2
+              POP_TOP
+
+ 25           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 26           LOAD_CONST               1 ('call_artifacts')
+
+ 27           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               5 ('notes_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+
+ 25           CALL                     2
+              POP_TOP
+
+ 29           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 30           LOAD_CONST               1 ('call_artifacts')
+
+ 31           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               6 ('notes_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+
+ 29           CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'drop_column')
+    # co_varnames: ()
+    # co_consts (strings): ['call_artifacts', 'notes_key_version', 'notes_nonce', 'notes_ciphertext']
+ 35           RESUME                   0
+
+ 36           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_CONST               2 ('notes_key_version')
+              CALL                     2
+              POP_TOP
+
+ 37           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_CONST               3 ('notes_nonce')
+              CALL                     2
+              POP_TOP
+
+ 38           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_CONST               4 ('notes_ciphertext')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           SETUP_ANNOTATIONS
+              LOAD_CONST               0 ('Add encrypted notes columns to call_artifacts\n\nRevision ID: 013\nRevises: 012\nCreate Date: 2026-02-27\n\n')
+              STORE_NAME               0 (__doc__)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('Sequence',))
+              IMPORT_NAME              1 (collections.abc)
+              IMPORT_FROM              2 (Sequence)
+              STORE_NAME               2 (Sequence)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (sqlalchemy)
+              STORE_NAME               4 (sa)
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('op',))
+              IMPORT_NAME              5 (alembic)
+              IMPORT_FROM              6 (op)
+              STORE_NAME               6 (op)
+              POP_TOP
+
+ 14           LOAD_CONST               5 ('013')
+              STORE_NAME               7 (revision)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               6 ('revision')
+              STORE_SUBSCR
+
+ 15           LOAD_CONST               7 ('012')
+              STORE_NAME              10 (down_revision)
+              LOAD_NAME                8 (str)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               8 ('down_revision')
+              STORE_SUBSCR
+
+ 16           LOAD_CONST               3 (None)
+              STORE_NAME              11 (branch_labels)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                8 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               9 ('branch_labels')
+              STORE_SUBSCR
+
+ 17           LOAD_CONST               3 (None)
+              STORE_NAME              12 (depends_on)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                8 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST              10 ('depends_on')
+              STORE_SUBSCR
+
+ 20           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              11 (<code object upgrade at 0x00000185C91F3050, file "D:\fluence\Github\mattbot\backend\alembic\versions\013_call_artifact_notes.py", line 20>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              13 (upgrade)
+
+ 35           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              12 (<code object downgrade at 0x00000185CB792EF0, file "D:\fluence\Github\mattbot\backend\alembic\versions\013_call_artifact_notes.py", line 35>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              14 (downgrade)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object upgrade at 0x00000185C91F3050, file "D:\fluence\Github\mattbot\backend\alembic\versions\013_call_artifact_notes.py", line 20>:
+ 20           RESUME                   0
+
+ 21           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 22           LOAD_CONST               1 ('call_artifacts')
+
+ 23           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('notes_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+
+ 21           CALL                     2
+              POP_TOP
+
+ 25           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 26           LOAD_CONST               1 ('call_artifacts')
+
+ 27           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               5 ('notes_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+
+ 25           CALL                     2
+              POP_TOP
+
+ 29           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 30           LOAD_CONST               1 ('call_artifacts')
+
+ 31           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               6 ('notes_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+
+ 29           CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185CB792EF0, file "D:\fluence\Github\mattbot\backend\alembic\versions\013_call_artifact_notes.py", line 35>:
+ 35           RESUME                   0
+
+ 36           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_CONST               2 ('notes_key_version')
+              CALL                     2
+              POP_TOP
+
+ 37           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_CONST               3 ('notes_nonce')
+              CALL                     2
+              POP_TOP
+
+ 38           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_CONST               4 ('notes_ciphertext')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)

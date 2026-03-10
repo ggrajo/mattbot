@@ -1,0 +1,315 @@
+# Bytecode dump of: 008_user_profile_fields.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\008_user_profile_fields.py
+# co_names: ('__doc__', 'collections.abc', 'Sequence', 'sqlalchemy', 'sa', 'alembic', 'op', 'revision', 'str', '__annotations__', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Add user profile fields: nickname, company_name, role_title, ai_greeting_instructions\n\nRevision ID: 008\nRevises: 007\nCreate Date: 2026-02-24\n', '008', 'revision', '007', 'down_revision', 'branch_labels', 'depends_on']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'add_column', 'sa', 'Column', 'Text')
+    # co_varnames: ()
+    # co_consts (strings): ['users', 'nickname', 'company_name', 'role_title', 'ai_greeting_instructions']
+ 19           RESUME                   0
+
+ 20           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('users')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('nickname')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+
+ 21           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('users')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               5 ('company_name')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+
+ 22           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('users')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               6 ('role_title')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+
+ 23           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('users')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               7 ('ai_greeting_instructions')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'drop_column')
+    # co_varnames: ()
+    # co_consts (strings): ['users', 'ai_greeting_instructions', 'role_title', 'company_name', 'nickname']
+ 26           RESUME                   0
+
+ 27           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('users')
+              LOAD_CONST               2 ('ai_greeting_instructions')
+              CALL                     2
+              POP_TOP
+
+ 28           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('users')
+              LOAD_CONST               3 ('role_title')
+              CALL                     2
+              POP_TOP
+
+ 29           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('users')
+              LOAD_CONST               4 ('company_name')
+              CALL                     2
+              POP_TOP
+
+ 30           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('users')
+              LOAD_CONST               5 ('nickname')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           SETUP_ANNOTATIONS
+              LOAD_CONST               0 ('Add user profile fields: nickname, company_name, role_title, ai_greeting_instructions\n\nRevision ID: 008\nRevises: 007\nCreate Date: 2026-02-24\n')
+              STORE_NAME               0 (__doc__)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('Sequence',))
+              IMPORT_NAME              1 (collections.abc)
+              IMPORT_FROM              2 (Sequence)
+              STORE_NAME               2 (Sequence)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (sqlalchemy)
+              STORE_NAME               4 (sa)
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('op',))
+              IMPORT_NAME              5 (alembic)
+              IMPORT_FROM              6 (op)
+              STORE_NAME               6 (op)
+              POP_TOP
+
+ 13           LOAD_CONST               5 ('008')
+              STORE_NAME               7 (revision)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               6 ('revision')
+              STORE_SUBSCR
+
+ 14           LOAD_CONST               7 ('007')
+              STORE_NAME              10 (down_revision)
+              LOAD_NAME                8 (str)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               8 ('down_revision')
+              STORE_SUBSCR
+
+ 15           LOAD_CONST               3 (None)
+              STORE_NAME              11 (branch_labels)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                8 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               9 ('branch_labels')
+              STORE_SUBSCR
+
+ 16           LOAD_CONST               3 (None)
+              STORE_NAME              12 (depends_on)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                8 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST              10 ('depends_on')
+              STORE_SUBSCR
+
+ 19           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              11 (<code object upgrade at 0x00000185C9AC7110, file "D:\fluence\Github\mattbot\backend\alembic\versions\008_user_profile_fields.py", line 19>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              13 (upgrade)
+
+ 26           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              12 (<code object downgrade at 0x00000185CBA3D930, file "D:\fluence\Github\mattbot\backend\alembic\versions\008_user_profile_fields.py", line 26>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              14 (downgrade)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object upgrade at 0x00000185C9AC7110, file "D:\fluence\Github\mattbot\backend\alembic\versions\008_user_profile_fields.py", line 19>:
+ 19           RESUME                   0
+
+ 20           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('users')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('nickname')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+
+ 21           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('users')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               5 ('company_name')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+
+ 22           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('users')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               6 ('role_title')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+
+ 23           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('users')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               7 ('ai_greeting_instructions')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185CBA3D930, file "D:\fluence\Github\mattbot\backend\alembic\versions\008_user_profile_fields.py", line 26>:
+ 26           RESUME                   0
+
+ 27           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('users')
+              LOAD_CONST               2 ('ai_greeting_instructions')
+              CALL                     2
+              POP_TOP
+
+ 28           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('users')
+              LOAD_CONST               3 ('role_title')
+              CALL                     2
+              POP_TOP
+
+ 29           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('users')
+              LOAD_CONST               4 ('company_name')
+              CALL                     2
+              POP_TOP
+
+ 30           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('users')
+              LOAD_CONST               5 ('nickname')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)

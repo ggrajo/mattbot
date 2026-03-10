@@ -3,9 +3,7 @@
 
 __doc__ = 'Phase 1 completion: VIP/block lists, reminders, notifications, handoff,\nand expanded user_settings columns.\n\nRevision ID: 015\nRevises: 014\nCreate Date: 2026-02-27\n\n'
 from collections.abc import Sequence
-import sqlalchemy as sa
-from sqlalchemy.dialects.postgresql import JSONB, UUID
-from alembic import op
+
 revision: str = '015'
 down_revision: str | None = '014'
 branch_labels: str | Sequence[str] | None = None

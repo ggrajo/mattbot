@@ -3,9 +3,7 @@
 
 __doc__ = 'Add user_settings and onboarding_state tables\n\nRevision ID: 003\nRevises: 002\nCreate Date: 2026-02-21\n'
 from collections.abc import Sequence
-import sqlalchemy as sa
-from sqlalchemy.dialects import postgresql
-from alembic import op
+
 revision: str = '003'
 down_revision: str | None = '002'
 branch_labels: str | Sequence[str] | None = None

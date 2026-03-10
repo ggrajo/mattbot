@@ -1,0 +1,567 @@
+# Bytecode dump of: 023_add_urgent_notification_settings.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\023_add_urgent_notification_settings.py
+# co_names: ('__doc__', 'sqlalchemy', 'sa', 'alembic', 'op', 'revision', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Add urgent notification settings columns\n\nRevision ID: 023\nRevises: 022\nCreate Date: 2026-03-03\n', '023', '022']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'add_column', 'sa', 'Column', 'Boolean', 'text', 'LargeBinary', 'Integer', 'String')
+    # co_varnames: ()
+    # co_consts (strings): ['user_settings', 'urgent_notify_sms', 'false', 'urgent_notify_email', 'urgent_notify_call', 'urgent_notify_phone_ciphertext', 'urgent_notify_phone_nonce', 'urgent_notify_phone_key_version', 'urgent_notify_phone_last4', 'urgent_notify_email_address']
+ 16           RESUME                   0
+
+ 17           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 18           LOAD_CONST               1 ('user_settings')
+
+ 19           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('urgent_notify_sms')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Boolean)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (text)
+              PUSH_NULL
+              LOAD_CONST               4 ('false')
+              CALL                     1
+              LOAD_CONST               5 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 17           CALL                     2
+              POP_TOP
+
+ 21           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 22           LOAD_CONST               1 ('user_settings')
+
+ 23           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               6 ('urgent_notify_email')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Boolean)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (text)
+              PUSH_NULL
+              LOAD_CONST               4 ('false')
+              CALL                     1
+              LOAD_CONST               5 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 21           CALL                     2
+              POP_TOP
+
+ 25           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 26           LOAD_CONST               1 ('user_settings')
+
+ 27           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               7 ('urgent_notify_call')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Boolean)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (text)
+              PUSH_NULL
+              LOAD_CONST               4 ('false')
+              CALL                     1
+              LOAD_CONST               5 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 25           CALL                     2
+              POP_TOP
+
+ 29           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 30           LOAD_CONST               1 ('user_settings')
+
+ 31           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               8 ('urgent_notify_phone_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 29           CALL                     2
+              POP_TOP
+
+ 33           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 34           LOAD_CONST               1 ('user_settings')
+
+ 35           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              11 ('urgent_notify_phone_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 33           CALL                     2
+              POP_TOP
+
+ 37           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 38           LOAD_CONST               1 ('user_settings')
+
+ 39           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              12 ('urgent_notify_phone_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 37           CALL                     2
+              POP_TOP
+
+ 41           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 42           LOAD_CONST               1 ('user_settings')
+
+ 43           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              13 ('urgent_notify_phone_last4')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (String)
+              PUSH_NULL
+              LOAD_CONST              14 (4)
+              CALL                     1
+              LOAD_CONST               9 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 41           CALL                     2
+              POP_TOP
+
+ 45           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 46           LOAD_CONST               1 ('user_settings')
+
+ 47           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              15 ('urgent_notify_email_address')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (String)
+              PUSH_NULL
+              LOAD_CONST              16 (254)
+              CALL                     1
+              LOAD_CONST               9 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 45           CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'drop_column')
+    # co_varnames: ()
+    # co_consts (strings): ['user_settings', 'urgent_notify_email_address', 'urgent_notify_phone_last4', 'urgent_notify_phone_key_version', 'urgent_notify_phone_nonce', 'urgent_notify_phone_ciphertext', 'urgent_notify_call', 'urgent_notify_email', 'urgent_notify_sms']
+ 51           RESUME                   0
+
+ 52           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               2 ('urgent_notify_email_address')
+              CALL                     2
+              POP_TOP
+
+ 53           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               3 ('urgent_notify_phone_last4')
+              CALL                     2
+              POP_TOP
+
+ 54           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               4 ('urgent_notify_phone_key_version')
+              CALL                     2
+              POP_TOP
+
+ 55           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               5 ('urgent_notify_phone_nonce')
+              CALL                     2
+              POP_TOP
+
+ 56           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               6 ('urgent_notify_phone_ciphertext')
+              CALL                     2
+              POP_TOP
+
+ 57           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               7 ('urgent_notify_call')
+              CALL                     2
+              POP_TOP
+
+ 58           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               8 ('urgent_notify_email')
+              CALL                     2
+              POP_TOP
+
+ 59           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               9 ('urgent_notify_sms')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Add urgent notification settings columns\n\nRevision ID: 023\nRevises: 022\nCreate Date: 2026-03-03\n')
+              STORE_NAME               0 (__doc__)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (sqlalchemy)
+              STORE_NAME               2 (sa)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('op',))
+              IMPORT_NAME              3 (alembic)
+              IMPORT_FROM              4 (op)
+              STORE_NAME               4 (op)
+              POP_TOP
+
+ 10           LOAD_CONST               4 ('023')
+              STORE_NAME               5 (revision)
+
+ 11           LOAD_CONST               5 ('022')
+              STORE_NAME               6 (down_revision)
+
+ 12           LOAD_CONST               2 (None)
+              STORE_NAME               7 (branch_labels)
+
+ 13           LOAD_CONST               2 (None)
+              STORE_NAME               8 (depends_on)
+
+ 16           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               6 (<code object upgrade at 0x00000185C9ACF1E0, file "D:\fluence\Github\mattbot\backend\alembic\versions\023_add_urgent_notification_settings.py", line 16>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME               9 (upgrade)
+
+ 51           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               7 (<code object downgrade at 0x00000185C91F3050, file "D:\fluence\Github\mattbot\backend\alembic\versions\023_add_urgent_notification_settings.py", line 51>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              10 (downgrade)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object upgrade at 0x00000185C9ACF1E0, file "D:\fluence\Github\mattbot\backend\alembic\versions\023_add_urgent_notification_settings.py", line 16>:
+ 16           RESUME                   0
+
+ 17           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 18           LOAD_CONST               1 ('user_settings')
+
+ 19           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('urgent_notify_sms')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Boolean)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (text)
+              PUSH_NULL
+              LOAD_CONST               4 ('false')
+              CALL                     1
+              LOAD_CONST               5 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 17           CALL                     2
+              POP_TOP
+
+ 21           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 22           LOAD_CONST               1 ('user_settings')
+
+ 23           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               6 ('urgent_notify_email')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Boolean)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (text)
+              PUSH_NULL
+              LOAD_CONST               4 ('false')
+              CALL                     1
+              LOAD_CONST               5 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 21           CALL                     2
+              POP_TOP
+
+ 25           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 26           LOAD_CONST               1 ('user_settings')
+
+ 27           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               7 ('urgent_notify_call')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Boolean)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (text)
+              PUSH_NULL
+              LOAD_CONST               4 ('false')
+              CALL                     1
+              LOAD_CONST               5 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 25           CALL                     2
+              POP_TOP
+
+ 29           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 30           LOAD_CONST               1 ('user_settings')
+
+ 31           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               8 ('urgent_notify_phone_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 29           CALL                     2
+              POP_TOP
+
+ 33           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 34           LOAD_CONST               1 ('user_settings')
+
+ 35           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              11 ('urgent_notify_phone_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 33           CALL                     2
+              POP_TOP
+
+ 37           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 38           LOAD_CONST               1 ('user_settings')
+
+ 39           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              12 ('urgent_notify_phone_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 37           CALL                     2
+              POP_TOP
+
+ 41           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 42           LOAD_CONST               1 ('user_settings')
+
+ 43           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              13 ('urgent_notify_phone_last4')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (String)
+              PUSH_NULL
+              LOAD_CONST              14 (4)
+              CALL                     1
+              LOAD_CONST               9 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 41           CALL                     2
+              POP_TOP
+
+ 45           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 46           LOAD_CONST               1 ('user_settings')
+
+ 47           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              15 ('urgent_notify_email_address')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (String)
+              PUSH_NULL
+              LOAD_CONST              16 (254)
+              CALL                     1
+              LOAD_CONST               9 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 45           CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185C91F3050, file "D:\fluence\Github\mattbot\backend\alembic\versions\023_add_urgent_notification_settings.py", line 51>:
+ 51           RESUME                   0
+
+ 52           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               2 ('urgent_notify_email_address')
+              CALL                     2
+              POP_TOP
+
+ 53           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               3 ('urgent_notify_phone_last4')
+              CALL                     2
+              POP_TOP
+
+ 54           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               4 ('urgent_notify_phone_key_version')
+              CALL                     2
+              POP_TOP
+
+ 55           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               5 ('urgent_notify_phone_nonce')
+              CALL                     2
+              POP_TOP
+
+ 56           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               6 ('urgent_notify_phone_ciphertext')
+              CALL                     2
+              POP_TOP
+
+ 57           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               7 ('urgent_notify_call')
+              CALL                     2
+              POP_TOP
+
+ 58           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               8 ('urgent_notify_email')
+              CALL                     2
+              POP_TOP
+
+ 59           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               9 ('urgent_notify_sms')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)

@@ -1,0 +1,1382 @@
+# Bytecode dump of: 003_settings_and_onboarding.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\003_settings_and_onboarding.py
+# co_names: ('__doc__', 'collections.abc', 'Sequence', 'sqlalchemy', 'sa', 'sqlalchemy.dialects', 'postgresql', 'alembic', 'op', 'revision', 'str', '__annotations__', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Add user_settings and onboarding_state tables\n\nRevision ID: 003\nRevises: 002\nCreate Date: 2026-02-21\n', '003', 'revision', '002', 'down_revision', 'branch_labels', 'depends_on']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'create_table', 'sa', 'Column', 'postgresql', 'UUID', 'ForeignKey', 'Integer', 'text', 'String', 'Boolean', 'Time', 'JSONB', 'DateTime', 'CheckConstraint')
+    # co_varnames: ()
+    # co_consts (strings): ['user_settings', 'owner_user_id', 'users.id', 'CASCADE', 'schema_version', '1', 'revision', 'notification_privacy_mode', "'private'", 'quiet_hours_enabled', 'false', 'quiet_hours_start', 'quiet_hours_end', 'quiet_hours_days', "'[]'::jsonb", 'timezone', "'America/New_York'", 'memory_enabled', 'true', 'data_retention_days', '30', 'biometric_unlock_enabled', 'recording_enabled', 'call_objective_mode', "'screen_and_summarize'", 'max_call_length_seconds', '180', 'vip_max_call_length_seconds', '300', 'updated_by_device_id', 'devices.id', 'SET NULL', 'created_at', 'now()', 'updated_at', "notification_privacy_mode IN ('private', 'preview')", 'ck_user_settings_privacy_mode', 'data_retention_days IN (7, 30, 90)', 'ck_user_settings_retention_days', 'max_call_length_seconds BETWEEN 120 AND 300', 'ck_user_settings_max_call', 'vip_max_call_length_seconds BETWEEN 180 AND 600', 'ck_user_settings_vip_call', 'onboarding_state', 'current_step', "'privacy_review'", 'steps_completed', 'completed_at']
+ 20           RESUME                   0
+
+ 21           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+ 22           LOAD_CONST               1 ('user_settings')
+
+ 23           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 24           LOAD_CONST               2 ('owner_user_id')
+
+ 25           LOAD_GLOBAL              8 (postgresql)
+              LOAD_ATTR               10 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 26           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               5 ('users.id')
+              LOAD_CONST               6 ('CASCADE')
+              LOAD_CONST               7 (('ondelete',))
+              CALL_KW                  2
+
+ 27           LOAD_CONST               3 (True)
+
+ 23           LOAD_CONST               8 (('primary_key',))
+              CALL_KW                  4
+
+ 29           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 30           LOAD_CONST               9 ('schema_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              10 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              11 ('1')
+              CALL                     1
+
+ 29           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 32           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 33           LOAD_CONST              13 ('revision')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              10 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              11 ('1')
+              CALL                     1
+
+ 32           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 36           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 37           LOAD_CONST              14 ('notification_privacy_mode')
+
+ 38           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (String)
+              PUSH_NULL
+              LOAD_CONST              15 (20)
+              CALL                     1
+
+ 39           LOAD_CONST              10 (False)
+
+ 40           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              16 ("'private'")
+              CALL                     1
+
+ 36           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 42           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 43           LOAD_CONST              17 ('quiet_hours_enabled')
+
+ 44           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 45           LOAD_CONST              10 (False)
+
+ 46           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              18 ('false')
+              CALL                     1
+
+ 42           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 48           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              19 ('quiet_hours_start')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Time)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              20 (('nullable',))
+              CALL_KW                  3
+
+ 49           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              21 ('quiet_hours_end')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Time)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              20 (('nullable',))
+              CALL_KW                  3
+
+ 50           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 51           LOAD_CONST              22 ('quiet_hours_days')
+
+ 52           LOAD_GLOBAL              8 (postgresql)
+              LOAD_ATTR               24 (JSONB)
+              PUSH_NULL
+              CALL                     0
+
+ 53           LOAD_CONST              10 (False)
+
+ 54           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              23 ("'[]'::jsonb")
+              CALL                     1
+
+ 50           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 56           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 57           LOAD_CONST              24 ('timezone')
+
+ 58           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (String)
+              PUSH_NULL
+              LOAD_CONST              25 (60)
+              CALL                     1
+
+ 59           LOAD_CONST              10 (False)
+
+ 60           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              26 ("'America/New_York'")
+              CALL                     1
+
+ 56           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 63           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 64           LOAD_CONST              27 ('memory_enabled')
+
+ 65           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 66           LOAD_CONST              10 (False)
+
+ 67           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              28 ('true')
+              CALL                     1
+
+ 63           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 69           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 70           LOAD_CONST              29 ('data_retention_days')
+
+ 71           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Integer)
+              PUSH_NULL
+              CALL                     0
+
+ 72           LOAD_CONST              10 (False)
+
+ 73           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              30 ('30')
+              CALL                     1
+
+ 69           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 75           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 76           LOAD_CONST              31 ('biometric_unlock_enabled')
+
+ 77           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 78           LOAD_CONST              10 (False)
+
+ 79           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              18 ('false')
+              CALL                     1
+
+ 75           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 81           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 82           LOAD_CONST              32 ('recording_enabled')
+
+ 83           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 84           LOAD_CONST              10 (False)
+
+ 85           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              18 ('false')
+              CALL                     1
+
+ 81           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 88           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 89           LOAD_CONST              33 ('call_objective_mode')
+
+ 90           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (String)
+              PUSH_NULL
+              LOAD_CONST              34 (40)
+              CALL                     1
+
+ 91           LOAD_CONST              10 (False)
+
+ 92           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              35 ("'screen_and_summarize'")
+              CALL                     1
+
+ 88           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 94           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 95           LOAD_CONST              36 ('max_call_length_seconds')
+
+ 96           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Integer)
+              PUSH_NULL
+              CALL                     0
+
+ 97           LOAD_CONST              10 (False)
+
+ 98           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              37 ('180')
+              CALL                     1
+
+ 94           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+100           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+101           LOAD_CONST              38 ('vip_max_call_length_seconds')
+
+102           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Integer)
+              PUSH_NULL
+              CALL                     0
+
+103           LOAD_CONST              10 (False)
+
+104           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              39 ('300')
+              CALL                     1
+
+100           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+107           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+108           LOAD_CONST              40 ('updated_by_device_id')
+
+109           LOAD_GLOBAL              8 (postgresql)
+              LOAD_ATTR               10 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+110           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              41 ('devices.id')
+              LOAD_CONST              42 ('SET NULL')
+              LOAD_CONST               7 (('ondelete',))
+              CALL_KW                  2
+
+111           LOAD_CONST               3 (True)
+
+107           LOAD_CONST              20 (('nullable',))
+              CALL_KW                  4
+
+113           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+114           LOAD_CONST              43 ('created_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              44 (('timezone',))
+              CALL_KW                  1
+
+115           LOAD_CONST              10 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              45 ('now()')
+              CALL                     1
+
+113           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+117           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+118           LOAD_CONST              46 ('updated_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              44 (('timezone',))
+              CALL_KW                  1
+
+119           LOAD_CONST              10 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              45 ('now()')
+              CALL                     1
+
+117           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+122           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (CheckConstraint)
+              PUSH_NULL
+
+123           LOAD_CONST              47 ("notification_privacy_mode IN ('private', 'preview')")
+
+124           LOAD_CONST              48 ('ck_user_settings_privacy_mode')
+
+122           LOAD_CONST              49 (('name',))
+              CALL_KW                  2
+
+126           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (CheckConstraint)
+              PUSH_NULL
+
+127           LOAD_CONST              50 ('data_retention_days IN (7, 30, 90)')
+
+128           LOAD_CONST              51 ('ck_user_settings_retention_days')
+
+126           LOAD_CONST              49 (('name',))
+              CALL_KW                  2
+
+130           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (CheckConstraint)
+              PUSH_NULL
+
+131           LOAD_CONST              52 ('max_call_length_seconds BETWEEN 120 AND 300')
+
+132           LOAD_CONST              53 ('ck_user_settings_max_call')
+
+130           LOAD_CONST              49 (('name',))
+              CALL_KW                  2
+
+134           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (CheckConstraint)
+              PUSH_NULL
+
+135           LOAD_CONST              54 ('vip_max_call_length_seconds BETWEEN 180 AND 600')
+
+136           LOAD_CONST              55 ('ck_user_settings_vip_call')
+
+134           LOAD_CONST              49 (('name',))
+              CALL_KW                  2
+
+ 21           CALL                    24
+              POP_TOP
+
+140           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+141           LOAD_CONST              56 ('onboarding_state')
+
+142           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+143           LOAD_CONST               2 ('owner_user_id')
+
+144           LOAD_GLOBAL              8 (postgresql)
+              LOAD_ATTR               10 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+145           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               5 ('users.id')
+              LOAD_CONST               6 ('CASCADE')
+              LOAD_CONST               7 (('ondelete',))
+              CALL_KW                  2
+
+146           LOAD_CONST               3 (True)
+
+142           LOAD_CONST               8 (('primary_key',))
+              CALL_KW                  4
+
+148           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+149           LOAD_CONST              57 ('current_step')
+
+150           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (String)
+              PUSH_NULL
+              LOAD_CONST              34 (40)
+              CALL                     1
+
+151           LOAD_CONST              10 (False)
+
+152           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              58 ("'privacy_review'")
+              CALL                     1
+
+148           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+154           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+155           LOAD_CONST              59 ('steps_completed')
+
+156           LOAD_GLOBAL              8 (postgresql)
+              LOAD_ATTR               24 (JSONB)
+              PUSH_NULL
+              CALL                     0
+
+157           LOAD_CONST              10 (False)
+
+158           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              23 ("'[]'::jsonb")
+              CALL                     1
+
+154           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+160           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              60 ('completed_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              44 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              20 (('nullable',))
+              CALL_KW                  3
+
+161           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+162           LOAD_CONST              40 ('updated_by_device_id')
+
+163           LOAD_GLOBAL              8 (postgresql)
+              LOAD_ATTR               10 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+164           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              41 ('devices.id')
+              LOAD_CONST              42 ('SET NULL')
+              LOAD_CONST               7 (('ondelete',))
+              CALL_KW                  2
+
+165           LOAD_CONST               3 (True)
+
+161           LOAD_CONST              20 (('nullable',))
+              CALL_KW                  4
+
+167           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+168           LOAD_CONST              43 ('created_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              44 (('timezone',))
+              CALL_KW                  1
+
+169           LOAD_CONST              10 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              45 ('now()')
+              CALL                     1
+
+167           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+171           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+172           LOAD_CONST              46 ('updated_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              44 (('timezone',))
+              CALL_KW                  1
+
+173           LOAD_CONST              10 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              45 ('now()')
+              CALL                     1
+
+171           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+140           CALL                     8
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'drop_table')
+    # co_varnames: ()
+    # co_consts (strings): ['onboarding_state', 'user_settings']
+178           RESUME                   0
+
+179           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               1 ('onboarding_state')
+              CALL                     1
+              POP_TOP
+
+180           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               2 ('user_settings')
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           SETUP_ANNOTATIONS
+              LOAD_CONST               0 ('Add user_settings and onboarding_state tables\n\nRevision ID: 003\nRevises: 002\nCreate Date: 2026-02-21\n')
+              STORE_NAME               0 (__doc__)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('Sequence',))
+              IMPORT_NAME              1 (collections.abc)
+              IMPORT_FROM              2 (Sequence)
+              STORE_NAME               2 (Sequence)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (sqlalchemy)
+              STORE_NAME               4 (sa)
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('postgresql',))
+              IMPORT_NAME              5 (sqlalchemy.dialects)
+              IMPORT_FROM              6 (postgresql)
+              STORE_NAME               6 (postgresql)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('op',))
+              IMPORT_NAME              7 (alembic)
+              IMPORT_FROM              8 (op)
+              STORE_NAME               8 (op)
+              POP_TOP
+
+ 14           LOAD_CONST               6 ('003')
+              STORE_NAME               9 (revision)
+              LOAD_NAME               10 (str)
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               7 ('revision')
+              STORE_SUBSCR
+
+ 15           LOAD_CONST               8 ('002')
+              STORE_NAME              12 (down_revision)
+              LOAD_NAME               10 (str)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               9 ('down_revision')
+              STORE_SUBSCR
+
+ 16           LOAD_CONST               3 (None)
+              STORE_NAME              13 (branch_labels)
+              LOAD_NAME               10 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME               10 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              10 ('branch_labels')
+              STORE_SUBSCR
+
+ 17           LOAD_CONST               3 (None)
+              STORE_NAME              14 (depends_on)
+              LOAD_NAME               10 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME               10 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              11 ('depends_on')
+              STORE_SUBSCR
+
+ 20           LOAD_CONST              14 (('return', None))
+              LOAD_CONST              12 (<code object upgrade at 0x00000185C9B24050, file "D:\fluence\Github\mattbot\backend\alembic\versions\003_settings_and_onboarding.py", line 20>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              15 (upgrade)
+
+178           LOAD_CONST              14 (('return', None))
+              LOAD_CONST              13 (<code object downgrade at 0x00000185CB7FBA60, file "D:\fluence\Github\mattbot\backend\alembic\versions\003_settings_and_onboarding.py", line 178>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              16 (downgrade)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object upgrade at 0x00000185C9B24050, file "D:\fluence\Github\mattbot\backend\alembic\versions\003_settings_and_onboarding.py", line 20>:
+ 20           RESUME                   0
+
+ 21           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+ 22           LOAD_CONST               1 ('user_settings')
+
+ 23           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 24           LOAD_CONST               2 ('owner_user_id')
+
+ 25           LOAD_GLOBAL              8 (postgresql)
+              LOAD_ATTR               10 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 26           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               5 ('users.id')
+              LOAD_CONST               6 ('CASCADE')
+              LOAD_CONST               7 (('ondelete',))
+              CALL_KW                  2
+
+ 27           LOAD_CONST               3 (True)
+
+ 23           LOAD_CONST               8 (('primary_key',))
+              CALL_KW                  4
+
+ 29           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 30           LOAD_CONST               9 ('schema_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              10 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              11 ('1')
+              CALL                     1
+
+ 29           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 32           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 33           LOAD_CONST              13 ('revision')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              10 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              11 ('1')
+              CALL                     1
+
+ 32           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 36           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 37           LOAD_CONST              14 ('notification_privacy_mode')
+
+ 38           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (String)
+              PUSH_NULL
+              LOAD_CONST              15 (20)
+              CALL                     1
+
+ 39           LOAD_CONST              10 (False)
+
+ 40           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              16 ("'private'")
+              CALL                     1
+
+ 36           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 42           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 43           LOAD_CONST              17 ('quiet_hours_enabled')
+
+ 44           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 45           LOAD_CONST              10 (False)
+
+ 46           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              18 ('false')
+              CALL                     1
+
+ 42           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 48           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              19 ('quiet_hours_start')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Time)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              20 (('nullable',))
+              CALL_KW                  3
+
+ 49           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              21 ('quiet_hours_end')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Time)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              20 (('nullable',))
+              CALL_KW                  3
+
+ 50           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 51           LOAD_CONST              22 ('quiet_hours_days')
+
+ 52           LOAD_GLOBAL              8 (postgresql)
+              LOAD_ATTR               24 (JSONB)
+              PUSH_NULL
+              CALL                     0
+
+ 53           LOAD_CONST              10 (False)
+
+ 54           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              23 ("'[]'::jsonb")
+              CALL                     1
+
+ 50           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 56           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 57           LOAD_CONST              24 ('timezone')
+
+ 58           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (String)
+              PUSH_NULL
+              LOAD_CONST              25 (60)
+              CALL                     1
+
+ 59           LOAD_CONST              10 (False)
+
+ 60           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              26 ("'America/New_York'")
+              CALL                     1
+
+ 56           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 63           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 64           LOAD_CONST              27 ('memory_enabled')
+
+ 65           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 66           LOAD_CONST              10 (False)
+
+ 67           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              28 ('true')
+              CALL                     1
+
+ 63           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 69           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 70           LOAD_CONST              29 ('data_retention_days')
+
+ 71           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Integer)
+              PUSH_NULL
+              CALL                     0
+
+ 72           LOAD_CONST              10 (False)
+
+ 73           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              30 ('30')
+              CALL                     1
+
+ 69           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 75           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 76           LOAD_CONST              31 ('biometric_unlock_enabled')
+
+ 77           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 78           LOAD_CONST              10 (False)
+
+ 79           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              18 ('false')
+              CALL                     1
+
+ 75           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 81           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 82           LOAD_CONST              32 ('recording_enabled')
+
+ 83           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 84           LOAD_CONST              10 (False)
+
+ 85           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              18 ('false')
+              CALL                     1
+
+ 81           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 88           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 89           LOAD_CONST              33 ('call_objective_mode')
+
+ 90           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (String)
+              PUSH_NULL
+              LOAD_CONST              34 (40)
+              CALL                     1
+
+ 91           LOAD_CONST              10 (False)
+
+ 92           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              35 ("'screen_and_summarize'")
+              CALL                     1
+
+ 88           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 94           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 95           LOAD_CONST              36 ('max_call_length_seconds')
+
+ 96           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Integer)
+              PUSH_NULL
+              CALL                     0
+
+ 97           LOAD_CONST              10 (False)
+
+ 98           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              37 ('180')
+              CALL                     1
+
+ 94           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+100           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+101           LOAD_CONST              38 ('vip_max_call_length_seconds')
+
+102           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Integer)
+              PUSH_NULL
+              CALL                     0
+
+103           LOAD_CONST              10 (False)
+
+104           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              39 ('300')
+              CALL                     1
+
+100           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+107           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+108           LOAD_CONST              40 ('updated_by_device_id')
+
+109           LOAD_GLOBAL              8 (postgresql)
+              LOAD_ATTR               10 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+110           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              41 ('devices.id')
+              LOAD_CONST              42 ('SET NULL')
+              LOAD_CONST               7 (('ondelete',))
+              CALL_KW                  2
+
+111           LOAD_CONST               3 (True)
+
+107           LOAD_CONST              20 (('nullable',))
+              CALL_KW                  4
+
+113           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+114           LOAD_CONST              43 ('created_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              44 (('timezone',))
+              CALL_KW                  1
+
+115           LOAD_CONST              10 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              45 ('now()')
+              CALL                     1
+
+113           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+117           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+118           LOAD_CONST              46 ('updated_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              44 (('timezone',))
+              CALL_KW                  1
+
+119           LOAD_CONST              10 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              45 ('now()')
+              CALL                     1
+
+117           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+122           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (CheckConstraint)
+              PUSH_NULL
+
+123           LOAD_CONST              47 ("notification_privacy_mode IN ('private', 'preview')")
+
+124           LOAD_CONST              48 ('ck_user_settings_privacy_mode')
+
+122           LOAD_CONST              49 (('name',))
+              CALL_KW                  2
+
+126           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (CheckConstraint)
+              PUSH_NULL
+
+127           LOAD_CONST              50 ('data_retention_days IN (7, 30, 90)')
+
+128           LOAD_CONST              51 ('ck_user_settings_retention_days')
+
+126           LOAD_CONST              49 (('name',))
+              CALL_KW                  2
+
+130           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (CheckConstraint)
+              PUSH_NULL
+
+131           LOAD_CONST              52 ('max_call_length_seconds BETWEEN 120 AND 300')
+
+132           LOAD_CONST              53 ('ck_user_settings_max_call')
+
+130           LOAD_CONST              49 (('name',))
+              CALL_KW                  2
+
+134           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (CheckConstraint)
+              PUSH_NULL
+
+135           LOAD_CONST              54 ('vip_max_call_length_seconds BETWEEN 180 AND 600')
+
+136           LOAD_CONST              55 ('ck_user_settings_vip_call')
+
+134           LOAD_CONST              49 (('name',))
+              CALL_KW                  2
+
+ 21           CALL                    24
+              POP_TOP
+
+140           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+141           LOAD_CONST              56 ('onboarding_state')
+
+142           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+143           LOAD_CONST               2 ('owner_user_id')
+
+144           LOAD_GLOBAL              8 (postgresql)
+              LOAD_ATTR               10 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+145           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               5 ('users.id')
+              LOAD_CONST               6 ('CASCADE')
+              LOAD_CONST               7 (('ondelete',))
+              CALL_KW                  2
+
+146           LOAD_CONST               3 (True)
+
+142           LOAD_CONST               8 (('primary_key',))
+              CALL_KW                  4
+
+148           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+149           LOAD_CONST              57 ('current_step')
+
+150           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (String)
+              PUSH_NULL
+              LOAD_CONST              34 (40)
+              CALL                     1
+
+151           LOAD_CONST              10 (False)
+
+152           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              58 ("'privacy_review'")
+              CALL                     1
+
+148           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+154           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+155           LOAD_CONST              59 ('steps_completed')
+
+156           LOAD_GLOBAL              8 (postgresql)
+              LOAD_ATTR               24 (JSONB)
+              PUSH_NULL
+              CALL                     0
+
+157           LOAD_CONST              10 (False)
+
+158           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              23 ("'[]'::jsonb")
+              CALL                     1
+
+154           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+160           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              60 ('completed_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              44 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              20 (('nullable',))
+              CALL_KW                  3
+
+161           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+162           LOAD_CONST              40 ('updated_by_device_id')
+
+163           LOAD_GLOBAL              8 (postgresql)
+              LOAD_ATTR               10 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+164           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              41 ('devices.id')
+              LOAD_CONST              42 ('SET NULL')
+              LOAD_CONST               7 (('ondelete',))
+              CALL_KW                  2
+
+165           LOAD_CONST               3 (True)
+
+161           LOAD_CONST              20 (('nullable',))
+              CALL_KW                  4
+
+167           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+168           LOAD_CONST              43 ('created_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              44 (('timezone',))
+              CALL_KW                  1
+
+169           LOAD_CONST              10 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              45 ('now()')
+              CALL                     1
+
+167           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+171           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+172           LOAD_CONST              46 ('updated_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              44 (('timezone',))
+              CALL_KW                  1
+
+173           LOAD_CONST              10 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              45 ('now()')
+              CALL                     1
+
+171           LOAD_CONST              12 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+140           CALL                     8
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185CB7FBA60, file "D:\fluence\Github\mattbot\backend\alembic\versions\003_settings_and_onboarding.py", line 178>:
+178           RESUME                   0
+
+179           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               1 ('onboarding_state')
+              CALL                     1
+              POP_TOP
+
+180           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               2 ('user_settings')
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)

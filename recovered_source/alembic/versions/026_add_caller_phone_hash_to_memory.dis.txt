@@ -1,0 +1,209 @@
+# Bytecode dump of: 026_add_caller_phone_hash_to_memory.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\026_add_caller_phone_hash_to_memory.py
+# co_names: ('__doc__', 'sqlalchemy', 'sa', 'alembic', 'op', 'revision', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Add caller_phone_hash to call_memory_items for per-caller memory lookup\n\nRevision ID: 026\nRevises: 025\nCreate Date: 2026-03-04\n', '026', '025']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'add_column', 'sa', 'Column', 'String', 'execute', 'create_index', 'text')
+    # co_varnames: ()
+    # co_consts (strings): ['call_memory_items', 'caller_phone_hash', '\n        UPDATE call_memory_items m\n        SET caller_phone_hash = c.caller_phone_hash\n        FROM calls c\n        WHERE m.source_call_id = c.id\n          AND m.caller_phone_hash IS NULL\n        ', 'call_memory_items_user_caller_active_idx', 'owner_user_id', 'deleted_at IS NULL']
+ 16           RESUME                   0
+
+ 17           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 18           LOAD_CONST               1 ('call_memory_items')
+
+ 19           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('caller_phone_hash')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               3 (64)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 17           CALL                     2
+              POP_TOP
+
+ 23           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               10 (execute)
+              PUSH_NULL
+
+ 24           LOAD_CONST               6 ('\n        UPDATE call_memory_items m\n        SET caller_phone_hash = c.caller_phone_hash\n        FROM calls c\n        WHERE m.source_call_id = c.id\n          AND m.caller_phone_hash IS NULL\n        ')
+
+ 23           CALL                     1
+              POP_TOP
+
+ 33           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               12 (create_index)
+              PUSH_NULL
+
+ 34           LOAD_CONST               7 ('call_memory_items_user_caller_active_idx')
+
+ 35           LOAD_CONST               1 ('call_memory_items')
+
+ 36           LOAD_CONST               8 ('owner_user_id')
+              LOAD_CONST               2 ('caller_phone_hash')
+              BUILD_LIST               2
+
+ 37           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (text)
+              PUSH_NULL
+              LOAD_CONST               9 ('deleted_at IS NULL')
+              CALL                     1
+
+ 33           LOAD_CONST              10 (('postgresql_where',))
+              CALL_KW                  4
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'drop_index', 'drop_column')
+    # co_varnames: ()
+    # co_consts (strings): ['call_memory_items_user_caller_active_idx', 'call_memory_items', 'caller_phone_hash']
+ 41           RESUME                   0
+
+ 42           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_index)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_memory_items_user_caller_active_idx')
+              LOAD_CONST               2 ('call_memory_items')
+              LOAD_CONST               3 (('table_name',))
+              CALL_KW                  2
+              POP_TOP
+
+ 43           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               2 ('call_memory_items')
+              LOAD_CONST               4 ('caller_phone_hash')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Add caller_phone_hash to call_memory_items for per-caller memory lookup\n\nRevision ID: 026\nRevises: 025\nCreate Date: 2026-03-04\n')
+              STORE_NAME               0 (__doc__)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (sqlalchemy)
+              STORE_NAME               2 (sa)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('op',))
+              IMPORT_NAME              3 (alembic)
+              IMPORT_FROM              4 (op)
+              STORE_NAME               4 (op)
+              POP_TOP
+
+ 10           LOAD_CONST               4 ('026')
+              STORE_NAME               5 (revision)
+
+ 11           LOAD_CONST               5 ('025')
+              STORE_NAME               6 (down_revision)
+
+ 12           LOAD_CONST               2 (None)
+              STORE_NAME               7 (branch_labels)
+
+ 13           LOAD_CONST               2 (None)
+              STORE_NAME               8 (depends_on)
+
+ 16           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               6 (<code object upgrade at 0x00000185CB76E640, file "D:\fluence\Github\mattbot\backend\alembic\versions\026_add_caller_phone_hash_to_memory.py", line 16>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME               9 (upgrade)
+
+ 41           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               7 (<code object downgrade at 0x00000185CB7FBA60, file "D:\fluence\Github\mattbot\backend\alembic\versions\026_add_caller_phone_hash_to_memory.py", line 41>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              10 (downgrade)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object upgrade at 0x00000185CB76E640, file "D:\fluence\Github\mattbot\backend\alembic\versions\026_add_caller_phone_hash_to_memory.py", line 16>:
+ 16           RESUME                   0
+
+ 17           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 18           LOAD_CONST               1 ('call_memory_items')
+
+ 19           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('caller_phone_hash')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               3 (64)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 17           CALL                     2
+              POP_TOP
+
+ 23           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               10 (execute)
+              PUSH_NULL
+
+ 24           LOAD_CONST               6 ('\n        UPDATE call_memory_items m\n        SET caller_phone_hash = c.caller_phone_hash\n        FROM calls c\n        WHERE m.source_call_id = c.id\n          AND m.caller_phone_hash IS NULL\n        ')
+
+ 23           CALL                     1
+              POP_TOP
+
+ 33           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               12 (create_index)
+              PUSH_NULL
+
+ 34           LOAD_CONST               7 ('call_memory_items_user_caller_active_idx')
+
+ 35           LOAD_CONST               1 ('call_memory_items')
+
+ 36           LOAD_CONST               8 ('owner_user_id')
+              LOAD_CONST               2 ('caller_phone_hash')
+              BUILD_LIST               2
+
+ 37           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (text)
+              PUSH_NULL
+              LOAD_CONST               9 ('deleted_at IS NULL')
+              CALL                     1
+
+ 33           LOAD_CONST              10 (('postgresql_where',))
+              CALL_KW                  4
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185CB7FBA60, file "D:\fluence\Github\mattbot\backend\alembic\versions\026_add_caller_phone_hash_to_memory.py", line 41>:
+ 41           RESUME                   0
+
+ 42           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_index)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_memory_items_user_caller_active_idx')
+              LOAD_CONST               2 ('call_memory_items')
+              LOAD_CONST               3 (('table_name',))
+              CALL_KW                  2
+              POP_TOP
+
+ 43           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               2 ('call_memory_items')
+              LOAD_CONST               4 ('caller_phone_hash')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)

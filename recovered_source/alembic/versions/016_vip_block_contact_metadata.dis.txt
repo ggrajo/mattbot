@@ -1,0 +1,583 @@
+# Bytecode dump of: 016_vip_block_contact_metadata.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\016_vip_block_contact_metadata.py
+# co_names: ('__doc__', 'collections.abc', 'Sequence', 'sqlalchemy', 'sa', 'alembic', 'op', 'revision', 'str', '__annotations__', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Add contact metadata columns to vip_entries and block_entries.\n\nRevision ID: 016\nRevises: 015\nCreate Date: 2026-02-27\n\n', '016', 'revision', '015', 'down_revision', 'branch_labels', 'depends_on']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'add_column', 'sa', 'Column', 'String', 'Text')
+    # co_varnames: ()
+    # co_consts (strings): ['vip_entries', 'company', 'relationship', 'email', 'notes', 'block_entries']
+ 20           RESUME                   0
+
+ 21           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 22           LOAD_CONST               1 ('vip_entries')
+
+ 23           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('company')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               3 (200)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 21           CALL                     2
+              POP_TOP
+
+ 25           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 26           LOAD_CONST               1 ('vip_entries')
+
+ 27           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               6 ('relationship')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               7 (100)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 25           CALL                     2
+              POP_TOP
+
+ 29           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 30           LOAD_CONST               1 ('vip_entries')
+
+ 31           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               8 ('email')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               9 (254)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 29           CALL                     2
+              POP_TOP
+
+ 33           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 34           LOAD_CONST               1 ('vip_entries')
+
+ 35           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              10 ('notes')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 33           CALL                     2
+              POP_TOP
+
+ 38           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 39           LOAD_CONST              11 ('block_entries')
+
+ 40           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('company')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               3 (200)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 38           CALL                     2
+              POP_TOP
+
+ 42           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 43           LOAD_CONST              11 ('block_entries')
+
+ 44           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               6 ('relationship')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               7 (100)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 42           CALL                     2
+              POP_TOP
+
+ 46           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 47           LOAD_CONST              11 ('block_entries')
+
+ 48           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               8 ('email')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               9 (254)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 46           CALL                     2
+              POP_TOP
+
+ 50           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 51           LOAD_CONST              11 ('block_entries')
+
+ 52           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              10 ('notes')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 50           CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'drop_column')
+    # co_varnames: ()
+    # co_consts (strings): ['block_entries', 'notes', 'email', 'relationship', 'company', 'vip_entries']
+ 56           RESUME                   0
+
+ 57           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('block_entries')
+              LOAD_CONST               2 ('notes')
+              CALL                     2
+              POP_TOP
+
+ 58           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('block_entries')
+              LOAD_CONST               3 ('email')
+              CALL                     2
+              POP_TOP
+
+ 59           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('block_entries')
+              LOAD_CONST               4 ('relationship')
+              CALL                     2
+              POP_TOP
+
+ 60           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('block_entries')
+              LOAD_CONST               5 ('company')
+              CALL                     2
+              POP_TOP
+
+ 62           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               6 ('vip_entries')
+              LOAD_CONST               2 ('notes')
+              CALL                     2
+              POP_TOP
+
+ 63           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               6 ('vip_entries')
+              LOAD_CONST               3 ('email')
+              CALL                     2
+              POP_TOP
+
+ 64           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               6 ('vip_entries')
+              LOAD_CONST               4 ('relationship')
+              CALL                     2
+              POP_TOP
+
+ 65           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               6 ('vip_entries')
+              LOAD_CONST               5 ('company')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           SETUP_ANNOTATIONS
+              LOAD_CONST               0 ('Add contact metadata columns to vip_entries and block_entries.\n\nRevision ID: 016\nRevises: 015\nCreate Date: 2026-02-27\n\n')
+              STORE_NAME               0 (__doc__)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('Sequence',))
+              IMPORT_NAME              1 (collections.abc)
+              IMPORT_FROM              2 (Sequence)
+              STORE_NAME               2 (Sequence)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (sqlalchemy)
+              STORE_NAME               4 (sa)
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('op',))
+              IMPORT_NAME              5 (alembic)
+              IMPORT_FROM              6 (op)
+              STORE_NAME               6 (op)
+              POP_TOP
+
+ 14           LOAD_CONST               5 ('016')
+              STORE_NAME               7 (revision)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               6 ('revision')
+              STORE_SUBSCR
+
+ 15           LOAD_CONST               7 ('015')
+              STORE_NAME              10 (down_revision)
+              LOAD_NAME                8 (str)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               8 ('down_revision')
+              STORE_SUBSCR
+
+ 16           LOAD_CONST               3 (None)
+              STORE_NAME              11 (branch_labels)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                8 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               9 ('branch_labels')
+              STORE_SUBSCR
+
+ 17           LOAD_CONST               3 (None)
+              STORE_NAME              12 (depends_on)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                8 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST              10 ('depends_on')
+              STORE_SUBSCR
+
+ 20           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              11 (<code object upgrade at 0x00000185C9AC2E80, file "D:\fluence\Github\mattbot\backend\alembic\versions\016_vip_block_contact_metadata.py", line 20>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              13 (upgrade)
+
+ 56           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              12 (<code object downgrade at 0x00000185C91F3050, file "D:\fluence\Github\mattbot\backend\alembic\versions\016_vip_block_contact_metadata.py", line 56>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              14 (downgrade)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object upgrade at 0x00000185C9AC2E80, file "D:\fluence\Github\mattbot\backend\alembic\versions\016_vip_block_contact_metadata.py", line 20>:
+ 20           RESUME                   0
+
+ 21           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 22           LOAD_CONST               1 ('vip_entries')
+
+ 23           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('company')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               3 (200)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 21           CALL                     2
+              POP_TOP
+
+ 25           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 26           LOAD_CONST               1 ('vip_entries')
+
+ 27           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               6 ('relationship')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               7 (100)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 25           CALL                     2
+              POP_TOP
+
+ 29           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 30           LOAD_CONST               1 ('vip_entries')
+
+ 31           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               8 ('email')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               9 (254)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 29           CALL                     2
+              POP_TOP
+
+ 33           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 34           LOAD_CONST               1 ('vip_entries')
+
+ 35           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              10 ('notes')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 33           CALL                     2
+              POP_TOP
+
+ 38           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 39           LOAD_CONST              11 ('block_entries')
+
+ 40           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('company')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               3 (200)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 38           CALL                     2
+              POP_TOP
+
+ 42           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 43           LOAD_CONST              11 ('block_entries')
+
+ 44           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               6 ('relationship')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               7 (100)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 42           CALL                     2
+              POP_TOP
+
+ 46           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 47           LOAD_CONST              11 ('block_entries')
+
+ 48           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               8 ('email')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               9 (254)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 46           CALL                     2
+              POP_TOP
+
+ 50           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 51           LOAD_CONST              11 ('block_entries')
+
+ 52           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              10 ('notes')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 50           CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185C91F3050, file "D:\fluence\Github\mattbot\backend\alembic\versions\016_vip_block_contact_metadata.py", line 56>:
+ 56           RESUME                   0
+
+ 57           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('block_entries')
+              LOAD_CONST               2 ('notes')
+              CALL                     2
+              POP_TOP
+
+ 58           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('block_entries')
+              LOAD_CONST               3 ('email')
+              CALL                     2
+              POP_TOP
+
+ 59           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('block_entries')
+              LOAD_CONST               4 ('relationship')
+              CALL                     2
+              POP_TOP
+
+ 60           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('block_entries')
+              LOAD_CONST               5 ('company')
+              CALL                     2
+              POP_TOP
+
+ 62           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               6 ('vip_entries')
+              LOAD_CONST               2 ('notes')
+              CALL                     2
+              POP_TOP
+
+ 63           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               6 ('vip_entries')
+              LOAD_CONST               3 ('email')
+              CALL                     2
+              POP_TOP
+
+ 64           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               6 ('vip_entries')
+              LOAD_CONST               4 ('relationship')
+              CALL                     2
+              POP_TOP
+
+ 65           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               6 ('vip_entries')
+              LOAD_CONST               5 ('company')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)

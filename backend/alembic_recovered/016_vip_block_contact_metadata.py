@@ -3,8 +3,7 @@
 
 __doc__ = 'Add contact metadata columns to vip_entries and block_entries.\n\nRevision ID: 016\nRevises: 015\nCreate Date: 2026-02-27\n\n'
 from collections.abc import Sequence
-import sqlalchemy as sa
-from alembic import op
+
 revision: str = '016'
 down_revision: str | None = '015'
 branch_labels: str | Sequence[str] | None = None

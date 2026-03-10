@@ -3,9 +3,7 @@
 
 __doc__ = 'Add billing, telephony, and theme_preference\n\nRevision ID: 004\nRevises: 003\nCreate Date: 2026-02-23\n'
 from collections.abc import Sequence
-import sqlalchemy as sa
-from sqlalchemy.dialects import postgresql
-from alembic import op
+
 revision: str = '004'
 down_revision: str | None = '003'
 branch_labels: str | Sequence[str] | None = None

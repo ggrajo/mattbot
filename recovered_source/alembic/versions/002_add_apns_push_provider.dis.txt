@@ -1,0 +1,194 @@
+# Bytecode dump of: 002_add_apns_push_provider.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\002_add_apns_push_provider.py
+# co_names: ('__doc__', 'collections.abc', 'Sequence', 'alembic', 'op', 'revision', 'str', '__annotations__', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Add apns to push token provider constraint\n\nRevision ID: 002\nRevises: 001\nCreate Date: 2026-02-21\n', '002', 'revision', '001', 'down_revision', 'branch_labels', 'depends_on']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'drop_constraint', 'create_check_constraint')
+    # co_varnames: ()
+    # co_consts (strings): ['ck_push_tokens_provider', 'push_tokens', 'check', "provider IN ('fcm', 'apns')"]
+ 17           RESUME                   0
+
+ 18           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST               1 ('ck_push_tokens_provider')
+              LOAD_CONST               2 ('push_tokens')
+              LOAD_CONST               3 ('check')
+              LOAD_CONST               4 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+ 19           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (create_check_constraint)
+              PUSH_NULL
+
+ 20           LOAD_CONST               1 ('ck_push_tokens_provider')
+
+ 21           LOAD_CONST               2 ('push_tokens')
+
+ 22           LOAD_CONST               5 ("provider IN ('fcm', 'apns')")
+
+ 19           CALL                     3
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'drop_constraint', 'create_check_constraint')
+    # co_varnames: ()
+    # co_consts (strings): ['ck_push_tokens_provider', 'push_tokens', 'check', "provider IN ('fcm')"]
+ 26           RESUME                   0
+
+ 27           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST               1 ('ck_push_tokens_provider')
+              LOAD_CONST               2 ('push_tokens')
+              LOAD_CONST               3 ('check')
+              LOAD_CONST               4 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+ 28           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (create_check_constraint)
+              PUSH_NULL
+
+ 29           LOAD_CONST               1 ('ck_push_tokens_provider')
+
+ 30           LOAD_CONST               2 ('push_tokens')
+
+ 31           LOAD_CONST               5 ("provider IN ('fcm')")
+
+ 28           CALL                     3
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           SETUP_ANNOTATIONS
+              LOAD_CONST               0 ('Add apns to push token provider constraint\n\nRevision ID: 002\nRevises: 001\nCreate Date: 2026-02-21\n')
+              STORE_NAME               0 (__doc__)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('Sequence',))
+              IMPORT_NAME              1 (collections.abc)
+              IMPORT_FROM              2 (Sequence)
+              STORE_NAME               2 (Sequence)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('op',))
+              IMPORT_NAME              3 (alembic)
+              IMPORT_FROM              4 (op)
+              STORE_NAME               4 (op)
+              POP_TOP
+
+ 11           LOAD_CONST               4 ('002')
+              STORE_NAME               5 (revision)
+              LOAD_NAME                6 (str)
+              LOAD_NAME                7 (__annotations__)
+              LOAD_CONST               5 ('revision')
+              STORE_SUBSCR
+
+ 12           LOAD_CONST               6 ('001')
+              STORE_NAME               8 (down_revision)
+              LOAD_NAME                6 (str)
+              LOAD_CONST               7 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                7 (__annotations__)
+              LOAD_CONST               8 ('down_revision')
+              STORE_SUBSCR
+
+ 13           LOAD_CONST               7 (None)
+              STORE_NAME               9 (branch_labels)
+              LOAD_NAME                6 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                6 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               7 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                7 (__annotations__)
+              LOAD_CONST               9 ('branch_labels')
+              STORE_SUBSCR
+
+ 14           LOAD_CONST               7 (None)
+              STORE_NAME              10 (depends_on)
+              LOAD_NAME                6 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                6 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               7 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                7 (__annotations__)
+              LOAD_CONST              10 ('depends_on')
+              STORE_SUBSCR
+
+ 17           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              11 (<code object upgrade at 0x00000185CB7FB930, file "D:\fluence\Github\mattbot\backend\alembic\versions\002_add_apns_push_provider.py", line 17>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              11 (upgrade)
+
+ 26           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              12 (<code object downgrade at 0x00000185CB7FBDF0, file "D:\fluence\Github\mattbot\backend\alembic\versions\002_add_apns_push_provider.py", line 26>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              12 (downgrade)
+              RETURN_CONST             7 (None)
+
+Disassembly of <code object upgrade at 0x00000185CB7FB930, file "D:\fluence\Github\mattbot\backend\alembic\versions\002_add_apns_push_provider.py", line 17>:
+ 17           RESUME                   0
+
+ 18           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST               1 ('ck_push_tokens_provider')
+              LOAD_CONST               2 ('push_tokens')
+              LOAD_CONST               3 ('check')
+              LOAD_CONST               4 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+ 19           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (create_check_constraint)
+              PUSH_NULL
+
+ 20           LOAD_CONST               1 ('ck_push_tokens_provider')
+
+ 21           LOAD_CONST               2 ('push_tokens')
+
+ 22           LOAD_CONST               5 ("provider IN ('fcm', 'apns')")
+
+ 19           CALL                     3
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185CB7FBDF0, file "D:\fluence\Github\mattbot\backend\alembic\versions\002_add_apns_push_provider.py", line 26>:
+ 26           RESUME                   0
+
+ 27           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST               1 ('ck_push_tokens_provider')
+              LOAD_CONST               2 ('push_tokens')
+              LOAD_CONST               3 ('check')
+              LOAD_CONST               4 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+ 28           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (create_check_constraint)
+              PUSH_NULL
+
+ 29           LOAD_CONST               1 ('ck_push_tokens_provider')
+
+ 30           LOAD_CONST               2 ('push_tokens')
+
+ 31           LOAD_CONST               5 ("provider IN ('fcm')")
+
+ 28           CALL                     3
+              POP_TOP
+              RETURN_CONST             0 (None)

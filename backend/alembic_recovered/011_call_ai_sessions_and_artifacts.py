@@ -3,8 +3,7 @@
 
 __doc__ = 'Part 5: call AI sessions, artifacts, memory items, usage events\n\nRevision ID: 011\nRevises: 010\nCreate Date: 2026-02-25\n\n'
 from collections.abc import Sequence
-import sqlalchemy as sa
-from alembic import op
+
 revision: str = '011'
 down_revision: str | None = '010'
 branch_labels: str | Sequence[str] | None = None

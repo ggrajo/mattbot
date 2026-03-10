@@ -1,0 +1,971 @@
+# Bytecode dump of: 019_add_calendar_booking.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\019_add_calendar_booking.py
+# co_names: ('__doc__', 'logging', 'sqlalchemy', 'sa', 'alembic', 'op', 'getLogger', '__name__', 'logger', 'revision', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Add Google Calendar booking: tokens table, settings columns, onboarding step.\n\nRevision ID: 019\nRevises: 018\nCreate Date: 2026-03-03\n', '019', '018']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'create_table', 'sa', 'Column', 'dialects', 'postgresql', 'UUID', 'ForeignKey', 'LargeBinary', 'Integer', 'DateTime', 'String', 'text', 'add_column', 'Boolean', 'create_check_constraint', 'get_bind', 'execute', 'scalar', 'Exception', 'logger', 'debug', 'str')
+    # co_varnames: ('connection', 'result', 'e')
+    # co_consts (strings): ['google_calendar_tokens', 'owner_user_id', 'users.id', 'CASCADE', 'access_token_ciphertext', 'access_token_nonce', 'refresh_token_ciphertext', 'refresh_token_nonce', 'key_version', 'token_expiry', 'google_email', 'calendar_id', "'primary'", 'connected_at', 'now()', 'updated_at', 'user_settings', 'calendar_booking_enabled', 'false', 'calendar_default_duration_minutes', '30', 'calendar_booking_window_days', '14', 'ck_user_settings_calendar_duration', 'calendar_default_duration_minutes BETWEEN 15 AND 120', 'ck_user_settings_calendar_window', 'calendar_booking_window_days BETWEEN 1 AND 60', "SELECT 1 FROM information_schema.tables WHERE table_name='onboarding_state'", 'UPDATE onboarding_state SET steps_completed = steps_completed || \'["calendar_setup"]\'::jsonb WHERE steps_completed @> \'["assistant_setup"]\'::jsonb AND NOT steps_completed @> \'["calendar_setup"]\'::jsonb', 'Skipped onboarding_states backfill: %s']
+  22           RESUME                   0
+
+  23           LOAD_GLOBAL              0 (op)
+               LOAD_ATTR                2 (create_table)
+               PUSH_NULL
+
+  24           LOAD_CONST               1 ('google_calendar_tokens')
+
+  25           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+
+  26           LOAD_CONST               2 ('owner_user_id')
+
+  27           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                8 (dialects)
+               LOAD_ATTR               10 (postgresql)
+               LOAD_ATTR               13 (UUID + NULL|self)
+               LOAD_CONST               3 (True)
+               LOAD_CONST               4 (('as_uuid',))
+               CALL_KW                  1
+
+  28           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               14 (ForeignKey)
+               PUSH_NULL
+               LOAD_CONST               5 ('users.id')
+               LOAD_CONST               6 ('CASCADE')
+               LOAD_CONST               7 (('ondelete',))
+               CALL_KW                  2
+
+  29           LOAD_CONST               3 (True)
+
+  25           LOAD_CONST               8 (('primary_key',))
+               CALL_KW                  4
+
+  31           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+               LOAD_CONST               9 ('access_token_ciphertext')
+               LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               16 (LargeBinary)
+               PUSH_NULL
+               CALL                     0
+               LOAD_CONST              10 (False)
+               LOAD_CONST              11 (('nullable',))
+               CALL_KW                  3
+
+  32           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+               LOAD_CONST              12 ('access_token_nonce')
+               LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               16 (LargeBinary)
+               PUSH_NULL
+               CALL                     0
+               LOAD_CONST              10 (False)
+               LOAD_CONST              11 (('nullable',))
+               CALL_KW                  3
+
+  33           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+               LOAD_CONST              13 ('refresh_token_ciphertext')
+               LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               16 (LargeBinary)
+               PUSH_NULL
+               CALL                     0
+               LOAD_CONST              10 (False)
+               LOAD_CONST              11 (('nullable',))
+               CALL_KW                  3
+
+  34           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+               LOAD_CONST              14 ('refresh_token_nonce')
+               LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               16 (LargeBinary)
+               PUSH_NULL
+               CALL                     0
+               LOAD_CONST              10 (False)
+               LOAD_CONST              11 (('nullable',))
+               CALL_KW                  3
+
+  35           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+               LOAD_CONST              15 ('key_version')
+               LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               18 (Integer)
+               PUSH_NULL
+               CALL                     0
+               LOAD_CONST              10 (False)
+               LOAD_CONST              11 (('nullable',))
+               CALL_KW                  3
+
+  36           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+               LOAD_CONST              16 ('token_expiry')
+               LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               20 (DateTime)
+               PUSH_NULL
+               LOAD_CONST               3 (True)
+               LOAD_CONST              17 (('timezone',))
+               CALL_KW                  1
+               LOAD_CONST               3 (True)
+               LOAD_CONST              11 (('nullable',))
+               CALL_KW                  3
+
+  37           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+               LOAD_CONST              18 ('google_email')
+               LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               22 (String)
+               PUSH_NULL
+               LOAD_CONST              19 (255)
+               CALL                     1
+               LOAD_CONST              10 (False)
+               LOAD_CONST              11 (('nullable',))
+               CALL_KW                  3
+
+  38           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+
+  39           LOAD_CONST              20 ('calendar_id')
+
+  40           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               22 (String)
+               PUSH_NULL
+               LOAD_CONST              19 (255)
+               CALL                     1
+
+  41           LOAD_CONST              10 (False)
+
+  42           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               24 (text)
+               PUSH_NULL
+               LOAD_CONST              21 ("'primary'")
+               CALL                     1
+
+  38           LOAD_CONST              22 (('nullable', 'server_default'))
+               CALL_KW                  4
+
+  44           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+
+  45           LOAD_CONST              23 ('connected_at')
+
+  46           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               20 (DateTime)
+               PUSH_NULL
+               LOAD_CONST               3 (True)
+               LOAD_CONST              17 (('timezone',))
+               CALL_KW                  1
+
+  47           LOAD_CONST              10 (False)
+
+  48           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               24 (text)
+               PUSH_NULL
+               LOAD_CONST              24 ('now()')
+               CALL                     1
+
+  44           LOAD_CONST              22 (('nullable', 'server_default'))
+               CALL_KW                  4
+
+  50           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+
+  51           LOAD_CONST              25 ('updated_at')
+
+  52           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               20 (DateTime)
+               PUSH_NULL
+               LOAD_CONST               3 (True)
+               LOAD_CONST              17 (('timezone',))
+               CALL_KW                  1
+
+  53           LOAD_CONST              10 (False)
+
+  54           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               24 (text)
+               PUSH_NULL
+               LOAD_CONST              24 ('now()')
+               CALL                     1
+
+  50           LOAD_CONST              22 (('nullable', 'server_default'))
+               CALL_KW                  4
+
+  23           CALL                    12
+               POP_TOP
+
+  58           LOAD_GLOBAL              0 (op)
+               LOAD_ATTR               26 (add_column)
+               PUSH_NULL
+
+  59           LOAD_CONST              26 ('user_settings')
+
+  60           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+
+  61           LOAD_CONST              27 ('calendar_booking_enabled')
+
+  62           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               28 (Boolean)
+               PUSH_NULL
+               CALL                     0
+
+  63           LOAD_CONST              10 (False)
+
+  64           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               24 (text)
+               PUSH_NULL
+               LOAD_CONST              28 ('false')
+               CALL                     1
+
+  60           LOAD_CONST              22 (('nullable', 'server_default'))
+               CALL_KW                  4
+
+  58           CALL                     2
+               POP_TOP
+
+  67           LOAD_GLOBAL              0 (op)
+               LOAD_ATTR               26 (add_column)
+               PUSH_NULL
+
+  68           LOAD_CONST              26 ('user_settings')
+
+  69           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+
+  70           LOAD_CONST              29 ('calendar_default_duration_minutes')
+
+  71           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               18 (Integer)
+               PUSH_NULL
+               CALL                     0
+
+  72           LOAD_CONST              10 (False)
+
+  73           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               24 (text)
+               PUSH_NULL
+               LOAD_CONST              30 ('30')
+               CALL                     1
+
+  69           LOAD_CONST              22 (('nullable', 'server_default'))
+               CALL_KW                  4
+
+  67           CALL                     2
+               POP_TOP
+
+  76           LOAD_GLOBAL              0 (op)
+               LOAD_ATTR               26 (add_column)
+               PUSH_NULL
+
+  77           LOAD_CONST              26 ('user_settings')
+
+  78           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+
+  79           LOAD_CONST              31 ('calendar_booking_window_days')
+
+  80           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               18 (Integer)
+               PUSH_NULL
+               CALL                     0
+
+  81           LOAD_CONST              10 (False)
+
+  82           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               24 (text)
+               PUSH_NULL
+               LOAD_CONST              32 ('14')
+               CALL                     1
+
+  78           LOAD_CONST              22 (('nullable', 'server_default'))
+               CALL_KW                  4
+
+  76           CALL                     2
+               POP_TOP
+
+  86           LOAD_GLOBAL              0 (op)
+               LOAD_ATTR               30 (create_check_constraint)
+               PUSH_NULL
+
+  87           LOAD_CONST              33 ('ck_user_settings_calendar_duration')
+
+  88           LOAD_CONST              26 ('user_settings')
+
+  89           LOAD_CONST              34 ('calendar_default_duration_minutes BETWEEN 15 AND 120')
+
+  86           CALL                     3
+               POP_TOP
+
+  91           LOAD_GLOBAL              0 (op)
+               LOAD_ATTR               30 (create_check_constraint)
+               PUSH_NULL
+
+  92           LOAD_CONST              35 ('ck_user_settings_calendar_window')
+
+  93           LOAD_CONST              26 ('user_settings')
+
+  94           LOAD_CONST              36 ('calendar_booking_window_days BETWEEN 1 AND 60')
+
+  91           CALL                     3
+               POP_TOP
+
+ 100           LOAD_GLOBAL              0 (op)
+               LOAD_ATTR               32 (get_bind)
+               PUSH_NULL
+               CALL                     0
+               STORE_FAST               0 (connection)
+
+ 101           NOP
+
+ 103   L1:     LOAD_FAST                0 (connection)
+               LOAD_ATTR               35 (execute + NULL|self)
+
+ 104           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               24 (text)
+               PUSH_NULL
+
+ 105           LOAD_CONST              37 ("SELECT 1 FROM information_schema.tables WHERE table_name='onboarding_state'")
+
+ 104           CALL                     1
+
+ 103           CALL                     1
+               STORE_FAST               1 (result)
+
+ 109           LOAD_FAST                1 (result)
+               LOAD_ATTR               37 (scalar + NULL|self)
+               CALL                     0
+               TO_BOOL
+               POP_JUMP_IF_FALSE       38 (to L3)
+
+ 110           LOAD_FAST                0 (connection)
+               LOAD_ATTR               35 (execute + NULL|self)
+
+ 111           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               24 (text)
+               PUSH_NULL
+
+ 112           LOAD_CONST              38 ('UPDATE onboarding_state SET steps_completed = steps_completed || \'["calendar_setup"]\'::jsonb WHERE steps_completed @> \'["assistant_setup"]\'::jsonb AND NOT steps_completed @> \'["calendar_setup"]\'::jsonb')
+
+ 111           CALL                     1
+
+ 110           CALL                     1
+               POP_TOP
+       L2:     RETURN_CONST             0 (None)
+
+ 109   L3:     RETURN_CONST             0 (None)
+
+  --   L4:     PUSH_EXC_INFO
+
+ 118           LOAD_GLOBAL             38 (Exception)
+               CHECK_EXC_MATCH
+               POP_JUMP_IF_FALSE       41 (to L8)
+               STORE_FAST               2 (e)
+
+ 120   L5:     LOAD_GLOBAL             40 (logger)
+               LOAD_ATTR               43 (debug + NULL|self)
+               LOAD_CONST              39 ('Skipped onboarding_states backfill: %s')
+               LOAD_GLOBAL             45 (str + NULL)
+               LOAD_FAST                2 (e)
+               CALL                     1
+               CALL                     2
+               POP_TOP
+       L6:     POP_EXCEPT
+               LOAD_CONST               0 (None)
+               STORE_FAST               2 (e)
+               DELETE_FAST              2 (e)
+               RETURN_CONST             0 (None)
+
+  --   L7:     LOAD_CONST               0 (None)
+               STORE_FAST               2 (e)
+               DELETE_FAST              2 (e)
+               RERAISE                  1
+
+ 118   L8:     RERAISE                  0
+
+  --   L9:     COPY                     3
+               POP_EXCEPT
+               RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L4 [0]
+  L4 to L5 -> L9 [1] lasti
+  L5 to L6 -> L7 [1] lasti
+  L7 to L9 -> L9 [1] lasti
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'drop_constraint', 'drop_column', 'drop_table')
+    # co_varnames: ()
+    # co_consts (strings): ['ck_user_settings_calendar_window', 'user_settings', 'check', 'ck_user_settings_calendar_duration', 'calendar_booking_window_days', 'calendar_default_duration_minutes', 'calendar_booking_enabled', 'google_calendar_tokens']
+123           RESUME                   0
+
+124           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST               1 ('ck_user_settings_calendar_window')
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               3 ('check')
+              LOAD_CONST               4 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+125           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST               5 ('ck_user_settings_calendar_duration')
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               3 ('check')
+              LOAD_CONST               4 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+126           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               6 ('calendar_booking_window_days')
+              CALL                     2
+              POP_TOP
+
+127           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               7 ('calendar_default_duration_minutes')
+              CALL                     2
+              POP_TOP
+
+128           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               8 ('calendar_booking_enabled')
+              CALL                     2
+              POP_TOP
+
+129           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                6 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               9 ('google_calendar_tokens')
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Add Google Calendar booking: tokens table, settings columns, onboarding step.\n\nRevision ID: 019\nRevises: 018\nCreate Date: 2026-03-03\n')
+              STORE_NAME               0 (__doc__)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (logging)
+              STORE_NAME               1 (logging)
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              2 (sqlalchemy)
+              STORE_NAME               3 (sa)
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('op',))
+              IMPORT_NAME              4 (alembic)
+              IMPORT_FROM              5 (op)
+              STORE_NAME               5 (op)
+              POP_TOP
+
+ 14           LOAD_NAME                1 (logging)
+              LOAD_ATTR               12 (getLogger)
+              PUSH_NULL
+              LOAD_NAME                7 (__name__)
+              CALL                     1
+              STORE_NAME               8 (logger)
+
+ 16           LOAD_CONST               4 ('019')
+              STORE_NAME               9 (revision)
+
+ 17           LOAD_CONST               5 ('018')
+              STORE_NAME              10 (down_revision)
+
+ 18           LOAD_CONST               2 (None)
+              STORE_NAME              11 (branch_labels)
+
+ 19           LOAD_CONST               2 (None)
+              STORE_NAME              12 (depends_on)
+
+ 22           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               6 (<code object upgrade at 0x00000185C9B38F50, file "D:\fluence\Github\mattbot\backend\alembic\versions\019_add_calendar_booking.py", line 22>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              13 (upgrade)
+
+123           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               7 (<code object downgrade at 0x00000185CB7DA010, file "D:\fluence\Github\mattbot\backend\alembic\versions\019_add_calendar_booking.py", line 123>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              14 (downgrade)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object upgrade at 0x00000185C9B38F50, file "D:\fluence\Github\mattbot\backend\alembic\versions\019_add_calendar_booking.py", line 22>:
+  22           RESUME                   0
+
+  23           LOAD_GLOBAL              0 (op)
+               LOAD_ATTR                2 (create_table)
+               PUSH_NULL
+
+  24           LOAD_CONST               1 ('google_calendar_tokens')
+
+  25           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+
+  26           LOAD_CONST               2 ('owner_user_id')
+
+  27           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                8 (dialects)
+               LOAD_ATTR               10 (postgresql)
+               LOAD_ATTR               13 (UUID + NULL|self)
+               LOAD_CONST               3 (True)
+               LOAD_CONST               4 (('as_uuid',))
+               CALL_KW                  1
+
+  28           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               14 (ForeignKey)
+               PUSH_NULL
+               LOAD_CONST               5 ('users.id')
+               LOAD_CONST               6 ('CASCADE')
+               LOAD_CONST               7 (('ondelete',))
+               CALL_KW                  2
+
+  29           LOAD_CONST               3 (True)
+
+  25           LOAD_CONST               8 (('primary_key',))
+               CALL_KW                  4
+
+  31           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+               LOAD_CONST               9 ('access_token_ciphertext')
+               LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               16 (LargeBinary)
+               PUSH_NULL
+               CALL                     0
+               LOAD_CONST              10 (False)
+               LOAD_CONST              11 (('nullable',))
+               CALL_KW                  3
+
+  32           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+               LOAD_CONST              12 ('access_token_nonce')
+               LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               16 (LargeBinary)
+               PUSH_NULL
+               CALL                     0
+               LOAD_CONST              10 (False)
+               LOAD_CONST              11 (('nullable',))
+               CALL_KW                  3
+
+  33           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+               LOAD_CONST              13 ('refresh_token_ciphertext')
+               LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               16 (LargeBinary)
+               PUSH_NULL
+               CALL                     0
+               LOAD_CONST              10 (False)
+               LOAD_CONST              11 (('nullable',))
+               CALL_KW                  3
+
+  34           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+               LOAD_CONST              14 ('refresh_token_nonce')
+               LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               16 (LargeBinary)
+               PUSH_NULL
+               CALL                     0
+               LOAD_CONST              10 (False)
+               LOAD_CONST              11 (('nullable',))
+               CALL_KW                  3
+
+  35           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+               LOAD_CONST              15 ('key_version')
+               LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               18 (Integer)
+               PUSH_NULL
+               CALL                     0
+               LOAD_CONST              10 (False)
+               LOAD_CONST              11 (('nullable',))
+               CALL_KW                  3
+
+  36           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+               LOAD_CONST              16 ('token_expiry')
+               LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               20 (DateTime)
+               PUSH_NULL
+               LOAD_CONST               3 (True)
+               LOAD_CONST              17 (('timezone',))
+               CALL_KW                  1
+               LOAD_CONST               3 (True)
+               LOAD_CONST              11 (('nullable',))
+               CALL_KW                  3
+
+  37           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+               LOAD_CONST              18 ('google_email')
+               LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               22 (String)
+               PUSH_NULL
+               LOAD_CONST              19 (255)
+               CALL                     1
+               LOAD_CONST              10 (False)
+               LOAD_CONST              11 (('nullable',))
+               CALL_KW                  3
+
+  38           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+
+  39           LOAD_CONST              20 ('calendar_id')
+
+  40           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               22 (String)
+               PUSH_NULL
+               LOAD_CONST              19 (255)
+               CALL                     1
+
+  41           LOAD_CONST              10 (False)
+
+  42           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               24 (text)
+               PUSH_NULL
+               LOAD_CONST              21 ("'primary'")
+               CALL                     1
+
+  38           LOAD_CONST              22 (('nullable', 'server_default'))
+               CALL_KW                  4
+
+  44           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+
+  45           LOAD_CONST              23 ('connected_at')
+
+  46           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               20 (DateTime)
+               PUSH_NULL
+               LOAD_CONST               3 (True)
+               LOAD_CONST              17 (('timezone',))
+               CALL_KW                  1
+
+  47           LOAD_CONST              10 (False)
+
+  48           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               24 (text)
+               PUSH_NULL
+               LOAD_CONST              24 ('now()')
+               CALL                     1
+
+  44           LOAD_CONST              22 (('nullable', 'server_default'))
+               CALL_KW                  4
+
+  50           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+
+  51           LOAD_CONST              25 ('updated_at')
+
+  52           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               20 (DateTime)
+               PUSH_NULL
+               LOAD_CONST               3 (True)
+               LOAD_CONST              17 (('timezone',))
+               CALL_KW                  1
+
+  53           LOAD_CONST              10 (False)
+
+  54           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               24 (text)
+               PUSH_NULL
+               LOAD_CONST              24 ('now()')
+               CALL                     1
+
+  50           LOAD_CONST              22 (('nullable', 'server_default'))
+               CALL_KW                  4
+
+  23           CALL                    12
+               POP_TOP
+
+  58           LOAD_GLOBAL              0 (op)
+               LOAD_ATTR               26 (add_column)
+               PUSH_NULL
+
+  59           LOAD_CONST              26 ('user_settings')
+
+  60           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+
+  61           LOAD_CONST              27 ('calendar_booking_enabled')
+
+  62           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               28 (Boolean)
+               PUSH_NULL
+               CALL                     0
+
+  63           LOAD_CONST              10 (False)
+
+  64           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               24 (text)
+               PUSH_NULL
+               LOAD_CONST              28 ('false')
+               CALL                     1
+
+  60           LOAD_CONST              22 (('nullable', 'server_default'))
+               CALL_KW                  4
+
+  58           CALL                     2
+               POP_TOP
+
+  67           LOAD_GLOBAL              0 (op)
+               LOAD_ATTR               26 (add_column)
+               PUSH_NULL
+
+  68           LOAD_CONST              26 ('user_settings')
+
+  69           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+
+  70           LOAD_CONST              29 ('calendar_default_duration_minutes')
+
+  71           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               18 (Integer)
+               PUSH_NULL
+               CALL                     0
+
+  72           LOAD_CONST              10 (False)
+
+  73           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               24 (text)
+               PUSH_NULL
+               LOAD_CONST              30 ('30')
+               CALL                     1
+
+  69           LOAD_CONST              22 (('nullable', 'server_default'))
+               CALL_KW                  4
+
+  67           CALL                     2
+               POP_TOP
+
+  76           LOAD_GLOBAL              0 (op)
+               LOAD_ATTR               26 (add_column)
+               PUSH_NULL
+
+  77           LOAD_CONST              26 ('user_settings')
+
+  78           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR                6 (Column)
+               PUSH_NULL
+
+  79           LOAD_CONST              31 ('calendar_booking_window_days')
+
+  80           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               18 (Integer)
+               PUSH_NULL
+               CALL                     0
+
+  81           LOAD_CONST              10 (False)
+
+  82           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               24 (text)
+               PUSH_NULL
+               LOAD_CONST              32 ('14')
+               CALL                     1
+
+  78           LOAD_CONST              22 (('nullable', 'server_default'))
+               CALL_KW                  4
+
+  76           CALL                     2
+               POP_TOP
+
+  86           LOAD_GLOBAL              0 (op)
+               LOAD_ATTR               30 (create_check_constraint)
+               PUSH_NULL
+
+  87           LOAD_CONST              33 ('ck_user_settings_calendar_duration')
+
+  88           LOAD_CONST              26 ('user_settings')
+
+  89           LOAD_CONST              34 ('calendar_default_duration_minutes BETWEEN 15 AND 120')
+
+  86           CALL                     3
+               POP_TOP
+
+  91           LOAD_GLOBAL              0 (op)
+               LOAD_ATTR               30 (create_check_constraint)
+               PUSH_NULL
+
+  92           LOAD_CONST              35 ('ck_user_settings_calendar_window')
+
+  93           LOAD_CONST              26 ('user_settings')
+
+  94           LOAD_CONST              36 ('calendar_booking_window_days BETWEEN 1 AND 60')
+
+  91           CALL                     3
+               POP_TOP
+
+ 100           LOAD_GLOBAL              0 (op)
+               LOAD_ATTR               32 (get_bind)
+               PUSH_NULL
+               CALL                     0
+               STORE_FAST               0 (connection)
+
+ 101           NOP
+
+ 103   L1:     LOAD_FAST                0 (connection)
+               LOAD_ATTR               35 (execute + NULL|self)
+
+ 104           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               24 (text)
+               PUSH_NULL
+
+ 105           LOAD_CONST              37 ("SELECT 1 FROM information_schema.tables WHERE table_name='onboarding_state'")
+
+ 104           CALL                     1
+
+ 103           CALL                     1
+               STORE_FAST               1 (result)
+
+ 109           LOAD_FAST                1 (result)
+               LOAD_ATTR               37 (scalar + NULL|self)
+               CALL                     0
+               TO_BOOL
+               POP_JUMP_IF_FALSE       38 (to L3)
+
+ 110           LOAD_FAST                0 (connection)
+               LOAD_ATTR               35 (execute + NULL|self)
+
+ 111           LOAD_GLOBAL              4 (sa)
+               LOAD_ATTR               24 (text)
+               PUSH_NULL
+
+ 112           LOAD_CONST              38 ('UPDATE onboarding_state SET steps_completed = steps_completed || \'["calendar_setup"]\'::jsonb WHERE steps_completed @> \'["assistant_setup"]\'::jsonb AND NOT steps_completed @> \'["calendar_setup"]\'::jsonb')
+
+ 111           CALL                     1
+
+ 110           CALL                     1
+               POP_TOP
+       L2:     RETURN_CONST             0 (None)
+
+ 109   L3:     RETURN_CONST             0 (None)
+
+  --   L4:     PUSH_EXC_INFO
+
+ 118           LOAD_GLOBAL             38 (Exception)
+               CHECK_EXC_MATCH
+               POP_JUMP_IF_FALSE       41 (to L8)
+               STORE_FAST               2 (e)
+
+ 120   L5:     LOAD_GLOBAL             40 (logger)
+               LOAD_ATTR               43 (debug + NULL|self)
+               LOAD_CONST              39 ('Skipped onboarding_states backfill: %s')
+               LOAD_GLOBAL             45 (str + NULL)
+               LOAD_FAST                2 (e)
+               CALL                     1
+               CALL                     2
+               POP_TOP
+       L6:     POP_EXCEPT
+               LOAD_CONST               0 (None)
+               STORE_FAST               2 (e)
+               DELETE_FAST              2 (e)
+               RETURN_CONST             0 (None)
+
+  --   L7:     LOAD_CONST               0 (None)
+               STORE_FAST               2 (e)
+               DELETE_FAST              2 (e)
+               RERAISE                  1
+
+ 118   L8:     RERAISE                  0
+
+  --   L9:     COPY                     3
+               POP_EXCEPT
+               RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L4 [0]
+  L4 to L5 -> L9 [1] lasti
+  L5 to L6 -> L7 [1] lasti
+  L7 to L9 -> L9 [1] lasti
+
+Disassembly of <code object downgrade at 0x00000185CB7DA010, file "D:\fluence\Github\mattbot\backend\alembic\versions\019_add_calendar_booking.py", line 123>:
+123           RESUME                   0
+
+124           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST               1 ('ck_user_settings_calendar_window')
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               3 ('check')
+              LOAD_CONST               4 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+125           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST               5 ('ck_user_settings_calendar_duration')
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               3 ('check')
+              LOAD_CONST               4 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+126           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               6 ('calendar_booking_window_days')
+              CALL                     2
+              POP_TOP
+
+127           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               7 ('calendar_default_duration_minutes')
+              CALL                     2
+              POP_TOP
+
+128           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               8 ('calendar_booking_enabled')
+              CALL                     2
+              POP_TOP
+
+129           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                6 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               9 ('google_calendar_tokens')
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)

@@ -1,0 +1,585 @@
+# Bytecode dump of: 017_hardening_fixes.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\017_hardening_fixes.py
+# co_names: ('__doc__', 'collections.abc', 'Sequence', 'sqlalchemy', 'sa', 'alembic', 'op', 'revision', 'str', '__annotations__', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Hardening fixes: per-user ElevenLabs agent, handoff target phone, expanded enums.\n\nRevision ID: 017\nRevises: 016\nCreate Date: 2026-02-27\n\n', '017', 'revision', '016', 'down_revision', 'branch_labels', 'depends_on']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'add_column', 'sa', 'Column', 'String', 'LargeBinary', 'Integer', 'drop_constraint', 'create_check_constraint')
+    # co_varnames: ()
+    # co_consts (strings): ['agents', 'elevenlabs_agent_id', 'user_settings', 'handoff_target_phone_ciphertext', 'handoff_target_phone_nonce', 'handoff_target_phone_key_version', 'handoff_target_phone_last4', 'ck_user_settings_handoff_trigger', 'check', "handoff_trigger IN ('vip_only', 'urgent_only', 'vip_and_urgent', 'always', 'never')", 'ck_user_settings_temperament', "temperament_preset IN ('professional_polite', 'casual_friendly', 'short_and_direct', 'warm_and_supportive', 'formal', 'custom')"]
+ 20           RESUME                   0
+
+ 22           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 23           LOAD_CONST               1 ('agents')
+
+ 24           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('elevenlabs_agent_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               3 (50)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 22           CALL                     2
+              POP_TOP
+
+ 28           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 29           LOAD_CONST               6 ('user_settings')
+
+ 30           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               7 ('handoff_target_phone_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 28           CALL                     2
+              POP_TOP
+
+ 32           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 33           LOAD_CONST               6 ('user_settings')
+
+ 34           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               8 ('handoff_target_phone_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 32           CALL                     2
+              POP_TOP
+
+ 36           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 37           LOAD_CONST               6 ('user_settings')
+
+ 38           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               9 ('handoff_target_phone_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 36           CALL                     2
+              POP_TOP
+
+ 40           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 41           LOAD_CONST               6 ('user_settings')
+
+ 42           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              10 ('handoff_target_phone_last4')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST              11 (4)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 40           CALL                     2
+              POP_TOP
+
+ 46           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               14 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST              12 ('ck_user_settings_handoff_trigger')
+              LOAD_CONST               6 ('user_settings')
+              LOAD_CONST              13 ('check')
+              LOAD_CONST              14 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+ 47           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               16 (create_check_constraint)
+              PUSH_NULL
+
+ 48           LOAD_CONST              12 ('ck_user_settings_handoff_trigger')
+
+ 49           LOAD_CONST               6 ('user_settings')
+
+ 50           LOAD_CONST              15 ("handoff_trigger IN ('vip_only', 'urgent_only', 'vip_and_urgent', 'always', 'never')")
+
+ 47           CALL                     3
+              POP_TOP
+
+ 54           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               14 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST              16 ('ck_user_settings_temperament')
+              LOAD_CONST               6 ('user_settings')
+              LOAD_CONST              13 ('check')
+              LOAD_CONST              14 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+ 55           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               16 (create_check_constraint)
+              PUSH_NULL
+
+ 56           LOAD_CONST              16 ('ck_user_settings_temperament')
+
+ 57           LOAD_CONST               6 ('user_settings')
+
+ 58           LOAD_CONST              17 ("temperament_preset IN ('professional_polite', 'casual_friendly', 'short_and_direct', 'warm_and_supportive', 'formal', 'custom')")
+
+ 55           CALL                     3
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'drop_constraint', 'create_check_constraint', 'drop_column')
+    # co_varnames: ()
+    # co_consts (strings): ['ck_user_settings_temperament', 'user_settings', 'check', "temperament_preset IN ('professional_polite', 'casual_friendly', 'formal', 'custom')", 'ck_user_settings_handoff_trigger', "handoff_trigger IN ('vip_only', 'always', 'never')", 'handoff_target_phone_last4', 'handoff_target_phone_key_version', 'handoff_target_phone_nonce', 'handoff_target_phone_ciphertext', 'agents', 'elevenlabs_agent_id']
+ 63           RESUME                   0
+
+ 65           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST               1 ('ck_user_settings_temperament')
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               3 ('check')
+              LOAD_CONST               4 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+ 66           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (create_check_constraint)
+              PUSH_NULL
+
+ 67           LOAD_CONST               1 ('ck_user_settings_temperament')
+
+ 68           LOAD_CONST               2 ('user_settings')
+
+ 69           LOAD_CONST               5 ("temperament_preset IN ('professional_polite', 'casual_friendly', 'formal', 'custom')")
+
+ 66           CALL                     3
+              POP_TOP
+
+ 73           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST               6 ('ck_user_settings_handoff_trigger')
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               3 ('check')
+              LOAD_CONST               4 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+ 74           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (create_check_constraint)
+              PUSH_NULL
+
+ 75           LOAD_CONST               6 ('ck_user_settings_handoff_trigger')
+
+ 76           LOAD_CONST               2 ('user_settings')
+
+ 77           LOAD_CONST               7 ("handoff_trigger IN ('vip_only', 'always', 'never')")
+
+ 74           CALL                     3
+              POP_TOP
+
+ 81           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                6 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               8 ('handoff_target_phone_last4')
+              CALL                     2
+              POP_TOP
+
+ 82           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                6 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               9 ('handoff_target_phone_key_version')
+              CALL                     2
+              POP_TOP
+
+ 83           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                6 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST              10 ('handoff_target_phone_nonce')
+              CALL                     2
+              POP_TOP
+
+ 84           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                6 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST              11 ('handoff_target_phone_ciphertext')
+              CALL                     2
+              POP_TOP
+
+ 87           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                6 (drop_column)
+              PUSH_NULL
+              LOAD_CONST              12 ('agents')
+              LOAD_CONST              13 ('elevenlabs_agent_id')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           SETUP_ANNOTATIONS
+              LOAD_CONST               0 ('Hardening fixes: per-user ElevenLabs agent, handoff target phone, expanded enums.\n\nRevision ID: 017\nRevises: 016\nCreate Date: 2026-02-27\n\n')
+              STORE_NAME               0 (__doc__)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('Sequence',))
+              IMPORT_NAME              1 (collections.abc)
+              IMPORT_FROM              2 (Sequence)
+              STORE_NAME               2 (Sequence)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (sqlalchemy)
+              STORE_NAME               4 (sa)
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('op',))
+              IMPORT_NAME              5 (alembic)
+              IMPORT_FROM              6 (op)
+              STORE_NAME               6 (op)
+              POP_TOP
+
+ 14           LOAD_CONST               5 ('017')
+              STORE_NAME               7 (revision)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               6 ('revision')
+              STORE_SUBSCR
+
+ 15           LOAD_CONST               7 ('016')
+              STORE_NAME              10 (down_revision)
+              LOAD_NAME                8 (str)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               8 ('down_revision')
+              STORE_SUBSCR
+
+ 16           LOAD_CONST               3 (None)
+              STORE_NAME              11 (branch_labels)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                8 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               9 ('branch_labels')
+              STORE_SUBSCR
+
+ 17           LOAD_CONST               3 (None)
+              STORE_NAME              12 (depends_on)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                8 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST              10 ('depends_on')
+              STORE_SUBSCR
+
+ 20           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              11 (<code object upgrade at 0x00000185C9B0E400, file "D:\fluence\Github\mattbot\backend\alembic\versions\017_hardening_fixes.py", line 20>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              13 (upgrade)
+
+ 63           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              12 (<code object downgrade at 0x00000185C917B410, file "D:\fluence\Github\mattbot\backend\alembic\versions\017_hardening_fixes.py", line 63>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              14 (downgrade)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object upgrade at 0x00000185C9B0E400, file "D:\fluence\Github\mattbot\backend\alembic\versions\017_hardening_fixes.py", line 20>:
+ 20           RESUME                   0
+
+ 22           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 23           LOAD_CONST               1 ('agents')
+
+ 24           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('elevenlabs_agent_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               3 (50)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 22           CALL                     2
+              POP_TOP
+
+ 28           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 29           LOAD_CONST               6 ('user_settings')
+
+ 30           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               7 ('handoff_target_phone_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 28           CALL                     2
+              POP_TOP
+
+ 32           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 33           LOAD_CONST               6 ('user_settings')
+
+ 34           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               8 ('handoff_target_phone_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 32           CALL                     2
+              POP_TOP
+
+ 36           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 37           LOAD_CONST               6 ('user_settings')
+
+ 38           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               9 ('handoff_target_phone_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 36           CALL                     2
+              POP_TOP
+
+ 40           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 41           LOAD_CONST               6 ('user_settings')
+
+ 42           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              10 ('handoff_target_phone_last4')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST              11 (4)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 40           CALL                     2
+              POP_TOP
+
+ 46           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               14 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST              12 ('ck_user_settings_handoff_trigger')
+              LOAD_CONST               6 ('user_settings')
+              LOAD_CONST              13 ('check')
+              LOAD_CONST              14 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+ 47           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               16 (create_check_constraint)
+              PUSH_NULL
+
+ 48           LOAD_CONST              12 ('ck_user_settings_handoff_trigger')
+
+ 49           LOAD_CONST               6 ('user_settings')
+
+ 50           LOAD_CONST              15 ("handoff_trigger IN ('vip_only', 'urgent_only', 'vip_and_urgent', 'always', 'never')")
+
+ 47           CALL                     3
+              POP_TOP
+
+ 54           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               14 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST              16 ('ck_user_settings_temperament')
+              LOAD_CONST               6 ('user_settings')
+              LOAD_CONST              13 ('check')
+              LOAD_CONST              14 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+ 55           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               16 (create_check_constraint)
+              PUSH_NULL
+
+ 56           LOAD_CONST              16 ('ck_user_settings_temperament')
+
+ 57           LOAD_CONST               6 ('user_settings')
+
+ 58           LOAD_CONST              17 ("temperament_preset IN ('professional_polite', 'casual_friendly', 'short_and_direct', 'warm_and_supportive', 'formal', 'custom')")
+
+ 55           CALL                     3
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185C917B410, file "D:\fluence\Github\mattbot\backend\alembic\versions\017_hardening_fixes.py", line 63>:
+ 63           RESUME                   0
+
+ 65           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST               1 ('ck_user_settings_temperament')
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               3 ('check')
+              LOAD_CONST               4 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+ 66           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (create_check_constraint)
+              PUSH_NULL
+
+ 67           LOAD_CONST               1 ('ck_user_settings_temperament')
+
+ 68           LOAD_CONST               2 ('user_settings')
+
+ 69           LOAD_CONST               5 ("temperament_preset IN ('professional_polite', 'casual_friendly', 'formal', 'custom')")
+
+ 66           CALL                     3
+              POP_TOP
+
+ 73           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST               6 ('ck_user_settings_handoff_trigger')
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               3 ('check')
+              LOAD_CONST               4 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+ 74           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (create_check_constraint)
+              PUSH_NULL
+
+ 75           LOAD_CONST               6 ('ck_user_settings_handoff_trigger')
+
+ 76           LOAD_CONST               2 ('user_settings')
+
+ 77           LOAD_CONST               7 ("handoff_trigger IN ('vip_only', 'always', 'never')")
+
+ 74           CALL                     3
+              POP_TOP
+
+ 81           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                6 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               8 ('handoff_target_phone_last4')
+              CALL                     2
+              POP_TOP
+
+ 82           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                6 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST               9 ('handoff_target_phone_key_version')
+              CALL                     2
+              POP_TOP
+
+ 83           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                6 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST              10 ('handoff_target_phone_nonce')
+              CALL                     2
+              POP_TOP
+
+ 84           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                6 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               2 ('user_settings')
+              LOAD_CONST              11 ('handoff_target_phone_ciphertext')
+              CALL                     2
+              POP_TOP
+
+ 87           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                6 (drop_column)
+              PUSH_NULL
+              LOAD_CONST              12 ('agents')
+              LOAD_CONST              13 ('elevenlabs_agent_id')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)

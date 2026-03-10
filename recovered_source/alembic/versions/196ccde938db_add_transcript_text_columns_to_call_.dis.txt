@@ -1,0 +1,269 @@
+# Bytecode dump of: 196ccde938db_add_transcript_text_columns_to_call_.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\196ccde938db_add_transcript_text_columns_to_call_.py
+# co_names: ('__doc__', 'typing', 'Sequence', 'Union', 'alembic', 'op', 'sqlalchemy', 'sa', 'revision', 'str', '__annotations__', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['add_transcript_text_columns_to_call_artifacts\n\nRevision ID: 196ccde938db\nRevises: 027\nCreate Date: 2026-03-08 02:11:20.646019\n', '196ccde938db', 'revision', '027', 'down_revision', 'branch_labels', 'depends_on']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'add_column', 'sa', 'Column', 'LargeBinary', 'Integer')
+    # co_varnames: ()
+    # co_consts (strings): ['call_artifacts', 'transcript_text_ciphertext', 'transcript_text_nonce', 'transcript_text_key_version']
+ 18           RESUME                   0
+
+ 19           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('transcript_text_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+
+ 20           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               5 ('transcript_text_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+
+ 21           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               6 ('transcript_text_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'drop_column')
+    # co_varnames: ()
+    # co_consts (strings): ['call_artifacts', 'transcript_text_key_version', 'transcript_text_nonce', 'transcript_text_ciphertext']
+ 24           RESUME                   0
+
+ 25           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_CONST               2 ('transcript_text_key_version')
+              CALL                     2
+              POP_TOP
+
+ 26           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_CONST               3 ('transcript_text_nonce')
+              CALL                     2
+              POP_TOP
+
+ 27           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_CONST               4 ('transcript_text_ciphertext')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           SETUP_ANNOTATIONS
+              LOAD_CONST               0 ('add_transcript_text_columns_to_call_artifacts\n\nRevision ID: 196ccde938db\nRevises: 027\nCreate Date: 2026-03-08 02:11:20.646019\n')
+              STORE_NAME               0 (__doc__)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('Sequence', 'Union'))
+              IMPORT_NAME              1 (typing)
+              IMPORT_FROM              2 (Sequence)
+              STORE_NAME               2 (Sequence)
+              IMPORT_FROM              3 (Union)
+              STORE_NAME               3 (Union)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('op',))
+              IMPORT_NAME              4 (alembic)
+              IMPORT_FROM              5 (op)
+              STORE_NAME               5 (op)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (None)
+              IMPORT_NAME              6 (sqlalchemy)
+              STORE_NAME               7 (sa)
+
+ 12           LOAD_CONST               5 ('196ccde938db')
+              STORE_NAME               8 (revision)
+              LOAD_NAME                9 (str)
+              LOAD_NAME               10 (__annotations__)
+              LOAD_CONST               6 ('revision')
+              STORE_SUBSCR
+
+ 13           LOAD_CONST               7 ('027')
+              STORE_NAME              11 (down_revision)
+              LOAD_NAME                3 (Union)
+              LOAD_NAME                9 (str)
+              LOAD_CONST               4 (None)
+              BUILD_TUPLE              2
+              BINARY_SUBSCR
+              LOAD_NAME               10 (__annotations__)
+              LOAD_CONST               8 ('down_revision')
+              STORE_SUBSCR
+
+ 14           LOAD_CONST               4 (None)
+              STORE_NAME              12 (branch_labels)
+              LOAD_NAME                3 (Union)
+              LOAD_NAME                9 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                9 (str)
+              BINARY_SUBSCR
+              LOAD_CONST               4 (None)
+              BUILD_TUPLE              3
+              BINARY_SUBSCR
+              LOAD_NAME               10 (__annotations__)
+              LOAD_CONST               9 ('branch_labels')
+              STORE_SUBSCR
+
+ 15           LOAD_CONST               4 (None)
+              STORE_NAME              13 (depends_on)
+              LOAD_NAME                3 (Union)
+              LOAD_NAME                9 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                9 (str)
+              BINARY_SUBSCR
+              LOAD_CONST               4 (None)
+              BUILD_TUPLE              3
+              BINARY_SUBSCR
+              LOAD_NAME               10 (__annotations__)
+              LOAD_CONST              10 ('depends_on')
+              STORE_SUBSCR
+
+ 18           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              11 (<code object upgrade at 0x00000185C91F3050, file "D:\fluence\Github\mattbot\backend\alembic\versions\196ccde938db_add_transcript_text_columns_to_call_.py", line 18>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              14 (upgrade)
+
+ 24           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              12 (<code object downgrade at 0x00000185CBA80030, file "D:\fluence\Github\mattbot\backend\alembic\versions\196ccde938db_add_transcript_text_columns_to_call_.py", line 24>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              15 (downgrade)
+              RETURN_CONST             4 (None)
+
+Disassembly of <code object upgrade at 0x00000185C91F3050, file "D:\fluence\Github\mattbot\backend\alembic\versions\196ccde938db_add_transcript_text_columns_to_call_.py", line 18>:
+ 18           RESUME                   0
+
+ 19           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('transcript_text_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+
+ 20           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               5 ('transcript_text_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+
+ 21           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               6 ('transcript_text_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185CBA80030, file "D:\fluence\Github\mattbot\backend\alembic\versions\196ccde938db_add_transcript_text_columns_to_call_.py", line 24>:
+ 24           RESUME                   0
+
+ 25           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_CONST               2 ('transcript_text_key_version')
+              CALL                     2
+              POP_TOP
+
+ 26           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_CONST               3 ('transcript_text_nonce')
+              CALL                     2
+              POP_TOP
+
+ 27           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_artifacts')
+              LOAD_CONST               4 ('transcript_text_ciphertext')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)

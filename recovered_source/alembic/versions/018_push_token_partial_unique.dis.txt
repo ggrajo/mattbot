@@ -1,0 +1,156 @@
+# Bytecode dump of: 018_push_token_partial_unique.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\018_push_token_partial_unique.py
+# co_names: ('__doc__', 'alembic', 'op', 'revision', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Replace push_tokens unique constraint with partial unique index.\n\nRevision ID: 018\nRevises: 017\nCreate Date: 2026-02-28\n', '018', '017']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'execute', 'drop_constraint')
+    # co_varnames: ()
+    # co_consts (strings): ['DELETE FROM push_tokens WHERE revoked_at IS NOT NULL', 'uq_push_tokens_provider_token', 'push_tokens', 'unique', 'CREATE UNIQUE INDEX uq_push_tokens_active_token ON push_tokens (provider, token) WHERE revoked_at IS NULL']
+ 16           RESUME                   0
+
+ 18           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (execute)
+              PUSH_NULL
+              LOAD_CONST               1 ('DELETE FROM push_tokens WHERE revoked_at IS NOT NULL')
+              CALL                     1
+              POP_TOP
+
+ 21           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST               2 ('uq_push_tokens_provider_token')
+              LOAD_CONST               3 ('push_tokens')
+              LOAD_CONST               4 ('unique')
+              LOAD_CONST               5 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+ 24           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (execute)
+              PUSH_NULL
+
+ 25           LOAD_CONST               6 ('CREATE UNIQUE INDEX uq_push_tokens_active_token ON push_tokens (provider, token) WHERE revoked_at IS NULL')
+
+ 24           CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'execute', 'create_unique_constraint')
+    # co_varnames: ()
+    # co_consts (strings): ['DROP INDEX IF EXISTS uq_push_tokens_active_token', 'uq_push_tokens_provider_token', 'push_tokens', 'provider', 'token']
+ 30           RESUME                   0
+
+ 31           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (execute)
+              PUSH_NULL
+              LOAD_CONST               1 ('DROP INDEX IF EXISTS uq_push_tokens_active_token')
+              CALL                     1
+              POP_TOP
+
+ 32           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (create_unique_constraint)
+              PUSH_NULL
+
+ 33           LOAD_CONST               2 ('uq_push_tokens_provider_token')
+              LOAD_CONST               3 ('push_tokens')
+              LOAD_CONST               4 ('provider')
+              LOAD_CONST               5 ('token')
+              BUILD_LIST               2
+
+ 32           CALL                     3
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Replace push_tokens unique constraint with partial unique index.\n\nRevision ID: 018\nRevises: 017\nCreate Date: 2026-02-28\n')
+              STORE_NAME               0 (__doc__)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('op',))
+              IMPORT_NAME              1 (alembic)
+              IMPORT_FROM              2 (op)
+              STORE_NAME               2 (op)
+              POP_TOP
+
+ 10           LOAD_CONST               3 ('018')
+              STORE_NAME               3 (revision)
+
+ 11           LOAD_CONST               4 ('017')
+              STORE_NAME               4 (down_revision)
+
+ 12           LOAD_CONST               5 (None)
+              STORE_NAME               5 (branch_labels)
+
+ 13           LOAD_CONST               5 (None)
+              STORE_NAME               6 (depends_on)
+
+ 16           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               6 (<code object upgrade at 0x00000185CB7874B0, file "D:\fluence\Github\mattbot\backend\alembic\versions\018_push_token_partial_unique.py", line 16>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME               7 (upgrade)
+
+ 30           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               7 (<code object downgrade at 0x00000185CB7FBA60, file "D:\fluence\Github\mattbot\backend\alembic\versions\018_push_token_partial_unique.py", line 30>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME               8 (downgrade)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object upgrade at 0x00000185CB7874B0, file "D:\fluence\Github\mattbot\backend\alembic\versions\018_push_token_partial_unique.py", line 16>:
+ 16           RESUME                   0
+
+ 18           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (execute)
+              PUSH_NULL
+              LOAD_CONST               1 ('DELETE FROM push_tokens WHERE revoked_at IS NOT NULL')
+              CALL                     1
+              POP_TOP
+
+ 21           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (drop_constraint)
+              PUSH_NULL
+              LOAD_CONST               2 ('uq_push_tokens_provider_token')
+              LOAD_CONST               3 ('push_tokens')
+              LOAD_CONST               4 ('unique')
+              LOAD_CONST               5 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+
+ 24           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (execute)
+              PUSH_NULL
+
+ 25           LOAD_CONST               6 ('CREATE UNIQUE INDEX uq_push_tokens_active_token ON push_tokens (provider, token) WHERE revoked_at IS NULL')
+
+ 24           CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185CB7FBA60, file "D:\fluence\Github\mattbot\backend\alembic\versions\018_push_token_partial_unique.py", line 30>:
+ 30           RESUME                   0
+
+ 31           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (execute)
+              PUSH_NULL
+              LOAD_CONST               1 ('DROP INDEX IF EXISTS uq_push_tokens_active_token')
+              CALL                     1
+              POP_TOP
+
+ 32           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (create_unique_constraint)
+              PUSH_NULL
+
+ 33           LOAD_CONST               2 ('uq_push_tokens_provider_token')
+              LOAD_CONST               3 ('push_tokens')
+              LOAD_CONST               4 ('provider')
+              LOAD_CONST               5 ('token')
+              BUILD_LIST               2
+
+ 32           CALL                     3
+              POP_TOP
+              RETURN_CONST             0 (None)

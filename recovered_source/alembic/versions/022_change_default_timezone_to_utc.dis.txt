@@ -1,0 +1,120 @@
+# Bytecode dump of: 022_change_default_timezone_to_utc.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\022_change_default_timezone_to_utc.py
+# co_names: ('__doc__', 'alembic', 'op', 'revision', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Change default timezone from America/New_York to UTC\n\nRevision ID: 022\nRevises: 021\nCreate Date: 2026-03-03\n', '022', '021']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'alter_column')
+    # co_varnames: ()
+    # co_consts (strings): ['user_settings', 'timezone', 'UTC']
+ 15           RESUME                   0
+
+ 16           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (alter_column)
+              PUSH_NULL
+
+ 17           LOAD_CONST               1 ('user_settings')
+
+ 18           LOAD_CONST               2 ('timezone')
+
+ 19           LOAD_CONST               3 ('UTC')
+
+ 16           LOAD_CONST               4 (('server_default',))
+              CALL_KW                  3
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'alter_column')
+    # co_varnames: ()
+    # co_consts (strings): ['user_settings', 'timezone', 'America/New_York']
+ 23           RESUME                   0
+
+ 24           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (alter_column)
+              PUSH_NULL
+
+ 25           LOAD_CONST               1 ('user_settings')
+
+ 26           LOAD_CONST               2 ('timezone')
+
+ 27           LOAD_CONST               3 ('America/New_York')
+
+ 24           LOAD_CONST               4 (('server_default',))
+              CALL_KW                  3
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Change default timezone from America/New_York to UTC\n\nRevision ID: 022\nRevises: 021\nCreate Date: 2026-03-03\n')
+              STORE_NAME               0 (__doc__)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('op',))
+              IMPORT_NAME              1 (alembic)
+              IMPORT_FROM              2 (op)
+              STORE_NAME               2 (op)
+              POP_TOP
+
+  9           LOAD_CONST               3 ('022')
+              STORE_NAME               3 (revision)
+
+ 10           LOAD_CONST               4 ('021')
+              STORE_NAME               4 (down_revision)
+
+ 11           LOAD_CONST               5 (None)
+              STORE_NAME               5 (branch_labels)
+
+ 12           LOAD_CONST               5 (None)
+              STORE_NAME               6 (depends_on)
+
+ 15           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               6 (<code object upgrade at 0x00000185CB9F3730, file "D:\fluence\Github\mattbot\backend\alembic\versions\022_change_default_timezone_to_utc.py", line 15>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME               7 (upgrade)
+
+ 23           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               7 (<code object downgrade at 0x00000185CBA67B30, file "D:\fluence\Github\mattbot\backend\alembic\versions\022_change_default_timezone_to_utc.py", line 23>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME               8 (downgrade)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object upgrade at 0x00000185CB9F3730, file "D:\fluence\Github\mattbot\backend\alembic\versions\022_change_default_timezone_to_utc.py", line 15>:
+ 15           RESUME                   0
+
+ 16           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (alter_column)
+              PUSH_NULL
+
+ 17           LOAD_CONST               1 ('user_settings')
+
+ 18           LOAD_CONST               2 ('timezone')
+
+ 19           LOAD_CONST               3 ('UTC')
+
+ 16           LOAD_CONST               4 (('server_default',))
+              CALL_KW                  3
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185CBA67B30, file "D:\fluence\Github\mattbot\backend\alembic\versions\022_change_default_timezone_to_utc.py", line 23>:
+ 23           RESUME                   0
+
+ 24           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (alter_column)
+              PUSH_NULL
+
+ 25           LOAD_CONST               1 ('user_settings')
+
+ 26           LOAD_CONST               2 ('timezone')
+
+ 27           LOAD_CONST               3 ('America/New_York')
+
+ 24           LOAD_CONST               4 (('server_default',))
+              CALL_KW                  3
+              POP_TOP
+              RETURN_CONST             0 (None)

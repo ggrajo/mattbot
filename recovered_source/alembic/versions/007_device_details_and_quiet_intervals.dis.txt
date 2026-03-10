@@ -1,0 +1,456 @@
+# Bytecode dump of: 007_device_details_and_quiet_intervals.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\007_device_details_and_quiet_intervals.py
+# co_names: ('__doc__', 'collections.abc', 'Sequence', 'sqlalchemy', 'sa', 'sqlalchemy.dialects.postgresql', 'JSONB', 'alembic', 'op', 'revision', 'str', '__annotations__', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Add device details (IP, location, remembered) and quiet hours intervals\n\nRevision ID: 007\nRevises: 006\nCreate Date: 2026-02-23\n', '007', 'revision', '006', 'down_revision', 'branch_labels', 'depends_on']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'add_column', 'sa', 'Column', 'String', 'Boolean', 'text', 'JSONB', 'execute')
+    # co_varnames: ()
+    # co_consts (strings): ['devices', 'last_ip', 'last_location', 'is_remembered', 'false', 'user_settings', 'quiet_hours_intervals', "'[]'::jsonb", 'quiet_hours_allow_vip', "\n        UPDATE user_settings\n        SET quiet_hours_intervals = jsonb_build_array(\n            jsonb_build_object(\n                'label', 'Default',\n                'start', to_char(quiet_hours_start, 'HH24:MI'),\n                'end', to_char(quiet_hours_end, 'HH24:MI'),\n                'days', quiet_hours_days\n            )\n        )\n        WHERE quiet_hours_start IS NOT NULL\n          AND quiet_hours_end IS NOT NULL\n    "]
+ 20           RESUME                   0
+
+ 22           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('devices')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('last_ip')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               3 (45)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+
+ 23           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('devices')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               6 ('last_location')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               7 (120)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+
+ 24           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 25           LOAD_CONST               1 ('devices')
+
+ 26           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               8 ('is_remembered')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (Boolean)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (text)
+              PUSH_NULL
+              LOAD_CONST              10 ('false')
+              CALL                     1
+              LOAD_CONST              11 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 24           CALL                     2
+              POP_TOP
+
+ 30           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 31           LOAD_CONST              12 ('user_settings')
+
+ 32           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 33           LOAD_CONST              13 ('quiet_hours_intervals')
+
+ 34           LOAD_GLOBAL             15 (JSONB + NULL)
+              CALL                     0
+
+ 35           LOAD_CONST               9 (False)
+
+ 36           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (text)
+              PUSH_NULL
+              LOAD_CONST              14 ("'[]'::jsonb")
+              CALL                     1
+
+ 32           LOAD_CONST              11 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 30           CALL                     2
+              POP_TOP
+
+ 39           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 40           LOAD_CONST              12 ('user_settings')
+
+ 41           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 42           LOAD_CONST              15 ('quiet_hours_allow_vip')
+
+ 43           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 44           LOAD_CONST               9 (False)
+
+ 45           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (text)
+              PUSH_NULL
+              LOAD_CONST              10 ('false')
+              CALL                     1
+
+ 41           LOAD_CONST              11 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 39           CALL                     2
+              POP_TOP
+
+ 50           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               16 (execute)
+              PUSH_NULL
+              LOAD_CONST              16 ("\n        UPDATE user_settings\n        SET quiet_hours_intervals = jsonb_build_array(\n            jsonb_build_object(\n                'label', 'Default',\n                'start', to_char(quiet_hours_start, 'HH24:MI'),\n                'end', to_char(quiet_hours_end, 'HH24:MI'),\n                'days', quiet_hours_days\n            )\n        )\n        WHERE quiet_hours_start IS NOT NULL\n          AND quiet_hours_end IS NOT NULL\n    ")
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'drop_column')
+    # co_varnames: ()
+    # co_consts (strings): ['user_settings', 'quiet_hours_allow_vip', 'quiet_hours_intervals', 'devices', 'is_remembered', 'last_location', 'last_ip']
+ 65           RESUME                   0
+
+ 66           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               2 ('quiet_hours_allow_vip')
+              CALL                     2
+              POP_TOP
+
+ 67           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               3 ('quiet_hours_intervals')
+              CALL                     2
+              POP_TOP
+
+ 68           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               4 ('devices')
+              LOAD_CONST               5 ('is_remembered')
+              CALL                     2
+              POP_TOP
+
+ 69           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               4 ('devices')
+              LOAD_CONST               6 ('last_location')
+              CALL                     2
+              POP_TOP
+
+ 70           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               4 ('devices')
+              LOAD_CONST               7 ('last_ip')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           SETUP_ANNOTATIONS
+              LOAD_CONST               0 ('Add device details (IP, location, remembered) and quiet hours intervals\n\nRevision ID: 007\nRevises: 006\nCreate Date: 2026-02-23\n')
+              STORE_NAME               0 (__doc__)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('Sequence',))
+              IMPORT_NAME              1 (collections.abc)
+              IMPORT_FROM              2 (Sequence)
+              STORE_NAME               2 (Sequence)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (sqlalchemy)
+              STORE_NAME               4 (sa)
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('JSONB',))
+              IMPORT_NAME              5 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM              6 (JSONB)
+              STORE_NAME               6 (JSONB)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('op',))
+              IMPORT_NAME              7 (alembic)
+              IMPORT_FROM              8 (op)
+              STORE_NAME               8 (op)
+              POP_TOP
+
+ 14           LOAD_CONST               6 ('007')
+              STORE_NAME               9 (revision)
+              LOAD_NAME               10 (str)
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               7 ('revision')
+              STORE_SUBSCR
+
+ 15           LOAD_CONST               8 ('006')
+              STORE_NAME              12 (down_revision)
+              LOAD_NAME               10 (str)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               9 ('down_revision')
+              STORE_SUBSCR
+
+ 16           LOAD_CONST               3 (None)
+              STORE_NAME              13 (branch_labels)
+              LOAD_NAME               10 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME               10 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              10 ('branch_labels')
+              STORE_SUBSCR
+
+ 17           LOAD_CONST               3 (None)
+              STORE_NAME              14 (depends_on)
+              LOAD_NAME               10 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME               10 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              11 ('depends_on')
+              STORE_SUBSCR
+
+ 20           LOAD_CONST              14 (('return', None))
+              LOAD_CONST              12 (<code object upgrade at 0x00000185C9A4AC80, file "D:\fluence\Github\mattbot\backend\alembic\versions\007_device_details_and_quiet_intervals.py", line 20>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              15 (upgrade)
+
+ 65           LOAD_CONST              14 (('return', None))
+              LOAD_CONST              13 (<code object downgrade at 0x00000185CB7BDDF0, file "D:\fluence\Github\mattbot\backend\alembic\versions\007_device_details_and_quiet_intervals.py", line 65>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              16 (downgrade)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object upgrade at 0x00000185C9A4AC80, file "D:\fluence\Github\mattbot\backend\alembic\versions\007_device_details_and_quiet_intervals.py", line 20>:
+ 20           RESUME                   0
+
+ 22           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('devices')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('last_ip')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               3 (45)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+
+ 23           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('devices')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               6 ('last_location')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               7 (120)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+              CALL                     2
+              POP_TOP
+
+ 24           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 25           LOAD_CONST               1 ('devices')
+
+ 26           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               8 ('is_remembered')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (Boolean)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (text)
+              PUSH_NULL
+              LOAD_CONST              10 ('false')
+              CALL                     1
+              LOAD_CONST              11 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 24           CALL                     2
+              POP_TOP
+
+ 30           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 31           LOAD_CONST              12 ('user_settings')
+
+ 32           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 33           LOAD_CONST              13 ('quiet_hours_intervals')
+
+ 34           LOAD_GLOBAL             15 (JSONB + NULL)
+              CALL                     0
+
+ 35           LOAD_CONST               9 (False)
+
+ 36           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (text)
+              PUSH_NULL
+              LOAD_CONST              14 ("'[]'::jsonb")
+              CALL                     1
+
+ 32           LOAD_CONST              11 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 30           CALL                     2
+              POP_TOP
+
+ 39           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 40           LOAD_CONST              12 ('user_settings')
+
+ 41           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 42           LOAD_CONST              15 ('quiet_hours_allow_vip')
+
+ 43           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 44           LOAD_CONST               9 (False)
+
+ 45           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (text)
+              PUSH_NULL
+              LOAD_CONST              10 ('false')
+              CALL                     1
+
+ 41           LOAD_CONST              11 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 39           CALL                     2
+              POP_TOP
+
+ 50           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               16 (execute)
+              PUSH_NULL
+              LOAD_CONST              16 ("\n        UPDATE user_settings\n        SET quiet_hours_intervals = jsonb_build_array(\n            jsonb_build_object(\n                'label', 'Default',\n                'start', to_char(quiet_hours_start, 'HH24:MI'),\n                'end', to_char(quiet_hours_end, 'HH24:MI'),\n                'days', quiet_hours_days\n            )\n        )\n        WHERE quiet_hours_start IS NOT NULL\n          AND quiet_hours_end IS NOT NULL\n    ")
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185CB7BDDF0, file "D:\fluence\Github\mattbot\backend\alembic\versions\007_device_details_and_quiet_intervals.py", line 65>:
+ 65           RESUME                   0
+
+ 66           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               2 ('quiet_hours_allow_vip')
+              CALL                     2
+              POP_TOP
+
+ 67           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('user_settings')
+              LOAD_CONST               3 ('quiet_hours_intervals')
+              CALL                     2
+              POP_TOP
+
+ 68           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               4 ('devices')
+              LOAD_CONST               5 ('is_remembered')
+              CALL                     2
+              POP_TOP
+
+ 69           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               4 ('devices')
+              LOAD_CONST               6 ('last_location')
+              CALL                     2
+              POP_TOP
+
+ 70           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               4 ('devices')
+              LOAD_CONST               7 ('last_ip')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)

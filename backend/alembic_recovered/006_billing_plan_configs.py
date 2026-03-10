@@ -3,8 +3,7 @@
 
 __doc__ = 'Dynamic billing plan configs: new tables + drop hardcoded plan CHECK\n\nRevision ID: 006\nRevises: 005\nCreate Date: 2026-02-23\n'
 from collections.abc import Sequence
-import sqlalchemy as sa
-from alembic import op
+
 revision: str = '006'
 down_revision: str | None = '005'
 branch_labels: str | Sequence[str] | None = None

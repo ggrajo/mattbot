@@ -1,0 +1,331 @@
+# Bytecode dump of: 027_add_pin_to_devices.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\027_add_pin_to_devices.py
+# co_names: ('__doc__', 'sqlalchemy', 'sa', 'alembic', 'op', 'revision', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Add PIN login columns to devices table\n\nRevision ID: 027\nRevises: 026\nCreate Date: 2026-03-05\n', '027', '026']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'add_column', 'sa', 'Column', 'String', 'Integer', 'text', 'DateTime')
+    # co_varnames: ()
+    # co_consts (strings): ['devices', 'pin_hash', 'pin_failed_attempts', '0', 'pin_locked_until', 'pin_set_at']
+ 16           RESUME                   0
+
+ 17           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 18           LOAD_CONST               1 ('devices')
+
+ 19           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('pin_hash')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               3 (255)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 17           CALL                     2
+              POP_TOP
+
+ 21           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 22           LOAD_CONST               1 ('devices')
+
+ 23           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 24           LOAD_CONST               6 ('pin_failed_attempts')
+
+ 25           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (Integer)
+              PUSH_NULL
+              CALL                     0
+
+ 26           LOAD_CONST               7 (False)
+
+ 27           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (text)
+              PUSH_NULL
+              LOAD_CONST               8 ('0')
+              CALL                     1
+
+ 23           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 21           CALL                     2
+              POP_TOP
+
+ 30           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 31           LOAD_CONST               1 ('devices')
+
+ 32           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              10 ('pin_locked_until')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               4 (True)
+              LOAD_CONST              11 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 30           CALL                     2
+              POP_TOP
+
+ 34           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 35           LOAD_CONST               1 ('devices')
+
+ 36           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              12 ('pin_set_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               4 (True)
+              LOAD_CONST              11 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 34           CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'drop_column')
+    # co_varnames: ()
+    # co_consts (strings): ['devices', 'pin_set_at', 'pin_locked_until', 'pin_failed_attempts', 'pin_hash']
+ 40           RESUME                   0
+
+ 41           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('devices')
+              LOAD_CONST               2 ('pin_set_at')
+              CALL                     2
+              POP_TOP
+
+ 42           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('devices')
+              LOAD_CONST               3 ('pin_locked_until')
+              CALL                     2
+              POP_TOP
+
+ 43           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('devices')
+              LOAD_CONST               4 ('pin_failed_attempts')
+              CALL                     2
+              POP_TOP
+
+ 44           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('devices')
+              LOAD_CONST               5 ('pin_hash')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Add PIN login columns to devices table\n\nRevision ID: 027\nRevises: 026\nCreate Date: 2026-03-05\n')
+              STORE_NAME               0 (__doc__)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (sqlalchemy)
+              STORE_NAME               2 (sa)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('op',))
+              IMPORT_NAME              3 (alembic)
+              IMPORT_FROM              4 (op)
+              STORE_NAME               4 (op)
+              POP_TOP
+
+ 10           LOAD_CONST               4 ('027')
+              STORE_NAME               5 (revision)
+
+ 11           LOAD_CONST               5 ('026')
+              STORE_NAME               6 (down_revision)
+
+ 12           LOAD_CONST               2 (None)
+              STORE_NAME               7 (branch_labels)
+
+ 13           LOAD_CONST               2 (None)
+              STORE_NAME               8 (depends_on)
+
+ 16           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               6 (<code object upgrade at 0x00000185C9AC7110, file "D:\fluence\Github\mattbot\backend\alembic\versions\027_add_pin_to_devices.py", line 16>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME               9 (upgrade)
+
+ 40           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               7 (<code object downgrade at 0x00000185CBA3D930, file "D:\fluence\Github\mattbot\backend\alembic\versions\027_add_pin_to_devices.py", line 40>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              10 (downgrade)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object upgrade at 0x00000185C9AC7110, file "D:\fluence\Github\mattbot\backend\alembic\versions\027_add_pin_to_devices.py", line 16>:
+ 16           RESUME                   0
+
+ 17           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 18           LOAD_CONST               1 ('devices')
+
+ 19           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('pin_hash')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (String)
+              PUSH_NULL
+              LOAD_CONST               3 (255)
+              CALL                     1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 17           CALL                     2
+              POP_TOP
+
+ 21           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 22           LOAD_CONST               1 ('devices')
+
+ 23           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 24           LOAD_CONST               6 ('pin_failed_attempts')
+
+ 25           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (Integer)
+              PUSH_NULL
+              CALL                     0
+
+ 26           LOAD_CONST               7 (False)
+
+ 27           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (text)
+              PUSH_NULL
+              LOAD_CONST               8 ('0')
+              CALL                     1
+
+ 23           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 21           CALL                     2
+              POP_TOP
+
+ 30           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 31           LOAD_CONST               1 ('devices')
+
+ 32           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              10 ('pin_locked_until')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               4 (True)
+              LOAD_CONST              11 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 30           CALL                     2
+              POP_TOP
+
+ 34           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 35           LOAD_CONST               1 ('devices')
+
+ 36           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              12 ('pin_set_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               4 (True)
+              LOAD_CONST              11 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('nullable',))
+              CALL_KW                  3
+
+ 34           CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185CBA3D930, file "D:\fluence\Github\mattbot\backend\alembic\versions\027_add_pin_to_devices.py", line 40>:
+ 40           RESUME                   0
+
+ 41           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('devices')
+              LOAD_CONST               2 ('pin_set_at')
+              CALL                     2
+              POP_TOP
+
+ 42           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('devices')
+              LOAD_CONST               3 ('pin_locked_until')
+              CALL                     2
+              POP_TOP
+
+ 43           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('devices')
+              LOAD_CONST               4 ('pin_failed_attempts')
+              CALL                     2
+              POP_TOP
+
+ 44           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('devices')
+              LOAD_CONST               5 ('pin_hash')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)

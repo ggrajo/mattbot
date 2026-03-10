@@ -3,9 +3,7 @@
 
 __doc__ = 'Add device details (IP, location, remembered) and quiet hours intervals\n\nRevision ID: 007\nRevises: 006\nCreate Date: 2026-02-23\n'
 from collections.abc import Sequence
-import sqlalchemy as sa
-from sqlalchemy.dialects.postgresql import JSONB
-from alembic import op
+
 revision: str = '007'
 down_revision: str | None = '006'
 branch_labels: str | Sequence[str] | None = None

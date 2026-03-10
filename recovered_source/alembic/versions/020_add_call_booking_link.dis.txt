@@ -1,0 +1,185 @@
+# Bytecode dump of: 020_add_call_booking_link.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\020_add_call_booking_link.py
+# co_names: ('__doc__', 'sqlalchemy', 'sa', 'alembic', 'op', 'revision', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Add calendar booking link columns to calls table.\n\nRevision ID: 020\nRevises: 019\nCreate Date: 2026-03-03\n', '020', '019']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'add_column', 'sa', 'Column', 'Text')
+    # co_varnames: ()
+    # co_consts (strings): ['calls', 'booked_calendar_event_id', 'booked_calendar_event_summary']
+ 18           RESUME                   0
+
+ 19           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 20           LOAD_CONST               1 ('calls')
+
+ 21           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('booked_calendar_event_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+
+ 19           CALL                     2
+              POP_TOP
+
+ 23           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 24           LOAD_CONST               1 ('calls')
+
+ 25           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               5 ('booked_calendar_event_summary')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+
+ 23           CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'drop_column')
+    # co_varnames: ()
+    # co_consts (strings): ['calls', 'booked_calendar_event_summary', 'booked_calendar_event_id']
+ 29           RESUME                   0
+
+ 30           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('calls')
+              LOAD_CONST               2 ('booked_calendar_event_summary')
+              CALL                     2
+              POP_TOP
+
+ 31           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('calls')
+              LOAD_CONST               3 ('booked_calendar_event_id')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Add calendar booking link columns to calls table.\n\nRevision ID: 020\nRevises: 019\nCreate Date: 2026-03-03\n')
+              STORE_NAME               0 (__doc__)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (sqlalchemy)
+              STORE_NAME               2 (sa)
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('op',))
+              IMPORT_NAME              3 (alembic)
+              IMPORT_FROM              4 (op)
+              STORE_NAME               4 (op)
+              POP_TOP
+
+ 12           LOAD_CONST               4 ('020')
+              STORE_NAME               5 (revision)
+
+ 13           LOAD_CONST               5 ('019')
+              STORE_NAME               6 (down_revision)
+
+ 14           LOAD_CONST               2 (None)
+              STORE_NAME               7 (branch_labels)
+
+ 15           LOAD_CONST               2 (None)
+              STORE_NAME               8 (depends_on)
+
+ 18           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               6 (<code object upgrade at 0x00000185CB76E640, file "D:\fluence\Github\mattbot\backend\alembic\versions\020_add_call_booking_link.py", line 18>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME               9 (upgrade)
+
+ 29           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               7 (<code object downgrade at 0x00000185CB7FB930, file "D:\fluence\Github\mattbot\backend\alembic\versions\020_add_call_booking_link.py", line 29>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              10 (downgrade)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object upgrade at 0x00000185CB76E640, file "D:\fluence\Github\mattbot\backend\alembic\versions\020_add_call_booking_link.py", line 18>:
+ 18           RESUME                   0
+
+ 19           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 20           LOAD_CONST               1 ('calls')
+
+ 21           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('booked_calendar_event_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+
+ 19           CALL                     2
+              POP_TOP
+
+ 23           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 24           LOAD_CONST               1 ('calls')
+
+ 25           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               5 ('booked_calendar_event_summary')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+
+ 23           CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185CB7FB930, file "D:\fluence\Github\mattbot\backend\alembic\versions\020_add_call_booking_link.py", line 29>:
+ 29           RESUME                   0
+
+ 30           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('calls')
+              LOAD_CONST               2 ('booked_calendar_event_summary')
+              CALL                     2
+              POP_TOP
+
+ 31           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('calls')
+              LOAD_CONST               3 ('booked_calendar_event_id')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)

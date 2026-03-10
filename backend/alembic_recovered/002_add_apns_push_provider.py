@@ -3,7 +3,7 @@
 
 __doc__ = 'Add apns to push token provider constraint\n\nRevision ID: 002\nRevises: 001\nCreate Date: 2026-02-21\n'
 from collections.abc import Sequence
-from alembic import op
+
 revision: str = '002'
 down_revision: str | None = '001'
 branch_labels: str | Sequence[str] | None = None

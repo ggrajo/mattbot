@@ -1,0 +1,1139 @@
+# Bytecode dump of: 006_billing_plan_configs.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\006_billing_plan_configs.py
+# co_names: ('__doc__', 'collections.abc', 'Sequence', 'sqlalchemy', 'sa', 'alembic', 'op', 'revision', 'str', '__annotations__', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Dynamic billing plan configs: new tables + drop hardcoded plan CHECK\n\nRevision ID: 006\nRevises: 005\nCreate Date: 2026-02-23\n', '006', 'revision', '005', 'down_revision', 'branch_labels', 'depends_on']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'create_table', 'sa', 'Column', 'dialects', 'postgresql', 'UUID', 'Boolean', 'text', 'DateTime', 'Text', 'create_index', 'ForeignKey', 'String', 'Integer', 'UniqueConstraint', 'drop_constraint')
+    # co_varnames: ()
+    # co_consts (strings): ['billing_plan_configs', 'id', 'is_active', 'false', 'created_at', 'now()', 'created_by_admin_id', 'notes', 'uq_billing_plan_configs_active', 'is_active = true', 'billing_plan_config_plans', 'config_id', 'billing_plan_configs.id', 'CASCADE', 'code', 'name', 'price_usd', 'included_minutes', 'stripe_price_id', 'requires_credit_card', 'true', 'limited', 'sort_order', '0', 'description', "''", 'icon', 'uq_billing_plan_config_plans_code', 'billing_plan_config_rules', 'from_plan', 'to_plan', 'trigger', "'minutes_exceeded'", 'uq_billing_plan_config_rules_from', 'ck_billing_subscriptions_plan', 'billing_subscriptions', 'check']
+ 19           RESUME                   0
+
+ 20           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+ 21           LOAD_CONST               1 ('billing_plan_configs')
+
+ 22           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               5 (('primary_key',))
+              CALL_KW                  3
+
+ 23           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 24           LOAD_CONST               6 ('is_active')
+
+ 25           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 26           LOAD_CONST               7 (False)
+
+ 27           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST               8 ('false')
+              CALL                     1
+
+ 23           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 29           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 30           LOAD_CONST              10 ('created_at')
+
+ 31           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              11 (('timezone',))
+              CALL_KW                  1
+
+ 32           LOAD_CONST               7 (False)
+
+ 33           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              12 ('now()')
+              CALL                     1
+
+ 29           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 35           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 36           LOAD_CONST              13 ('created_by_admin_id')
+
+ 37           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 38           LOAD_CONST               3 (True)
+
+ 35           LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+ 40           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              15 ('notes')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+ 20           CALL                     6
+              POP_TOP
+
+ 42           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               22 (create_index)
+              PUSH_NULL
+
+ 43           LOAD_CONST              16 ('uq_billing_plan_configs_active')
+
+ 44           LOAD_CONST               1 ('billing_plan_configs')
+
+ 45           LOAD_CONST               6 ('is_active')
+              BUILD_LIST               1
+
+ 46           LOAD_CONST               3 (True)
+
+ 47           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              17 ('is_active = true')
+              CALL                     1
+
+ 42           LOAD_CONST              18 (('unique', 'postgresql_where'))
+              CALL_KW                  5
+              POP_TOP
+
+ 50           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+ 51           LOAD_CONST              19 ('billing_plan_config_plans')
+
+ 52           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               5 (('primary_key',))
+              CALL_KW                  3
+
+ 53           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 54           LOAD_CONST              20 ('config_id')
+
+ 55           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 56           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               24 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              21 ('billing_plan_configs.id')
+              LOAD_CONST              22 ('CASCADE')
+              LOAD_CONST              23 (('ondelete',))
+              CALL_KW                  2
+
+ 57           LOAD_CONST               7 (False)
+
+ 53           LOAD_CONST              14 (('nullable',))
+              CALL_KW                  4
+
+ 59           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              24 ('code')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (String)
+              PUSH_NULL
+              LOAD_CONST              25 (30)
+              CALL                     1
+              LOAD_CONST               7 (False)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+ 60           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              26 ('name')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (String)
+              PUSH_NULL
+              LOAD_CONST              27 (60)
+              CALL                     1
+              LOAD_CONST               7 (False)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+ 61           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              28 ('price_usd')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (String)
+              PUSH_NULL
+              LOAD_CONST              29 (10)
+              CALL                     1
+              LOAD_CONST               7 (False)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+ 62           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              30 ('included_minutes')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+ 63           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              31 ('stripe_price_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+ 64           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 65           LOAD_CONST              32 ('requires_credit_card')
+
+ 66           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 67           LOAD_CONST               7 (False)
+
+ 68           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              33 ('true')
+              CALL                     1
+
+ 64           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 70           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 71           LOAD_CONST              34 ('limited')
+
+ 72           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 73           LOAD_CONST               7 (False)
+
+ 74           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST               8 ('false')
+              CALL                     1
+
+ 70           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 76           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 77           LOAD_CONST              35 ('sort_order')
+
+ 78           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (Integer)
+              PUSH_NULL
+              CALL                     0
+
+ 79           LOAD_CONST               7 (False)
+
+ 80           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              36 ('0')
+              CALL                     1
+
+ 76           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 82           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 83           LOAD_CONST              37 ('description')
+
+ 84           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (Text)
+              PUSH_NULL
+              CALL                     0
+
+ 85           LOAD_CONST               7 (False)
+
+ 86           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              38 ("''")
+              CALL                     1
+
+ 82           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 88           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 89           LOAD_CONST              39 ('icon')
+
+ 90           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (Text)
+              PUSH_NULL
+              CALL                     0
+
+ 91           LOAD_CONST               7 (False)
+
+ 92           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              38 ("''")
+              CALL                     1
+
+ 88           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 94           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               30 (UniqueConstraint)
+              PUSH_NULL
+              LOAD_CONST              20 ('config_id')
+              LOAD_CONST              24 ('code')
+              LOAD_CONST              40 ('uq_billing_plan_config_plans_code')
+              LOAD_CONST              41 (('name',))
+              CALL_KW                  3
+
+ 50           CALL                    14
+              POP_TOP
+
+ 97           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+ 98           LOAD_CONST              42 ('billing_plan_config_rules')
+
+ 99           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               5 (('primary_key',))
+              CALL_KW                  3
+
+100           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+101           LOAD_CONST              20 ('config_id')
+
+102           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+103           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               24 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              21 ('billing_plan_configs.id')
+              LOAD_CONST              22 ('CASCADE')
+              LOAD_CONST              23 (('ondelete',))
+              CALL_KW                  2
+
+104           LOAD_CONST               7 (False)
+
+100           LOAD_CONST              14 (('nullable',))
+              CALL_KW                  4
+
+106           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              43 ('from_plan')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (String)
+              PUSH_NULL
+              LOAD_CONST              25 (30)
+              CALL                     1
+              LOAD_CONST               7 (False)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+107           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              44 ('to_plan')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (String)
+              PUSH_NULL
+              LOAD_CONST              25 (30)
+              CALL                     1
+              LOAD_CONST               7 (False)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+108           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+109           LOAD_CONST              45 ('trigger')
+
+110           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (String)
+              PUSH_NULL
+              LOAD_CONST              25 (30)
+              CALL                     1
+
+111           LOAD_CONST               7 (False)
+
+112           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              46 ("'minutes_exceeded'")
+              CALL                     1
+
+108           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+114           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               30 (UniqueConstraint)
+              PUSH_NULL
+
+115           LOAD_CONST              20 ('config_id')
+              LOAD_CONST              43 ('from_plan')
+              LOAD_CONST              47 ('uq_billing_plan_config_rules_from')
+
+114           LOAD_CONST              41 (('name',))
+              CALL_KW                  3
+
+ 97           CALL                     7
+              POP_TOP
+
+119           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               32 (drop_constraint)
+              PUSH_NULL
+
+120           LOAD_CONST              48 ('ck_billing_subscriptions_plan')
+
+121           LOAD_CONST              49 ('billing_subscriptions')
+
+122           LOAD_CONST              50 ('check')
+
+119           LOAD_CONST              51 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'create_check_constraint', 'drop_table')
+    # co_varnames: ()
+    # co_consts (strings): ['ck_billing_subscriptions_plan', 'billing_subscriptions', "plan IN ('free', 'standard', 'pro')", 'billing_plan_config_rules', 'billing_plan_config_plans', 'billing_plan_configs']
+126           RESUME                   0
+
+127           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_check_constraint)
+              PUSH_NULL
+
+128           LOAD_CONST               1 ('ck_billing_subscriptions_plan')
+
+129           LOAD_CONST               2 ('billing_subscriptions')
+
+130           LOAD_CONST               3 ("plan IN ('free', 'standard', 'pro')")
+
+127           CALL                     3
+              POP_TOP
+
+132           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               4 ('billing_plan_config_rules')
+              CALL                     1
+              POP_TOP
+
+133           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               5 ('billing_plan_config_plans')
+              CALL                     1
+              POP_TOP
+
+134           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               6 ('billing_plan_configs')
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           SETUP_ANNOTATIONS
+              LOAD_CONST               0 ('Dynamic billing plan configs: new tables + drop hardcoded plan CHECK\n\nRevision ID: 006\nRevises: 005\nCreate Date: 2026-02-23\n')
+              STORE_NAME               0 (__doc__)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('Sequence',))
+              IMPORT_NAME              1 (collections.abc)
+              IMPORT_FROM              2 (Sequence)
+              STORE_NAME               2 (Sequence)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (sqlalchemy)
+              STORE_NAME               4 (sa)
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('op',))
+              IMPORT_NAME              5 (alembic)
+              IMPORT_FROM              6 (op)
+              STORE_NAME               6 (op)
+              POP_TOP
+
+ 13           LOAD_CONST               5 ('006')
+              STORE_NAME               7 (revision)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               6 ('revision')
+              STORE_SUBSCR
+
+ 14           LOAD_CONST               7 ('005')
+              STORE_NAME              10 (down_revision)
+              LOAD_NAME                8 (str)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               8 ('down_revision')
+              STORE_SUBSCR
+
+ 15           LOAD_CONST               3 (None)
+              STORE_NAME              11 (branch_labels)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                8 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               9 ('branch_labels')
+              STORE_SUBSCR
+
+ 16           LOAD_CONST               3 (None)
+              STORE_NAME              12 (depends_on)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                8 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST              10 ('depends_on')
+              STORE_SUBSCR
+
+ 19           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              11 (<code object upgrade at 0x00000185C9ADACB0, file "D:\fluence\Github\mattbot\backend\alembic\versions\006_billing_plan_configs.py", line 19>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              13 (upgrade)
+
+126           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              12 (<code object downgrade at 0x00000185CB7D5CB0, file "D:\fluence\Github\mattbot\backend\alembic\versions\006_billing_plan_configs.py", line 126>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              14 (downgrade)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object upgrade at 0x00000185C9ADACB0, file "D:\fluence\Github\mattbot\backend\alembic\versions\006_billing_plan_configs.py", line 19>:
+ 19           RESUME                   0
+
+ 20           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+ 21           LOAD_CONST               1 ('billing_plan_configs')
+
+ 22           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               5 (('primary_key',))
+              CALL_KW                  3
+
+ 23           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 24           LOAD_CONST               6 ('is_active')
+
+ 25           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 26           LOAD_CONST               7 (False)
+
+ 27           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST               8 ('false')
+              CALL                     1
+
+ 23           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 29           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 30           LOAD_CONST              10 ('created_at')
+
+ 31           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              11 (('timezone',))
+              CALL_KW                  1
+
+ 32           LOAD_CONST               7 (False)
+
+ 33           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              12 ('now()')
+              CALL                     1
+
+ 29           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 35           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 36           LOAD_CONST              13 ('created_by_admin_id')
+
+ 37           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 38           LOAD_CONST               3 (True)
+
+ 35           LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+ 40           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              15 ('notes')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+ 20           CALL                     6
+              POP_TOP
+
+ 42           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               22 (create_index)
+              PUSH_NULL
+
+ 43           LOAD_CONST              16 ('uq_billing_plan_configs_active')
+
+ 44           LOAD_CONST               1 ('billing_plan_configs')
+
+ 45           LOAD_CONST               6 ('is_active')
+              BUILD_LIST               1
+
+ 46           LOAD_CONST               3 (True)
+
+ 47           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              17 ('is_active = true')
+              CALL                     1
+
+ 42           LOAD_CONST              18 (('unique', 'postgresql_where'))
+              CALL_KW                  5
+              POP_TOP
+
+ 50           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+ 51           LOAD_CONST              19 ('billing_plan_config_plans')
+
+ 52           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               5 (('primary_key',))
+              CALL_KW                  3
+
+ 53           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 54           LOAD_CONST              20 ('config_id')
+
+ 55           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 56           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               24 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              21 ('billing_plan_configs.id')
+              LOAD_CONST              22 ('CASCADE')
+              LOAD_CONST              23 (('ondelete',))
+              CALL_KW                  2
+
+ 57           LOAD_CONST               7 (False)
+
+ 53           LOAD_CONST              14 (('nullable',))
+              CALL_KW                  4
+
+ 59           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              24 ('code')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (String)
+              PUSH_NULL
+              LOAD_CONST              25 (30)
+              CALL                     1
+              LOAD_CONST               7 (False)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+ 60           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              26 ('name')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (String)
+              PUSH_NULL
+              LOAD_CONST              27 (60)
+              CALL                     1
+              LOAD_CONST               7 (False)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+ 61           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              28 ('price_usd')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (String)
+              PUSH_NULL
+              LOAD_CONST              29 (10)
+              CALL                     1
+              LOAD_CONST               7 (False)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+ 62           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              30 ('included_minutes')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+ 63           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              31 ('stripe_price_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+ 64           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 65           LOAD_CONST              32 ('requires_credit_card')
+
+ 66           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 67           LOAD_CONST               7 (False)
+
+ 68           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              33 ('true')
+              CALL                     1
+
+ 64           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 70           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 71           LOAD_CONST              34 ('limited')
+
+ 72           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 73           LOAD_CONST               7 (False)
+
+ 74           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST               8 ('false')
+              CALL                     1
+
+ 70           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 76           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 77           LOAD_CONST              35 ('sort_order')
+
+ 78           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (Integer)
+              PUSH_NULL
+              CALL                     0
+
+ 79           LOAD_CONST               7 (False)
+
+ 80           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              36 ('0')
+              CALL                     1
+
+ 76           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 82           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 83           LOAD_CONST              37 ('description')
+
+ 84           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (Text)
+              PUSH_NULL
+              CALL                     0
+
+ 85           LOAD_CONST               7 (False)
+
+ 86           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              38 ("''")
+              CALL                     1
+
+ 82           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 88           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 89           LOAD_CONST              39 ('icon')
+
+ 90           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (Text)
+              PUSH_NULL
+              CALL                     0
+
+ 91           LOAD_CONST               7 (False)
+
+ 92           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              38 ("''")
+              CALL                     1
+
+ 88           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 94           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               30 (UniqueConstraint)
+              PUSH_NULL
+              LOAD_CONST              20 ('config_id')
+              LOAD_CONST              24 ('code')
+              LOAD_CONST              40 ('uq_billing_plan_config_plans_code')
+              LOAD_CONST              41 (('name',))
+              CALL_KW                  3
+
+ 50           CALL                    14
+              POP_TOP
+
+ 97           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+ 98           LOAD_CONST              42 ('billing_plan_config_rules')
+
+ 99           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               5 (('primary_key',))
+              CALL_KW                  3
+
+100           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+101           LOAD_CONST              20 ('config_id')
+
+102           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+103           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               24 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              21 ('billing_plan_configs.id')
+              LOAD_CONST              22 ('CASCADE')
+              LOAD_CONST              23 (('ondelete',))
+              CALL_KW                  2
+
+104           LOAD_CONST               7 (False)
+
+100           LOAD_CONST              14 (('nullable',))
+              CALL_KW                  4
+
+106           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              43 ('from_plan')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (String)
+              PUSH_NULL
+              LOAD_CONST              25 (30)
+              CALL                     1
+              LOAD_CONST               7 (False)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+107           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              44 ('to_plan')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (String)
+              PUSH_NULL
+              LOAD_CONST              25 (30)
+              CALL                     1
+              LOAD_CONST               7 (False)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+
+108           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+109           LOAD_CONST              45 ('trigger')
+
+110           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (String)
+              PUSH_NULL
+              LOAD_CONST              25 (30)
+              CALL                     1
+
+111           LOAD_CONST               7 (False)
+
+112           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              46 ("'minutes_exceeded'")
+              CALL                     1
+
+108           LOAD_CONST               9 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+114           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               30 (UniqueConstraint)
+              PUSH_NULL
+
+115           LOAD_CONST              20 ('config_id')
+              LOAD_CONST              43 ('from_plan')
+              LOAD_CONST              47 ('uq_billing_plan_config_rules_from')
+
+114           LOAD_CONST              41 (('name',))
+              CALL_KW                  3
+
+ 97           CALL                     7
+              POP_TOP
+
+119           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               32 (drop_constraint)
+              PUSH_NULL
+
+120           LOAD_CONST              48 ('ck_billing_subscriptions_plan')
+
+121           LOAD_CONST              49 ('billing_subscriptions')
+
+122           LOAD_CONST              50 ('check')
+
+119           LOAD_CONST              51 (('type_',))
+              CALL_KW                  3
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185CB7D5CB0, file "D:\fluence\Github\mattbot\backend\alembic\versions\006_billing_plan_configs.py", line 126>:
+126           RESUME                   0
+
+127           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_check_constraint)
+              PUSH_NULL
+
+128           LOAD_CONST               1 ('ck_billing_subscriptions_plan')
+
+129           LOAD_CONST               2 ('billing_subscriptions')
+
+130           LOAD_CONST               3 ("plan IN ('free', 'standard', 'pro')")
+
+127           CALL                     3
+              POP_TOP
+
+132           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               4 ('billing_plan_config_rules')
+              CALL                     1
+              POP_TOP
+
+133           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               5 ('billing_plan_config_plans')
+              CALL                     1
+              POP_TOP
+
+134           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                4 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               6 ('billing_plan_configs')
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)

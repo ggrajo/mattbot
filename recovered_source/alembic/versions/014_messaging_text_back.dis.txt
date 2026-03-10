@@ -1,0 +1,1779 @@
+# Bytecode dump of: 014_messaging_text_back.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\014_messaging_text_back.py
+# co_names: ('__doc__', 'collections.abc', 'Sequence', 'sqlalchemy', 'sa', 'alembic', 'op', 'revision', 'str', '__annotations__', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Messaging / text-back tables: outbound_messages, text_send_attempts, text_back_templates\n\nRevision ID: 014\nRevises: 013\nCreate Date: 2026-02-27\n\n', '014', 'revision', '013', 'down_revision', 'branch_labels', 'depends_on']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'create_table', 'sa', 'Column', 'dialects', 'postgresql', 'UUID', 'Text', 'Boolean', 'text', 'DateTime', 'CheckConstraint', 'create_index', 'ForeignKey', 'LargeBinary', 'Integer', 'String')
+    # co_varnames: ()
+    # co_consts (strings): ['text_back_templates', 'id', 'category', 'title', 'body', 'tone_tag', 'enabled_by_default', 'true', 'is_builtin', 'created_at', 'now()', "category IN ('busy', 'callback_request', 'request_details', 'reschedule', 'wrong_number', 'sales_decline')", 'ck_text_back_templates_category', "tone_tag IN ('neutral', 'warm', 'formal', 'concise')", 'ck_text_back_templates_tone_tag', 'text_back_templates_category_idx', 'outbound_messages', 'owner_user_id', 'users.id', 'CASCADE', 'call_id', 'calls.id', 'SET NULL', 'action_type', 'text_back', 'status', 'drafted', 'from_number_e164', 'to_number_ciphertext', 'to_number_nonce', 'to_number_key_version', 'to_number_hash', 'to_number_last4', 'draft_body_ciphertext', 'draft_body_nonce', 'draft_body_key_version', 'final_body_ciphertext', 'final_body_nonce', 'final_body_key_version', 'template_id_used', 'approved_at', 'approved_by_device_id', 'last_error_code', 'last_error_message_short', 'retention_expires_at', 'updated_at', "status IN ('drafted', 'awaiting_approval', 'approved', 'sending', 'sent', 'delivered', 'failed', 'cancelled')", 'ck_outbound_messages_status', 'outbound_messages_user_call_idx', 'outbound_messages_user_created_idx', 'created_at DESC', 'text_send_attempts', 'message_id', 'outbound_messages.id', 'attempt_number', 'idempotency_key', 'provider', 'twilio', 'provider_message_sid', 'provider_status', 'provider_error_code', 'provider_error_message_short', 'started_at', 'finished_at', 'text_send_attempts_message_idx', 'text_send_attempts_provider_sid_idx', 'provider_message_sid IS NOT NULL']
+ 20           RESUME                   0
+
+ 24           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+ 25           LOAD_CONST               1 ('text_back_templates')
+
+ 26           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               5 (('primary_key',))
+              CALL_KW                  3
+
+ 27           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               6 ('category')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 28           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               9 ('title')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 29           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              10 ('body')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 30           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              11 ('tone_tag')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 31           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 32           LOAD_CONST              12 ('enabled_by_default')
+
+ 33           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 34           LOAD_CONST               7 (False)
+
+ 35           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (text)
+              PUSH_NULL
+              LOAD_CONST              13 ('true')
+              CALL                     1
+
+ 31           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 37           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 38           LOAD_CONST              15 ('is_builtin')
+
+ 39           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 40           LOAD_CONST               7 (False)
+
+ 41           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (text)
+              PUSH_NULL
+              LOAD_CONST              13 ('true')
+              CALL                     1
+
+ 37           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 43           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 44           LOAD_CONST              16 ('created_at')
+
+ 45           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              17 (('timezone',))
+              CALL_KW                  1
+
+ 46           LOAD_CONST               7 (False)
+
+ 47           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (text)
+              PUSH_NULL
+              LOAD_CONST              18 ('now()')
+              CALL                     1
+
+ 43           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 49           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (CheckConstraint)
+              PUSH_NULL
+
+ 50           LOAD_CONST              19 ("category IN ('busy', 'callback_request', 'request_details', 'reschedule', 'wrong_number', 'sales_decline')")
+
+ 52           LOAD_CONST              20 ('ck_text_back_templates_category')
+
+ 49           LOAD_CONST              21 (('name',))
+              CALL_KW                  2
+
+ 54           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (CheckConstraint)
+              PUSH_NULL
+
+ 55           LOAD_CONST              22 ("tone_tag IN ('neutral', 'warm', 'formal', 'concise')")
+
+ 56           LOAD_CONST              23 ('ck_text_back_templates_tone_tag')
+
+ 54           LOAD_CONST              21 (('name',))
+              CALL_KW                  2
+
+ 24           CALL                    11
+              POP_TOP
+
+ 59           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+ 60           LOAD_CONST              24 ('text_back_templates_category_idx')
+
+ 61           LOAD_CONST               1 ('text_back_templates')
+
+ 62           LOAD_CONST               6 ('category')
+              BUILD_LIST               1
+
+ 59           CALL                     3
+              POP_TOP
+
+ 68           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+ 69           LOAD_CONST              25 ('outbound_messages')
+
+ 70           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               5 (('primary_key',))
+              CALL_KW                  3
+
+ 71           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 72           LOAD_CONST              26 ('owner_user_id')
+
+ 73           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 74           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              27 ('users.id')
+              LOAD_CONST              28 ('CASCADE')
+              LOAD_CONST              29 (('ondelete',))
+              CALL_KW                  2
+
+ 75           LOAD_CONST               7 (False)
+
+ 71           LOAD_CONST               8 (('nullable',))
+              CALL_KW                  4
+
+ 77           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 78           LOAD_CONST              30 ('call_id')
+
+ 79           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 80           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              31 ('calls.id')
+              LOAD_CONST              32 ('SET NULL')
+              LOAD_CONST              29 (('ondelete',))
+              CALL_KW                  2
+
+ 81           LOAD_CONST               3 (True)
+
+ 77           LOAD_CONST               8 (('nullable',))
+              CALL_KW                  4
+
+ 83           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 84           LOAD_CONST              33 ('action_type')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST              34 ('text_back')
+
+ 83           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 86           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              35 ('status')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST              36 ('drafted')
+              LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 87           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              37 ('from_number_e164')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 89           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              38 ('to_number_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 90           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              39 ('to_number_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 91           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              40 ('to_number_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               30 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 92           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              41 ('to_number_hash')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               32 (String)
+              PUSH_NULL
+              LOAD_CONST              42 (64)
+              CALL                     1
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 93           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              43 ('to_number_last4')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               32 (String)
+              PUSH_NULL
+              LOAD_CONST              44 (4)
+              CALL                     1
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 95           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              45 ('draft_body_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 96           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              46 ('draft_body_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 97           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              47 ('draft_body_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               30 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 99           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              48 ('final_body_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+100           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              49 ('final_body_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+101           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              50 ('final_body_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               30 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+102           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+103           LOAD_CONST              51 ('template_id_used')
+
+104           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+105           LOAD_CONST               3 (True)
+
+102           LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+107           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              52 ('approved_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              17 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+108           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+109           LOAD_CONST              53 ('approved_by_device_id')
+
+110           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+111           LOAD_CONST               3 (True)
+
+108           LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+113           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              54 ('last_error_code')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               32 (String)
+              PUSH_NULL
+              LOAD_CONST              55 (60)
+              CALL                     1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+114           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              56 ('last_error_message_short')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+115           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+116           LOAD_CONST              57 ('retention_expires_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              17 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+
+115           LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+118           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+119           LOAD_CONST              16 ('created_at')
+
+120           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              17 (('timezone',))
+              CALL_KW                  1
+
+121           LOAD_CONST               7 (False)
+
+122           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (text)
+              PUSH_NULL
+              LOAD_CONST              18 ('now()')
+              CALL                     1
+
+118           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+124           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+125           LOAD_CONST              58 ('updated_at')
+
+126           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              17 (('timezone',))
+              CALL_KW                  1
+
+127           LOAD_CONST               7 (False)
+
+128           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (text)
+              PUSH_NULL
+              LOAD_CONST              18 ('now()')
+              CALL                     1
+
+124           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+130           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (CheckConstraint)
+              PUSH_NULL
+
+131           LOAD_CONST              59 ("status IN ('drafted', 'awaiting_approval', 'approved', 'sending', 'sent', 'delivered', 'failed', 'cancelled')")
+
+133           LOAD_CONST              60 ('ck_outbound_messages_status')
+
+130           LOAD_CONST              21 (('name',))
+              CALL_KW                  2
+
+ 68           CALL                    27
+              POP_TOP
+
+136           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+137           LOAD_CONST              61 ('outbound_messages_user_call_idx')
+
+138           LOAD_CONST              25 ('outbound_messages')
+
+139           LOAD_CONST              26 ('owner_user_id')
+              LOAD_CONST              30 ('call_id')
+              BUILD_LIST               2
+
+136           CALL                     3
+              POP_TOP
+
+141           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+142           LOAD_CONST              62 ('outbound_messages_user_created_idx')
+
+143           LOAD_CONST              25 ('outbound_messages')
+
+144           LOAD_CONST              26 ('owner_user_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (text)
+              PUSH_NULL
+              LOAD_CONST              63 ('created_at DESC')
+              CALL                     1
+              BUILD_LIST               2
+
+141           CALL                     3
+              POP_TOP
+
+150           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+151           LOAD_CONST              64 ('text_send_attempts')
+
+152           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               5 (('primary_key',))
+              CALL_KW                  3
+
+153           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+154           LOAD_CONST              65 ('message_id')
+
+155           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+156           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              66 ('outbound_messages.id')
+              LOAD_CONST              28 ('CASCADE')
+              LOAD_CONST              29 (('ondelete',))
+              CALL_KW                  2
+
+157           LOAD_CONST               7 (False)
+
+153           LOAD_CONST               8 (('nullable',))
+              CALL_KW                  4
+
+159           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              67 ('attempt_number')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               30 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+160           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              68 ('idempotency_key')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+161           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+162           LOAD_CONST              69 ('provider')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST              70 ('twilio')
+
+161           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+164           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              71 ('provider_message_sid')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+165           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              72 ('provider_status')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+166           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              73 ('provider_error_code')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+167           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              74 ('provider_error_message_short')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+168           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              75 ('started_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              17 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+169           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              76 ('finished_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              17 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+150           CALL                    12
+              POP_TOP
+
+171           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+172           LOAD_CONST              77 ('text_send_attempts_message_idx')
+
+173           LOAD_CONST              64 ('text_send_attempts')
+
+174           LOAD_CONST              65 ('message_id')
+              BUILD_LIST               1
+
+171           CALL                     3
+              POP_TOP
+
+176           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+177           LOAD_CONST              78 ('text_send_attempts_provider_sid_idx')
+
+178           LOAD_CONST              64 ('text_send_attempts')
+
+179           LOAD_CONST              71 ('provider_message_sid')
+              BUILD_LIST               1
+
+180           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (text)
+              PUSH_NULL
+              LOAD_CONST              79 ('provider_message_sid IS NOT NULL')
+              CALL                     1
+
+176           LOAD_CONST              80 (('postgresql_where',))
+              CALL_KW                  4
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'drop_table')
+    # co_varnames: ()
+    # co_consts (strings): ['text_send_attempts', 'outbound_messages', 'text_back_templates']
+184           RESUME                   0
+
+185           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               1 ('text_send_attempts')
+              CALL                     1
+              POP_TOP
+
+186           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               2 ('outbound_messages')
+              CALL                     1
+              POP_TOP
+
+187           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               3 ('text_back_templates')
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           SETUP_ANNOTATIONS
+              LOAD_CONST               0 ('Messaging / text-back tables: outbound_messages, text_send_attempts, text_back_templates\n\nRevision ID: 014\nRevises: 013\nCreate Date: 2026-02-27\n\n')
+              STORE_NAME               0 (__doc__)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('Sequence',))
+              IMPORT_NAME              1 (collections.abc)
+              IMPORT_FROM              2 (Sequence)
+              STORE_NAME               2 (Sequence)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (sqlalchemy)
+              STORE_NAME               4 (sa)
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('op',))
+              IMPORT_NAME              5 (alembic)
+              IMPORT_FROM              6 (op)
+              STORE_NAME               6 (op)
+              POP_TOP
+
+ 14           LOAD_CONST               5 ('014')
+              STORE_NAME               7 (revision)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               6 ('revision')
+              STORE_SUBSCR
+
+ 15           LOAD_CONST               7 ('013')
+              STORE_NAME              10 (down_revision)
+              LOAD_NAME                8 (str)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               8 ('down_revision')
+              STORE_SUBSCR
+
+ 16           LOAD_CONST               3 (None)
+              STORE_NAME              11 (branch_labels)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                8 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               9 ('branch_labels')
+              STORE_SUBSCR
+
+ 17           LOAD_CONST               3 (None)
+              STORE_NAME              12 (depends_on)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                8 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST              10 ('depends_on')
+              STORE_SUBSCR
+
+ 20           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              11 (<code object upgrade at 0x00000185C9B22040, file "D:\fluence\Github\mattbot\backend\alembic\versions\014_messaging_text_back.py", line 20>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              13 (upgrade)
+
+184           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              12 (<code object downgrade at 0x00000185CB787360, file "D:\fluence\Github\mattbot\backend\alembic\versions\014_messaging_text_back.py", line 184>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              14 (downgrade)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object upgrade at 0x00000185C9B22040, file "D:\fluence\Github\mattbot\backend\alembic\versions\014_messaging_text_back.py", line 20>:
+ 20           RESUME                   0
+
+ 24           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+ 25           LOAD_CONST               1 ('text_back_templates')
+
+ 26           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               5 (('primary_key',))
+              CALL_KW                  3
+
+ 27           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               6 ('category')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 28           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               9 ('title')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 29           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              10 ('body')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 30           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              11 ('tone_tag')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 31           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 32           LOAD_CONST              12 ('enabled_by_default')
+
+ 33           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 34           LOAD_CONST               7 (False)
+
+ 35           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (text)
+              PUSH_NULL
+              LOAD_CONST              13 ('true')
+              CALL                     1
+
+ 31           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 37           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 38           LOAD_CONST              15 ('is_builtin')
+
+ 39           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 40           LOAD_CONST               7 (False)
+
+ 41           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (text)
+              PUSH_NULL
+              LOAD_CONST              13 ('true')
+              CALL                     1
+
+ 37           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 43           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 44           LOAD_CONST              16 ('created_at')
+
+ 45           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              17 (('timezone',))
+              CALL_KW                  1
+
+ 46           LOAD_CONST               7 (False)
+
+ 47           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (text)
+              PUSH_NULL
+              LOAD_CONST              18 ('now()')
+              CALL                     1
+
+ 43           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 49           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (CheckConstraint)
+              PUSH_NULL
+
+ 50           LOAD_CONST              19 ("category IN ('busy', 'callback_request', 'request_details', 'reschedule', 'wrong_number', 'sales_decline')")
+
+ 52           LOAD_CONST              20 ('ck_text_back_templates_category')
+
+ 49           LOAD_CONST              21 (('name',))
+              CALL_KW                  2
+
+ 54           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (CheckConstraint)
+              PUSH_NULL
+
+ 55           LOAD_CONST              22 ("tone_tag IN ('neutral', 'warm', 'formal', 'concise')")
+
+ 56           LOAD_CONST              23 ('ck_text_back_templates_tone_tag')
+
+ 54           LOAD_CONST              21 (('name',))
+              CALL_KW                  2
+
+ 24           CALL                    11
+              POP_TOP
+
+ 59           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+ 60           LOAD_CONST              24 ('text_back_templates_category_idx')
+
+ 61           LOAD_CONST               1 ('text_back_templates')
+
+ 62           LOAD_CONST               6 ('category')
+              BUILD_LIST               1
+
+ 59           CALL                     3
+              POP_TOP
+
+ 68           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+ 69           LOAD_CONST              25 ('outbound_messages')
+
+ 70           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               5 (('primary_key',))
+              CALL_KW                  3
+
+ 71           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 72           LOAD_CONST              26 ('owner_user_id')
+
+ 73           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 74           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              27 ('users.id')
+              LOAD_CONST              28 ('CASCADE')
+              LOAD_CONST              29 (('ondelete',))
+              CALL_KW                  2
+
+ 75           LOAD_CONST               7 (False)
+
+ 71           LOAD_CONST               8 (('nullable',))
+              CALL_KW                  4
+
+ 77           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 78           LOAD_CONST              30 ('call_id')
+
+ 79           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 80           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              31 ('calls.id')
+              LOAD_CONST              32 ('SET NULL')
+              LOAD_CONST              29 (('ondelete',))
+              CALL_KW                  2
+
+ 81           LOAD_CONST               3 (True)
+
+ 77           LOAD_CONST               8 (('nullable',))
+              CALL_KW                  4
+
+ 83           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 84           LOAD_CONST              33 ('action_type')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST              34 ('text_back')
+
+ 83           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 86           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              35 ('status')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST              36 ('drafted')
+              LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 87           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              37 ('from_number_e164')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 89           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              38 ('to_number_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 90           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              39 ('to_number_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 91           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              40 ('to_number_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               30 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 92           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              41 ('to_number_hash')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               32 (String)
+              PUSH_NULL
+              LOAD_CONST              42 (64)
+              CALL                     1
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 93           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              43 ('to_number_last4')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               32 (String)
+              PUSH_NULL
+              LOAD_CONST              44 (4)
+              CALL                     1
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 95           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              45 ('draft_body_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 96           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              46 ('draft_body_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 97           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              47 ('draft_body_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               30 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+ 99           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              48 ('final_body_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+100           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              49 ('final_body_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+101           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              50 ('final_body_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               30 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+102           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+103           LOAD_CONST              51 ('template_id_used')
+
+104           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+105           LOAD_CONST               3 (True)
+
+102           LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+107           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              52 ('approved_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              17 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+108           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+109           LOAD_CONST              53 ('approved_by_device_id')
+
+110           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+111           LOAD_CONST               3 (True)
+
+108           LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+113           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              54 ('last_error_code')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               32 (String)
+              PUSH_NULL
+              LOAD_CONST              55 (60)
+              CALL                     1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+114           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              56 ('last_error_message_short')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+115           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+116           LOAD_CONST              57 ('retention_expires_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              17 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+
+115           LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+118           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+119           LOAD_CONST              16 ('created_at')
+
+120           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              17 (('timezone',))
+              CALL_KW                  1
+
+121           LOAD_CONST               7 (False)
+
+122           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (text)
+              PUSH_NULL
+              LOAD_CONST              18 ('now()')
+              CALL                     1
+
+118           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+124           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+125           LOAD_CONST              58 ('updated_at')
+
+126           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              17 (('timezone',))
+              CALL_KW                  1
+
+127           LOAD_CONST               7 (False)
+
+128           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (text)
+              PUSH_NULL
+              LOAD_CONST              18 ('now()')
+              CALL                     1
+
+124           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+130           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (CheckConstraint)
+              PUSH_NULL
+
+131           LOAD_CONST              59 ("status IN ('drafted', 'awaiting_approval', 'approved', 'sending', 'sent', 'delivered', 'failed', 'cancelled')")
+
+133           LOAD_CONST              60 ('ck_outbound_messages_status')
+
+130           LOAD_CONST              21 (('name',))
+              CALL_KW                  2
+
+ 68           CALL                    27
+              POP_TOP
+
+136           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+137           LOAD_CONST              61 ('outbound_messages_user_call_idx')
+
+138           LOAD_CONST              25 ('outbound_messages')
+
+139           LOAD_CONST              26 ('owner_user_id')
+              LOAD_CONST              30 ('call_id')
+              BUILD_LIST               2
+
+136           CALL                     3
+              POP_TOP
+
+141           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+142           LOAD_CONST              62 ('outbound_messages_user_created_idx')
+
+143           LOAD_CONST              25 ('outbound_messages')
+
+144           LOAD_CONST              26 ('owner_user_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (text)
+              PUSH_NULL
+              LOAD_CONST              63 ('created_at DESC')
+              CALL                     1
+              BUILD_LIST               2
+
+141           CALL                     3
+              POP_TOP
+
+150           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+151           LOAD_CONST              64 ('text_send_attempts')
+
+152           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               5 (('primary_key',))
+              CALL_KW                  3
+
+153           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+154           LOAD_CONST              65 ('message_id')
+
+155           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (dialects)
+              LOAD_ATTR               10 (postgresql)
+              LOAD_ATTR               13 (UUID + NULL|self)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+156           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              66 ('outbound_messages.id')
+              LOAD_CONST              28 ('CASCADE')
+              LOAD_CONST              29 (('ondelete',))
+              CALL_KW                  2
+
+157           LOAD_CONST               7 (False)
+
+153           LOAD_CONST               8 (('nullable',))
+              CALL_KW                  4
+
+159           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              67 ('attempt_number')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               30 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+160           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              68 ('idempotency_key')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+161           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+162           LOAD_CONST              69 ('provider')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_CONST              70 ('twilio')
+
+161           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+164           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              71 ('provider_message_sid')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+165           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              72 ('provider_status')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+166           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              73 ('provider_error_code')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+167           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              74 ('provider_error_message_short')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+168           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              75 ('started_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              17 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+169           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              76 ('finished_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              17 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               8 (('nullable',))
+              CALL_KW                  3
+
+150           CALL                    12
+              POP_TOP
+
+171           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+172           LOAD_CONST              77 ('text_send_attempts_message_idx')
+
+173           LOAD_CONST              64 ('text_send_attempts')
+
+174           LOAD_CONST              65 ('message_id')
+              BUILD_LIST               1
+
+171           CALL                     3
+              POP_TOP
+
+176           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+177           LOAD_CONST              78 ('text_send_attempts_provider_sid_idx')
+
+178           LOAD_CONST              64 ('text_send_attempts')
+
+179           LOAD_CONST              71 ('provider_message_sid')
+              BUILD_LIST               1
+
+180           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (text)
+              PUSH_NULL
+              LOAD_CONST              79 ('provider_message_sid IS NOT NULL')
+              CALL                     1
+
+176           LOAD_CONST              80 (('postgresql_where',))
+              CALL_KW                  4
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185CB787360, file "D:\fluence\Github\mattbot\backend\alembic\versions\014_messaging_text_back.py", line 184>:
+184           RESUME                   0
+
+185           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               1 ('text_send_attempts')
+              CALL                     1
+              POP_TOP
+
+186           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               2 ('outbound_messages')
+              CALL                     1
+              POP_TOP
+
+187           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               3 ('text_back_templates')
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)

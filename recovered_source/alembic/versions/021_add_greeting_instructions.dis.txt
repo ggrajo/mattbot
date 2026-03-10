@@ -1,0 +1,127 @@
+# Bytecode dump of: 021_add_greeting_instructions.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\021_add_greeting_instructions.py
+# co_names: ('__doc__', 'sqlalchemy', 'sa', 'alembic', 'op', 'revision', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Add greeting_instructions to agent_configs\n\nRevision ID: 021\nRevises: 020\nCreate Date: 2026-03-03\n', '021', '020']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'add_column', 'sa', 'Column', 'Text')
+    # co_varnames: ()
+    # co_consts (strings): ['agent_configs', 'greeting_instructions']
+ 17           RESUME                   0
+
+ 18           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 19           LOAD_CONST               1 ('agent_configs')
+
+ 20           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('greeting_instructions')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+
+ 18           CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'drop_column')
+    # co_varnames: ()
+    # co_consts (strings): ['agent_configs', 'greeting_instructions']
+ 24           RESUME                   0
+
+ 25           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('agent_configs')
+              LOAD_CONST               2 ('greeting_instructions')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Add greeting_instructions to agent_configs\n\nRevision ID: 021\nRevises: 020\nCreate Date: 2026-03-03\n')
+              STORE_NAME               0 (__doc__)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (sqlalchemy)
+              STORE_NAME               2 (sa)
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('op',))
+              IMPORT_NAME              3 (alembic)
+              IMPORT_FROM              4 (op)
+              STORE_NAME               4 (op)
+              POP_TOP
+
+ 11           LOAD_CONST               4 ('021')
+              STORE_NAME               5 (revision)
+
+ 12           LOAD_CONST               5 ('020')
+              STORE_NAME               6 (down_revision)
+
+ 13           LOAD_CONST               2 (None)
+              STORE_NAME               7 (branch_labels)
+
+ 14           LOAD_CONST               2 (None)
+              STORE_NAME               8 (depends_on)
+
+ 17           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               6 (<code object upgrade at 0x00000185CB7874B0, file "D:\fluence\Github\mattbot\backend\alembic\versions\021_add_greeting_instructions.py", line 17>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME               9 (upgrade)
+
+ 24           LOAD_CONST               8 (('return', None))
+              LOAD_CONST               7 (<code object downgrade at 0x00000185CB9F2E30, file "D:\fluence\Github\mattbot\backend\alembic\versions\021_add_greeting_instructions.py", line 24>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              10 (downgrade)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object upgrade at 0x00000185CB7874B0, file "D:\fluence\Github\mattbot\backend\alembic\versions\021_add_greeting_instructions.py", line 17>:
+ 17           RESUME                   0
+
+ 18           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (add_column)
+              PUSH_NULL
+
+ 19           LOAD_CONST               1 ('agent_configs')
+
+ 20           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('greeting_instructions')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('nullable',))
+              CALL_KW                  3
+
+ 18           CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185CB9F2E30, file "D:\fluence\Github\mattbot\backend\alembic\versions\021_add_greeting_instructions.py", line 24>:
+ 24           RESUME                   0
+
+ 25           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_column)
+              PUSH_NULL
+              LOAD_CONST               1 ('agent_configs')
+              LOAD_CONST               2 ('greeting_instructions')
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)

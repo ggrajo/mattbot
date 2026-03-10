@@ -1,0 +1,2413 @@
+# Bytecode dump of: 010_call_intake_and_state_machine.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\010_call_intake_and_state_machine.py
+# co_names: ('__doc__', 'collections.abc', 'Sequence', 'sqlalchemy', 'sa', 'alembic', 'op', 'revision', 'str', '__annotations__', 'down_revision', 'branch_labels', 'depends_on', 'upgrade', 'downgrade')
+# co_consts (strings): ['Part 4: inbound call intake and state machine\n\nRevision ID: 010\nRevises: 009\nCreate Date: 2026-02-25\n\n', '010', 'revision', '009', 'down_revision', 'branch_labels', 'depends_on']
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'create_table', 'sa', 'Column', 'UUID', 'ForeignKey', 'String', 'DateTime', 'text', 'Integer', 'LargeBinary', 'Text', 'Boolean', 'CheckConstraint', 'UniqueConstraint', 'create_index', 'JSON')
+    # co_varnames: ()
+    # co_consts (strings): ['calls', 'id', 'owner_user_id', 'users.id', 'CASCADE', 'source_type', 'direction', 'inbound', 'status', 'started_at', 'now()', 'ended_at', 'duration_seconds', 'caller_phone_ciphertext', 'caller_phone_nonce', 'caller_phone_key_version', 'caller_phone_hash', 'caller_phone_last4', 'caller_display', 'provider', 'twilio', 'provider_call_sid', 'provider_parent_call_sid', 'forwarding_detected', 'false', 'forwarding_verification_hint', 'missing_summary', 'true', 'missing_transcript', 'missing_labels', 'from_masked', 'to_masked', 'retention_expires_at', 'deleted_at', 'created_at', 'updated_at', "source_type IN ('dedicated_number', 'forwarded')", 'ck_calls_source_type', "direction IN ('inbound')", 'ck_calls_direction', "status IN ('created', 'inbound_received', 'twiml_responded', 'in_progress', 'completed', 'partial', 'failed', 'canceled')", 'ck_calls_status', "provider IN ('twilio')", 'ck_calls_provider', 'uq_calls_provider_sid', 'calls_user_started_idx', 'started_at DESC', 'calls_user_status_idx', 'calls_provider_sid_idx', 'calls_user_caller_hash_idx', 'call_events', 'call_id', 'calls.id', 'event_type', 'provider_status', 'event_at', 'details_redacted', 'uq_call_events_dedupe', 'call_events_call_idx', 'event_at ASC', 'call_events_user_idx', 'event_at DESC', 'provider_events', 'provider_event_id', 'received_at', 'processed_at', 'process_status', 'received', 'failure_reason', 'SET NULL', 'payload_hash', 'payload_redacted', 'signature_valid', "provider IN ('twilio', 'elevenlabs')", 'ck_provider_events_provider', "process_status IN ('received', 'processed', 'failed')", 'ck_provider_events_status', 'provider_events_status_idx', 'received_at ASC', 'provider_events_call_sid_idx']
+ 20           RESUME                   0
+
+ 22           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+              BUILD_LIST               0
+
+ 23           LOAD_CONST               1 ('calls')
+
+ 22           LIST_APPEND              1
+
+ 24           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('primary_key',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 25           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 26           LOAD_CONST               5 ('owner_user_id')
+
+ 27           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+ 28           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               6 ('users.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+ 29           LOAD_CONST               9 (False)
+
+ 25           LOAD_CONST              10 (('nullable',))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 31           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              11 ('source_type')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              12 (30)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 32           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              13 ('direction')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              14 (10)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              15 ('inbound')
+              LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 33           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              17 ('status')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              12 (30)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 34           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 35           LOAD_CONST              18 ('started_at')
+
+ 36           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+
+ 37           LOAD_CONST               9 (False)
+
+ 38           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              20 ('now()')
+              CALL                     1
+
+ 34           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 40           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              21 ('ended_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 41           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              22 ('duration_seconds')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 43           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              23 ('caller_phone_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 44           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              24 ('caller_phone_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 45           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              25 ('caller_phone_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 46           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              26 ('caller_phone_hash')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              27 (64)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 47           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              28 ('caller_phone_last4')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              29 (4)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 48           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              30 ('caller_display')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 50           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              31 ('provider')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              32 (20)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              33 ('twilio')
+              LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 51           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              34 ('provider_call_sid')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 52           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              35 ('provider_parent_call_sid')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 54           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 55           LOAD_CONST              36 ('forwarding_detected')
+
+ 56           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               24 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 57           LOAD_CONST               9 (False)
+
+ 58           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              37 ('false')
+              CALL                     1
+
+ 54           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 60           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              38 ('forwarding_verification_hint')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 62           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 63           LOAD_CONST              39 ('missing_summary')
+
+ 64           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               24 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 65           LOAD_CONST               9 (False)
+
+ 66           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              40 ('true')
+              CALL                     1
+
+ 62           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 68           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 69           LOAD_CONST              41 ('missing_transcript')
+
+ 70           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               24 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 71           LOAD_CONST               9 (False)
+
+ 72           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              40 ('true')
+              CALL                     1
+
+ 68           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 74           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 75           LOAD_CONST              42 ('missing_labels')
+
+ 76           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               24 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 77           LOAD_CONST               9 (False)
+
+ 78           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              40 ('true')
+              CALL                     1
+
+ 74           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 81           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              43 ('from_masked')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 82           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              44 ('to_masked')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 84           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              45 ('retention_expires_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 85           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              46 ('deleted_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 87           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 88           LOAD_CONST              47 ('created_at')
+
+ 89           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+
+ 90           LOAD_CONST               9 (False)
+
+ 91           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              20 ('now()')
+              CALL                     1
+
+ 87           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 93           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 94           LOAD_CONST              48 ('updated_at')
+
+ 95           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+
+ 96           LOAD_CONST               9 (False)
+
+ 97           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              20 ('now()')
+              CALL                     1
+
+ 93           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+100           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (CheckConstraint)
+              PUSH_NULL
+
+101           LOAD_CONST              49 ("source_type IN ('dedicated_number', 'forwarded')")
+
+102           LOAD_CONST              50 ('ck_calls_source_type')
+
+100           LOAD_CONST              51 (('name',))
+              CALL_KW                  2
+
+ 22           LIST_APPEND              1
+
+104           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (CheckConstraint)
+              PUSH_NULL
+
+105           LOAD_CONST              52 ("direction IN ('inbound')")
+
+106           LOAD_CONST              53 ('ck_calls_direction')
+
+104           LOAD_CONST              51 (('name',))
+              CALL_KW                  2
+
+ 22           LIST_APPEND              1
+
+108           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (CheckConstraint)
+              PUSH_NULL
+
+109           LOAD_CONST              54 ("status IN ('created', 'inbound_received', 'twiml_responded', 'in_progress', 'completed', 'partial', 'failed', 'canceled')")
+
+111           LOAD_CONST              55 ('ck_calls_status')
+
+108           LOAD_CONST              51 (('name',))
+              CALL_KW                  2
+
+ 22           LIST_APPEND              1
+
+113           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (CheckConstraint)
+              PUSH_NULL
+
+114           LOAD_CONST              56 ("provider IN ('twilio')")
+
+115           LOAD_CONST              57 ('ck_calls_provider')
+
+113           LOAD_CONST              51 (('name',))
+              CALL_KW                  2
+
+ 22           LIST_APPEND              1
+
+117           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (UniqueConstraint)
+              PUSH_NULL
+              LOAD_CONST              31 ('provider')
+              LOAD_CONST              34 ('provider_call_sid')
+              LOAD_CONST              58 ('uq_calls_provider_sid')
+              LOAD_CONST              51 (('name',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+              CALL_INTRINSIC_1         6 (INTRINSIC_LIST_TO_TUPLE)
+              CALL_FUNCTION_EX         0
+              POP_TOP
+
+120           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               30 (create_index)
+              PUSH_NULL
+
+121           LOAD_CONST              59 ('calls_user_started_idx')
+              LOAD_CONST               1 ('calls')
+              LOAD_CONST               5 ('owner_user_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              60 ('started_at DESC')
+              CALL                     1
+              BUILD_LIST               2
+
+120           CALL                     3
+              POP_TOP
+
+123           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               30 (create_index)
+              PUSH_NULL
+
+124           LOAD_CONST              61 ('calls_user_status_idx')
+
+125           LOAD_CONST               1 ('calls')
+
+126           LOAD_CONST               5 ('owner_user_id')
+              LOAD_CONST              17 ('status')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              60 ('started_at DESC')
+              CALL                     1
+              BUILD_LIST               3
+
+123           CALL                     3
+              POP_TOP
+
+128           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               30 (create_index)
+              PUSH_NULL
+              LOAD_CONST              62 ('calls_provider_sid_idx')
+              LOAD_CONST               1 ('calls')
+              LOAD_CONST              34 ('provider_call_sid')
+              BUILD_LIST               1
+              CALL                     3
+              POP_TOP
+
+129           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               30 (create_index)
+              PUSH_NULL
+
+130           LOAD_CONST              63 ('calls_user_caller_hash_idx')
+              LOAD_CONST               1 ('calls')
+              LOAD_CONST               5 ('owner_user_id')
+              LOAD_CONST              26 ('caller_phone_hash')
+              BUILD_LIST               2
+
+129           CALL                     3
+              POP_TOP
+
+134           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+135           LOAD_CONST              64 ('call_events')
+
+136           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('primary_key',))
+              CALL_KW                  3
+
+137           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+138           LOAD_CONST              65 ('call_id')
+
+139           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+140           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              66 ('calls.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+141           LOAD_CONST               9 (False)
+
+137           LOAD_CONST              10 (('nullable',))
+              CALL_KW                  4
+
+143           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+144           LOAD_CONST               5 ('owner_user_id')
+
+145           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+146           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               6 ('users.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+147           LOAD_CONST               9 (False)
+
+143           LOAD_CONST              10 (('nullable',))
+              CALL_KW                  4
+
+149           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              67 ('event_type')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              68 (60)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+150           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              69 ('provider_status')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              12 (30)
+              CALL                     1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+151           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+152           LOAD_CONST              70 ('event_at')
+
+153           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+
+154           LOAD_CONST               9 (False)
+
+155           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              20 ('now()')
+              CALL                     1
+
+151           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+157           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              71 ('details_redacted')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               32 (JSON)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+158           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+159           LOAD_CONST              47 ('created_at')
+
+160           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+
+161           LOAD_CONST               9 (False)
+
+162           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              20 ('now()')
+              CALL                     1
+
+158           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+164           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (UniqueConstraint)
+              PUSH_NULL
+
+165           LOAD_CONST              65 ('call_id')
+              LOAD_CONST              67 ('event_type')
+              LOAD_CONST              69 ('provider_status')
+              LOAD_CONST              72 ('uq_call_events_dedupe')
+
+164           LOAD_CONST              51 (('name',))
+              CALL_KW                  4
+
+134           CALL                    10
+              POP_TOP
+
+169           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               30 (create_index)
+              PUSH_NULL
+
+170           LOAD_CONST              73 ('call_events_call_idx')
+              LOAD_CONST              64 ('call_events')
+              LOAD_CONST              65 ('call_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              74 ('event_at ASC')
+              CALL                     1
+              BUILD_LIST               2
+
+169           CALL                     3
+              POP_TOP
+
+172           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               30 (create_index)
+              PUSH_NULL
+
+173           LOAD_CONST              75 ('call_events_user_idx')
+              LOAD_CONST              64 ('call_events')
+              LOAD_CONST               5 ('owner_user_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              76 ('event_at DESC')
+              CALL                     1
+              BUILD_LIST               2
+
+172           CALL                     3
+              POP_TOP
+
+177           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+178           LOAD_CONST              77 ('provider_events')
+
+179           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('primary_key',))
+              CALL_KW                  3
+
+180           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              31 ('provider')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              32 (20)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+181           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              78 ('provider_event_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+182           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              34 ('provider_call_sid')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+183           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              67 ('event_type')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              68 (60)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+184           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+185           LOAD_CONST              79 ('received_at')
+
+186           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+
+187           LOAD_CONST               9 (False)
+
+188           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              20 ('now()')
+              CALL                     1
+
+184           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+190           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              80 ('processed_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+191           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+192           LOAD_CONST              81 ('process_status')
+
+193           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              32 (20)
+              CALL                     1
+
+194           LOAD_CONST               9 (False)
+
+195           LOAD_CONST              82 ('received')
+
+191           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+197           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              83 ('failure_reason')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+198           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+199           LOAD_CONST              65 ('call_id')
+
+200           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+201           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              66 ('calls.id')
+              LOAD_CONST              84 ('SET NULL')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+202           LOAD_CONST               3 (True)
+
+198           LOAD_CONST              10 (('nullable',))
+              CALL_KW                  4
+
+204           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+205           LOAD_CONST               5 ('owner_user_id')
+
+206           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+207           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               6 ('users.id')
+              LOAD_CONST              84 ('SET NULL')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+208           LOAD_CONST               3 (True)
+
+204           LOAD_CONST              10 (('nullable',))
+              CALL_KW                  4
+
+210           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              85 ('payload_hash')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              27 (64)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+211           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              86 ('payload_redacted')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               32 (JSON)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+212           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              87 ('signature_valid')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               24 (Boolean)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+213           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+214           LOAD_CONST              47 ('created_at')
+
+215           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+
+216           LOAD_CONST               9 (False)
+
+217           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              20 ('now()')
+              CALL                     1
+
+213           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+219           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (CheckConstraint)
+              PUSH_NULL
+
+220           LOAD_CONST              88 ("provider IN ('twilio', 'elevenlabs')")
+
+221           LOAD_CONST              89 ('ck_provider_events_provider')
+
+219           LOAD_CONST              51 (('name',))
+              CALL_KW                  2
+
+223           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (CheckConstraint)
+              PUSH_NULL
+
+224           LOAD_CONST              90 ("process_status IN ('received', 'processed', 'failed')")
+
+225           LOAD_CONST              91 ('ck_provider_events_status')
+
+223           LOAD_CONST              51 (('name',))
+              CALL_KW                  2
+
+177           CALL                    18
+              POP_TOP
+
+229           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               30 (create_index)
+              PUSH_NULL
+
+230           LOAD_CONST              92 ('provider_events_status_idx')
+
+231           LOAD_CONST              77 ('provider_events')
+
+232           LOAD_CONST              81 ('process_status')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              93 ('received_at ASC')
+              CALL                     1
+              BUILD_LIST               2
+
+229           CALL                     3
+              POP_TOP
+
+234           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               30 (create_index)
+              PUSH_NULL
+
+235           LOAD_CONST              94 ('provider_events_call_sid_idx')
+              LOAD_CONST              77 ('provider_events')
+              LOAD_CONST              34 ('provider_call_sid')
+              BUILD_LIST               1
+
+234           CALL                     3
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'drop_table')
+    # co_varnames: ()
+    # co_consts (strings): ['provider_events', 'call_events', 'calls']
+239           RESUME                   0
+
+240           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               1 ('provider_events')
+              CALL                     1
+              POP_TOP
+
+241           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               2 ('call_events')
+              CALL                     1
+              POP_TOP
+
+242           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               3 ('calls')
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           SETUP_ANNOTATIONS
+              LOAD_CONST               0 ('Part 4: inbound call intake and state machine\n\nRevision ID: 010\nRevises: 009\nCreate Date: 2026-02-25\n\n')
+              STORE_NAME               0 (__doc__)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('Sequence',))
+              IMPORT_NAME              1 (collections.abc)
+              IMPORT_FROM              2 (Sequence)
+              STORE_NAME               2 (Sequence)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (sqlalchemy)
+              STORE_NAME               4 (sa)
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('op',))
+              IMPORT_NAME              5 (alembic)
+              IMPORT_FROM              6 (op)
+              STORE_NAME               6 (op)
+              POP_TOP
+
+ 14           LOAD_CONST               5 ('010')
+              STORE_NAME               7 (revision)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               6 ('revision')
+              STORE_SUBSCR
+
+ 15           LOAD_CONST               7 ('009')
+              STORE_NAME              10 (down_revision)
+              LOAD_NAME                8 (str)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               8 ('down_revision')
+              STORE_SUBSCR
+
+ 16           LOAD_CONST               3 (None)
+              STORE_NAME              11 (branch_labels)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                8 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               9 ('branch_labels')
+              STORE_SUBSCR
+
+ 17           LOAD_CONST               3 (None)
+              STORE_NAME              12 (depends_on)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                8 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST              10 ('depends_on')
+              STORE_SUBSCR
+
+ 20           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              11 (<code object upgrade at 0x00000185C9B26EB0, file "D:\fluence\Github\mattbot\backend\alembic\versions\010_call_intake_and_state_machine.py", line 20>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              13 (upgrade)
+
+239           LOAD_CONST              13 (('return', None))
+              LOAD_CONST              12 (<code object downgrade at 0x00000185CB787360, file "D:\fluence\Github\mattbot\backend\alembic\versions\010_call_intake_and_state_machine.py", line 239>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              14 (downgrade)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object upgrade at 0x00000185C9B26EB0, file "D:\fluence\Github\mattbot\backend\alembic\versions\010_call_intake_and_state_machine.py", line 20>:
+ 20           RESUME                   0
+
+ 22           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+              BUILD_LIST               0
+
+ 23           LOAD_CONST               1 ('calls')
+
+ 22           LIST_APPEND              1
+
+ 24           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('primary_key',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 25           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 26           LOAD_CONST               5 ('owner_user_id')
+
+ 27           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+ 28           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               6 ('users.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+ 29           LOAD_CONST               9 (False)
+
+ 25           LOAD_CONST              10 (('nullable',))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 31           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              11 ('source_type')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              12 (30)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 32           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              13 ('direction')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              14 (10)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              15 ('inbound')
+              LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 33           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              17 ('status')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              12 (30)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 34           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 35           LOAD_CONST              18 ('started_at')
+
+ 36           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+
+ 37           LOAD_CONST               9 (False)
+
+ 38           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              20 ('now()')
+              CALL                     1
+
+ 34           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 40           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              21 ('ended_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 41           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              22 ('duration_seconds')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 43           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              23 ('caller_phone_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 44           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              24 ('caller_phone_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 45           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              25 ('caller_phone_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 46           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              26 ('caller_phone_hash')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              27 (64)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 47           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              28 ('caller_phone_last4')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              29 (4)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 48           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              30 ('caller_display')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 50           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              31 ('provider')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              32 (20)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              33 ('twilio')
+              LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 51           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              34 ('provider_call_sid')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 52           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              35 ('provider_parent_call_sid')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 54           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 55           LOAD_CONST              36 ('forwarding_detected')
+
+ 56           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               24 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 57           LOAD_CONST               9 (False)
+
+ 58           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              37 ('false')
+              CALL                     1
+
+ 54           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 60           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              38 ('forwarding_verification_hint')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 62           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 63           LOAD_CONST              39 ('missing_summary')
+
+ 64           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               24 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 65           LOAD_CONST               9 (False)
+
+ 66           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              40 ('true')
+              CALL                     1
+
+ 62           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 68           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 69           LOAD_CONST              41 ('missing_transcript')
+
+ 70           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               24 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 71           LOAD_CONST               9 (False)
+
+ 72           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              40 ('true')
+              CALL                     1
+
+ 68           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 74           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 75           LOAD_CONST              42 ('missing_labels')
+
+ 76           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               24 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+ 77           LOAD_CONST               9 (False)
+
+ 78           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              40 ('true')
+              CALL                     1
+
+ 74           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 81           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              43 ('from_masked')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 82           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              44 ('to_masked')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 84           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              45 ('retention_expires_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 85           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              46 ('deleted_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+
+ 87           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 88           LOAD_CONST              47 ('created_at')
+
+ 89           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+
+ 90           LOAD_CONST               9 (False)
+
+ 91           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              20 ('now()')
+              CALL                     1
+
+ 87           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+ 93           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 94           LOAD_CONST              48 ('updated_at')
+
+ 95           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+
+ 96           LOAD_CONST               9 (False)
+
+ 97           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              20 ('now()')
+              CALL                     1
+
+ 93           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 22           LIST_APPEND              1
+
+100           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (CheckConstraint)
+              PUSH_NULL
+
+101           LOAD_CONST              49 ("source_type IN ('dedicated_number', 'forwarded')")
+
+102           LOAD_CONST              50 ('ck_calls_source_type')
+
+100           LOAD_CONST              51 (('name',))
+              CALL_KW                  2
+
+ 22           LIST_APPEND              1
+
+104           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (CheckConstraint)
+              PUSH_NULL
+
+105           LOAD_CONST              52 ("direction IN ('inbound')")
+
+106           LOAD_CONST              53 ('ck_calls_direction')
+
+104           LOAD_CONST              51 (('name',))
+              CALL_KW                  2
+
+ 22           LIST_APPEND              1
+
+108           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (CheckConstraint)
+              PUSH_NULL
+
+109           LOAD_CONST              54 ("status IN ('created', 'inbound_received', 'twiml_responded', 'in_progress', 'completed', 'partial', 'failed', 'canceled')")
+
+111           LOAD_CONST              55 ('ck_calls_status')
+
+108           LOAD_CONST              51 (('name',))
+              CALL_KW                  2
+
+ 22           LIST_APPEND              1
+
+113           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (CheckConstraint)
+              PUSH_NULL
+
+114           LOAD_CONST              56 ("provider IN ('twilio')")
+
+115           LOAD_CONST              57 ('ck_calls_provider')
+
+113           LOAD_CONST              51 (('name',))
+              CALL_KW                  2
+
+ 22           LIST_APPEND              1
+
+117           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (UniqueConstraint)
+              PUSH_NULL
+              LOAD_CONST              31 ('provider')
+              LOAD_CONST              34 ('provider_call_sid')
+              LOAD_CONST              58 ('uq_calls_provider_sid')
+              LOAD_CONST              51 (('name',))
+              CALL_KW                  3
+
+ 22           LIST_APPEND              1
+              CALL_INTRINSIC_1         6 (INTRINSIC_LIST_TO_TUPLE)
+              CALL_FUNCTION_EX         0
+              POP_TOP
+
+120           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               30 (create_index)
+              PUSH_NULL
+
+121           LOAD_CONST              59 ('calls_user_started_idx')
+              LOAD_CONST               1 ('calls')
+              LOAD_CONST               5 ('owner_user_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              60 ('started_at DESC')
+              CALL                     1
+              BUILD_LIST               2
+
+120           CALL                     3
+              POP_TOP
+
+123           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               30 (create_index)
+              PUSH_NULL
+
+124           LOAD_CONST              61 ('calls_user_status_idx')
+
+125           LOAD_CONST               1 ('calls')
+
+126           LOAD_CONST               5 ('owner_user_id')
+              LOAD_CONST              17 ('status')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              60 ('started_at DESC')
+              CALL                     1
+              BUILD_LIST               3
+
+123           CALL                     3
+              POP_TOP
+
+128           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               30 (create_index)
+              PUSH_NULL
+              LOAD_CONST              62 ('calls_provider_sid_idx')
+              LOAD_CONST               1 ('calls')
+              LOAD_CONST              34 ('provider_call_sid')
+              BUILD_LIST               1
+              CALL                     3
+              POP_TOP
+
+129           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               30 (create_index)
+              PUSH_NULL
+
+130           LOAD_CONST              63 ('calls_user_caller_hash_idx')
+              LOAD_CONST               1 ('calls')
+              LOAD_CONST               5 ('owner_user_id')
+              LOAD_CONST              26 ('caller_phone_hash')
+              BUILD_LIST               2
+
+129           CALL                     3
+              POP_TOP
+
+134           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+135           LOAD_CONST              64 ('call_events')
+
+136           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('primary_key',))
+              CALL_KW                  3
+
+137           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+138           LOAD_CONST              65 ('call_id')
+
+139           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+140           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              66 ('calls.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+141           LOAD_CONST               9 (False)
+
+137           LOAD_CONST              10 (('nullable',))
+              CALL_KW                  4
+
+143           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+144           LOAD_CONST               5 ('owner_user_id')
+
+145           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+146           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               6 ('users.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+147           LOAD_CONST               9 (False)
+
+143           LOAD_CONST              10 (('nullable',))
+              CALL_KW                  4
+
+149           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              67 ('event_type')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              68 (60)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+150           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              69 ('provider_status')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              12 (30)
+              CALL                     1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+151           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+152           LOAD_CONST              70 ('event_at')
+
+153           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+
+154           LOAD_CONST               9 (False)
+
+155           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              20 ('now()')
+              CALL                     1
+
+151           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+157           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              71 ('details_redacted')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               32 (JSON)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+158           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+159           LOAD_CONST              47 ('created_at')
+
+160           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+
+161           LOAD_CONST               9 (False)
+
+162           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              20 ('now()')
+              CALL                     1
+
+158           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+164           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (UniqueConstraint)
+              PUSH_NULL
+
+165           LOAD_CONST              65 ('call_id')
+              LOAD_CONST              67 ('event_type')
+              LOAD_CONST              69 ('provider_status')
+              LOAD_CONST              72 ('uq_call_events_dedupe')
+
+164           LOAD_CONST              51 (('name',))
+              CALL_KW                  4
+
+134           CALL                    10
+              POP_TOP
+
+169           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               30 (create_index)
+              PUSH_NULL
+
+170           LOAD_CONST              73 ('call_events_call_idx')
+              LOAD_CONST              64 ('call_events')
+              LOAD_CONST              65 ('call_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              74 ('event_at ASC')
+              CALL                     1
+              BUILD_LIST               2
+
+169           CALL                     3
+              POP_TOP
+
+172           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               30 (create_index)
+              PUSH_NULL
+
+173           LOAD_CONST              75 ('call_events_user_idx')
+              LOAD_CONST              64 ('call_events')
+              LOAD_CONST               5 ('owner_user_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              76 ('event_at DESC')
+              CALL                     1
+              BUILD_LIST               2
+
+172           CALL                     3
+              POP_TOP
+
+177           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+178           LOAD_CONST              77 ('provider_events')
+
+179           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('primary_key',))
+              CALL_KW                  3
+
+180           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              31 ('provider')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              32 (20)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+181           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              78 ('provider_event_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+182           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              34 ('provider_call_sid')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+183           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              67 ('event_type')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              68 (60)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+184           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+185           LOAD_CONST              79 ('received_at')
+
+186           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+
+187           LOAD_CONST               9 (False)
+
+188           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              20 ('now()')
+              CALL                     1
+
+184           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+190           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              80 ('processed_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+191           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+192           LOAD_CONST              81 ('process_status')
+
+193           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              32 (20)
+              CALL                     1
+
+194           LOAD_CONST               9 (False)
+
+195           LOAD_CONST              82 ('received')
+
+191           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+197           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              83 ('failure_reason')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+198           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+199           LOAD_CONST              65 ('call_id')
+
+200           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+201           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              66 ('calls.id')
+              LOAD_CONST              84 ('SET NULL')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+202           LOAD_CONST               3 (True)
+
+198           LOAD_CONST              10 (('nullable',))
+              CALL_KW                  4
+
+204           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+205           LOAD_CONST               5 ('owner_user_id')
+
+206           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+207           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               6 ('users.id')
+              LOAD_CONST              84 ('SET NULL')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+208           LOAD_CONST               3 (True)
+
+204           LOAD_CONST              10 (('nullable',))
+              CALL_KW                  4
+
+210           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              85 ('payload_hash')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (String)
+              PUSH_NULL
+              LOAD_CONST              27 (64)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+211           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              86 ('payload_redacted')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               32 (JSON)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+212           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              87 ('signature_valid')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               24 (Boolean)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  3
+
+213           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+214           LOAD_CONST              47 ('created_at')
+
+215           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              19 (('timezone',))
+              CALL_KW                  1
+
+216           LOAD_CONST               9 (False)
+
+217           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              20 ('now()')
+              CALL                     1
+
+213           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+219           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (CheckConstraint)
+              PUSH_NULL
+
+220           LOAD_CONST              88 ("provider IN ('twilio', 'elevenlabs')")
+
+221           LOAD_CONST              89 ('ck_provider_events_provider')
+
+219           LOAD_CONST              51 (('name',))
+              CALL_KW                  2
+
+223           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (CheckConstraint)
+              PUSH_NULL
+
+224           LOAD_CONST              90 ("process_status IN ('received', 'processed', 'failed')")
+
+225           LOAD_CONST              91 ('ck_provider_events_status')
+
+223           LOAD_CONST              51 (('name',))
+              CALL_KW                  2
+
+177           CALL                    18
+              POP_TOP
+
+229           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               30 (create_index)
+              PUSH_NULL
+
+230           LOAD_CONST              92 ('provider_events_status_idx')
+
+231           LOAD_CONST              77 ('provider_events')
+
+232           LOAD_CONST              81 ('process_status')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (text)
+              PUSH_NULL
+              LOAD_CONST              93 ('received_at ASC')
+              CALL                     1
+              BUILD_LIST               2
+
+229           CALL                     3
+              POP_TOP
+
+234           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               30 (create_index)
+              PUSH_NULL
+
+235           LOAD_CONST              94 ('provider_events_call_sid_idx')
+              LOAD_CONST              77 ('provider_events')
+              LOAD_CONST              34 ('provider_call_sid')
+              BUILD_LIST               1
+
+234           CALL                     3
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185CB787360, file "D:\fluence\Github\mattbot\backend\alembic\versions\010_call_intake_and_state_machine.py", line 239>:
+239           RESUME                   0
+
+240           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               1 ('provider_events')
+              CALL                     1
+              POP_TOP
+
+241           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               2 ('call_events')
+              CALL                     1
+              POP_TOP
+
+242           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               3 ('calls')
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)

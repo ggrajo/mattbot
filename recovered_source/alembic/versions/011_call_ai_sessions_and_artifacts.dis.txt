@@ -1,0 +1,2269 @@
+# Bytecode dump of: 011_call_ai_sessions_and_artifacts.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\alembic\versions\011_call_ai_sessions_and_artifacts.py
+# co_names: ('__doc__', 'collections.abc', 'Sequence', 'sqlalchemy', 'sa', 'alembic', 'op', 'revision', 'str', '__annotations__', 'down_revision', 'branch_labels', 'depends_on', '_ARTIFACT_STATUS', 'upgrade', 'downgrade')
+# co_consts (strings): ['Part 5: call AI sessions, artifacts, memory items, usage events\n\nRevision ID: 011\nRevises: 010\nCreate Date: 2026-02-25\n\n', '011', 'revision', '010', 'down_revision', 'branch_labels', 'depends_on', "IN ('pending', 'processing', 'ready', 'failed', 'not_available')"]
+
+# --- Nested code object: upgrade ---
+    # co_names: ('op', 'create_table', 'sa', 'Column', 'UUID', 'ForeignKey', 'Text', 'String', 'DateTime', 'Integer', 'text', 'CheckConstraint', 'create_index', 'LargeBinary', 'JSON', '_ARTIFACT_STATUS', 'Float', 'Boolean')
+    # co_varnames: ()
+    # co_consts (strings): ['call_ai_sessions', 'id', 'call_id', 'calls.id', 'CASCADE', 'owner_user_id', 'users.id', 'provider_session_id', 'agent_id', 'status', 'pending', 'started_at', 'ended_at', 'duration_seconds', 'last_error_redacted', 'prompt_pack_version', 'settings_snapshot_id', 'created_at', 'now()', 'updated_at', "status IN ('pending', 'connected', 'active', 'completed', 'failed', 'timeout')", 'ck_call_ai_sessions_status', 'call_ai_sessions_call_id_idx', 'call_ai_sessions_user_status_idx', 'call_artifacts', 'summary_text_ciphertext', 'summary_text_nonce', 'summary_text_key_version', 'summary_status', 'structured_extraction', 'labels_json', 'labels_status', 'transcript_provider', 'elevenlabs', 'transcript_provider_ref', 'transcript_status', 'transcript_last_checked_at', 'idempotency_key', 'summary_status ', 'ck_call_artifacts_summary_status', 'labels_status ', 'ck_call_artifacts_labels_status', 'transcript_status ', 'ck_call_artifacts_transcript_status', 'call_artifacts_call_id_idx', 'call_artifacts_owner_idx', 'call_memory_items', 'source_call_id', 'SET NULL', 'memory_type', 'subject', 'value_ciphertext', 'value_nonce', 'value_key_version', 'confidence', 'user_confirmed', 'false', 'deleted_at', "memory_type IN ('caller_display_name', 'relationship_tag', 'callback_window_preference', 'communication_preference', 'repeated_reason_pattern')", 'ck_call_memory_items_type', 'call_memory_items_user_active_idx', 'deleted_at IS NULL', 'call_usage_events', 'minutes_billed', 'source', 'call', 'call_usage_events_call_idx', 'call_usage_events_idemp_idx']
+ 24           RESUME                   0
+
+ 26           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+ 27           LOAD_CONST               1 ('call_ai_sessions')
+
+ 28           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('primary_key',))
+              CALL_KW                  3
+
+ 29           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 30           LOAD_CONST               5 ('call_id')
+
+ 31           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+ 32           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               6 ('calls.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+ 33           LOAD_CONST               3 (True)
+
+ 34           LOAD_CONST               9 (False)
+
+ 29           LOAD_CONST              10 (('unique', 'nullable'))
+              CALL_KW                  5
+
+ 36           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 37           LOAD_CONST              11 ('owner_user_id')
+
+ 38           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+ 39           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              12 ('users.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+ 40           LOAD_CONST               9 (False)
+
+ 36           LOAD_CONST              13 (('nullable',))
+              CALL_KW                  4
+
+ 42           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              14 ('provider_session_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 43           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              15 ('agent_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 44           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 45           LOAD_CONST              16 ('status')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              17 (30)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              18 ('pending')
+
+ 44           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 47           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              20 ('started_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 48           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              22 ('ended_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 49           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              23 ('duration_seconds')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 50           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              24 ('last_error_redacted')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 51           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              25 ('prompt_pack_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              26 (20)
+              CALL                     1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 52           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              27 ('settings_snapshot_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 53           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 54           LOAD_CONST              28 ('created_at')
+
+ 55           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+
+ 56           LOAD_CONST               9 (False)
+
+ 57           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (text)
+              PUSH_NULL
+              LOAD_CONST              29 ('now()')
+              CALL                     1
+
+ 53           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 59           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 60           LOAD_CONST              30 ('updated_at')
+
+ 61           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+
+ 62           LOAD_CONST               9 (False)
+
+ 63           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (text)
+              PUSH_NULL
+              LOAD_CONST              29 ('now()')
+              CALL                     1
+
+ 59           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 65           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (CheckConstraint)
+              PUSH_NULL
+
+ 66           LOAD_CONST              31 ("status IN ('pending', 'connected', 'active', 'completed', 'failed', 'timeout')")
+
+ 68           LOAD_CONST              32 ('ck_call_ai_sessions_status')
+
+ 65           LOAD_CONST              33 (('name',))
+              CALL_KW                  2
+
+ 26           CALL                    16
+              POP_TOP
+
+ 71           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+ 72           LOAD_CONST              34 ('call_ai_sessions_call_id_idx')
+              LOAD_CONST               1 ('call_ai_sessions')
+              LOAD_CONST               5 ('call_id')
+              BUILD_LIST               1
+
+ 71           CALL                     3
+              POP_TOP
+
+ 74           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+ 75           LOAD_CONST              35 ('call_ai_sessions_user_status_idx')
+
+ 76           LOAD_CONST               1 ('call_ai_sessions')
+
+ 77           LOAD_CONST              11 ('owner_user_id')
+              LOAD_CONST              16 ('status')
+              BUILD_LIST               2
+
+ 74           CALL                     3
+              POP_TOP
+
+ 81           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+ 82           LOAD_CONST              36 ('call_artifacts')
+
+ 83           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('primary_key',))
+              CALL_KW                  3
+
+ 84           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 85           LOAD_CONST               5 ('call_id')
+
+ 86           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+ 87           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               6 ('calls.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+ 88           LOAD_CONST               3 (True)
+
+ 89           LOAD_CONST               9 (False)
+
+ 84           LOAD_CONST              10 (('unique', 'nullable'))
+              CALL_KW                  5
+
+ 91           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 92           LOAD_CONST              11 ('owner_user_id')
+
+ 93           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+ 94           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              12 ('users.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+ 95           LOAD_CONST               9 (False)
+
+ 91           LOAD_CONST              13 (('nullable',))
+              CALL_KW                  4
+
+ 97           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              37 ('summary_text_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 98           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              38 ('summary_text_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 99           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              39 ('summary_text_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+100           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+101           LOAD_CONST              40 ('summary_status')
+
+102           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              26 (20)
+              CALL                     1
+
+103           LOAD_CONST               9 (False)
+
+104           LOAD_CONST              18 ('pending')
+
+100           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+106           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              41 ('structured_extraction')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (JSON)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+107           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              42 ('labels_json')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (JSON)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+108           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+109           LOAD_CONST              43 ('labels_status')
+
+110           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              26 (20)
+              CALL                     1
+
+111           LOAD_CONST               9 (False)
+
+112           LOAD_CONST              18 ('pending')
+
+108           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+114           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+115           LOAD_CONST              44 ('transcript_provider')
+
+116           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              26 (20)
+              CALL                     1
+
+117           LOAD_CONST               9 (False)
+
+118           LOAD_CONST              45 ('elevenlabs')
+
+114           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+120           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              46 ('transcript_provider_ref')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+121           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+122           LOAD_CONST              47 ('transcript_status')
+
+123           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              26 (20)
+              CALL                     1
+
+124           LOAD_CONST               9 (False)
+
+125           LOAD_CONST              18 ('pending')
+
+121           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+127           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+128           LOAD_CONST              48 ('transcript_last_checked_at')
+
+129           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+
+130           LOAD_CONST               3 (True)
+
+127           LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+132           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              49 ('idempotency_key')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              50 (64)
+              CALL                     1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('unique', 'nullable'))
+              CALL_KW                  4
+
+133           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+134           LOAD_CONST              28 ('created_at')
+
+135           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+
+136           LOAD_CONST               9 (False)
+
+137           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (text)
+              PUSH_NULL
+              LOAD_CONST              29 ('now()')
+              CALL                     1
+
+133           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+139           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+140           LOAD_CONST              30 ('updated_at')
+
+141           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+
+142           LOAD_CONST               9 (False)
+
+143           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (text)
+              PUSH_NULL
+              LOAD_CONST              29 ('now()')
+              CALL                     1
+
+139           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+145           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (CheckConstraint)
+              PUSH_NULL
+
+146           LOAD_CONST              51 ('summary_status ')
+              LOAD_GLOBAL             30 (_ARTIFACT_STATUS)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+
+147           LOAD_CONST              52 ('ck_call_artifacts_summary_status')
+
+145           LOAD_CONST              33 (('name',))
+              CALL_KW                  2
+
+149           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (CheckConstraint)
+              PUSH_NULL
+
+150           LOAD_CONST              53 ('labels_status ')
+              LOAD_GLOBAL             30 (_ARTIFACT_STATUS)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+
+151           LOAD_CONST              54 ('ck_call_artifacts_labels_status')
+
+149           LOAD_CONST              33 (('name',))
+              CALL_KW                  2
+
+153           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (CheckConstraint)
+              PUSH_NULL
+
+154           LOAD_CONST              55 ('transcript_status ')
+              LOAD_GLOBAL             30 (_ARTIFACT_STATUS)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+
+155           LOAD_CONST              56 ('ck_call_artifacts_transcript_status')
+
+153           LOAD_CONST              33 (('name',))
+              CALL_KW                  2
+
+ 81           CALL                    21
+              POP_TOP
+
+158           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+159           LOAD_CONST              57 ('call_artifacts_call_id_idx')
+              LOAD_CONST              36 ('call_artifacts')
+              LOAD_CONST               5 ('call_id')
+              BUILD_LIST               1
+
+158           CALL                     3
+              POP_TOP
+
+161           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+162           LOAD_CONST              58 ('call_artifacts_owner_idx')
+              LOAD_CONST              36 ('call_artifacts')
+              LOAD_CONST              11 ('owner_user_id')
+              BUILD_LIST               1
+
+161           CALL                     3
+              POP_TOP
+
+166           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+167           LOAD_CONST              59 ('call_memory_items')
+
+168           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('primary_key',))
+              CALL_KW                  3
+
+169           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+170           LOAD_CONST              11 ('owner_user_id')
+
+171           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+172           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              12 ('users.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+173           LOAD_CONST               9 (False)
+
+169           LOAD_CONST              13 (('nullable',))
+              CALL_KW                  4
+
+175           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+176           LOAD_CONST              60 ('source_call_id')
+
+177           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+178           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               6 ('calls.id')
+              LOAD_CONST              61 ('SET NULL')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+179           LOAD_CONST               3 (True)
+
+175           LOAD_CONST              13 (('nullable',))
+              CALL_KW                  4
+
+181           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              62 ('memory_type')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              63 (40)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+182           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              64 ('subject')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+183           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              65 ('value_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+184           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              66 ('value_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+185           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              67 ('value_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+186           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              68 ('confidence')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               32 (Float)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+187           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+188           LOAD_CONST              69 ('user_confirmed')
+
+189           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               34 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+190           LOAD_CONST               9 (False)
+
+191           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (text)
+              PUSH_NULL
+              LOAD_CONST              70 ('false')
+              CALL                     1
+
+187           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+193           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+194           LOAD_CONST              28 ('created_at')
+
+195           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+
+196           LOAD_CONST               9 (False)
+
+197           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (text)
+              PUSH_NULL
+              LOAD_CONST              29 ('now()')
+              CALL                     1
+
+193           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+199           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              71 ('deleted_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+200           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (CheckConstraint)
+              PUSH_NULL
+
+201           LOAD_CONST              72 ("memory_type IN ('caller_display_name', 'relationship_tag', 'callback_window_preference', 'communication_preference', 'repeated_reason_pattern')")
+
+205           LOAD_CONST              73 ('ck_call_memory_items_type')
+
+200           LOAD_CONST              33 (('name',))
+              CALL_KW                  2
+
+166           CALL                    14
+              POP_TOP
+
+208           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+209           LOAD_CONST              74 ('call_memory_items_user_active_idx')
+
+210           LOAD_CONST              59 ('call_memory_items')
+
+211           LOAD_CONST              11 ('owner_user_id')
+              BUILD_LIST               1
+
+212           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (text)
+              PUSH_NULL
+              LOAD_CONST              75 ('deleted_at IS NULL')
+              CALL                     1
+
+208           LOAD_CONST              76 (('postgresql_where',))
+              CALL_KW                  4
+              POP_TOP
+
+216           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+217           LOAD_CONST              77 ('call_usage_events')
+
+218           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('primary_key',))
+              CALL_KW                  3
+
+219           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+220           LOAD_CONST               5 ('call_id')
+
+221           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+222           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               6 ('calls.id')
+              LOAD_CONST              61 ('SET NULL')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+223           LOAD_CONST               3 (True)
+
+219           LOAD_CONST              13 (('nullable',))
+              CALL_KW                  4
+
+225           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+226           LOAD_CONST              11 ('owner_user_id')
+
+227           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+228           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              12 ('users.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+229           LOAD_CONST               9 (False)
+
+225           LOAD_CONST              13 (('nullable',))
+              CALL_KW                  4
+
+231           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+232           LOAD_CONST              49 ('idempotency_key')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              78 (128)
+              CALL                     1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               9 (False)
+
+231           LOAD_CONST              10 (('unique', 'nullable'))
+              CALL_KW                  4
+
+234           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              79 ('minutes_billed')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+235           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              23 ('duration_seconds')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+236           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+237           LOAD_CONST              80 ('source')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              26 (20)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              81 ('call')
+
+236           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+239           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+240           LOAD_CONST              28 ('created_at')
+
+241           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+
+242           LOAD_CONST               9 (False)
+
+243           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (text)
+              PUSH_NULL
+              LOAD_CONST              29 ('now()')
+              CALL                     1
+
+239           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+216           CALL                     9
+              POP_TOP
+
+246           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+247           LOAD_CONST              82 ('call_usage_events_call_idx')
+              LOAD_CONST              77 ('call_usage_events')
+              LOAD_CONST               5 ('call_id')
+              BUILD_LIST               1
+
+246           CALL                     3
+              POP_TOP
+
+249           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+250           LOAD_CONST              83 ('call_usage_events_idemp_idx')
+
+251           LOAD_CONST              77 ('call_usage_events')
+
+252           LOAD_CONST              49 ('idempotency_key')
+              BUILD_LIST               1
+
+253           LOAD_CONST               3 (True)
+
+249           LOAD_CONST              84 (('unique',))
+              CALL_KW                  4
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Nested code object: downgrade ---
+    # co_names: ('op', 'drop_table')
+    # co_varnames: ()
+    # co_consts (strings): ['call_usage_events', 'call_memory_items', 'call_artifacts', 'call_ai_sessions']
+257           RESUME                   0
+
+258           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_usage_events')
+              CALL                     1
+              POP_TOP
+
+259           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               2 ('call_memory_items')
+              CALL                     1
+              POP_TOP
+
+260           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               3 ('call_artifacts')
+              CALL                     1
+              POP_TOP
+
+261           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               4 ('call_ai_sessions')
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+# --- Module-level bytecode ---
+  0           RESUME                   0
+
+  1           SETUP_ANNOTATIONS
+              LOAD_CONST               0 ('Part 5: call AI sessions, artifacts, memory items, usage events\n\nRevision ID: 011\nRevises: 010\nCreate Date: 2026-02-25\n\n')
+              STORE_NAME               0 (__doc__)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('Sequence',))
+              IMPORT_NAME              1 (collections.abc)
+              IMPORT_FROM              2 (Sequence)
+              STORE_NAME               2 (Sequence)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (sqlalchemy)
+              STORE_NAME               4 (sa)
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('op',))
+              IMPORT_NAME              5 (alembic)
+              IMPORT_FROM              6 (op)
+              STORE_NAME               6 (op)
+              POP_TOP
+
+ 14           LOAD_CONST               5 ('011')
+              STORE_NAME               7 (revision)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               6 ('revision')
+              STORE_SUBSCR
+
+ 15           LOAD_CONST               7 ('010')
+              STORE_NAME              10 (down_revision)
+              LOAD_NAME                8 (str)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               8 ('down_revision')
+              STORE_SUBSCR
+
+ 16           LOAD_CONST               3 (None)
+              STORE_NAME              11 (branch_labels)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                8 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               9 ('branch_labels')
+              STORE_SUBSCR
+
+ 17           LOAD_CONST               3 (None)
+              STORE_NAME              12 (depends_on)
+              LOAD_NAME                8 (str)
+              LOAD_NAME                2 (Sequence)
+              LOAD_NAME                8 (str)
+              BINARY_SUBSCR
+              BINARY_OP                7 (|)
+              LOAD_CONST               3 (None)
+              BINARY_OP                7 (|)
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST              10 ('depends_on')
+              STORE_SUBSCR
+
+ 20           LOAD_CONST              11 ("IN ('pending', 'processing', 'ready', 'failed', 'not_available')")
+
+ 19           STORE_NAME              13 (_ARTIFACT_STATUS)
+
+ 24           LOAD_CONST              14 (('return', None))
+              LOAD_CONST              12 (<code object upgrade at 0x00000185C9B24BC0, file "D:\fluence\Github\mattbot\backend\alembic\versions\011_call_ai_sessions_and_artifacts.py", line 24>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              14 (upgrade)
+
+257           LOAD_CONST              14 (('return', None))
+              LOAD_CONST              13 (<code object downgrade at 0x00000185CB7D5E30, file "D:\fluence\Github\mattbot\backend\alembic\versions\011_call_ai_sessions_and_artifacts.py", line 257>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              15 (downgrade)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object upgrade at 0x00000185C9B24BC0, file "D:\fluence\Github\mattbot\backend\alembic\versions\011_call_ai_sessions_and_artifacts.py", line 24>:
+ 24           RESUME                   0
+
+ 26           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+ 27           LOAD_CONST               1 ('call_ai_sessions')
+
+ 28           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('primary_key',))
+              CALL_KW                  3
+
+ 29           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 30           LOAD_CONST               5 ('call_id')
+
+ 31           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+ 32           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               6 ('calls.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+ 33           LOAD_CONST               3 (True)
+
+ 34           LOAD_CONST               9 (False)
+
+ 29           LOAD_CONST              10 (('unique', 'nullable'))
+              CALL_KW                  5
+
+ 36           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 37           LOAD_CONST              11 ('owner_user_id')
+
+ 38           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+ 39           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              12 ('users.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+ 40           LOAD_CONST               9 (False)
+
+ 36           LOAD_CONST              13 (('nullable',))
+              CALL_KW                  4
+
+ 42           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              14 ('provider_session_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 43           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              15 ('agent_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 44           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 45           LOAD_CONST              16 ('status')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              17 (30)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              18 ('pending')
+
+ 44           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 47           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              20 ('started_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 48           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              22 ('ended_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 49           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              23 ('duration_seconds')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 50           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              24 ('last_error_redacted')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 51           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              25 ('prompt_pack_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              26 (20)
+              CALL                     1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 52           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              27 ('settings_snapshot_id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 53           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 54           LOAD_CONST              28 ('created_at')
+
+ 55           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+
+ 56           LOAD_CONST               9 (False)
+
+ 57           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (text)
+              PUSH_NULL
+              LOAD_CONST              29 ('now()')
+              CALL                     1
+
+ 53           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 59           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 60           LOAD_CONST              30 ('updated_at')
+
+ 61           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+
+ 62           LOAD_CONST               9 (False)
+
+ 63           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (text)
+              PUSH_NULL
+              LOAD_CONST              29 ('now()')
+              CALL                     1
+
+ 59           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+ 65           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (CheckConstraint)
+              PUSH_NULL
+
+ 66           LOAD_CONST              31 ("status IN ('pending', 'connected', 'active', 'completed', 'failed', 'timeout')")
+
+ 68           LOAD_CONST              32 ('ck_call_ai_sessions_status')
+
+ 65           LOAD_CONST              33 (('name',))
+              CALL_KW                  2
+
+ 26           CALL                    16
+              POP_TOP
+
+ 71           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+ 72           LOAD_CONST              34 ('call_ai_sessions_call_id_idx')
+              LOAD_CONST               1 ('call_ai_sessions')
+              LOAD_CONST               5 ('call_id')
+              BUILD_LIST               1
+
+ 71           CALL                     3
+              POP_TOP
+
+ 74           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+ 75           LOAD_CONST              35 ('call_ai_sessions_user_status_idx')
+
+ 76           LOAD_CONST               1 ('call_ai_sessions')
+
+ 77           LOAD_CONST              11 ('owner_user_id')
+              LOAD_CONST              16 ('status')
+              BUILD_LIST               2
+
+ 74           CALL                     3
+              POP_TOP
+
+ 81           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+ 82           LOAD_CONST              36 ('call_artifacts')
+
+ 83           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('primary_key',))
+              CALL_KW                  3
+
+ 84           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 85           LOAD_CONST               5 ('call_id')
+
+ 86           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+ 87           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               6 ('calls.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+ 88           LOAD_CONST               3 (True)
+
+ 89           LOAD_CONST               9 (False)
+
+ 84           LOAD_CONST              10 (('unique', 'nullable'))
+              CALL_KW                  5
+
+ 91           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+ 92           LOAD_CONST              11 ('owner_user_id')
+
+ 93           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+ 94           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              12 ('users.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+ 95           LOAD_CONST               9 (False)
+
+ 91           LOAD_CONST              13 (('nullable',))
+              CALL_KW                  4
+
+ 97           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              37 ('summary_text_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 98           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              38 ('summary_text_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+ 99           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              39 ('summary_text_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+100           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+101           LOAD_CONST              40 ('summary_status')
+
+102           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              26 (20)
+              CALL                     1
+
+103           LOAD_CONST               9 (False)
+
+104           LOAD_CONST              18 ('pending')
+
+100           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+106           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              41 ('structured_extraction')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (JSON)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+107           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              42 ('labels_json')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               28 (JSON)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+108           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+109           LOAD_CONST              43 ('labels_status')
+
+110           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              26 (20)
+              CALL                     1
+
+111           LOAD_CONST               9 (False)
+
+112           LOAD_CONST              18 ('pending')
+
+108           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+114           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+115           LOAD_CONST              44 ('transcript_provider')
+
+116           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              26 (20)
+              CALL                     1
+
+117           LOAD_CONST               9 (False)
+
+118           LOAD_CONST              45 ('elevenlabs')
+
+114           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+120           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              46 ('transcript_provider_ref')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+121           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+122           LOAD_CONST              47 ('transcript_status')
+
+123           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              26 (20)
+              CALL                     1
+
+124           LOAD_CONST               9 (False)
+
+125           LOAD_CONST              18 ('pending')
+
+121           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+127           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+128           LOAD_CONST              48 ('transcript_last_checked_at')
+
+129           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+
+130           LOAD_CONST               3 (True)
+
+127           LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+132           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              49 ('idempotency_key')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              50 (64)
+              CALL                     1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('unique', 'nullable'))
+              CALL_KW                  4
+
+133           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+134           LOAD_CONST              28 ('created_at')
+
+135           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+
+136           LOAD_CONST               9 (False)
+
+137           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (text)
+              PUSH_NULL
+              LOAD_CONST              29 ('now()')
+              CALL                     1
+
+133           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+139           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+140           LOAD_CONST              30 ('updated_at')
+
+141           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+
+142           LOAD_CONST               9 (False)
+
+143           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (text)
+              PUSH_NULL
+              LOAD_CONST              29 ('now()')
+              CALL                     1
+
+139           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+145           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (CheckConstraint)
+              PUSH_NULL
+
+146           LOAD_CONST              51 ('summary_status ')
+              LOAD_GLOBAL             30 (_ARTIFACT_STATUS)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+
+147           LOAD_CONST              52 ('ck_call_artifacts_summary_status')
+
+145           LOAD_CONST              33 (('name',))
+              CALL_KW                  2
+
+149           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (CheckConstraint)
+              PUSH_NULL
+
+150           LOAD_CONST              53 ('labels_status ')
+              LOAD_GLOBAL             30 (_ARTIFACT_STATUS)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+
+151           LOAD_CONST              54 ('ck_call_artifacts_labels_status')
+
+149           LOAD_CONST              33 (('name',))
+              CALL_KW                  2
+
+153           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (CheckConstraint)
+              PUSH_NULL
+
+154           LOAD_CONST              55 ('transcript_status ')
+              LOAD_GLOBAL             30 (_ARTIFACT_STATUS)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+
+155           LOAD_CONST              56 ('ck_call_artifacts_transcript_status')
+
+153           LOAD_CONST              33 (('name',))
+              CALL_KW                  2
+
+ 81           CALL                    21
+              POP_TOP
+
+158           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+159           LOAD_CONST              57 ('call_artifacts_call_id_idx')
+              LOAD_CONST              36 ('call_artifacts')
+              LOAD_CONST               5 ('call_id')
+              BUILD_LIST               1
+
+158           CALL                     3
+              POP_TOP
+
+161           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+162           LOAD_CONST              58 ('call_artifacts_owner_idx')
+              LOAD_CONST              36 ('call_artifacts')
+              LOAD_CONST              11 ('owner_user_id')
+              BUILD_LIST               1
+
+161           CALL                     3
+              POP_TOP
+
+166           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+167           LOAD_CONST              59 ('call_memory_items')
+
+168           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('primary_key',))
+              CALL_KW                  3
+
+169           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+170           LOAD_CONST              11 ('owner_user_id')
+
+171           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+172           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              12 ('users.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+173           LOAD_CONST               9 (False)
+
+169           LOAD_CONST              13 (('nullable',))
+              CALL_KW                  4
+
+175           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+176           LOAD_CONST              60 ('source_call_id')
+
+177           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+178           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               6 ('calls.id')
+              LOAD_CONST              61 ('SET NULL')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+179           LOAD_CONST               3 (True)
+
+175           LOAD_CONST              13 (('nullable',))
+              CALL_KW                  4
+
+181           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              62 ('memory_type')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              63 (40)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+182           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              64 ('subject')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               12 (Text)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+183           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              65 ('value_ciphertext')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+184           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              66 ('value_nonce')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               26 (LargeBinary)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+185           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              67 ('value_key_version')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+186           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              68 ('confidence')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               32 (Float)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+187           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+188           LOAD_CONST              69 ('user_confirmed')
+
+189           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               34 (Boolean)
+              PUSH_NULL
+              CALL                     0
+
+190           LOAD_CONST               9 (False)
+
+191           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (text)
+              PUSH_NULL
+              LOAD_CONST              70 ('false')
+              CALL                     1
+
+187           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+193           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+194           LOAD_CONST              28 ('created_at')
+
+195           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+
+196           LOAD_CONST               9 (False)
+
+197           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (text)
+              PUSH_NULL
+              LOAD_CONST              29 ('now()')
+              CALL                     1
+
+193           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+199           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              71 ('deleted_at')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+200           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               22 (CheckConstraint)
+              PUSH_NULL
+
+201           LOAD_CONST              72 ("memory_type IN ('caller_display_name', 'relationship_tag', 'callback_window_preference', 'communication_preference', 'repeated_reason_pattern')")
+
+205           LOAD_CONST              73 ('ck_call_memory_items_type')
+
+200           LOAD_CONST              33 (('name',))
+              CALL_KW                  2
+
+166           CALL                    14
+              POP_TOP
+
+208           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+209           LOAD_CONST              74 ('call_memory_items_user_active_idx')
+
+210           LOAD_CONST              59 ('call_memory_items')
+
+211           LOAD_CONST              11 ('owner_user_id')
+              BUILD_LIST               1
+
+212           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (text)
+              PUSH_NULL
+              LOAD_CONST              75 ('deleted_at IS NULL')
+              CALL                     1
+
+208           LOAD_CONST              76 (('postgresql_where',))
+              CALL_KW                  4
+              POP_TOP
+
+216           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (create_table)
+              PUSH_NULL
+
+217           LOAD_CONST              77 ('call_usage_events')
+
+218           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST               2 ('id')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('primary_key',))
+              CALL_KW                  3
+
+219           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+220           LOAD_CONST               5 ('call_id')
+
+221           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+222           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               6 ('calls.id')
+              LOAD_CONST              61 ('SET NULL')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+223           LOAD_CONST               3 (True)
+
+219           LOAD_CONST              13 (('nullable',))
+              CALL_KW                  4
+
+225           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+226           LOAD_CONST              11 ('owner_user_id')
+
+227           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                8 (UUID)
+              PUSH_NULL
+              CALL                     0
+
+228           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               10 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              12 ('users.id')
+              LOAD_CONST               7 ('CASCADE')
+              LOAD_CONST               8 (('ondelete',))
+              CALL_KW                  2
+
+229           LOAD_CONST               9 (False)
+
+225           LOAD_CONST              13 (('nullable',))
+              CALL_KW                  4
+
+231           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+232           LOAD_CONST              49 ('idempotency_key')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              78 (128)
+              CALL                     1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               9 (False)
+
+231           LOAD_CONST              10 (('unique', 'nullable'))
+              CALL_KW                  4
+
+234           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              79 ('minutes_billed')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+235           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+              LOAD_CONST              23 ('duration_seconds')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               18 (Integer)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               9 (False)
+              LOAD_CONST              13 (('nullable',))
+              CALL_KW                  3
+
+236           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+237           LOAD_CONST              80 ('source')
+              LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               14 (String)
+              PUSH_NULL
+              LOAD_CONST              26 (20)
+              CALL                     1
+              LOAD_CONST               9 (False)
+              LOAD_CONST              81 ('call')
+
+236           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+239           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR                6 (Column)
+              PUSH_NULL
+
+240           LOAD_CONST              28 ('created_at')
+
+241           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               16 (DateTime)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST              21 (('timezone',))
+              CALL_KW                  1
+
+242           LOAD_CONST               9 (False)
+
+243           LOAD_GLOBAL              4 (sa)
+              LOAD_ATTR               20 (text)
+              PUSH_NULL
+              LOAD_CONST              29 ('now()')
+              CALL                     1
+
+239           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  4
+
+216           CALL                     9
+              POP_TOP
+
+246           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+247           LOAD_CONST              82 ('call_usage_events_call_idx')
+              LOAD_CONST              77 ('call_usage_events')
+              LOAD_CONST               5 ('call_id')
+              BUILD_LIST               1
+
+246           CALL                     3
+              POP_TOP
+
+249           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR               24 (create_index)
+              PUSH_NULL
+
+250           LOAD_CONST              83 ('call_usage_events_idemp_idx')
+
+251           LOAD_CONST              77 ('call_usage_events')
+
+252           LOAD_CONST              49 ('idempotency_key')
+              BUILD_LIST               1
+
+253           LOAD_CONST               3 (True)
+
+249           LOAD_CONST              84 (('unique',))
+              CALL_KW                  4
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object downgrade at 0x00000185CB7D5E30, file "D:\fluence\Github\mattbot\backend\alembic\versions\011_call_ai_sessions_and_artifacts.py", line 257>:
+257           RESUME                   0
+
+258           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               1 ('call_usage_events')
+              CALL                     1
+              POP_TOP
+
+259           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               2 ('call_memory_items')
+              CALL                     1
+              POP_TOP
+
+260           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               3 ('call_artifacts')
+              CALL                     1
+              POP_TOP
+
+261           LOAD_GLOBAL              0 (op)
+              LOAD_ATTR                2 (drop_table)
+              PUSH_NULL
+              LOAD_CONST               4 ('call_ai_sessions')
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)
