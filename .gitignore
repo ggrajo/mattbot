@@ -112,3 +112,6 @@ nginx/certbot/
 .DS_Store
 
 DEPLOY_GUIDE.md
+backend/.env.dev
+mobile/.env.dev
+realtime/.env.dev
