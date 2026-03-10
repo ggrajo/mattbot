@@ -10,6 +10,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.core.clock import utcnow
 from app.models.call import Call
 from app.models.handoff_offer import HandoffOffer
 from app.models.handoff_suppression import HandoffSuppression
@@ -128,7 +129,7 @@ async def record_suppression(
     entry = HandoffSuppression(
         owner_user_id=user_id,
         destination_phone_hash=destination_hash,
-        suppression_expires_at=datetime.now(UTC) + timedelta(seconds=ttl_seconds),
+        suppression_expires_at=utcnow() + timedelta(seconds=ttl_seconds),
         reason=reason,
     )
     db.add(entry)
@@ -141,7 +142,7 @@ async def is_suppressed(
     user_id: uuid.UUID,
     destination_hash: str,
 ) -> bool:
-    now = datetime.now(UTC)
+    now = utcnow()
     row = await db.scalar(
         select(HandoffSuppression).where(
             HandoffSuppression.owner_user_id == user_id,

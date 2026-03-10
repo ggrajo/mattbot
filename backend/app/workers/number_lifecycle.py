@@ -14,6 +14,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.core.clock import utcnow
 from app.models.user_number import UserNumber
 from app.services import audit_service
 from app.services.telephony_service import (
@@ -27,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 async def cleanup_stale_pending_numbers(db: AsyncSession) -> int:
     """Release numbers stuck in 'pending' longer than PENDING_TTL_MINUTES."""
-    cutoff = datetime.now(UTC) - timedelta(minutes=settings.NUMBER_PENDING_TTL_MINUTES)
+    cutoff = utcnow() - timedelta(minutes=settings.NUMBER_PENDING_TTL_MINUTES)
     stmt = select(UserNumber).where(
         UserNumber.status == "pending",
         UserNumber.updated_at < cutoff,
@@ -42,7 +43,7 @@ async def cleanup_stale_pending_numbers(db: AsyncSession) -> int:
             _rollback_twilio_number(num.twilio_number_sid)
 
         num.status = "released"
-        num.released_at = datetime.now(UTC)
+        num.released_at = utcnow()
         num.last_error = "pending_ttl_exceeded"
 
         await audit_service.log_event(
@@ -72,7 +73,7 @@ async def release_numbers_after_grace(
 ) -> int:
     """Release suspended numbers whose grace period has expired."""
 
-    cutoff = datetime.now(UTC) - timedelta(days=grace_days)
+    cutoff = utcnow() - timedelta(days=grace_days)
     stmt = select(UserNumber).where(
         UserNumber.status == "suspended",
         UserNumber.suspended_at < cutoff,

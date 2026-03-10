@@ -12,6 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
 from app.config import settings as app_settings
+from app.core.clock import utcnow
 from app.core.encryption import decrypt_field
 from app.models.agent import Agent
 from app.models.agent_config import AgentConfig
@@ -148,7 +149,7 @@ async def update_agent(
 
     if display_name is not None:
         agent.display_name = display_name
-        agent.updated_at = datetime.now(UTC)
+        agent.updated_at = utcnow()
 
     if voice_id is not None:
         resolved_voice_id = None
@@ -174,7 +175,7 @@ async def update_agent(
         config.greeting_instructions = greeting_instructions
 
     config.revision += 1
-    config.updated_at = datetime.now(UTC)
+    config.updated_at = utcnow()
     await db.flush()
     await db.refresh(agent, ["config"])
     return agent

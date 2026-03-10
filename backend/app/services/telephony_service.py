@@ -25,6 +25,7 @@ from app.schemas.telephony import (
     NumberProvisionResponse,
 )
 from app.services import audit_service, billing_service
+from app.core.clock import utcnow
 
 logger = logging.getLogger(__name__)
 
@@ -137,7 +138,7 @@ async def _provision_dev_number(db: AsyncSession, user_id: uuid.UUID) -> NumberP
         owner_user_id=user_id,
         e164=fake_e164,
         status="active",
-        provisioned_at=datetime.now(UTC),
+        provisioned_at=utcnow(),
         twilio_number_sid=f"PN_dev_{uuid.uuid4().hex[:16]}",
         webhook_url=webhook,
     )
@@ -200,7 +201,7 @@ async def _provision_twilio_number(db: AsyncSession, user_id: uuid.UUID) -> Numb
         purchased = client.incoming_phone_numbers.create(**create_kwargs)
         twilio_sid = purchased.sid
 
-        now = datetime.now(UTC)
+        now = utcnow()
         number.twilio_number_sid = twilio_sid
         number.e164 = purchased.phone_number
         number.status = "active"
@@ -301,7 +302,7 @@ async def suspend_number(db: AsyncSession, user_id: uuid.UUID, reason: str) -> b
     if not number or number.status not in ("active", "pending"):
         return False
 
-    now = datetime.now(UTC)
+    now = utcnow()
 
     sid = number.twilio_number_sid
     if sid and not sid.startswith("PN_dev_"):
@@ -353,7 +354,7 @@ async def release_number(db: AsyncSession, user_id: uuid.UUID, reason: str) -> b
             )
             number.last_error = f"release_delete: {str(e)[:150]}"
 
-    now = datetime.now(UTC)
+    now = utcnow()
     number.status = "released"
     number.released_at = now
     number.webhook_url = None
@@ -469,7 +470,7 @@ async def update_call_modes(
         config.verification_status = "unverified"
         config.last_verified_at = None
 
-    config.updated_at = datetime.now(UTC)
+    config.updated_at = utcnow()
     await db.flush()
     await db.refresh(config)
 
@@ -550,14 +551,14 @@ async def initiate_forwarding_verification(
     result = await db.execute(stmt)
     for old in result.scalars().all():
         old.status = "expired"
-        old.completed_at = datetime.now(UTC)
+        old.completed_at = utcnow()
 
     code = _generate_verification_code()
     attempt = ForwardingVerificationAttempt(
         owner_user_id=user_id,
         verification_code=code,
         status="pending",
-        initiated_at=datetime.now(UTC),
+        initiated_at=utcnow(),
     )
     db.add(attempt)
 
@@ -650,7 +651,7 @@ async def complete_forwarding_verification(
     if not attempt:
         return False
 
-    now = datetime.now(UTC)
+    now = utcnow()
     attempt.status = "passed"
     attempt.completed_at = now
     if call_sid:

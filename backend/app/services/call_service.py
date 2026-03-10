@@ -22,6 +22,7 @@ from app.models.call import Call
 from app.models.call_event import CallEvent
 from app.models.provider_event import ProviderEvent
 from app.models.user_number import UserNumber
+from app.core.clock import utcnow
 
 logger = logging.getLogger(__name__)
 
@@ -125,7 +126,7 @@ async def create_or_get_call(
         missing_labels=True,
         from_masked=mask_phone(caller_e164) if caller_e164 else "Unknown",
         to_masked=mask_phone(called_e164) if called_e164 else "Unknown",
-        retention_expires_at=datetime.now(UTC) + timedelta(days=retention_days),
+        retention_expires_at=utcnow() + timedelta(days=retention_days),
         agent_id=agent_id,
         voice_id=voice_id,
     )
@@ -370,7 +371,7 @@ async def soft_delete_call(
     if call is None:
         return False
 
-    now = datetime.now(UTC)
+    now = utcnow()
     call.deleted_at = now
 
     from app.models.call_memory_item import CallMemoryItem
@@ -400,7 +401,7 @@ async def soft_delete_all_calls(
 
     from app.models.call_memory_item import CallMemoryItem
 
-    now = datetime.now(UTC)
+    now = utcnow()
 
     count_stmt = (
         select(sa_func.count())

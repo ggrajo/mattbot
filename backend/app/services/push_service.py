@@ -4,6 +4,7 @@ from datetime import UTC, datetime
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.clock import utcnow
 from app.models.push_token import PushToken
 from app.services import audit_service
 
@@ -16,7 +17,7 @@ async def register_push_token(
     provider: str,
     token: str,
 ) -> PushToken:
-    now = datetime.now(UTC)
+    now = utcnow()
 
     # Revoke any existing active entries for this device+provider
     await db.execute(

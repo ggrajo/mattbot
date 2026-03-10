@@ -13,6 +13,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings as app_settings
+from app.core.clock import utcnow
 from app.core.encryption import decrypt_field, encrypt_field
 from app.models.call import Call
 from app.models.call_ai_session import CallAiSession
@@ -47,7 +48,7 @@ async def create_ai_session(
             existing.provider_session_id = provider_session_id
         if status:
             existing.status = status
-        existing.started_at = existing.started_at or datetime.now(UTC)
+        existing.started_at = existing.started_at or utcnow()
         await db.flush()
         return existing
 
@@ -57,7 +58,7 @@ async def create_ai_session(
         status=status,
         provider_session_id=provider_session_id,
         agent_id=app_settings.ELEVENLABS_AGENT_ID or None,
-        started_at=datetime.now(UTC),
+        started_at=utcnow(),
     )
     db.add(session)
     await db.flush()
@@ -824,7 +825,7 @@ async def process_call_artifacts(
     # --- Transcript ---
     if artifact.transcript_status in ("processing", "pending") and conversation_id:
         el_data = await fetch_transcript_from_provider(conversation_id)
-        artifact.transcript_last_checked_at = datetime.now(UTC)
+        artifact.transcript_last_checked_at = utcnow()
 
         if el_data:
             transcript_turns = _extract_transcript_text(el_data)

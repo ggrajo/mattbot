@@ -5,6 +5,7 @@ from datetime import UTC, datetime, time
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.clock import utcnow
 from app.core.dependencies import CurrentUser, get_current_user
 from app.core.encryption import encrypt_field
 from app.database import get_db
@@ -219,7 +220,7 @@ async def patch_settings(
         changed_keys.append(key)
 
     settings.revision += 1
-    settings.updated_at = datetime.now(UTC)
+    settings.updated_at = utcnow()
     settings.updated_by_device_id = current_user.device_id
 
     audit_details = {"changed_keys": changed_keys, "revision": settings.revision}

@@ -8,6 +8,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.core.clock import utcnow
 from app.core.jwt_utils import create_partial_token
 from app.core.oauth import OAuthUserInfo
 from app.core.rate_limiter import _get_redis
@@ -40,7 +41,7 @@ async def _store_token(prefix: str, token_hash: str, data: dict, ttl_seconds: in
     else:
         _memory_fallback[f"{prefix}{token_hash}"] = (
             payload,
-            datetime.now(UTC) + timedelta(seconds=ttl_seconds),
+            utcnow() + timedelta(seconds=ttl_seconds),
         )
 
 
@@ -57,7 +58,7 @@ async def _get_token(prefix: str, token_hash: str) -> dict[str, str] | None:
         if entry is None:
             return None
         payload, expires = entry
-        if datetime.now(UTC) > expires:
+        if utcnow() > expires:
             _memory_fallback.pop(f"{prefix}{token_hash}", None)
             return None
         result = json.loads(payload)

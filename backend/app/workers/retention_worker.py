@@ -12,6 +12,7 @@ from datetime import UTC, datetime
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.clock import utcnow
 from app.models.call import Call
 from app.models.call_artifact import CallArtifact
 from app.models.call_memory_item import CallMemoryItem
@@ -22,14 +23,12 @@ logger = logging.getLogger(__name__)
 
 async def process_retention_deletions(db: AsyncSession) -> int:
     """Soft-delete expired calls and scrub linked data. Returns count."""
-    now = datetime.now(UTC)
-    # Remove timezone info for comparison with naive database column
-    now_naive = now.replace(tzinfo=None)
+    now = utcnow()
 
     stmt = (
         select(Call)
         .where(
-            Call.retention_expires_at <= now_naive,
+            Call.retention_expires_at <= now,
             Call.deleted_at.is_(None),
         )
         .limit(50)

@@ -10,6 +10,7 @@ from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.core.clock import utcnow
 from app.core.dependencies import CurrentUser, get_current_user
 from app.core.encryption import encrypt_field
 from app.core.rate_limiter import check_rate_limit
@@ -575,7 +576,7 @@ async def delete_contact(
             status_code=404,
         )
 
-    contact.deleted_at = datetime.now(UTC)
+    contact.deleted_at = utcnow()
     await log_event(
         db,
         owner_user_id=current_user.user.id,

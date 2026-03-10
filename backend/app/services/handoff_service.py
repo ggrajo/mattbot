@@ -15,6 +15,7 @@ from app.models.call_event import CallEvent
 from app.models.handoff_offer import HandoffOffer
 from app.models.user_settings import UserSettings
 from app.models.vip_entry import VipEntry
+from app.core.clock import utcnow
 
 logger = logging.getLogger(__name__)
 
@@ -108,7 +109,7 @@ async def create_offer(
     if timeout_seconds is None:
         timeout_seconds = settings.HANDOFF_OFFER_DEFAULT_TIMEOUT
 
-    now = datetime.now(UTC)
+    now = utcnow()
     expires_at = now + timedelta(seconds=timeout_seconds)
 
     offer = HandoffOffer(
@@ -153,17 +154,12 @@ async def accept_offer(
     if offer is None:
         return {"result": "not_found"}
 
-    now = datetime.now(UTC)
+    now = utcnow()
 
     if offer.status != "offered":
         return {"result": "lost", "current_status": offer.status}
 
-    if not offer.expires_at.tzinfo:
-        exp = offer.expires_at.replace(tzinfo=UTC)
-    else:
-        exp = offer.expires_at
-
-    if exp < now:
+    if offer.expires_at < now:
         offer.status = "expired"
         await _sync_call_handoff_status(db, offer.call_id, "expired")
         await db.flush()
@@ -197,7 +193,7 @@ async def decline_offer(
     if offer.status != "offered":
         return {"result": "already_resolved", "current_status": offer.status}
 
-    now = datetime.now(UTC)
+    now = utcnow()
     offer.status = "declined"
     offer.declined_at = now
 
@@ -212,15 +208,13 @@ async def decline_offer(
 
 
 async def expire_stale_offers(db: AsyncSession) -> int:
-    now = datetime.now(UTC)
-    # Remove timezone info for comparison with naive database column
-    now_naive = now.replace(tzinfo=None)
+    now = utcnow()
 
     stale = (
         await db.scalars(
             select(HandoffOffer).where(
                 HandoffOffer.status == "offered",
-                HandoffOffer.expires_at < now_naive,
+                HandoffOffer.expires_at < now,
             )
         )
     ).all()

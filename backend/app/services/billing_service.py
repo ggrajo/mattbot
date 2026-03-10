@@ -27,6 +27,7 @@ from app.schemas.billing import (
 )
 from app.services import audit_service
 from app.services.billing_config_service import get_billing_config
+from app.core.clock import utcnow
 
 logger = logging.getLogger(__name__)
 
@@ -206,7 +207,7 @@ async def subscribe(
         )
 
     minutes = plan_cfg.included_minutes
-    now = datetime.now(UTC)
+    now = utcnow()
 
     pm = await _get_default_payment_method(db, user_id)
     if pm is None:
@@ -348,7 +349,7 @@ async def change_plan(
                 400,
             )
 
-        now = datetime.now(UTC)
+        now = utcnow()
         sub = BillingSubscription(
             owner_user_id=user_id,
             plan=new_plan,
@@ -387,12 +388,12 @@ async def change_plan(
         raise AppError("SAME_PLAN", "You are already on this plan.", 400)
 
     old_plan = sub.plan
-    now = datetime.now(UTC)
+    now = utcnow()
 
     usage = await _get_usage(db, user_id)
     period_end = sub.current_period_end
-    if period_end and period_end.tzinfo is None:
-        period_end = period_end.replace(tzinfo=UTC)
+    if period_end and period_end.tzinfo:
+        period_end = period_end.replace(tzinfo=None)
     if period_end and now < period_end:
         carried = sub.minutes_carried_over
         remaining = max(0, sub.minutes_included + carried - usage.minutes_used)
@@ -472,7 +473,7 @@ async def cancel_subscription(db: AsyncSession, user_id: uuid.UUID) -> CancelRes
         )
 
     sub.cancel_at_period_end = True
-    sub.canceled_at = datetime.now(UTC)
+    sub.canceled_at = utcnow()
 
     await audit_service.log_event(
         db=db,
@@ -556,7 +557,7 @@ async def record_usage(
     usage = await _get_usage(db, user_id)
     usage.minutes_used += minutes
     usage.last_usage_source = source
-    usage.updated_at = datetime.now(UTC)
+    usage.updated_at = utcnow()
 
     if idempotency_key:
         usage_event = CallUsageEvent(
@@ -877,7 +878,7 @@ async def dev_set_plan(
 ) -> SubscribeResponse:
     config = get_billing_config()
     minutes = config.get_plan(plan).included_minutes
-    now = datetime.now(UTC)
+    now = utcnow()
 
     period_end = now + timedelta(days=app_settings.BILLING_PERIOD_DAYS)
     sub = await _get_subscription(db, user_id)
@@ -1016,7 +1017,7 @@ async def handle_stripe_webhook(db: AsyncSession, payload: bytes, sig_header: st
         sub = result.scalar_one_or_none()
         if sub:
             sub.status = "canceled"
-            sub.canceled_at = datetime.now(UTC)
+            sub.canceled_at = utcnow()
             handled = True
 
             await telephony_service.suspend_number(
@@ -1043,7 +1044,7 @@ async def handle_stripe_webhook(db: AsyncSession, payload: bytes, sig_header: st
                     reason="payment_failed",
                 )
 
-    be.processed_at = datetime.now(UTC) if handled else None
+    be.processed_at = utcnow() if handled else None
     await db.flush()
 
     if handled:

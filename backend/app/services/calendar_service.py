@@ -13,6 +13,7 @@ import httpx
 
 from app.config import settings as app_settings
 from app.core.encryption import decrypt_field, encrypt_field
+from app.core.clock import utcnow
 
 logger = logging.getLogger(__name__)
 
@@ -106,7 +107,7 @@ async def store_tokens(
 
     expiry = None
     if "expires_in" in tokens:
-        expiry = datetime.now(UTC) + timedelta(seconds=int(tokens["expires_in"]))
+        expiry = utcnow() + timedelta(seconds=int(tokens["expires_in"]))
 
     existing = await session.get(GoogleCalendarToken, user_id)
 
@@ -127,7 +128,7 @@ async def store_tokens(
         existing.key_version = kv
         existing.token_expiry = expiry
         existing.google_email = google_email
-        existing.updated_at = datetime.now(UTC)
+        existing.updated_at = utcnow()
     else:
         entry = GoogleCalendarToken(
             owner_user_id=user_id,
@@ -160,7 +161,7 @@ async def get_valid_access_token(db: object, user_id: uuid.UUID) -> str | None:
         row.key_version,
     ).decode()
 
-    if row.token_expiry and row.token_expiry < datetime.now(UTC) + timedelta(minutes=2):
+    if row.token_expiry and row.token_expiry < utcnow() + timedelta(minutes=2):
         refresh_token = decrypt_field(
             row.refresh_token_ciphertext,
             row.refresh_token_nonce,
@@ -179,14 +180,14 @@ async def get_valid_access_token(db: object, user_id: uuid.UUID) -> str | None:
         row.key_version = kv
 
         if "expires_in" in new_tokens:
-            row.token_expiry = datetime.now(UTC) + timedelta(seconds=int(new_tokens["expires_in"]))
+            row.token_expiry = utcnow() + timedelta(seconds=int(new_tokens["expires_in"]))
 
         if "refresh_token" in new_tokens:
             rct, rnonce, _ = encrypt_field(new_tokens["refresh_token"].encode())
             row.refresh_token_ciphertext = rct
             row.refresh_token_nonce = rnonce
 
-        row.updated_at = datetime.now(UTC)
+        row.updated_at = utcnow()
         await session.flush()
 
     return access_token

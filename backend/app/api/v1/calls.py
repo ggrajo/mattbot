@@ -87,7 +87,7 @@ async def list_calls(
     parsed_to = None
     if date_from:
         try:
-            parsed_from = datetime.fromisoformat(date_from).replace(tzinfo=UTC)
+            parsed_from = datetime.fromisoformat(date_from).replace(tzinfo=None)
         except ValueError as exc:
             raise AppError(
                 code="INVALID_DATE", message="Invalid date_from format", status_code=422
@@ -95,7 +95,7 @@ async def list_calls(
 
     if date_to:
         try:
-            parsed_to = datetime.fromisoformat(date_to).replace(tzinfo=UTC)
+            parsed_to = datetime.fromisoformat(date_to).replace(tzinfo=None)
         except ValueError as exc:
             raise AppError(
                 code="INVALID_DATE", message="Invalid date_to format", status_code=422

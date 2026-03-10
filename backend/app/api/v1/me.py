@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.clock import utcnow
 from app.core.dependencies import CurrentUser, get_current_user, require_step_up
 from app.database import get_db
 from app.models.user import User
@@ -127,7 +128,7 @@ async def delete_account(
 
     # Mark user as deleted
     user.status = "deleted"
-    user.deleted_at = datetime.now(UTC)
+    user.deleted_at = utcnow()
 
     # Revoke all sessions
     await revoke_all_user_sessions(

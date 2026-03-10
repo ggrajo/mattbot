@@ -10,6 +10,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.core.clock import utcnow
 from app.core.dependencies import CurrentUser, get_current_user
 from app.core.rate_limiter import check_rate_limit
 from app.database import get_db
@@ -75,7 +76,7 @@ async def record_delivery_receipt(
         )
 
     delivery.status = "delivered_ack"
-    delivery.last_attempt_at = datetime.now(UTC)
+    delivery.last_attempt_at = utcnow()
 
 
 @router.post("/{notification_id}/opened", status_code=204)

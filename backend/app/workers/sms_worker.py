@@ -14,6 +14,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from app.core.clock import utcnow
 from app.core.encryption import decrypt_field
 from app.models.outbound_message import OutboundMessage
 from app.models.text_send_attempt import TextSendAttempt
@@ -91,7 +92,7 @@ async def _send_single(db: AsyncSession, msg: OutboundMessage) -> None:
         attempt_number=attempt_count,
         idempotency_key=idempotency_key,
         provider="twilio",
-        started_at=datetime.now(UTC),
+        started_at=utcnow(),
     )
     db.add(attempt)
     await db.flush()
@@ -107,7 +108,7 @@ async def _send_single(db: AsyncSession, msg: OutboundMessage) -> None:
 
     attempt.provider_message_sid = stub_sid
     attempt.provider_status = "queued"
-    attempt.finished_at = datetime.now(UTC)
+    attempt.finished_at = utcnow()
 
     msg.status = "sent"
     await db.flush()

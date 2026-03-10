@@ -3,6 +3,7 @@ from datetime import UTC, datetime, timedelta
 
 import jwt
 
+from app.core.clock import utcnow
 from app.config import settings
 
 
@@ -13,7 +14,7 @@ def create_access_token(
     expires_minutes: int | None = None,
 ) -> str:
     exp_minutes = expires_minutes or settings.JWT_ACCESS_TOKEN_MINUTES
-    now = datetime.now(UTC)
+    now = utcnow()
     payload = {
         "sub": str(user_id),
         "sid": str(session_id),
@@ -32,7 +33,7 @@ def create_partial_token(
     purpose: str,
     expires_minutes: int = 10,
 ) -> str:
-    now = datetime.now(UTC)
+    now = utcnow()
     payload = {
         "sub": str(user_id),
         "did": str(device_id),

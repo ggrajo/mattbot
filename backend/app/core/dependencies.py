@@ -8,6 +8,7 @@ from fastapi import Depends, Header, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.core.clock import utcnow
 from app.core.jwt_utils import decode_token
 from app.database import get_db
 from app.middleware.error_handler import AppError
@@ -56,17 +57,13 @@ async def _resolve_user_from_token(
     if session.owner_user_id != user_id:
         raise AppError("INVALID_TOKEN", "Token session mismatch", 401)
 
-    now = datetime.now(UTC)
+    now = utcnow()
 
     access_exp = session.access_expires_at
-    if access_exp.tzinfo is None:
-        access_exp = access_exp.replace(tzinfo=UTC)
     if access_exp < now:
         raise AppError("TOKEN_EXPIRED", "Access token has expired", 401)
 
     created = session.created_at
-    if created.tzinfo is None:
-        created = created.replace(tzinfo=UTC)
     absolute_age = (now - created).days
     if absolute_age > settings.ABSOLUTE_SESSION_DAYS:
         raise AppError("SESSION_EXPIRED", "Session has exceeded maximum age", 401)
