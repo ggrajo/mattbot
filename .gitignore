@@ -35,11 +35,15 @@ build/
 # Environment
 .env
 .env.local
-.env.dev
+.env.backup
 .env.staging
 .env.prod
 .env.*.local
 .env.production.local
+# EXCEPTION: Track .env.dev files as templates for reference
+!backend/.env.dev
+!mobile/.env.dev
+!realtime/.env.dev
 
 # Secrets & Credentials
 firebase-service-account.json
