@@ -1,6 +1,10 @@
 # Python
 __pycache__/
 *.py[cod]
+
+# TEMPORARY: Allow .pyc files (source .py files missing, only bytecode remains)
+!backend/app/**/*.pyc
+!backend/alembic/versions/*.pyc
 *.egg-info/
 *.egg
 dist/
