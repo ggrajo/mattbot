@@ -95,7 +95,12 @@ alembic/versions/__pycache__/
 # Docker
 .dockerignore
 
+# Nginx SSL & Certbot (generated on server)
+nginx/ssl/
+nginx/certbot/
+
 # Misc
 .cache/
 .DS_Store
 
+DEPLOY_GUIDE.md

@@ -1,0 +1,151 @@
+name: Deploy to Dev Server
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  DEPLOY_PATH: /home/${{ secrets.EC2_USER }}/mattbot
+
+jobs:
+  deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Write .env files and Firebase credentials to server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            mkdir -p ${{ env.DEPLOY_PATH }}/backend
+            mkdir -p ${{ env.DEPLOY_PATH }}/realtime
+
+            # --- backend/.env ---
+            cat > ${{ env.DEPLOY_PATH }}/backend/.env << 'ENVEOF'
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            DATABASE_URL_SYNC=${{ secrets.DATABASE_URL_SYNC }}
+            REDIS_URL=redis://redis:6379
+            JWT_SIGNING_KEY=${{ secrets.JWT_SIGNING_KEY }}
+            JWT_KEY_ID=key-dev-001
+            ENCRYPTION_MASTER_KEY=${{ secrets.ENCRYPTION_MASTER_KEY }}
+            GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+            APPLE_BUNDLE_ID=${{ secrets.APPLE_BUNDLE_ID }}
+            APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}
+            EMAIL_PROVIDER=${{ secrets.EMAIL_PROVIDER }}
+            EMAIL_FROM=${{ secrets.EMAIL_FROM }}
+            SMTP_HOST=${{ secrets.SMTP_HOST }}
+            SMTP_PORT=${{ secrets.SMTP_PORT }}
+            SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}
+            SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
+            SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY }}
+            APP_LINK_BASE_URL=${{ secrets.APP_LINK_BASE_URL }}
+            BILLING_PROVIDER=${{ secrets.BILLING_PROVIDER }}
+            STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}
+            STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}
+            STRIPE_PRICE_FREE=${{ secrets.STRIPE_PRICE_FREE }}
+            STRIPE_PRICE_STANDARD=${{ secrets.STRIPE_PRICE_STANDARD }}
+            STRIPE_PRICE_PRO=${{ secrets.STRIPE_PRICE_PRO }}
+            BILLING_PLANS_JSON=${{ secrets.BILLING_PLANS_JSON }}
+            BILLING_UPGRADE_RULES_JSON=${{ secrets.BILLING_UPGRADE_RULES_JSON }}
+            STRIPE_PRICE_IDS_JSON=${{ secrets.STRIPE_PRICE_IDS_JSON }}
+            TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }}
+            TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }}
+            TWILIO_NUMBER_PROVISIONING_ENABLED=${{ secrets.TWILIO_NUMBER_PROVISIONING_ENABLED }}
+            TWILIO_WEBHOOK_BASE_URL=${{ secrets.TWILIO_WEBHOOK_BASE_URL }}
+            HANDOFF_CALLER_ID=${{ secrets.HANDOFF_CALLER_ID }}
+            ELEVENLABS_API_KEY=${{ secrets.ELEVENLABS_API_KEY }}
+            ELEVENLABS_AGENT_ID=${{ secrets.ELEVENLABS_AGENT_ID }}
+            ELEVENLABS_WEBHOOK_SECRET=${{ secrets.ELEVENLABS_WEBHOOK_SECRET }}
+            ELEVENLABS_DEFAULT_VOICE_ID=${{ secrets.ELEVENLABS_DEFAULT_VOICE_ID }}
+            ELEVENLABS_API_BASE_URL=https://api.elevenlabs.io/v1/convai/conversations
+            NODE_BRIDGE_WS_URL=${{ secrets.NODE_BRIDGE_WS_URL }}
+            NODE_BRIDGE_INTERNAL_URL=http://realtime:3001
+            ENABLE_REALTIME_BRIDGE=true
+            INTERNAL_EVENT_SECRET=${{ secrets.INTERNAL_EVENT_SECRET }}
+            INTERNAL_NODE_API_KEY=${{ secrets.INTERNAL_NODE_API_KEY }}
+            SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+            ENVIRONMENT=development
+            API_BASE_URL=${{ secrets.API_BASE_URL }}
+            AGENT_DEFAULT_SYSTEM_PROMPT_KEY=default_v1
+            DEFAULT_ASSISTANT_NAME=Alex
+            FCM_SERVICE_ACCOUNT_JSON=/app/firebase-service-account.json
+            ENVEOF
+
+            # Strip leading whitespace from .env (heredoc indentation)
+            sed -i 's/^[[:space:]]*//' ${{ env.DEPLOY_PATH }}/backend/.env
+
+            # --- Firebase service account JSON ---
+            cat > ${{ env.DEPLOY_PATH }}/backend/firebase-service-account.json << 'FBEOF'
+            ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+            FBEOF
+
+            # --- realtime/.env ---
+            cat > ${{ env.DEPLOY_PATH }}/realtime/.env << 'ENVEOF'
+            PORT=3001
+            ELEVENLABS_API_KEY=${{ secrets.ELEVENLABS_API_KEY }}
+            ELEVENLABS_AGENT_ID=${{ secrets.ELEVENLABS_AGENT_ID }}
+            INTERNAL_EVENT_SECRET=${{ secrets.INTERNAL_EVENT_SECRET }}
+            INTERNAL_NODE_API_KEY=${{ secrets.INTERNAL_NODE_API_KEY }}
+            JWT_SIGNING_KEY=${{ secrets.JWT_SIGNING_KEY }}
+            LOG_LEVEL=info
+            BACKEND_INTERNAL_URL=http://backend:8000
+            MAX_CONCURRENT_SESSIONS=50
+            MAX_SESSIONS_PER_USER=5
+            ELEVENLABS_WS_URL=wss://api.elevenlabs.io/v1/convai/conversation
+            ELEVENLABS_BUFFER_LIMIT_BYTES=512000
+            WS_AUTH_TIMEOUT_MS=5000
+            AGENT_RUNTIME_FETCH_TIMEOUT_MS=5000
+            EVENT_EMISSION_TIMEOUT_MS=10000
+            HANDOFF_DECISION_TIMEOUT_MS=10000
+            ENVEOF
+
+            # Strip leading whitespace from realtime .env
+            sed -i 's/^[[:space:]]*//' ${{ env.DEPLOY_PATH }}/realtime/.env
+
+      - name: Deploy code and restart
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          command_timeout: 10m
+          script: |
+            set -e
+            cd ${{ env.DEPLOY_PATH }}
+
+            echo "=== Pulling latest code ==="
+            git fetch origin main
+            git reset --hard origin/main
+
+            echo "=== Restoring .env files (git reset removes them) ==="
+            # .env files were written in the previous step but git reset --hard
+            # doesn't touch untracked files, so they survive. Verify:
+            test -f backend/.env || { echo "ERROR: backend/.env missing"; exit 1; }
+            test -f realtime/.env || { echo "ERROR: realtime/.env missing"; exit 1; }
+
+            echo "=== Building and restarting containers ==="
+            docker compose down --remove-orphans
+            docker compose build --no-cache
+            docker compose up -d
+
+            echo "=== Waiting for services to be healthy ==="
+            sleep 20
+
+            echo "=== Container status ==="
+            docker compose ps
+
+            echo "=== Backend health check ==="
+            curl -sf http://localhost:8000/health && echo " OK" || echo " WARNING: Backend health check failed"
+
+            echo "=== Realtime bridge health check ==="
+            curl -sf http://localhost:3001/health && echo " OK" || echo " WARNING: Realtime health check failed"
+
+            echo "=== Deploy complete ==="
