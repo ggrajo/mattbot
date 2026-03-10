@@ -213,12 +213,14 @@ async def decline_offer(
 
 async def expire_stale_offers(db: AsyncSession) -> int:
     now = datetime.now(UTC)
+    # Remove timezone info for comparison with naive database column
+    now_naive = now.replace(tzinfo=None)
 
     stale = (
         await db.scalars(
             select(HandoffOffer).where(
                 HandoffOffer.status == "offered",
-                HandoffOffer.expires_at < now,
+                HandoffOffer.expires_at < now_naive,
             )
         )
     ).all()
