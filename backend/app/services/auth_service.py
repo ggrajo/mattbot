@@ -39,7 +39,8 @@ async def _store_token(prefix: str, token_hash: str, data: dict, ttl_seconds: in
         await r.setex(f"{prefix}{token_hash}", ttl_seconds, payload)
     else:
         _memory_fallback[f"{prefix}{token_hash}"] = (
-            payload, datetime.now(UTC) + timedelta(seconds=ttl_seconds)
+            payload,
+            datetime.now(UTC) + timedelta(seconds=ttl_seconds),
         )
 
 
@@ -147,9 +148,7 @@ async def register_with_email(
         ttl_seconds=settings.EMAIL_VERIFY_TOKEN_TTL,
     )
 
-    await audit_service.log_event(
-        db, owner_user_id=user.id, event_type="user.registered", ip=ip
-    )
+    await audit_service.log_event(db, owner_user_id=user.id, event_type="user.registered", ip=ip)
 
     await db.flush()
 
@@ -189,9 +188,7 @@ async def verify_email(db: AsyncSession, token: str) -> dict:
     if identity:
         identity.provider_email_verified = True
 
-    await audit_service.log_event(
-        db, owner_user_id=user_id, event_type="user.email_verified"
-    )
+    await audit_service.log_event(db, owner_user_id=user_id, event_type="user.email_verified")
     await db.flush()
 
     return {"status": user.status}
@@ -209,9 +206,7 @@ async def login_with_email(
     ip: str | None = None,
     user_agent: str | None = None,
 ) -> dict:
-    user = (
-        await db.execute(select(User).where(User.email == email.lower()))
-    ).scalar_one_or_none()
+    user = (await db.execute(select(User).where(User.email == email.lower()))).scalar_one_or_none()
 
     if user is None:
         hash_password("dummy-to-prevent-timing-attack")
@@ -244,7 +239,9 @@ async def login_with_email(
 
     if mfa_enrolled:
         challenge_token = create_partial_token(
-            user.id, device.id, "mfa_challenge",
+            user.id,
+            device.id,
+            "mfa_challenge",
             expires_minutes=settings.MFA_CHALLENGE_EXPIRY_MINUTES,
         )
         return {
@@ -253,7 +250,9 @@ async def login_with_email(
         }
     else:
         partial_token = create_partial_token(
-            user.id, device.id, "mfa_enrollment",
+            user.id,
+            device.id,
+            "mfa_enrollment",
             expires_minutes=settings.MFA_CHALLENGE_EXPIRY_MINUTES,
         )
         return {
@@ -325,13 +324,17 @@ async def handle_oauth_login(
         mfa_enrolled = await has_active_totp(db, user.id)
         if mfa_enrolled:
             challenge_token = create_partial_token(
-                user.id, device.id, "mfa_challenge",
+                user.id,
+                device.id,
+                "mfa_challenge",
                 expires_minutes=settings.MFA_CHALLENGE_EXPIRY_MINUTES,
             )
             return {"requires_mfa": True, "mfa_challenge_token": challenge_token}
         else:
             partial_token = create_partial_token(
-                user.id, device.id, "mfa_enrollment",
+                user.id,
+                device.id,
+                "mfa_enrollment",
                 expires_minutes=settings.MFA_CHALLENGE_EXPIRY_MINUTES,
             )
             return {"requires_mfa_enrollment": True, "partial_token": partial_token}
@@ -384,9 +387,7 @@ async def handle_oauth_login(
     )
 
     event_type = f"oauth.{user_info.provider}.linked"
-    await audit_service.log_event(
-        db, owner_user_id=user.id, event_type=event_type, ip=ip
-    )
+    await audit_service.log_event(db, owner_user_id=user.id, event_type=event_type, ip=ip)
 
     partial_token = create_partial_token(
         user.id, device.id, "mfa_enrollment", expires_minutes=settings.MFA_CHALLENGE_EXPIRY_MINUTES
@@ -396,9 +397,7 @@ async def handle_oauth_login(
 
 async def request_password_reset(db: AsyncSession, email: str) -> None:
     """Always returns success to prevent email enumeration."""
-    user = (
-        await db.execute(select(User).where(User.email == email.lower()))
-    ).scalar_one_or_none()
+    user = (await db.execute(select(User).where(User.email == email.lower()))).scalar_one_or_none()
 
     if user is None:
         return
@@ -455,7 +454,9 @@ async def confirm_password_reset(
     mfa_enrolled = await has_active_totp(db, user_id)
     if mfa_enrolled:
         challenge_token = create_partial_token(
-            user_id, device.id, "mfa_challenge",
+            user_id,
+            device.id,
+            "mfa_challenge",
             expires_minutes=settings.MFA_CHALLENGE_EXPIRY_MINUTES,
         )
         return {"requires_mfa": True, "mfa_challenge_token": challenge_token}
@@ -505,14 +506,18 @@ async def change_password(
         db.add(identity)
 
     await revoke_all_user_sessions(
-        db, user.id, reason="password_changed", ip=ip,
+        db,
+        user.id,
+        reason="password_changed",
+        ip=ip,
     )
 
-    event_type = (
-        "user.password.set" if current_password is None else "user.password.changed"
-    )
+    event_type = "user.password.set" if current_password is None else "user.password.changed"
     await audit_service.log_event(
-        db, owner_user_id=user.id, event_type=event_type, ip=ip,
+        db,
+        owner_user_id=user.id,
+        event_type=event_type,
+        ip=ip,
     )
 
     if user.email:
@@ -525,9 +530,7 @@ async def change_password(
     await db.flush()
 
 
-async def store_email_otp(
-    db: AsyncSession, email: str, otp: str, user_id: uuid.UUID
-) -> None:
+async def store_email_otp(db: AsyncSession, email: str, otp: str, user_id: uuid.UUID) -> None:
     otp_hash = hash_token(otp)
     await _store_token(
         _EMAIL_OTP_PREFIX,

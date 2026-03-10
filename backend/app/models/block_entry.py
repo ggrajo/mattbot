@@ -1,8 +1,17 @@
-from datetime import UTC
-from datetime import datetime
 import uuid
+from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, Index, Integer, LargeBinary, String, Text, UniqueConstraint, text
+from sqlalchemy import (
+    DateTime,
+    ForeignKey,
+    Index,
+    Integer,
+    LargeBinary,
+    String,
+    Text,
+    UniqueConstraint,
+    text,
+)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -13,7 +22,9 @@ class BlockEntry(Base):
     __tablename__ = "block_entries"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
-    owner_user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    owner_user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
     phone_ciphertext: Mapped[str] = mapped_column(LargeBinary, nullable=False)
     phone_nonce: Mapped[str] = mapped_column(LargeBinary, nullable=False)
     phone_key_version: Mapped[int] = mapped_column(Integer, nullable=False)
@@ -25,7 +36,14 @@ class BlockEntry(Base):
     relationship: Mapped[str | None] = mapped_column(String(100))
     email: Mapped[str | None] = mapped_column(String(254))
     notes: Mapped[str | None] = mapped_column(Text)
-    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, server_default=text("now()"))
-    updated_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, server_default=text("now()"))
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=text("now()")
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=text("now()")
+    )
 
-    __table_args__ = (UniqueConstraint("owner_user_id", "phone_hash", name="uq_block_entries_user_phone"), Index("block_entries_user_idx", "owner_user_id"),)
+    __table_args__ = (
+        UniqueConstraint("owner_user_id", "phone_hash", name="uq_block_entries_user_phone"),
+        Index("block_entries_user_idx", "owner_user_id"),
+    )

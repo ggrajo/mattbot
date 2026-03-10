@@ -58,37 +58,51 @@ async def _seed_catalog_data():
     from app.models.voice_catalog import VoiceCatalog
 
     async with test_session_factory() as session:
-        existing_voice = (await session.execute(
-            __import__("sqlalchemy").select(VoiceCatalog).limit(1)
-        )).scalar_one_or_none()
+        existing_voice = (
+            await session.execute(__import__("sqlalchemy").select(VoiceCatalog).limit(1))
+        ).scalar_one_or_none()
         if existing_voice:
             return
 
-        session.add(VoiceCatalog(
-            id=__import__("uuid").UUID("00000000-0000-4000-a000-000000000001"),
-            provider_voice_id="21m00Tcm4TlvDq8ikWAM",
-            display_name="Rachel", locale="en", gender_tag="female", sort_order=0,
-        ))
-        session.add(VoiceCatalog(
-            id=__import__("uuid").UUID("00000000-0000-4000-a000-000000000002"),
-            provider_voice_id="pNInz6obpgDQGcFmaJgB",
-            display_name="Adam", locale="en", gender_tag="male", sort_order=1,
-        ))
-        session.add(PromptSuggestion(
-            id=__import__("uuid").UUID("00000000-0000-4000-b000-000000000001"),
-            title="Professional tone",
-            text="Always maintain a professional and polite tone when speaking with callers.",
-            sort_order=0,
-        ))
-        session.add(PromptSuggestion(
-            id=__import__("uuid").UUID("00000000-0000-4000-b000-000000000002"),
-            title="Take messages",
-            text=(
-                "If the caller wants to leave a message,"
-                " collect their name, number, and a brief message."
-            ),
-            sort_order=1,
-        ))
+        session.add(
+            VoiceCatalog(
+                id=__import__("uuid").UUID("00000000-0000-4000-a000-000000000001"),
+                provider_voice_id="21m00Tcm4TlvDq8ikWAM",
+                display_name="Rachel",
+                locale="en",
+                gender_tag="female",
+                sort_order=0,
+            )
+        )
+        session.add(
+            VoiceCatalog(
+                id=__import__("uuid").UUID("00000000-0000-4000-a000-000000000002"),
+                provider_voice_id="pNInz6obpgDQGcFmaJgB",
+                display_name="Adam",
+                locale="en",
+                gender_tag="male",
+                sort_order=1,
+            )
+        )
+        session.add(
+            PromptSuggestion(
+                id=__import__("uuid").UUID("00000000-0000-4000-b000-000000000001"),
+                title="Professional tone",
+                text="Always maintain a professional and polite tone when speaking with callers.",
+                sort_order=0,
+            )
+        )
+        session.add(
+            PromptSuggestion(
+                id=__import__("uuid").UUID("00000000-0000-4000-b000-000000000002"),
+                title="Take messages",
+                text=(
+                    "If the caller wants to leave a message,"
+                    " collect their name, number, and a brief message."
+                ),
+                sort_order=1,
+            )
+        )
         await session.commit()
 
 
@@ -103,6 +117,7 @@ async def setup_database():
     reset_memory_store()
 
     from app.services.auth_service import _memory_fallback
+
     _memory_fallback.clear()
 
 
@@ -199,6 +214,7 @@ async def create_test_user(
         totp_data = resp.json()
 
         import pyotp
+
         totp = pyotp.TOTP(totp_data["secret"])
         code = totp.now()
 

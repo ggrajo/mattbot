@@ -2,7 +2,7 @@
 # File: onboarding.pyc (Python 3.13)
 
 from __future__ import annotations
-from pydantic import BaseModel, field_validator
+
 ONBOARDING_STEPS = [
     'account_created',
     'email_verified',

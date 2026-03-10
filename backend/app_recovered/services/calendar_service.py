@@ -3,15 +3,7 @@
 
 __doc__ = 'Google Calendar integration: OAuth token management and Calendar API calls.'
 from __future__ import annotations
-import logging
-import uuid
-from datetime import UTC, datetime, timedelta
-from datetime import time as dt_time
-from typing import Any
-from urllib.parse import urlencode
-import httpx
-from app.config import settings as app_settings
-from app.core.encryption import decrypt_field, encrypt_field
+
 logger = None(__name__)
 _GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth'
 _GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token'

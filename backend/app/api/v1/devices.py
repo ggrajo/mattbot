@@ -113,9 +113,7 @@ async def remember_device(
     current_user: CurrentUser = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> DeviceResponse:
-    device = await device_service.get_device(
-        db, uuid.UUID(device_id), current_user.user_id
-    )
+    device = await device_service.get_device(db, uuid.UUID(device_id), current_user.user_id)
     if device is None:
         raise AppError("NOT_FOUND", "Device not found", 404)
 
@@ -133,9 +131,7 @@ async def revoke_device(
     db: AsyncSession = Depends(get_db),
     ip: str = Depends(get_client_ip),
 ) -> MessageResponse:
-    device = await device_service.get_device(
-        db, uuid.UUID(device_id), current_user.user_id
-    )
+    device = await device_service.get_device(db, uuid.UUID(device_id), current_user.user_id)
     if device is None:
         raise AppError("NOT_FOUND", "Device not found", 404)
 

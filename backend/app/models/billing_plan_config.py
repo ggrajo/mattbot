@@ -1,7 +1,17 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Index, Integer, String, Text, UniqueConstraint, text
+from sqlalchemy import (
+    Boolean,
+    DateTime,
+    ForeignKey,
+    Index,
+    Integer,
+    String,
+    Text,
+    UniqueConstraint,
+    text,
+)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -24,12 +34,19 @@ class BillingPlanConfigRow(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("false"))
-    created_at: Mapped[datetime] = mapped_column(_tz(), nullable=False, server_default=text("now()"))
+    created_at: Mapped[datetime] = mapped_column(
+        _tz(), nullable=False, server_default=text("now()")
+    )
     created_by_admin_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     __table_args__ = (
-        Index("uq_billing_plan_configs_active", "is_active", unique=True, postgresql_where=text("is_active = true")),
+        Index(
+            "uq_billing_plan_configs_active",
+            "is_active",
+            unique=True,
+            postgresql_where=text("is_active = true"),
+        ),
     )
 
 
@@ -39,13 +56,19 @@ class BillingPlanConfigPlan(Base):
     __tablename__ = "billing_plan_config_plans"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    config_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("billing_plan_configs.id", ondelete="CASCADE"), nullable=False)
+    config_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("billing_plan_configs.id", ondelete="CASCADE"),
+        nullable=False,
+    )
     code: Mapped[str] = mapped_column(String(30), nullable=False)
     name: Mapped[str] = mapped_column(String(60), nullable=False)
     price_usd: Mapped[str] = mapped_column(String(10), nullable=False)
     included_minutes: Mapped[int] = mapped_column(Integer, nullable=False)
     stripe_price_id: Mapped[str | None] = mapped_column(Text, nullable=True)
-    requires_credit_card: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("true"))
+    requires_credit_card: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("true")
+    )
     limited: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("false"))
     sort_order: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("0"))
     description: Mapped[str] = mapped_column(Text, nullable=False, server_default=text("''"))
@@ -62,10 +85,16 @@ class BillingPlanConfigRule(Base):
     __tablename__ = "billing_plan_config_rules"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    config_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("billing_plan_configs.id", ondelete="CASCADE"), nullable=False)
+    config_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("billing_plan_configs.id", ondelete="CASCADE"),
+        nullable=False,
+    )
     from_plan: Mapped[str] = mapped_column(String(30), nullable=False)
     to_plan: Mapped[str] = mapped_column(String(30), nullable=False)
-    trigger: Mapped[str] = mapped_column(String(30), nullable=False, server_default="minutes_exceeded")
+    trigger: Mapped[str] = mapped_column(
+        String(30), nullable=False, server_default="minutes_exceeded"
+    )
 
     __table_args__ = (
         UniqueConstraint("config_id", "from_plan", name="uq_billing_plan_config_rules_from"),

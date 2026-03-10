@@ -1,6 +1,5 @@
-from datetime import UTC
-from datetime import datetime
 import uuid
+from datetime import datetime
 
 from sqlalchemy import Boolean, CheckConstraint, DateTime, Index, Text, text
 from sqlalchemy.dialects.postgresql import UUID
@@ -17,8 +16,24 @@ class TextBackTemplate(Base):
     title: Mapped[str] = mapped_column(Text, nullable=False)
     body: Mapped[str] = mapped_column(Text, nullable=False)
     tone_tag: Mapped[str] = mapped_column(Text, nullable=False)
-    enabled_by_default: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("true"))
+    enabled_by_default: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("true")
+    )
     is_builtin: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("true"))
-    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, server_default=text("now()"))
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=text("now()")
+    )
 
-    __table_args__ = (CheckConstraint("category IN ('busy', 'callback_request', 'request_details', 'reschedule', 'wrong_number', 'sales_decline')", name="ck_text_back_templates_category"), CheckConstraint("tone_tag IN ('neutral', 'warm', 'formal', 'concise')", name="ck_text_back_templates_tone_tag"), Index("text_back_templates_category_idx", "category"),)
+    __table_args__ = (
+        CheckConstraint(
+            "category IN ('busy', 'callback_request', "
+            "'request_details', 'reschedule', "
+            "'wrong_number', 'sales_decline')",
+            name="ck_text_back_templates_category",
+        ),
+        CheckConstraint(
+            "tone_tag IN ('neutral', 'warm', 'formal', 'concise')",
+            name="ck_text_back_templates_tone_tag",
+        ),
+        Index("text_back_templates_category_idx", "category"),
+    )

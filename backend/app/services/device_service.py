@@ -65,9 +65,7 @@ async def update_device(
     return device
 
 
-async def list_user_devices(
-    db: AsyncSession, owner_user_id: uuid.UUID
-) -> list[Device]:
+async def list_user_devices(db: AsyncSession, owner_user_id: uuid.UUID) -> list[Device]:
     result = await db.execute(
         select(Device)
         .where(Device.owner_user_id == owner_user_id, Device.revoked_at.is_(None))
@@ -80,9 +78,7 @@ async def get_device(
     db: AsyncSession, device_id: uuid.UUID, owner_user_id: uuid.UUID
 ) -> Device | None:
     result = await db.execute(
-        select(Device).where(
-            Device.id == device_id, Device.owner_user_id == owner_user_id
-        )
+        select(Device).where(Device.id == device_id, Device.owner_user_id == owner_user_id)
     )
     return result.scalar_one_or_none()
 

@@ -1,4 +1,5 @@
 """Custom SQLAlchemy types that work across PostgreSQL and SQLite."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -35,12 +36,14 @@ class JsonbDict(TypeDecorator[Any]):
     def process_bind_param(self, value: Any, dialect: Dialect) -> Any:
         if dialect.name != "postgresql" and value is not None:
             import json
+
             return json.dumps(value)
         return value
 
     def process_result_value(self, value: Any, dialect: Dialect) -> Any:
         if dialect.name != "postgresql" and value is not None:
             import json
+
             return json.loads(value)
         return value
 

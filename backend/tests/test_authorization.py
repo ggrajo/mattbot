@@ -2,11 +2,9 @@
 
 import uuid
 
-import jwt as pyjwt
 import pytest
 from httpx import AsyncClient
 
-from app.config import settings
 from app.core.jwt_utils import create_partial_token
 from tests.conftest import create_test_user
 
@@ -43,6 +41,7 @@ async def test_user_cannot_revoke_other_users_device(client: AsyncClient):
     device_a_id = resp.json()["items"][0]["id"]
 
     import pyotp
+
     totp = pyotp.TOTP(user_b["totp_secret"])
     step_up_resp = await client.post(
         "/api/v1/auth/step-up",

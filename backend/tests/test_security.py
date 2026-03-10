@@ -1,6 +1,5 @@
 """Unit tests for core/security.py"""
 
-
 from app.core.security import (
     constant_time_compare,
     generate_otp,
@@ -58,6 +57,7 @@ def test_totp_generation_and_verification():
     assert len(secret) > 10
 
     import pyotp
+
     totp = pyotp.TOTP(secret)
     code = totp.now()
     assert verify_totp(secret, code)

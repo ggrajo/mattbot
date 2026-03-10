@@ -17,6 +17,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+
 async def _run_handoff_expiry_worker() -> None:
     """Expire stale handoff offers every few seconds."""
     from app.database import async_session_factory
@@ -51,9 +52,10 @@ async def _run_lifecycle_workers() -> None:
                 n3 = await repair_pending_configurations(db)
                 if n1 or n2 or n3:
                     logger.info(
-                        "Lifecycle worker: cleaned=%d released=%d "
-                        "repaired=%d",
-                        n1, n2, n3,
+                        "Lifecycle worker: cleaned=%d released=%d repaired=%d",
+                        n1,
+                        n2,
+                        n3,
                     )
         except Exception:
             logger.exception("Lifecycle worker iteration failed")
@@ -68,9 +70,13 @@ async def _sync_voices_if_empty() -> None:
     from app.services.elevenlabs_agent_service import sync_voice_catalog
 
     async with async_session_factory() as db, db.begin():
-        count = (await db.execute(
-            select(func.count()).select_from(VoiceCatalog).where(VoiceCatalog.is_active.is_(True))
-        )).scalar() or 0
+        count = (
+            await db.execute(
+                select(func.count())
+                .select_from(VoiceCatalog)
+                .where(VoiceCatalog.is_active.is_(True))
+            )
+        ).scalar() or 0
         if count == 0:
             logger.info("Voice catalog empty — syncing from ElevenLabs")
             n = await sync_voice_catalog(db)
@@ -205,7 +211,9 @@ def create_app() -> FastAPI:
     application.include_router(callers.router, prefix="/api/v1/callers", tags=["callers"])
     application.include_router(reminders.router, prefix="/api/v1/reminders", tags=["reminders"])
     application.include_router(
-        audit_events.router, prefix="/api/v1/audit-events", tags=["audit-events"],
+        audit_events.router,
+        prefix="/api/v1/audit-events",
+        tags=["audit-events"],
     )
     application.include_router(contacts.router, prefix="/api/v1/contacts", tags=["contacts"])
     application.include_router(vip.router, prefix="/api/v1/vip", tags=["vip"])
@@ -219,7 +227,9 @@ def create_app() -> FastAPI:
     )
     application.include_router(messages.router, prefix="/api/v1/messages", tags=["messages"])
     application.include_router(
-        notifications.router, prefix="/api/v1/notifications", tags=["notifications"],
+        notifications.router,
+        prefix="/api/v1/notifications",
+        tags=["notifications"],
     )
     application.include_router(handoff.router, prefix="/api/v1/calls", tags=["handoff"])
     application.include_router(calendar_api.router, prefix="/api/v1/calendar", tags=["calendar"])

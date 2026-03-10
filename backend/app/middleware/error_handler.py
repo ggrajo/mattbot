@@ -47,7 +47,7 @@ def register_error_handlers(app: FastAPI) -> None:
             field = ".".join(str(loc) for loc in e["loc"][1:]) or "request"
             msg = e.get("msg", "Invalid value")
             if msg.startswith("Value error, "):
-                msg = msg[len("Value error, "):]
+                msg = msg[len("Value error, ") :]
             details.append({"field": field, "message": msg})
         first_msg = details[0]["message"] if details else "Invalid request"
         return JSONResponse(

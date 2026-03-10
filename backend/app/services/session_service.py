@@ -82,9 +82,7 @@ async def refresh_session(
 ) -> TokenPair:
     token_hash = hash_token(refresh_token)
 
-    result = await db.execute(
-        select(Session).where(Session.refresh_token_hash == token_hash)
-    )
+    result = await db.execute(select(Session).where(Session.refresh_token_hash == token_hash))
     session = result.scalar_one_or_none()
 
     if session is None:
@@ -108,6 +106,7 @@ async def refresh_session(
         raise AppError("SESSION_EXPIRED", "Session exceeded maximum age", 401)
 
     from app.models.device import Device
+
     device = await db.get(Device, session.device_id)
     if device is None or device.revoked_at is not None:
         session.revoked_at = now
@@ -116,6 +115,7 @@ async def refresh_session(
         raise AppError("DEVICE_REVOKED", "Device has been revoked", 401)
 
     from app.models.user import User
+
     user = await db.get(User, session.owner_user_id)
     if user is None or user.status in ("deleted", "locked"):
         raise AppError("ACCOUNT_DISABLED", "Account is disabled", 401)
@@ -145,9 +145,7 @@ async def refresh_session(
     db.add(new_session)
     await db.flush()
 
-    access_token = create_access_token(
-        session.owner_user_id, new_session.id, session.device_id
-    )
+    access_token = create_access_token(session.owner_user_id, new_session.id, session.device_id)
     new_session.access_token_hash = hash_token(access_token)
     new_session.access_token_id = uuid.uuid4()
     await db.flush()

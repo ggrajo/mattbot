@@ -2,7 +2,7 @@
 # File: settings.pyc (Python 3.13)
 
 from __future__ import annotations
-from pydantic import BaseModel, Field, field_validator
+
 VALID_PRIVACY_MODES = ('private', 'preview')
 VALID_RETENTION_DAYS = (7, 30, 90)
 VALID_OBJECTIVE_MODES = ('screen_and_summarize', 'take_message', 'custom')

@@ -47,7 +47,9 @@ async def _send_via_sendgrid(to: str, subject: str, body: str) -> None:
                 sg_id = resp.headers.get("X-Message-Id", "n/a")
                 logger.info(
                     "Email sent via SendGrid to=%s subject=%r sg_id=%s",
-                    _redact_email(to), subject, sg_id,
+                    _redact_email(to),
+                    subject,
+                    sg_id,
                 )
                 return
 
@@ -61,25 +63,31 @@ async def _send_via_sendgrid(to: str, subject: str, body: str) -> None:
             if not retryable:
                 logger.error(
                     "SendGrid non-retryable error status=%d to=%s",
-                    resp.status_code, _redact_email(to),
+                    resp.status_code,
+                    _redact_email(to),
                 )
                 raise last_error
 
             if attempt < settings.SENDGRID_MAX_RETRIES:
-                delay = settings.SENDGRID_RETRY_DELAY * (2 ** attempt)
+                delay = settings.SENDGRID_RETRY_DELAY * (2**attempt)
                 logger.warning(
                     "SendGrid retryable error status=%d attempt=%d/%d, retrying in %.1fs",
-                    resp.status_code, attempt + 1, 1 + settings.SENDGRID_MAX_RETRIES, delay,
+                    resp.status_code,
+                    attempt + 1,
+                    1 + settings.SENDGRID_MAX_RETRIES,
+                    delay,
                 )
                 await asyncio.sleep(delay)
 
         except httpx.TimeoutException as exc:
             last_error = exc
             if attempt < settings.SENDGRID_MAX_RETRIES:
-                delay = settings.SENDGRID_RETRY_DELAY * (2 ** attempt)
+                delay = settings.SENDGRID_RETRY_DELAY * (2**attempt)
                 logger.warning(
                     "SendGrid timeout attempt=%d/%d, retrying in %.1fs",
-                    attempt + 1, 1 + settings.SENDGRID_MAX_RETRIES, delay,
+                    attempt + 1,
+                    1 + settings.SENDGRID_MAX_RETRIES,
+                    delay,
                 )
                 await asyncio.sleep(delay)
 
@@ -97,7 +105,9 @@ async def send_email(to: str, subject: str, body: str) -> None:
     if settings.EMAIL_PROVIDER == "console":
         logger.info(
             "=== CONSOLE EMAIL to=%s subject=%r ===\n%s\n=== END ===",
-            _redact_email(to), subject, body,
+            _redact_email(to),
+            subject,
+            body,
         )
         return
 
@@ -130,6 +140,7 @@ def _build_link(path: str, token: str) -> str:
     """Build an email link. Uses HTTPS redirect via backend when APP_LINK_BASE_URL is set,
     otherwise falls back to the mattbot:// custom scheme (useful for console-only dev)."""
     from urllib.parse import quote
+
     safe_token = quote(token, safe="")
     base = settings.APP_LINK_BASE_URL.rstrip("/")
     if base:
@@ -154,10 +165,7 @@ async def send_password_reset_email(to: str, token: str) -> None:
     await send_email(
         to=to,
         subject="Reset your MattBot password",
-        body=(
-            f"Reset your password using this link: {link}\n\n"
-            "This link expires in 15 minutes."
-        ),
+        body=(f"Reset your password using this link: {link}\n\nThis link expires in 15 minutes."),
     )
 
 

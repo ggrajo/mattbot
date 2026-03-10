@@ -197,7 +197,9 @@ async def test_reveal_recovery_codes_single_audit(client: AsyncClient, db: Async
     )
     assert resp.status_code == 200
 
-    count = (await db.execute(
-        select(func.count()).where(AuditEvent.event_type == "mfa.recovery_codes.regenerated")
-    )).scalar()
+    count = (
+        await db.execute(
+            select(func.count()).where(AuditEvent.event_type == "mfa.recovery_codes.regenerated")
+        )
+    ).scalar()
     assert count == 1, f"Expected 1 audit event, got {count}"

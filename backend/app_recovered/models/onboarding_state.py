@@ -1,4 +1,3 @@
-from datetime import UTC
 import datetime
 import uuid
 

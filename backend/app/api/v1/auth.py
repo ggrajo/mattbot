@@ -243,13 +243,12 @@ async def mfa_totp_start(
     device_id = uuid.UUID(payload["did"])
 
     from app.models.user import User
+
     user = await db.get(User, user_id)
     if user is None:
         raise AppError("USER_NOT_FOUND", "User not found", 404)
 
-    result = await mfa_service.start_totp_enrollment(
-        db, user_id, device_id, user.email or ""
-    )
+    result = await mfa_service.start_totp_enrollment(db, user_id, device_id, user.email or "")
     return MfaTotpStartResponse(
         secret=result["secret"],
         qr_uri=result["qr_uri"],
@@ -282,9 +281,7 @@ async def mfa_totp_confirm(
 
     codes = await mfa_service.confirm_totp_enrollment(db, user_id, body.totp_code)
 
-    tokens = await auth_service.login_complete_mfa(
-        db, user_id=user_id, device_id=device_id, ip=ip
-    )
+    tokens = await auth_service.login_complete_mfa(db, user_id=user_id, device_id=device_id, ip=ip)
 
     return MfaTotpConfirmResponse(
         recovery_codes=codes,
@@ -304,9 +301,7 @@ async def mfa_verify(
     try:
         payload = decode_token(body.mfa_challenge_token, expected_type="mfa_challenge")
     except pyjwt.InvalidTokenError:
-        raise AppError(
-            "INVALID_TOKEN", "Invalid or expired MFA challenge token", 401
-        ) from None
+        raise AppError("INVALID_TOKEN", "Invalid or expired MFA challenge token", 401) from None
 
     user_id = uuid.UUID(payload["sub"])
     device_id = uuid.UUID(payload["did"])
@@ -352,7 +347,9 @@ async def mfa_verify(
         await revoke_all_user_sessions(db, user_id, reason="recovery_code_used", ip=ip)
 
         partial_token = create_partial_token(
-            user_id, device_id, "mfa_enrollment",
+            user_id,
+            device_id,
+            "mfa_enrollment",
             expires_minutes=settings.MFA_CHALLENGE_EXPIRY_MINUTES,
         )
 
@@ -365,6 +362,7 @@ async def mfa_verify(
         )
 
         from app.models.user import User
+
         user = await db.get(User, user_id)
         if user and user.email:
             await email_service.send_security_notification(
@@ -380,9 +378,7 @@ async def mfa_verify(
             partial_token=partial_token,
         )
 
-    tokens = await auth_service.login_complete_mfa(
-        db, user_id=user_id, device_id=device_id, ip=ip
-    )
+    tokens = await auth_service.login_complete_mfa(db, user_id=user_id, device_id=device_id, ip=ip)
     return MfaVerifyResponse(**tokens)
 
 
@@ -415,12 +411,14 @@ async def email_otp_request(
     from sqlalchemy import select
 
     from app.models.user import User
+
     user = (
         await db.execute(select(User).where(User.email == body.email.lower()))
     ).scalar_one_or_none()
 
     if user is not None:
         from app.core.security import generate_otp
+
         otp = generate_otp()
         await auth_service.store_email_otp(db, body.email, otp, user.id)
         await email_service.send_otp_email(body.email, otp)
@@ -447,6 +445,7 @@ async def email_otp_verify(
         raise AppError("INVALID_CREDENTIALS", "Invalid credentials", 401)
 
     from app.models.user import User
+
     user = await db.get(User, user_id)
     if user is None:
         raise AppError("INVALID_CREDENTIALS", "Invalid credentials", 401)
@@ -462,13 +461,16 @@ async def email_otp_verify(
     await revoke_all_user_sessions(db, user_id, reason="mfa_recovery", ip=ip)
 
     from app.services.device_service import create_or_get_device
+
     platform = body.device.platform if body.device else "ios"
     device_name = body.device.device_name if body.device else None
     device = await create_or_get_device(
         db, owner_user_id=user_id, platform=platform, device_name=device_name
     )
     partial_token = create_partial_token(
-        user_id, device.id, "mfa_enrollment",
+        user_id,
+        device.id,
+        "mfa_enrollment",
         expires_minutes=settings.MFA_CHALLENGE_EXPIRY_MINUTES,
     )
 
@@ -602,7 +604,11 @@ async def pin_setup(
         raise AppError("DEVICE_NOT_FOUND", "Device not found", 404)
 
     await pin_service.setup_pin(
-        db, user=current_user.user, device=device, pin=body.pin, ip=ip,
+        db,
+        user=current_user.user,
+        device=device,
+        pin=body.pin,
+        ip=ip,
     )
     return PinSetupResponse(status="pin_enabled")
 
@@ -629,7 +635,11 @@ async def pin_login(
 
     ua = request.headers.get("user-agent", "")
     result = await pin_service.verify_pin_and_login(
-        db, device_id=device_id, pin=body.pin, ip=ip, user_agent=ua,
+        db,
+        device_id=device_id,
+        pin=body.pin,
+        ip=ip,
+        user_agent=ua,
     )
     return LoginResponse(**result)
 
@@ -647,7 +657,10 @@ async def pin_disable(
         raise AppError("DEVICE_NOT_FOUND", "Device not found", 404)
 
     await pin_service.disable_pin(
-        db, user=current_user.user, device=device, ip=ip,
+        db,
+        user=current_user.user,
+        device=device,
+        ip=ip,
     )
     return PinSetupResponse(status="pin_disabled")
 
@@ -695,7 +708,9 @@ async def step_up_auth(
         raise AppError("INVALID_CREDENTIALS", "Invalid credentials", 401)
 
     token = create_partial_token(
-        current_user.user_id, current_user.device_id, "step_up",
+        current_user.user_id,
+        current_user.device_id,
+        "step_up",
         expires_minutes=settings.STEP_UP_TOKEN_EXPIRY_MINUTES,
     )
     return StepUpResponse(step_up_token=token)

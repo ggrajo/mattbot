@@ -3,5 +3,5 @@
 
 __doc__ = 'Pydantic schemas for Google Calendar API endpoints.'
 from __future__ import annotations
-from pydantic import BaseModel
+
 # WARNING: Decompyle incomplete

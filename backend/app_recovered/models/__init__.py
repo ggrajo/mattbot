@@ -14,13 +14,13 @@ from app.models.billing_subscription import BillingSubscription
 from app.models.billing_usage import BillingUsage
 from app.models.block_entry import BlockEntry
 from app.models.call import Call
-from app.models.contact_profile import ContactProfile
 from app.models.call_ai_session import CallAiSession
 from app.models.call_artifact import CallArtifact
 from app.models.call_event import CallEvent
 from app.models.call_memory_item import CallMemoryItem
 from app.models.call_mode_config import CallModeConfig
 from app.models.call_usage_event import CallUsageEvent
+from app.models.contact_profile import ContactProfile
 from app.models.device import Device
 from app.models.forwarding_verification_attempt import ForwardingVerificationAttempt
 from app.models.google_calendar_token import GoogleCalendarToken

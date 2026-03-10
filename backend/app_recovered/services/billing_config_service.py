@@ -3,15 +3,10 @@
 
 __doc__ = 'Dynamic billing plan configuration.\n\nResolution order:\n1. DB: billing_plan_configs with is_active=True (for future admin portal)\n2. Env: BILLING_PLANS_JSON, BILLING_UPGRADE_RULES_JSON, STRIPE_PRICE_IDS_JSON\n3. Built-in defaults (hardcoded fallback of last resort)\n'
 from __future__ import annotations
-import json
-import logging
-import time
-from dataclasses import dataclass, field
-from sqlalchemy import select
-from app.config import settings as app_settings
+
 logger = None(__name__)
-_cached_config: 'BillingConfig | None' = None
-_cached_at: 'float' = 0
+_cached_config: BillingConfig | None = None
+_cached_at: float = 0
 _DEFAULT_PLANS_JSON = None([
     {
         'code': 'free',

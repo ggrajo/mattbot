@@ -112,7 +112,9 @@ async def delete_account(
 
     # Release Twilio number if any
     await telephony_service.release_number(
-        db, user_id, reason="account_deletion",
+        db,
+        user_id,
+        reason="account_deletion",
     )
 
     # Cancel subscription if active
@@ -129,7 +131,9 @@ async def delete_account(
 
     # Revoke all sessions
     await revoke_all_user_sessions(
-        db, user_id, reason="account_deleted",
+        db,
+        user_id,
+        reason="account_deleted",
     )
 
     await audit_service.log_event(

@@ -3,10 +3,8 @@
 
 __doc__ = 'Pydantic schemas for contact profile endpoints.'
 from __future__ import annotations
-import re
-from datetime import datetime
-from pydantic import BaseModel, field_validator
-DEFAULT_CATEGORIES: 'set[str]' = {
+
+DEFAULT_CATEGORIES: set[str] = {
     'other',
     'family',
     'clients',

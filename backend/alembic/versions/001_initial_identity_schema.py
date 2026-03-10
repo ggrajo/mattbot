@@ -4,6 +4,7 @@ Revision ID: 001
 Revises: None
 Create Date: 2026-02-20
 """
+
 from collections.abc import Sequence
 
 import sqlalchemy as sa
@@ -24,21 +25,37 @@ def upgrade() -> None:
     # --- users ---
     op.create_table(
         "users",
-        sa.Column("id", postgresql.UUID(as_uuid=True), primary_key=True,
-                   server_default=sa.text("uuid_generate_v4()")),
+        sa.Column(
+            "id",
+            postgresql.UUID(as_uuid=True),
+            primary_key=True,
+            server_default=sa.text("uuid_generate_v4()"),
+        ),
         sa.Column("email", sa.Text(), nullable=True),
         sa.Column("email_verified", sa.Boolean(), nullable=False, server_default=sa.text("false")),
         sa.Column("password_hash", sa.String(255), nullable=True),
-        sa.Column("status", sa.String(30), nullable=False,
-                   server_default=sa.text("'pending_verification'")),
+        sa.Column(
+            "status",
+            sa.String(30),
+            nullable=False,
+            server_default=sa.text("'pending_verification'"),
+        ),
         sa.Column("display_name", sa.Text(), nullable=True),
         sa.Column("default_timezone", sa.Text(), nullable=False, server_default=sa.text("'UTC'")),
         sa.Column("language_code", sa.String(10), nullable=False, server_default=sa.text("'en'")),
         sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False,
-                   server_default=sa.text("now()")),
-        sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False,
-                   server_default=sa.text("now()")),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text("now()"),
+        ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text("now()"),
+        ),
         sa.CheckConstraint(
             "status IN ('active', 'pending_verification', 'locked', 'deleted')",
             name="ck_users_status",
@@ -55,34 +72,50 @@ def upgrade() -> None:
     # --- auth_identities ---
     op.create_table(
         "auth_identities",
-        sa.Column("id", postgresql.UUID(as_uuid=True), primary_key=True,
-                   server_default=sa.text("uuid_generate_v4()")),
+        sa.Column(
+            "id",
+            postgresql.UUID(as_uuid=True),
+            primary_key=True,
+            server_default=sa.text("uuid_generate_v4()"),
+        ),
         sa.Column("owner_user_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("provider", sa.String(30), nullable=False),
         sa.Column("provider_subject", sa.Text(), nullable=False),
         sa.Column("provider_email", sa.Text(), nullable=True),
         sa.Column("provider_email_verified", sa.Boolean(), nullable=True),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False,
-                   server_default=sa.text("now()")),
-        sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False,
-                   server_default=sa.text("now()")),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text("now()"),
+        ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text("now()"),
+        ),
         sa.ForeignKeyConstraint(["owner_user_id"], ["users.id"], ondelete="CASCADE"),
         sa.CheckConstraint(
             "provider IN ('email_password', 'google', 'apple')",
             name="ck_auth_identities_provider",
         ),
-        sa.UniqueConstraint("provider", "provider_subject",
-                            name="uq_auth_identities_provider_sub"),
+        sa.UniqueConstraint("provider", "provider_subject", name="uq_auth_identities_provider_sub"),
     )
     op.create_index("auth_identities_user_idx", "auth_identities", ["owner_user_id"])
-    op.create_index("auth_identities_provider_sub_idx", "auth_identities",
-                     ["provider", "provider_subject"])
+    op.create_index(
+        "auth_identities_provider_sub_idx", "auth_identities", ["provider", "provider_subject"]
+    )
 
     # --- mfa_methods ---
     op.create_table(
         "mfa_methods",
-        sa.Column("id", postgresql.UUID(as_uuid=True), primary_key=True,
-                   server_default=sa.text("uuid_generate_v4()")),
+        sa.Column(
+            "id",
+            postgresql.UUID(as_uuid=True),
+            primary_key=True,
+            server_default=sa.text("uuid_generate_v4()"),
+        ),
         sa.Column("owner_user_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("method_type", sa.String(20), nullable=False),
         sa.Column("totp_secret_ciphertext", sa.LargeBinary(), nullable=True),
@@ -91,10 +124,18 @@ def upgrade() -> None:
         sa.Column("is_primary", sa.Boolean(), nullable=False, server_default=sa.text("false")),
         sa.Column("enabled_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("disabled_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False,
-                   server_default=sa.text("now()")),
-        sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False,
-                   server_default=sa.text("now()")),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text("now()"),
+        ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text("now()"),
+        ),
         sa.ForeignKeyConstraint(["owner_user_id"], ["users.id"], ondelete="CASCADE"),
         sa.CheckConstraint("method_type IN ('totp', 'email_otp')", name="ck_mfa_methods_type"),
     )
@@ -110,24 +151,35 @@ def upgrade() -> None:
     # --- recovery_codes ---
     op.create_table(
         "recovery_codes",
-        sa.Column("id", postgresql.UUID(as_uuid=True), primary_key=True,
-                   server_default=sa.text("uuid_generate_v4()")),
+        sa.Column(
+            "id",
+            postgresql.UUID(as_uuid=True),
+            primary_key=True,
+            server_default=sa.text("uuid_generate_v4()"),
+        ),
         sa.Column("owner_user_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("code_hash", sa.String(64), nullable=False),
         sa.Column("used_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False,
-                   server_default=sa.text("now()")),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text("now()"),
+        ),
         sa.ForeignKeyConstraint(["owner_user_id"], ["users.id"], ondelete="CASCADE"),
-        sa.UniqueConstraint("owner_user_id", "code_hash",
-                            name="uq_recovery_codes_user_hash"),
+        sa.UniqueConstraint("owner_user_id", "code_hash", name="uq_recovery_codes_user_hash"),
     )
     op.create_index("recovery_codes_user_idx", "recovery_codes", ["owner_user_id"])
 
     # --- devices ---
     op.create_table(
         "devices",
-        sa.Column("id", postgresql.UUID(as_uuid=True), primary_key=True,
-                   server_default=sa.text("uuid_generate_v4()")),
+        sa.Column(
+            "id",
+            postgresql.UUID(as_uuid=True),
+            primary_key=True,
+            server_default=sa.text("uuid_generate_v4()"),
+        ),
         sa.Column("owner_user_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("platform", sa.String(10), nullable=False),
         sa.Column("device_name", sa.Text(), nullable=True),
@@ -136,13 +188,20 @@ def upgrade() -> None:
         sa.Column("last_seen_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("revoked_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("revoke_reason", sa.Text(), nullable=True),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False,
-                   server_default=sa.text("now()")),
-        sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False,
-                   server_default=sa.text("now()")),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text("now()"),
+        ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text("now()"),
+        ),
         sa.ForeignKeyConstraint(["owner_user_id"], ["users.id"], ondelete="CASCADE"),
-        sa.CheckConstraint("platform IN ('ios', 'android', 'web')",
-                           name="ck_devices_platform"),
+        sa.CheckConstraint("platform IN ('ios', 'android', 'web')", name="ck_devices_platform"),
     )
     op.create_index("devices_user_idx", "devices", ["owner_user_id"])
     op.create_index(
@@ -155,8 +214,12 @@ def upgrade() -> None:
     # --- sessions ---
     op.create_table(
         "sessions",
-        sa.Column("id", postgresql.UUID(as_uuid=True), primary_key=True,
-                   server_default=sa.text("uuid_generate_v4()")),
+        sa.Column(
+            "id",
+            postgresql.UUID(as_uuid=True),
+            primary_key=True,
+            server_default=sa.text("uuid_generate_v4()"),
+        ),
         sa.Column("owner_user_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("device_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("access_token_id", postgresql.UUID(as_uuid=True), nullable=False),
@@ -170,10 +233,18 @@ def upgrade() -> None:
         sa.Column("ip_created", postgresql.INET(), nullable=True),
         sa.Column("ip_last", postgresql.INET(), nullable=True),
         sa.Column("user_agent", sa.Text(), nullable=True),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False,
-                   server_default=sa.text("now()")),
-        sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False,
-                   server_default=sa.text("now()")),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text("now()"),
+        ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text("now()"),
+        ),
         sa.ForeignKeyConstraint(["owner_user_id"], ["users.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(["device_id"], ["devices.id"], ondelete="CASCADE"),
     )
@@ -192,13 +263,21 @@ def upgrade() -> None:
     # --- push_tokens ---
     op.create_table(
         "push_tokens",
-        sa.Column("id", postgresql.UUID(as_uuid=True), primary_key=True,
-                   server_default=sa.text("uuid_generate_v4()")),
+        sa.Column(
+            "id",
+            postgresql.UUID(as_uuid=True),
+            primary_key=True,
+            server_default=sa.text("uuid_generate_v4()"),
+        ),
         sa.Column("device_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("provider", sa.String(10), nullable=False),
         sa.Column("token", sa.Text(), nullable=False),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False,
-                   server_default=sa.text("now()")),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text("now()"),
+        ),
         sa.Column("revoked_at", sa.DateTime(timezone=True), nullable=True),
         sa.ForeignKeyConstraint(["device_id"], ["devices.id"], ondelete="CASCADE"),
         sa.CheckConstraint("provider IN ('fcm')", name="ck_push_tokens_provider"),
@@ -209,31 +288,42 @@ def upgrade() -> None:
     # --- audit_events ---
     op.create_table(
         "audit_events",
-        sa.Column("id", postgresql.UUID(as_uuid=True), primary_key=True,
-                   server_default=sa.text("uuid_generate_v4()")),
+        sa.Column(
+            "id",
+            postgresql.UUID(as_uuid=True),
+            primary_key=True,
+            server_default=sa.text("uuid_generate_v4()"),
+        ),
         sa.Column("owner_user_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("actor_type", sa.String(20), nullable=False),
         sa.Column("actor_id", postgresql.UUID(as_uuid=True), nullable=True),
         sa.Column("event_type", sa.String(60), nullable=False),
-        sa.Column("event_at", sa.DateTime(timezone=True), nullable=False,
-                   server_default=sa.text("now()")),
+        sa.Column(
+            "event_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.text("now()")
+        ),
         sa.Column("target_type", sa.String(30), nullable=True),
         sa.Column("target_id", postgresql.UUID(as_uuid=True), nullable=True),
         sa.Column("ip", postgresql.INET(), nullable=True),
         sa.Column("user_agent", sa.Text(), nullable=True),
         sa.Column("details", postgresql.JSONB(), nullable=True),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False,
-                   server_default=sa.text("now()")),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text("now()"),
+        ),
         sa.ForeignKeyConstraint(["owner_user_id"], ["users.id"], ondelete="CASCADE"),
         sa.CheckConstraint(
             "actor_type IN ('user', 'admin', 'system', 'service')",
             name="ck_audit_events_actor_type",
         ),
     )
-    op.create_index("audit_events_user_time_idx", "audit_events",
-                     ["owner_user_id", sa.text("event_at DESC")])
-    op.create_index("audit_events_type_time_idx", "audit_events",
-                     ["event_type", sa.text("event_at DESC")])
+    op.create_index(
+        "audit_events_user_time_idx", "audit_events", ["owner_user_id", sa.text("event_at DESC")]
+    )
+    op.create_index(
+        "audit_events_type_time_idx", "audit_events", ["event_type", sa.text("event_at DESC")]
+    )
 
 
 def downgrade() -> None:

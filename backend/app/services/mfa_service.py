@@ -45,7 +45,9 @@ async def start_totp_enrollment(
     await db.flush()
 
     setup_token = create_partial_token(
-        user_id, device_id, "mfa_setup",
+        user_id,
+        device_id,
+        "mfa_setup",
         expires_minutes=settings.MFA_CHALLENGE_EXPIRY_MINUTES,
     )
 
@@ -88,24 +90,22 @@ async def confirm_totp_enrollment(
 
     codes = await _generate_and_store_recovery_codes(db, user_id)
 
-    await audit_service.log_event(
-        db, owner_user_id=user_id, event_type="mfa.totp.enrolled"
-    )
+    await audit_service.log_event(db, owner_user_id=user_id, event_type="mfa.totp.enrolled")
 
     existing_settings = await db.get(UserSettings, user_id)
     if existing_settings is None:
         db.add(UserSettings(owner_user_id=user_id))
-        await audit_service.log_event(
-            db, owner_user_id=user_id, event_type="settings.created"
-        )
+        await audit_service.log_event(db, owner_user_id=user_id, event_type="settings.created")
 
     existing_onboarding = await db.get(OnboardingState, user_id)
     if existing_onboarding is None:
-        db.add(OnboardingState(
-            owner_user_id=user_id,
-            current_step="privacy_review",
-            steps_completed=["account_created", "email_verified", "mfa_enrolled"],
-        ))
+        db.add(
+            OnboardingState(
+                owner_user_id=user_id,
+                current_step="privacy_review",
+                steps_completed=["account_created", "email_verified", "mfa_enrolled"],
+            )
+        )
     await db.flush()
 
     return codes
@@ -133,15 +133,11 @@ async def verify_totp_code(db: AsyncSession, user_id: uuid.UUID, code: str) -> b
 
     valid = verify_totp(secret, code)
     event_type = "mfa.totp.verified" if valid else "mfa.totp.failed"
-    await audit_service.log_event(
-        db, owner_user_id=user_id, event_type=event_type
-    )
+    await audit_service.log_event(db, owner_user_id=user_id, event_type=event_type)
     return valid
 
 
-async def verify_recovery_code(
-    db: AsyncSession, user_id: uuid.UUID, code: str
-) -> bool:
+async def verify_recovery_code(db: AsyncSession, user_id: uuid.UUID, code: str) -> bool:
     code_hash = hash_token(code.strip().upper())
     result = await db.execute(
         select(RecoveryCode).where(
@@ -167,9 +163,7 @@ async def verify_recovery_code(
     return True
 
 
-async def get_remaining_recovery_codes_count(
-    db: AsyncSession, user_id: uuid.UUID
-) -> int:
+async def get_remaining_recovery_codes_count(db: AsyncSession, user_id: uuid.UUID) -> int:
     result = await db.execute(
         select(RecoveryCode).where(
             RecoveryCode.owner_user_id == user_id,
@@ -179,9 +173,7 @@ async def get_remaining_recovery_codes_count(
     return len(result.scalars().all())
 
 
-async def regenerate_recovery_codes(
-    db: AsyncSession, user_id: uuid.UUID
-) -> list[str]:
+async def regenerate_recovery_codes(db: AsyncSession, user_id: uuid.UUID) -> list[str]:
     await db.execute(
         update(RecoveryCode)
         .where(RecoveryCode.owner_user_id == user_id, RecoveryCode.used_at.is_(None))
@@ -216,14 +208,10 @@ async def disable_all_mfa(db: AsyncSession, user_id: uuid.UUID) -> None:
         .where(MfaMethod.owner_user_id == user_id, MfaMethod.disabled_at.is_(None))
         .values(disabled_at=now)
     )
-    await audit_service.log_event(
-        db, owner_user_id=user_id, event_type="mfa.reset_forced"
-    )
+    await audit_service.log_event(db, owner_user_id=user_id, event_type="mfa.reset_forced")
 
 
-async def _generate_and_store_recovery_codes(
-    db: AsyncSession, user_id: uuid.UUID
-) -> list[str]:
+async def _generate_and_store_recovery_codes(db: AsyncSession, user_id: uuid.UUID) -> list[str]:
     codes = generate_recovery_codes(10)
     for code in codes:
         rc = RecoveryCode(

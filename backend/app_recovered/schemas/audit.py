@@ -3,6 +3,6 @@
 
 __doc__ = 'Pydantic schemas for audit events endpoint.'
 from __future__ import annotations
-from datetime import datetime
-from pydantic import BaseModel
+
+
 # WARNING: Decompyle incomplete

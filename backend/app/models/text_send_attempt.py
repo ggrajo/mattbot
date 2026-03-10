@@ -1,5 +1,5 @@
-from datetime import datetime
 import uuid
+from datetime import datetime
 
 from sqlalchemy import DateTime, ForeignKey, Index, Integer, Text, text
 from sqlalchemy.dialects.postgresql import UUID
@@ -12,7 +12,9 @@ class TextSendAttempt(Base):
     __tablename__ = "text_send_attempts"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
-    message_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("outbound_messages.id", ondelete="CASCADE"), nullable=False)
+    message_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("outbound_messages.id", ondelete="CASCADE"), nullable=False
+    )
     attempt_number: Mapped[int] = mapped_column(Integer, nullable=False)
     idempotency_key: Mapped[str] = mapped_column(Text, nullable=False)
     provider: Mapped[str] = mapped_column(Text, nullable=False, server_default=text("twilio"))
@@ -23,6 +25,11 @@ class TextSendAttempt(Base):
     started_at: Mapped[datetime | None] = mapped_column(DateTime)
     finished_at: Mapped[datetime | None] = mapped_column(DateTime)
 
-    message: Mapped["OutboundMessage | None"] = relationship("OutboundMessage", back_populates="send_attempts", uselist=False)
+    message: Mapped["OutboundMessage | None"] = relationship(
+        "OutboundMessage", back_populates="send_attempts", uselist=False
+    )
 
-    __table_args__ = (Index("text_send_attempts_message_idx", "message_id"), Index("text_send_attempts_provider_sid_idx", "provider_message_sid"),)
+    __table_args__ = (
+        Index("text_send_attempts_message_idx", "message_id"),
+        Index("text_send_attempts_provider_sid_idx", "provider_message_sid"),
+    )

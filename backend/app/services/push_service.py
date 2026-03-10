@@ -58,12 +58,8 @@ async def register_push_token(
     return push_token
 
 
-async def get_active_push_tokens(
-    db: AsyncSession, device_id: uuid.UUID
-) -> list[PushToken]:
+async def get_active_push_tokens(db: AsyncSession, device_id: uuid.UUID) -> list[PushToken]:
     result = await db.execute(
-        select(PushToken).where(
-            PushToken.device_id == device_id, PushToken.revoked_at.is_(None)
-        )
+        select(PushToken).where(PushToken.device_id == device_id, PushToken.revoked_at.is_(None))
     )
     return list(result.scalars().all())

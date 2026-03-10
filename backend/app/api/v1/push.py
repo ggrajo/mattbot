@@ -34,9 +34,7 @@ async def register_push_token(
     )
     if not allowed:
         raise AppError("RATE_LIMITED", "Too many requests. Please try again later.", 429)
-    device = await device_service.get_device(
-        db, uuid.UUID(body.device_id), current_user.user_id
-    )
+    device = await device_service.get_device(db, uuid.UUID(body.device_id), current_user.user_id)
     if device is None:
         raise AppError("NOT_FOUND", "Device not found", 404)
 

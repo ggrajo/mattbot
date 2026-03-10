@@ -63,6 +63,7 @@ async def verify_apple_identity_token(token: str) -> OAuthUserInfo:
         for key_data in jwks_data.get("keys", []):
             if key_data.get("kid") == kid:
                 from jwt.algorithms import RSAAlgorithm
+
                 matching_key = RSAAlgorithm.from_jwk(key_data)
                 break
 
