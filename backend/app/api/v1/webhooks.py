@@ -1208,6 +1208,8 @@ async def elevenlabs_tool_webhook(
 
         start_naive = dt_cls.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M")
         start_dt = start_naive.replace(tzinfo=tz)
+        # Convert to UTC for database consistency
+        start_dt = start_dt.astimezone(ZoneInfo("UTC"))
         end_dt = start_dt + timedelta(minutes=int(duration))
 
         start_iso = start_dt.isoformat()
