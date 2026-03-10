@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from fastapi import APIRouter
-from redis.asyncio import asyncio as aioredis
+import redis.asyncio as aioredis
 from sqlalchemy import text
 
 from app.config import settings
