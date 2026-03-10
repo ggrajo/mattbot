@@ -1,0 +1,591 @@
+# Bytecode dump of: agent_config.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\models\agent_config.py
+# co_names: ('__doc__', 'uuid', 'datetime', 'UTC', 'sqlalchemy', 'ForeignKey', 'Integer', 'String', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'relationship', 'app.database', 'Base', 'app.models._types', 'tz_datetime', 'AgentConfig')
+# co_consts (strings): ['Per-agent configuration: voice, user instructions, prompt key, revision.', 'AgentConfig']
+
+# DOCSTRING: """Per-agent configuration: voice, user instructions, prompt key, revision."""
+# --- Nested code object: AgentConfig ---
+    # DOCSTRING: """AgentConfig"""
+    # --- Nested code object: AgentConfig.<lambda> ---
+        # co_names: ('datetime', 'now', 'UTC')
+        # co_varnames: ()
+         47           RESUME                   0
+                      LOAD_GLOBAL              0 (datetime)
+                      LOAD_ATTR                2 (now)
+                      PUSH_NULL
+                      LOAD_GLOBAL              4 (UTC)
+                      CALL                     1
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__tablename__', 'mapped_column', 'UUID', 'uuid', 'uuid4', 'id', 'Mapped', '__annotations__', 'ForeignKey', 'agent_id', 'voice_id', 'Text', 'user_instructions', 'str', 'greeting_instructions', 'String', 'text', 'system_prompt_key', 'Integer', 'revision', 'int', 'tz_datetime', 'created_at', 'datetime', 'updated_at', 'relationship', 'agent', '__static_attributes__')
+    # co_varnames: ()
+     14           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('AgentConfig')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (14)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     15           LOAD_CONST               2 ('agent_configs')
+                  STORE_NAME               4 (__tablename__)
+    
+     17           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     18           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               3 (True)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               16 (uuid4)
+    
+     17           LOAD_CONST               5 (('primary_key', 'default'))
+                  CALL_KW                  3
+                  STORE_NAME               9 (id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST               6 ('id')
+                  STORE_SUBSCR
+    
+     20           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     21           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     22           LOAD_NAME               12 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST               7 ('agents.id')
+                  LOAD_CONST               8 ('CASCADE')
+                  LOAD_CONST               9 (('ondelete',))
+                  CALL_KW                  2
+    
+     23           LOAD_CONST               3 (True)
+    
+     24           LOAD_CONST              10 (False)
+    
+     20           LOAD_CONST              11 (('unique', 'nullable'))
+                  CALL_KW                  4
+                  STORE_NAME              13 (agent_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              12 ('agent_id')
+                  STORE_SUBSCR
+    
+     26           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     27           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     28           LOAD_NAME               12 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST              13 ('voice_catalog.id')
+                  LOAD_CONST              14 ('SET NULL')
+                  LOAD_CONST               9 (('ondelete',))
+                  CALL_KW                  2
+    
+     29           LOAD_CONST               3 (True)
+    
+     26           LOAD_CONST              15 (('nullable',))
+                  CALL_KW                  3
+                  STORE_NAME              14 (voice_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  LOAD_CONST              16 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              17 ('voice_id')
+                  STORE_SUBSCR
+    
+     31           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               15 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              15 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              16 (user_instructions)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               17 (str)
+                  LOAD_CONST              16 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              18 ('user_instructions')
+                  STORE_SUBSCR
+    
+     32           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               15 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              15 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              18 (greeting_instructions)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               17 (str)
+                  LOAD_CONST              16 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              19 ('greeting_instructions')
+                  STORE_SUBSCR
+    
+     33           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     34           LOAD_NAME               19 (String)
+                  PUSH_NULL
+                  LOAD_CONST              20 (40)
+                  CALL                     1
+                  LOAD_CONST              10 (False)
+                  LOAD_NAME               20 (text)
+                  PUSH_NULL
+                  LOAD_CONST              21 ("'default_v1'")
+                  CALL                     1
+    
+     33           LOAD_CONST              22 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              21 (system_prompt_key)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               17 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              23 ('system_prompt_key')
+                  STORE_SUBSCR
+    
+     36           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     37           LOAD_NAME               22 (Integer)
+                  LOAD_CONST              10 (False)
+                  LOAD_NAME               20 (text)
+                  PUSH_NULL
+                  LOAD_CONST              24 ('1')
+                  CALL                     1
+    
+     36           LOAD_CONST              22 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              23 (revision)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               24 (int)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              25 ('revision')
+                  STORE_SUBSCR
+    
+     40           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     41           LOAD_NAME               25 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST              10 (False)
+                  LOAD_NAME               20 (text)
+                  PUSH_NULL
+                  LOAD_CONST              26 ('now()')
+                  CALL                     1
+    
+     40           LOAD_CONST              22 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              26 (created_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               27 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              27 ('created_at')
+                  STORE_SUBSCR
+    
+     43           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     44           LOAD_NAME               25 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+    
+     45           LOAD_CONST              10 (False)
+    
+     46           LOAD_NAME               20 (text)
+                  PUSH_NULL
+                  LOAD_CONST              26 ('now()')
+                  CALL                     1
+    
+     47           LOAD_CONST              28 (<code object <lambda> at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\agent_config.py", line 47>)
+                  MAKE_FUNCTION
+    
+     43           LOAD_CONST              29 (('nullable', 'server_default', 'onupdate'))
+                  CALL_KW                  4
+                  STORE_NAME              28 (updated_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               27 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              30 ('updated_at')
+                  STORE_SUBSCR
+    
+     50           LOAD_NAME               29 (relationship)
+                  PUSH_NULL
+                  LOAD_CONST              31 ('config')
+                  LOAD_CONST              32 (('back_populates',))
+                  CALL_KW                  1
+                  STORE_NAME              30 (agent)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_CONST              33 ('Agent')
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              34 ('agent')
+                  STORE_SUBSCR
+                  LOAD_CONST              35 (())
+                  STORE_NAME              31 (__static_attributes__)
+                  RETURN_CONST            16 (None)
+    
+    Disassembly of <code object <lambda> at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\agent_config.py", line 47>:
+     47           RESUME                   0
+                  LOAD_GLOBAL              0 (datetime)
+                  LOAD_ATTR                2 (now)
+                  PUSH_NULL
+                  LOAD_GLOBAL              4 (UTC)
+                  CALL                     1
+                  RETURN_VALUE
+    
+# co_names: ('__doc__', 'uuid', 'datetime', 'UTC', 'sqlalchemy', 'ForeignKey', 'Integer', 'String', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'relationship', 'app.database', 'Base', 'app.models._types', 'tz_datetime', 'AgentConfig')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Per-agent configuration: voice, user instructions, prompt key, revision.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (uuid)
+              STORE_NAME               1 (uuid)
+
+  4           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('UTC', 'datetime'))
+              IMPORT_NAME              2 (datetime)
+              IMPORT_FROM              3 (UTC)
+              STORE_NAME               3 (UTC)
+              IMPORT_FROM              2 (datetime)
+              STORE_NAME               2 (datetime)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('ForeignKey', 'Integer', 'String', 'Text', 'text'))
+              IMPORT_NAME              4 (sqlalchemy)
+              IMPORT_FROM              5 (ForeignKey)
+              STORE_NAME               5 (ForeignKey)
+              IMPORT_FROM              6 (Integer)
+              STORE_NAME               6 (Integer)
+              IMPORT_FROM              7 (String)
+              STORE_NAME               7 (String)
+              IMPORT_FROM              8 (Text)
+              STORE_NAME               8 (Text)
+              IMPORT_FROM              9 (text)
+              STORE_NAME               9 (text)
+              POP_TOP
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('UUID',))
+              IMPORT_NAME             10 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM             11 (UUID)
+              STORE_NAME              11 (UUID)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('Mapped', 'mapped_column', 'relationship'))
+              IMPORT_NAME             12 (sqlalchemy.orm)
+              IMPORT_FROM             13 (Mapped)
+              STORE_NAME              13 (Mapped)
+              IMPORT_FROM             14 (mapped_column)
+              STORE_NAME              14 (mapped_column)
+              IMPORT_FROM             15 (relationship)
+              STORE_NAME              15 (relationship)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('Base',))
+              IMPORT_NAME             16 (app.database)
+              IMPORT_FROM             17 (Base)
+              STORE_NAME              17 (Base)
+              POP_TOP
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('tz_datetime',))
+              IMPORT_NAME             18 (app.models._types)
+              IMPORT_FROM             19 (tz_datetime)
+              STORE_NAME              19 (tz_datetime)
+              POP_TOP
+
+ 14           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               9 (<code object AgentConfig at 0x0000024C0FB27460, file "D:\fluence\Github\mattbot\backend\app\models\agent_config.py", line 14>)
+              MAKE_FUNCTION
+              LOAD_CONST              10 ('AgentConfig')
+              LOAD_NAME               17 (Base)
+              CALL                     3
+              STORE_NAME              20 (AgentConfig)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object AgentConfig at 0x0000024C0FB27460, file "D:\fluence\Github\mattbot\backend\app\models\agent_config.py", line 14>:
+ 14           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('AgentConfig')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (14)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 15           LOAD_CONST               2 ('agent_configs')
+              STORE_NAME               4 (__tablename__)
+
+ 17           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 18           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               16 (uuid4)
+
+ 17           LOAD_CONST               5 (('primary_key', 'default'))
+              CALL_KW                  3
+              STORE_NAME               9 (id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               6 ('id')
+              STORE_SUBSCR
+
+ 20           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 21           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 22           LOAD_NAME               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               7 ('agents.id')
+              LOAD_CONST               8 ('CASCADE')
+              LOAD_CONST               9 (('ondelete',))
+              CALL_KW                  2
+
+ 23           LOAD_CONST               3 (True)
+
+ 24           LOAD_CONST              10 (False)
+
+ 20           LOAD_CONST              11 (('unique', 'nullable'))
+              CALL_KW                  4
+              STORE_NAME              13 (agent_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              12 ('agent_id')
+              STORE_SUBSCR
+
+ 26           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 27           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 28           LOAD_NAME               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              13 ('voice_catalog.id')
+              LOAD_CONST              14 ('SET NULL')
+              LOAD_CONST               9 (('ondelete',))
+              CALL_KW                  2
+
+ 29           LOAD_CONST               3 (True)
+
+ 26           LOAD_CONST              15 (('nullable',))
+              CALL_KW                  3
+              STORE_NAME              14 (voice_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              LOAD_CONST              16 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              17 ('voice_id')
+              STORE_SUBSCR
+
+ 31           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               15 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              15 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              16 (user_instructions)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               17 (str)
+              LOAD_CONST              16 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              18 ('user_instructions')
+              STORE_SUBSCR
+
+ 32           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               15 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              15 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              18 (greeting_instructions)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               17 (str)
+              LOAD_CONST              16 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              19 ('greeting_instructions')
+              STORE_SUBSCR
+
+ 33           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 34           LOAD_NAME               19 (String)
+              PUSH_NULL
+              LOAD_CONST              20 (40)
+              CALL                     1
+              LOAD_CONST              10 (False)
+              LOAD_NAME               20 (text)
+              PUSH_NULL
+              LOAD_CONST              21 ("'default_v1'")
+              CALL                     1
+
+ 33           LOAD_CONST              22 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              21 (system_prompt_key)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               17 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              23 ('system_prompt_key')
+              STORE_SUBSCR
+
+ 36           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 37           LOAD_NAME               22 (Integer)
+              LOAD_CONST              10 (False)
+              LOAD_NAME               20 (text)
+              PUSH_NULL
+              LOAD_CONST              24 ('1')
+              CALL                     1
+
+ 36           LOAD_CONST              22 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              23 (revision)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               24 (int)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              25 ('revision')
+              STORE_SUBSCR
+
+ 40           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 41           LOAD_NAME               25 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              10 (False)
+              LOAD_NAME               20 (text)
+              PUSH_NULL
+              LOAD_CONST              26 ('now()')
+              CALL                     1
+
+ 40           LOAD_CONST              22 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              26 (created_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               27 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              27 ('created_at')
+              STORE_SUBSCR
+
+ 43           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 44           LOAD_NAME               25 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+
+ 45           LOAD_CONST              10 (False)
+
+ 46           LOAD_NAME               20 (text)
+              PUSH_NULL
+              LOAD_CONST              26 ('now()')
+              CALL                     1
+
+ 47           LOAD_CONST              28 (<code object <lambda> at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\agent_config.py", line 47>)
+              MAKE_FUNCTION
+
+ 43           LOAD_CONST              29 (('nullable', 'server_default', 'onupdate'))
+              CALL_KW                  4
+              STORE_NAME              28 (updated_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               27 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              30 ('updated_at')
+              STORE_SUBSCR
+
+ 50           LOAD_NAME               29 (relationship)
+              PUSH_NULL
+              LOAD_CONST              31 ('config')
+              LOAD_CONST              32 (('back_populates',))
+              CALL_KW                  1
+              STORE_NAME              30 (agent)
+              LOAD_NAME               10 (Mapped)
+              LOAD_CONST              33 ('Agent')
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              34 ('agent')
+              STORE_SUBSCR
+              LOAD_CONST              35 (())
+              STORE_NAME              31 (__static_attributes__)
+              RETURN_CONST            16 (None)
+
+Disassembly of <code object <lambda> at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\agent_config.py", line 47>:
+ 47           RESUME                   0
+              LOAD_GLOBAL              0 (datetime)
+              LOAD_ATTR                2 (now)
+              PUSH_NULL
+              LOAD_GLOBAL              4 (UTC)
+              CALL                     1
+              RETURN_VALUE

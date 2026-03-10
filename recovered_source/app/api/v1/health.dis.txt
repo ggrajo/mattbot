@@ -1,0 +1,566 @@
+# Bytecode dump of: health.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\api\v1\health.py
+# co_names: ('__doc__', '__future__', 'annotations', 'redis.asyncio', 'asyncio', 'aioredis', 'fastapi', 'APIRouter', 'sqlalchemy', 'text', 'app.config', 'settings', 'app.database', 'engine', 'router', 'get', 'health_check')
+# co_consts (strings): ['Health check endpoint for Docker and deployment verification.', '/health']
+
+# DOCSTRING: """Health check endpoint for Docker and deployment verification."""
+# --- Nested code object: health_check ---
+    # co_names: ('engine', 'connect', 'execute', 'text', 'Exception', 'aioredis', 'from_url', 'settings', 'REDIS_URL', 'ping', 'aclose')
+    # co_varnames: ('status', 'conn', 'exc', 'r')
+      15            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      17            LOAD_CONST               1 ('ok')
+                    LOAD_CONST               1 ('ok')
+                    LOAD_CONST               1 ('ok')
+                    LOAD_CONST               2 (('status', 'db', 'redis'))
+                    BUILD_CONST_KEY_MAP      3
+                    STORE_FAST               0 (status)
+    
+      19    L2:     NOP
+    
+      20    L3:     LOAD_GLOBAL              0 (engine)
+                    LOAD_ATTR                2 (connect)
+                    PUSH_NULL
+                    CALL                     0
+                    BEFORE_ASYNC_WITH
+                    GET_AWAITABLE            1
+                    LOAD_CONST               0 (None)
+            L4:     SEND                     3 (to L7)
+            L5:     YIELD_VALUE              1
+            L6:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+            L7:     END_SEND
+            L8:     STORE_FAST               1 (conn)
+    
+      21            LOAD_FAST                1 (conn)
+                    LOAD_ATTR                5 (execute + NULL|self)
+                    LOAD_GLOBAL              7 (text + NULL)
+                    LOAD_CONST               3 ('SELECT 1')
+                    CALL                     1
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L9:     SEND                     3 (to L12)
+           L10:     YIELD_VALUE              1
+           L11:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+           L12:     END_SEND
+                    POP_TOP
+    
+      20   L13:     LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    CALL                     2
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L14:     SEND                     3 (to L17)
+           L15:     YIELD_VALUE              1
+           L16:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+           L17:     END_SEND
+                    POP_TOP
+    
+      26   L18:     NOP
+    
+      27   L19:     LOAD_GLOBAL             10 (aioredis)
+                    LOAD_ATTR               12 (from_url)
+                    PUSH_NULL
+                    LOAD_GLOBAL             14 (settings)
+                    LOAD_ATTR               16 (REDIS_URL)
+                    LOAD_CONST               8 (True)
+                    LOAD_CONST               9 (('decode_responses',))
+                    CALL_KW                  2
+                    STORE_FAST               3 (r)
+    
+      28            LOAD_FAST                3 (r)
+                    LOAD_ATTR               19 (ping + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L20:     SEND                     3 (to L23)
+           L21:     YIELD_VALUE              1
+           L22:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L20)
+           L23:     END_SEND
+                    POP_TOP
+    
+      29            LOAD_FAST                3 (r)
+                    LOAD_ATTR               21 (aclose + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L24:     SEND                     3 (to L27)
+           L25:     YIELD_VALUE              1
+           L26:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+           L27:     END_SEND
+                    POP_TOP
+    
+      34   L28:     LOAD_FAST                0 (status)
+                    RETURN_VALUE
+    
+      20   L29:     CLEANUP_THROW
+           L30:     JUMP_BACKWARD_NO_INTERRUPT 140 (to L7)
+    
+      21   L31:     CLEANUP_THROW
+           L32:     JUMP_BACKWARD_NO_INTERRUPT 108 (to L12)
+    
+      20   L33:     CLEANUP_THROW
+           L34:     JUMP_BACKWARD_NO_INTERRUPT 94 (to L17)
+           L35:     PUSH_EXC_INFO
+                    WITH_EXCEPT_START
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L36:     SEND                     4 (to L40)
+           L37:     YIELD_VALUE              1
+           L38:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L36)
+           L39:     CLEANUP_THROW
+           L40:     END_SEND
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L41)
+                    RERAISE                  2
+           L41:     POP_TOP
+           L42:     POP_EXCEPT
+                    POP_TOP
+                    POP_TOP
+           L43:     JUMP_BACKWARD_NO_INTERRUPT 115 (to L18)
+    
+      --   L44:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L45:     PUSH_EXC_INFO
+    
+      22            LOAD_GLOBAL              8 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       23 (to L49)
+                    STORE_FAST               2 (exc)
+    
+      23   L46:     LOAD_CONST               4 ('error: ')
+                    LOAD_FAST                2 (exc)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+                    LOAD_FAST                0 (status)
+                    LOAD_CONST               5 ('db')
+                    STORE_SUBSCR
+    
+      24            LOAD_CONST               6 ('degraded')
+                    LOAD_FAST                0 (status)
+                    LOAD_CONST               7 ('status')
+                    STORE_SUBSCR
+           L47:     POP_EXCEPT
+                    LOAD_CONST               0 (None)
+                    STORE_FAST               2 (exc)
+                    DELETE_FAST              2 (exc)
+                    JUMP_BACKWARD_NO_INTERRUPT 146 (to L18)
+    
+      --   L48:     LOAD_CONST               0 (None)
+                    STORE_FAST               2 (exc)
+                    DELETE_FAST              2 (exc)
+                    RERAISE                  1
+    
+      22   L49:     RERAISE                  0
+    
+      --   L50:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+      28   L51:     CLEANUP_THROW
+           L52:     JUMP_BACKWARD_NO_INTERRUPT 98 (to L23)
+    
+      29   L53:     CLEANUP_THROW
+           L54:     JUMP_BACKWARD_NO_INTERRUPT 76 (to L27)
+    
+      --   L55:     PUSH_EXC_INFO
+    
+      30            LOAD_GLOBAL              8 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       24 (to L59)
+                    STORE_FAST               2 (exc)
+    
+      31   L56:     LOAD_CONST               4 ('error: ')
+                    LOAD_FAST                2 (exc)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+                    LOAD_FAST                0 (status)
+                    LOAD_CONST              10 ('redis')
+                    STORE_SUBSCR
+    
+      32            LOAD_CONST               6 ('degraded')
+                    LOAD_FAST                0 (status)
+                    LOAD_CONST               7 ('status')
+                    STORE_SUBSCR
+           L57:     POP_EXCEPT
+                    LOAD_CONST               0 (None)
+                    STORE_FAST               2 (exc)
+                    DELETE_FAST              2 (exc)
+    
+      34            LOAD_FAST                0 (status)
+                    RETURN_VALUE
+    
+      --   L58:     LOAD_CONST               0 (None)
+                    STORE_FAST               2 (exc)
+                    DELETE_FAST              2 (exc)
+                    RERAISE                  1
+    
+      30   L59:     RERAISE                  0
+    
+      --   L60:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L61:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L2 -> L61 [0] lasti
+      L3 to L5 -> L45 [0]
+      L5 to L6 -> L29 [3]
+      L6 to L8 -> L45 [0]
+      L8 to L10 -> L35 [1] lasti
+      L10 to L11 -> L31 [3]
+      L11 to L13 -> L35 [1] lasti
+      L13 to L15 -> L45 [0]
+      L15 to L16 -> L33 [2]
+      L16 to L18 -> L45 [0]
+      L19 to L21 -> L55 [0]
+      L21 to L22 -> L51 [2]
+      L22 to L25 -> L55 [0]
+      L25 to L26 -> L53 [2]
+      L26 to L28 -> L55 [0]
+      L28 to L29 -> L61 [0] lasti
+      L29 to L30 -> L45 [0]
+      L31 to L32 -> L35 [1] lasti
+      L33 to L34 -> L45 [0]
+      L35 to L37 -> L44 [3] lasti
+      L37 to L38 -> L39 [6]
+      L38 to L42 -> L44 [3] lasti
+      L42 to L43 -> L45 [0]
+      L43 to L44 -> L61 [0] lasti
+      L44 to L45 -> L45 [0]
+      L45 to L46 -> L50 [1] lasti
+      L46 to L47 -> L48 [1] lasti
+      L47 to L48 -> L61 [0] lasti
+      L48 to L50 -> L50 [1] lasti
+      L50 to L51 -> L61 [0] lasti
+      L51 to L52 -> L55 [0]
+      L53 to L54 -> L55 [0]
+      L55 to L56 -> L60 [1] lasti
+      L56 to L57 -> L58 [1] lasti
+      L57 to L58 -> L61 [0] lasti
+      L58 to L60 -> L60 [1] lasti
+      L60 to L61 -> L61 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'redis.asyncio', 'asyncio', 'aioredis', 'fastapi', 'APIRouter', 'sqlalchemy', 'text', 'app.config', 'settings', 'app.database', 'engine', 'router', 'get', 'health_check')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Health check endpoint for Docker and deployment verification.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (redis.asyncio)
+              IMPORT_FROM              4 (asyncio)
+              STORE_NAME               5 (aioredis)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('APIRouter',))
+              IMPORT_NAME              6 (fastapi)
+              IMPORT_FROM              7 (APIRouter)
+              STORE_NAME               7 (APIRouter)
+              POP_TOP
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('text',))
+              IMPORT_NAME              8 (sqlalchemy)
+              IMPORT_FROM              9 (text)
+              STORE_NAME               9 (text)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('settings',))
+              IMPORT_NAME             10 (app.config)
+              IMPORT_FROM             11 (settings)
+              STORE_NAME              11 (settings)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('engine',))
+              IMPORT_NAME             12 (app.database)
+              IMPORT_FROM             13 (engine)
+              STORE_NAME              13 (engine)
+              POP_TOP
+
+ 12           LOAD_NAME                7 (APIRouter)
+              PUSH_NULL
+              CALL                     0
+              STORE_NAME              14 (router)
+
+ 15           LOAD_NAME               14 (router)
+              LOAD_ATTR               31 (get + NULL|self)
+              LOAD_CONST               8 ('/health')
+              CALL                     1
+
+ 16           LOAD_CONST              10 (('return', 'dict'))
+              LOAD_CONST               9 (<code object health_check at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\api\v1\health.py", line 15>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 15           CALL                     0
+
+ 16           STORE_NAME              16 (health_check)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object health_check at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\api\v1\health.py", line 15>:
+  15            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  17            LOAD_CONST               1 ('ok')
+                LOAD_CONST               1 ('ok')
+                LOAD_CONST               1 ('ok')
+                LOAD_CONST               2 (('status', 'db', 'redis'))
+                BUILD_CONST_KEY_MAP      3
+                STORE_FAST               0 (status)
+
+  19    L2:     NOP
+
+  20    L3:     LOAD_GLOBAL              0 (engine)
+                LOAD_ATTR                2 (connect)
+                PUSH_NULL
+                CALL                     0
+                BEFORE_ASYNC_WITH
+                GET_AWAITABLE            1
+                LOAD_CONST               0 (None)
+        L4:     SEND                     3 (to L7)
+        L5:     YIELD_VALUE              1
+        L6:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+        L7:     END_SEND
+        L8:     STORE_FAST               1 (conn)
+
+  21            LOAD_FAST                1 (conn)
+                LOAD_ATTR                5 (execute + NULL|self)
+                LOAD_GLOBAL              7 (text + NULL)
+                LOAD_CONST               3 ('SELECT 1')
+                CALL                     1
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L9:     SEND                     3 (to L12)
+       L10:     YIELD_VALUE              1
+       L11:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+       L12:     END_SEND
+                POP_TOP
+
+  20   L13:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     2
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L14:     SEND                     3 (to L17)
+       L15:     YIELD_VALUE              1
+       L16:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+       L17:     END_SEND
+                POP_TOP
+
+  26   L18:     NOP
+
+  27   L19:     LOAD_GLOBAL             10 (aioredis)
+                LOAD_ATTR               12 (from_url)
+                PUSH_NULL
+                LOAD_GLOBAL             14 (settings)
+                LOAD_ATTR               16 (REDIS_URL)
+                LOAD_CONST               8 (True)
+                LOAD_CONST               9 (('decode_responses',))
+                CALL_KW                  2
+                STORE_FAST               3 (r)
+
+  28            LOAD_FAST                3 (r)
+                LOAD_ATTR               19 (ping + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L20:     SEND                     3 (to L23)
+       L21:     YIELD_VALUE              1
+       L22:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L20)
+       L23:     END_SEND
+                POP_TOP
+
+  29            LOAD_FAST                3 (r)
+                LOAD_ATTR               21 (aclose + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L24:     SEND                     3 (to L27)
+       L25:     YIELD_VALUE              1
+       L26:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+       L27:     END_SEND
+                POP_TOP
+
+  34   L28:     LOAD_FAST                0 (status)
+                RETURN_VALUE
+
+  20   L29:     CLEANUP_THROW
+       L30:     JUMP_BACKWARD_NO_INTERRUPT 140 (to L7)
+
+  21   L31:     CLEANUP_THROW
+       L32:     JUMP_BACKWARD_NO_INTERRUPT 108 (to L12)
+
+  20   L33:     CLEANUP_THROW
+       L34:     JUMP_BACKWARD_NO_INTERRUPT 94 (to L17)
+       L35:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L36:     SEND                     4 (to L40)
+       L37:     YIELD_VALUE              1
+       L38:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L36)
+       L39:     CLEANUP_THROW
+       L40:     END_SEND
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L41)
+                RERAISE                  2
+       L41:     POP_TOP
+       L42:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+       L43:     JUMP_BACKWARD_NO_INTERRUPT 115 (to L18)
+
+  --   L44:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L45:     PUSH_EXC_INFO
+
+  22            LOAD_GLOBAL              8 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       23 (to L49)
+                STORE_FAST               2 (exc)
+
+  23   L46:     LOAD_CONST               4 ('error: ')
+                LOAD_FAST                2 (exc)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                LOAD_FAST                0 (status)
+                LOAD_CONST               5 ('db')
+                STORE_SUBSCR
+
+  24            LOAD_CONST               6 ('degraded')
+                LOAD_FAST                0 (status)
+                LOAD_CONST               7 ('status')
+                STORE_SUBSCR
+       L47:     POP_EXCEPT
+                LOAD_CONST               0 (None)
+                STORE_FAST               2 (exc)
+                DELETE_FAST              2 (exc)
+                JUMP_BACKWARD_NO_INTERRUPT 146 (to L18)
+
+  --   L48:     LOAD_CONST               0 (None)
+                STORE_FAST               2 (exc)
+                DELETE_FAST              2 (exc)
+                RERAISE                  1
+
+  22   L49:     RERAISE                  0
+
+  --   L50:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+  28   L51:     CLEANUP_THROW
+       L52:     JUMP_BACKWARD_NO_INTERRUPT 98 (to L23)
+
+  29   L53:     CLEANUP_THROW
+       L54:     JUMP_BACKWARD_NO_INTERRUPT 76 (to L27)
+
+  --   L55:     PUSH_EXC_INFO
+
+  30            LOAD_GLOBAL              8 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       24 (to L59)
+                STORE_FAST               2 (exc)
+
+  31   L56:     LOAD_CONST               4 ('error: ')
+                LOAD_FAST                2 (exc)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                LOAD_FAST                0 (status)
+                LOAD_CONST              10 ('redis')
+                STORE_SUBSCR
+
+  32            LOAD_CONST               6 ('degraded')
+                LOAD_FAST                0 (status)
+                LOAD_CONST               7 ('status')
+                STORE_SUBSCR
+       L57:     POP_EXCEPT
+                LOAD_CONST               0 (None)
+                STORE_FAST               2 (exc)
+                DELETE_FAST              2 (exc)
+
+  34            LOAD_FAST                0 (status)
+                RETURN_VALUE
+
+  --   L58:     LOAD_CONST               0 (None)
+                STORE_FAST               2 (exc)
+                DELETE_FAST              2 (exc)
+                RERAISE                  1
+
+  30   L59:     RERAISE                  0
+
+  --   L60:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L61:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L61 [0] lasti
+  L3 to L5 -> L45 [0]
+  L5 to L6 -> L29 [3]
+  L6 to L8 -> L45 [0]
+  L8 to L10 -> L35 [1] lasti
+  L10 to L11 -> L31 [3]
+  L11 to L13 -> L35 [1] lasti
+  L13 to L15 -> L45 [0]
+  L15 to L16 -> L33 [2]
+  L16 to L18 -> L45 [0]
+  L19 to L21 -> L55 [0]
+  L21 to L22 -> L51 [2]
+  L22 to L25 -> L55 [0]
+  L25 to L26 -> L53 [2]
+  L26 to L28 -> L55 [0]
+  L28 to L29 -> L61 [0] lasti
+  L29 to L30 -> L45 [0]
+  L31 to L32 -> L35 [1] lasti
+  L33 to L34 -> L45 [0]
+  L35 to L37 -> L44 [3] lasti
+  L37 to L38 -> L39 [6]
+  L38 to L42 -> L44 [3] lasti
+  L42 to L43 -> L45 [0]
+  L43 to L44 -> L61 [0] lasti
+  L44 to L45 -> L45 [0]
+  L45 to L46 -> L50 [1] lasti
+  L46 to L47 -> L48 [1] lasti
+  L47 to L48 -> L61 [0] lasti
+  L48 to L50 -> L50 [1] lasti
+  L50 to L51 -> L61 [0] lasti
+  L51 to L52 -> L55 [0]
+  L53 to L54 -> L55 [0]
+  L55 to L56 -> L60 [1] lasti
+  L56 to L57 -> L58 [1] lasti
+  L57 to L58 -> L61 [0] lasti
+  L58 to L60 -> L60 [1] lasti
+  L60 to L61 -> L61 [0] lasti

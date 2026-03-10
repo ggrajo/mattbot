@@ -1,0 +1,1422 @@
+# Bytecode dump of: onboarding.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\api\v1\onboarding.py
+# co_names: ('__doc__', 'datetime', 'UTC', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy.exc', 'IntegrityError', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.models.onboarding_state', 'OnboardingState', 'app.schemas.onboarding', 'ONBOARDING_STEPS', 'OnboardingCompleteStepRequest', 'OnboardingCompleteStepResponse', 'OnboardingResponse', 'app.services', 'agent_service', 'audit_service', 'router', 'str', '_next_step', 'dict', '_build_response', 'get', 'get_onboarding', 'post', 'complete_step')
+# co_consts (strings): ['Onboarding state machine endpoints.', 'current', 'return', 'state', '', 'current_user', 'db', '/complete-step', 'body']
+
+# DOCSTRING: """Onboarding state machine endpoints."""
+# --- Nested code object: _next_step ---
+    # co_names: ('ONBOARDING_STEPS', 'index', 'len', 'ValueError')
+    # co_varnames: ('current', 'idx')
+      24           RESUME                   0
+    
+      25           NOP
+    
+      26   L1:     LOAD_GLOBAL              0 (ONBOARDING_STEPS)
+                   LOAD_ATTR                2 (index)
+                   PUSH_NULL
+                   LOAD_FAST                0 (current)
+                   CALL                     1
+                   STORE_FAST               1 (idx)
+    
+      27           LOAD_FAST                1 (idx)
+                   LOAD_CONST               1 (1)
+                   BINARY_OP                0 (+)
+                   LOAD_GLOBAL              5 (len + NULL)
+                   LOAD_GLOBAL              0 (ONBOARDING_STEPS)
+                   CALL                     1
+                   COMPARE_OP              18 (bool(<))
+                   POP_JUMP_IF_FALSE       12 (to L3)
+    
+      28           LOAD_GLOBAL              0 (ONBOARDING_STEPS)
+                   LOAD_FAST                1 (idx)
+                   LOAD_CONST               1 (1)
+                   BINARY_OP                0 (+)
+                   BINARY_SUBSCR
+           L2:     RETURN_VALUE
+    
+      27   L3:     NOP
+    
+      31           RETURN_CONST             0 (None)
+    
+      --   L4:     PUSH_EXC_INFO
+    
+      29           LOAD_GLOBAL              6 (ValueError)
+                   CHECK_EXC_MATCH
+                   POP_JUMP_IF_FALSE        3 (to L6)
+                   POP_TOP
+    
+      30   L5:     POP_EXCEPT
+    
+      31           RETURN_CONST             0 (None)
+    
+      29   L6:     RERAISE                  0
+    
+      --   L7:     COPY                     3
+                   POP_EXCEPT
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L2 -> L4 [0]
+      L4 to L5 -> L7 [1] lasti
+      L6 to L7 -> L7 [1] lasti
+    
+# --- Nested code object: _build_response ---
+    # co_names: ('completed_at', 'current_step', 'steps_completed', '_next_step')
+    # co_varnames: ('state', 'is_complete')
+     34           RESUME                   0
+    
+     35           LOAD_FAST                0 (state)
+                  LOAD_ATTR                0 (completed_at)
+                  LOAD_CONST               0 (None)
+                  IS_OP                    1
+                  STORE_FAST               1 (is_complete)
+    
+     37           LOAD_FAST                0 (state)
+                  LOAD_ATTR                2 (current_step)
+    
+     38           LOAD_FAST                0 (state)
+                  LOAD_ATTR                4 (steps_completed)
+                  COPY                     1
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE         2 (to L1)
+                  POP_TOP
+                  BUILD_LIST               0
+    
+     39   L1:     LOAD_FAST                1 (is_complete)
+    
+     40           LOAD_FAST                1 (is_complete)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE        4 (to L2)
+                  LOAD_CONST               0 (None)
+    
+     36           LOAD_CONST               1 (('current_step', 'steps_completed', 'is_complete', 'next_step'))
+                  BUILD_CONST_KEY_MAP      4
+                  RETURN_VALUE
+    
+     40   L2:     LOAD_GLOBAL              7 (_next_step + NULL)
+                  LOAD_FAST                0 (state)
+                  LOAD_ATTR                2 (current_step)
+                  CALL                     1
+    
+     36           LOAD_CONST               1 (('current_step', 'steps_completed', 'is_complete', 'next_step'))
+                  BUILD_CONST_KEY_MAP      4
+                  RETURN_VALUE
+    
+# --- Nested code object: get_onboarding ---
+    # co_names: ('get', 'OnboardingState', 'user_id', 'add', 'flush', 'refresh', 'IntegrityError', 'rollback', 'AppError', '_build_response')
+    # co_varnames: ('current_user', 'db', 'state')
+      44            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      49            LOAD_FAST                1 (db)
+                    LOAD_ATTR                1 (get + NULL|self)
+                    LOAD_GLOBAL              2 (OnboardingState)
+                    LOAD_FAST                0 (current_user)
+                    LOAD_ATTR                4 (user_id)
+                    CALL                     2
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               2 (state)
+    
+      50            LOAD_FAST                2 (state)
+                    POP_JUMP_IF_NOT_NONE    90 (to L16)
+    
+      51    L6:     NOP
+    
+      52    L7:     LOAD_GLOBAL              3 (OnboardingState + NULL)
+    
+      53            LOAD_FAST                0 (current_user)
+                    LOAD_ATTR                4 (user_id)
+    
+      54            LOAD_CONST               1 ('privacy_review')
+    
+      55            BUILD_LIST               0
+                    LOAD_CONST               2 (('account_created', 'email_verified', 'mfa_enrolled'))
+                    LIST_EXTEND              1
+    
+      52            LOAD_CONST               3 (('owner_user_id', 'current_step', 'steps_completed'))
+                    CALL_KW                  3
+                    STORE_FAST               2 (state)
+    
+      57            LOAD_FAST                1 (db)
+                    LOAD_ATTR                7 (add + NULL|self)
+                    LOAD_FAST                2 (state)
+                    CALL                     1
+                    POP_TOP
+    
+      58            LOAD_FAST                1 (db)
+                    LOAD_ATTR                9 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L8:     SEND                     3 (to L11)
+            L9:     YIELD_VALUE              1
+           L10:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L8)
+           L11:     END_SEND
+                    POP_TOP
+    
+      59            LOAD_FAST                1 (db)
+                    LOAD_ATTR               11 (refresh + NULL|self)
+                    LOAD_FAST                2 (state)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L12:     SEND                     3 (to L15)
+           L13:     YIELD_VALUE              1
+           L14:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L12)
+           L15:     END_SEND
+                    POP_TOP
+    
+      70   L16:     LOAD_GLOBAL             19 (_build_response + NULL)
+                    LOAD_FAST                2 (state)
+                    CALL                     1
+                    RETURN_VALUE
+    
+      49   L17:     CLEANUP_THROW
+           L18:     JUMP_BACKWARD_NO_INTERRUPT 108 (to L5)
+    
+      58   L19:     CLEANUP_THROW
+           L20:     JUMP_BACKWARD_NO_INTERRUPT 42 (to L11)
+    
+      59   L21:     CLEANUP_THROW
+           L22:     JUMP_BACKWARD_NO_INTERRUPT 19 (to L15)
+    
+      --   L23:     PUSH_EXC_INFO
+    
+      60            LOAD_GLOBAL             12 (IntegrityError)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       86 (to L35)
+                    POP_TOP
+    
+      61            LOAD_FAST                1 (db)
+                    LOAD_ATTR               15 (rollback + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L24:     SEND                     4 (to L28)
+           L25:     YIELD_VALUE              1
+           L26:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+           L27:     CLEANUP_THROW
+           L28:     END_SEND
+                    POP_TOP
+    
+      62            LOAD_FAST                1 (db)
+                    LOAD_ATTR                1 (get + NULL|self)
+                    LOAD_GLOBAL              2 (OnboardingState)
+                    LOAD_FAST                0 (current_user)
+                    LOAD_ATTR                4 (user_id)
+                    CALL                     2
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L29:     SEND                     4 (to L33)
+           L30:     YIELD_VALUE              1
+           L31:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L29)
+           L32:     CLEANUP_THROW
+           L33:     END_SEND
+                    STORE_FAST               2 (state)
+    
+      63            LOAD_FAST                2 (state)
+                    POP_JUMP_IF_NOT_NONE    14 (to L34)
+    
+      64            LOAD_GLOBAL             17 (AppError + NULL)
+    
+      65            LOAD_CONST               4 ('ONBOARDING_INIT_FAILED')
+    
+      66            LOAD_CONST               5 ('Failed to initialize onboarding state')
+    
+      67            LOAD_CONST               6 (500)
+    
+      64            CALL                     3
+    
+      68            LOAD_CONST               0 (None)
+    
+      64            RAISE_VARARGS            2
+    
+      63   L34:     POP_EXCEPT
+                    JUMP_BACKWARD_NO_INTERRUPT 112 (to L16)
+    
+      60   L35:     RERAISE                  0
+    
+      --   L36:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L37:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L37 [0] lasti
+      L3 to L4 -> L17 [2]
+      L4 to L6 -> L37 [0] lasti
+      L7 to L9 -> L23 [0]
+      L9 to L10 -> L19 [2]
+      L10 to L13 -> L23 [0]
+      L13 to L14 -> L21 [2]
+      L14 to L16 -> L23 [0]
+      L16 to L18 -> L37 [0] lasti
+      L19 to L20 -> L23 [0]
+      L21 to L22 -> L23 [0]
+      L23 to L25 -> L36 [1] lasti
+      L25 to L26 -> L27 [3]
+      L26 to L30 -> L36 [1] lasti
+      L30 to L31 -> L32 [3]
+      L31 to L34 -> L36 [1] lasti
+      L34 to L35 -> L37 [0] lasti
+      L35 to L36 -> L36 [1] lasti
+      L36 to L37 -> L37 [0] lasti
+    
+# --- Nested code object: complete_step ---
+    # co_names: ('get', 'OnboardingState', 'user_id', 'AppError', 'completed_at', '_build_response', 'list', 'steps_completed', 'step', 'ONBOARDING_STEPS', 'index', 'append', 'datetime', 'now', 'UTC', 'updated_at', 'device_id', 'updated_by_device_id', 'audit_service', 'log_event', 'agent_service', 'get_or_create_default_agent', 'elevenlabs_agent_id', 'ensure_elevenlabs_agent', 'current_step', '_next_step', 'flush')
+    # co_varnames: ('body', 'current_user', 'db', 'state', 'completed', 'step_idx', 'prereq', 'agent', 'next_s')
+      73            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      79            LOAD_FAST                2 (db)
+                    LOAD_ATTR                1 (get + NULL|self)
+                    LOAD_GLOBAL              2 (OnboardingState)
+                    LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                4 (user_id)
+                    CALL                     2
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               3 (state)
+    
+      80            LOAD_FAST                3 (state)
+                    POP_JUMP_IF_NOT_NONE    13 (to L6)
+    
+      81            LOAD_GLOBAL              7 (AppError + NULL)
+                    LOAD_CONST               1 ('ONBOARDING_NOT_FOUND')
+                    LOAD_CONST               2 ('Onboarding state not found')
+                    LOAD_CONST               3 (404)
+                    CALL                     3
+                    RAISE_VARARGS            1
+    
+      83    L6:     LOAD_FAST                3 (state)
+                    LOAD_ATTR                8 (completed_at)
+                    POP_JUMP_IF_NONE        11 (to L7)
+    
+      84            LOAD_GLOBAL             11 (_build_response + NULL)
+                    LOAD_FAST                3 (state)
+                    CALL                     1
+                    RETURN_VALUE
+    
+      86    L7:     LOAD_GLOBAL             13 (list + NULL)
+                    LOAD_FAST                3 (state)
+                    LOAD_ATTR               14 (steps_completed)
+                    COPY                     1
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L8)
+                    POP_TOP
+                    BUILD_LIST               0
+            L8:     CALL                     1
+                    STORE_FAST               4 (completed)
+    
+      88            LOAD_FAST                0 (body)
+                    LOAD_ATTR               16 (step)
+                    LOAD_FAST                4 (completed)
+                    CONTAINS_OP              0
+                    POP_JUMP_IF_FALSE       11 (to L9)
+    
+      89            LOAD_GLOBAL             11 (_build_response + NULL)
+                    LOAD_FAST                3 (state)
+                    CALL                     1
+                    RETURN_VALUE
+    
+      91    L9:     LOAD_FAST                0 (body)
+                    LOAD_ATTR               16 (step)
+                    LOAD_GLOBAL             18 (ONBOARDING_STEPS)
+                    CONTAINS_OP              0
+                    POP_JUMP_IF_FALSE       32 (to L10)
+                    LOAD_GLOBAL             18 (ONBOARDING_STEPS)
+                    LOAD_ATTR               20 (index)
+                    PUSH_NULL
+                    LOAD_FAST                0 (body)
+                    LOAD_ATTR               16 (step)
+                    CALL                     1
+                    JUMP_FORWARD             1 (to L11)
+           L10:     LOAD_CONST               4 (-1)
+           L11:     STORE_FAST               5 (step_idx)
+    
+      92            LOAD_FAST                5 (step_idx)
+                    LOAD_CONST               5 (0)
+                    COMPARE_OP              18 (bool(<))
+                    POP_JUMP_IF_FALSE       26 (to L12)
+    
+      93            LOAD_GLOBAL              7 (AppError + NULL)
+                    LOAD_CONST               6 ('INVALID_STEP')
+                    LOAD_CONST               7 ('Unknown step: ')
+                    LOAD_FAST                0 (body)
+                    LOAD_ATTR               16 (step)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+                    LOAD_CONST               8 (400)
+                    CALL                     3
+                    RAISE_VARARGS            1
+    
+      95   L12:     LOAD_GLOBAL             18 (ONBOARDING_STEPS)
+                    LOAD_CONST               0 (None)
+                    LOAD_FAST                5 (step_idx)
+                    BINARY_SLICE
+                    GET_ITER
+           L13:     FOR_ITER                38 (to L16)
+                    STORE_FAST               6 (prereq)
+    
+      96            LOAD_FAST_LOAD_FAST    100 (prereq, completed)
+                    CONTAINS_OP              1
+           L14:     POP_JUMP_IF_TRUE         2 (to L15)
+                    JUMP_BACKWARD           10 (to L13)
+    
+      97   L15:     LOAD_GLOBAL              7 (AppError + NULL)
+    
+      98            LOAD_CONST               9 ('PREREQUISITE_MISSING')
+    
+      99            LOAD_CONST              10 ("Step '")
+                    LOAD_FAST                6 (prereq)
+                    FORMAT_SIMPLE
+                    LOAD_CONST              11 ("' must be completed before '")
+                    LOAD_FAST                0 (body)
+                    LOAD_ATTR               16 (step)
+                    FORMAT_SIMPLE
+                    LOAD_CONST              12 ("'")
+                    BUILD_STRING             5
+    
+     100            LOAD_CONST               8 (400)
+    
+      97            CALL                     3
+                    RAISE_VARARGS            1
+    
+      95   L16:     END_FOR
+                    POP_TOP
+    
+     103            LOAD_FAST                4 (completed)
+                    LOAD_ATTR               23 (append + NULL|self)
+                    LOAD_FAST                0 (body)
+                    LOAD_ATTR               16 (step)
+                    CALL                     1
+                    POP_TOP
+    
+     104            LOAD_FAST_LOAD_FAST     67 (completed, state)
+                    STORE_ATTR               7 (steps_completed)
+    
+     105            LOAD_GLOBAL             24 (datetime)
+                    LOAD_ATTR               26 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL             28 (UTC)
+                    CALL                     1
+                    LOAD_FAST                3 (state)
+                    STORE_ATTR              15 (updated_at)
+    
+     106            LOAD_FAST                1 (current_user)
+                    LOAD_ATTR               32 (device_id)
+                    LOAD_FAST                3 (state)
+                    STORE_ATTR              17 (updated_by_device_id)
+    
+     108            LOAD_GLOBAL             36 (audit_service)
+                    LOAD_ATTR               38 (log_event)
+                    PUSH_NULL
+    
+     109            LOAD_FAST                2 (db)
+    
+     110            LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                4 (user_id)
+    
+     111            LOAD_CONST              13 ('onboarding.step_completed')
+    
+     112            LOAD_FAST                1 (current_user)
+                    LOAD_ATTR               32 (device_id)
+    
+     113            LOAD_CONST              14 ('step')
+                    LOAD_FAST                0 (body)
+                    LOAD_ATTR               16 (step)
+                    BUILD_MAP                1
+    
+     108            LOAD_CONST              15 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                    CALL_KW                  5
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L17:     SEND                     3 (to L20)
+           L18:     YIELD_VALUE              1
+           L19:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L17)
+           L20:     END_SEND
+                    POP_TOP
+    
+     116            LOAD_FAST                0 (body)
+                    LOAD_ATTR               16 (step)
+                    LOAD_CONST              16 ('assistant_setup')
+                    COMPARE_OP              88 (bool(==))
+                    POP_JUMP_IF_FALSE       98 (to L29)
+    
+     117            LOAD_GLOBAL             40 (agent_service)
+                    LOAD_ATTR               42 (get_or_create_default_agent)
+                    PUSH_NULL
+                    LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                    LOAD_ATTR                4 (user_id)
+                    CALL                     2
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L21:     SEND                     3 (to L24)
+           L22:     YIELD_VALUE              1
+           L23:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L21)
+           L24:     END_SEND
+                    STORE_FAST               7 (agent)
+    
+     118            LOAD_FAST                7 (agent)
+                    LOAD_ATTR               44 (elevenlabs_agent_id)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        41 (to L29)
+    
+     119            LOAD_GLOBAL             40 (agent_service)
+                    LOAD_ATTR               46 (ensure_elevenlabs_agent)
+                    PUSH_NULL
+    
+     120            LOAD_FAST_LOAD_FAST     39 (db, agent)
+                    LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                4 (user_id)
+    
+     119            CALL                     3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L25:     SEND                     3 (to L28)
+           L26:     YIELD_VALUE              1
+           L27:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L25)
+           L28:     END_SEND
+                    POP_TOP
+    
+     123   L29:     LOAD_FAST                0 (body)
+                    LOAD_ATTR               16 (step)
+                    LOAD_CONST              17 ('onboarding_complete')
+                    COMPARE_OP              88 (bool(==))
+                    POP_JUMP_IF_FALSE       90 (to L34)
+    
+     124            LOAD_CONST              17 ('onboarding_complete')
+                    LOAD_FAST                3 (state)
+                    STORE_ATTR              24 (current_step)
+    
+     125            LOAD_GLOBAL             24 (datetime)
+                    LOAD_ATTR               26 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL             28 (UTC)
+                    CALL                     1
+                    LOAD_FAST                3 (state)
+                    STORE_ATTR               4 (completed_at)
+    
+     126            LOAD_GLOBAL             36 (audit_service)
+                    LOAD_ATTR               38 (log_event)
+                    PUSH_NULL
+    
+     127            LOAD_FAST                2 (db)
+    
+     128            LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                4 (user_id)
+    
+     129            LOAD_CONST              18 ('onboarding.completed')
+    
+     130            LOAD_FAST                1 (current_user)
+                    LOAD_ATTR               32 (device_id)
+    
+     126            LOAD_CONST              19 (('owner_user_id', 'event_type', 'actor_id'))
+                    CALL_KW                  4
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L30:     SEND                     3 (to L33)
+           L31:     YIELD_VALUE              1
+           L32:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L30)
+           L33:     END_SEND
+                    POP_TOP
+                    JUMP_FORWARD            34 (to L35)
+    
+     133   L34:     LOAD_GLOBAL             51 (_next_step + NULL)
+                    LOAD_FAST                0 (body)
+                    LOAD_ATTR               16 (step)
+                    CALL                     1
+                    STORE_FAST               8 (next_s)
+    
+     134            LOAD_FAST                8 (next_s)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE        6 (to L35)
+    
+     135            LOAD_FAST_LOAD_FAST    131 (next_s, state)
+                    STORE_ATTR              24 (current_step)
+    
+     137   L35:     LOAD_FAST                2 (db)
+                    LOAD_ATTR               53 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L36:     SEND                     3 (to L39)
+           L37:     YIELD_VALUE              1
+           L38:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L36)
+           L39:     END_SEND
+                    POP_TOP
+    
+     138            LOAD_GLOBAL             11 (_build_response + NULL)
+                    LOAD_FAST                3 (state)
+                    CALL                     1
+                    RETURN_VALUE
+    
+      79   L40:     CLEANUP_THROW
+           L41:     EXTENDED_ARG             2
+                    JUMP_BACKWARD_NO_INTERRUPT 673 (to L5)
+    
+     108   L42:     CLEANUP_THROW
+           L43:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 297 (to L20)
+    
+     117   L44:     CLEANUP_THROW
+           L45:     JUMP_BACKWARD_NO_INTERRUPT 243 (to L24)
+    
+     119   L46:     CLEANUP_THROW
+           L47:     JUMP_BACKWARD_NO_INTERRUPT 187 (to L28)
+    
+     126   L48:     CLEANUP_THROW
+           L49:     JUMP_BACKWARD_NO_INTERRUPT 84 (to L33)
+    
+     137   L50:     CLEANUP_THROW
+           L51:     JUMP_BACKWARD_NO_INTERRUPT 27 (to L39)
+    
+      --   L52:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L52 [0] lasti
+      L3 to L4 -> L40 [2]
+      L4 to L14 -> L52 [0] lasti
+      L15 to L18 -> L52 [0] lasti
+      L18 to L19 -> L42 [2]
+      L19 to L22 -> L52 [0] lasti
+      L22 to L23 -> L44 [2]
+      L23 to L26 -> L52 [0] lasti
+      L26 to L27 -> L46 [2]
+      L27 to L31 -> L52 [0] lasti
+      L31 to L32 -> L48 [2]
+      L32 to L37 -> L52 [0] lasti
+      L37 to L38 -> L50 [2]
+      L38 to L41 -> L52 [0] lasti
+      L42 to L43 -> L52 [0] lasti
+      L44 to L45 -> L52 [0] lasti
+      L46 to L47 -> L52 [0] lasti
+      L48 to L49 -> L52 [0] lasti
+      L50 to L51 -> L52 [0] lasti
+    
+# co_names: ('__doc__', 'datetime', 'UTC', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy.exc', 'IntegrityError', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.models.onboarding_state', 'OnboardingState', 'app.schemas.onboarding', 'ONBOARDING_STEPS', 'OnboardingCompleteStepRequest', 'OnboardingCompleteStepResponse', 'OnboardingResponse', 'app.services', 'agent_service', 'audit_service', 'router', 'str', '_next_step', 'dict', '_build_response', 'get', 'get_onboarding', 'post', 'complete_step')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Onboarding state machine endpoints.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('UTC', 'datetime'))
+              IMPORT_NAME              1 (datetime)
+              IMPORT_FROM              2 (UTC)
+              STORE_NAME               2 (UTC)
+              IMPORT_FROM              1 (datetime)
+              STORE_NAME               1 (datetime)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('APIRouter', 'Depends'))
+              IMPORT_NAME              3 (fastapi)
+              IMPORT_FROM              4 (APIRouter)
+              STORE_NAME               4 (APIRouter)
+              IMPORT_FROM              5 (Depends)
+              STORE_NAME               5 (Depends)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('IntegrityError',))
+              IMPORT_NAME              6 (sqlalchemy.exc)
+              IMPORT_FROM              7 (IntegrityError)
+              STORE_NAME               7 (IntegrityError)
+              POP_TOP
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('AsyncSession',))
+              IMPORT_NAME              8 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM              9 (AsyncSession)
+              STORE_NAME               9 (AsyncSession)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('CurrentUser', 'get_current_user'))
+              IMPORT_NAME             10 (app.core.dependencies)
+              IMPORT_FROM             11 (CurrentUser)
+              STORE_NAME              11 (CurrentUser)
+              IMPORT_FROM             12 (get_current_user)
+              STORE_NAME              12 (get_current_user)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('get_db',))
+              IMPORT_NAME             13 (app.database)
+              IMPORT_FROM             14 (get_db)
+              STORE_NAME              14 (get_db)
+              POP_TOP
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('AppError',))
+              IMPORT_NAME             15 (app.middleware.error_handler)
+              IMPORT_FROM             16 (AppError)
+              STORE_NAME              16 (AppError)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('OnboardingState',))
+              IMPORT_NAME             17 (app.models.onboarding_state)
+              IMPORT_FROM             18 (OnboardingState)
+              STORE_NAME              18 (OnboardingState)
+              POP_TOP
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST              10 (('ONBOARDING_STEPS', 'OnboardingCompleteStepRequest', 'OnboardingCompleteStepResponse', 'OnboardingResponse'))
+              IMPORT_NAME             19 (app.schemas.onboarding)
+              IMPORT_FROM             20 (ONBOARDING_STEPS)
+              STORE_NAME              20 (ONBOARDING_STEPS)
+              IMPORT_FROM             21 (OnboardingCompleteStepRequest)
+              STORE_NAME              21 (OnboardingCompleteStepRequest)
+              IMPORT_FROM             22 (OnboardingCompleteStepResponse)
+              STORE_NAME              22 (OnboardingCompleteStepResponse)
+              IMPORT_FROM             23 (OnboardingResponse)
+              STORE_NAME              23 (OnboardingResponse)
+              POP_TOP
+
+ 19           LOAD_CONST               1 (0)
+              LOAD_CONST              11 (('agent_service', 'audit_service'))
+              IMPORT_NAME             24 (app.services)
+              IMPORT_FROM             25 (agent_service)
+              STORE_NAME              25 (agent_service)
+              IMPORT_FROM             26 (audit_service)
+              STORE_NAME              26 (audit_service)
+              POP_TOP
+
+ 21           LOAD_NAME                4 (APIRouter)
+              PUSH_NULL
+              CALL                     0
+              STORE_NAME              27 (router)
+
+ 24           LOAD_CONST              12 ('current')
+              LOAD_NAME               28 (str)
+              LOAD_CONST              13 ('return')
+              LOAD_NAME               28 (str)
+              LOAD_CONST              14 (None)
+              BINARY_OP                7 (|)
+              BUILD_TUPLE              4
+              LOAD_CONST              15 (<code object _next_step at 0x0000024C0EEFA6B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\onboarding.py", line 24>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              29 (_next_step)
+
+ 34           LOAD_CONST              16 ('state')
+              LOAD_NAME               18 (OnboardingState)
+              LOAD_CONST              13 ('return')
+              LOAD_NAME               30 (dict)
+              BUILD_TUPLE              4
+              LOAD_CONST              17 (<code object _build_response at 0x0000024C11435170, file "D:\fluence\Github\mattbot\backend\app\api\v1\onboarding.py", line 34>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              31 (_build_response)
+
+ 44           LOAD_NAME               27 (router)
+              LOAD_ATTR               65 (get + NULL|self)
+              LOAD_CONST              18 ('')
+              LOAD_NAME               23 (OnboardingResponse)
+              LOAD_CONST              19 (('response_model',))
+              CALL_KW                  2
+
+ 46           LOAD_NAME                5 (Depends)
+              PUSH_NULL
+              LOAD_NAME               12 (get_current_user)
+              CALL                     1
+
+ 47           LOAD_NAME                5 (Depends)
+              PUSH_NULL
+              LOAD_NAME               14 (get_db)
+              CALL                     1
+
+ 45           BUILD_TUPLE              2
+              LOAD_CONST              20 ('current_user')
+
+ 46           LOAD_NAME               11 (CurrentUser)
+
+ 45           LOAD_CONST              21 ('db')
+
+ 47           LOAD_NAME                9 (AsyncSession)
+
+ 45           LOAD_CONST              13 ('return')
+
+ 48           LOAD_NAME               30 (dict)
+
+ 45           BUILD_TUPLE              6
+              LOAD_CONST              22 (<code object get_onboarding at 0x0000024C0FBEDE60, file "D:\fluence\Github\mattbot\backend\app\api\v1\onboarding.py", line 44>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 44           CALL                     0
+
+ 45           STORE_NAME              33 (get_onboarding)
+
+ 73           LOAD_NAME               27 (router)
+              LOAD_ATTR               69 (post + NULL|self)
+              LOAD_CONST              23 ('/complete-step')
+              LOAD_NAME               22 (OnboardingCompleteStepResponse)
+              LOAD_CONST              19 (('response_model',))
+              CALL_KW                  2
+
+ 76           LOAD_NAME                5 (Depends)
+              PUSH_NULL
+              LOAD_NAME               12 (get_current_user)
+              CALL                     1
+
+ 77           LOAD_NAME                5 (Depends)
+              PUSH_NULL
+              LOAD_NAME               14 (get_db)
+              CALL                     1
+
+ 74           BUILD_TUPLE              2
+              LOAD_CONST              24 ('body')
+
+ 75           LOAD_NAME               21 (OnboardingCompleteStepRequest)
+
+ 74           LOAD_CONST              20 ('current_user')
+
+ 76           LOAD_NAME               11 (CurrentUser)
+
+ 74           LOAD_CONST              21 ('db')
+
+ 77           LOAD_NAME                9 (AsyncSession)
+
+ 74           LOAD_CONST              13 ('return')
+
+ 78           LOAD_NAME               30 (dict)
+
+ 74           BUILD_TUPLE              8
+              LOAD_CONST              25 (<code object complete_step at 0x0000024C0FCFC6D0, file "D:\fluence\Github\mattbot\backend\app\api\v1\onboarding.py", line 73>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 73           CALL                     0
+
+ 74           STORE_NAME              35 (complete_step)
+              RETURN_CONST            14 (None)
+
+Disassembly of <code object _next_step at 0x0000024C0EEFA6B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\onboarding.py", line 24>:
+  24           RESUME                   0
+
+  25           NOP
+
+  26   L1:     LOAD_GLOBAL              0 (ONBOARDING_STEPS)
+               LOAD_ATTR                2 (index)
+               PUSH_NULL
+               LOAD_FAST                0 (current)
+               CALL                     1
+               STORE_FAST               1 (idx)
+
+  27           LOAD_FAST                1 (idx)
+               LOAD_CONST               1 (1)
+               BINARY_OP                0 (+)
+               LOAD_GLOBAL              5 (len + NULL)
+               LOAD_GLOBAL              0 (ONBOARDING_STEPS)
+               CALL                     1
+               COMPARE_OP              18 (bool(<))
+               POP_JUMP_IF_FALSE       12 (to L3)
+
+  28           LOAD_GLOBAL              0 (ONBOARDING_STEPS)
+               LOAD_FAST                1 (idx)
+               LOAD_CONST               1 (1)
+               BINARY_OP                0 (+)
+               BINARY_SUBSCR
+       L2:     RETURN_VALUE
+
+  27   L3:     NOP
+
+  31           RETURN_CONST             0 (None)
+
+  --   L4:     PUSH_EXC_INFO
+
+  29           LOAD_GLOBAL              6 (ValueError)
+               CHECK_EXC_MATCH
+               POP_JUMP_IF_FALSE        3 (to L6)
+               POP_TOP
+
+  30   L5:     POP_EXCEPT
+
+  31           RETURN_CONST             0 (None)
+
+  29   L6:     RERAISE                  0
+
+  --   L7:     COPY                     3
+               POP_EXCEPT
+               RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L4 [0]
+  L4 to L5 -> L7 [1] lasti
+  L6 to L7 -> L7 [1] lasti
+
+Disassembly of <code object _build_response at 0x0000024C11435170, file "D:\fluence\Github\mattbot\backend\app\api\v1\onboarding.py", line 34>:
+ 34           RESUME                   0
+
+ 35           LOAD_FAST                0 (state)
+              LOAD_ATTR                0 (completed_at)
+              LOAD_CONST               0 (None)
+              IS_OP                    1
+              STORE_FAST               1 (is_complete)
+
+ 37           LOAD_FAST                0 (state)
+              LOAD_ATTR                2 (current_step)
+
+ 38           LOAD_FAST                0 (state)
+              LOAD_ATTR                4 (steps_completed)
+              COPY                     1
+              TO_BOOL
+              POP_JUMP_IF_TRUE         2 (to L1)
+              POP_TOP
+              BUILD_LIST               0
+
+ 39   L1:     LOAD_FAST                1 (is_complete)
+
+ 40           LOAD_FAST                1 (is_complete)
+              TO_BOOL
+              POP_JUMP_IF_FALSE        4 (to L2)
+              LOAD_CONST               0 (None)
+
+ 36           LOAD_CONST               1 (('current_step', 'steps_completed', 'is_complete', 'next_step'))
+              BUILD_CONST_KEY_MAP      4
+              RETURN_VALUE
+
+ 40   L2:     LOAD_GLOBAL              7 (_next_step + NULL)
+              LOAD_FAST                0 (state)
+              LOAD_ATTR                2 (current_step)
+              CALL                     1
+
+ 36           LOAD_CONST               1 (('current_step', 'steps_completed', 'is_complete', 'next_step'))
+              BUILD_CONST_KEY_MAP      4
+              RETURN_VALUE
+
+Disassembly of <code object get_onboarding at 0x0000024C0FBEDE60, file "D:\fluence\Github\mattbot\backend\app\api\v1\onboarding.py", line 44>:
+  44            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  49            LOAD_FAST                1 (db)
+                LOAD_ATTR                1 (get + NULL|self)
+                LOAD_GLOBAL              2 (OnboardingState)
+                LOAD_FAST                0 (current_user)
+                LOAD_ATTR                4 (user_id)
+                CALL                     2
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               2 (state)
+
+  50            LOAD_FAST                2 (state)
+                POP_JUMP_IF_NOT_NONE    90 (to L16)
+
+  51    L6:     NOP
+
+  52    L7:     LOAD_GLOBAL              3 (OnboardingState + NULL)
+
+  53            LOAD_FAST                0 (current_user)
+                LOAD_ATTR                4 (user_id)
+
+  54            LOAD_CONST               1 ('privacy_review')
+
+  55            BUILD_LIST               0
+                LOAD_CONST               2 (('account_created', 'email_verified', 'mfa_enrolled'))
+                LIST_EXTEND              1
+
+  52            LOAD_CONST               3 (('owner_user_id', 'current_step', 'steps_completed'))
+                CALL_KW                  3
+                STORE_FAST               2 (state)
+
+  57            LOAD_FAST                1 (db)
+                LOAD_ATTR                7 (add + NULL|self)
+                LOAD_FAST                2 (state)
+                CALL                     1
+                POP_TOP
+
+  58            LOAD_FAST                1 (db)
+                LOAD_ATTR                9 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L8:     SEND                     3 (to L11)
+        L9:     YIELD_VALUE              1
+       L10:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L8)
+       L11:     END_SEND
+                POP_TOP
+
+  59            LOAD_FAST                1 (db)
+                LOAD_ATTR               11 (refresh + NULL|self)
+                LOAD_FAST                2 (state)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L12:     SEND                     3 (to L15)
+       L13:     YIELD_VALUE              1
+       L14:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L12)
+       L15:     END_SEND
+                POP_TOP
+
+  70   L16:     LOAD_GLOBAL             19 (_build_response + NULL)
+                LOAD_FAST                2 (state)
+                CALL                     1
+                RETURN_VALUE
+
+  49   L17:     CLEANUP_THROW
+       L18:     JUMP_BACKWARD_NO_INTERRUPT 108 (to L5)
+
+  58   L19:     CLEANUP_THROW
+       L20:     JUMP_BACKWARD_NO_INTERRUPT 42 (to L11)
+
+  59   L21:     CLEANUP_THROW
+       L22:     JUMP_BACKWARD_NO_INTERRUPT 19 (to L15)
+
+  --   L23:     PUSH_EXC_INFO
+
+  60            LOAD_GLOBAL             12 (IntegrityError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       86 (to L35)
+                POP_TOP
+
+  61            LOAD_FAST                1 (db)
+                LOAD_ATTR               15 (rollback + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L24:     SEND                     4 (to L28)
+       L25:     YIELD_VALUE              1
+       L26:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+       L27:     CLEANUP_THROW
+       L28:     END_SEND
+                POP_TOP
+
+  62            LOAD_FAST                1 (db)
+                LOAD_ATTR                1 (get + NULL|self)
+                LOAD_GLOBAL              2 (OnboardingState)
+                LOAD_FAST                0 (current_user)
+                LOAD_ATTR                4 (user_id)
+                CALL                     2
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L29:     SEND                     4 (to L33)
+       L30:     YIELD_VALUE              1
+       L31:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L29)
+       L32:     CLEANUP_THROW
+       L33:     END_SEND
+                STORE_FAST               2 (state)
+
+  63            LOAD_FAST                2 (state)
+                POP_JUMP_IF_NOT_NONE    14 (to L34)
+
+  64            LOAD_GLOBAL             17 (AppError + NULL)
+
+  65            LOAD_CONST               4 ('ONBOARDING_INIT_FAILED')
+
+  66            LOAD_CONST               5 ('Failed to initialize onboarding state')
+
+  67            LOAD_CONST               6 (500)
+
+  64            CALL                     3
+
+  68            LOAD_CONST               0 (None)
+
+  64            RAISE_VARARGS            2
+
+  63   L34:     POP_EXCEPT
+                JUMP_BACKWARD_NO_INTERRUPT 112 (to L16)
+
+  60   L35:     RERAISE                  0
+
+  --   L36:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L37:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L37 [0] lasti
+  L3 to L4 -> L17 [2]
+  L4 to L6 -> L37 [0] lasti
+  L7 to L9 -> L23 [0]
+  L9 to L10 -> L19 [2]
+  L10 to L13 -> L23 [0]
+  L13 to L14 -> L21 [2]
+  L14 to L16 -> L23 [0]
+  L16 to L18 -> L37 [0] lasti
+  L19 to L20 -> L23 [0]
+  L21 to L22 -> L23 [0]
+  L23 to L25 -> L36 [1] lasti
+  L25 to L26 -> L27 [3]
+  L26 to L30 -> L36 [1] lasti
+  L30 to L31 -> L32 [3]
+  L31 to L34 -> L36 [1] lasti
+  L34 to L35 -> L37 [0] lasti
+  L35 to L36 -> L36 [1] lasti
+  L36 to L37 -> L37 [0] lasti
+
+Disassembly of <code object complete_step at 0x0000024C0FCFC6D0, file "D:\fluence\Github\mattbot\backend\app\api\v1\onboarding.py", line 73>:
+  73            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  79            LOAD_FAST                2 (db)
+                LOAD_ATTR                1 (get + NULL|self)
+                LOAD_GLOBAL              2 (OnboardingState)
+                LOAD_FAST                1 (current_user)
+                LOAD_ATTR                4 (user_id)
+                CALL                     2
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               3 (state)
+
+  80            LOAD_FAST                3 (state)
+                POP_JUMP_IF_NOT_NONE    13 (to L6)
+
+  81            LOAD_GLOBAL              7 (AppError + NULL)
+                LOAD_CONST               1 ('ONBOARDING_NOT_FOUND')
+                LOAD_CONST               2 ('Onboarding state not found')
+                LOAD_CONST               3 (404)
+                CALL                     3
+                RAISE_VARARGS            1
+
+  83    L6:     LOAD_FAST                3 (state)
+                LOAD_ATTR                8 (completed_at)
+                POP_JUMP_IF_NONE        11 (to L7)
+
+  84            LOAD_GLOBAL             11 (_build_response + NULL)
+                LOAD_FAST                3 (state)
+                CALL                     1
+                RETURN_VALUE
+
+  86    L7:     LOAD_GLOBAL             13 (list + NULL)
+                LOAD_FAST                3 (state)
+                LOAD_ATTR               14 (steps_completed)
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L8)
+                POP_TOP
+                BUILD_LIST               0
+        L8:     CALL                     1
+                STORE_FAST               4 (completed)
+
+  88            LOAD_FAST                0 (body)
+                LOAD_ATTR               16 (step)
+                LOAD_FAST                4 (completed)
+                CONTAINS_OP              0
+                POP_JUMP_IF_FALSE       11 (to L9)
+
+  89            LOAD_GLOBAL             11 (_build_response + NULL)
+                LOAD_FAST                3 (state)
+                CALL                     1
+                RETURN_VALUE
+
+  91    L9:     LOAD_FAST                0 (body)
+                LOAD_ATTR               16 (step)
+                LOAD_GLOBAL             18 (ONBOARDING_STEPS)
+                CONTAINS_OP              0
+                POP_JUMP_IF_FALSE       32 (to L10)
+                LOAD_GLOBAL             18 (ONBOARDING_STEPS)
+                LOAD_ATTR               20 (index)
+                PUSH_NULL
+                LOAD_FAST                0 (body)
+                LOAD_ATTR               16 (step)
+                CALL                     1
+                JUMP_FORWARD             1 (to L11)
+       L10:     LOAD_CONST               4 (-1)
+       L11:     STORE_FAST               5 (step_idx)
+
+  92            LOAD_FAST                5 (step_idx)
+                LOAD_CONST               5 (0)
+                COMPARE_OP              18 (bool(<))
+                POP_JUMP_IF_FALSE       26 (to L12)
+
+  93            LOAD_GLOBAL              7 (AppError + NULL)
+                LOAD_CONST               6 ('INVALID_STEP')
+                LOAD_CONST               7 ('Unknown step: ')
+                LOAD_FAST                0 (body)
+                LOAD_ATTR               16 (step)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                LOAD_CONST               8 (400)
+                CALL                     3
+                RAISE_VARARGS            1
+
+  95   L12:     LOAD_GLOBAL             18 (ONBOARDING_STEPS)
+                LOAD_CONST               0 (None)
+                LOAD_FAST                5 (step_idx)
+                BINARY_SLICE
+                GET_ITER
+       L13:     FOR_ITER                38 (to L16)
+                STORE_FAST               6 (prereq)
+
+  96            LOAD_FAST_LOAD_FAST    100 (prereq, completed)
+                CONTAINS_OP              1
+       L14:     POP_JUMP_IF_TRUE         2 (to L15)
+                JUMP_BACKWARD           10 (to L13)
+
+  97   L15:     LOAD_GLOBAL              7 (AppError + NULL)
+
+  98            LOAD_CONST               9 ('PREREQUISITE_MISSING')
+
+  99            LOAD_CONST              10 ("Step '")
+                LOAD_FAST                6 (prereq)
+                FORMAT_SIMPLE
+                LOAD_CONST              11 ("' must be completed before '")
+                LOAD_FAST                0 (body)
+                LOAD_ATTR               16 (step)
+                FORMAT_SIMPLE
+                LOAD_CONST              12 ("'")
+                BUILD_STRING             5
+
+ 100            LOAD_CONST               8 (400)
+
+  97            CALL                     3
+                RAISE_VARARGS            1
+
+  95   L16:     END_FOR
+                POP_TOP
+
+ 103            LOAD_FAST                4 (completed)
+                LOAD_ATTR               23 (append + NULL|self)
+                LOAD_FAST                0 (body)
+                LOAD_ATTR               16 (step)
+                CALL                     1
+                POP_TOP
+
+ 104            LOAD_FAST_LOAD_FAST     67 (completed, state)
+                STORE_ATTR               7 (steps_completed)
+
+ 105            LOAD_GLOBAL             24 (datetime)
+                LOAD_ATTR               26 (now)
+                PUSH_NULL
+                LOAD_GLOBAL             28 (UTC)
+                CALL                     1
+                LOAD_FAST                3 (state)
+                STORE_ATTR              15 (updated_at)
+
+ 106            LOAD_FAST                1 (current_user)
+                LOAD_ATTR               32 (device_id)
+                LOAD_FAST                3 (state)
+                STORE_ATTR              17 (updated_by_device_id)
+
+ 108            LOAD_GLOBAL             36 (audit_service)
+                LOAD_ATTR               38 (log_event)
+                PUSH_NULL
+
+ 109            LOAD_FAST                2 (db)
+
+ 110            LOAD_FAST                1 (current_user)
+                LOAD_ATTR                4 (user_id)
+
+ 111            LOAD_CONST              13 ('onboarding.step_completed')
+
+ 112            LOAD_FAST                1 (current_user)
+                LOAD_ATTR               32 (device_id)
+
+ 113            LOAD_CONST              14 ('step')
+                LOAD_FAST                0 (body)
+                LOAD_ATTR               16 (step)
+                BUILD_MAP                1
+
+ 108            LOAD_CONST              15 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                CALL_KW                  5
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L17:     SEND                     3 (to L20)
+       L18:     YIELD_VALUE              1
+       L19:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L17)
+       L20:     END_SEND
+                POP_TOP
+
+ 116            LOAD_FAST                0 (body)
+                LOAD_ATTR               16 (step)
+                LOAD_CONST              16 ('assistant_setup')
+                COMPARE_OP              88 (bool(==))
+                POP_JUMP_IF_FALSE       98 (to L29)
+
+ 117            LOAD_GLOBAL             40 (agent_service)
+                LOAD_ATTR               42 (get_or_create_default_agent)
+                PUSH_NULL
+                LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                LOAD_ATTR                4 (user_id)
+                CALL                     2
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L21:     SEND                     3 (to L24)
+       L22:     YIELD_VALUE              1
+       L23:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L21)
+       L24:     END_SEND
+                STORE_FAST               7 (agent)
+
+ 118            LOAD_FAST                7 (agent)
+                LOAD_ATTR               44 (elevenlabs_agent_id)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        41 (to L29)
+
+ 119            LOAD_GLOBAL             40 (agent_service)
+                LOAD_ATTR               46 (ensure_elevenlabs_agent)
+                PUSH_NULL
+
+ 120            LOAD_FAST_LOAD_FAST     39 (db, agent)
+                LOAD_FAST                1 (current_user)
+                LOAD_ATTR                4 (user_id)
+
+ 119            CALL                     3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L25:     SEND                     3 (to L28)
+       L26:     YIELD_VALUE              1
+       L27:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L25)
+       L28:     END_SEND
+                POP_TOP
+
+ 123   L29:     LOAD_FAST                0 (body)
+                LOAD_ATTR               16 (step)
+                LOAD_CONST              17 ('onboarding_complete')
+                COMPARE_OP              88 (bool(==))
+                POP_JUMP_IF_FALSE       90 (to L34)
+
+ 124            LOAD_CONST              17 ('onboarding_complete')
+                LOAD_FAST                3 (state)
+                STORE_ATTR              24 (current_step)
+
+ 125            LOAD_GLOBAL             24 (datetime)
+                LOAD_ATTR               26 (now)
+                PUSH_NULL
+                LOAD_GLOBAL             28 (UTC)
+                CALL                     1
+                LOAD_FAST                3 (state)
+                STORE_ATTR               4 (completed_at)
+
+ 126            LOAD_GLOBAL             36 (audit_service)
+                LOAD_ATTR               38 (log_event)
+                PUSH_NULL
+
+ 127            LOAD_FAST                2 (db)
+
+ 128            LOAD_FAST                1 (current_user)
+                LOAD_ATTR                4 (user_id)
+
+ 129            LOAD_CONST              18 ('onboarding.completed')
+
+ 130            LOAD_FAST                1 (current_user)
+                LOAD_ATTR               32 (device_id)
+
+ 126            LOAD_CONST              19 (('owner_user_id', 'event_type', 'actor_id'))
+                CALL_KW                  4
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L30:     SEND                     3 (to L33)
+       L31:     YIELD_VALUE              1
+       L32:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L30)
+       L33:     END_SEND
+                POP_TOP
+                JUMP_FORWARD            34 (to L35)
+
+ 133   L34:     LOAD_GLOBAL             51 (_next_step + NULL)
+                LOAD_FAST                0 (body)
+                LOAD_ATTR               16 (step)
+                CALL                     1
+                STORE_FAST               8 (next_s)
+
+ 134            LOAD_FAST                8 (next_s)
+                TO_BOOL
+                POP_JUMP_IF_FALSE        6 (to L35)
+
+ 135            LOAD_FAST_LOAD_FAST    131 (next_s, state)
+                STORE_ATTR              24 (current_step)
+
+ 137   L35:     LOAD_FAST                2 (db)
+                LOAD_ATTR               53 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L36:     SEND                     3 (to L39)
+       L37:     YIELD_VALUE              1
+       L38:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L36)
+       L39:     END_SEND
+                POP_TOP
+
+ 138            LOAD_GLOBAL             11 (_build_response + NULL)
+                LOAD_FAST                3 (state)
+                CALL                     1
+                RETURN_VALUE
+
+  79   L40:     CLEANUP_THROW
+       L41:     EXTENDED_ARG             2
+                JUMP_BACKWARD_NO_INTERRUPT 673 (to L5)
+
+ 108   L42:     CLEANUP_THROW
+       L43:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 297 (to L20)
+
+ 117   L44:     CLEANUP_THROW
+       L45:     JUMP_BACKWARD_NO_INTERRUPT 243 (to L24)
+
+ 119   L46:     CLEANUP_THROW
+       L47:     JUMP_BACKWARD_NO_INTERRUPT 187 (to L28)
+
+ 126   L48:     CLEANUP_THROW
+       L49:     JUMP_BACKWARD_NO_INTERRUPT 84 (to L33)
+
+ 137   L50:     CLEANUP_THROW
+       L51:     JUMP_BACKWARD_NO_INTERRUPT 27 (to L39)
+
+  --   L52:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L52 [0] lasti
+  L3 to L4 -> L40 [2]
+  L4 to L14 -> L52 [0] lasti
+  L15 to L18 -> L52 [0] lasti
+  L18 to L19 -> L42 [2]
+  L19 to L22 -> L52 [0] lasti
+  L22 to L23 -> L44 [2]
+  L23 to L26 -> L52 [0] lasti
+  L26 to L27 -> L46 [2]
+  L27 to L31 -> L52 [0] lasti
+  L31 to L32 -> L48 [2]
+  L32 to L37 -> L52 [0] lasti
+  L37 to L38 -> L50 [2]
+  L38 to L41 -> L52 [0] lasti
+  L42 to L43 -> L52 [0] lasti
+  L44 to L45 -> L52 [0] lasti
+  L46 to L47 -> L52 [0] lasti
+  L48 to L49 -> L52 [0] lasti
+  L50 to L51 -> L52 [0] lasti

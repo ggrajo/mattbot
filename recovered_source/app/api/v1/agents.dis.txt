@@ -1,0 +1,1653 @@
+# Bytecode dump of: agents.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\api\v1\agents.py
+# co_names: ('__doc__', '__future__', 'annotations', 'uuid', 'typing', 'TYPE_CHECKING', 'app.models.agent', 'Agent', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.core.rate_limiter', 'check_rate_limit', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.schemas.agents', 'AgentListResponse', 'AgentResponse', 'CreateDefaultAgentRequest', 'UpdateAgentRequest', 'VoiceSelection', 'app.services', 'agent_service', 'router', '_agent_to_response', 'get', 'list_agents', 'post', 'create_default_agent', 'sync_default_agent', 'patch', 'update_agent')
+# co_consts (strings): ['Agent management endpoints.', '', '/default', '/default/sync', '/{agent_id}']
+
+# DOCSTRING: """Agent management endpoints."""
+# --- Nested code object: _agent_to_response ---
+    # DOCSTRING: """Map Agent ORM object to AgentResponse, never exposing system prompt."""
+    # co_names: ('config', 'voice_id', 'VoiceSelection', 'str', 'AgentResponse', 'id', 'display_name', 'function_type', 'is_default', 'status', 'user_instructions', 'greeting_instructions', 'revision', 'created_at')
+    # co_varnames: ('agent', 'config', 'voice')
+     31           RESUME                   0
+    
+     33           LOAD_FAST                0 (agent)
+                  LOAD_ATTR                0 (config)
+                  STORE_FAST               1 (config)
+    
+     34           LOAD_CONST               1 (None)
+                  STORE_FAST               2 (voice)
+    
+     35           LOAD_FAST                1 (config)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       45 (to L1)
+                  LOAD_FAST                1 (config)
+                  LOAD_ATTR                2 (voice_id)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       28 (to L1)
+    
+     36           LOAD_GLOBAL              5 (VoiceSelection + NULL)
+                  LOAD_GLOBAL              7 (str + NULL)
+                  LOAD_FAST                1 (config)
+                  LOAD_ATTR                2 (voice_id)
+                  CALL                     1
+                  LOAD_CONST               2 (('voice_id',))
+                  CALL_KW                  1
+                  STORE_FAST               2 (voice)
+    
+     38   L1:     LOAD_GLOBAL              9 (AgentResponse + NULL)
+    
+     39           LOAD_GLOBAL              7 (str + NULL)
+                  LOAD_FAST                0 (agent)
+                  LOAD_ATTR               10 (id)
+                  CALL                     1
+    
+     40           LOAD_FAST                0 (agent)
+                  LOAD_ATTR               12 (display_name)
+    
+     41           LOAD_FAST                0 (agent)
+                  LOAD_ATTR               14 (function_type)
+    
+     42           LOAD_FAST                0 (agent)
+                  LOAD_ATTR               16 (is_default)
+    
+     43           LOAD_FAST                0 (agent)
+                  LOAD_ATTR               18 (status)
+    
+     44           LOAD_FAST                2 (voice)
+    
+     45           LOAD_FAST                1 (config)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       12 (to L2)
+                  LOAD_FAST                1 (config)
+                  LOAD_ATTR               20 (user_instructions)
+                  JUMP_FORWARD             1 (to L3)
+          L2:     LOAD_CONST               1 (None)
+    
+     46   L3:     LOAD_FAST                1 (config)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       12 (to L4)
+                  LOAD_FAST                1 (config)
+                  LOAD_ATTR               22 (greeting_instructions)
+                  JUMP_FORWARD             1 (to L5)
+          L4:     LOAD_CONST               1 (None)
+    
+     47   L5:     LOAD_FAST                1 (config)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       12 (to L6)
+                  LOAD_FAST                1 (config)
+                  LOAD_ATTR               24 (revision)
+                  JUMP_FORWARD             1 (to L7)
+          L6:     LOAD_CONST               3 (1)
+    
+     48   L7:     LOAD_FAST                0 (agent)
+                  LOAD_ATTR               26 (created_at)
+    
+     38           LOAD_CONST               4 (('id', 'display_name', 'function_type', 'is_default', 'status', 'voice', 'user_instructions', 'greeting_instructions', 'revision', 'created_at'))
+                  CALL_KW                 10
+                  RETURN_VALUE
+    
+# --- Nested code object: list_agents ---
+    # co_names: ('agent_service', 'get_agents_for_user', 'user_id', 'AgentListResponse', '_agent_to_response')
+    # co_varnames: ('current_user', 'db', 'agents', 'a')
+      52            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      57            LOAD_GLOBAL              0 (agent_service)
+                    LOAD_ATTR                2 (get_agents_for_user)
+                    PUSH_NULL
+                    LOAD_FAST_LOAD_FAST     16 (db, current_user)
+                    LOAD_ATTR                4 (user_id)
+                    CALL                     2
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               2 (agents)
+    
+      58            LOAD_GLOBAL              7 (AgentListResponse + NULL)
+                    LOAD_FAST                2 (agents)
+                    GET_ITER
+                    LOAD_FAST_AND_CLEAR      3 (a)
+                    SWAP                     2
+            L6:     BUILD_LIST               0
+                    SWAP                     2
+                    GET_ITER
+            L7:     FOR_ITER                14 (to L8)
+                    STORE_FAST               3 (a)
+                    LOAD_GLOBAL              9 (_agent_to_response + NULL)
+                    LOAD_FAST                3 (a)
+                    CALL                     1
+                    LIST_APPEND              2
+                    JUMP_BACKWARD           16 (to L7)
+            L8:     END_FOR
+                    POP_TOP
+            L9:     SWAP                     2
+                    STORE_FAST               3 (a)
+                    LOAD_CONST               1 (('items',))
+                    CALL_KW                  1
+                    RETURN_VALUE
+    
+      57   L10:     CLEANUP_THROW
+           L11:     JUMP_BACKWARD_NO_INTERRUPT 39 (to L5)
+    
+      --   L12:     SWAP                     2
+                    POP_TOP
+    
+      58            SWAP                     2
+                    STORE_FAST               3 (a)
+                    RERAISE                  0
+    
+      --   L13:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L13 [0] lasti
+      L3 to L4 -> L10 [2]
+      L4 to L6 -> L13 [0] lasti
+      L6 to L9 -> L12 [4]
+      L9 to L11 -> L13 [0] lasti
+      L12 to L13 -> L13 [0] lasti
+    
+# --- Nested code object: create_default_agent ---
+    # co_names: ('check_rate_limit', 'user_id', 'settings', 'RATE_LIMIT_API_WRITE_MAX', 'RATE_LIMIT_API_WRITE_WINDOW', 'AppError', 'voice_id', 'uuid', 'UUID', 'ValueError', 'agent_service', 'get_or_create_default_agent', 'display_name', 'user_instructions', 'commit', '_agent_to_response')
+    # co_varnames: ('body', 'current_user', 'db', 'allowed', '_', 'voice_id', 'err', 'agent')
+      61            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      67            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+      68            LOAD_CONST               1 ('agents:create:')
+                    LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user_id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+      69            LOAD_GLOBAL              4 (settings)
+                    LOAD_ATTR                6 (RATE_LIMIT_API_WRITE_MAX)
+    
+      70            LOAD_GLOBAL              4 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_WINDOW)
+    
+      67            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   52 (allowed, _)
+    
+      72            LOAD_FAST                3 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        13 (to L6)
+    
+      73            LOAD_GLOBAL             11 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    CALL                     3
+                    RAISE_VARARGS            1
+    
+      75    L6:     LOAD_CONST               0 (None)
+                    STORE_FAST               5 (voice_id)
+    
+      76            LOAD_FAST                0 (body)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       50 (to L9)
+                    LOAD_FAST                0 (body)
+                    LOAD_ATTR               12 (voice_id)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       33 (to L9)
+    
+      77    L7:     NOP
+    
+      78    L8:     LOAD_GLOBAL             14 (uuid)
+                    LOAD_ATTR               16 (UUID)
+                    PUSH_NULL
+                    LOAD_FAST                0 (body)
+                    LOAD_ATTR               12 (voice_id)
+                    CALL                     1
+                    STORE_FAST               5 (voice_id)
+    
+      82    L9:     LOAD_GLOBAL             20 (agent_service)
+                    LOAD_ATTR               22 (get_or_create_default_agent)
+                    PUSH_NULL
+    
+      83            LOAD_FAST                2 (db)
+    
+      84            LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user_id)
+    
+      85            LOAD_FAST                0 (body)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       12 (to L10)
+                    LOAD_FAST                0 (body)
+                    LOAD_ATTR               24 (display_name)
+                    JUMP_FORWARD             1 (to L11)
+           L10:     LOAD_CONST               0 (None)
+    
+      86   L11:     LOAD_FAST                5 (voice_id)
+    
+      87            LOAD_FAST                0 (body)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       12 (to L12)
+                    LOAD_FAST                0 (body)
+                    LOAD_ATTR               26 (user_instructions)
+                    JUMP_FORWARD             1 (to L13)
+           L12:     LOAD_CONST               0 (None)
+    
+      82   L13:     LOAD_CONST               9 (('user_id', 'display_name', 'voice_id', 'user_instructions'))
+                    CALL_KW                  5
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L14:     SEND                     3 (to L17)
+           L15:     YIELD_VALUE              1
+           L16:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+           L17:     END_SEND
+                    STORE_FAST               7 (agent)
+    
+      89            LOAD_FAST                2 (db)
+                    LOAD_ATTR               29 (commit + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L18:     SEND                     3 (to L21)
+           L19:     YIELD_VALUE              1
+           L20:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L18)
+           L21:     END_SEND
+                    POP_TOP
+    
+      90            LOAD_GLOBAL             31 (_agent_to_response + NULL)
+                    LOAD_FAST                7 (agent)
+                    CALL                     1
+                    RETURN_VALUE
+    
+      67   L22:     CLEANUP_THROW
+           L23:     JUMP_BACKWARD_NO_INTERRUPT 200 (to L5)
+    
+      --   L24:     PUSH_EXC_INFO
+    
+      79            LOAD_GLOBAL             18 (ValueError)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       19 (to L27)
+                    STORE_FAST               6 (err)
+    
+      80   L25:     LOAD_GLOBAL             11 (AppError + NULL)
+                    LOAD_CONST               6 ('INVALID_VOICE_ID')
+                    LOAD_CONST               7 ('Invalid voice_id format')
+                    LOAD_CONST               8 (400)
+                    CALL                     3
+                    LOAD_FAST                6 (err)
+                    RAISE_VARARGS            2
+    
+      --   L26:     LOAD_CONST               0 (None)
+                    STORE_FAST               6 (err)
+                    DELETE_FAST              6 (err)
+                    RERAISE                  1
+    
+      79   L27:     RERAISE                  0
+    
+      --   L28:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+      82   L29:     CLEANUP_THROW
+           L30:     JUMP_BACKWARD_NO_INTERRUPT 73 (to L17)
+    
+      89   L31:     CLEANUP_THROW
+           L32:     JUMP_BACKWARD_NO_INTERRUPT 51 (to L21)
+    
+      --   L33:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L33 [0] lasti
+      L3 to L4 -> L22 [2]
+      L4 to L7 -> L33 [0] lasti
+      L8 to L9 -> L24 [0]
+      L9 to L15 -> L33 [0] lasti
+      L15 to L16 -> L29 [2]
+      L16 to L19 -> L33 [0] lasti
+      L19 to L20 -> L31 [2]
+      L20 to L23 -> L33 [0] lasti
+      L24 to L25 -> L28 [1] lasti
+      L25 to L26 -> L26 [1] lasti
+      L26 to L28 -> L28 [1] lasti
+      L28 to L30 -> L33 [0] lasti
+      L31 to L32 -> L33 [0] lasti
+    
+# --- Nested code object: sync_default_agent ---
+    # DOCSTRING: """Create or update the ElevenLabs agent for the user's default agent."""
+    # co_names: ('check_rate_limit', 'user_id', 'settings', 'RATE_LIMIT_API_WRITE_MAX', 'RATE_LIMIT_API_WRITE_WINDOW', 'AppError', 'agent_service', 'get_or_create_default_agent', 'ensure_elevenlabs_agent', 'commit', '_agent_to_response')
+    # co_varnames: ('current_user', 'db', 'allowed', '_', 'agent', 'el_id')
+      93            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      99            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+     100            LOAD_CONST               1 ('agents:sync:')
+                    LOAD_FAST                0 (current_user)
+                    LOAD_ATTR                2 (user_id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+     101            LOAD_GLOBAL              4 (settings)
+                    LOAD_ATTR                6 (RATE_LIMIT_API_WRITE_MAX)
+    
+     102            LOAD_GLOBAL              4 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_WINDOW)
+    
+      99            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               3 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   35 (allowed, _)
+    
+     104            LOAD_FAST                2 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        13 (to L6)
+    
+     105            LOAD_GLOBAL             11 (AppError + NULL)
+                    LOAD_CONST               4 ('RATE_LIMITED')
+                    LOAD_CONST               5 ('Too many requests')
+                    LOAD_CONST               6 (429)
+                    CALL                     3
+                    RAISE_VARARGS            1
+    
+     107    L6:     LOAD_GLOBAL             12 (agent_service)
+                    LOAD_ATTR               14 (get_or_create_default_agent)
+                    PUSH_NULL
+    
+     108            LOAD_FAST_LOAD_FAST     16 (db, current_user)
+                    LOAD_ATTR                2 (user_id)
+    
+     107            LOAD_CONST               7 (('user_id',))
+                    CALL_KW                  2
+                    GET_AWAITABLE            0
+                    LOAD_CONST               3 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    STORE_FAST               4 (agent)
+    
+     111            LOAD_GLOBAL             12 (agent_service)
+                    LOAD_ATTR               16 (ensure_elevenlabs_agent)
+                    PUSH_NULL
+    
+     112            LOAD_FAST_LOAD_FAST     20 (db, agent)
+                    LOAD_FAST                0 (current_user)
+                    LOAD_ATTR                2 (user_id)
+    
+     111            CALL                     3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               3 (None)
+           L11:     SEND                     3 (to L14)
+           L12:     YIELD_VALUE              1
+           L13:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+           L14:     END_SEND
+                    STORE_FAST               5 (el_id)
+    
+     114            LOAD_FAST                5 (el_id)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        13 (to L15)
+    
+     115            LOAD_GLOBAL             11 (AppError + NULL)
+    
+     116            LOAD_CONST               8 ('ELEVENLABS_SYNC_FAILED')
+    
+     117            LOAD_CONST               9 ('Failed to provision or update ElevenLabs agent')
+    
+     118            LOAD_CONST              10 (502)
+    
+     115            CALL                     3
+                    RAISE_VARARGS            1
+    
+     121   L15:     LOAD_FAST                1 (db)
+                    LOAD_ATTR               19 (commit + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               3 (None)
+           L16:     SEND                     3 (to L19)
+           L17:     YIELD_VALUE              1
+           L18:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L16)
+           L19:     END_SEND
+                    POP_TOP
+    
+     122            LOAD_GLOBAL             21 (_agent_to_response + NULL)
+                    LOAD_FAST                4 (agent)
+                    CALL                     1
+                    RETURN_VALUE
+    
+      99   L20:     CLEANUP_THROW
+           L21:     JUMP_BACKWARD_NO_INTERRUPT 160 (to L5)
+    
+     107   L22:     CLEANUP_THROW
+           L23:     JUMP_BACKWARD_NO_INTERRUPT 102 (to L10)
+    
+     111   L24:     CLEANUP_THROW
+           L25:     JUMP_BACKWARD_NO_INTERRUPT 63 (to L14)
+    
+     121   L26:     CLEANUP_THROW
+           L27:     JUMP_BACKWARD_NO_INTERRUPT 21 (to L19)
+    
+      --   L28:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L28 [0] lasti
+      L3 to L4 -> L20 [2]
+      L4 to L8 -> L28 [0] lasti
+      L8 to L9 -> L22 [2]
+      L9 to L12 -> L28 [0] lasti
+      L12 to L13 -> L24 [2]
+      L13 to L17 -> L28 [0] lasti
+      L17 to L18 -> L26 [2]
+      L18 to L21 -> L28 [0] lasti
+      L22 to L23 -> L28 [0] lasti
+      L24 to L25 -> L28 [0] lasti
+      L26 to L27 -> L28 [0] lasti
+    
+# --- Nested code object: update_agent ---
+    # co_names: ('check_rate_limit', 'user_id', 'settings', 'RATE_LIMIT_API_STANDARD_MAX', 'RATE_LIMIT_API_STANDARD_WINDOW', 'AppError', 'uuid', 'UUID', 'ValueError', 'agent_service', 'update_agent', 'display_name', 'voice_id', 'user_instructions', 'greeting_instructions', 'expected_revision', 'ensure_elevenlabs_agent', 'Exception', 'logging', 'getLogger', '__name__', 'exception', 'commit', '_agent_to_response')
+    # co_varnames: ('agent_id', 'body', 'current_user', 'db', 'allowed', '_', 'aid', 'err', 'agent', 'logging')
+     125            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     132            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+     133            LOAD_CONST               1 ('agents:update:')
+                    LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user_id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+     134            LOAD_GLOBAL              4 (settings)
+                    LOAD_ATTR                6 (RATE_LIMIT_API_STANDARD_MAX)
+    
+     135            LOAD_GLOBAL              4 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_STANDARD_WINDOW)
+    
+     132            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   69 (allowed, _)
+    
+     137            LOAD_FAST                4 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        13 (to L6)
+    
+     138            LOAD_GLOBAL             11 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    CALL                     3
+                    RAISE_VARARGS            1
+    
+     140    L6:     NOP
+    
+     141    L7:     LOAD_GLOBAL             12 (uuid)
+                    LOAD_ATTR               14 (UUID)
+                    PUSH_NULL
+                    LOAD_FAST                0 (agent_id)
+                    CALL                     1
+                    STORE_FAST               6 (aid)
+    
+     145    L8:     LOAD_GLOBAL             18 (agent_service)
+                    LOAD_ATTR               20 (update_agent)
+                    PUSH_NULL
+    
+     146            LOAD_FAST                3 (db)
+    
+     147            LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user_id)
+    
+     148            LOAD_FAST                6 (aid)
+    
+     149            LOAD_FAST                1 (body)
+                    LOAD_ATTR               22 (display_name)
+    
+     150            LOAD_FAST                1 (body)
+                    LOAD_ATTR               24 (voice_id)
+    
+     151            LOAD_FAST                1 (body)
+                    LOAD_ATTR               26 (user_instructions)
+    
+     152            LOAD_FAST                1 (body)
+                    LOAD_ATTR               28 (greeting_instructions)
+    
+     153            LOAD_FAST                1 (body)
+                    LOAD_ATTR               30 (expected_revision)
+    
+     145            LOAD_CONST               9 (('user_id', 'agent_id', 'display_name', 'voice_id', 'user_instructions', 'greeting_instructions', 'expected_revision'))
+                    CALL_KW                  8
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L9:     SEND                     3 (to L12)
+           L10:     YIELD_VALUE              1
+           L11:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+           L12:     END_SEND
+                    STORE_FAST               8 (agent)
+    
+     157   L13:     NOP
+    
+     158   L14:     LOAD_GLOBAL             18 (agent_service)
+                    LOAD_ATTR               32 (ensure_elevenlabs_agent)
+                    PUSH_NULL
+    
+     159            LOAD_FAST_LOAD_FAST     56 (db, agent)
+                    LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user_id)
+    
+     158            CALL                     3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L15:     SEND                     3 (to L18)
+           L16:     YIELD_VALUE              1
+           L17:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+           L18:     END_SEND
+                    POP_TOP
+    
+     167   L19:     LOAD_FAST                3 (db)
+                    LOAD_ATTR               45 (commit + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L20:     SEND                     3 (to L23)
+           L21:     YIELD_VALUE              1
+           L22:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L20)
+           L23:     END_SEND
+                    POP_TOP
+    
+     168            LOAD_GLOBAL             47 (_agent_to_response + NULL)
+                    LOAD_FAST                8 (agent)
+                    CALL                     1
+                    RETURN_VALUE
+    
+     132   L24:     CLEANUP_THROW
+           L25:     JUMP_BACKWARD_NO_INTERRUPT 221 (to L5)
+    
+      --   L26:     PUSH_EXC_INFO
+    
+     142            LOAD_GLOBAL             16 (ValueError)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       19 (to L29)
+                    STORE_FAST               7 (err)
+    
+     143   L27:     LOAD_GLOBAL             11 (AppError + NULL)
+                    LOAD_CONST               6 ('INVALID_AGENT_ID')
+                    LOAD_CONST               7 ('Invalid agent_id format')
+                    LOAD_CONST               8 (400)
+                    CALL                     3
+                    LOAD_FAST                7 (err)
+                    RAISE_VARARGS            2
+    
+      --   L28:     LOAD_CONST               0 (None)
+                    STORE_FAST               7 (err)
+                    DELETE_FAST              7 (err)
+                    RERAISE                  1
+    
+     142   L29:     RERAISE                  0
+    
+      --   L30:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+     145   L31:     CLEANUP_THROW
+           L32:     JUMP_BACKWARD_NO_INTERRUPT 115 (to L12)
+    
+     158   L33:     CLEANUP_THROW
+           L34:     JUMP_BACKWARD_NO_INTERRUPT 75 (to L18)
+    
+      --   L35:     PUSH_EXC_INFO
+    
+     161            LOAD_GLOBAL             34 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       43 (to L37)
+                    POP_TOP
+    
+     162            LOAD_CONST              10 (0)
+                    LOAD_CONST               0 (None)
+                    IMPORT_NAME             18 (logging)
+                    STORE_FAST               9 (logging)
+    
+     163            LOAD_FAST                9 (logging)
+                    LOAD_ATTR               39 (getLogger + NULL|self)
+                    LOAD_GLOBAL             40 (__name__)
+                    CALL                     1
+                    LOAD_ATTR               43 (exception + NULL|self)
+    
+     164            LOAD_CONST              11 ('Failed to sync ElevenLabs agent after agent update')
+    
+     163            CALL                     1
+                    POP_TOP
+           L36:     POP_EXCEPT
+                    JUMP_BACKWARD_NO_INTERRUPT 125 (to L19)
+    
+     161   L37:     RERAISE                  0
+    
+      --   L38:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+     167   L39:     CLEANUP_THROW
+           L40:     JUMP_BACKWARD_NO_INTERRUPT 109 (to L23)
+    
+      --   L41:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L41 [0] lasti
+      L3 to L4 -> L24 [2]
+      L4 to L6 -> L41 [0] lasti
+      L7 to L8 -> L26 [0]
+      L8 to L10 -> L41 [0] lasti
+      L10 to L11 -> L31 [2]
+      L11 to L13 -> L41 [0] lasti
+      L14 to L16 -> L35 [0]
+      L16 to L17 -> L33 [2]
+      L17 to L19 -> L35 [0]
+      L19 to L21 -> L41 [0] lasti
+      L21 to L22 -> L39 [2]
+      L22 to L25 -> L41 [0] lasti
+      L26 to L27 -> L30 [1] lasti
+      L27 to L28 -> L28 [1] lasti
+      L28 to L30 -> L30 [1] lasti
+      L30 to L32 -> L41 [0] lasti
+      L33 to L34 -> L35 [0]
+      L35 to L36 -> L38 [1] lasti
+      L36 to L37 -> L41 [0] lasti
+      L37 to L38 -> L38 [1] lasti
+      L38 to L40 -> L41 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'uuid', 'typing', 'TYPE_CHECKING', 'app.models.agent', 'Agent', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.core.rate_limiter', 'check_rate_limit', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.schemas.agents', 'AgentListResponse', 'AgentResponse', 'CreateDefaultAgentRequest', 'UpdateAgentRequest', 'VoiceSelection', 'app.services', 'agent_service', 'router', '_agent_to_response', 'get', 'list_agents', 'post', 'create_default_agent', 'sync_default_agent', 'patch', 'update_agent')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Agent management endpoints.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (uuid)
+              STORE_NAME               3 (uuid)
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('TYPE_CHECKING',))
+              IMPORT_NAME              4 (typing)
+              IMPORT_FROM              5 (TYPE_CHECKING)
+              STORE_NAME               5 (TYPE_CHECKING)
+              POP_TOP
+
+  8           LOAD_NAME                5 (TYPE_CHECKING)
+              TO_BOOL
+              POP_JUMP_IF_FALSE        6 (to L1)
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('Agent',))
+              IMPORT_NAME              6 (app.models.agent)
+              IMPORT_FROM              7 (Agent)
+              STORE_NAME               7 (Agent)
+              POP_TOP
+
+ 11   L1:     LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('APIRouter', 'Depends'))
+              IMPORT_NAME              8 (fastapi)
+              IMPORT_FROM              9 (APIRouter)
+              STORE_NAME               9 (APIRouter)
+              IMPORT_FROM             10 (Depends)
+              STORE_NAME              10 (Depends)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('AsyncSession',))
+              IMPORT_NAME             11 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM             12 (AsyncSession)
+              STORE_NAME              12 (AsyncSession)
+              POP_TOP
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('settings',))
+              IMPORT_NAME             13 (app.config)
+              IMPORT_FROM             14 (settings)
+              STORE_NAME              14 (settings)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('CurrentUser', 'get_current_user'))
+              IMPORT_NAME             15 (app.core.dependencies)
+              IMPORT_FROM             16 (CurrentUser)
+              STORE_NAME              16 (CurrentUser)
+              IMPORT_FROM             17 (get_current_user)
+              STORE_NAME              17 (get_current_user)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST              10 (('check_rate_limit',))
+              IMPORT_NAME             18 (app.core.rate_limiter)
+              IMPORT_FROM             19 (check_rate_limit)
+              STORE_NAME              19 (check_rate_limit)
+              POP_TOP
+
+ 17           LOAD_CONST               1 (0)
+              LOAD_CONST              11 (('get_db',))
+              IMPORT_NAME             20 (app.database)
+              IMPORT_FROM             21 (get_db)
+              STORE_NAME              21 (get_db)
+              POP_TOP
+
+ 18           LOAD_CONST               1 (0)
+              LOAD_CONST              12 (('AppError',))
+              IMPORT_NAME             22 (app.middleware.error_handler)
+              IMPORT_FROM             23 (AppError)
+              STORE_NAME              23 (AppError)
+              POP_TOP
+
+ 19           LOAD_CONST               1 (0)
+              LOAD_CONST              13 (('AgentListResponse', 'AgentResponse', 'CreateDefaultAgentRequest', 'UpdateAgentRequest', 'VoiceSelection'))
+              IMPORT_NAME             24 (app.schemas.agents)
+              IMPORT_FROM             25 (AgentListResponse)
+              STORE_NAME              25 (AgentListResponse)
+              IMPORT_FROM             26 (AgentResponse)
+              STORE_NAME              26 (AgentResponse)
+              IMPORT_FROM             27 (CreateDefaultAgentRequest)
+              STORE_NAME              27 (CreateDefaultAgentRequest)
+              IMPORT_FROM             28 (UpdateAgentRequest)
+              STORE_NAME              28 (UpdateAgentRequest)
+              IMPORT_FROM             29 (VoiceSelection)
+              STORE_NAME              29 (VoiceSelection)
+              POP_TOP
+
+ 26           LOAD_CONST               1 (0)
+              LOAD_CONST              14 (('agent_service',))
+              IMPORT_NAME             30 (app.services)
+              IMPORT_FROM             31 (agent_service)
+              STORE_NAME              31 (agent_service)
+              POP_TOP
+
+ 28           LOAD_NAME                9 (APIRouter)
+              PUSH_NULL
+              CALL                     0
+              STORE_NAME              32 (router)
+
+ 31           LOAD_CONST              25 (('agent', 'Agent', 'return', 'AgentResponse'))
+              LOAD_CONST              15 (<code object _agent_to_response at 0x0000024C0FBCEB50, file "D:\fluence\Github\mattbot\backend\app\api\v1\agents.py", line 31>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              33 (_agent_to_response)
+
+ 52           LOAD_NAME               32 (router)
+              LOAD_ATTR               69 (get + NULL|self)
+              LOAD_CONST              16 ('')
+              LOAD_NAME               25 (AgentListResponse)
+              LOAD_CONST              17 (('response_model',))
+              CALL_KW                  2
+
+ 54           LOAD_NAME               10 (Depends)
+              PUSH_NULL
+              LOAD_NAME               17 (get_current_user)
+              CALL                     1
+
+ 55           LOAD_NAME               10 (Depends)
+              PUSH_NULL
+              LOAD_NAME               21 (get_db)
+              CALL                     1
+
+ 53           BUILD_TUPLE              2
+
+ 54           NOP
+
+ 53           NOP
+
+ 55           NOP
+
+ 53           NOP
+
+ 56           NOP
+
+ 53           LOAD_CONST              26 (('current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'AgentListResponse'))
+              LOAD_CONST              18 (<code object list_agents at 0x0000024C0EC47330, file "D:\fluence\Github\mattbot\backend\app\api\v1\agents.py", line 52>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 52           CALL                     0
+
+ 53           STORE_NAME              35 (list_agents)
+
+ 61           LOAD_NAME               32 (router)
+              LOAD_ATTR               73 (post + NULL|self)
+              LOAD_CONST              19 ('/default')
+              LOAD_NAME               26 (AgentResponse)
+              LOAD_CONST              17 (('response_model',))
+              CALL_KW                  2
+
+ 63           LOAD_CONST               3 (None)
+
+ 64           LOAD_NAME               10 (Depends)
+              PUSH_NULL
+              LOAD_NAME               17 (get_current_user)
+              CALL                     1
+
+ 65           LOAD_NAME               10 (Depends)
+              PUSH_NULL
+              LOAD_NAME               21 (get_db)
+              CALL                     1
+
+ 62           BUILD_TUPLE              3
+
+ 63           NOP
+
+ 62           NOP
+
+ 64           NOP
+
+ 62           NOP
+
+ 65           NOP
+
+ 62           NOP
+
+ 66           NOP
+
+ 62           LOAD_CONST              27 (('body', 'CreateDefaultAgentRequest | None', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'AgentResponse'))
+              LOAD_CONST              20 (<code object create_default_agent at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\api\v1\agents.py", line 61>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 61           CALL                     0
+
+ 62           STORE_NAME              37 (create_default_agent)
+
+ 93           LOAD_NAME               32 (router)
+              LOAD_ATTR               73 (post + NULL|self)
+              LOAD_CONST              21 ('/default/sync')
+              LOAD_NAME               26 (AgentResponse)
+              LOAD_CONST              17 (('response_model',))
+              CALL_KW                  2
+
+ 95           LOAD_NAME               10 (Depends)
+              PUSH_NULL
+              LOAD_NAME               17 (get_current_user)
+              CALL                     1
+
+ 96           LOAD_NAME               10 (Depends)
+              PUSH_NULL
+              LOAD_NAME               21 (get_db)
+              CALL                     1
+
+ 94           BUILD_TUPLE              2
+
+ 95           NOP
+
+ 94           NOP
+
+ 96           NOP
+
+ 94           NOP
+
+ 97           NOP
+
+ 94           LOAD_CONST              28 (('current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'AgentResponse'))
+              LOAD_CONST              22 (<code object sync_default_agent at 0x0000024C0FBE0410, file "D:\fluence\Github\mattbot\backend\app\api\v1\agents.py", line 93>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 93           CALL                     0
+
+ 94           STORE_NAME              38 (sync_default_agent)
+
+125           LOAD_NAME               32 (router)
+              LOAD_ATTR               79 (patch + NULL|self)
+              LOAD_CONST              23 ('/{agent_id}')
+              LOAD_NAME               26 (AgentResponse)
+              LOAD_CONST              17 (('response_model',))
+              CALL_KW                  2
+
+129           LOAD_NAME               10 (Depends)
+              PUSH_NULL
+              LOAD_NAME               17 (get_current_user)
+              CALL                     1
+
+130           LOAD_NAME               10 (Depends)
+              PUSH_NULL
+              LOAD_NAME               21 (get_db)
+              CALL                     1
+
+126           BUILD_TUPLE              2
+
+127           NOP
+
+126           NOP
+
+128           NOP
+
+126           NOP
+
+129           NOP
+
+126           NOP
+
+130           NOP
+
+126           NOP
+
+131           NOP
+
+126           LOAD_CONST              29 (('agent_id', 'str', 'body', 'UpdateAgentRequest', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'AgentResponse'))
+              LOAD_CONST              24 (<code object update_agent at 0x0000024C0FBE28A0, file "D:\fluence\Github\mattbot\backend\app\api\v1\agents.py", line 125>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+125           CALL                     0
+
+126           STORE_NAME              40 (update_agent)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object _agent_to_response at 0x0000024C0FBCEB50, file "D:\fluence\Github\mattbot\backend\app\api\v1\agents.py", line 31>:
+ 31           RESUME                   0
+
+ 33           LOAD_FAST                0 (agent)
+              LOAD_ATTR                0 (config)
+              STORE_FAST               1 (config)
+
+ 34           LOAD_CONST               1 (None)
+              STORE_FAST               2 (voice)
+
+ 35           LOAD_FAST                1 (config)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       45 (to L1)
+              LOAD_FAST                1 (config)
+              LOAD_ATTR                2 (voice_id)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       28 (to L1)
+
+ 36           LOAD_GLOBAL              5 (VoiceSelection + NULL)
+              LOAD_GLOBAL              7 (str + NULL)
+              LOAD_FAST                1 (config)
+              LOAD_ATTR                2 (voice_id)
+              CALL                     1
+              LOAD_CONST               2 (('voice_id',))
+              CALL_KW                  1
+              STORE_FAST               2 (voice)
+
+ 38   L1:     LOAD_GLOBAL              9 (AgentResponse + NULL)
+
+ 39           LOAD_GLOBAL              7 (str + NULL)
+              LOAD_FAST                0 (agent)
+              LOAD_ATTR               10 (id)
+              CALL                     1
+
+ 40           LOAD_FAST                0 (agent)
+              LOAD_ATTR               12 (display_name)
+
+ 41           LOAD_FAST                0 (agent)
+              LOAD_ATTR               14 (function_type)
+
+ 42           LOAD_FAST                0 (agent)
+              LOAD_ATTR               16 (is_default)
+
+ 43           LOAD_FAST                0 (agent)
+              LOAD_ATTR               18 (status)
+
+ 44           LOAD_FAST                2 (voice)
+
+ 45           LOAD_FAST                1 (config)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       12 (to L2)
+              LOAD_FAST                1 (config)
+              LOAD_ATTR               20 (user_instructions)
+              JUMP_FORWARD             1 (to L3)
+      L2:     LOAD_CONST               1 (None)
+
+ 46   L3:     LOAD_FAST                1 (config)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       12 (to L4)
+              LOAD_FAST                1 (config)
+              LOAD_ATTR               22 (greeting_instructions)
+              JUMP_FORWARD             1 (to L5)
+      L4:     LOAD_CONST               1 (None)
+
+ 47   L5:     LOAD_FAST                1 (config)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       12 (to L6)
+              LOAD_FAST                1 (config)
+              LOAD_ATTR               24 (revision)
+              JUMP_FORWARD             1 (to L7)
+      L6:     LOAD_CONST               3 (1)
+
+ 48   L7:     LOAD_FAST                0 (agent)
+              LOAD_ATTR               26 (created_at)
+
+ 38           LOAD_CONST               4 (('id', 'display_name', 'function_type', 'is_default', 'status', 'voice', 'user_instructions', 'greeting_instructions', 'revision', 'created_at'))
+              CALL_KW                 10
+              RETURN_VALUE
+
+Disassembly of <code object list_agents at 0x0000024C0EC47330, file "D:\fluence\Github\mattbot\backend\app\api\v1\agents.py", line 52>:
+  52            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  57            LOAD_GLOBAL              0 (agent_service)
+                LOAD_ATTR                2 (get_agents_for_user)
+                PUSH_NULL
+                LOAD_FAST_LOAD_FAST     16 (db, current_user)
+                LOAD_ATTR                4 (user_id)
+                CALL                     2
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               2 (agents)
+
+  58            LOAD_GLOBAL              7 (AgentListResponse + NULL)
+                LOAD_FAST                2 (agents)
+                GET_ITER
+                LOAD_FAST_AND_CLEAR      3 (a)
+                SWAP                     2
+        L6:     BUILD_LIST               0
+                SWAP                     2
+                GET_ITER
+        L7:     FOR_ITER                14 (to L8)
+                STORE_FAST               3 (a)
+                LOAD_GLOBAL              9 (_agent_to_response + NULL)
+                LOAD_FAST                3 (a)
+                CALL                     1
+                LIST_APPEND              2
+                JUMP_BACKWARD           16 (to L7)
+        L8:     END_FOR
+                POP_TOP
+        L9:     SWAP                     2
+                STORE_FAST               3 (a)
+                LOAD_CONST               1 (('items',))
+                CALL_KW                  1
+                RETURN_VALUE
+
+  57   L10:     CLEANUP_THROW
+       L11:     JUMP_BACKWARD_NO_INTERRUPT 39 (to L5)
+
+  --   L12:     SWAP                     2
+                POP_TOP
+
+  58            SWAP                     2
+                STORE_FAST               3 (a)
+                RERAISE                  0
+
+  --   L13:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L13 [0] lasti
+  L3 to L4 -> L10 [2]
+  L4 to L6 -> L13 [0] lasti
+  L6 to L9 -> L12 [4]
+  L9 to L11 -> L13 [0] lasti
+  L12 to L13 -> L13 [0] lasti
+
+Disassembly of <code object create_default_agent at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\api\v1\agents.py", line 61>:
+  61            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  67            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+  68            LOAD_CONST               1 ('agents:create:')
+                LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user_id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+  69            LOAD_GLOBAL              4 (settings)
+                LOAD_ATTR                6 (RATE_LIMIT_API_WRITE_MAX)
+
+  70            LOAD_GLOBAL              4 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_WINDOW)
+
+  67            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   52 (allowed, _)
+
+  72            LOAD_FAST                3 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        13 (to L6)
+
+  73            LOAD_GLOBAL             11 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                CALL                     3
+                RAISE_VARARGS            1
+
+  75    L6:     LOAD_CONST               0 (None)
+                STORE_FAST               5 (voice_id)
+
+  76            LOAD_FAST                0 (body)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       50 (to L9)
+                LOAD_FAST                0 (body)
+                LOAD_ATTR               12 (voice_id)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       33 (to L9)
+
+  77    L7:     NOP
+
+  78    L8:     LOAD_GLOBAL             14 (uuid)
+                LOAD_ATTR               16 (UUID)
+                PUSH_NULL
+                LOAD_FAST                0 (body)
+                LOAD_ATTR               12 (voice_id)
+                CALL                     1
+                STORE_FAST               5 (voice_id)
+
+  82    L9:     LOAD_GLOBAL             20 (agent_service)
+                LOAD_ATTR               22 (get_or_create_default_agent)
+                PUSH_NULL
+
+  83            LOAD_FAST                2 (db)
+
+  84            LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user_id)
+
+  85            LOAD_FAST                0 (body)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       12 (to L10)
+                LOAD_FAST                0 (body)
+                LOAD_ATTR               24 (display_name)
+                JUMP_FORWARD             1 (to L11)
+       L10:     LOAD_CONST               0 (None)
+
+  86   L11:     LOAD_FAST                5 (voice_id)
+
+  87            LOAD_FAST                0 (body)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       12 (to L12)
+                LOAD_FAST                0 (body)
+                LOAD_ATTR               26 (user_instructions)
+                JUMP_FORWARD             1 (to L13)
+       L12:     LOAD_CONST               0 (None)
+
+  82   L13:     LOAD_CONST               9 (('user_id', 'display_name', 'voice_id', 'user_instructions'))
+                CALL_KW                  5
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L14:     SEND                     3 (to L17)
+       L15:     YIELD_VALUE              1
+       L16:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+       L17:     END_SEND
+                STORE_FAST               7 (agent)
+
+  89            LOAD_FAST                2 (db)
+                LOAD_ATTR               29 (commit + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L18:     SEND                     3 (to L21)
+       L19:     YIELD_VALUE              1
+       L20:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L18)
+       L21:     END_SEND
+                POP_TOP
+
+  90            LOAD_GLOBAL             31 (_agent_to_response + NULL)
+                LOAD_FAST                7 (agent)
+                CALL                     1
+                RETURN_VALUE
+
+  67   L22:     CLEANUP_THROW
+       L23:     JUMP_BACKWARD_NO_INTERRUPT 200 (to L5)
+
+  --   L24:     PUSH_EXC_INFO
+
+  79            LOAD_GLOBAL             18 (ValueError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       19 (to L27)
+                STORE_FAST               6 (err)
+
+  80   L25:     LOAD_GLOBAL             11 (AppError + NULL)
+                LOAD_CONST               6 ('INVALID_VOICE_ID')
+                LOAD_CONST               7 ('Invalid voice_id format')
+                LOAD_CONST               8 (400)
+                CALL                     3
+                LOAD_FAST                6 (err)
+                RAISE_VARARGS            2
+
+  --   L26:     LOAD_CONST               0 (None)
+                STORE_FAST               6 (err)
+                DELETE_FAST              6 (err)
+                RERAISE                  1
+
+  79   L27:     RERAISE                  0
+
+  --   L28:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+  82   L29:     CLEANUP_THROW
+       L30:     JUMP_BACKWARD_NO_INTERRUPT 73 (to L17)
+
+  89   L31:     CLEANUP_THROW
+       L32:     JUMP_BACKWARD_NO_INTERRUPT 51 (to L21)
+
+  --   L33:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L33 [0] lasti
+  L3 to L4 -> L22 [2]
+  L4 to L7 -> L33 [0] lasti
+  L8 to L9 -> L24 [0]
+  L9 to L15 -> L33 [0] lasti
+  L15 to L16 -> L29 [2]
+  L16 to L19 -> L33 [0] lasti
+  L19 to L20 -> L31 [2]
+  L20 to L23 -> L33 [0] lasti
+  L24 to L25 -> L28 [1] lasti
+  L25 to L26 -> L26 [1] lasti
+  L26 to L28 -> L28 [1] lasti
+  L28 to L30 -> L33 [0] lasti
+  L31 to L32 -> L33 [0] lasti
+
+Disassembly of <code object sync_default_agent at 0x0000024C0FBE0410, file "D:\fluence\Github\mattbot\backend\app\api\v1\agents.py", line 93>:
+  93            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  99            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+ 100            LOAD_CONST               1 ('agents:sync:')
+                LOAD_FAST                0 (current_user)
+                LOAD_ATTR                2 (user_id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 101            LOAD_GLOBAL              4 (settings)
+                LOAD_ATTR                6 (RATE_LIMIT_API_WRITE_MAX)
+
+ 102            LOAD_GLOBAL              4 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_WINDOW)
+
+  99            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               3 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   35 (allowed, _)
+
+ 104            LOAD_FAST                2 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        13 (to L6)
+
+ 105            LOAD_GLOBAL             11 (AppError + NULL)
+                LOAD_CONST               4 ('RATE_LIMITED')
+                LOAD_CONST               5 ('Too many requests')
+                LOAD_CONST               6 (429)
+                CALL                     3
+                RAISE_VARARGS            1
+
+ 107    L6:     LOAD_GLOBAL             12 (agent_service)
+                LOAD_ATTR               14 (get_or_create_default_agent)
+                PUSH_NULL
+
+ 108            LOAD_FAST_LOAD_FAST     16 (db, current_user)
+                LOAD_ATTR                2 (user_id)
+
+ 107            LOAD_CONST               7 (('user_id',))
+                CALL_KW                  2
+                GET_AWAITABLE            0
+                LOAD_CONST               3 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                STORE_FAST               4 (agent)
+
+ 111            LOAD_GLOBAL             12 (agent_service)
+                LOAD_ATTR               16 (ensure_elevenlabs_agent)
+                PUSH_NULL
+
+ 112            LOAD_FAST_LOAD_FAST     20 (db, agent)
+                LOAD_FAST                0 (current_user)
+                LOAD_ATTR                2 (user_id)
+
+ 111            CALL                     3
+                GET_AWAITABLE            0
+                LOAD_CONST               3 (None)
+       L11:     SEND                     3 (to L14)
+       L12:     YIELD_VALUE              1
+       L13:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+       L14:     END_SEND
+                STORE_FAST               5 (el_id)
+
+ 114            LOAD_FAST                5 (el_id)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        13 (to L15)
+
+ 115            LOAD_GLOBAL             11 (AppError + NULL)
+
+ 116            LOAD_CONST               8 ('ELEVENLABS_SYNC_FAILED')
+
+ 117            LOAD_CONST               9 ('Failed to provision or update ElevenLabs agent')
+
+ 118            LOAD_CONST              10 (502)
+
+ 115            CALL                     3
+                RAISE_VARARGS            1
+
+ 121   L15:     LOAD_FAST                1 (db)
+                LOAD_ATTR               19 (commit + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               3 (None)
+       L16:     SEND                     3 (to L19)
+       L17:     YIELD_VALUE              1
+       L18:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L16)
+       L19:     END_SEND
+                POP_TOP
+
+ 122            LOAD_GLOBAL             21 (_agent_to_response + NULL)
+                LOAD_FAST                4 (agent)
+                CALL                     1
+                RETURN_VALUE
+
+  99   L20:     CLEANUP_THROW
+       L21:     JUMP_BACKWARD_NO_INTERRUPT 160 (to L5)
+
+ 107   L22:     CLEANUP_THROW
+       L23:     JUMP_BACKWARD_NO_INTERRUPT 102 (to L10)
+
+ 111   L24:     CLEANUP_THROW
+       L25:     JUMP_BACKWARD_NO_INTERRUPT 63 (to L14)
+
+ 121   L26:     CLEANUP_THROW
+       L27:     JUMP_BACKWARD_NO_INTERRUPT 21 (to L19)
+
+  --   L28:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L28 [0] lasti
+  L3 to L4 -> L20 [2]
+  L4 to L8 -> L28 [0] lasti
+  L8 to L9 -> L22 [2]
+  L9 to L12 -> L28 [0] lasti
+  L12 to L13 -> L24 [2]
+  L13 to L17 -> L28 [0] lasti
+  L17 to L18 -> L26 [2]
+  L18 to L21 -> L28 [0] lasti
+  L22 to L23 -> L28 [0] lasti
+  L24 to L25 -> L28 [0] lasti
+  L26 to L27 -> L28 [0] lasti
+
+Disassembly of <code object update_agent at 0x0000024C0FBE28A0, file "D:\fluence\Github\mattbot\backend\app\api\v1\agents.py", line 125>:
+ 125            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 132            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+ 133            LOAD_CONST               1 ('agents:update:')
+                LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user_id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 134            LOAD_GLOBAL              4 (settings)
+                LOAD_ATTR                6 (RATE_LIMIT_API_STANDARD_MAX)
+
+ 135            LOAD_GLOBAL              4 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_STANDARD_WINDOW)
+
+ 132            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   69 (allowed, _)
+
+ 137            LOAD_FAST                4 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        13 (to L6)
+
+ 138            LOAD_GLOBAL             11 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                CALL                     3
+                RAISE_VARARGS            1
+
+ 140    L6:     NOP
+
+ 141    L7:     LOAD_GLOBAL             12 (uuid)
+                LOAD_ATTR               14 (UUID)
+                PUSH_NULL
+                LOAD_FAST                0 (agent_id)
+                CALL                     1
+                STORE_FAST               6 (aid)
+
+ 145    L8:     LOAD_GLOBAL             18 (agent_service)
+                LOAD_ATTR               20 (update_agent)
+                PUSH_NULL
+
+ 146            LOAD_FAST                3 (db)
+
+ 147            LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user_id)
+
+ 148            LOAD_FAST                6 (aid)
+
+ 149            LOAD_FAST                1 (body)
+                LOAD_ATTR               22 (display_name)
+
+ 150            LOAD_FAST                1 (body)
+                LOAD_ATTR               24 (voice_id)
+
+ 151            LOAD_FAST                1 (body)
+                LOAD_ATTR               26 (user_instructions)
+
+ 152            LOAD_FAST                1 (body)
+                LOAD_ATTR               28 (greeting_instructions)
+
+ 153            LOAD_FAST                1 (body)
+                LOAD_ATTR               30 (expected_revision)
+
+ 145            LOAD_CONST               9 (('user_id', 'agent_id', 'display_name', 'voice_id', 'user_instructions', 'greeting_instructions', 'expected_revision'))
+                CALL_KW                  8
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L9:     SEND                     3 (to L12)
+       L10:     YIELD_VALUE              1
+       L11:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+       L12:     END_SEND
+                STORE_FAST               8 (agent)
+
+ 157   L13:     NOP
+
+ 158   L14:     LOAD_GLOBAL             18 (agent_service)
+                LOAD_ATTR               32 (ensure_elevenlabs_agent)
+                PUSH_NULL
+
+ 159            LOAD_FAST_LOAD_FAST     56 (db, agent)
+                LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user_id)
+
+ 158            CALL                     3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L15:     SEND                     3 (to L18)
+       L16:     YIELD_VALUE              1
+       L17:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+       L18:     END_SEND
+                POP_TOP
+
+ 167   L19:     LOAD_FAST                3 (db)
+                LOAD_ATTR               45 (commit + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L20:     SEND                     3 (to L23)
+       L21:     YIELD_VALUE              1
+       L22:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L20)
+       L23:     END_SEND
+                POP_TOP
+
+ 168            LOAD_GLOBAL             47 (_agent_to_response + NULL)
+                LOAD_FAST                8 (agent)
+                CALL                     1
+                RETURN_VALUE
+
+ 132   L24:     CLEANUP_THROW
+       L25:     JUMP_BACKWARD_NO_INTERRUPT 221 (to L5)
+
+  --   L26:     PUSH_EXC_INFO
+
+ 142            LOAD_GLOBAL             16 (ValueError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       19 (to L29)
+                STORE_FAST               7 (err)
+
+ 143   L27:     LOAD_GLOBAL             11 (AppError + NULL)
+                LOAD_CONST               6 ('INVALID_AGENT_ID')
+                LOAD_CONST               7 ('Invalid agent_id format')
+                LOAD_CONST               8 (400)
+                CALL                     3
+                LOAD_FAST                7 (err)
+                RAISE_VARARGS            2
+
+  --   L28:     LOAD_CONST               0 (None)
+                STORE_FAST               7 (err)
+                DELETE_FAST              7 (err)
+                RERAISE                  1
+
+ 142   L29:     RERAISE                  0
+
+  --   L30:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+ 145   L31:     CLEANUP_THROW
+       L32:     JUMP_BACKWARD_NO_INTERRUPT 115 (to L12)
+
+ 158   L33:     CLEANUP_THROW
+       L34:     JUMP_BACKWARD_NO_INTERRUPT 75 (to L18)
+
+  --   L35:     PUSH_EXC_INFO
+
+ 161            LOAD_GLOBAL             34 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       43 (to L37)
+                POP_TOP
+
+ 162            LOAD_CONST              10 (0)
+                LOAD_CONST               0 (None)
+                IMPORT_NAME             18 (logging)
+                STORE_FAST               9 (logging)
+
+ 163            LOAD_FAST                9 (logging)
+                LOAD_ATTR               39 (getLogger + NULL|self)
+                LOAD_GLOBAL             40 (__name__)
+                CALL                     1
+                LOAD_ATTR               43 (exception + NULL|self)
+
+ 164            LOAD_CONST              11 ('Failed to sync ElevenLabs agent after agent update')
+
+ 163            CALL                     1
+                POP_TOP
+       L36:     POP_EXCEPT
+                JUMP_BACKWARD_NO_INTERRUPT 125 (to L19)
+
+ 161   L37:     RERAISE                  0
+
+  --   L38:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+ 167   L39:     CLEANUP_THROW
+       L40:     JUMP_BACKWARD_NO_INTERRUPT 109 (to L23)
+
+  --   L41:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L41 [0] lasti
+  L3 to L4 -> L24 [2]
+  L4 to L6 -> L41 [0] lasti
+  L7 to L8 -> L26 [0]
+  L8 to L10 -> L41 [0] lasti
+  L10 to L11 -> L31 [2]
+  L11 to L13 -> L41 [0] lasti
+  L14 to L16 -> L35 [0]
+  L16 to L17 -> L33 [2]
+  L17 to L19 -> L35 [0]
+  L19 to L21 -> L41 [0] lasti
+  L21 to L22 -> L39 [2]
+  L22 to L25 -> L41 [0] lasti
+  L26 to L27 -> L30 [1] lasti
+  L27 to L28 -> L28 [1] lasti
+  L28 to L30 -> L30 [1] lasti
+  L30 to L32 -> L41 [0] lasti
+  L33 to L34 -> L35 [0]
+  L35 to L36 -> L38 [1] lasti
+  L36 to L37 -> L41 [0] lasti
+  L37 to L38 -> L38 [1] lasti
+  L38 to L40 -> L41 [0] lasti

@@ -1,0 +1,988 @@
+# Bytecode dump of: transfer_service.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\services\transfer_service.py
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'uuid', 'datetime', 'UTC', 'timedelta', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.models.call', 'Call', 'app.models.handoff_offer', 'HandoffOffer', 'app.models.handoff_suppression', 'HandoffSuppression', 'app.models.user_settings', 'UserSettings', 'getLogger', '__name__', 'logger', 'initiate_transfer', 'is_loop_call', 'record_suppression', 'is_suppressed')
+# co_consts (strings): ['Transfer service: Twilio call transfer + loop prevention.']
+
+# DOCSTRING: """Transfer service: Twilio call transfer + loop prevention."""
+# --- Nested code object: initiate_transfer ---
+    # co_names: ('status', 'handoff_attempt_count', 'handoff_loop_detected', 'handoff_status', 'app.core.encryption', 'decrypt_field', 'personal_phone_ciphertext', 'personal_phone_nonce', 'personal_phone_key_version', 'decode', 'handoff_target_phone_ciphertext', 'handoff_target_phone_nonce', 'handoff_target_phone_key_version', 'flush', 'getattr', 'settings', 'min', 'handoff_offer_timeout_seconds', 'HANDOFF_TRANSFER_TIMEOUT_CAP')
+    # co_varnames: ('db', 'call', 'offer', 'user_settings', 'decrypt_field', 'target_phone', 'plaintext', 'caller_id', 'timeout', 'twiml')
+      26            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      32            LOAD_FAST                1 (call)
+                    LOAD_ATTR                0 (status)
+                    LOAD_CONST               1 ('in_progress')
+                    COMPARE_OP             119 (bool(!=))
+                    POP_JUMP_IF_FALSE        5 (to L2)
+    
+      33            LOAD_CONST               2 ('rejected')
+                    LOAD_CONST               3 ('call_not_in_progress')
+                    LOAD_CONST               4 (('status', 'reason'))
+                    BUILD_CONST_KEY_MAP      2
+                    RETURN_VALUE
+    
+      35    L2:     LOAD_FAST                2 (offer)
+                    LOAD_ATTR                0 (status)
+                    LOAD_CONST               5 ('accepted')
+                    COMPARE_OP             119 (bool(!=))
+                    POP_JUMP_IF_FALSE        5 (to L3)
+    
+      36            LOAD_CONST               2 ('rejected')
+                    LOAD_CONST               6 ('offer_not_accepted')
+                    LOAD_CONST               4 (('status', 'reason'))
+                    BUILD_CONST_KEY_MAP      2
+                    RETURN_VALUE
+    
+      38    L3:     LOAD_FAST                1 (call)
+                    LOAD_ATTR                2 (handoff_attempt_count)
+                    LOAD_CONST               7 (0)
+                    COMPARE_OP             148 (bool(>))
+                    POP_JUMP_IF_FALSE        5 (to L4)
+    
+      39            LOAD_CONST               2 ('rejected')
+                    LOAD_CONST               8 ('already_attempted')
+                    LOAD_CONST               4 (('status', 'reason'))
+                    BUILD_CONST_KEY_MAP      2
+                    RETURN_VALUE
+    
+      41    L4:     LOAD_FAST                1 (call)
+                    LOAD_ATTR                4 (handoff_loop_detected)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE        5 (to L5)
+    
+      42            LOAD_CONST               2 ('rejected')
+                    LOAD_CONST               9 ('loop_detected')
+                    LOAD_CONST               4 (('status', 'reason'))
+                    BUILD_CONST_KEY_MAP      2
+                    RETURN_VALUE
+    
+      44    L5:     LOAD_FAST                1 (call)
+                    COPY                     1
+                    LOAD_ATTR                2 (handoff_attempt_count)
+                    LOAD_CONST              10 (1)
+                    BINARY_OP               13 (+=)
+                    SWAP                     2
+                    STORE_ATTR               1 (handoff_attempt_count)
+    
+      45            LOAD_CONST              11 ('transfer_starting')
+                    LOAD_FAST                1 (call)
+                    STORE_ATTR               3 (handoff_status)
+    
+      47            LOAD_CONST               7 (0)
+                    LOAD_CONST              12 (('decrypt_field',))
+                    IMPORT_NAME              4 (app.core.encryption)
+                    IMPORT_FROM              5 (decrypt_field)
+                    STORE_FAST               4 (decrypt_field)
+                    POP_TOP
+    
+      50            LOAD_CONST               0 (None)
+                    STORE_FAST               5 (target_phone)
+    
+      52            LOAD_FAST                3 (user_settings)
+                    LOAD_ATTR               12 (personal_phone_ciphertext)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       87 (to L6)
+    
+      53            LOAD_FAST                3 (user_settings)
+                    LOAD_ATTR               14 (personal_phone_nonce)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       70 (to L6)
+    
+      54            LOAD_FAST                3 (user_settings)
+                    LOAD_ATTR               16 (personal_phone_key_version)
+                    POP_JUMP_IF_NONE        57 (to L6)
+    
+      56            LOAD_FAST                4 (decrypt_field)
+                    PUSH_NULL
+    
+      57            LOAD_FAST                3 (user_settings)
+                    LOAD_ATTR               12 (personal_phone_ciphertext)
+    
+      58            LOAD_FAST                3 (user_settings)
+                    LOAD_ATTR               14 (personal_phone_nonce)
+    
+      59            LOAD_FAST                3 (user_settings)
+                    LOAD_ATTR               16 (personal_phone_key_version)
+    
+      56            CALL                     3
+                    STORE_FAST               6 (plaintext)
+    
+      61            LOAD_FAST                6 (plaintext)
+                    LOAD_ATTR               19 (decode + NULL|self)
+                    LOAD_CONST              13 ('utf-8')
+                    CALL                     1
+                    STORE_FAST               5 (target_phone)
+    
+      63    L6:     LOAD_FAST                5 (target_phone)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE       104 (to L7)
+    
+      64            LOAD_FAST                3 (user_settings)
+                    LOAD_ATTR               20 (handoff_target_phone_ciphertext)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       87 (to L7)
+    
+      65            LOAD_FAST                3 (user_settings)
+                    LOAD_ATTR               22 (handoff_target_phone_nonce)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       70 (to L7)
+    
+      66            LOAD_FAST                3 (user_settings)
+                    LOAD_ATTR               24 (handoff_target_phone_key_version)
+                    POP_JUMP_IF_NONE        57 (to L7)
+    
+      68            LOAD_FAST                4 (decrypt_field)
+                    PUSH_NULL
+    
+      69            LOAD_FAST                3 (user_settings)
+                    LOAD_ATTR               20 (handoff_target_phone_ciphertext)
+    
+      70            LOAD_FAST                3 (user_settings)
+                    LOAD_ATTR               22 (handoff_target_phone_nonce)
+    
+      71            LOAD_FAST                3 (user_settings)
+                    LOAD_ATTR               24 (handoff_target_phone_key_version)
+    
+      68            CALL                     3
+                    STORE_FAST               6 (plaintext)
+    
+      73            LOAD_FAST                6 (plaintext)
+                    LOAD_ATTR               19 (decode + NULL|self)
+                    LOAD_CONST              13 ('utf-8')
+                    CALL                     1
+                    STORE_FAST               5 (target_phone)
+    
+      75    L7:     LOAD_FAST                5 (target_phone)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        36 (to L12)
+    
+      76            LOAD_CONST              14 ('failed')
+                    LOAD_FAST                1 (call)
+                    STORE_ATTR               3 (handoff_status)
+    
+      77            LOAD_FAST                0 (db)
+                    LOAD_ATTR               27 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L8:     SEND                     3 (to L11)
+            L9:     YIELD_VALUE              1
+           L10:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L8)
+           L11:     END_SEND
+                    POP_TOP
+    
+      78            LOAD_CONST               2 ('rejected')
+                    LOAD_CONST              15 ('no_target_phone')
+                    LOAD_CONST               4 (('status', 'reason'))
+                    BUILD_CONST_KEY_MAP      2
+                    RETURN_VALUE
+    
+      80   L12:     LOAD_GLOBAL             29 (getattr + NULL)
+                    LOAD_GLOBAL             30 (settings)
+                    LOAD_CONST              16 ('HANDOFF_CALLER_ID')
+                    LOAD_CONST              17 ('')
+                    CALL                     3
+                    COPY                     1
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L13)
+                    POP_TOP
+                    LOAD_CONST              18 ('+10000000000')
+           L13:     STORE_FAST               7 (caller_id)
+    
+      81            LOAD_GLOBAL             33 (min + NULL)
+    
+      82            LOAD_FAST                3 (user_settings)
+                    LOAD_ATTR               34 (handoff_offer_timeout_seconds)
+    
+      83            LOAD_GLOBAL             30 (settings)
+                    LOAD_ATTR               36 (HANDOFF_TRANSFER_TIMEOUT_CAP)
+    
+      81            CALL                     2
+                    STORE_FAST               8 (timeout)
+    
+      87            LOAD_CONST              19 ('<?xml version="1.0" encoding="UTF-8"?><Response><Dial callerId="')
+    
+      90            LOAD_FAST                7 (caller_id)
+                    FORMAT_SIMPLE
+                    LOAD_CONST              20 ('" timeout="')
+    
+      91            LOAD_FAST                8 (timeout)
+                    FORMAT_SIMPLE
+                    LOAD_CONST              21 ('" answerOnBridge="true" machineDetection="Enable"><Number>')
+    
+      95            LOAD_FAST                5 (target_phone)
+                    FORMAT_SIMPLE
+                    LOAD_CONST              22 ('</Number></Dial></Response>')
+    
+      87            BUILD_STRING             7
+    
+      86            STORE_FAST               9 (twiml)
+    
+     100            LOAD_FAST                0 (db)
+                    LOAD_ATTR               27 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L14:     SEND                     3 (to L17)
+           L15:     YIELD_VALUE              1
+           L16:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+           L17:     END_SEND
+                    POP_TOP
+    
+     102            LOAD_CONST              11 ('transfer_starting')
+                    LOAD_FAST                9 (twiml)
+                    LOAD_CONST              23 (('status', 'twiml'))
+                    BUILD_CONST_KEY_MAP      2
+                    RETURN_VALUE
+    
+      77   L18:     CLEANUP_THROW
+           L19:     JUMP_BACKWARD_NO_INTERRUPT 112 (to L11)
+    
+     100   L20:     CLEANUP_THROW
+           L21:     JUMP_BACKWARD_NO_INTERRUPT 11 (to L17)
+    
+      --   L22:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L9 -> L22 [0] lasti
+      L9 to L10 -> L18 [2]
+      L10 to L15 -> L22 [0] lasti
+      L15 to L16 -> L20 [2]
+      L16 to L19 -> L22 [0] lasti
+      L20 to L21 -> L22 [0] lasti
+    
+# --- Nested code object: is_loop_call ---
+    # co_names: ('getattr', 'settings')
+    # co_varnames: ('from_number', 'to_number', 'handoff_cid')
+    110           RESUME                   0
+    
+    111           LOAD_GLOBAL              1 (getattr + NULL)
+                  LOAD_GLOBAL              2 (settings)
+                  LOAD_CONST               1 ('HANDOFF_CALLER_ID')
+                  LOAD_CONST               2 ('')
+                  CALL                     3
+                  STORE_FAST               2 (handoff_cid)
+    
+    112           LOAD_FAST                2 (handoff_cid)
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE         1 (to L1)
+    
+    113           RETURN_CONST             3 (False)
+    
+    114   L1:     LOAD_FAST_LOAD_FAST      2 (from_number, handoff_cid)
+                  COMPARE_OP              72 (==)
+                  RETURN_VALUE
+    
+# --- Nested code object: record_suppression ---
+    # co_names: ('settings', 'HANDOFF_SUPPRESSION_TTL', 'HandoffSuppression', 'datetime', 'now', 'UTC', 'timedelta', 'add', 'flush')
+    # co_varnames: ('db', 'user_id', 'destination_hash', 'ttl_seconds', 'reason', 'entry')
+     117           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+     124           LOAD_FAST                3 (ttl_seconds)
+                   POP_JUMP_IF_NOT_NONE    16 (to L2)
+    
+     125           LOAD_GLOBAL              0 (settings)
+                   LOAD_ATTR                2 (HANDOFF_SUPPRESSION_TTL)
+                   STORE_FAST               3 (ttl_seconds)
+    
+     126   L2:     LOAD_GLOBAL              5 (HandoffSuppression + NULL)
+    
+     127           LOAD_FAST                1 (user_id)
+    
+     128           LOAD_FAST                2 (destination_hash)
+    
+     129           LOAD_GLOBAL              6 (datetime)
+                   LOAD_ATTR                8 (now)
+                   PUSH_NULL
+                   LOAD_GLOBAL             10 (UTC)
+                   CALL                     1
+                   LOAD_GLOBAL             13 (timedelta + NULL)
+                   LOAD_FAST                3 (ttl_seconds)
+                   LOAD_CONST               1 (('seconds',))
+                   CALL_KW                  1
+                   BINARY_OP                0 (+)
+    
+     130           LOAD_FAST                4 (reason)
+    
+     126           LOAD_CONST               2 (('owner_user_id', 'destination_phone_hash', 'suppression_expires_at', 'reason'))
+                   CALL_KW                  4
+                   STORE_FAST               5 (entry)
+    
+     132           LOAD_FAST                0 (db)
+                   LOAD_ATTR               15 (add + NULL|self)
+                   LOAD_FAST                5 (entry)
+                   CALL                     1
+                   POP_TOP
+    
+     133           LOAD_FAST                0 (db)
+                   LOAD_ATTR               17 (flush + NULL|self)
+                   CALL                     0
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L3:     SEND                     3 (to L6)
+           L4:     YIELD_VALUE              1
+           L5:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L3)
+           L6:     END_SEND
+                   POP_TOP
+    
+     134           LOAD_FAST                5 (entry)
+                   RETURN_VALUE
+    
+     133   L7:     CLEANUP_THROW
+           L8:     JUMP_BACKWARD_NO_INTERRUPT 6 (to L6)
+    
+      --   L9:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L4 -> L9 [0] lasti
+      L4 to L5 -> L7 [2]
+      L5 to L8 -> L9 [0] lasti
+    
+# --- Nested code object: is_suppressed ---
+    # co_names: ('datetime', 'now', 'UTC', 'scalar', 'select', 'HandoffSuppression', 'where', 'owner_user_id', 'destination_phone_hash', 'suppression_expires_at')
+    # co_varnames: ('db', 'user_id', 'destination_hash', 'now', 'row')
+     137           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+     142           LOAD_GLOBAL              0 (datetime)
+                   LOAD_ATTR                2 (now)
+                   PUSH_NULL
+                   LOAD_GLOBAL              4 (UTC)
+                   CALL                     1
+                   STORE_FAST               3 (now)
+    
+     143           LOAD_FAST                0 (db)
+                   LOAD_ATTR                7 (scalar + NULL|self)
+    
+     144           LOAD_GLOBAL              9 (select + NULL)
+                   LOAD_GLOBAL             10 (HandoffSuppression)
+                   CALL                     1
+                   LOAD_ATTR               13 (where + NULL|self)
+    
+     145           LOAD_GLOBAL             10 (HandoffSuppression)
+                   LOAD_ATTR               14 (owner_user_id)
+                   LOAD_FAST                1 (user_id)
+                   COMPARE_OP              72 (==)
+    
+     146           LOAD_GLOBAL             10 (HandoffSuppression)
+                   LOAD_ATTR               16 (destination_phone_hash)
+                   LOAD_FAST                2 (destination_hash)
+                   COMPARE_OP              72 (==)
+    
+     147           LOAD_GLOBAL             10 (HandoffSuppression)
+                   LOAD_ATTR               18 (suppression_expires_at)
+                   LOAD_FAST                3 (now)
+                   COMPARE_OP             132 (>)
+    
+     144           CALL                     3
+    
+     143           CALL                     1
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   STORE_FAST               4 (row)
+    
+     150           LOAD_FAST                4 (row)
+                   LOAD_CONST               0 (None)
+                   IS_OP                    1
+                   RETURN_VALUE
+    
+     143   L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 8 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'uuid', 'datetime', 'UTC', 'timedelta', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.models.call', 'Call', 'app.models.handoff_offer', 'HandoffOffer', 'app.models.handoff_suppression', 'HandoffSuppression', 'app.models.user_settings', 'UserSettings', 'getLogger', '__name__', 'logger', 'initiate_transfer', 'is_loop_call', 'record_suppression', 'is_suppressed')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Transfer service: Twilio call transfer + loop prevention.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (logging)
+              STORE_NAME               3 (logging)
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              4 (uuid)
+              STORE_NAME               4 (uuid)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('UTC', 'datetime', 'timedelta'))
+              IMPORT_NAME              5 (datetime)
+              IMPORT_FROM              6 (UTC)
+              STORE_NAME               6 (UTC)
+              IMPORT_FROM              5 (datetime)
+              STORE_NAME               5 (datetime)
+              IMPORT_FROM              7 (timedelta)
+              STORE_NAME               7 (timedelta)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('select',))
+              IMPORT_NAME              8 (sqlalchemy)
+              IMPORT_FROM              9 (select)
+              STORE_NAME               9 (select)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('AsyncSession',))
+              IMPORT_NAME             10 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM             11 (AsyncSession)
+              STORE_NAME              11 (AsyncSession)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('settings',))
+              IMPORT_NAME             12 (app.config)
+              IMPORT_FROM             13 (settings)
+              STORE_NAME              13 (settings)
+              POP_TOP
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('Call',))
+              IMPORT_NAME             14 (app.models.call)
+              IMPORT_FROM             15 (Call)
+              STORE_NAME              15 (Call)
+              POP_TOP
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('HandoffOffer',))
+              IMPORT_NAME             16 (app.models.handoff_offer)
+              IMPORT_FROM             17 (HandoffOffer)
+              STORE_NAME              17 (HandoffOffer)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST              10 (('HandoffSuppression',))
+              IMPORT_NAME             18 (app.models.handoff_suppression)
+              IMPORT_FROM             19 (HandoffSuppression)
+              STORE_NAME              19 (HandoffSuppression)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST              11 (('UserSettings',))
+              IMPORT_NAME             20 (app.models.user_settings)
+              IMPORT_FROM             21 (UserSettings)
+              STORE_NAME              21 (UserSettings)
+              POP_TOP
+
+ 18           LOAD_NAME                3 (logging)
+              LOAD_ATTR               44 (getLogger)
+              PUSH_NULL
+              LOAD_NAME               23 (__name__)
+              CALL                     1
+              STORE_NAME              24 (logger)
+
+ 26           NOP
+
+ 27           NOP
+
+ 26           NOP
+
+ 28           NOP
+
+ 26           NOP
+
+ 29           NOP
+
+ 26           NOP
+
+ 30           NOP
+
+ 26           NOP
+
+ 31           NOP
+
+ 26           LOAD_CONST              16 (('db', 'AsyncSession', 'call', 'Call', 'offer', 'HandoffOffer', 'user_settings', 'UserSettings', 'return', 'dict'))
+              LOAD_CONST              12 (<code object initiate_transfer at 0x0000024C0FB5A950, file "D:\fluence\Github\mattbot\backend\app\services\transfer_service.py", line 26>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              25 (initiate_transfer)
+
+110           LOAD_CONST              17 (('from_number', 'str', 'to_number', 'str', 'return', 'bool'))
+              LOAD_CONST              13 (<code object is_loop_call at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\services\transfer_service.py", line 110>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              26 (is_loop_call)
+
+121           NOP
+
+122           NOP
+
+117           LOAD_CONST              18 ((None, None))
+
+118           NOP
+
+117           NOP
+
+119           NOP
+
+117           NOP
+
+120           NOP
+
+117           NOP
+
+121           NOP
+
+117           NOP
+
+122           NOP
+
+117           NOP
+
+123           NOP
+
+117           LOAD_CONST              19 (('db', 'AsyncSession', 'user_id', 'uuid.UUID', 'destination_hash', 'str', 'ttl_seconds', 'int | None', 'reason', 'str | None', 'return', 'HandoffSuppression'))
+              LOAD_CONST              14 (<code object record_suppression at 0x0000024C0EC73B40, file "D:\fluence\Github\mattbot\backend\app\services\transfer_service.py", line 117>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME              27 (record_suppression)
+
+137           NOP
+
+138           NOP
+
+137           NOP
+
+139           NOP
+
+137           NOP
+
+140           NOP
+
+137           NOP
+
+141           NOP
+
+137           LOAD_CONST              20 (('db', 'AsyncSession', 'user_id', 'uuid.UUID', 'destination_hash', 'str', 'return', 'bool'))
+              LOAD_CONST              15 (<code object is_suppressed at 0x0000024C0EC33A50, file "D:\fluence\Github\mattbot\backend\app\services\transfer_service.py", line 137>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              28 (is_suppressed)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object initiate_transfer at 0x0000024C0FB5A950, file "D:\fluence\Github\mattbot\backend\app\services\transfer_service.py", line 26>:
+  26            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  32            LOAD_FAST                1 (call)
+                LOAD_ATTR                0 (status)
+                LOAD_CONST               1 ('in_progress')
+                COMPARE_OP             119 (bool(!=))
+                POP_JUMP_IF_FALSE        5 (to L2)
+
+  33            LOAD_CONST               2 ('rejected')
+                LOAD_CONST               3 ('call_not_in_progress')
+                LOAD_CONST               4 (('status', 'reason'))
+                BUILD_CONST_KEY_MAP      2
+                RETURN_VALUE
+
+  35    L2:     LOAD_FAST                2 (offer)
+                LOAD_ATTR                0 (status)
+                LOAD_CONST               5 ('accepted')
+                COMPARE_OP             119 (bool(!=))
+                POP_JUMP_IF_FALSE        5 (to L3)
+
+  36            LOAD_CONST               2 ('rejected')
+                LOAD_CONST               6 ('offer_not_accepted')
+                LOAD_CONST               4 (('status', 'reason'))
+                BUILD_CONST_KEY_MAP      2
+                RETURN_VALUE
+
+  38    L3:     LOAD_FAST                1 (call)
+                LOAD_ATTR                2 (handoff_attempt_count)
+                LOAD_CONST               7 (0)
+                COMPARE_OP             148 (bool(>))
+                POP_JUMP_IF_FALSE        5 (to L4)
+
+  39            LOAD_CONST               2 ('rejected')
+                LOAD_CONST               8 ('already_attempted')
+                LOAD_CONST               4 (('status', 'reason'))
+                BUILD_CONST_KEY_MAP      2
+                RETURN_VALUE
+
+  41    L4:     LOAD_FAST                1 (call)
+                LOAD_ATTR                4 (handoff_loop_detected)
+                TO_BOOL
+                POP_JUMP_IF_FALSE        5 (to L5)
+
+  42            LOAD_CONST               2 ('rejected')
+                LOAD_CONST               9 ('loop_detected')
+                LOAD_CONST               4 (('status', 'reason'))
+                BUILD_CONST_KEY_MAP      2
+                RETURN_VALUE
+
+  44    L5:     LOAD_FAST                1 (call)
+                COPY                     1
+                LOAD_ATTR                2 (handoff_attempt_count)
+                LOAD_CONST              10 (1)
+                BINARY_OP               13 (+=)
+                SWAP                     2
+                STORE_ATTR               1 (handoff_attempt_count)
+
+  45            LOAD_CONST              11 ('transfer_starting')
+                LOAD_FAST                1 (call)
+                STORE_ATTR               3 (handoff_status)
+
+  47            LOAD_CONST               7 (0)
+                LOAD_CONST              12 (('decrypt_field',))
+                IMPORT_NAME              4 (app.core.encryption)
+                IMPORT_FROM              5 (decrypt_field)
+                STORE_FAST               4 (decrypt_field)
+                POP_TOP
+
+  50            LOAD_CONST               0 (None)
+                STORE_FAST               5 (target_phone)
+
+  52            LOAD_FAST                3 (user_settings)
+                LOAD_ATTR               12 (personal_phone_ciphertext)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       87 (to L6)
+
+  53            LOAD_FAST                3 (user_settings)
+                LOAD_ATTR               14 (personal_phone_nonce)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       70 (to L6)
+
+  54            LOAD_FAST                3 (user_settings)
+                LOAD_ATTR               16 (personal_phone_key_version)
+                POP_JUMP_IF_NONE        57 (to L6)
+
+  56            LOAD_FAST                4 (decrypt_field)
+                PUSH_NULL
+
+  57            LOAD_FAST                3 (user_settings)
+                LOAD_ATTR               12 (personal_phone_ciphertext)
+
+  58            LOAD_FAST                3 (user_settings)
+                LOAD_ATTR               14 (personal_phone_nonce)
+
+  59            LOAD_FAST                3 (user_settings)
+                LOAD_ATTR               16 (personal_phone_key_version)
+
+  56            CALL                     3
+                STORE_FAST               6 (plaintext)
+
+  61            LOAD_FAST                6 (plaintext)
+                LOAD_ATTR               19 (decode + NULL|self)
+                LOAD_CONST              13 ('utf-8')
+                CALL                     1
+                STORE_FAST               5 (target_phone)
+
+  63    L6:     LOAD_FAST                5 (target_phone)
+                TO_BOOL
+                POP_JUMP_IF_TRUE       104 (to L7)
+
+  64            LOAD_FAST                3 (user_settings)
+                LOAD_ATTR               20 (handoff_target_phone_ciphertext)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       87 (to L7)
+
+  65            LOAD_FAST                3 (user_settings)
+                LOAD_ATTR               22 (handoff_target_phone_nonce)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       70 (to L7)
+
+  66            LOAD_FAST                3 (user_settings)
+                LOAD_ATTR               24 (handoff_target_phone_key_version)
+                POP_JUMP_IF_NONE        57 (to L7)
+
+  68            LOAD_FAST                4 (decrypt_field)
+                PUSH_NULL
+
+  69            LOAD_FAST                3 (user_settings)
+                LOAD_ATTR               20 (handoff_target_phone_ciphertext)
+
+  70            LOAD_FAST                3 (user_settings)
+                LOAD_ATTR               22 (handoff_target_phone_nonce)
+
+  71            LOAD_FAST                3 (user_settings)
+                LOAD_ATTR               24 (handoff_target_phone_key_version)
+
+  68            CALL                     3
+                STORE_FAST               6 (plaintext)
+
+  73            LOAD_FAST                6 (plaintext)
+                LOAD_ATTR               19 (decode + NULL|self)
+                LOAD_CONST              13 ('utf-8')
+                CALL                     1
+                STORE_FAST               5 (target_phone)
+
+  75    L7:     LOAD_FAST                5 (target_phone)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        36 (to L12)
+
+  76            LOAD_CONST              14 ('failed')
+                LOAD_FAST                1 (call)
+                STORE_ATTR               3 (handoff_status)
+
+  77            LOAD_FAST                0 (db)
+                LOAD_ATTR               27 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L8:     SEND                     3 (to L11)
+        L9:     YIELD_VALUE              1
+       L10:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L8)
+       L11:     END_SEND
+                POP_TOP
+
+  78            LOAD_CONST               2 ('rejected')
+                LOAD_CONST              15 ('no_target_phone')
+                LOAD_CONST               4 (('status', 'reason'))
+                BUILD_CONST_KEY_MAP      2
+                RETURN_VALUE
+
+  80   L12:     LOAD_GLOBAL             29 (getattr + NULL)
+                LOAD_GLOBAL             30 (settings)
+                LOAD_CONST              16 ('HANDOFF_CALLER_ID')
+                LOAD_CONST              17 ('')
+                CALL                     3
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L13)
+                POP_TOP
+                LOAD_CONST              18 ('+10000000000')
+       L13:     STORE_FAST               7 (caller_id)
+
+  81            LOAD_GLOBAL             33 (min + NULL)
+
+  82            LOAD_FAST                3 (user_settings)
+                LOAD_ATTR               34 (handoff_offer_timeout_seconds)
+
+  83            LOAD_GLOBAL             30 (settings)
+                LOAD_ATTR               36 (HANDOFF_TRANSFER_TIMEOUT_CAP)
+
+  81            CALL                     2
+                STORE_FAST               8 (timeout)
+
+  87            LOAD_CONST              19 ('<?xml version="1.0" encoding="UTF-8"?><Response><Dial callerId="')
+
+  90            LOAD_FAST                7 (caller_id)
+                FORMAT_SIMPLE
+                LOAD_CONST              20 ('" timeout="')
+
+  91            LOAD_FAST                8 (timeout)
+                FORMAT_SIMPLE
+                LOAD_CONST              21 ('" answerOnBridge="true" machineDetection="Enable"><Number>')
+
+  95            LOAD_FAST                5 (target_phone)
+                FORMAT_SIMPLE
+                LOAD_CONST              22 ('</Number></Dial></Response>')
+
+  87            BUILD_STRING             7
+
+  86            STORE_FAST               9 (twiml)
+
+ 100            LOAD_FAST                0 (db)
+                LOAD_ATTR               27 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L14:     SEND                     3 (to L17)
+       L15:     YIELD_VALUE              1
+       L16:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+       L17:     END_SEND
+                POP_TOP
+
+ 102            LOAD_CONST              11 ('transfer_starting')
+                LOAD_FAST                9 (twiml)
+                LOAD_CONST              23 (('status', 'twiml'))
+                BUILD_CONST_KEY_MAP      2
+                RETURN_VALUE
+
+  77   L18:     CLEANUP_THROW
+       L19:     JUMP_BACKWARD_NO_INTERRUPT 112 (to L11)
+
+ 100   L20:     CLEANUP_THROW
+       L21:     JUMP_BACKWARD_NO_INTERRUPT 11 (to L17)
+
+  --   L22:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L9 -> L22 [0] lasti
+  L9 to L10 -> L18 [2]
+  L10 to L15 -> L22 [0] lasti
+  L15 to L16 -> L20 [2]
+  L16 to L19 -> L22 [0] lasti
+  L20 to L21 -> L22 [0] lasti
+
+Disassembly of <code object is_loop_call at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\services\transfer_service.py", line 110>:
+110           RESUME                   0
+
+111           LOAD_GLOBAL              1 (getattr + NULL)
+              LOAD_GLOBAL              2 (settings)
+              LOAD_CONST               1 ('HANDOFF_CALLER_ID')
+              LOAD_CONST               2 ('')
+              CALL                     3
+              STORE_FAST               2 (handoff_cid)
+
+112           LOAD_FAST                2 (handoff_cid)
+              TO_BOOL
+              POP_JUMP_IF_TRUE         1 (to L1)
+
+113           RETURN_CONST             3 (False)
+
+114   L1:     LOAD_FAST_LOAD_FAST      2 (from_number, handoff_cid)
+              COMPARE_OP              72 (==)
+              RETURN_VALUE
+
+Disassembly of <code object record_suppression at 0x0000024C0EC73B40, file "D:\fluence\Github\mattbot\backend\app\services\transfer_service.py", line 117>:
+ 117           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+ 124           LOAD_FAST                3 (ttl_seconds)
+               POP_JUMP_IF_NOT_NONE    16 (to L2)
+
+ 125           LOAD_GLOBAL              0 (settings)
+               LOAD_ATTR                2 (HANDOFF_SUPPRESSION_TTL)
+               STORE_FAST               3 (ttl_seconds)
+
+ 126   L2:     LOAD_GLOBAL              5 (HandoffSuppression + NULL)
+
+ 127           LOAD_FAST                1 (user_id)
+
+ 128           LOAD_FAST                2 (destination_hash)
+
+ 129           LOAD_GLOBAL              6 (datetime)
+               LOAD_ATTR                8 (now)
+               PUSH_NULL
+               LOAD_GLOBAL             10 (UTC)
+               CALL                     1
+               LOAD_GLOBAL             13 (timedelta + NULL)
+               LOAD_FAST                3 (ttl_seconds)
+               LOAD_CONST               1 (('seconds',))
+               CALL_KW                  1
+               BINARY_OP                0 (+)
+
+ 130           LOAD_FAST                4 (reason)
+
+ 126           LOAD_CONST               2 (('owner_user_id', 'destination_phone_hash', 'suppression_expires_at', 'reason'))
+               CALL_KW                  4
+               STORE_FAST               5 (entry)
+
+ 132           LOAD_FAST                0 (db)
+               LOAD_ATTR               15 (add + NULL|self)
+               LOAD_FAST                5 (entry)
+               CALL                     1
+               POP_TOP
+
+ 133           LOAD_FAST                0 (db)
+               LOAD_ATTR               17 (flush + NULL|self)
+               CALL                     0
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L3:     SEND                     3 (to L6)
+       L4:     YIELD_VALUE              1
+       L5:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L3)
+       L6:     END_SEND
+               POP_TOP
+
+ 134           LOAD_FAST                5 (entry)
+               RETURN_VALUE
+
+ 133   L7:     CLEANUP_THROW
+       L8:     JUMP_BACKWARD_NO_INTERRUPT 6 (to L6)
+
+  --   L9:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L4 -> L9 [0] lasti
+  L4 to L5 -> L7 [2]
+  L5 to L8 -> L9 [0] lasti
+
+Disassembly of <code object is_suppressed at 0x0000024C0EC33A50, file "D:\fluence\Github\mattbot\backend\app\services\transfer_service.py", line 137>:
+ 137           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+ 142           LOAD_GLOBAL              0 (datetime)
+               LOAD_ATTR                2 (now)
+               PUSH_NULL
+               LOAD_GLOBAL              4 (UTC)
+               CALL                     1
+               STORE_FAST               3 (now)
+
+ 143           LOAD_FAST                0 (db)
+               LOAD_ATTR                7 (scalar + NULL|self)
+
+ 144           LOAD_GLOBAL              9 (select + NULL)
+               LOAD_GLOBAL             10 (HandoffSuppression)
+               CALL                     1
+               LOAD_ATTR               13 (where + NULL|self)
+
+ 145           LOAD_GLOBAL             10 (HandoffSuppression)
+               LOAD_ATTR               14 (owner_user_id)
+               LOAD_FAST                1 (user_id)
+               COMPARE_OP              72 (==)
+
+ 146           LOAD_GLOBAL             10 (HandoffSuppression)
+               LOAD_ATTR               16 (destination_phone_hash)
+               LOAD_FAST                2 (destination_hash)
+               COMPARE_OP              72 (==)
+
+ 147           LOAD_GLOBAL             10 (HandoffSuppression)
+               LOAD_ATTR               18 (suppression_expires_at)
+               LOAD_FAST                3 (now)
+               COMPARE_OP             132 (>)
+
+ 144           CALL                     3
+
+ 143           CALL                     1
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               STORE_FAST               4 (row)
+
+ 150           LOAD_FAST                4 (row)
+               LOAD_CONST               0 (None)
+               IS_OP                    1
+               RETURN_VALUE
+
+ 143   L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 8 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti

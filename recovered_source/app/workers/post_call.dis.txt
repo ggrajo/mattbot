@@ -1,0 +1,615 @@
+# Bytecode dump of: post_call.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\workers\post_call.py
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'sqlalchemy', 'or_', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.models.call_artifact', 'CallArtifact', 'app.services', 'artifact_service', 'app.services.event_emitter', 'emit_event', 'app.services.notification_service', 'notify_call_screened', 'getLogger', '__name__', 'logger', 'process_pending_artifacts')
+# co_consts (strings): ['Post-call artifact processing worker.\n\nPolls for pending/processing artifacts and runs the artifact pipeline.\nAlso sends privacy-safe push notifications when artifacts become ready.\n']
+
+# DOCSTRING: """Post-call artifact processing worker.
+
+Polls for pending/processing artifacts and runs the artifact pipeline.
+Also sends privacy-safe push notifications when artifacts become ready.
+"""
+# --- Nested code object: process_pending_artifacts ---
+    # DOCSTRING: """Find and process pending artifacts. Returns count of processed items."""
+    # co_names: ('select', 'CallArtifact', 'where', 'or_', 'summary_status', 'in_', 'labels_status', 'transcript_status', 'limit', 'execute', 'list', 'scalars', 'all', 'artifact_service', 'process_call_artifacts', 'str', 'call_id', 'owner_user_id', 'emit_event', 'notify_call_screened', 'labels_json', 'Exception', 'logger', 'exception')
+    # co_varnames: ('db', 'stmt', 'result', 'artifacts', 'processed', 'artifact', 'all_done', 'cid', 'uid')
+      22            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      25            LOAD_GLOBAL              1 (select + NULL)
+                    LOAD_GLOBAL              2 (CallArtifact)
+                    CALL                     1
+    
+      26            LOAD_ATTR                5 (where + NULL|self)
+    
+      27            LOAD_GLOBAL              7 (or_ + NULL)
+    
+      28            LOAD_GLOBAL              2 (CallArtifact)
+                    LOAD_ATTR                8 (summary_status)
+                    LOAD_ATTR               11 (in_ + NULL|self)
+                    LOAD_CONST               1 (('pending', 'processing'))
+                    CALL                     1
+    
+      29            LOAD_GLOBAL              2 (CallArtifact)
+                    LOAD_ATTR               12 (labels_status)
+                    LOAD_ATTR               11 (in_ + NULL|self)
+                    LOAD_CONST               1 (('pending', 'processing'))
+                    CALL                     1
+    
+      30            LOAD_GLOBAL              2 (CallArtifact)
+                    LOAD_ATTR               14 (transcript_status)
+                    LOAD_ATTR               11 (in_ + NULL|self)
+                    LOAD_CONST               1 (('pending', 'processing'))
+                    CALL                     1
+    
+      27            CALL                     3
+    
+      26            CALL                     1
+    
+      33            LOAD_ATTR               17 (limit + NULL|self)
+                    LOAD_CONST               2 (10)
+                    CALL                     1
+    
+      24            STORE_FAST               1 (stmt)
+    
+      35            LOAD_FAST                0 (db)
+                    LOAD_ATTR               19 (execute + NULL|self)
+                    LOAD_FAST                1 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               3 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               2 (result)
+    
+      36            LOAD_GLOBAL             21 (list + NULL)
+                    LOAD_FAST                2 (result)
+                    LOAD_ATTR               23 (scalars + NULL|self)
+                    CALL                     0
+                    LOAD_ATTR               25 (all + NULL|self)
+                    CALL                     0
+                    CALL                     1
+                    STORE_FAST               3 (artifacts)
+    
+      38            LOAD_CONST               4 (0)
+                    STORE_FAST               4 (processed)
+    
+      39            LOAD_FAST                3 (artifacts)
+                    GET_ITER
+            L6:     FOR_ITER               212 (to L29)
+                    STORE_FAST               5 (artifact)
+    
+      40    L7:     NOP
+    
+      41    L8:     LOAD_GLOBAL             26 (artifact_service)
+                    LOAD_ATTR               28 (process_call_artifacts)
+                    PUSH_NULL
+                    LOAD_FAST_LOAD_FAST      5 (db, artifact)
+                    CALL                     2
+                    GET_AWAITABLE            0
+                    LOAD_CONST               3 (None)
+            L9:     SEND                     3 (to L12)
+           L10:     YIELD_VALUE              1
+           L11:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+           L12:     END_SEND
+                    STORE_FAST               6 (all_done)
+    
+      43            LOAD_GLOBAL             31 (str + NULL)
+                    LOAD_FAST                5 (artifact)
+                    LOAD_ATTR               32 (call_id)
+                    CALL                     1
+                    STORE_FAST               7 (cid)
+    
+      44            LOAD_GLOBAL             31 (str + NULL)
+                    LOAD_FAST                5 (artifact)
+                    LOAD_ATTR               34 (owner_user_id)
+                    CALL                     1
+                    STORE_FAST               8 (uid)
+    
+      46            LOAD_FAST                5 (artifact)
+                    LOAD_ATTR               14 (transcript_status)
+                    LOAD_CONST               5 ('ready')
+                    COMPARE_OP              88 (bool(==))
+                    POP_JUMP_IF_FALSE       21 (to L17)
+    
+      47            LOAD_GLOBAL             37 (emit_event + NULL)
+    
+      48            LOAD_FAST                8 (uid)
+    
+      49            LOAD_CONST               6 ('TRANSCRIPT_READY')
+    
+      50            LOAD_FAST                7 (cid)
+    
+      51            LOAD_CONST               7 (1)
+    
+      52            BUILD_MAP                0
+    
+      47            LOAD_CONST               8 (('user_id', 'event_type', 'call_id', 'seq', 'payload'))
+                    CALL_KW                  5
+                    GET_AWAITABLE            0
+                    LOAD_CONST               3 (None)
+           L13:     SEND                     3 (to L16)
+           L14:     YIELD_VALUE              1
+           L15:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L13)
+           L16:     END_SEND
+                    POP_TOP
+    
+      55   L17:     LOAD_FAST                5 (artifact)
+                    LOAD_ATTR                8 (summary_status)
+                    LOAD_CONST               5 ('ready')
+                    COMPARE_OP              88 (bool(==))
+                    POP_JUMP_IF_FALSE       21 (to L22)
+    
+      56            LOAD_GLOBAL             37 (emit_event + NULL)
+    
+      57            LOAD_FAST                8 (uid)
+    
+      58            LOAD_CONST               9 ('SUMMARY_READY')
+    
+      59            LOAD_FAST                7 (cid)
+    
+      60            LOAD_CONST              10 (2)
+    
+      61            BUILD_MAP                0
+    
+      56            LOAD_CONST               8 (('user_id', 'event_type', 'call_id', 'seq', 'payload'))
+                    CALL_KW                  5
+                    GET_AWAITABLE            0
+                    LOAD_CONST               3 (None)
+           L18:     SEND                     3 (to L21)
+           L19:     YIELD_VALUE              1
+           L20:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L18)
+           L21:     END_SEND
+                    POP_TOP
+    
+      64   L22:     LOAD_FAST                6 (all_done)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       50 (to L27)
+    
+      65            LOAD_GLOBAL             39 (notify_call_screened + NULL)
+    
+      66            LOAD_FAST                0 (db)
+    
+      67            LOAD_FAST                5 (artifact)
+                    LOAD_ATTR               32 (call_id)
+    
+      68            LOAD_FAST                5 (artifact)
+                    LOAD_ATTR               34 (owner_user_id)
+    
+      69            LOAD_FAST                5 (artifact)
+                    LOAD_ATTR               40 (labels_json)
+    
+      65            LOAD_CONST              11 (('call_id', 'user_id', 'labels'))
+                    CALL_KW                  4
+                    GET_AWAITABLE            0
+                    LOAD_CONST               3 (None)
+           L23:     SEND                     3 (to L26)
+           L24:     YIELD_VALUE              1
+           L25:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L23)
+           L26:     END_SEND
+                    POP_TOP
+    
+      71   L27:     LOAD_FAST                4 (processed)
+                    LOAD_CONST               7 (1)
+                    BINARY_OP               13 (+=)
+                    STORE_FAST               4 (processed)
+           L28:     JUMP_BACKWARD          214 (to L6)
+    
+      39   L29:     END_FOR
+                    POP_TOP
+    
+      77            LOAD_FAST                4 (processed)
+                    RETURN_VALUE
+    
+      35   L30:     CLEANUP_THROW
+           L31:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 266 (to L5)
+    
+      41   L32:     CLEANUP_THROW
+           L33:     JUMP_BACKWARD_NO_INTERRUPT 191 (to L12)
+    
+      47   L34:     CLEANUP_THROW
+           L35:     JUMP_BACKWARD_NO_INTERRUPT 114 (to L16)
+    
+      56   L36:     CLEANUP_THROW
+           L37:     JUMP_BACKWARD_NO_INTERRUPT 79 (to L21)
+    
+      65   L38:     CLEANUP_THROW
+           L39:     JUMP_BACKWARD_NO_INTERRUPT 24 (to L26)
+    
+      --   L40:     PUSH_EXC_INFO
+    
+      72            LOAD_GLOBAL             42 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       37 (to L42)
+                    POP_TOP
+    
+      73            LOAD_GLOBAL             44 (logger)
+                    LOAD_ATTR               47 (exception + NULL|self)
+    
+      74            LOAD_CONST              12 ('Failed to process artifacts for call %s')
+                    LOAD_FAST                5 (artifact)
+                    LOAD_ATTR               32 (call_id)
+    
+      73            CALL                     2
+                    POP_TOP
+           L41:     POP_EXCEPT
+                    EXTENDED_ARG             1
+                    JUMP_BACKWARD          275 (to L6)
+    
+      72   L42:     RERAISE                  0
+    
+      --   L43:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L44:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L44 [0] lasti
+      L3 to L4 -> L30 [2]
+      L4 to L7 -> L44 [0] lasti
+      L8 to L10 -> L40 [1]
+      L10 to L11 -> L32 [3]
+      L11 to L14 -> L40 [1]
+      L14 to L15 -> L34 [3]
+      L15 to L19 -> L40 [1]
+      L19 to L20 -> L36 [3]
+      L20 to L24 -> L40 [1]
+      L24 to L25 -> L38 [3]
+      L25 to L28 -> L40 [1]
+      L28 to L31 -> L44 [0] lasti
+      L32 to L33 -> L40 [1]
+      L34 to L35 -> L40 [1]
+      L36 to L37 -> L40 [1]
+      L38 to L39 -> L40 [1]
+      L40 to L41 -> L43 [2] lasti
+      L41 to L42 -> L44 [0] lasti
+      L42 to L43 -> L43 [2] lasti
+      L43 to L44 -> L44 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'sqlalchemy', 'or_', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.models.call_artifact', 'CallArtifact', 'app.services', 'artifact_service', 'app.services.event_emitter', 'emit_event', 'app.services.notification_service', 'notify_call_screened', 'getLogger', '__name__', 'logger', 'process_pending_artifacts')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Post-call artifact processing worker.\n\nPolls for pending/processing artifacts and runs the artifact pipeline.\nAlso sends privacy-safe push notifications when artifacts become ready.\n')
+              STORE_NAME               0 (__doc__)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (logging)
+              STORE_NAME               3 (logging)
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('or_', 'select'))
+              IMPORT_NAME              4 (sqlalchemy)
+              IMPORT_FROM              5 (or_)
+              STORE_NAME               5 (or_)
+              IMPORT_FROM              6 (select)
+              STORE_NAME               6 (select)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('AsyncSession',))
+              IMPORT_NAME              7 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM              8 (AsyncSession)
+              STORE_NAME               8 (AsyncSession)
+              POP_TOP
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('CallArtifact',))
+              IMPORT_NAME              9 (app.models.call_artifact)
+              IMPORT_FROM             10 (CallArtifact)
+              STORE_NAME              10 (CallArtifact)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('artifact_service',))
+              IMPORT_NAME             11 (app.services)
+              IMPORT_FROM             12 (artifact_service)
+              STORE_NAME              12 (artifact_service)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('emit_event',))
+              IMPORT_NAME             13 (app.services.event_emitter)
+              IMPORT_FROM             14 (emit_event)
+              STORE_NAME              14 (emit_event)
+              POP_TOP
+
+ 17           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('notify_call_screened',))
+              IMPORT_NAME             15 (app.services.notification_service)
+              IMPORT_FROM             16 (notify_call_screened)
+              STORE_NAME              16 (notify_call_screened)
+              POP_TOP
+
+ 19           LOAD_NAME                3 (logging)
+              LOAD_ATTR               34 (getLogger)
+              PUSH_NULL
+              LOAD_NAME               18 (__name__)
+              CALL                     1
+              STORE_NAME              19 (logger)
+
+ 22           LOAD_CONST              11 (('db', 'AsyncSession', 'return', 'int'))
+              LOAD_CONST              10 (<code object process_pending_artifacts at 0x0000024C0FB57510, file "D:\fluence\Github\mattbot\backend\app\workers\post_call.py", line 22>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              20 (process_pending_artifacts)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object process_pending_artifacts at 0x0000024C0FB57510, file "D:\fluence\Github\mattbot\backend\app\workers\post_call.py", line 22>:
+  22            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  25            LOAD_GLOBAL              1 (select + NULL)
+                LOAD_GLOBAL              2 (CallArtifact)
+                CALL                     1
+
+  26            LOAD_ATTR                5 (where + NULL|self)
+
+  27            LOAD_GLOBAL              7 (or_ + NULL)
+
+  28            LOAD_GLOBAL              2 (CallArtifact)
+                LOAD_ATTR                8 (summary_status)
+                LOAD_ATTR               11 (in_ + NULL|self)
+                LOAD_CONST               1 (('pending', 'processing'))
+                CALL                     1
+
+  29            LOAD_GLOBAL              2 (CallArtifact)
+                LOAD_ATTR               12 (labels_status)
+                LOAD_ATTR               11 (in_ + NULL|self)
+                LOAD_CONST               1 (('pending', 'processing'))
+                CALL                     1
+
+  30            LOAD_GLOBAL              2 (CallArtifact)
+                LOAD_ATTR               14 (transcript_status)
+                LOAD_ATTR               11 (in_ + NULL|self)
+                LOAD_CONST               1 (('pending', 'processing'))
+                CALL                     1
+
+  27            CALL                     3
+
+  26            CALL                     1
+
+  33            LOAD_ATTR               17 (limit + NULL|self)
+                LOAD_CONST               2 (10)
+                CALL                     1
+
+  24            STORE_FAST               1 (stmt)
+
+  35            LOAD_FAST                0 (db)
+                LOAD_ATTR               19 (execute + NULL|self)
+                LOAD_FAST                1 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               3 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               2 (result)
+
+  36            LOAD_GLOBAL             21 (list + NULL)
+                LOAD_FAST                2 (result)
+                LOAD_ATTR               23 (scalars + NULL|self)
+                CALL                     0
+                LOAD_ATTR               25 (all + NULL|self)
+                CALL                     0
+                CALL                     1
+                STORE_FAST               3 (artifacts)
+
+  38            LOAD_CONST               4 (0)
+                STORE_FAST               4 (processed)
+
+  39            LOAD_FAST                3 (artifacts)
+                GET_ITER
+        L6:     FOR_ITER               212 (to L29)
+                STORE_FAST               5 (artifact)
+
+  40    L7:     NOP
+
+  41    L8:     LOAD_GLOBAL             26 (artifact_service)
+                LOAD_ATTR               28 (process_call_artifacts)
+                PUSH_NULL
+                LOAD_FAST_LOAD_FAST      5 (db, artifact)
+                CALL                     2
+                GET_AWAITABLE            0
+                LOAD_CONST               3 (None)
+        L9:     SEND                     3 (to L12)
+       L10:     YIELD_VALUE              1
+       L11:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+       L12:     END_SEND
+                STORE_FAST               6 (all_done)
+
+  43            LOAD_GLOBAL             31 (str + NULL)
+                LOAD_FAST                5 (artifact)
+                LOAD_ATTR               32 (call_id)
+                CALL                     1
+                STORE_FAST               7 (cid)
+
+  44            LOAD_GLOBAL             31 (str + NULL)
+                LOAD_FAST                5 (artifact)
+                LOAD_ATTR               34 (owner_user_id)
+                CALL                     1
+                STORE_FAST               8 (uid)
+
+  46            LOAD_FAST                5 (artifact)
+                LOAD_ATTR               14 (transcript_status)
+                LOAD_CONST               5 ('ready')
+                COMPARE_OP              88 (bool(==))
+                POP_JUMP_IF_FALSE       21 (to L17)
+
+  47            LOAD_GLOBAL             37 (emit_event + NULL)
+
+  48            LOAD_FAST                8 (uid)
+
+  49            LOAD_CONST               6 ('TRANSCRIPT_READY')
+
+  50            LOAD_FAST                7 (cid)
+
+  51            LOAD_CONST               7 (1)
+
+  52            BUILD_MAP                0
+
+  47            LOAD_CONST               8 (('user_id', 'event_type', 'call_id', 'seq', 'payload'))
+                CALL_KW                  5
+                GET_AWAITABLE            0
+                LOAD_CONST               3 (None)
+       L13:     SEND                     3 (to L16)
+       L14:     YIELD_VALUE              1
+       L15:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L13)
+       L16:     END_SEND
+                POP_TOP
+
+  55   L17:     LOAD_FAST                5 (artifact)
+                LOAD_ATTR                8 (summary_status)
+                LOAD_CONST               5 ('ready')
+                COMPARE_OP              88 (bool(==))
+                POP_JUMP_IF_FALSE       21 (to L22)
+
+  56            LOAD_GLOBAL             37 (emit_event + NULL)
+
+  57            LOAD_FAST                8 (uid)
+
+  58            LOAD_CONST               9 ('SUMMARY_READY')
+
+  59            LOAD_FAST                7 (cid)
+
+  60            LOAD_CONST              10 (2)
+
+  61            BUILD_MAP                0
+
+  56            LOAD_CONST               8 (('user_id', 'event_type', 'call_id', 'seq', 'payload'))
+                CALL_KW                  5
+                GET_AWAITABLE            0
+                LOAD_CONST               3 (None)
+       L18:     SEND                     3 (to L21)
+       L19:     YIELD_VALUE              1
+       L20:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L18)
+       L21:     END_SEND
+                POP_TOP
+
+  64   L22:     LOAD_FAST                6 (all_done)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       50 (to L27)
+
+  65            LOAD_GLOBAL             39 (notify_call_screened + NULL)
+
+  66            LOAD_FAST                0 (db)
+
+  67            LOAD_FAST                5 (artifact)
+                LOAD_ATTR               32 (call_id)
+
+  68            LOAD_FAST                5 (artifact)
+                LOAD_ATTR               34 (owner_user_id)
+
+  69            LOAD_FAST                5 (artifact)
+                LOAD_ATTR               40 (labels_json)
+
+  65            LOAD_CONST              11 (('call_id', 'user_id', 'labels'))
+                CALL_KW                  4
+                GET_AWAITABLE            0
+                LOAD_CONST               3 (None)
+       L23:     SEND                     3 (to L26)
+       L24:     YIELD_VALUE              1
+       L25:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L23)
+       L26:     END_SEND
+                POP_TOP
+
+  71   L27:     LOAD_FAST                4 (processed)
+                LOAD_CONST               7 (1)
+                BINARY_OP               13 (+=)
+                STORE_FAST               4 (processed)
+       L28:     JUMP_BACKWARD          214 (to L6)
+
+  39   L29:     END_FOR
+                POP_TOP
+
+  77            LOAD_FAST                4 (processed)
+                RETURN_VALUE
+
+  35   L30:     CLEANUP_THROW
+       L31:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 266 (to L5)
+
+  41   L32:     CLEANUP_THROW
+       L33:     JUMP_BACKWARD_NO_INTERRUPT 191 (to L12)
+
+  47   L34:     CLEANUP_THROW
+       L35:     JUMP_BACKWARD_NO_INTERRUPT 114 (to L16)
+
+  56   L36:     CLEANUP_THROW
+       L37:     JUMP_BACKWARD_NO_INTERRUPT 79 (to L21)
+
+  65   L38:     CLEANUP_THROW
+       L39:     JUMP_BACKWARD_NO_INTERRUPT 24 (to L26)
+
+  --   L40:     PUSH_EXC_INFO
+
+  72            LOAD_GLOBAL             42 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       37 (to L42)
+                POP_TOP
+
+  73            LOAD_GLOBAL             44 (logger)
+                LOAD_ATTR               47 (exception + NULL|self)
+
+  74            LOAD_CONST              12 ('Failed to process artifacts for call %s')
+                LOAD_FAST                5 (artifact)
+                LOAD_ATTR               32 (call_id)
+
+  73            CALL                     2
+                POP_TOP
+       L41:     POP_EXCEPT
+                EXTENDED_ARG             1
+                JUMP_BACKWARD          275 (to L6)
+
+  72   L42:     RERAISE                  0
+
+  --   L43:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L44:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L44 [0] lasti
+  L3 to L4 -> L30 [2]
+  L4 to L7 -> L44 [0] lasti
+  L8 to L10 -> L40 [1]
+  L10 to L11 -> L32 [3]
+  L11 to L14 -> L40 [1]
+  L14 to L15 -> L34 [3]
+  L15 to L19 -> L40 [1]
+  L19 to L20 -> L36 [3]
+  L20 to L24 -> L40 [1]
+  L24 to L25 -> L38 [3]
+  L25 to L28 -> L40 [1]
+  L28 to L31 -> L44 [0] lasti
+  L32 to L33 -> L40 [1]
+  L34 to L35 -> L40 [1]
+  L36 to L37 -> L40 [1]
+  L38 to L39 -> L40 [1]
+  L40 to L41 -> L43 [2] lasti
+  L41 to L42 -> L44 [0] lasti
+  L42 to L43 -> L43 [2] lasti
+  L43 to L44 -> L44 [0] lasti

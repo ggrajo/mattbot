@@ -1,0 +1,790 @@
+# Bytecode dump of: billing_subscription.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\models\billing_subscription.py
+# co_names: ('uuid', 'datetime', 'UTC', 'sqlalchemy', 'Boolean', 'CheckConstraint', 'DateTime', 'ForeignKey', 'Integer', 'String', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'relationship', 'app.database', 'Base', '_tz', 'BillingSubscription')
+# co_consts (strings): ['return', 'BillingSubscription']
+
+# --- Nested code object: _tz ---
+    # co_names: ('DateTime',)
+    # co_varnames: ()
+     11           RESUME                   0
+    
+     12           LOAD_GLOBAL              1 (DateTime + NULL)
+                  LOAD_CONST               1 (True)
+                  LOAD_CONST               2 (('timezone',))
+                  CALL_KW                  1
+                  RETURN_VALUE
+    
+# --- Nested code object: BillingSubscription ---
+    # DOCSTRING: """BillingSubscription"""
+    # --- Nested code object: BillingSubscription.<lambda> ---
+        # co_names: ('datetime', 'now', 'UTC')
+        # co_varnames: ()
+         53           RESUME                   0
+                      LOAD_GLOBAL              0 (datetime)
+                      LOAD_ATTR                2 (now)
+                      PUSH_NULL
+                      LOAD_GLOBAL              4 (UTC)
+                      CALL                     1
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__tablename__', 'mapped_column', 'UUID', 'uuid', 'uuid4', 'id', 'Mapped', '__annotations__', 'ForeignKey', 'owner_user_id', 'String', 'plan', 'str', 'status', 'Text', 'stripe_subscription_id', 'stripe_price_id', '_tz', 'current_period_start', 'datetime', 'current_period_end', 'Boolean', 'text', 'cancel_at_period_end', 'bool', 'canceled_at', 'Integer', 'minutes_included', 'int', 'minutes_carried_over', 'created_at', 'updated_at', 'relationship', 'user', 'CheckConstraint', '__table_args__', '__static_attributes__')
+    # co_varnames: ()
+     15           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('BillingSubscription')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (15)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     16           LOAD_CONST               2 ('billing_subscriptions')
+                  STORE_NAME               4 (__tablename__)
+    
+     18           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     19           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               3 (True)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               16 (uuid4)
+    
+     18           LOAD_CONST               5 (('primary_key', 'default'))
+                  CALL_KW                  3
+                  STORE_NAME               9 (id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST               6 ('id')
+                  STORE_SUBSCR
+    
+     21           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     22           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     23           LOAD_NAME               12 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST               7 ('users.id')
+                  LOAD_CONST               8 ('CASCADE')
+                  LOAD_CONST               9 (('ondelete',))
+                  CALL_KW                  2
+    
+     24           LOAD_CONST               3 (True)
+    
+     25           LOAD_CONST              10 (False)
+    
+     26           LOAD_CONST               3 (True)
+    
+     21           LOAD_CONST              11 (('unique', 'nullable', 'index'))
+                  CALL_KW                  5
+                  STORE_NAME              13 (owner_user_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              12 ('owner_user_id')
+                  STORE_SUBSCR
+    
+     28           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               14 (String)
+                  PUSH_NULL
+                  LOAD_CONST              13 (20)
+                  CALL                     1
+                  LOAD_CONST              10 (False)
+                  LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              15 (plan)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               16 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              15 ('plan')
+                  STORE_SUBSCR
+    
+     29           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               14 (String)
+                  PUSH_NULL
+                  LOAD_CONST              13 (20)
+                  CALL                     1
+                  LOAD_CONST              10 (False)
+                  LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              17 (status)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               16 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              16 ('status')
+                  STORE_SUBSCR
+    
+     30           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     31           LOAD_NAME               18 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               3 (True)
+    
+     30           LOAD_CONST              17 (('unique', 'nullable'))
+                  CALL_KW                  3
+                  STORE_NAME              19 (stripe_subscription_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               16 (str)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              19 ('stripe_subscription_id')
+                  STORE_SUBSCR
+    
+     33           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               18 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              20 (stripe_price_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               16 (str)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              20 ('stripe_price_id')
+                  STORE_SUBSCR
+    
+     34           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     35           LOAD_NAME               21 (_tz)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               3 (True)
+    
+     34           LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              22 (current_period_start)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               23 (datetime)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              21 ('current_period_start')
+                  STORE_SUBSCR
+    
+     37           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               21 (_tz)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              24 (current_period_end)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               23 (datetime)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              22 ('current_period_end')
+                  STORE_SUBSCR
+    
+     38           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     39           LOAD_NAME               25 (Boolean)
+                  LOAD_CONST              10 (False)
+                  LOAD_NAME               26 (text)
+                  PUSH_NULL
+                  LOAD_CONST              23 ('false')
+                  CALL                     1
+    
+     38           LOAD_CONST              24 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              27 (cancel_at_period_end)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               28 (bool)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              25 ('cancel_at_period_end')
+                  STORE_SUBSCR
+    
+     41           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               21 (_tz)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              29 (canceled_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               23 (datetime)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              26 ('canceled_at')
+                  STORE_SUBSCR
+    
+     42           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               30 (Integer)
+                  LOAD_CONST              10 (False)
+                  LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              31 (minutes_included)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               32 (int)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              27 ('minutes_included')
+                  STORE_SUBSCR
+    
+     43           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     44           LOAD_NAME               30 (Integer)
+                  LOAD_CONST              10 (False)
+                  LOAD_NAME               26 (text)
+                  PUSH_NULL
+                  LOAD_CONST              28 ('0')
+                  CALL                     1
+    
+     43           LOAD_CONST              24 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              33 (minutes_carried_over)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               32 (int)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              29 ('minutes_carried_over')
+                  STORE_SUBSCR
+    
+     46           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     47           LOAD_NAME               21 (_tz)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST              10 (False)
+                  LOAD_NAME               26 (text)
+                  PUSH_NULL
+                  LOAD_CONST              30 ('now()')
+                  CALL                     1
+    
+     46           LOAD_CONST              24 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              34 (created_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               23 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              31 ('created_at')
+                  STORE_SUBSCR
+    
+     49           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     50           LOAD_NAME               21 (_tz)
+                  PUSH_NULL
+                  CALL                     0
+    
+     51           LOAD_CONST              10 (False)
+    
+     52           LOAD_NAME               26 (text)
+                  PUSH_NULL
+                  LOAD_CONST              30 ('now()')
+                  CALL                     1
+    
+     53           LOAD_CONST              32 (<code object <lambda> at 0x0000024C11422F30, file "D:\fluence\Github\mattbot\backend\app\models\billing_subscription.py", line 53>)
+                  MAKE_FUNCTION
+    
+     49           LOAD_CONST              33 (('nullable', 'server_default', 'onupdate'))
+                  CALL_KW                  4
+                  STORE_NAME              35 (updated_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               23 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              34 ('updated_at')
+                  STORE_SUBSCR
+    
+     56           LOAD_NAME               36 (relationship)
+                  PUSH_NULL
+                  LOAD_CONST              35 ('billing_subscription')
+                  LOAD_CONST              36 (('back_populates',))
+                  CALL_KW                  1
+                  STORE_NAME              37 (user)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_CONST              37 ('User')
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              38 ('user')
+                  STORE_SUBSCR
+    
+     59           LOAD_NAME               38 (CheckConstraint)
+                  PUSH_NULL
+    
+     60           LOAD_CONST              39 ("status IN ('active', 'past_due', 'canceled', 'incomplete', 'trialing')")
+    
+     61           LOAD_CONST              40 ('ck_billing_subscriptions_status')
+    
+     59           LOAD_CONST              41 (('name',))
+                  CALL_KW                  2
+    
+     58           BUILD_TUPLE              1
+                  STORE_NAME              39 (__table_args__)
+                  LOAD_CONST              42 (())
+                  STORE_NAME              40 (__static_attributes__)
+                  RETURN_CONST            18 (None)
+    
+    Disassembly of <code object <lambda> at 0x0000024C11422F30, file "D:\fluence\Github\mattbot\backend\app\models\billing_subscription.py", line 53>:
+     53           RESUME                   0
+                  LOAD_GLOBAL              0 (datetime)
+                  LOAD_ATTR                2 (now)
+                  PUSH_NULL
+                  LOAD_GLOBAL              4 (UTC)
+                  CALL                     1
+                  RETURN_VALUE
+    
+# co_names: ('uuid', 'datetime', 'UTC', 'sqlalchemy', 'Boolean', 'CheckConstraint', 'DateTime', 'ForeignKey', 'Integer', 'String', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'relationship', 'app.database', 'Base', '_tz', 'BillingSubscription')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 (0)
+              LOAD_CONST               1 (None)
+              IMPORT_NAME              0 (uuid)
+              STORE_NAME               0 (uuid)
+
+  2           LOAD_CONST               0 (0)
+              LOAD_CONST               2 (('UTC', 'datetime'))
+              IMPORT_NAME              1 (datetime)
+              IMPORT_FROM              2 (UTC)
+              STORE_NAME               2 (UTC)
+              IMPORT_FROM              1 (datetime)
+              STORE_NAME               1 (datetime)
+              POP_TOP
+
+  4           LOAD_CONST               0 (0)
+              LOAD_CONST               3 (('Boolean', 'CheckConstraint', 'DateTime', 'ForeignKey', 'Integer', 'String', 'Text', 'text'))
+              IMPORT_NAME              3 (sqlalchemy)
+              IMPORT_FROM              4 (Boolean)
+              STORE_NAME               4 (Boolean)
+              IMPORT_FROM              5 (CheckConstraint)
+              STORE_NAME               5 (CheckConstraint)
+              IMPORT_FROM              6 (DateTime)
+              STORE_NAME               6 (DateTime)
+              IMPORT_FROM              7 (ForeignKey)
+              STORE_NAME               7 (ForeignKey)
+              IMPORT_FROM              8 (Integer)
+              STORE_NAME               8 (Integer)
+              IMPORT_FROM              9 (String)
+              STORE_NAME               9 (String)
+              IMPORT_FROM             10 (Text)
+              STORE_NAME              10 (Text)
+              IMPORT_FROM             11 (text)
+              STORE_NAME              11 (text)
+              POP_TOP
+
+  5           LOAD_CONST               0 (0)
+              LOAD_CONST               4 (('UUID',))
+              IMPORT_NAME             12 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM             13 (UUID)
+              STORE_NAME              13 (UUID)
+              POP_TOP
+
+  6           LOAD_CONST               0 (0)
+              LOAD_CONST               5 (('Mapped', 'mapped_column', 'relationship'))
+              IMPORT_NAME             14 (sqlalchemy.orm)
+              IMPORT_FROM             15 (Mapped)
+              STORE_NAME              15 (Mapped)
+              IMPORT_FROM             16 (mapped_column)
+              STORE_NAME              16 (mapped_column)
+              IMPORT_FROM             17 (relationship)
+              STORE_NAME              17 (relationship)
+              POP_TOP
+
+  8           LOAD_CONST               0 (0)
+              LOAD_CONST               6 (('Base',))
+              IMPORT_NAME             18 (app.database)
+              IMPORT_FROM             19 (Base)
+              STORE_NAME              19 (Base)
+              POP_TOP
+
+ 11           LOAD_CONST               7 ('return')
+              LOAD_NAME                6 (DateTime)
+              BUILD_TUPLE              2
+              LOAD_CONST               8 (<code object _tz at 0x0000024C0EF0FE50, file "D:\fluence\Github\mattbot\backend\app\models\billing_subscription.py", line 11>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              20 (_tz)
+
+ 15           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               9 (<code object BillingSubscription at 0x0000024C0FBE2570, file "D:\fluence\Github\mattbot\backend\app\models\billing_subscription.py", line 15>)
+              MAKE_FUNCTION
+              LOAD_CONST              10 ('BillingSubscription')
+              LOAD_NAME               19 (Base)
+              CALL                     3
+              STORE_NAME              21 (BillingSubscription)
+              RETURN_CONST             1 (None)
+
+Disassembly of <code object _tz at 0x0000024C0EF0FE50, file "D:\fluence\Github\mattbot\backend\app\models\billing_subscription.py", line 11>:
+ 11           RESUME                   0
+
+ 12           LOAD_GLOBAL              1 (DateTime + NULL)
+              LOAD_CONST               1 (True)
+              LOAD_CONST               2 (('timezone',))
+              CALL_KW                  1
+              RETURN_VALUE
+
+Disassembly of <code object BillingSubscription at 0x0000024C0FBE2570, file "D:\fluence\Github\mattbot\backend\app\models\billing_subscription.py", line 15>:
+ 15           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('BillingSubscription')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (15)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 16           LOAD_CONST               2 ('billing_subscriptions')
+              STORE_NAME               4 (__tablename__)
+
+ 18           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 19           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               16 (uuid4)
+
+ 18           LOAD_CONST               5 (('primary_key', 'default'))
+              CALL_KW                  3
+              STORE_NAME               9 (id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               6 ('id')
+              STORE_SUBSCR
+
+ 21           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 22           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 23           LOAD_NAME               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               7 ('users.id')
+              LOAD_CONST               8 ('CASCADE')
+              LOAD_CONST               9 (('ondelete',))
+              CALL_KW                  2
+
+ 24           LOAD_CONST               3 (True)
+
+ 25           LOAD_CONST              10 (False)
+
+ 26           LOAD_CONST               3 (True)
+
+ 21           LOAD_CONST              11 (('unique', 'nullable', 'index'))
+              CALL_KW                  5
+              STORE_NAME              13 (owner_user_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              12 ('owner_user_id')
+              STORE_SUBSCR
+
+ 28           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               14 (String)
+              PUSH_NULL
+              LOAD_CONST              13 (20)
+              CALL                     1
+              LOAD_CONST              10 (False)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              15 (plan)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               16 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              15 ('plan')
+              STORE_SUBSCR
+
+ 29           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               14 (String)
+              PUSH_NULL
+              LOAD_CONST              13 (20)
+              CALL                     1
+              LOAD_CONST              10 (False)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              17 (status)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               16 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              16 ('status')
+              STORE_SUBSCR
+
+ 30           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 31           LOAD_NAME               18 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               3 (True)
+
+ 30           LOAD_CONST              17 (('unique', 'nullable'))
+              CALL_KW                  3
+              STORE_NAME              19 (stripe_subscription_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               16 (str)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              19 ('stripe_subscription_id')
+              STORE_SUBSCR
+
+ 33           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               18 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              20 (stripe_price_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               16 (str)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              20 ('stripe_price_id')
+              STORE_SUBSCR
+
+ 34           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 35           LOAD_NAME               21 (_tz)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+
+ 34           LOAD_CONST              14 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              22 (current_period_start)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               23 (datetime)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              21 ('current_period_start')
+              STORE_SUBSCR
+
+ 37           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               21 (_tz)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              24 (current_period_end)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               23 (datetime)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              22 ('current_period_end')
+              STORE_SUBSCR
+
+ 38           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 39           LOAD_NAME               25 (Boolean)
+              LOAD_CONST              10 (False)
+              LOAD_NAME               26 (text)
+              PUSH_NULL
+              LOAD_CONST              23 ('false')
+              CALL                     1
+
+ 38           LOAD_CONST              24 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              27 (cancel_at_period_end)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               28 (bool)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              25 ('cancel_at_period_end')
+              STORE_SUBSCR
+
+ 41           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               21 (_tz)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              29 (canceled_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               23 (datetime)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              26 ('canceled_at')
+              STORE_SUBSCR
+
+ 42           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               30 (Integer)
+              LOAD_CONST              10 (False)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              31 (minutes_included)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               32 (int)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              27 ('minutes_included')
+              STORE_SUBSCR
+
+ 43           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 44           LOAD_NAME               30 (Integer)
+              LOAD_CONST              10 (False)
+              LOAD_NAME               26 (text)
+              PUSH_NULL
+              LOAD_CONST              28 ('0')
+              CALL                     1
+
+ 43           LOAD_CONST              24 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              33 (minutes_carried_over)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               32 (int)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              29 ('minutes_carried_over')
+              STORE_SUBSCR
+
+ 46           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 47           LOAD_NAME               21 (_tz)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              10 (False)
+              LOAD_NAME               26 (text)
+              PUSH_NULL
+              LOAD_CONST              30 ('now()')
+              CALL                     1
+
+ 46           LOAD_CONST              24 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              34 (created_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               23 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              31 ('created_at')
+              STORE_SUBSCR
+
+ 49           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 50           LOAD_NAME               21 (_tz)
+              PUSH_NULL
+              CALL                     0
+
+ 51           LOAD_CONST              10 (False)
+
+ 52           LOAD_NAME               26 (text)
+              PUSH_NULL
+              LOAD_CONST              30 ('now()')
+              CALL                     1
+
+ 53           LOAD_CONST              32 (<code object <lambda> at 0x0000024C11422F30, file "D:\fluence\Github\mattbot\backend\app\models\billing_subscription.py", line 53>)
+              MAKE_FUNCTION
+
+ 49           LOAD_CONST              33 (('nullable', 'server_default', 'onupdate'))
+              CALL_KW                  4
+              STORE_NAME              35 (updated_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               23 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              34 ('updated_at')
+              STORE_SUBSCR
+
+ 56           LOAD_NAME               36 (relationship)
+              PUSH_NULL
+              LOAD_CONST              35 ('billing_subscription')
+              LOAD_CONST              36 (('back_populates',))
+              CALL_KW                  1
+              STORE_NAME              37 (user)
+              LOAD_NAME               10 (Mapped)
+              LOAD_CONST              37 ('User')
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              38 ('user')
+              STORE_SUBSCR
+
+ 59           LOAD_NAME               38 (CheckConstraint)
+              PUSH_NULL
+
+ 60           LOAD_CONST              39 ("status IN ('active', 'past_due', 'canceled', 'incomplete', 'trialing')")
+
+ 61           LOAD_CONST              40 ('ck_billing_subscriptions_status')
+
+ 59           LOAD_CONST              41 (('name',))
+              CALL_KW                  2
+
+ 58           BUILD_TUPLE              1
+              STORE_NAME              39 (__table_args__)
+              LOAD_CONST              42 (())
+              STORE_NAME              40 (__static_attributes__)
+              RETURN_CONST            18 (None)
+
+Disassembly of <code object <lambda> at 0x0000024C11422F30, file "D:\fluence\Github\mattbot\backend\app\models\billing_subscription.py", line 53>:
+ 53           RESUME                   0
+              LOAD_GLOBAL              0 (datetime)
+              LOAD_ATTR                2 (now)
+              PUSH_NULL
+              LOAD_GLOBAL              4 (UTC)
+              CALL                     1
+              RETURN_VALUE

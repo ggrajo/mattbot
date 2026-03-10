@@ -1,0 +1,890 @@
+# Bytecode dump of: messaging.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\schemas\messaging.py
+# co_names: ('__doc__', '__future__', 'annotations', 're', 'datetime', 'pydantic', 'BaseModel', 'Field', 'field_validator', 'compile', '_E164_RE', '_validate_e164', 'TextBackDraftRequest', 'TextBackUpdateRequest', 'TextBackApproveRequest', 'TextBackResponse', 'TemplateResponse', 'TemplateListResponse')
+# co_consts (strings): ['Pydantic schemas for messaging / text-back endpoints.', '^\\+[1-9]\\d{1,14}$', 'TextBackDraftRequest', 'TextBackUpdateRequest', 'TextBackApproveRequest', 'TextBackResponse', 'TemplateResponse', 'TemplateListResponse']
+
+# DOCSTRING: """Pydantic schemas for messaging / text-back endpoints."""
+# --- Nested code object: _validate_e164 ---
+    # co_names: ('_E164_RE', 'match', 'ValueError')
+    # co_varnames: ('v',)
+     13           RESUME                   0
+    
+     14           LOAD_FAST                0 (v)
+                  POP_JUMP_IF_NONE        37 (to L1)
+                  LOAD_GLOBAL              0 (_E164_RE)
+                  LOAD_ATTR                3 (match + NULL|self)
+                  LOAD_FAST                0 (v)
+                  CALL                     1
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE        11 (to L1)
+    
+     15           LOAD_GLOBAL              5 (ValueError + NULL)
+                  LOAD_CONST               1 ('Phone number must be in E.164 format (e.g. +15551234567)')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     16   L1:     LOAD_FAST                0 (v)
+                  RETURN_VALUE
+    
+# --- Nested code object: TextBackDraftRequest ---
+    # DOCSTRING: """TextBackDraftRequest"""
+    # --- Nested code object: TextBackDraftRequest.validate_to_number ---
+        # co_names: ('_validate_e164',)
+        # co_varnames: ('cls', 'v')
+         24           RESUME                   0
+        
+         27           LOAD_GLOBAL              1 (_validate_e164 + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'template_id', '__annotations__', 'Field', 'custom_body', 'to_number', 'field_validator', 'classmethod', 'validate_to_number', '__static_attributes__')
+    # co_varnames: ()
+     19           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('TextBackDraftRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (19)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     20           LOAD_CONST               2 (None)
+                  STORE_NAME               4 (template_id)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               4 ('template_id')
+                  STORE_SUBSCR
+    
+     21           LOAD_NAME                6 (Field)
+                  PUSH_NULL
+                  LOAD_CONST               2 (None)
+                  LOAD_CONST               5 (500)
+                  LOAD_CONST               6 (('default', 'max_length'))
+                  CALL_KW                  2
+                  STORE_NAME               7 (custom_body)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               7 ('custom_body')
+                  STORE_SUBSCR
+    
+     22           LOAD_CONST               2 (None)
+                  STORE_NAME               8 (to_number)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               8 ('to_number')
+                  STORE_SUBSCR
+    
+     24           LOAD_NAME                9 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               8 ('to_number')
+                  CALL                     1
+    
+     25           LOAD_NAME               10 (classmethod)
+    
+     26           LOAD_CONST              11 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST               9 (<code object validate_to_number at 0x0000024C0EF0FC90, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 24>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     25           CALL                     0
+    
+     24           CALL                     0
+    
+     26           STORE_NAME              11 (validate_to_number)
+                  LOAD_CONST              10 (())
+                  STORE_NAME              12 (__static_attributes__)
+                  RETURN_CONST             2 (None)
+    
+    Disassembly of <code object validate_to_number at 0x0000024C0EF0FC90, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 24>:
+     24           RESUME                   0
+    
+     27           LOAD_GLOBAL              1 (_validate_e164 + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  RETURN_VALUE
+    
+# --- Nested code object: TextBackUpdateRequest ---
+    # DOCSTRING: """TextBackUpdateRequest"""
+    # --- Nested code object: TextBackUpdateRequest.validate_to_number ---
+        # co_names: ('_validate_e164',)
+        # co_varnames: ('cls', 'v')
+         34           RESUME                   0
+        
+         37           LOAD_GLOBAL              1 (_validate_e164 + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'Field', 'body', '__annotations__', 'to_number', 'field_validator', 'classmethod', 'validate_to_number', '__static_attributes__')
+    # co_varnames: ()
+     30           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('TextBackUpdateRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (30)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     31           LOAD_NAME                4 (Field)
+                  PUSH_NULL
+                  LOAD_CONST               2 (None)
+                  LOAD_CONST               3 (500)
+                  LOAD_CONST               4 (('default', 'max_length'))
+                  CALL_KW                  2
+                  STORE_NAME               5 (body)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST               6 ('body')
+                  STORE_SUBSCR
+    
+     32           LOAD_CONST               2 (None)
+                  STORE_NAME               7 (to_number)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST               7 ('to_number')
+                  STORE_SUBSCR
+    
+     34           LOAD_NAME                8 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               7 ('to_number')
+                  CALL                     1
+    
+     35           LOAD_NAME                9 (classmethod)
+    
+     36           LOAD_CONST              10 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST               8 (<code object validate_to_number at 0x0000024C0EF0FD70, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 34>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     35           CALL                     0
+    
+     34           CALL                     0
+    
+     36           STORE_NAME              10 (validate_to_number)
+                  LOAD_CONST               9 (())
+                  STORE_NAME              11 (__static_attributes__)
+                  RETURN_CONST             2 (None)
+    
+    Disassembly of <code object validate_to_number at 0x0000024C0EF0FD70, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 34>:
+     34           RESUME                   0
+    
+     37           LOAD_GLOBAL              1 (_validate_e164 + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  RETURN_VALUE
+    
+# --- Nested code object: TextBackApproveRequest ---
+    # DOCSTRING: """TextBackApproveRequest"""
+    # --- Nested code object: TextBackApproveRequest.validate_to_number ---
+        # co_names: ('_E164_RE', 'match', 'ValueError')
+        # co_varnames: ('cls', 'v')
+         46           RESUME                   0
+        
+         49           LOAD_GLOBAL              0 (_E164_RE)
+                      LOAD_ATTR                3 (match + NULL|self)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      TO_BOOL
+                      POP_JUMP_IF_TRUE        11 (to L1)
+        
+         50           LOAD_GLOBAL              5 (ValueError + NULL)
+                      LOAD_CONST               1 ('Phone number must be in E.164 format')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         51   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'Field', 'final_body', '__annotations__', 'field_validator', 'classmethod', 'validate_to_number', '__static_attributes__')
+    # co_varnames: ()
+     40           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('TextBackApproveRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (40)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     41           LOAD_NAME                4 (Field)
+                  PUSH_NULL
+                  LOAD_CONST               2 (Ellipsis)
+                  LOAD_CONST               3 (500)
+                  LOAD_CONST               4 (('max_length',))
+                  CALL_KW                  2
+                  STORE_NAME               5 (final_body)
+                  LOAD_CONST               5 ('str')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST               6 ('final_body')
+                  STORE_SUBSCR
+    
+     42           LOAD_CONST               5 ('str')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST               7 ('to_number')
+                  STORE_SUBSCR
+    
+     43           LOAD_CONST               5 ('str')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST               8 ('idempotency_key')
+                  STORE_SUBSCR
+    
+     44           LOAD_CONST               5 ('str')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST               9 ('device_id')
+                  STORE_SUBSCR
+    
+     46           LOAD_NAME                7 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               7 ('to_number')
+                  CALL                     1
+    
+     47           LOAD_NAME                8 (classmethod)
+    
+     48           LOAD_CONST              13 (('v', 'str', 'return', 'str'))
+                  LOAD_CONST              10 (<code object validate_to_number at 0x0000024C11496AF0, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 46>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     47           CALL                     0
+    
+     46           CALL                     0
+    
+     48           STORE_NAME               9 (validate_to_number)
+                  LOAD_CONST              11 (())
+                  STORE_NAME              10 (__static_attributes__)
+                  RETURN_CONST            12 (None)
+    
+    Disassembly of <code object validate_to_number at 0x0000024C11496AF0, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 46>:
+     46           RESUME                   0
+    
+     49           LOAD_GLOBAL              0 (_E164_RE)
+                  LOAD_ATTR                3 (match + NULL|self)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE        11 (to L1)
+    
+     50           LOAD_GLOBAL              5 (ValueError + NULL)
+                  LOAD_CONST               1 ('Phone number must be in E.164 format')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     51   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+# --- Nested code object: TextBackResponse ---
+    # DOCSTRING: """TextBackResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'call_id', 'draft_body', 'final_body', 'template_id_used', 'approved_at', 'last_error_code', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+     54           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('TextBackResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (54)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     55           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('id')
+                  STORE_SUBSCR
+    
+     56           LOAD_CONST               4 (None)
+                  STORE_NAME               5 (call_id)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('call_id')
+                  STORE_SUBSCR
+    
+     57           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('status')
+                  STORE_SUBSCR
+    
+     58           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('to_number_last4')
+                  STORE_SUBSCR
+    
+     59           LOAD_CONST               4 (None)
+                  STORE_NAME               6 (draft_body)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('draft_body')
+                  STORE_SUBSCR
+    
+     60           LOAD_CONST               4 (None)
+                  STORE_NAME               7 (final_body)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              10 ('final_body')
+                  STORE_SUBSCR
+    
+     61           LOAD_CONST               4 (None)
+                  STORE_NAME               8 (template_id_used)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              11 ('template_id_used')
+                  STORE_SUBSCR
+    
+     62           LOAD_CONST               4 (None)
+                  STORE_NAME               9 (approved_at)
+                  LOAD_CONST              12 ('datetime | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              13 ('approved_at')
+                  STORE_SUBSCR
+    
+     63           LOAD_CONST               4 (None)
+                  STORE_NAME              10 (last_error_code)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              14 ('last_error_code')
+                  STORE_SUBSCR
+    
+     64           LOAD_CONST              15 ('datetime')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              16 ('created_at')
+                  STORE_SUBSCR
+    
+     66           LOAD_CONST              17 ('from_attributes')
+                  LOAD_CONST              18 (True)
+                  BUILD_MAP                1
+                  STORE_NAME              11 (model_config)
+                  LOAD_CONST              19 (())
+                  STORE_NAME              12 (__static_attributes__)
+                  RETURN_CONST             4 (None)
+    
+# --- Nested code object: TemplateResponse ---
+    # DOCSTRING: """TemplateResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+     69           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('TemplateResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (69)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     70           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('id')
+                  STORE_SUBSCR
+    
+     71           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('category')
+                  STORE_SUBSCR
+    
+     72           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('title')
+                  STORE_SUBSCR
+    
+     73           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('body')
+                  STORE_SUBSCR
+    
+     74           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('tone_tag')
+                  STORE_SUBSCR
+    
+     76           LOAD_CONST               8 ('from_attributes')
+                  LOAD_CONST               9 (True)
+                  BUILD_MAP                1
+                  STORE_NAME               5 (model_config)
+                  LOAD_CONST              10 (())
+                  STORE_NAME               6 (__static_attributes__)
+                  RETURN_CONST            11 (None)
+    
+# --- Nested code object: TemplateListResponse ---
+    # DOCSTRING: """TemplateListResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     79           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('TemplateListResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (79)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     80           LOAD_CONST               2 ('list[TemplateResponse]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('items')
+                  STORE_SUBSCR
+                  LOAD_CONST               4 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# co_names: ('__doc__', '__future__', 'annotations', 're', 'datetime', 'pydantic', 'BaseModel', 'Field', 'field_validator', 'compile', '_E164_RE', '_validate_e164', 'TextBackDraftRequest', 'TextBackUpdateRequest', 'TextBackApproveRequest', 'TextBackResponse', 'TemplateResponse', 'TemplateListResponse')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Pydantic schemas for messaging / text-back endpoints.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (re)
+              STORE_NAME               3 (re)
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('datetime',))
+              IMPORT_NAME              4 (datetime)
+              IMPORT_FROM              4 (datetime)
+              STORE_NAME               4 (datetime)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('BaseModel', 'Field', 'field_validator'))
+              IMPORT_NAME              5 (pydantic)
+              IMPORT_FROM              6 (BaseModel)
+              STORE_NAME               6 (BaseModel)
+              IMPORT_FROM              7 (Field)
+              STORE_NAME               7 (Field)
+              IMPORT_FROM              8 (field_validator)
+              STORE_NAME               8 (field_validator)
+              POP_TOP
+
+ 10           LOAD_NAME                3 (re)
+              LOAD_ATTR               18 (compile)
+              PUSH_NULL
+              LOAD_CONST               6 ('^\\+[1-9]\\d{1,14}$')
+              CALL                     1
+              STORE_NAME              10 (_E164_RE)
+
+ 13           LOAD_CONST              20 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST               7 (<code object _validate_e164 at 0x0000024C11495D70, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 13>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              11 (_validate_e164)
+
+ 19           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               8 (<code object TextBackDraftRequest at 0x0000024C114988F0, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 19>)
+              MAKE_FUNCTION
+              LOAD_CONST               9 ('TextBackDraftRequest')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME              12 (TextBackDraftRequest)
+
+ 30           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              10 (<code object TextBackUpdateRequest at 0x0000024C0EF13DF0, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 30>)
+              MAKE_FUNCTION
+              LOAD_CONST              11 ('TextBackUpdateRequest')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME              13 (TextBackUpdateRequest)
+
+ 40           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              12 (<code object TextBackApproveRequest at 0x0000024C11498B70, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 40>)
+              MAKE_FUNCTION
+              LOAD_CONST              13 ('TextBackApproveRequest')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME              14 (TextBackApproveRequest)
+
+ 54           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              14 (<code object TextBackResponse at 0x0000024C114355C0, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 54>)
+              MAKE_FUNCTION
+              LOAD_CONST              15 ('TextBackResponse')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME              15 (TextBackResponse)
+
+ 69           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              16 (<code object TemplateResponse at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 69>)
+              MAKE_FUNCTION
+              LOAD_CONST              17 ('TemplateResponse')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME              16 (TemplateResponse)
+
+ 79           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              18 (<code object TemplateListResponse at 0x0000024C0EF2AA60, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 79>)
+              MAKE_FUNCTION
+              LOAD_CONST              19 ('TemplateListResponse')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME              17 (TemplateListResponse)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object _validate_e164 at 0x0000024C11495D70, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 13>:
+ 13           RESUME                   0
+
+ 14           LOAD_FAST                0 (v)
+              POP_JUMP_IF_NONE        37 (to L1)
+              LOAD_GLOBAL              0 (_E164_RE)
+              LOAD_ATTR                3 (match + NULL|self)
+              LOAD_FAST                0 (v)
+              CALL                     1
+              TO_BOOL
+              POP_JUMP_IF_TRUE        11 (to L1)
+
+ 15           LOAD_GLOBAL              5 (ValueError + NULL)
+              LOAD_CONST               1 ('Phone number must be in E.164 format (e.g. +15551234567)')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 16   L1:     LOAD_FAST                0 (v)
+              RETURN_VALUE
+
+Disassembly of <code object TextBackDraftRequest at 0x0000024C114988F0, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 19>:
+ 19           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('TextBackDraftRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (19)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 20           LOAD_CONST               2 (None)
+              STORE_NAME               4 (template_id)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               4 ('template_id')
+              STORE_SUBSCR
+
+ 21           LOAD_NAME                6 (Field)
+              PUSH_NULL
+              LOAD_CONST               2 (None)
+              LOAD_CONST               5 (500)
+              LOAD_CONST               6 (('default', 'max_length'))
+              CALL_KW                  2
+              STORE_NAME               7 (custom_body)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               7 ('custom_body')
+              STORE_SUBSCR
+
+ 22           LOAD_CONST               2 (None)
+              STORE_NAME               8 (to_number)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               8 ('to_number')
+              STORE_SUBSCR
+
+ 24           LOAD_NAME                9 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               8 ('to_number')
+              CALL                     1
+
+ 25           LOAD_NAME               10 (classmethod)
+
+ 26           LOAD_CONST              11 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST               9 (<code object validate_to_number at 0x0000024C0EF0FC90, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 24>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 25           CALL                     0
+
+ 24           CALL                     0
+
+ 26           STORE_NAME              11 (validate_to_number)
+              LOAD_CONST              10 (())
+              STORE_NAME              12 (__static_attributes__)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object validate_to_number at 0x0000024C0EF0FC90, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 24>:
+ 24           RESUME                   0
+
+ 27           LOAD_GLOBAL              1 (_validate_e164 + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              RETURN_VALUE
+
+Disassembly of <code object TextBackUpdateRequest at 0x0000024C0EF13DF0, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 30>:
+ 30           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('TextBackUpdateRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (30)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 31           LOAD_NAME                4 (Field)
+              PUSH_NULL
+              LOAD_CONST               2 (None)
+              LOAD_CONST               3 (500)
+              LOAD_CONST               4 (('default', 'max_length'))
+              CALL_KW                  2
+              STORE_NAME               5 (body)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST               6 ('body')
+              STORE_SUBSCR
+
+ 32           LOAD_CONST               2 (None)
+              STORE_NAME               7 (to_number)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST               7 ('to_number')
+              STORE_SUBSCR
+
+ 34           LOAD_NAME                8 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               7 ('to_number')
+              CALL                     1
+
+ 35           LOAD_NAME                9 (classmethod)
+
+ 36           LOAD_CONST              10 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST               8 (<code object validate_to_number at 0x0000024C0EF0FD70, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 34>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 35           CALL                     0
+
+ 34           CALL                     0
+
+ 36           STORE_NAME              10 (validate_to_number)
+              LOAD_CONST               9 (())
+              STORE_NAME              11 (__static_attributes__)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object validate_to_number at 0x0000024C0EF0FD70, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 34>:
+ 34           RESUME                   0
+
+ 37           LOAD_GLOBAL              1 (_validate_e164 + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              RETURN_VALUE
+
+Disassembly of <code object TextBackApproveRequest at 0x0000024C11498B70, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 40>:
+ 40           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('TextBackApproveRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (40)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 41           LOAD_NAME                4 (Field)
+              PUSH_NULL
+              LOAD_CONST               2 (Ellipsis)
+              LOAD_CONST               3 (500)
+              LOAD_CONST               4 (('max_length',))
+              CALL_KW                  2
+              STORE_NAME               5 (final_body)
+              LOAD_CONST               5 ('str')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST               6 ('final_body')
+              STORE_SUBSCR
+
+ 42           LOAD_CONST               5 ('str')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST               7 ('to_number')
+              STORE_SUBSCR
+
+ 43           LOAD_CONST               5 ('str')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST               8 ('idempotency_key')
+              STORE_SUBSCR
+
+ 44           LOAD_CONST               5 ('str')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST               9 ('device_id')
+              STORE_SUBSCR
+
+ 46           LOAD_NAME                7 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               7 ('to_number')
+              CALL                     1
+
+ 47           LOAD_NAME                8 (classmethod)
+
+ 48           LOAD_CONST              13 (('v', 'str', 'return', 'str'))
+              LOAD_CONST              10 (<code object validate_to_number at 0x0000024C11496AF0, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 46>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 47           CALL                     0
+
+ 46           CALL                     0
+
+ 48           STORE_NAME               9 (validate_to_number)
+              LOAD_CONST              11 (())
+              STORE_NAME              10 (__static_attributes__)
+              RETURN_CONST            12 (None)
+
+Disassembly of <code object validate_to_number at 0x0000024C11496AF0, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 46>:
+ 46           RESUME                   0
+
+ 49           LOAD_GLOBAL              0 (_E164_RE)
+              LOAD_ATTR                3 (match + NULL|self)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              TO_BOOL
+              POP_JUMP_IF_TRUE        11 (to L1)
+
+ 50           LOAD_GLOBAL              5 (ValueError + NULL)
+              LOAD_CONST               1 ('Phone number must be in E.164 format')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 51   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object TextBackResponse at 0x0000024C114355C0, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 54>:
+ 54           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('TextBackResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (54)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 55           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('id')
+              STORE_SUBSCR
+
+ 56           LOAD_CONST               4 (None)
+              STORE_NAME               5 (call_id)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('call_id')
+              STORE_SUBSCR
+
+ 57           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('status')
+              STORE_SUBSCR
+
+ 58           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('to_number_last4')
+              STORE_SUBSCR
+
+ 59           LOAD_CONST               4 (None)
+              STORE_NAME               6 (draft_body)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('draft_body')
+              STORE_SUBSCR
+
+ 60           LOAD_CONST               4 (None)
+              STORE_NAME               7 (final_body)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('final_body')
+              STORE_SUBSCR
+
+ 61           LOAD_CONST               4 (None)
+              STORE_NAME               8 (template_id_used)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('template_id_used')
+              STORE_SUBSCR
+
+ 62           LOAD_CONST               4 (None)
+              STORE_NAME               9 (approved_at)
+              LOAD_CONST              12 ('datetime | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              13 ('approved_at')
+              STORE_SUBSCR
+
+ 63           LOAD_CONST               4 (None)
+              STORE_NAME              10 (last_error_code)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              14 ('last_error_code')
+              STORE_SUBSCR
+
+ 64           LOAD_CONST              15 ('datetime')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              16 ('created_at')
+              STORE_SUBSCR
+
+ 66           LOAD_CONST              17 ('from_attributes')
+              LOAD_CONST              18 (True)
+              BUILD_MAP                1
+              STORE_NAME              11 (model_config)
+              LOAD_CONST              19 (())
+              STORE_NAME              12 (__static_attributes__)
+              RETURN_CONST             4 (None)
+
+Disassembly of <code object TemplateResponse at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 69>:
+ 69           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('TemplateResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (69)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 70           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('id')
+              STORE_SUBSCR
+
+ 71           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('category')
+              STORE_SUBSCR
+
+ 72           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('title')
+              STORE_SUBSCR
+
+ 73           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('body')
+              STORE_SUBSCR
+
+ 74           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('tone_tag')
+              STORE_SUBSCR
+
+ 76           LOAD_CONST               8 ('from_attributes')
+              LOAD_CONST               9 (True)
+              BUILD_MAP                1
+              STORE_NAME               5 (model_config)
+              LOAD_CONST              10 (())
+              STORE_NAME               6 (__static_attributes__)
+              RETURN_CONST            11 (None)
+
+Disassembly of <code object TemplateListResponse at 0x0000024C0EF2AA60, file "D:\fluence\Github\mattbot\backend\app\schemas\messaging.py", line 79>:
+ 79           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('TemplateListResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (79)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 80           LOAD_CONST               2 ('list[TemplateResponse]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('items')
+              STORE_SUBSCR
+              LOAD_CONST               4 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             5 (None)

@@ -1,0 +1,2155 @@
+# Bytecode dump of: memory.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\api\v1\memory.py
+# co_names: ('__doc__', '__future__', 'annotations', 'uuid', 'datetime', 'UTC', 'fastapi', 'APIRouter', 'Depends', 'Query', 'sqlalchemy', 'select', 'update', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.core.encryption', 'decrypt_field', 'encrypt_field', 'app.core.rate_limiter', 'check_rate_limit', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.models.call_memory_item', 'CallMemoryItem', 'app.schemas.calls', 'CreateMemoryItemRequest', 'MemoryItemResponse', 'MemoryListResponse', 'UpdateMemoryItemRequest', 'router', '_item_to_response', 'get', 'list_memory_items', 'post', 'create_memory_item', 'patch', 'update_memory_item', 'delete', 'delete_memory_item', 'delete_all_memory')
+# co_consts (strings): ['Memory items API: list, create, update, delete, bulk delete.', '', '/{memory_id}']
+
+# DOCSTRING: """Memory items API: list, create, update, delete, bulk delete."""
+# --- Nested code object: _item_to_response ---
+    # co_names: ('decrypt_field', 'value_ciphertext', 'value_nonce', 'value_key_version', 'decode', 'Exception', 'MemoryItemResponse', 'str', 'id', 'memory_type', 'subject', 'confidence', 'user_confirmed', 'source_call_id', 'caller_phone_hash', 'created_at')
+    # co_varnames: ('item', 'value')
+      29           RESUME                   0
+    
+      30           LOAD_CONST               0 (None)
+                   STORE_FAST               1 (value)
+    
+      31           NOP
+    
+      32   L1:     LOAD_GLOBAL              1 (decrypt_field + NULL)
+    
+      33           LOAD_FAST                0 (item)
+                   LOAD_ATTR                2 (value_ciphertext)
+                   LOAD_FAST                0 (item)
+                   LOAD_ATTR                4 (value_nonce)
+                   LOAD_FAST                0 (item)
+                   LOAD_ATTR                6 (value_key_version)
+    
+      32           CALL                     3
+    
+      34           LOAD_ATTR                9 (decode + NULL|self)
+                   LOAD_CONST               1 ('utf-8')
+                   CALL                     1
+    
+      32           STORE_FAST               1 (value)
+    
+      38   L2:     LOAD_GLOBAL             13 (MemoryItemResponse + NULL)
+    
+      39           LOAD_GLOBAL             15 (str + NULL)
+                   LOAD_FAST                0 (item)
+                   LOAD_ATTR               16 (id)
+                   CALL                     1
+    
+      40           LOAD_FAST                0 (item)
+                   LOAD_ATTR               18 (memory_type)
+    
+      41           LOAD_FAST                0 (item)
+                   LOAD_ATTR               20 (subject)
+    
+      42           LOAD_FAST                1 (value)
+    
+      43           LOAD_FAST                0 (item)
+                   LOAD_ATTR               22 (confidence)
+    
+      44           LOAD_FAST                0 (item)
+                   LOAD_ATTR               24 (user_confirmed)
+    
+      45           LOAD_FAST                0 (item)
+                   LOAD_ATTR               26 (source_call_id)
+                   TO_BOOL
+                   POP_JUMP_IF_FALSE       21 (to L3)
+                   LOAD_GLOBAL             15 (str + NULL)
+                   LOAD_FAST                0 (item)
+                   LOAD_ATTR               26 (source_call_id)
+                   CALL                     1
+                   JUMP_FORWARD             1 (to L4)
+           L3:     LOAD_CONST               0 (None)
+    
+      46   L4:     LOAD_FAST                0 (item)
+                   LOAD_ATTR               28 (caller_phone_hash)
+    
+      47           LOAD_FAST                0 (item)
+                   LOAD_ATTR               30 (created_at)
+    
+      38           LOAD_CONST               3 (('id', 'memory_type', 'subject', 'value', 'confidence', 'user_confirmed', 'source_call_id', 'caller_phone_hash', 'created_at'))
+                   CALL_KW                  9
+                   RETURN_VALUE
+    
+      --   L5:     PUSH_EXC_INFO
+    
+      35           LOAD_GLOBAL             10 (Exception)
+                   CHECK_EXC_MATCH
+                   POP_JUMP_IF_FALSE        5 (to L7)
+                   POP_TOP
+    
+      36           LOAD_CONST               2 ('[unable to decrypt]')
+                   STORE_FAST               1 (value)
+           L6:     POP_EXCEPT
+                   JUMP_BACKWARD_NO_INTERRUPT 148 (to L2)
+    
+      35   L7:     RERAISE                  0
+    
+      --   L8:     COPY                     3
+                   POP_EXCEPT
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L2 -> L5 [0]
+      L5 to L6 -> L8 [1] lasti
+      L7 to L8 -> L8 [1] lasti
+    
+# --- Nested code object: list_memory_items ---
+    # co_names: ('check_rate_limit', 'user', 'id', 'settings', 'RATE_LIMIT_API_STANDARD_MAX', 'RATE_LIMIT_API_STANDARD_WINDOW', 'AppError', 'CallMemoryItem', 'owner_user_id', 'deleted_at', 'is_', 'append', 'caller_phone_hash', 'select', 'where', 'order_by', 'created_at', 'desc', 'execute', 'list', 'scalars', 'all', 'MemoryListResponse', '_item_to_response')
+    # co_varnames: ('caller_phone_hash', 'current_user', 'db', 'allowed', '_', 'filters', 'stmt', 'result', 'items', 'i')
+      51            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      57            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+      58            LOAD_CONST               1 ('memory:list:')
+                    LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+      59            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_STANDARD_MAX)
+    
+      60            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR               10 (RATE_LIMIT_API_STANDARD_WINDOW)
+    
+      57            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   52 (allowed, _)
+    
+      62            LOAD_FAST                3 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+      63            LOAD_GLOBAL             13 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+      66    L6:     LOAD_GLOBAL             14 (CallMemoryItem)
+                    LOAD_ATTR               16 (owner_user_id)
+                    LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    COMPARE_OP              72 (==)
+    
+      67            LOAD_GLOBAL             14 (CallMemoryItem)
+                    LOAD_ATTR               18 (deleted_at)
+                    LOAD_ATTR               21 (is_ + NULL|self)
+                    LOAD_CONST               0 (None)
+                    CALL                     1
+    
+      65            BUILD_LIST               2
+                    STORE_FAST               5 (filters)
+    
+      69            LOAD_FAST                0 (caller_phone_hash)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       34 (to L7)
+    
+      70            LOAD_FAST                5 (filters)
+                    LOAD_ATTR               23 (append + NULL|self)
+                    LOAD_GLOBAL             14 (CallMemoryItem)
+                    LOAD_ATTR               24 (caller_phone_hash)
+                    LOAD_FAST                0 (caller_phone_hash)
+                    COMPARE_OP              72 (==)
+                    CALL                     1
+                    POP_TOP
+    
+      73    L7:     LOAD_GLOBAL             27 (select + NULL)
+                    LOAD_GLOBAL             14 (CallMemoryItem)
+                    CALL                     1
+    
+      74            LOAD_ATTR               28 (where)
+    
+      73            PUSH_NULL
+    
+      74            LOAD_FAST                5 (filters)
+    
+      73            CALL_FUNCTION_EX         0
+    
+      75            LOAD_ATTR               31 (order_by + NULL|self)
+                    LOAD_GLOBAL             14 (CallMemoryItem)
+                    LOAD_ATTR               32 (created_at)
+                    LOAD_ATTR               35 (desc + NULL|self)
+                    CALL                     0
+                    CALL                     1
+    
+      72            STORE_FAST               6 (stmt)
+    
+      77            LOAD_FAST                2 (db)
+                    LOAD_ATTR               37 (execute + NULL|self)
+                    LOAD_FAST                6 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L8:     SEND                     3 (to L11)
+            L9:     YIELD_VALUE              1
+           L10:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L8)
+           L11:     END_SEND
+                    STORE_FAST               7 (result)
+    
+      78            LOAD_GLOBAL             39 (list + NULL)
+                    LOAD_FAST                7 (result)
+                    LOAD_ATTR               41 (scalars + NULL|self)
+                    CALL                     0
+                    LOAD_ATTR               43 (all + NULL|self)
+                    CALL                     0
+                    CALL                     1
+                    STORE_FAST               8 (items)
+    
+      80            LOAD_GLOBAL             45 (MemoryListResponse + NULL)
+                    LOAD_FAST                8 (items)
+                    GET_ITER
+                    LOAD_FAST_AND_CLEAR      9 (i)
+                    SWAP                     2
+           L12:     BUILD_LIST               0
+                    SWAP                     2
+                    GET_ITER
+           L13:     FOR_ITER                14 (to L14)
+                    STORE_FAST               9 (i)
+                    LOAD_GLOBAL             47 (_item_to_response + NULL)
+                    LOAD_FAST                9 (i)
+                    CALL                     1
+                    LIST_APPEND              2
+                    JUMP_BACKWARD           16 (to L13)
+           L14:     END_FOR
+                    POP_TOP
+           L15:     SWAP                     2
+                    STORE_FAST               9 (i)
+                    LOAD_CONST               7 (('items',))
+                    CALL_KW                  1
+                    RETURN_VALUE
+    
+      57   L16:     CLEANUP_THROW
+           L17:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 306 (to L5)
+    
+      77   L18:     CLEANUP_THROW
+           L19:     JUMP_BACKWARD_NO_INTERRUPT 81 (to L11)
+    
+      --   L20:     SWAP                     2
+                    POP_TOP
+    
+      80            SWAP                     2
+                    STORE_FAST               9 (i)
+                    RERAISE                  0
+    
+      --   L21:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L21 [0] lasti
+      L3 to L4 -> L16 [2]
+      L4 to L9 -> L21 [0] lasti
+      L9 to L10 -> L18 [2]
+      L10 to L12 -> L21 [0] lasti
+      L12 to L15 -> L20 [4]
+      L15 to L17 -> L21 [0] lasti
+      L18 to L19 -> L21 [0] lasti
+      L20 to L21 -> L21 [0] lasti
+    
+# --- Nested code object: create_memory_item ---
+    # co_names: ('check_rate_limit', 'user', 'id', 'settings', 'RATE_LIMIT_API_WRITE_MAX', 'RATE_LIMIT_API_WRITE_WINDOW', 'AppError', 'encrypt_field', 'value', 'encode', 'CallMemoryItem', 'caller_phone_hash', 'memory_type', 'subject', 'add', 'commit', 'refresh', '_item_to_response')
+    # co_varnames: ('body', 'current_user', 'db', 'allowed', '_', 'ct', 'nonce', 'kv', 'item')
+      83            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      89            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+      90            LOAD_CONST               1 ('memory:create:')
+                    LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+      91            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+    
+      92            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+    
+      89            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   52 (allowed, _)
+    
+      94            LOAD_FAST                3 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+      95            LOAD_GLOBAL             13 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+      97    L6:     LOAD_GLOBAL             15 (encrypt_field + NULL)
+                    LOAD_FAST                0 (body)
+                    LOAD_ATTR               16 (value)
+                    LOAD_ATTR               19 (encode + NULL|self)
+                    LOAD_CONST               7 ('utf-8')
+                    CALL                     1
+                    CALL                     1
+                    UNPACK_SEQUENCE          3
+                    STORE_FAST_STORE_FAST   86 (ct, nonce)
+                    STORE_FAST               7 (kv)
+    
+      98            LOAD_GLOBAL             21 (CallMemoryItem + NULL)
+    
+      99            LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+    
+     100            LOAD_FAST                0 (body)
+                    LOAD_ATTR               22 (caller_phone_hash)
+    
+     101            LOAD_FAST                0 (body)
+                    LOAD_ATTR               24 (memory_type)
+    
+     102            LOAD_FAST                0 (body)
+                    LOAD_ATTR               26 (subject)
+                    LOAD_CONST               0 (None)
+                    LOAD_CONST               8 (50)
+                    BINARY_SLICE
+    
+     103            LOAD_FAST                5 (ct)
+    
+     104            LOAD_FAST                6 (nonce)
+    
+     105            LOAD_FAST                7 (kv)
+    
+     106            LOAD_CONST               9 (1.0)
+    
+     107            LOAD_CONST              10 (True)
+    
+      98            LOAD_CONST              11 (('owner_user_id', 'caller_phone_hash', 'memory_type', 'subject', 'value_ciphertext', 'value_nonce', 'value_key_version', 'confidence', 'user_confirmed'))
+                    CALL_KW                  9
+                    STORE_FAST               8 (item)
+    
+     109            LOAD_FAST                2 (db)
+                    LOAD_ATTR               29 (add + NULL|self)
+                    LOAD_FAST                8 (item)
+                    CALL                     1
+                    POP_TOP
+    
+     110            LOAD_FAST                2 (db)
+                    LOAD_ATTR               31 (commit + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    POP_TOP
+    
+     111            LOAD_FAST                2 (db)
+                    LOAD_ATTR               33 (refresh + NULL|self)
+                    LOAD_FAST                8 (item)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L11:     SEND                     3 (to L14)
+           L12:     YIELD_VALUE              1
+           L13:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+           L14:     END_SEND
+                    POP_TOP
+    
+     112            LOAD_GLOBAL             35 (_item_to_response + NULL)
+                    LOAD_FAST                8 (item)
+                    CALL                     1
+                    RETURN_VALUE
+    
+      89   L15:     CLEANUP_THROW
+           L16:     JUMP_BACKWARD_NO_INTERRUPT 210 (to L5)
+    
+     110   L17:     CLEANUP_THROW
+           L18:     JUMP_BACKWARD_NO_INTERRUPT 42 (to L10)
+    
+     111   L19:     CLEANUP_THROW
+           L20:     JUMP_BACKWARD_NO_INTERRUPT 19 (to L14)
+    
+      --   L21:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L21 [0] lasti
+      L3 to L4 -> L15 [2]
+      L4 to L8 -> L21 [0] lasti
+      L8 to L9 -> L17 [2]
+      L9 to L12 -> L21 [0] lasti
+      L12 to L13 -> L19 [2]
+      L13 to L16 -> L21 [0] lasti
+      L17 to L18 -> L21 [0] lasti
+      L19 to L20 -> L21 [0] lasti
+    
+# --- Nested code object: update_memory_item ---
+    # co_names: ('check_rate_limit', 'user', 'id', 'settings', 'RATE_LIMIT_API_WRITE_MAX', 'RATE_LIMIT_API_WRITE_WINDOW', 'AppError', 'select', 'CallMemoryItem', 'where', 'owner_user_id', 'deleted_at', 'is_', 'execute', 'scalar_one_or_none', 'subject', 'value', 'encrypt_field', 'encode', 'value_ciphertext', 'value_nonce', 'value_key_version', 'user_confirmed', 'confidence', 'commit', 'refresh', '_item_to_response')
+    # co_varnames: ('memory_id', 'body', 'current_user', 'db', 'allowed', '_', 'stmt', 'result', 'item', 'ct', 'nonce', 'kv')
+     115            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     122            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+     123            LOAD_CONST               1 ('memory:update:')
+                    LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+     124            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+    
+     125            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+    
+     122            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   69 (allowed, _)
+    
+     127            LOAD_FAST                4 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+     128            LOAD_GLOBAL             13 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     130    L6:     LOAD_GLOBAL             15 (select + NULL)
+                    LOAD_GLOBAL             16 (CallMemoryItem)
+                    CALL                     1
+                    LOAD_ATTR               19 (where + NULL|self)
+    
+     131            LOAD_GLOBAL             16 (CallMemoryItem)
+                    LOAD_ATTR                4 (id)
+                    LOAD_FAST                0 (memory_id)
+                    COMPARE_OP              72 (==)
+    
+     132            LOAD_GLOBAL             16 (CallMemoryItem)
+                    LOAD_ATTR               20 (owner_user_id)
+                    LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    COMPARE_OP              72 (==)
+    
+     133            LOAD_GLOBAL             16 (CallMemoryItem)
+                    LOAD_ATTR               22 (deleted_at)
+                    LOAD_ATTR               25 (is_ + NULL|self)
+                    LOAD_CONST               0 (None)
+                    CALL                     1
+    
+     130            CALL                     3
+                    STORE_FAST               6 (stmt)
+    
+     135            LOAD_FAST                3 (db)
+                    LOAD_ATTR               27 (execute + NULL|self)
+                    LOAD_FAST                6 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    STORE_FAST               7 (result)
+    
+     136            LOAD_FAST                7 (result)
+                    LOAD_ATTR               29 (scalar_one_or_none + NULL|self)
+                    CALL                     0
+                    STORE_FAST               8 (item)
+    
+     138            LOAD_FAST                8 (item)
+                    POP_JUMP_IF_NOT_NONE    11 (to L11)
+    
+     139            LOAD_GLOBAL             13 (AppError + NULL)
+    
+     140            LOAD_CONST               7 ('MEMORY_NOT_FOUND')
+                    LOAD_CONST               8 ('Memory item not found')
+                    LOAD_CONST               9 (404)
+    
+     139            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     143   L11:     LOAD_FAST                1 (body)
+                    LOAD_ATTR               30 (subject)
+                    POP_JUMP_IF_NONE        20 (to L12)
+    
+     144            LOAD_FAST                1 (body)
+                    LOAD_ATTR               30 (subject)
+                    LOAD_CONST               0 (None)
+                    LOAD_CONST              10 (50)
+                    BINARY_SLICE
+                    LOAD_FAST                8 (item)
+                    STORE_ATTR              15 (subject)
+    
+     146   L12:     LOAD_FAST                1 (body)
+                    LOAD_ATTR               32 (value)
+                    POP_JUMP_IF_NONE        57 (to L13)
+    
+     147            LOAD_GLOBAL             35 (encrypt_field + NULL)
+                    LOAD_FAST                1 (body)
+                    LOAD_ATTR               32 (value)
+                    LOAD_ATTR               37 (encode + NULL|self)
+                    LOAD_CONST              11 ('utf-8')
+                    CALL                     1
+                    CALL                     1
+                    UNPACK_SEQUENCE          3
+                    STORE_FAST_STORE_FAST  154 (ct, nonce)
+                    STORE_FAST              11 (kv)
+    
+     148            LOAD_FAST_LOAD_FAST    152 (ct, item)
+                    STORE_ATTR              19 (value_ciphertext)
+    
+     149            LOAD_FAST_LOAD_FAST    168 (nonce, item)
+                    STORE_ATTR              20 (value_nonce)
+    
+     150            LOAD_FAST_LOAD_FAST    184 (kv, item)
+                    STORE_ATTR              21 (value_key_version)
+    
+     152   L13:     LOAD_FAST                1 (body)
+                    LOAD_ATTR               44 (user_confirmed)
+                    POP_JUMP_IF_NONE        41 (to L14)
+    
+     153            LOAD_FAST                1 (body)
+                    LOAD_ATTR               44 (user_confirmed)
+                    LOAD_FAST                8 (item)
+                    STORE_ATTR              22 (user_confirmed)
+    
+     154            LOAD_FAST                1 (body)
+                    LOAD_ATTR               44 (user_confirmed)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE        7 (to L14)
+    
+     155            LOAD_CONST              12 (1.0)
+                    LOAD_FAST                8 (item)
+                    STORE_ATTR              23 (confidence)
+    
+     157   L14:     LOAD_FAST                3 (db)
+                    LOAD_ATTR               49 (commit + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L15:     SEND                     3 (to L18)
+           L16:     YIELD_VALUE              1
+           L17:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+           L18:     END_SEND
+                    POP_TOP
+    
+     158            LOAD_FAST                3 (db)
+                    LOAD_ATTR               51 (refresh + NULL|self)
+                    LOAD_FAST                8 (item)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L19:     SEND                     3 (to L22)
+           L20:     YIELD_VALUE              1
+           L21:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+           L22:     END_SEND
+                    POP_TOP
+    
+     159            LOAD_GLOBAL             53 (_item_to_response + NULL)
+                    LOAD_FAST                8 (item)
+                    CALL                     1
+                    RETURN_VALUE
+    
+     122   L23:     CLEANUP_THROW
+           L24:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 412 (to L5)
+    
+     135   L25:     CLEANUP_THROW
+           L26:     JUMP_BACKWARD_NO_INTERRUPT 254 (to L10)
+    
+     157   L27:     CLEANUP_THROW
+           L28:     JUMP_BACKWARD_NO_INTERRUPT 45 (to L18)
+    
+     158   L29:     CLEANUP_THROW
+           L30:     JUMP_BACKWARD_NO_INTERRUPT 22 (to L22)
+    
+      --   L31:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L31 [0] lasti
+      L3 to L4 -> L23 [2]
+      L4 to L8 -> L31 [0] lasti
+      L8 to L9 -> L25 [2]
+      L9 to L16 -> L31 [0] lasti
+      L16 to L17 -> L27 [2]
+      L17 to L20 -> L31 [0] lasti
+      L20 to L21 -> L29 [2]
+      L21 to L24 -> L31 [0] lasti
+      L25 to L26 -> L31 [0] lasti
+      L27 to L28 -> L31 [0] lasti
+      L29 to L30 -> L31 [0] lasti
+    
+# --- Nested code object: delete_memory_item ---
+    # co_names: ('check_rate_limit', 'user', 'id', 'settings', 'RATE_LIMIT_API_WRITE_MAX', 'RATE_LIMIT_API_WRITE_WINDOW', 'AppError', 'select', 'CallMemoryItem', 'where', 'owner_user_id', 'deleted_at', 'is_', 'execute', 'scalar_one_or_none', 'datetime', 'now', 'UTC', 'commit')
+    # co_varnames: ('memory_id', 'current_user', 'db', 'allowed', '_', 'stmt', 'result', 'item')
+     162            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     168            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+     169            LOAD_CONST               1 ('memory:delete:')
+                    LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+     170            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+    
+     171            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+    
+     168            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   52 (allowed, _)
+    
+     173            LOAD_FAST                3 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+     174            LOAD_GLOBAL             13 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     175    L6:     LOAD_GLOBAL             15 (select + NULL)
+                    LOAD_GLOBAL             16 (CallMemoryItem)
+                    CALL                     1
+                    LOAD_ATTR               19 (where + NULL|self)
+    
+     176            LOAD_GLOBAL             16 (CallMemoryItem)
+                    LOAD_ATTR                4 (id)
+                    LOAD_FAST                0 (memory_id)
+                    COMPARE_OP              72 (==)
+    
+     177            LOAD_GLOBAL             16 (CallMemoryItem)
+                    LOAD_ATTR               20 (owner_user_id)
+                    LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    COMPARE_OP              72 (==)
+    
+     178            LOAD_GLOBAL             16 (CallMemoryItem)
+                    LOAD_ATTR               22 (deleted_at)
+                    LOAD_ATTR               25 (is_ + NULL|self)
+                    LOAD_CONST               0 (None)
+                    CALL                     1
+    
+     175            CALL                     3
+                    STORE_FAST               5 (stmt)
+    
+     180            LOAD_FAST                2 (db)
+                    LOAD_ATTR               27 (execute + NULL|self)
+                    LOAD_FAST                5 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    STORE_FAST               6 (result)
+    
+     181            LOAD_FAST                6 (result)
+                    LOAD_ATTR               29 (scalar_one_or_none + NULL|self)
+                    CALL                     0
+                    STORE_FAST               7 (item)
+    
+     183            LOAD_FAST                7 (item)
+                    POP_JUMP_IF_NOT_NONE    11 (to L11)
+    
+     184            LOAD_GLOBAL             13 (AppError + NULL)
+    
+     185            LOAD_CONST               7 ('MEMORY_NOT_FOUND')
+                    LOAD_CONST               8 ('Memory item not found')
+                    LOAD_CONST               9 (404)
+    
+     184            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     188   L11:     LOAD_GLOBAL             30 (datetime)
+                    LOAD_ATTR               32 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL             34 (UTC)
+                    CALL                     1
+                    LOAD_FAST                7 (item)
+                    STORE_ATTR              11 (deleted_at)
+    
+     189            LOAD_FAST                2 (db)
+                    LOAD_ATTR               37 (commit + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L12:     SEND                     3 (to L15)
+           L13:     YIELD_VALUE              1
+           L14:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L12)
+           L15:     END_SEND
+                    POP_TOP
+    
+     190            LOAD_CONST              10 ('deleted')
+                    LOAD_CONST              11 (True)
+                    BUILD_MAP                1
+                    RETURN_VALUE
+    
+     168   L16:     CLEANUP_THROW
+           L17:     JUMP_BACKWARD_NO_INTERRUPT 253 (to L5)
+    
+     180   L18:     CLEANUP_THROW
+           L19:     JUMP_BACKWARD_NO_INTERRUPT 95 (to L10)
+    
+     189   L20:     CLEANUP_THROW
+           L21:     JUMP_BACKWARD_NO_INTERRUPT 12 (to L15)
+    
+      --   L22:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L22 [0] lasti
+      L3 to L4 -> L16 [2]
+      L4 to L8 -> L22 [0] lasti
+      L8 to L9 -> L18 [2]
+      L9 to L13 -> L22 [0] lasti
+      L13 to L14 -> L20 [2]
+      L14 to L17 -> L22 [0] lasti
+      L18 to L19 -> L22 [0] lasti
+      L20 to L21 -> L22 [0] lasti
+    
+# --- Nested code object: delete_all_memory ---
+    # co_names: ('check_rate_limit', 'user', 'id', 'settings', 'RATE_LIMIT_API_WRITE_MAX', 'RATE_LIMIT_API_WRITE_WINDOW', 'AppError', 'update', 'CallMemoryItem', 'where', 'owner_user_id', 'deleted_at', 'is_', 'values', 'datetime', 'now', 'UTC', 'execute', 'commit', 'getattr')
+    # co_varnames: ('current_user', 'db', 'allowed', '_', 'stmt', 'result')
+     193            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     198            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+     199            LOAD_CONST               1 ('memory:bulkdel:')
+                    LOAD_FAST                0 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+     200            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+    
+     201            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+    
+     198            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   35 (allowed, _)
+    
+     203            LOAD_FAST                2 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+     204            LOAD_GLOBAL             13 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     206    L6:     LOAD_GLOBAL             15 (update + NULL)
+                    LOAD_GLOBAL             16 (CallMemoryItem)
+                    CALL                     1
+    
+     207            LOAD_ATTR               19 (where + NULL|self)
+    
+     208            LOAD_GLOBAL             16 (CallMemoryItem)
+                    LOAD_ATTR               20 (owner_user_id)
+                    LOAD_FAST                0 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    COMPARE_OP              72 (==)
+    
+     209            LOAD_GLOBAL             16 (CallMemoryItem)
+                    LOAD_ATTR               22 (deleted_at)
+                    LOAD_ATTR               25 (is_ + NULL|self)
+                    LOAD_CONST               0 (None)
+                    CALL                     1
+    
+     207            CALL                     2
+    
+     211            LOAD_ATTR               27 (values + NULL|self)
+                    LOAD_GLOBAL             28 (datetime)
+                    LOAD_ATTR               30 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL             32 (UTC)
+                    CALL                     1
+                    LOAD_CONST               7 (('deleted_at',))
+                    CALL_KW                  1
+    
+     205            STORE_FAST               4 (stmt)
+    
+     213            LOAD_FAST                1 (db)
+                    LOAD_ATTR               35 (execute + NULL|self)
+                    LOAD_FAST                4 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    STORE_FAST               5 (result)
+    
+     214            LOAD_FAST                1 (db)
+                    LOAD_ATTR               37 (commit + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L11:     SEND                     3 (to L14)
+           L12:     YIELD_VALUE              1
+           L13:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+           L14:     END_SEND
+                    POP_TOP
+    
+     215            LOAD_CONST               8 ('deleted_count')
+                    LOAD_GLOBAL             39 (getattr + NULL)
+                    LOAD_FAST                5 (result)
+                    LOAD_CONST               9 ('rowcount')
+                    LOAD_CONST              10 (0)
+                    CALL                     3
+                    BUILD_MAP                1
+                    RETURN_VALUE
+    
+     198   L15:     CLEANUP_THROW
+           L16:     JUMP_BACKWARD_NO_INTERRUPT 222 (to L5)
+    
+     213   L17:     CLEANUP_THROW
+           L18:     JUMP_BACKWARD_NO_INTERRUPT 45 (to L10)
+    
+     214   L19:     CLEANUP_THROW
+           L20:     JUMP_BACKWARD_NO_INTERRUPT 23 (to L14)
+    
+      --   L21:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L21 [0] lasti
+      L3 to L4 -> L15 [2]
+      L4 to L8 -> L21 [0] lasti
+      L8 to L9 -> L17 [2]
+      L9 to L12 -> L21 [0] lasti
+      L12 to L13 -> L19 [2]
+      L13 to L16 -> L21 [0] lasti
+      L17 to L18 -> L21 [0] lasti
+      L19 to L20 -> L21 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'uuid', 'datetime', 'UTC', 'fastapi', 'APIRouter', 'Depends', 'Query', 'sqlalchemy', 'select', 'update', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.core.encryption', 'decrypt_field', 'encrypt_field', 'app.core.rate_limiter', 'check_rate_limit', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.models.call_memory_item', 'CallMemoryItem', 'app.schemas.calls', 'CreateMemoryItemRequest', 'MemoryItemResponse', 'MemoryListResponse', 'UpdateMemoryItemRequest', 'router', '_item_to_response', 'get', 'list_memory_items', 'post', 'create_memory_item', 'patch', 'update_memory_item', 'delete', 'delete_memory_item', 'delete_all_memory')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Memory items API: list, create, update, delete, bulk delete.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (uuid)
+              STORE_NAME               3 (uuid)
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('UTC', 'datetime'))
+              IMPORT_NAME              4 (datetime)
+              IMPORT_FROM              5 (UTC)
+              STORE_NAME               5 (UTC)
+              IMPORT_FROM              4 (datetime)
+              STORE_NAME               4 (datetime)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('APIRouter', 'Depends', 'Query'))
+              IMPORT_NAME              6 (fastapi)
+              IMPORT_FROM              7 (APIRouter)
+              STORE_NAME               7 (APIRouter)
+              IMPORT_FROM              8 (Depends)
+              STORE_NAME               8 (Depends)
+              IMPORT_FROM              9 (Query)
+              STORE_NAME               9 (Query)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('select', 'update'))
+              IMPORT_NAME             10 (sqlalchemy)
+              IMPORT_FROM             11 (select)
+              STORE_NAME              11 (select)
+              IMPORT_FROM             12 (update)
+              STORE_NAME              12 (update)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('AsyncSession',))
+              IMPORT_NAME             13 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM             14 (AsyncSession)
+              STORE_NAME              14 (AsyncSession)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('settings',))
+              IMPORT_NAME             15 (app.config)
+              IMPORT_FROM             16 (settings)
+              STORE_NAME              16 (settings)
+              POP_TOP
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('CurrentUser', 'get_current_user'))
+              IMPORT_NAME             17 (app.core.dependencies)
+              IMPORT_FROM             18 (CurrentUser)
+              STORE_NAME              18 (CurrentUser)
+              IMPORT_FROM             19 (get_current_user)
+              STORE_NAME              19 (get_current_user)
+              POP_TOP
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST              10 (('decrypt_field', 'encrypt_field'))
+              IMPORT_NAME             20 (app.core.encryption)
+              IMPORT_FROM             21 (decrypt_field)
+              STORE_NAME              21 (decrypt_field)
+              IMPORT_FROM             22 (encrypt_field)
+              STORE_NAME              22 (encrypt_field)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST              11 (('check_rate_limit',))
+              IMPORT_NAME             23 (app.core.rate_limiter)
+              IMPORT_FROM             24 (check_rate_limit)
+              STORE_NAME              24 (check_rate_limit)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST              12 (('get_db',))
+              IMPORT_NAME             25 (app.database)
+              IMPORT_FROM             26 (get_db)
+              STORE_NAME              26 (get_db)
+              POP_TOP
+
+ 17           LOAD_CONST               1 (0)
+              LOAD_CONST              13 (('AppError',))
+              IMPORT_NAME             27 (app.middleware.error_handler)
+              IMPORT_FROM             28 (AppError)
+              STORE_NAME              28 (AppError)
+              POP_TOP
+
+ 18           LOAD_CONST               1 (0)
+              LOAD_CONST              14 (('CallMemoryItem',))
+              IMPORT_NAME             29 (app.models.call_memory_item)
+              IMPORT_FROM             30 (CallMemoryItem)
+              STORE_NAME              30 (CallMemoryItem)
+              POP_TOP
+
+ 19           LOAD_CONST               1 (0)
+              LOAD_CONST              15 (('CreateMemoryItemRequest', 'MemoryItemResponse', 'MemoryListResponse', 'UpdateMemoryItemRequest'))
+              IMPORT_NAME             31 (app.schemas.calls)
+              IMPORT_FROM             32 (CreateMemoryItemRequest)
+              STORE_NAME              32 (CreateMemoryItemRequest)
+              IMPORT_FROM             33 (MemoryItemResponse)
+              STORE_NAME              33 (MemoryItemResponse)
+              IMPORT_FROM             34 (MemoryListResponse)
+              STORE_NAME              34 (MemoryListResponse)
+              IMPORT_FROM             35 (UpdateMemoryItemRequest)
+              STORE_NAME              35 (UpdateMemoryItemRequest)
+              POP_TOP
+
+ 26           LOAD_NAME                7 (APIRouter)
+              PUSH_NULL
+              CALL                     0
+              STORE_NAME              36 (router)
+
+ 29           LOAD_CONST              27 (('item', 'CallMemoryItem', 'return', 'MemoryItemResponse'))
+              LOAD_CONST              16 (<code object _item_to_response at 0x0000024C0FB23F50, file "D:\fluence\Github\mattbot\backend\app\api\v1\memory.py", line 29>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              37 (_item_to_response)
+
+ 51           LOAD_NAME               36 (router)
+              LOAD_ATTR               77 (get + NULL|self)
+              LOAD_CONST              17 ('')
+              LOAD_NAME               34 (MemoryListResponse)
+              LOAD_CONST              18 (('response_model',))
+              CALL_KW                  2
+
+ 53           LOAD_NAME                9 (Query)
+              PUSH_NULL
+              LOAD_CONST               3 (None)
+              CALL                     1
+
+ 54           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               19 (get_current_user)
+              CALL                     1
+
+ 55           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               26 (get_db)
+              CALL                     1
+
+ 52           BUILD_TUPLE              3
+
+ 53           NOP
+
+ 52           NOP
+
+ 54           NOP
+
+ 52           NOP
+
+ 55           NOP
+
+ 52           NOP
+
+ 56           NOP
+
+ 52           LOAD_CONST              28 (('caller_phone_hash', 'str | None', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'MemoryListResponse'))
+              LOAD_CONST              19 (<code object list_memory_items at 0x0000024C0FBE2570, file "D:\fluence\Github\mattbot\backend\app\api\v1\memory.py", line 51>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 51           CALL                     0
+
+ 52           STORE_NAME              39 (list_memory_items)
+
+ 83           LOAD_NAME               36 (router)
+              LOAD_ATTR               81 (post + NULL|self)
+              LOAD_CONST              17 ('')
+              LOAD_NAME               33 (MemoryItemResponse)
+              LOAD_CONST              20 (201)
+              LOAD_CONST              21 (('response_model', 'status_code'))
+              CALL_KW                  3
+
+ 86           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               19 (get_current_user)
+              CALL                     1
+
+ 87           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               26 (get_db)
+              CALL                     1
+
+ 84           BUILD_TUPLE              2
+
+ 85           NOP
+
+ 84           NOP
+
+ 86           NOP
+
+ 84           NOP
+
+ 87           NOP
+
+ 84           NOP
+
+ 88           NOP
+
+ 84           LOAD_CONST              29 (('body', 'CreateMemoryItemRequest', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'MemoryItemResponse'))
+              LOAD_CONST              22 (<code object create_memory_item at 0x0000024C0FBE2950, file "D:\fluence\Github\mattbot\backend\app\api\v1\memory.py", line 83>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 83           CALL                     0
+
+ 84           STORE_NAME              41 (create_memory_item)
+
+115           LOAD_NAME               36 (router)
+              LOAD_ATTR               85 (patch + NULL|self)
+              LOAD_CONST              23 ('/{memory_id}')
+              LOAD_NAME               33 (MemoryItemResponse)
+              LOAD_CONST              18 (('response_model',))
+              CALL_KW                  2
+
+119           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               19 (get_current_user)
+              CALL                     1
+
+120           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               26 (get_db)
+              CALL                     1
+
+116           BUILD_TUPLE              2
+
+117           NOP
+
+116           NOP
+
+118           NOP
+
+116           NOP
+
+119           NOP
+
+116           NOP
+
+120           NOP
+
+116           NOP
+
+121           NOP
+
+116           LOAD_CONST              30 (('memory_id', 'uuid.UUID', 'body', 'UpdateMemoryItemRequest', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'MemoryItemResponse'))
+              LOAD_CONST              24 (<code object update_memory_item at 0x0000024C0FB57510, file "D:\fluence\Github\mattbot\backend\app\api\v1\memory.py", line 115>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+115           CALL                     0
+
+116           STORE_NAME              43 (update_memory_item)
+
+162           LOAD_NAME               36 (router)
+              LOAD_ATTR               89 (delete + NULL|self)
+              LOAD_CONST              23 ('/{memory_id}')
+              CALL                     1
+
+165           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               19 (get_current_user)
+              CALL                     1
+
+166           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               26 (get_db)
+              CALL                     1
+
+163           BUILD_TUPLE              2
+
+164           NOP
+
+163           NOP
+
+165           NOP
+
+163           NOP
+
+166           NOP
+
+163           NOP
+
+167           NOP
+
+163           LOAD_CONST              31 (('memory_id', 'uuid.UUID', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'dict'))
+              LOAD_CONST              25 (<code object delete_memory_item at 0x0000024C0FCA13B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\memory.py", line 162>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+162           CALL                     0
+
+163           STORE_NAME              45 (delete_memory_item)
+
+193           LOAD_NAME               36 (router)
+              LOAD_ATTR               89 (delete + NULL|self)
+              LOAD_CONST              17 ('')
+              CALL                     1
+
+195           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               19 (get_current_user)
+              CALL                     1
+
+196           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               26 (get_db)
+              CALL                     1
+
+194           BUILD_TUPLE              2
+
+195           NOP
+
+194           NOP
+
+196           NOP
+
+194           NOP
+
+197           NOP
+
+194           LOAD_CONST              32 (('current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'dict'))
+              LOAD_CONST              26 (<code object delete_all_memory at 0x0000024C0FBE2C70, file "D:\fluence\Github\mattbot\backend\app\api\v1\memory.py", line 193>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+193           CALL                     0
+
+194           STORE_NAME              46 (delete_all_memory)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object _item_to_response at 0x0000024C0FB23F50, file "D:\fluence\Github\mattbot\backend\app\api\v1\memory.py", line 29>:
+  29           RESUME                   0
+
+  30           LOAD_CONST               0 (None)
+               STORE_FAST               1 (value)
+
+  31           NOP
+
+  32   L1:     LOAD_GLOBAL              1 (decrypt_field + NULL)
+
+  33           LOAD_FAST                0 (item)
+               LOAD_ATTR                2 (value_ciphertext)
+               LOAD_FAST                0 (item)
+               LOAD_ATTR                4 (value_nonce)
+               LOAD_FAST                0 (item)
+               LOAD_ATTR                6 (value_key_version)
+
+  32           CALL                     3
+
+  34           LOAD_ATTR                9 (decode + NULL|self)
+               LOAD_CONST               1 ('utf-8')
+               CALL                     1
+
+  32           STORE_FAST               1 (value)
+
+  38   L2:     LOAD_GLOBAL             13 (MemoryItemResponse + NULL)
+
+  39           LOAD_GLOBAL             15 (str + NULL)
+               LOAD_FAST                0 (item)
+               LOAD_ATTR               16 (id)
+               CALL                     1
+
+  40           LOAD_FAST                0 (item)
+               LOAD_ATTR               18 (memory_type)
+
+  41           LOAD_FAST                0 (item)
+               LOAD_ATTR               20 (subject)
+
+  42           LOAD_FAST                1 (value)
+
+  43           LOAD_FAST                0 (item)
+               LOAD_ATTR               22 (confidence)
+
+  44           LOAD_FAST                0 (item)
+               LOAD_ATTR               24 (user_confirmed)
+
+  45           LOAD_FAST                0 (item)
+               LOAD_ATTR               26 (source_call_id)
+               TO_BOOL
+               POP_JUMP_IF_FALSE       21 (to L3)
+               LOAD_GLOBAL             15 (str + NULL)
+               LOAD_FAST                0 (item)
+               LOAD_ATTR               26 (source_call_id)
+               CALL                     1
+               JUMP_FORWARD             1 (to L4)
+       L3:     LOAD_CONST               0 (None)
+
+  46   L4:     LOAD_FAST                0 (item)
+               LOAD_ATTR               28 (caller_phone_hash)
+
+  47           LOAD_FAST                0 (item)
+               LOAD_ATTR               30 (created_at)
+
+  38           LOAD_CONST               3 (('id', 'memory_type', 'subject', 'value', 'confidence', 'user_confirmed', 'source_call_id', 'caller_phone_hash', 'created_at'))
+               CALL_KW                  9
+               RETURN_VALUE
+
+  --   L5:     PUSH_EXC_INFO
+
+  35           LOAD_GLOBAL             10 (Exception)
+               CHECK_EXC_MATCH
+               POP_JUMP_IF_FALSE        5 (to L7)
+               POP_TOP
+
+  36           LOAD_CONST               2 ('[unable to decrypt]')
+               STORE_FAST               1 (value)
+       L6:     POP_EXCEPT
+               JUMP_BACKWARD_NO_INTERRUPT 148 (to L2)
+
+  35   L7:     RERAISE                  0
+
+  --   L8:     COPY                     3
+               POP_EXCEPT
+               RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L5 [0]
+  L5 to L6 -> L8 [1] lasti
+  L7 to L8 -> L8 [1] lasti
+
+Disassembly of <code object list_memory_items at 0x0000024C0FBE2570, file "D:\fluence\Github\mattbot\backend\app\api\v1\memory.py", line 51>:
+  51            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  57            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+  58            LOAD_CONST               1 ('memory:list:')
+                LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+  59            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_STANDARD_MAX)
+
+  60            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR               10 (RATE_LIMIT_API_STANDARD_WINDOW)
+
+  57            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   52 (allowed, _)
+
+  62            LOAD_FAST                3 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+  63            LOAD_GLOBAL             13 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+  66    L6:     LOAD_GLOBAL             14 (CallMemoryItem)
+                LOAD_ATTR               16 (owner_user_id)
+                LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                COMPARE_OP              72 (==)
+
+  67            LOAD_GLOBAL             14 (CallMemoryItem)
+                LOAD_ATTR               18 (deleted_at)
+                LOAD_ATTR               21 (is_ + NULL|self)
+                LOAD_CONST               0 (None)
+                CALL                     1
+
+  65            BUILD_LIST               2
+                STORE_FAST               5 (filters)
+
+  69            LOAD_FAST                0 (caller_phone_hash)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       34 (to L7)
+
+  70            LOAD_FAST                5 (filters)
+                LOAD_ATTR               23 (append + NULL|self)
+                LOAD_GLOBAL             14 (CallMemoryItem)
+                LOAD_ATTR               24 (caller_phone_hash)
+                LOAD_FAST                0 (caller_phone_hash)
+                COMPARE_OP              72 (==)
+                CALL                     1
+                POP_TOP
+
+  73    L7:     LOAD_GLOBAL             27 (select + NULL)
+                LOAD_GLOBAL             14 (CallMemoryItem)
+                CALL                     1
+
+  74            LOAD_ATTR               28 (where)
+
+  73            PUSH_NULL
+
+  74            LOAD_FAST                5 (filters)
+
+  73            CALL_FUNCTION_EX         0
+
+  75            LOAD_ATTR               31 (order_by + NULL|self)
+                LOAD_GLOBAL             14 (CallMemoryItem)
+                LOAD_ATTR               32 (created_at)
+                LOAD_ATTR               35 (desc + NULL|self)
+                CALL                     0
+                CALL                     1
+
+  72            STORE_FAST               6 (stmt)
+
+  77            LOAD_FAST                2 (db)
+                LOAD_ATTR               37 (execute + NULL|self)
+                LOAD_FAST                6 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L8:     SEND                     3 (to L11)
+        L9:     YIELD_VALUE              1
+       L10:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L8)
+       L11:     END_SEND
+                STORE_FAST               7 (result)
+
+  78            LOAD_GLOBAL             39 (list + NULL)
+                LOAD_FAST                7 (result)
+                LOAD_ATTR               41 (scalars + NULL|self)
+                CALL                     0
+                LOAD_ATTR               43 (all + NULL|self)
+                CALL                     0
+                CALL                     1
+                STORE_FAST               8 (items)
+
+  80            LOAD_GLOBAL             45 (MemoryListResponse + NULL)
+                LOAD_FAST                8 (items)
+                GET_ITER
+                LOAD_FAST_AND_CLEAR      9 (i)
+                SWAP                     2
+       L12:     BUILD_LIST               0
+                SWAP                     2
+                GET_ITER
+       L13:     FOR_ITER                14 (to L14)
+                STORE_FAST               9 (i)
+                LOAD_GLOBAL             47 (_item_to_response + NULL)
+                LOAD_FAST                9 (i)
+                CALL                     1
+                LIST_APPEND              2
+                JUMP_BACKWARD           16 (to L13)
+       L14:     END_FOR
+                POP_TOP
+       L15:     SWAP                     2
+                STORE_FAST               9 (i)
+                LOAD_CONST               7 (('items',))
+                CALL_KW                  1
+                RETURN_VALUE
+
+  57   L16:     CLEANUP_THROW
+       L17:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 306 (to L5)
+
+  77   L18:     CLEANUP_THROW
+       L19:     JUMP_BACKWARD_NO_INTERRUPT 81 (to L11)
+
+  --   L20:     SWAP                     2
+                POP_TOP
+
+  80            SWAP                     2
+                STORE_FAST               9 (i)
+                RERAISE                  0
+
+  --   L21:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L21 [0] lasti
+  L3 to L4 -> L16 [2]
+  L4 to L9 -> L21 [0] lasti
+  L9 to L10 -> L18 [2]
+  L10 to L12 -> L21 [0] lasti
+  L12 to L15 -> L20 [4]
+  L15 to L17 -> L21 [0] lasti
+  L18 to L19 -> L21 [0] lasti
+  L20 to L21 -> L21 [0] lasti
+
+Disassembly of <code object create_memory_item at 0x0000024C0FBE2950, file "D:\fluence\Github\mattbot\backend\app\api\v1\memory.py", line 83>:
+  83            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  89            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+  90            LOAD_CONST               1 ('memory:create:')
+                LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+  91            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+
+  92            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+
+  89            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   52 (allowed, _)
+
+  94            LOAD_FAST                3 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+  95            LOAD_GLOBAL             13 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+  97    L6:     LOAD_GLOBAL             15 (encrypt_field + NULL)
+                LOAD_FAST                0 (body)
+                LOAD_ATTR               16 (value)
+                LOAD_ATTR               19 (encode + NULL|self)
+                LOAD_CONST               7 ('utf-8')
+                CALL                     1
+                CALL                     1
+                UNPACK_SEQUENCE          3
+                STORE_FAST_STORE_FAST   86 (ct, nonce)
+                STORE_FAST               7 (kv)
+
+  98            LOAD_GLOBAL             21 (CallMemoryItem + NULL)
+
+  99            LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+
+ 100            LOAD_FAST                0 (body)
+                LOAD_ATTR               22 (caller_phone_hash)
+
+ 101            LOAD_FAST                0 (body)
+                LOAD_ATTR               24 (memory_type)
+
+ 102            LOAD_FAST                0 (body)
+                LOAD_ATTR               26 (subject)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               8 (50)
+                BINARY_SLICE
+
+ 103            LOAD_FAST                5 (ct)
+
+ 104            LOAD_FAST                6 (nonce)
+
+ 105            LOAD_FAST                7 (kv)
+
+ 106            LOAD_CONST               9 (1.0)
+
+ 107            LOAD_CONST              10 (True)
+
+  98            LOAD_CONST              11 (('owner_user_id', 'caller_phone_hash', 'memory_type', 'subject', 'value_ciphertext', 'value_nonce', 'value_key_version', 'confidence', 'user_confirmed'))
+                CALL_KW                  9
+                STORE_FAST               8 (item)
+
+ 109            LOAD_FAST                2 (db)
+                LOAD_ATTR               29 (add + NULL|self)
+                LOAD_FAST                8 (item)
+                CALL                     1
+                POP_TOP
+
+ 110            LOAD_FAST                2 (db)
+                LOAD_ATTR               31 (commit + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                POP_TOP
+
+ 111            LOAD_FAST                2 (db)
+                LOAD_ATTR               33 (refresh + NULL|self)
+                LOAD_FAST                8 (item)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L11:     SEND                     3 (to L14)
+       L12:     YIELD_VALUE              1
+       L13:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+       L14:     END_SEND
+                POP_TOP
+
+ 112            LOAD_GLOBAL             35 (_item_to_response + NULL)
+                LOAD_FAST                8 (item)
+                CALL                     1
+                RETURN_VALUE
+
+  89   L15:     CLEANUP_THROW
+       L16:     JUMP_BACKWARD_NO_INTERRUPT 210 (to L5)
+
+ 110   L17:     CLEANUP_THROW
+       L18:     JUMP_BACKWARD_NO_INTERRUPT 42 (to L10)
+
+ 111   L19:     CLEANUP_THROW
+       L20:     JUMP_BACKWARD_NO_INTERRUPT 19 (to L14)
+
+  --   L21:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L21 [0] lasti
+  L3 to L4 -> L15 [2]
+  L4 to L8 -> L21 [0] lasti
+  L8 to L9 -> L17 [2]
+  L9 to L12 -> L21 [0] lasti
+  L12 to L13 -> L19 [2]
+  L13 to L16 -> L21 [0] lasti
+  L17 to L18 -> L21 [0] lasti
+  L19 to L20 -> L21 [0] lasti
+
+Disassembly of <code object update_memory_item at 0x0000024C0FB57510, file "D:\fluence\Github\mattbot\backend\app\api\v1\memory.py", line 115>:
+ 115            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 122            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+ 123            LOAD_CONST               1 ('memory:update:')
+                LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 124            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+
+ 125            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+
+ 122            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   69 (allowed, _)
+
+ 127            LOAD_FAST                4 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+ 128            LOAD_GLOBAL             13 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 130    L6:     LOAD_GLOBAL             15 (select + NULL)
+                LOAD_GLOBAL             16 (CallMemoryItem)
+                CALL                     1
+                LOAD_ATTR               19 (where + NULL|self)
+
+ 131            LOAD_GLOBAL             16 (CallMemoryItem)
+                LOAD_ATTR                4 (id)
+                LOAD_FAST                0 (memory_id)
+                COMPARE_OP              72 (==)
+
+ 132            LOAD_GLOBAL             16 (CallMemoryItem)
+                LOAD_ATTR               20 (owner_user_id)
+                LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                COMPARE_OP              72 (==)
+
+ 133            LOAD_GLOBAL             16 (CallMemoryItem)
+                LOAD_ATTR               22 (deleted_at)
+                LOAD_ATTR               25 (is_ + NULL|self)
+                LOAD_CONST               0 (None)
+                CALL                     1
+
+ 130            CALL                     3
+                STORE_FAST               6 (stmt)
+
+ 135            LOAD_FAST                3 (db)
+                LOAD_ATTR               27 (execute + NULL|self)
+                LOAD_FAST                6 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                STORE_FAST               7 (result)
+
+ 136            LOAD_FAST                7 (result)
+                LOAD_ATTR               29 (scalar_one_or_none + NULL|self)
+                CALL                     0
+                STORE_FAST               8 (item)
+
+ 138            LOAD_FAST                8 (item)
+                POP_JUMP_IF_NOT_NONE    11 (to L11)
+
+ 139            LOAD_GLOBAL             13 (AppError + NULL)
+
+ 140            LOAD_CONST               7 ('MEMORY_NOT_FOUND')
+                LOAD_CONST               8 ('Memory item not found')
+                LOAD_CONST               9 (404)
+
+ 139            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 143   L11:     LOAD_FAST                1 (body)
+                LOAD_ATTR               30 (subject)
+                POP_JUMP_IF_NONE        20 (to L12)
+
+ 144            LOAD_FAST                1 (body)
+                LOAD_ATTR               30 (subject)
+                LOAD_CONST               0 (None)
+                LOAD_CONST              10 (50)
+                BINARY_SLICE
+                LOAD_FAST                8 (item)
+                STORE_ATTR              15 (subject)
+
+ 146   L12:     LOAD_FAST                1 (body)
+                LOAD_ATTR               32 (value)
+                POP_JUMP_IF_NONE        57 (to L13)
+
+ 147            LOAD_GLOBAL             35 (encrypt_field + NULL)
+                LOAD_FAST                1 (body)
+                LOAD_ATTR               32 (value)
+                LOAD_ATTR               37 (encode + NULL|self)
+                LOAD_CONST              11 ('utf-8')
+                CALL                     1
+                CALL                     1
+                UNPACK_SEQUENCE          3
+                STORE_FAST_STORE_FAST  154 (ct, nonce)
+                STORE_FAST              11 (kv)
+
+ 148            LOAD_FAST_LOAD_FAST    152 (ct, item)
+                STORE_ATTR              19 (value_ciphertext)
+
+ 149            LOAD_FAST_LOAD_FAST    168 (nonce, item)
+                STORE_ATTR              20 (value_nonce)
+
+ 150            LOAD_FAST_LOAD_FAST    184 (kv, item)
+                STORE_ATTR              21 (value_key_version)
+
+ 152   L13:     LOAD_FAST                1 (body)
+                LOAD_ATTR               44 (user_confirmed)
+                POP_JUMP_IF_NONE        41 (to L14)
+
+ 153            LOAD_FAST                1 (body)
+                LOAD_ATTR               44 (user_confirmed)
+                LOAD_FAST                8 (item)
+                STORE_ATTR              22 (user_confirmed)
+
+ 154            LOAD_FAST                1 (body)
+                LOAD_ATTR               44 (user_confirmed)
+                TO_BOOL
+                POP_JUMP_IF_FALSE        7 (to L14)
+
+ 155            LOAD_CONST              12 (1.0)
+                LOAD_FAST                8 (item)
+                STORE_ATTR              23 (confidence)
+
+ 157   L14:     LOAD_FAST                3 (db)
+                LOAD_ATTR               49 (commit + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L15:     SEND                     3 (to L18)
+       L16:     YIELD_VALUE              1
+       L17:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+       L18:     END_SEND
+                POP_TOP
+
+ 158            LOAD_FAST                3 (db)
+                LOAD_ATTR               51 (refresh + NULL|self)
+                LOAD_FAST                8 (item)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L19:     SEND                     3 (to L22)
+       L20:     YIELD_VALUE              1
+       L21:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+       L22:     END_SEND
+                POP_TOP
+
+ 159            LOAD_GLOBAL             53 (_item_to_response + NULL)
+                LOAD_FAST                8 (item)
+                CALL                     1
+                RETURN_VALUE
+
+ 122   L23:     CLEANUP_THROW
+       L24:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 412 (to L5)
+
+ 135   L25:     CLEANUP_THROW
+       L26:     JUMP_BACKWARD_NO_INTERRUPT 254 (to L10)
+
+ 157   L27:     CLEANUP_THROW
+       L28:     JUMP_BACKWARD_NO_INTERRUPT 45 (to L18)
+
+ 158   L29:     CLEANUP_THROW
+       L30:     JUMP_BACKWARD_NO_INTERRUPT 22 (to L22)
+
+  --   L31:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L31 [0] lasti
+  L3 to L4 -> L23 [2]
+  L4 to L8 -> L31 [0] lasti
+  L8 to L9 -> L25 [2]
+  L9 to L16 -> L31 [0] lasti
+  L16 to L17 -> L27 [2]
+  L17 to L20 -> L31 [0] lasti
+  L20 to L21 -> L29 [2]
+  L21 to L24 -> L31 [0] lasti
+  L25 to L26 -> L31 [0] lasti
+  L27 to L28 -> L31 [0] lasti
+  L29 to L30 -> L31 [0] lasti
+
+Disassembly of <code object delete_memory_item at 0x0000024C0FCA13B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\memory.py", line 162>:
+ 162            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 168            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+ 169            LOAD_CONST               1 ('memory:delete:')
+                LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 170            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+
+ 171            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+
+ 168            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   52 (allowed, _)
+
+ 173            LOAD_FAST                3 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+ 174            LOAD_GLOBAL             13 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 175    L6:     LOAD_GLOBAL             15 (select + NULL)
+                LOAD_GLOBAL             16 (CallMemoryItem)
+                CALL                     1
+                LOAD_ATTR               19 (where + NULL|self)
+
+ 176            LOAD_GLOBAL             16 (CallMemoryItem)
+                LOAD_ATTR                4 (id)
+                LOAD_FAST                0 (memory_id)
+                COMPARE_OP              72 (==)
+
+ 177            LOAD_GLOBAL             16 (CallMemoryItem)
+                LOAD_ATTR               20 (owner_user_id)
+                LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                COMPARE_OP              72 (==)
+
+ 178            LOAD_GLOBAL             16 (CallMemoryItem)
+                LOAD_ATTR               22 (deleted_at)
+                LOAD_ATTR               25 (is_ + NULL|self)
+                LOAD_CONST               0 (None)
+                CALL                     1
+
+ 175            CALL                     3
+                STORE_FAST               5 (stmt)
+
+ 180            LOAD_FAST                2 (db)
+                LOAD_ATTR               27 (execute + NULL|self)
+                LOAD_FAST                5 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                STORE_FAST               6 (result)
+
+ 181            LOAD_FAST                6 (result)
+                LOAD_ATTR               29 (scalar_one_or_none + NULL|self)
+                CALL                     0
+                STORE_FAST               7 (item)
+
+ 183            LOAD_FAST                7 (item)
+                POP_JUMP_IF_NOT_NONE    11 (to L11)
+
+ 184            LOAD_GLOBAL             13 (AppError + NULL)
+
+ 185            LOAD_CONST               7 ('MEMORY_NOT_FOUND')
+                LOAD_CONST               8 ('Memory item not found')
+                LOAD_CONST               9 (404)
+
+ 184            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 188   L11:     LOAD_GLOBAL             30 (datetime)
+                LOAD_ATTR               32 (now)
+                PUSH_NULL
+                LOAD_GLOBAL             34 (UTC)
+                CALL                     1
+                LOAD_FAST                7 (item)
+                STORE_ATTR              11 (deleted_at)
+
+ 189            LOAD_FAST                2 (db)
+                LOAD_ATTR               37 (commit + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L12:     SEND                     3 (to L15)
+       L13:     YIELD_VALUE              1
+       L14:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L12)
+       L15:     END_SEND
+                POP_TOP
+
+ 190            LOAD_CONST              10 ('deleted')
+                LOAD_CONST              11 (True)
+                BUILD_MAP                1
+                RETURN_VALUE
+
+ 168   L16:     CLEANUP_THROW
+       L17:     JUMP_BACKWARD_NO_INTERRUPT 253 (to L5)
+
+ 180   L18:     CLEANUP_THROW
+       L19:     JUMP_BACKWARD_NO_INTERRUPT 95 (to L10)
+
+ 189   L20:     CLEANUP_THROW
+       L21:     JUMP_BACKWARD_NO_INTERRUPT 12 (to L15)
+
+  --   L22:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L22 [0] lasti
+  L3 to L4 -> L16 [2]
+  L4 to L8 -> L22 [0] lasti
+  L8 to L9 -> L18 [2]
+  L9 to L13 -> L22 [0] lasti
+  L13 to L14 -> L20 [2]
+  L14 to L17 -> L22 [0] lasti
+  L18 to L19 -> L22 [0] lasti
+  L20 to L21 -> L22 [0] lasti
+
+Disassembly of <code object delete_all_memory at 0x0000024C0FBE2C70, file "D:\fluence\Github\mattbot\backend\app\api\v1\memory.py", line 193>:
+ 193            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 198            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+ 199            LOAD_CONST               1 ('memory:bulkdel:')
+                LOAD_FAST                0 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 200            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+
+ 201            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+
+ 198            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   35 (allowed, _)
+
+ 203            LOAD_FAST                2 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+ 204            LOAD_GLOBAL             13 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 206    L6:     LOAD_GLOBAL             15 (update + NULL)
+                LOAD_GLOBAL             16 (CallMemoryItem)
+                CALL                     1
+
+ 207            LOAD_ATTR               19 (where + NULL|self)
+
+ 208            LOAD_GLOBAL             16 (CallMemoryItem)
+                LOAD_ATTR               20 (owner_user_id)
+                LOAD_FAST                0 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                COMPARE_OP              72 (==)
+
+ 209            LOAD_GLOBAL             16 (CallMemoryItem)
+                LOAD_ATTR               22 (deleted_at)
+                LOAD_ATTR               25 (is_ + NULL|self)
+                LOAD_CONST               0 (None)
+                CALL                     1
+
+ 207            CALL                     2
+
+ 211            LOAD_ATTR               27 (values + NULL|self)
+                LOAD_GLOBAL             28 (datetime)
+                LOAD_ATTR               30 (now)
+                PUSH_NULL
+                LOAD_GLOBAL             32 (UTC)
+                CALL                     1
+                LOAD_CONST               7 (('deleted_at',))
+                CALL_KW                  1
+
+ 205            STORE_FAST               4 (stmt)
+
+ 213            LOAD_FAST                1 (db)
+                LOAD_ATTR               35 (execute + NULL|self)
+                LOAD_FAST                4 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                STORE_FAST               5 (result)
+
+ 214            LOAD_FAST                1 (db)
+                LOAD_ATTR               37 (commit + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L11:     SEND                     3 (to L14)
+       L12:     YIELD_VALUE              1
+       L13:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+       L14:     END_SEND
+                POP_TOP
+
+ 215            LOAD_CONST               8 ('deleted_count')
+                LOAD_GLOBAL             39 (getattr + NULL)
+                LOAD_FAST                5 (result)
+                LOAD_CONST               9 ('rowcount')
+                LOAD_CONST              10 (0)
+                CALL                     3
+                BUILD_MAP                1
+                RETURN_VALUE
+
+ 198   L15:     CLEANUP_THROW
+       L16:     JUMP_BACKWARD_NO_INTERRUPT 222 (to L5)
+
+ 213   L17:     CLEANUP_THROW
+       L18:     JUMP_BACKWARD_NO_INTERRUPT 45 (to L10)
+
+ 214   L19:     CLEANUP_THROW
+       L20:     JUMP_BACKWARD_NO_INTERRUPT 23 (to L14)
+
+  --   L21:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L21 [0] lasti
+  L3 to L4 -> L15 [2]
+  L4 to L8 -> L21 [0] lasti
+  L8 to L9 -> L17 [2]
+  L9 to L12 -> L21 [0] lasti
+  L12 to L13 -> L19 [2]
+  L13 to L16 -> L21 [0] lasti
+  L17 to L18 -> L21 [0] lasti
+  L19 to L20 -> L21 [0] lasti

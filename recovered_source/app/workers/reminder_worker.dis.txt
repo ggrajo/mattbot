@@ -1,0 +1,394 @@
+# Bytecode dump of: reminder_worker.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\workers\reminder_worker.py
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'datetime', 'UTC', 'sqlalchemy', 'select', 'update', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.models.reminder', 'Reminder', 'getLogger', '__name__', 'logger', 'process_due_reminders')
+# co_consts (strings): ['Reminder poller — triggers due reminders.']
+
+# DOCSTRING: """Reminder poller — triggers due reminders."""
+# --- Nested code object: process_due_reminders ---
+    # DOCSTRING: """Find scheduled reminders past their due_at and mark them triggered.
+
+Returns the number of reminders that were triggered.
+"""
+    # co_names: ('datetime', 'now', 'UTC', 'select', 'Reminder', 'where', 'status', 'due_at', 'execute', 'scalars', 'all', 'id', 'update', 'in_', 'values', 'logger', 'info', 'owner_user_id', 'title', 'len')
+    # co_varnames: ('db', 'now', 'stmt', 'result', 'due_reminders', 'r', 'ids')
+      16            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      21            LOAD_GLOBAL              0 (datetime)
+                    LOAD_ATTR                2 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL              4 (UTC)
+                    CALL                     1
+                    STORE_FAST               1 (now)
+    
+      23            LOAD_GLOBAL              7 (select + NULL)
+                    LOAD_GLOBAL              8 (Reminder)
+                    CALL                     1
+                    LOAD_ATTR               11 (where + NULL|self)
+    
+      24            LOAD_GLOBAL              8 (Reminder)
+                    LOAD_ATTR               12 (status)
+                    LOAD_CONST               1 ('scheduled')
+                    COMPARE_OP              72 (==)
+    
+      25            LOAD_GLOBAL              8 (Reminder)
+                    LOAD_ATTR               14 (due_at)
+                    LOAD_FAST                1 (now)
+                    COMPARE_OP              42 (<=)
+    
+      23            CALL                     2
+                    STORE_FAST               2 (stmt)
+    
+      27            LOAD_FAST                0 (db)
+                    LOAD_ATTR               17 (execute + NULL|self)
+                    LOAD_FAST                2 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               2 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               3 (result)
+    
+      28            LOAD_FAST                3 (result)
+                    LOAD_ATTR               19 (scalars + NULL|self)
+                    CALL                     0
+                    LOAD_ATTR               21 (all + NULL|self)
+                    CALL                     0
+                    STORE_FAST               4 (due_reminders)
+    
+      30            LOAD_FAST                4 (due_reminders)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L6)
+    
+      31            RETURN_CONST             3 (0)
+    
+      33    L6:     LOAD_FAST                4 (due_reminders)
+                    GET_ITER
+                    LOAD_FAST_AND_CLEAR      5 (r)
+                    SWAP                     2
+            L7:     BUILD_LIST               0
+                    SWAP                     2
+                    GET_ITER
+            L8:     FOR_ITER                14 (to L9)
+                    STORE_FAST_LOAD_FAST    85 (r, r)
+                    LOAD_ATTR               22 (id)
+                    LIST_APPEND              2
+                    JUMP_BACKWARD           16 (to L8)
+            L9:     END_FOR
+                    POP_TOP
+           L10:     STORE_FAST               6 (ids)
+                    STORE_FAST               5 (r)
+    
+      35            LOAD_FAST                0 (db)
+                    LOAD_ATTR               17 (execute + NULL|self)
+    
+      36            LOAD_GLOBAL             25 (update + NULL)
+                    LOAD_GLOBAL              8 (Reminder)
+                    CALL                     1
+    
+      37            LOAD_ATTR               11 (where + NULL|self)
+                    LOAD_GLOBAL              8 (Reminder)
+                    LOAD_ATTR               22 (id)
+                    LOAD_ATTR               27 (in_ + NULL|self)
+                    LOAD_FAST                6 (ids)
+                    CALL                     1
+                    CALL                     1
+    
+      38            LOAD_ATTR               29 (values + NULL|self)
+                    LOAD_CONST               4 ('triggered')
+                    LOAD_CONST               5 (('status',))
+                    CALL_KW                  1
+    
+      35            CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               2 (None)
+           L11:     SEND                     3 (to L14)
+           L12:     YIELD_VALUE              1
+           L13:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+           L14:     END_SEND
+                    POP_TOP
+    
+      41            LOAD_FAST                4 (due_reminders)
+                    GET_ITER
+           L15:     FOR_ITER                57 (to L16)
+                    STORE_FAST               5 (r)
+    
+      42            LOAD_GLOBAL             30 (logger)
+                    LOAD_ATTR               33 (info + NULL|self)
+    
+      43            LOAD_CONST               6 ('Reminder triggered: id=%s user=%s title=%s')
+    
+      44            LOAD_FAST                5 (r)
+                    LOAD_ATTR               22 (id)
+    
+      45            LOAD_FAST                5 (r)
+                    LOAD_ATTR               34 (owner_user_id)
+    
+      46            LOAD_FAST                5 (r)
+                    LOAD_ATTR               36 (title)
+    
+      42            CALL                     4
+                    POP_TOP
+                    JUMP_BACKWARD           59 (to L15)
+    
+      41   L16:     END_FOR
+                    POP_TOP
+    
+      49            LOAD_GLOBAL             39 (len + NULL)
+                    LOAD_FAST                6 (ids)
+                    CALL                     1
+                    RETURN_VALUE
+    
+      27   L17:     CLEANUP_THROW
+           L18:     JUMP_BACKWARD_NO_INTERRUPT 238 (to L5)
+    
+      --   L19:     SWAP                     2
+                    POP_TOP
+    
+      33            SWAP                     2
+                    STORE_FAST               5 (r)
+                    RERAISE                  0
+    
+      35   L20:     CLEANUP_THROW
+           L21:     JUMP_BACKWARD_NO_INTERRUPT 85 (to L14)
+    
+      --   L22:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L22 [0] lasti
+      L3 to L4 -> L17 [2]
+      L4 to L7 -> L22 [0] lasti
+      L7 to L10 -> L19 [2]
+      L10 to L12 -> L22 [0] lasti
+      L12 to L13 -> L20 [2]
+      L13 to L18 -> L22 [0] lasti
+      L19 to L21 -> L22 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'datetime', 'UTC', 'sqlalchemy', 'select', 'update', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.models.reminder', 'Reminder', 'getLogger', '__name__', 'logger', 'process_due_reminders')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Reminder poller — triggers due reminders.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (logging)
+              STORE_NAME               3 (logging)
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('UTC', 'datetime'))
+              IMPORT_NAME              4 (datetime)
+              IMPORT_FROM              5 (UTC)
+              STORE_NAME               5 (UTC)
+              IMPORT_FROM              4 (datetime)
+              STORE_NAME               4 (datetime)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('select', 'update'))
+              IMPORT_NAME              6 (sqlalchemy)
+              IMPORT_FROM              7 (select)
+              STORE_NAME               7 (select)
+              IMPORT_FROM              8 (update)
+              STORE_NAME               8 (update)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('AsyncSession',))
+              IMPORT_NAME              9 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM             10 (AsyncSession)
+              STORE_NAME              10 (AsyncSession)
+              POP_TOP
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('Reminder',))
+              IMPORT_NAME             11 (app.models.reminder)
+              IMPORT_FROM             12 (Reminder)
+              STORE_NAME              12 (Reminder)
+              POP_TOP
+
+ 13           LOAD_NAME                3 (logging)
+              LOAD_ATTR               26 (getLogger)
+              PUSH_NULL
+              LOAD_NAME               14 (__name__)
+              CALL                     1
+              STORE_NAME              15 (logger)
+
+ 16           LOAD_CONST               9 (('db', 'AsyncSession', 'return', 'int'))
+              LOAD_CONST               8 (<code object process_due_reminders at 0x0000024C0FEFA830, file "D:\fluence\Github\mattbot\backend\app\workers\reminder_worker.py", line 16>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              16 (process_due_reminders)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object process_due_reminders at 0x0000024C0FEFA830, file "D:\fluence\Github\mattbot\backend\app\workers\reminder_worker.py", line 16>:
+  16            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  21            LOAD_GLOBAL              0 (datetime)
+                LOAD_ATTR                2 (now)
+                PUSH_NULL
+                LOAD_GLOBAL              4 (UTC)
+                CALL                     1
+                STORE_FAST               1 (now)
+
+  23            LOAD_GLOBAL              7 (select + NULL)
+                LOAD_GLOBAL              8 (Reminder)
+                CALL                     1
+                LOAD_ATTR               11 (where + NULL|self)
+
+  24            LOAD_GLOBAL              8 (Reminder)
+                LOAD_ATTR               12 (status)
+                LOAD_CONST               1 ('scheduled')
+                COMPARE_OP              72 (==)
+
+  25            LOAD_GLOBAL              8 (Reminder)
+                LOAD_ATTR               14 (due_at)
+                LOAD_FAST                1 (now)
+                COMPARE_OP              42 (<=)
+
+  23            CALL                     2
+                STORE_FAST               2 (stmt)
+
+  27            LOAD_FAST                0 (db)
+                LOAD_ATTR               17 (execute + NULL|self)
+                LOAD_FAST                2 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               2 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               3 (result)
+
+  28            LOAD_FAST                3 (result)
+                LOAD_ATTR               19 (scalars + NULL|self)
+                CALL                     0
+                LOAD_ATTR               21 (all + NULL|self)
+                CALL                     0
+                STORE_FAST               4 (due_reminders)
+
+  30            LOAD_FAST                4 (due_reminders)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L6)
+
+  31            RETURN_CONST             3 (0)
+
+  33    L6:     LOAD_FAST                4 (due_reminders)
+                GET_ITER
+                LOAD_FAST_AND_CLEAR      5 (r)
+                SWAP                     2
+        L7:     BUILD_LIST               0
+                SWAP                     2
+                GET_ITER
+        L8:     FOR_ITER                14 (to L9)
+                STORE_FAST_LOAD_FAST    85 (r, r)
+                LOAD_ATTR               22 (id)
+                LIST_APPEND              2
+                JUMP_BACKWARD           16 (to L8)
+        L9:     END_FOR
+                POP_TOP
+       L10:     STORE_FAST               6 (ids)
+                STORE_FAST               5 (r)
+
+  35            LOAD_FAST                0 (db)
+                LOAD_ATTR               17 (execute + NULL|self)
+
+  36            LOAD_GLOBAL             25 (update + NULL)
+                LOAD_GLOBAL              8 (Reminder)
+                CALL                     1
+
+  37            LOAD_ATTR               11 (where + NULL|self)
+                LOAD_GLOBAL              8 (Reminder)
+                LOAD_ATTR               22 (id)
+                LOAD_ATTR               27 (in_ + NULL|self)
+                LOAD_FAST                6 (ids)
+                CALL                     1
+                CALL                     1
+
+  38            LOAD_ATTR               29 (values + NULL|self)
+                LOAD_CONST               4 ('triggered')
+                LOAD_CONST               5 (('status',))
+                CALL_KW                  1
+
+  35            CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               2 (None)
+       L11:     SEND                     3 (to L14)
+       L12:     YIELD_VALUE              1
+       L13:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+       L14:     END_SEND
+                POP_TOP
+
+  41            LOAD_FAST                4 (due_reminders)
+                GET_ITER
+       L15:     FOR_ITER                57 (to L16)
+                STORE_FAST               5 (r)
+
+  42            LOAD_GLOBAL             30 (logger)
+                LOAD_ATTR               33 (info + NULL|self)
+
+  43            LOAD_CONST               6 ('Reminder triggered: id=%s user=%s title=%s')
+
+  44            LOAD_FAST                5 (r)
+                LOAD_ATTR               22 (id)
+
+  45            LOAD_FAST                5 (r)
+                LOAD_ATTR               34 (owner_user_id)
+
+  46            LOAD_FAST                5 (r)
+                LOAD_ATTR               36 (title)
+
+  42            CALL                     4
+                POP_TOP
+                JUMP_BACKWARD           59 (to L15)
+
+  41   L16:     END_FOR
+                POP_TOP
+
+  49            LOAD_GLOBAL             39 (len + NULL)
+                LOAD_FAST                6 (ids)
+                CALL                     1
+                RETURN_VALUE
+
+  27   L17:     CLEANUP_THROW
+       L18:     JUMP_BACKWARD_NO_INTERRUPT 238 (to L5)
+
+  --   L19:     SWAP                     2
+                POP_TOP
+
+  33            SWAP                     2
+                STORE_FAST               5 (r)
+                RERAISE                  0
+
+  35   L20:     CLEANUP_THROW
+       L21:     JUMP_BACKWARD_NO_INTERRUPT 85 (to L14)
+
+  --   L22:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L22 [0] lasti
+  L3 to L4 -> L17 [2]
+  L4 to L7 -> L22 [0] lasti
+  L7 to L10 -> L19 [2]
+  L10 to L12 -> L22 [0] lasti
+  L12 to L13 -> L20 [2]
+  L13 to L18 -> L22 [0] lasti
+  L19 to L21 -> L22 [0] lasti

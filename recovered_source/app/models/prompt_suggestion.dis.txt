@@ -1,0 +1,373 @@
+# Bytecode dump of: prompt_suggestion.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\models\prompt_suggestion.py
+# co_names: ('__doc__', 'uuid', 'datetime', 'sqlalchemy', 'Boolean', 'Index', 'Integer', 'String', 'Text', 'text', 'sa_text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'app.database', 'Base', 'app.models._types', 'tz_datetime', 'PromptSuggestion')
+# co_consts (strings): ['Prompt suggestions — server-controlled suggestion chips for user instructions.', 'PromptSuggestion']
+
+# DOCSTRING: """Prompt suggestions — server-controlled suggestion chips for user instructions."""
+# --- Nested code object: PromptSuggestion ---
+    # DOCSTRING: """PromptSuggestion"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__tablename__', 'mapped_column', 'UUID', 'uuid', 'uuid4', 'id', 'Mapped', '__annotations__', 'String', 'title', 'str', 'Text', 'text', 'Integer', 'sa_text', 'sort_order', 'int', 'Boolean', 'is_active', 'bool', 'tz_datetime', 'created_at', 'datetime', 'Index', '__table_args__', '__static_attributes__')
+    # co_varnames: ()
+     15           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('PromptSuggestion')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (15)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     16           LOAD_CONST               2 ('prompt_suggestions')
+                  STORE_NAME               4 (__tablename__)
+    
+     18           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     19           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               3 (True)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               16 (uuid4)
+    
+     18           LOAD_CONST               5 (('primary_key', 'default'))
+                  CALL_KW                  3
+                  STORE_NAME               9 (id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST               6 ('id')
+                  STORE_SUBSCR
+    
+     21           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               12 (String)
+                  PUSH_NULL
+                  LOAD_CONST               7 (100)
+                  CALL                     1
+                  LOAD_CONST               8 (False)
+                  LOAD_CONST               9 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              13 (title)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               14 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              10 ('title')
+                  STORE_SUBSCR
+    
+     22           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               15 (Text)
+                  LOAD_CONST               8 (False)
+                  LOAD_CONST               9 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              16 (text)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               14 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              11 ('text')
+                  STORE_SUBSCR
+    
+     23           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     24           LOAD_NAME               17 (Integer)
+                  LOAD_CONST               8 (False)
+                  LOAD_NAME               18 (sa_text)
+                  PUSH_NULL
+                  LOAD_CONST              12 ('0')
+                  CALL                     1
+    
+     23           LOAD_CONST              13 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              19 (sort_order)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               20 (int)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              14 ('sort_order')
+                  STORE_SUBSCR
+    
+     26           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     27           LOAD_NAME               21 (Boolean)
+                  LOAD_CONST               8 (False)
+                  LOAD_NAME               18 (sa_text)
+                  PUSH_NULL
+                  LOAD_CONST              15 ('true')
+                  CALL                     1
+    
+     26           LOAD_CONST              13 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              22 (is_active)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               23 (bool)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              16 ('is_active')
+                  STORE_SUBSCR
+    
+     30           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     31           LOAD_NAME               24 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               8 (False)
+                  LOAD_NAME               18 (sa_text)
+                  PUSH_NULL
+                  LOAD_CONST              17 ('now()')
+                  CALL                     1
+    
+     30           LOAD_CONST              13 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              25 (created_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               26 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              18 ('created_at')
+                  STORE_SUBSCR
+    
+     35           LOAD_NAME               27 (Index)
+                  PUSH_NULL
+                  LOAD_CONST              19 ('prompt_suggestions_active_idx')
+                  LOAD_CONST              16 ('is_active')
+                  LOAD_CONST              14 ('sort_order')
+                  CALL                     3
+    
+     34           BUILD_TUPLE              1
+                  STORE_NAME              28 (__table_args__)
+                  LOAD_CONST              20 (())
+                  STORE_NAME              29 (__static_attributes__)
+                  RETURN_CONST            21 (None)
+    
+# co_names: ('__doc__', 'uuid', 'datetime', 'sqlalchemy', 'Boolean', 'Index', 'Integer', 'String', 'Text', 'text', 'sa_text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'app.database', 'Base', 'app.models._types', 'tz_datetime', 'PromptSuggestion')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Prompt suggestions — server-controlled suggestion chips for user instructions.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (uuid)
+              STORE_NAME               1 (uuid)
+
+  4           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('datetime',))
+              IMPORT_NAME              2 (datetime)
+              IMPORT_FROM              2 (datetime)
+              STORE_NAME               2 (datetime)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('Boolean', 'Index', 'Integer', 'String', 'Text'))
+              IMPORT_NAME              3 (sqlalchemy)
+              IMPORT_FROM              4 (Boolean)
+              STORE_NAME               4 (Boolean)
+              IMPORT_FROM              5 (Index)
+              STORE_NAME               5 (Index)
+              IMPORT_FROM              6 (Integer)
+              STORE_NAME               6 (Integer)
+              IMPORT_FROM              7 (String)
+              STORE_NAME               7 (String)
+              IMPORT_FROM              8 (Text)
+              STORE_NAME               8 (Text)
+              POP_TOP
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('text',))
+              IMPORT_NAME              3 (sqlalchemy)
+              IMPORT_FROM              9 (text)
+              STORE_NAME              10 (sa_text)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('UUID',))
+              IMPORT_NAME             11 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM             12 (UUID)
+              STORE_NAME              12 (UUID)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('Mapped', 'mapped_column'))
+              IMPORT_NAME             13 (sqlalchemy.orm)
+              IMPORT_FROM             14 (Mapped)
+              STORE_NAME              14 (Mapped)
+              IMPORT_FROM             15 (mapped_column)
+              STORE_NAME              15 (mapped_column)
+              POP_TOP
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('Base',))
+              IMPORT_NAME             16 (app.database)
+              IMPORT_FROM             17 (Base)
+              STORE_NAME              17 (Base)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('tz_datetime',))
+              IMPORT_NAME             18 (app.models._types)
+              IMPORT_FROM             19 (tz_datetime)
+              STORE_NAME              19 (tz_datetime)
+              POP_TOP
+
+ 15           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              10 (<code object PromptSuggestion at 0x0000024C0FBECBF0, file "D:\fluence\Github\mattbot\backend\app\models\prompt_suggestion.py", line 15>)
+              MAKE_FUNCTION
+              LOAD_CONST              11 ('PromptSuggestion')
+              LOAD_NAME               17 (Base)
+              CALL                     3
+              STORE_NAME              20 (PromptSuggestion)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object PromptSuggestion at 0x0000024C0FBECBF0, file "D:\fluence\Github\mattbot\backend\app\models\prompt_suggestion.py", line 15>:
+ 15           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('PromptSuggestion')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (15)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 16           LOAD_CONST               2 ('prompt_suggestions')
+              STORE_NAME               4 (__tablename__)
+
+ 18           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 19           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               16 (uuid4)
+
+ 18           LOAD_CONST               5 (('primary_key', 'default'))
+              CALL_KW                  3
+              STORE_NAME               9 (id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               6 ('id')
+              STORE_SUBSCR
+
+ 21           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               12 (String)
+              PUSH_NULL
+              LOAD_CONST               7 (100)
+              CALL                     1
+              LOAD_CONST               8 (False)
+              LOAD_CONST               9 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              13 (title)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               14 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              10 ('title')
+              STORE_SUBSCR
+
+ 22           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               15 (Text)
+              LOAD_CONST               8 (False)
+              LOAD_CONST               9 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              16 (text)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               14 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              11 ('text')
+              STORE_SUBSCR
+
+ 23           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 24           LOAD_NAME               17 (Integer)
+              LOAD_CONST               8 (False)
+              LOAD_NAME               18 (sa_text)
+              PUSH_NULL
+              LOAD_CONST              12 ('0')
+              CALL                     1
+
+ 23           LOAD_CONST              13 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              19 (sort_order)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               20 (int)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              14 ('sort_order')
+              STORE_SUBSCR
+
+ 26           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 27           LOAD_NAME               21 (Boolean)
+              LOAD_CONST               8 (False)
+              LOAD_NAME               18 (sa_text)
+              PUSH_NULL
+              LOAD_CONST              15 ('true')
+              CALL                     1
+
+ 26           LOAD_CONST              13 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              22 (is_active)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               23 (bool)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              16 ('is_active')
+              STORE_SUBSCR
+
+ 30           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 31           LOAD_NAME               24 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               8 (False)
+              LOAD_NAME               18 (sa_text)
+              PUSH_NULL
+              LOAD_CONST              17 ('now()')
+              CALL                     1
+
+ 30           LOAD_CONST              13 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              25 (created_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               26 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              18 ('created_at')
+              STORE_SUBSCR
+
+ 35           LOAD_NAME               27 (Index)
+              PUSH_NULL
+              LOAD_CONST              19 ('prompt_suggestions_active_idx')
+              LOAD_CONST              16 ('is_active')
+              LOAD_CONST              14 ('sort_order')
+              CALL                     3
+
+ 34           BUILD_TUPLE              1
+              STORE_NAME              28 (__table_args__)
+              LOAD_CONST              20 (())
+              STORE_NAME              29 (__static_attributes__)
+              RETURN_CONST            21 (None)

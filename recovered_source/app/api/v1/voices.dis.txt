@@ -1,0 +1,557 @@
+# Bytecode dump of: voices.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\api\v1\voices.py
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'fastapi', 'APIRouter', 'Depends', 'pydantic', 'BaseModel', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.database', 'get_db', 'app.models.voice_catalog', 'VoiceCatalog', 'app.schemas.agents', 'VoiceCatalogItem', 'VoiceCatalogResponse', 'app.services.elevenlabs_agent_service', 'sync_voice_catalog', 'getLogger', '__name__', 'logger', 'router', 'get', 'list_voices', 'VoiceSyncResponse', 'post', 'sync_voices')
+# co_consts (strings): ['Voice catalog endpoint.', '', 'VoiceSyncResponse', '/sync']
+
+# DOCSTRING: """Voice catalog endpoint."""
+# --- Nested code object: list_voices ---
+    # co_names: ('select', 'VoiceCatalog', 'where', 'is_active', 'is_', 'order_by', 'sort_order', 'asc', 'execute', 'scalars', 'all', 'VoiceCatalogResponse', 'VoiceCatalogItem', 'str', 'id', 'provider_voice_id', 'display_name', 'locale', 'gender_tag', 'preview_url')
+    # co_varnames: ('_current_user', 'db', 'stmt', 'result', 'voices', 'v')
+      23            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      29            LOAD_GLOBAL              1 (select + NULL)
+                    LOAD_GLOBAL              2 (VoiceCatalog)
+                    CALL                     1
+    
+      30            LOAD_ATTR                5 (where + NULL|self)
+                    LOAD_GLOBAL              2 (VoiceCatalog)
+                    LOAD_ATTR                6 (is_active)
+                    LOAD_ATTR                9 (is_ + NULL|self)
+                    LOAD_CONST               1 (True)
+                    CALL                     1
+                    CALL                     1
+    
+      31            LOAD_ATTR               11 (order_by + NULL|self)
+                    LOAD_GLOBAL              2 (VoiceCatalog)
+                    LOAD_ATTR               12 (sort_order)
+                    LOAD_ATTR               15 (asc + NULL|self)
+                    CALL                     0
+                    CALL                     1
+    
+      28            STORE_FAST               2 (stmt)
+    
+      33            LOAD_FAST                1 (db)
+                    LOAD_ATTR               17 (execute + NULL|self)
+                    LOAD_FAST                2 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               3 (result)
+    
+      34            LOAD_FAST                3 (result)
+                    LOAD_ATTR               19 (scalars + NULL|self)
+                    CALL                     0
+                    LOAD_ATTR               21 (all + NULL|self)
+                    CALL                     0
+                    STORE_FAST               4 (voices)
+    
+      35            LOAD_GLOBAL             23 (VoiceCatalogResponse + NULL)
+    
+      46            LOAD_FAST                4 (voices)
+                    GET_ITER
+    
+      36            LOAD_FAST_AND_CLEAR      5 (v)
+                    SWAP                     2
+            L6:     BUILD_LIST               0
+                    SWAP                     2
+    
+      46            GET_ITER
+            L7:     FOR_ITER                97 (to L8)
+                    STORE_FAST               5 (v)
+    
+      37            LOAD_GLOBAL             25 (VoiceCatalogItem + NULL)
+    
+      38            LOAD_GLOBAL             27 (str + NULL)
+                    LOAD_FAST                5 (v)
+                    LOAD_ATTR               28 (id)
+                    CALL                     1
+    
+      39            LOAD_FAST                5 (v)
+                    LOAD_ATTR               30 (provider_voice_id)
+    
+      40            LOAD_FAST                5 (v)
+                    LOAD_ATTR               32 (display_name)
+    
+      41            LOAD_FAST                5 (v)
+                    LOAD_ATTR               34 (locale)
+    
+      42            LOAD_FAST                5 (v)
+                    LOAD_ATTR               36 (gender_tag)
+    
+      43            LOAD_FAST                5 (v)
+                    LOAD_ATTR               38 (preview_url)
+    
+      44            LOAD_FAST                5 (v)
+                    LOAD_ATTR               12 (sort_order)
+    
+      37            LOAD_CONST               2 (('id', 'provider_voice_id', 'display_name', 'locale', 'gender_tag', 'preview_url', 'sort_order'))
+                    CALL_KW                  7
+                    LIST_APPEND              2
+                    JUMP_BACKWARD           99 (to L7)
+    
+      46    L8:     END_FOR
+                    POP_TOP
+    
+      36    L9:     SWAP                     2
+                    STORE_FAST               5 (v)
+    
+      35            LOAD_CONST               3 (('items',))
+                    CALL_KW                  1
+                    RETURN_VALUE
+    
+      33   L10:     CLEANUP_THROW
+           L11:     JUMP_BACKWARD_NO_INTERRUPT 152 (to L5)
+    
+      --   L12:     SWAP                     2
+                    POP_TOP
+    
+      36            SWAP                     2
+                    STORE_FAST               5 (v)
+                    RERAISE                  0
+    
+      --   L13:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L13 [0] lasti
+      L3 to L4 -> L10 [2]
+      L4 to L6 -> L13 [0] lasti
+      L6 to L9 -> L12 [4]
+      L9 to L11 -> L13 [0] lasti
+      L12 to L13 -> L13 [0] lasti
+    
+# --- Nested code object: VoiceSyncResponse ---
+    # DOCSTRING: """VoiceSyncResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     51           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('VoiceSyncResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (51)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     52           LOAD_CONST               2 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('synced')
+                  STORE_SUBSCR
+                  LOAD_CONST               4 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# --- Nested code object: sync_voices ---
+    # DOCSTRING: """Pull the latest voices from ElevenLabs and upsert into the local catalog."""
+    # co_names: ('sync_voice_catalog', 'logger', 'info', 'VoiceSyncResponse')
+    # co_varnames: ('_current_user', 'db', 'n')
+      55           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+      61           LOAD_GLOBAL              1 (sync_voice_catalog + NULL)
+                   LOAD_FAST                1 (db)
+                   CALL                     1
+                   GET_AWAITABLE            0
+                   LOAD_CONST               1 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   STORE_FAST               2 (n)
+    
+      62           LOAD_GLOBAL              2 (logger)
+                   LOAD_ATTR                5 (info + NULL|self)
+                   LOAD_CONST               2 ('Voice catalog manual sync: %d voices upserted')
+                   LOAD_FAST                2 (n)
+                   CALL                     2
+                   POP_TOP
+    
+      63           LOAD_GLOBAL              7 (VoiceSyncResponse + NULL)
+                   LOAD_FAST                2 (n)
+                   LOAD_CONST               3 (('synced',))
+                   CALL_KW                  1
+                   RETURN_VALUE
+    
+      61   L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 35 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'fastapi', 'APIRouter', 'Depends', 'pydantic', 'BaseModel', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.database', 'get_db', 'app.models.voice_catalog', 'VoiceCatalog', 'app.schemas.agents', 'VoiceCatalogItem', 'VoiceCatalogResponse', 'app.services.elevenlabs_agent_service', 'sync_voice_catalog', 'getLogger', '__name__', 'logger', 'router', 'get', 'list_voices', 'VoiceSyncResponse', 'post', 'sync_voices')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Voice catalog endpoint.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (logging)
+              STORE_NAME               3 (logging)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('APIRouter', 'Depends'))
+              IMPORT_NAME              4 (fastapi)
+              IMPORT_FROM              5 (APIRouter)
+              STORE_NAME               5 (APIRouter)
+              IMPORT_FROM              6 (Depends)
+              STORE_NAME               6 (Depends)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('BaseModel',))
+              IMPORT_NAME              7 (pydantic)
+              IMPORT_FROM              8 (BaseModel)
+              STORE_NAME               8 (BaseModel)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('select',))
+              IMPORT_NAME              9 (sqlalchemy)
+              IMPORT_FROM             10 (select)
+              STORE_NAME              10 (select)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('AsyncSession',))
+              IMPORT_NAME             11 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM             12 (AsyncSession)
+              STORE_NAME              12 (AsyncSession)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('CurrentUser', 'get_current_user'))
+              IMPORT_NAME             13 (app.core.dependencies)
+              IMPORT_FROM             14 (CurrentUser)
+              STORE_NAME              14 (CurrentUser)
+              IMPORT_FROM             15 (get_current_user)
+              STORE_NAME              15 (get_current_user)
+              POP_TOP
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('get_db',))
+              IMPORT_NAME             16 (app.database)
+              IMPORT_FROM             17 (get_db)
+              STORE_NAME              17 (get_db)
+              POP_TOP
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST              10 (('VoiceCatalog',))
+              IMPORT_NAME             18 (app.models.voice_catalog)
+              IMPORT_FROM             19 (VoiceCatalog)
+              STORE_NAME              19 (VoiceCatalog)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST              11 (('VoiceCatalogItem', 'VoiceCatalogResponse'))
+              IMPORT_NAME             20 (app.schemas.agents)
+              IMPORT_FROM             21 (VoiceCatalogItem)
+              STORE_NAME              21 (VoiceCatalogItem)
+              IMPORT_FROM             22 (VoiceCatalogResponse)
+              STORE_NAME              22 (VoiceCatalogResponse)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST              12 (('sync_voice_catalog',))
+              IMPORT_NAME             23 (app.services.elevenlabs_agent_service)
+              IMPORT_FROM             24 (sync_voice_catalog)
+              STORE_NAME              24 (sync_voice_catalog)
+              POP_TOP
+
+ 18           LOAD_NAME                3 (logging)
+              LOAD_ATTR               50 (getLogger)
+              PUSH_NULL
+              LOAD_NAME               26 (__name__)
+              CALL                     1
+              STORE_NAME              27 (logger)
+
+ 20           LOAD_NAME                5 (APIRouter)
+              PUSH_NULL
+              CALL                     0
+              STORE_NAME              28 (router)
+
+ 23           LOAD_NAME               28 (router)
+              LOAD_ATTR               59 (get + NULL|self)
+              LOAD_CONST              13 ('')
+              LOAD_NAME               22 (VoiceCatalogResponse)
+              LOAD_CONST              14 (('response_model',))
+              CALL_KW                  2
+
+ 25           LOAD_NAME                6 (Depends)
+              PUSH_NULL
+              LOAD_NAME               15 (get_current_user)
+              CALL                     1
+
+ 26           LOAD_NAME                6 (Depends)
+              PUSH_NULL
+              LOAD_NAME               17 (get_db)
+              CALL                     1
+
+ 24           BUILD_TUPLE              2
+
+ 25           NOP
+
+ 24           NOP
+
+ 26           NOP
+
+ 24           NOP
+
+ 27           NOP
+
+ 24           LOAD_CONST              20 (('_current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'VoiceCatalogResponse'))
+              LOAD_CONST              15 (<code object list_voices at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\api\v1\voices.py", line 23>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 23           CALL                     0
+
+ 24           STORE_NAME              30 (list_voices)
+
+ 51           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              16 (<code object VoiceSyncResponse at 0x0000024C0EF2A790, file "D:\fluence\Github\mattbot\backend\app\api\v1\voices.py", line 51>)
+              MAKE_FUNCTION
+              LOAD_CONST              17 ('VoiceSyncResponse')
+              LOAD_NAME                8 (BaseModel)
+              CALL                     3
+              STORE_NAME              31 (VoiceSyncResponse)
+
+ 55           LOAD_NAME               28 (router)
+              LOAD_ATTR               65 (post + NULL|self)
+              LOAD_CONST              18 ('/sync')
+              LOAD_NAME               31 (VoiceSyncResponse)
+              LOAD_CONST              14 (('response_model',))
+              CALL_KW                  2
+
+ 57           LOAD_NAME                6 (Depends)
+              PUSH_NULL
+              LOAD_NAME               15 (get_current_user)
+              CALL                     1
+
+ 58           LOAD_NAME                6 (Depends)
+              PUSH_NULL
+              LOAD_NAME               17 (get_db)
+              CALL                     1
+
+ 56           BUILD_TUPLE              2
+
+ 57           NOP
+
+ 56           NOP
+
+ 58           NOP
+
+ 56           NOP
+
+ 59           NOP
+
+ 56           LOAD_CONST              21 (('_current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'VoiceSyncResponse'))
+              LOAD_CONST              19 (<code object sync_voices at 0x0000024C11498A30, file "D:\fluence\Github\mattbot\backend\app\api\v1\voices.py", line 55>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 55           CALL                     0
+
+ 56           STORE_NAME              33 (sync_voices)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object list_voices at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\api\v1\voices.py", line 23>:
+  23            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  29            LOAD_GLOBAL              1 (select + NULL)
+                LOAD_GLOBAL              2 (VoiceCatalog)
+                CALL                     1
+
+  30            LOAD_ATTR                5 (where + NULL|self)
+                LOAD_GLOBAL              2 (VoiceCatalog)
+                LOAD_ATTR                6 (is_active)
+                LOAD_ATTR                9 (is_ + NULL|self)
+                LOAD_CONST               1 (True)
+                CALL                     1
+                CALL                     1
+
+  31            LOAD_ATTR               11 (order_by + NULL|self)
+                LOAD_GLOBAL              2 (VoiceCatalog)
+                LOAD_ATTR               12 (sort_order)
+                LOAD_ATTR               15 (asc + NULL|self)
+                CALL                     0
+                CALL                     1
+
+  28            STORE_FAST               2 (stmt)
+
+  33            LOAD_FAST                1 (db)
+                LOAD_ATTR               17 (execute + NULL|self)
+                LOAD_FAST                2 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               3 (result)
+
+  34            LOAD_FAST                3 (result)
+                LOAD_ATTR               19 (scalars + NULL|self)
+                CALL                     0
+                LOAD_ATTR               21 (all + NULL|self)
+                CALL                     0
+                STORE_FAST               4 (voices)
+
+  35            LOAD_GLOBAL             23 (VoiceCatalogResponse + NULL)
+
+  46            LOAD_FAST                4 (voices)
+                GET_ITER
+
+  36            LOAD_FAST_AND_CLEAR      5 (v)
+                SWAP                     2
+        L6:     BUILD_LIST               0
+                SWAP                     2
+
+  46            GET_ITER
+        L7:     FOR_ITER                97 (to L8)
+                STORE_FAST               5 (v)
+
+  37            LOAD_GLOBAL             25 (VoiceCatalogItem + NULL)
+
+  38            LOAD_GLOBAL             27 (str + NULL)
+                LOAD_FAST                5 (v)
+                LOAD_ATTR               28 (id)
+                CALL                     1
+
+  39            LOAD_FAST                5 (v)
+                LOAD_ATTR               30 (provider_voice_id)
+
+  40            LOAD_FAST                5 (v)
+                LOAD_ATTR               32 (display_name)
+
+  41            LOAD_FAST                5 (v)
+                LOAD_ATTR               34 (locale)
+
+  42            LOAD_FAST                5 (v)
+                LOAD_ATTR               36 (gender_tag)
+
+  43            LOAD_FAST                5 (v)
+                LOAD_ATTR               38 (preview_url)
+
+  44            LOAD_FAST                5 (v)
+                LOAD_ATTR               12 (sort_order)
+
+  37            LOAD_CONST               2 (('id', 'provider_voice_id', 'display_name', 'locale', 'gender_tag', 'preview_url', 'sort_order'))
+                CALL_KW                  7
+                LIST_APPEND              2
+                JUMP_BACKWARD           99 (to L7)
+
+  46    L8:     END_FOR
+                POP_TOP
+
+  36    L9:     SWAP                     2
+                STORE_FAST               5 (v)
+
+  35            LOAD_CONST               3 (('items',))
+                CALL_KW                  1
+                RETURN_VALUE
+
+  33   L10:     CLEANUP_THROW
+       L11:     JUMP_BACKWARD_NO_INTERRUPT 152 (to L5)
+
+  --   L12:     SWAP                     2
+                POP_TOP
+
+  36            SWAP                     2
+                STORE_FAST               5 (v)
+                RERAISE                  0
+
+  --   L13:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L13 [0] lasti
+  L3 to L4 -> L10 [2]
+  L4 to L6 -> L13 [0] lasti
+  L6 to L9 -> L12 [4]
+  L9 to L11 -> L13 [0] lasti
+  L12 to L13 -> L13 [0] lasti
+
+Disassembly of <code object VoiceSyncResponse at 0x0000024C0EF2A790, file "D:\fluence\Github\mattbot\backend\app\api\v1\voices.py", line 51>:
+ 51           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('VoiceSyncResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (51)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 52           LOAD_CONST               2 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('synced')
+              STORE_SUBSCR
+              LOAD_CONST               4 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object sync_voices at 0x0000024C11498A30, file "D:\fluence\Github\mattbot\backend\app\api\v1\voices.py", line 55>:
+  55           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+  61           LOAD_GLOBAL              1 (sync_voice_catalog + NULL)
+               LOAD_FAST                1 (db)
+               CALL                     1
+               GET_AWAITABLE            0
+               LOAD_CONST               1 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               STORE_FAST               2 (n)
+
+  62           LOAD_GLOBAL              2 (logger)
+               LOAD_ATTR                5 (info + NULL|self)
+               LOAD_CONST               2 ('Voice catalog manual sync: %d voices upserted')
+               LOAD_FAST                2 (n)
+               CALL                     2
+               POP_TOP
+
+  63           LOAD_GLOBAL              7 (VoiceSyncResponse + NULL)
+               LOAD_FAST                2 (n)
+               LOAD_CONST               3 (('synced',))
+               CALL_KW                  1
+               RETURN_VALUE
+
+  61   L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 35 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti

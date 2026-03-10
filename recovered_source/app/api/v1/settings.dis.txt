@@ -1,0 +1,3601 @@
+# Bytecode dump of: settings.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\api\v1\settings.py
+# co_names: ('__doc__', 'datetime', 'UTC', 'time', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.core.encryption', 'encrypt_field', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.models.user_settings', 'UserSettings', 'app.schemas.settings', 'SettingsPatchRequest', 'SettingsPatchResponse', 'SettingsResponse', 'app.services', 'audit_service', 'router', '_SENSITIVE_KEYS', '_settings_to_response', 'str', '_parse_time', 'get', 'get_settings', 'patch', 'patch_settings')
+# co_consts (strings): ['User settings CRUD with optimistic concurrency.', 's', 'return', 'value', '', 'current_user', 'db', 'body']
+
+# DOCSTRING: """User settings CRUD with optimistic concurrency."""
+# --- Nested code object: _settings_to_response ---
+    # co_names: ('app.schemas.settings', 'QuietHoursInterval', 'quiet_hours_intervals', 'SettingsResponse', 'theme_preference', 'notification_privacy_mode', 'quiet_hours_enabled', 'quiet_hours_start', 'strftime', 'quiet_hours_end', 'quiet_hours_days', 'quiet_hours_allow_vip', 'timezone', 'personal_phone_last4', 'memory_enabled', 'data_retention_days', 'biometric_unlock_enabled', 'recording_enabled', 'call_objective_mode', 'max_call_length_seconds', 'vip_max_call_length_seconds', 'handoff_enabled', 'handoff_trigger', 'handoff_offer_timeout_seconds', 'handoff_target_phone_last4', 'business_hours_enabled', 'business_hours_start', 'business_hours_end', 'business_hours_days', 'after_hours_behavior', 'temperament_preset', 'swearing_rule', 'language_primary', 'language_secondary', 'vip_calls_mark_important', 'vip_notification_intensity', 'blocked_caller_behavior', 'log_blocked_attempts', 'notify_on_blocked', 'spam_labeling_enabled', 'block_suggestions_enabled', 'repeat_caller_threshold', 'text_approval_mode', 'assistant_name', 'greeting_template', 'transcript_disclosure_mode', 'recording_announcement_required', 'important_rule', 'biometric_policy', 'calendar_booking_enabled', 'calendar_default_duration_minutes', 'calendar_booking_window_days', 'urgent_notify_sms', 'urgent_notify_email', 'urgent_notify_call', 'urgent_notify_phone_last4', 'urgent_notify_email_address', 'revision')
+    # co_varnames: ('s', 'QuietHoursInterval', 'intervals_raw', 'iv', 'intervals')
+      33            RESUME                   0
+    
+      34            LOAD_CONST               1 (0)
+                    LOAD_CONST               2 (('QuietHoursInterval',))
+                    IMPORT_NAME              0 (app.schemas.settings)
+                    IMPORT_FROM              1 (QuietHoursInterval)
+                    STORE_FAST               1 (QuietHoursInterval)
+                    POP_TOP
+    
+      36            LOAD_FAST                0 (s)
+                    LOAD_ATTR                4 (quiet_hours_intervals)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       12 (to L1)
+                    LOAD_FAST                0 (s)
+                    LOAD_ATTR                4 (quiet_hours_intervals)
+                    JUMP_FORWARD             1 (to L2)
+            L1:     BUILD_LIST               0
+            L2:     STORE_FAST               2 (intervals_raw)
+    
+      37            LOAD_FAST                2 (intervals_raw)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       24 (to L7)
+                    LOAD_FAST                2 (intervals_raw)
+                    GET_ITER
+                    LOAD_FAST_AND_CLEAR      3 (iv)
+                    SWAP                     2
+            L3:     BUILD_LIST               0
+                    SWAP                     2
+                    GET_ITER
+            L4:     FOR_ITER                10 (to L5)
+                    STORE_FAST_LOAD_FAST    49 (iv, QuietHoursInterval)
+                    PUSH_NULL
+                    LOAD_CONST              58 (())
+                    BUILD_MAP                0
+                    LOAD_FAST                3 (iv)
+                    DICT_MERGE               1
+                    CALL_FUNCTION_EX         1
+                    LIST_APPEND              2
+                    JUMP_BACKWARD           12 (to L4)
+            L5:     END_FOR
+                    POP_TOP
+            L6:     SWAP                     2
+                    STORE_FAST               3 (iv)
+                    JUMP_FORWARD             1 (to L8)
+            L7:     BUILD_LIST               0
+            L8:     STORE_FAST               4 (intervals)
+    
+      39            LOAD_GLOBAL              7 (SettingsResponse + NULL)
+                    LOAD_CONST              58 (())
+                    BUILD_MAP                0
+                    LOAD_CONST               3 ('theme_preference')
+    
+      40            LOAD_FAST                0 (s)
+                    LOAD_ATTR                8 (theme_preference)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST               4 ('notification_privacy_mode')
+    
+      41            LOAD_FAST                0 (s)
+                    LOAD_ATTR               10 (notification_privacy_mode)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST               5 ('quiet_hours_enabled')
+    
+      42            LOAD_FAST                0 (s)
+                    LOAD_ATTR               12 (quiet_hours_enabled)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST               6 ('quiet_hours_start')
+    
+      43            LOAD_FAST                0 (s)
+                    LOAD_ATTR               14 (quiet_hours_start)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       27 (to L9)
+                    LOAD_FAST                0 (s)
+                    LOAD_ATTR               14 (quiet_hours_start)
+                    LOAD_ATTR               17 (strftime + NULL|self)
+                    LOAD_CONST               7 ('%H:%M')
+                    CALL                     1
+                    JUMP_FORWARD             1 (to L10)
+            L9:     LOAD_CONST               0 (None)
+    
+      --   L10:     MAP_ADD                  1
+    
+      39            LOAD_CONST               8 ('quiet_hours_end')
+    
+      44            LOAD_FAST                0 (s)
+                    LOAD_ATTR               18 (quiet_hours_end)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       27 (to L11)
+                    LOAD_FAST                0 (s)
+                    LOAD_ATTR               18 (quiet_hours_end)
+                    LOAD_ATTR               17 (strftime + NULL|self)
+                    LOAD_CONST               7 ('%H:%M')
+                    CALL                     1
+                    JUMP_FORWARD             1 (to L12)
+           L11:     LOAD_CONST               0 (None)
+    
+      --   L12:     MAP_ADD                  1
+    
+      39            LOAD_CONST               9 ('quiet_hours_days')
+    
+      45            LOAD_FAST                0 (s)
+                    LOAD_ATTR               20 (quiet_hours_days)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       12 (to L13)
+                    LOAD_FAST                0 (s)
+                    LOAD_ATTR               20 (quiet_hours_days)
+                    JUMP_FORWARD             1 (to L14)
+           L13:     BUILD_LIST               0
+    
+      --   L14:     MAP_ADD                  1
+    
+      39            LOAD_CONST              10 ('quiet_hours_intervals')
+    
+      46            LOAD_FAST                4 (intervals)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              11 ('quiet_hours_allow_vip')
+    
+      47            LOAD_FAST                0 (s)
+                    LOAD_ATTR               22 (quiet_hours_allow_vip)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              12 ('timezone')
+    
+      48            LOAD_FAST                0 (s)
+                    LOAD_ATTR               24 (timezone)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              13 ('personal_phone_last4')
+    
+      49            LOAD_FAST                0 (s)
+                    LOAD_ATTR               26 (personal_phone_last4)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              14 ('memory_enabled')
+    
+      50            LOAD_FAST                0 (s)
+                    LOAD_ATTR               28 (memory_enabled)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              15 ('data_retention_days')
+    
+      51            LOAD_FAST                0 (s)
+                    LOAD_ATTR               30 (data_retention_days)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              16 ('biometric_unlock_enabled')
+    
+      52            LOAD_FAST                0 (s)
+                    LOAD_ATTR               32 (biometric_unlock_enabled)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              17 ('recording_enabled')
+    
+      53            LOAD_FAST                0 (s)
+                    LOAD_ATTR               34 (recording_enabled)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              18 ('call_objective_mode')
+    
+      54            LOAD_FAST                0 (s)
+                    LOAD_ATTR               36 (call_objective_mode)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              19 ('max_call_length_seconds')
+    
+      55            LOAD_FAST                0 (s)
+                    LOAD_ATTR               38 (max_call_length_seconds)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              20 ('vip_max_call_length_seconds')
+    
+      56            LOAD_FAST                0 (s)
+                    LOAD_ATTR               40 (vip_max_call_length_seconds)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              21 ('handoff_enabled')
+    
+      57            LOAD_FAST                0 (s)
+                    LOAD_ATTR               42 (handoff_enabled)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              22 ('handoff_trigger')
+    
+      58            LOAD_FAST                0 (s)
+                    LOAD_ATTR               44 (handoff_trigger)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              23 ('handoff_offer_timeout_seconds')
+    
+      59            LOAD_FAST                0 (s)
+                    LOAD_ATTR               46 (handoff_offer_timeout_seconds)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              24 ('handoff_target_phone_last4')
+    
+      60            LOAD_FAST                0 (s)
+                    LOAD_ATTR               48 (handoff_target_phone_last4)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              25 ('business_hours_enabled')
+    
+      61            LOAD_FAST                0 (s)
+                    LOAD_ATTR               50 (business_hours_enabled)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              26 ('business_hours_start')
+    
+      63            LOAD_FAST                0 (s)
+                    LOAD_ATTR               52 (business_hours_start)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       27 (to L15)
+                    LOAD_FAST                0 (s)
+                    LOAD_ATTR               52 (business_hours_start)
+                    LOAD_ATTR               17 (strftime + NULL|self)
+                    LOAD_CONST               7 ('%H:%M')
+                    CALL                     1
+                    JUMP_FORWARD             1 (to L16)
+           L15:     LOAD_CONST               0 (None)
+    
+      --   L16:     MAP_ADD                  1
+    
+      39            LOAD_CONST              27 ('business_hours_end')
+    
+      66            LOAD_FAST                0 (s)
+                    LOAD_ATTR               54 (business_hours_end)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       27 (to L17)
+                    LOAD_FAST                0 (s)
+                    LOAD_ATTR               54 (business_hours_end)
+                    LOAD_ATTR               17 (strftime + NULL|self)
+                    LOAD_CONST               7 ('%H:%M')
+                    CALL                     1
+                    JUMP_FORWARD             1 (to L18)
+           L17:     LOAD_CONST               0 (None)
+    
+      --   L18:     MAP_ADD                  1
+    
+      39            LOAD_CONST              28 ('business_hours_days')
+    
+      68            LOAD_FAST                0 (s)
+                    LOAD_ATTR               56 (business_hours_days)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       12 (to L19)
+                    LOAD_FAST                0 (s)
+                    LOAD_ATTR               56 (business_hours_days)
+                    JUMP_FORWARD             1 (to L20)
+           L19:     BUILD_LIST               0
+    
+      --   L20:     MAP_ADD                  1
+    
+      39            LOAD_CONST              29 ('after_hours_behavior')
+    
+      69            LOAD_FAST                0 (s)
+                    LOAD_ATTR               58 (after_hours_behavior)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              30 ('temperament_preset')
+    
+      70            LOAD_FAST                0 (s)
+                    LOAD_ATTR               60 (temperament_preset)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              31 ('swearing_rule')
+    
+      71            LOAD_FAST                0 (s)
+                    LOAD_ATTR               62 (swearing_rule)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              32 ('language_primary')
+    
+      72            LOAD_FAST                0 (s)
+                    LOAD_ATTR               64 (language_primary)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              33 ('language_secondary')
+    
+      73            LOAD_FAST                0 (s)
+                    LOAD_ATTR               66 (language_secondary)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              34 ('vip_calls_mark_important')
+    
+      74            LOAD_FAST                0 (s)
+                    LOAD_ATTR               68 (vip_calls_mark_important)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              35 ('vip_notification_intensity')
+    
+      75            LOAD_FAST                0 (s)
+                    LOAD_ATTR               70 (vip_notification_intensity)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              36 ('blocked_caller_behavior')
+    
+      76            LOAD_FAST                0 (s)
+                    LOAD_ATTR               72 (blocked_caller_behavior)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              37 ('log_blocked_attempts')
+    
+      77            LOAD_FAST                0 (s)
+                    LOAD_ATTR               74 (log_blocked_attempts)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              38 ('notify_on_blocked')
+    
+      78            LOAD_FAST                0 (s)
+                    LOAD_ATTR               76 (notify_on_blocked)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              39 ('spam_labeling_enabled')
+    
+      79            LOAD_FAST                0 (s)
+                    LOAD_ATTR               78 (spam_labeling_enabled)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              40 ('block_suggestions_enabled')
+    
+      80            LOAD_FAST                0 (s)
+                    LOAD_ATTR               80 (block_suggestions_enabled)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              41 ('repeat_caller_threshold')
+    
+      81            LOAD_FAST                0 (s)
+                    LOAD_ATTR               82 (repeat_caller_threshold)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              42 ('text_approval_mode')
+    
+      82            LOAD_FAST                0 (s)
+                    LOAD_ATTR               84 (text_approval_mode)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              43 ('assistant_name')
+    
+      83            LOAD_FAST                0 (s)
+                    LOAD_ATTR               86 (assistant_name)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              44 ('greeting_template')
+    
+      84            LOAD_FAST                0 (s)
+                    LOAD_ATTR               88 (greeting_template)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              45 ('transcript_disclosure_mode')
+    
+      85            LOAD_FAST                0 (s)
+                    LOAD_ATTR               90 (transcript_disclosure_mode)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              46 ('recording_announcement_required')
+    
+      86            LOAD_FAST                0 (s)
+                    LOAD_ATTR               92 (recording_announcement_required)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              47 ('important_rule')
+    
+      87            LOAD_FAST                0 (s)
+                    LOAD_ATTR               94 (important_rule)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              48 ('biometric_policy')
+    
+      88            LOAD_FAST                0 (s)
+                    LOAD_ATTR               96 (biometric_policy)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              49 ('calendar_booking_enabled')
+    
+      89            LOAD_FAST                0 (s)
+                    LOAD_ATTR               98 (calendar_booking_enabled)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              50 ('calendar_default_duration_minutes')
+    
+      90            LOAD_FAST                0 (s)
+                    LOAD_ATTR              100 (calendar_default_duration_minutes)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              51 ('calendar_booking_window_days')
+    
+      91            LOAD_FAST                0 (s)
+                    LOAD_ATTR              102 (calendar_booking_window_days)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              52 ('urgent_notify_sms')
+    
+      92            LOAD_FAST                0 (s)
+                    LOAD_ATTR              104 (urgent_notify_sms)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              53 ('urgent_notify_email')
+    
+      93            LOAD_FAST                0 (s)
+                    LOAD_ATTR              106 (urgent_notify_email)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              54 ('urgent_notify_call')
+    
+      94            LOAD_FAST                0 (s)
+                    LOAD_ATTR              108 (urgent_notify_call)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              55 ('urgent_notify_phone_last4')
+    
+      95            LOAD_FAST                0 (s)
+                    LOAD_ATTR              110 (urgent_notify_phone_last4)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              56 ('urgent_notify_email_address')
+    
+      96            LOAD_FAST                0 (s)
+                    LOAD_ATTR              112 (urgent_notify_email_address)
+                    MAP_ADD                  1
+    
+      39            LOAD_CONST              57 ('revision')
+    
+      97            LOAD_FAST                0 (s)
+                    LOAD_ATTR              114 (revision)
+                    MAP_ADD                  1
+    
+      39            CALL_FUNCTION_EX         1
+                    RETURN_VALUE
+    
+      --   L21:     SWAP                     2
+                    POP_TOP
+    
+      37            SWAP                     2
+                    STORE_FAST               3 (iv)
+                    RERAISE                  0
+    ExceptionTable:
+      L3 to L6 -> L21 [2]
+    
+# --- Nested code object: _parse_time ---
+    # co_names: ('split', 'time', 'int')
+    # co_varnames: ('value', 'parts')
+    101           RESUME                   0
+    
+    102           LOAD_FAST                0 (value)
+                  LOAD_ATTR                1 (split + NULL|self)
+                  LOAD_CONST               1 (':')
+                  CALL                     1
+                  STORE_FAST               1 (parts)
+    
+    103           LOAD_GLOBAL              3 (time + NULL)
+                  LOAD_GLOBAL              5 (int + NULL)
+                  LOAD_FAST                1 (parts)
+                  LOAD_CONST               2 (0)
+                  BINARY_SUBSCR
+                  CALL                     1
+                  LOAD_GLOBAL              5 (int + NULL)
+                  LOAD_FAST                1 (parts)
+                  LOAD_CONST               3 (1)
+                  BINARY_SUBSCR
+                  CALL                     1
+                  CALL                     2
+                  RETURN_VALUE
+    
+# --- Nested code object: get_settings ---
+    # co_names: ('get', 'UserSettings', 'user_id', 'add', 'flush', 'refresh', '_settings_to_response')
+    # co_varnames: ('current_user', 'db', 'settings')
+     106            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     111            LOAD_FAST                1 (db)
+                    LOAD_ATTR                1 (get + NULL|self)
+                    LOAD_GLOBAL              2 (UserSettings)
+                    LOAD_FAST                0 (current_user)
+                    LOAD_ATTR                4 (user_id)
+                    CALL                     2
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               2 (settings)
+    
+     112            LOAD_FAST                2 (settings)
+                    POP_JUMP_IF_NOT_NONE    85 (to L14)
+    
+     113            LOAD_GLOBAL              3 (UserSettings + NULL)
+                    LOAD_FAST                0 (current_user)
+                    LOAD_ATTR                4 (user_id)
+                    LOAD_CONST               1 (('owner_user_id',))
+                    CALL_KW                  1
+                    STORE_FAST               2 (settings)
+    
+     114            LOAD_FAST                1 (db)
+                    LOAD_ATTR                7 (add + NULL|self)
+                    LOAD_FAST                2 (settings)
+                    CALL                     1
+                    POP_TOP
+    
+     115            LOAD_FAST                1 (db)
+                    LOAD_ATTR                9 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L6:     SEND                     3 (to L9)
+            L7:     YIELD_VALUE              1
+            L8:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L6)
+            L9:     END_SEND
+                    POP_TOP
+    
+     116            LOAD_FAST                1 (db)
+                    LOAD_ATTR               11 (refresh + NULL|self)
+                    LOAD_FAST                2 (settings)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L10:     SEND                     3 (to L13)
+           L11:     YIELD_VALUE              1
+           L12:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L10)
+           L13:     END_SEND
+                    POP_TOP
+    
+     117   L14:     LOAD_GLOBAL             13 (_settings_to_response + NULL)
+                    LOAD_FAST                2 (settings)
+                    CALL                     1
+                    RETURN_VALUE
+    
+     111   L15:     CLEANUP_THROW
+           L16:     JUMP_BACKWARD_NO_INTERRUPT 103 (to L5)
+    
+     115   L17:     CLEANUP_THROW
+           L18:     JUMP_BACKWARD_NO_INTERRUPT 42 (to L9)
+    
+     116   L19:     CLEANUP_THROW
+           L20:     JUMP_BACKWARD_NO_INTERRUPT 19 (to L13)
+    
+      --   L21:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L21 [0] lasti
+      L3 to L4 -> L15 [2]
+      L4 to L7 -> L21 [0] lasti
+      L7 to L8 -> L17 [2]
+      L8 to L11 -> L21 [0] lasti
+      L11 to L12 -> L19 [2]
+      L12 to L16 -> L21 [0] lasti
+      L17 to L18 -> L21 [0] lasti
+      L19 to L20 -> L21 [0] lasti
+    
+# --- Nested code object: patch_settings ---
+    # co_names: ('get', 'UserSettings', 'user_id', 'add', 'flush', 'refresh', 'revision', 'expected_revision', 'AppError', 'changes', 'model_dump', 'SettingsPatchResponse', '_settings_to_response', 're', 'pop', 'sub', 'encrypt_field', 'encode', 'handoff_target_phone_ciphertext', 'handoff_target_phone_nonce', 'handoff_target_phone_key_version', 'len', 'handoff_target_phone_last4', 'personal_phone_ciphertext', 'personal_phone_nonce', 'personal_phone_key_version', 'personal_phone_last4', 'urgent_notify_phone_ciphertext', 'urgent_notify_phone_nonce', 'urgent_notify_phone_key_version', 'urgent_notify_phone_last4', 'items', 'setattr', '_parse_time', 'isinstance', 'dict', 'quiet_hours_start', 'quiet_hours_end', 'quiet_hours_days', 'append', 'datetime', 'now', 'UTC', 'updated_at', 'device_id', 'updated_by_device_id', '_SENSITIVE_KEYS', 'audit_service', 'log_event', 'set', 'app.services', 'agent_service', 'get_or_create_default_agent', 'ensure_elevenlabs_agent', 'Exception', 'logging', 'getLogger', '__name__', 'exception')
+    # co_varnames: ('body', 'current_user', 'db', 'settings', 'changes', 're', 'raw_phone', 'cleaned', 'ct', 'nonce', 'kv', 'time_fields', 'changed_keys', 'key', 'value', 'iv', 'intervals_dicts', 'first', 'audit_details', 'k', 'handoff_keys', '_agent_sync_keys', 'agent_service', 'agent', 'logging')
+     120             RETURN_GENERATOR
+                     POP_TOP
+             L1:     RESUME                   0
+    
+     126             LOAD_FAST                2 (db)
+                     LOAD_ATTR                1 (get + NULL|self)
+                     LOAD_GLOBAL              2 (UserSettings)
+                     LOAD_FAST                1 (current_user)
+                     LOAD_ATTR                4 (user_id)
+                     CALL                     2
+                     GET_AWAITABLE            0
+                     LOAD_CONST               0 (None)
+             L2:     SEND                     3 (to L5)
+             L3:     YIELD_VALUE              1
+             L4:     RESUME                   3
+                     JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+             L5:     END_SEND
+                     STORE_FAST               3 (settings)
+    
+     127             LOAD_FAST                3 (settings)
+                     POP_JUMP_IF_NOT_NONE    85 (to L14)
+    
+     128             LOAD_GLOBAL              3 (UserSettings + NULL)
+                     LOAD_FAST                1 (current_user)
+                     LOAD_ATTR                4 (user_id)
+                     LOAD_CONST               1 (('owner_user_id',))
+                     CALL_KW                  1
+                     STORE_FAST               3 (settings)
+    
+     129             LOAD_FAST                2 (db)
+                     LOAD_ATTR                7 (add + NULL|self)
+                     LOAD_FAST                3 (settings)
+                     CALL                     1
+                     POP_TOP
+    
+     130             LOAD_FAST                2 (db)
+                     LOAD_ATTR                9 (flush + NULL|self)
+                     CALL                     0
+                     GET_AWAITABLE            0
+                     LOAD_CONST               0 (None)
+             L6:     SEND                     3 (to L9)
+             L7:     YIELD_VALUE              1
+             L8:     RESUME                   3
+                     JUMP_BACKWARD_NO_INTERRUPT 5 (to L6)
+             L9:     END_SEND
+                     POP_TOP
+    
+     131             LOAD_FAST                2 (db)
+                     LOAD_ATTR               11 (refresh + NULL|self)
+                     LOAD_FAST                3 (settings)
+                     CALL                     1
+                     GET_AWAITABLE            0
+                     LOAD_CONST               0 (None)
+            L10:     SEND                     3 (to L13)
+            L11:     YIELD_VALUE              1
+            L12:     RESUME                   3
+                     JUMP_BACKWARD_NO_INTERRUPT 5 (to L10)
+            L13:     END_SEND
+                     POP_TOP
+    
+     133    L14:     LOAD_FAST                3 (settings)
+                     LOAD_ATTR               12 (revision)
+                     LOAD_FAST                0 (body)
+                     LOAD_ATTR               14 (expected_revision)
+                     COMPARE_OP             119 (bool(!=))
+                     POP_JUMP_IF_FALSE       13 (to L15)
+    
+     134             LOAD_GLOBAL             17 (AppError + NULL)
+    
+     135             LOAD_CONST               2 ('REVISION_CONFLICT')
+    
+     136             LOAD_CONST               3 ('Settings were updated on another device. Please refresh and try again.')
+    
+     137             LOAD_CONST               4 (409)
+    
+     134             CALL                     3
+                     RAISE_VARARGS            1
+    
+     140    L15:     LOAD_FAST                0 (body)
+                     LOAD_ATTR               18 (changes)
+                     LOAD_ATTR               21 (model_dump + NULL|self)
+                     LOAD_CONST               5 (True)
+                     LOAD_CONST               6 (('exclude_none',))
+                     CALL_KW                  1
+                     STORE_FAST               4 (changes)
+    
+     141             LOAD_FAST                4 (changes)
+                     TO_BOOL
+                     POP_JUMP_IF_TRUE        29 (to L16)
+    
+     142             LOAD_GLOBAL             23 (SettingsPatchResponse + NULL)
+    
+     143             LOAD_FAST                3 (settings)
+                     LOAD_ATTR               12 (revision)
+                     LOAD_GLOBAL             25 (_settings_to_response + NULL)
+                     LOAD_FAST                3 (settings)
+                     CALL                     1
+    
+     142             LOAD_CONST               7 (('revision', 'settings'))
+                     CALL_KW                  2
+                     RETURN_VALUE
+    
+     146    L16:     LOAD_CONST               8 (0)
+                     LOAD_CONST               0 (None)
+                     IMPORT_NAME             13 (re)
+                     STORE_FAST               5 (re)
+    
+     149             LOAD_CONST               9 ('handoff_target_phone')
+                     LOAD_FAST                4 (changes)
+                     CONTAINS_OP              0
+                     POP_JUMP_IF_FALSE      146 (to L20)
+    
+     150             LOAD_FAST                4 (changes)
+                     LOAD_ATTR               29 (pop + NULL|self)
+                     LOAD_CONST               9 ('handoff_target_phone')
+                     CALL                     1
+                     STORE_FAST               6 (raw_phone)
+    
+     151             LOAD_FAST                6 (raw_phone)
+                     TO_BOOL
+                     POP_JUMP_IF_FALSE       94 (to L19)
+    
+     152             LOAD_FAST                5 (re)
+                     LOAD_ATTR               31 (sub + NULL|self)
+                     LOAD_CONST              10 ('[^+\\d]')
+                     LOAD_CONST              11 ('')
+                     LOAD_FAST                6 (raw_phone)
+                     CALL                     3
+                     STORE_FAST               7 (cleaned)
+    
+     153             LOAD_GLOBAL             33 (encrypt_field + NULL)
+                     LOAD_FAST                7 (cleaned)
+                     LOAD_ATTR               35 (encode + NULL|self)
+                     LOAD_CONST              12 ('utf-8')
+                     CALL                     1
+                     CALL                     1
+                     UNPACK_SEQUENCE          3
+                     STORE_FAST_STORE_FAST  137 (ct, nonce)
+                     STORE_FAST              10 (kv)
+    
+     154             LOAD_FAST_LOAD_FAST    131 (ct, settings)
+                     STORE_ATTR              18 (handoff_target_phone_ciphertext)
+    
+     155             LOAD_FAST_LOAD_FAST    147 (nonce, settings)
+                     STORE_ATTR              19 (handoff_target_phone_nonce)
+    
+     156             LOAD_FAST_LOAD_FAST    163 (kv, settings)
+                     STORE_ATTR              20 (handoff_target_phone_key_version)
+    
+     157             LOAD_GLOBAL             43 (len + NULL)
+                     LOAD_FAST                7 (cleaned)
+                     CALL                     1
+                     LOAD_CONST              13 (4)
+                     COMPARE_OP             188 (bool(>=))
+                     POP_JUMP_IF_FALSE        5 (to L17)
+                     LOAD_FAST                7 (cleaned)
+                     LOAD_CONST              14 (-4)
+                     LOAD_CONST               0 (None)
+                     BINARY_SLICE
+                     JUMP_FORWARD             1 (to L18)
+            L17:     LOAD_FAST                7 (cleaned)
+            L18:     LOAD_FAST                3 (settings)
+                     STORE_ATTR              22 (handoff_target_phone_last4)
+                     JUMP_FORWARD            28 (to L20)
+    
+     160    L19:     LOAD_CONST               0 (None)
+                     LOAD_FAST                3 (settings)
+                     STORE_ATTR              18 (handoff_target_phone_ciphertext)
+    
+     161             LOAD_CONST               0 (None)
+                     LOAD_FAST                3 (settings)
+                     STORE_ATTR              19 (handoff_target_phone_nonce)
+    
+     162             LOAD_CONST               0 (None)
+                     LOAD_FAST                3 (settings)
+                     STORE_ATTR              20 (handoff_target_phone_key_version)
+    
+     163             LOAD_CONST               0 (None)
+                     LOAD_FAST                3 (settings)
+                     STORE_ATTR              22 (handoff_target_phone_last4)
+    
+     166    L20:     LOAD_CONST              15 ('personal_phone')
+                     LOAD_FAST                4 (changes)
+                     CONTAINS_OP              0
+                     POP_JUMP_IF_FALSE      146 (to L24)
+    
+     167             LOAD_FAST                4 (changes)
+                     LOAD_ATTR               29 (pop + NULL|self)
+                     LOAD_CONST              15 ('personal_phone')
+                     CALL                     1
+                     STORE_FAST               6 (raw_phone)
+    
+     168             LOAD_FAST                6 (raw_phone)
+                     TO_BOOL
+                     POP_JUMP_IF_FALSE       94 (to L23)
+    
+     169             LOAD_FAST                5 (re)
+                     LOAD_ATTR               31 (sub + NULL|self)
+                     LOAD_CONST              10 ('[^+\\d]')
+                     LOAD_CONST              11 ('')
+                     LOAD_FAST                6 (raw_phone)
+                     CALL                     3
+                     STORE_FAST               7 (cleaned)
+    
+     170             LOAD_GLOBAL             33 (encrypt_field + NULL)
+                     LOAD_FAST                7 (cleaned)
+                     LOAD_ATTR               35 (encode + NULL|self)
+                     LOAD_CONST              12 ('utf-8')
+                     CALL                     1
+                     CALL                     1
+                     UNPACK_SEQUENCE          3
+                     STORE_FAST_STORE_FAST  137 (ct, nonce)
+                     STORE_FAST              10 (kv)
+    
+     171             LOAD_FAST_LOAD_FAST    131 (ct, settings)
+                     STORE_ATTR              23 (personal_phone_ciphertext)
+    
+     172             LOAD_FAST_LOAD_FAST    147 (nonce, settings)
+                     STORE_ATTR              24 (personal_phone_nonce)
+    
+     173             LOAD_FAST_LOAD_FAST    163 (kv, settings)
+                     STORE_ATTR              25 (personal_phone_key_version)
+    
+     174             LOAD_GLOBAL             43 (len + NULL)
+                     LOAD_FAST                7 (cleaned)
+                     CALL                     1
+                     LOAD_CONST              13 (4)
+                     COMPARE_OP             188 (bool(>=))
+                     POP_JUMP_IF_FALSE        5 (to L21)
+                     LOAD_FAST                7 (cleaned)
+                     LOAD_CONST              14 (-4)
+                     LOAD_CONST               0 (None)
+                     BINARY_SLICE
+                     JUMP_FORWARD             1 (to L22)
+            L21:     LOAD_FAST                7 (cleaned)
+            L22:     LOAD_FAST                3 (settings)
+                     STORE_ATTR              26 (personal_phone_last4)
+                     JUMP_FORWARD            28 (to L24)
+    
+     177    L23:     LOAD_CONST               0 (None)
+                     LOAD_FAST                3 (settings)
+                     STORE_ATTR              23 (personal_phone_ciphertext)
+    
+     178             LOAD_CONST               0 (None)
+                     LOAD_FAST                3 (settings)
+                     STORE_ATTR              24 (personal_phone_nonce)
+    
+     179             LOAD_CONST               0 (None)
+                     LOAD_FAST                3 (settings)
+                     STORE_ATTR              25 (personal_phone_key_version)
+    
+     180             LOAD_CONST               0 (None)
+                     LOAD_FAST                3 (settings)
+                     STORE_ATTR              26 (personal_phone_last4)
+    
+     183    L24:     LOAD_CONST              16 ('urgent_notify_phone')
+                     LOAD_FAST                4 (changes)
+                     CONTAINS_OP              0
+                     POP_JUMP_IF_FALSE      146 (to L28)
+    
+     184             LOAD_FAST                4 (changes)
+                     LOAD_ATTR               29 (pop + NULL|self)
+                     LOAD_CONST              16 ('urgent_notify_phone')
+                     CALL                     1
+                     STORE_FAST               6 (raw_phone)
+    
+     185             LOAD_FAST                6 (raw_phone)
+                     TO_BOOL
+                     POP_JUMP_IF_FALSE       94 (to L27)
+    
+     186             LOAD_FAST                5 (re)
+                     LOAD_ATTR               31 (sub + NULL|self)
+                     LOAD_CONST              10 ('[^+\\d]')
+                     LOAD_CONST              11 ('')
+                     LOAD_FAST                6 (raw_phone)
+                     CALL                     3
+                     STORE_FAST               7 (cleaned)
+    
+     187             LOAD_GLOBAL             33 (encrypt_field + NULL)
+                     LOAD_FAST                7 (cleaned)
+                     LOAD_ATTR               35 (encode + NULL|self)
+                     LOAD_CONST              12 ('utf-8')
+                     CALL                     1
+                     CALL                     1
+                     UNPACK_SEQUENCE          3
+                     STORE_FAST_STORE_FAST  137 (ct, nonce)
+                     STORE_FAST              10 (kv)
+    
+     188             LOAD_FAST_LOAD_FAST    131 (ct, settings)
+                     STORE_ATTR              27 (urgent_notify_phone_ciphertext)
+    
+     189             LOAD_FAST_LOAD_FAST    147 (nonce, settings)
+                     STORE_ATTR              28 (urgent_notify_phone_nonce)
+    
+     190             LOAD_FAST_LOAD_FAST    163 (kv, settings)
+                     STORE_ATTR              29 (urgent_notify_phone_key_version)
+    
+     191             LOAD_GLOBAL             43 (len + NULL)
+                     LOAD_FAST                7 (cleaned)
+                     CALL                     1
+                     LOAD_CONST              13 (4)
+                     COMPARE_OP             188 (bool(>=))
+                     POP_JUMP_IF_FALSE        5 (to L25)
+                     LOAD_FAST                7 (cleaned)
+                     LOAD_CONST              14 (-4)
+                     LOAD_CONST               0 (None)
+                     BINARY_SLICE
+                     JUMP_FORWARD             1 (to L26)
+            L25:     LOAD_FAST                7 (cleaned)
+            L26:     LOAD_FAST                3 (settings)
+                     STORE_ATTR              30 (urgent_notify_phone_last4)
+                     JUMP_FORWARD            28 (to L28)
+    
+     194    L27:     LOAD_CONST               0 (None)
+                     LOAD_FAST                3 (settings)
+                     STORE_ATTR              27 (urgent_notify_phone_ciphertext)
+    
+     195             LOAD_CONST               0 (None)
+                     LOAD_FAST                3 (settings)
+                     STORE_ATTR              28 (urgent_notify_phone_nonce)
+    
+     196             LOAD_CONST               0 (None)
+                     LOAD_FAST                3 (settings)
+                     STORE_ATTR              29 (urgent_notify_phone_key_version)
+    
+     197             LOAD_CONST               0 (None)
+                     LOAD_FAST                3 (settings)
+                     STORE_ATTR              30 (urgent_notify_phone_last4)
+    
+     199    L28:     LOAD_CONST              17 (('quiet_hours_start', 'quiet_hours_end', 'business_hours_start', 'business_hours_end'))
+                     STORE_FAST              11 (time_fields)
+    
+     204             BUILD_LIST               0
+                     STORE_FAST              12 (changed_keys)
+    
+     205             LOAD_FAST                4 (changes)
+                     LOAD_ATTR               63 (items + NULL|self)
+                     CALL                     0
+                     GET_ITER
+            L29:     FOR_ITER               219 (to L42)
+                     UNPACK_SEQUENCE          2
+                     STORE_FAST_STORE_FAST  222 (key, value)
+    
+     206             LOAD_FAST_LOAD_FAST    219 (key, time_fields)
+                     CONTAINS_OP              0
+                     POP_JUMP_IF_FALSE       31 (to L32)
+    
+     207             LOAD_GLOBAL             65 (setattr + NULL)
+                     LOAD_FAST_LOAD_FAST     61 (settings, key)
+                     LOAD_FAST               14 (value)
+                     TO_BOOL
+                     POP_JUMP_IF_FALSE       11 (to L30)
+                     LOAD_GLOBAL             67 (_parse_time + NULL)
+                     LOAD_FAST               14 (value)
+                     CALL                     1
+                     JUMP_FORWARD             1 (to L31)
+            L30:     LOAD_CONST               0 (None)
+            L31:     CALL                     3
+                     POP_TOP
+                     JUMP_FORWARD           161 (to L41)
+    
+     208    L32:     LOAD_FAST               13 (key)
+                     LOAD_CONST              18 ('quiet_hours_intervals')
+                     COMPARE_OP              88 (bool(==))
+                     POP_JUMP_IF_FALSE      143 (to L40)
+    
+     209             LOAD_FAST               14 (value)
+                     GET_ITER
+                     LOAD_FAST_AND_CLEAR     15 (iv)
+                     SWAP                     2
+            L33:     BUILD_LIST               0
+                     SWAP                     2
+                     GET_ITER
+            L34:     FOR_ITER                42 (to L37)
+                     STORE_FAST              15 (iv)
+                     LOAD_GLOBAL             69 (isinstance + NULL)
+                     LOAD_FAST               15 (iv)
+                     LOAD_GLOBAL             70 (dict)
+                     CALL                     2
+                     TO_BOOL
+                     POP_JUMP_IF_FALSE        2 (to L35)
+                     LOAD_FAST               15 (iv)
+                     JUMP_FORWARD            15 (to L36)
+            L35:     LOAD_FAST               15 (iv)
+                     LOAD_ATTR               21 (model_dump + NULL|self)
+                     CALL                     0
+            L36:     LIST_APPEND              2
+                     JUMP_BACKWARD           44 (to L34)
+            L37:     END_FOR
+                     POP_TOP
+            L38:     STORE_FAST              16 (intervals_dicts)
+                     STORE_FAST              15 (iv)
+    
+     210             LOAD_GLOBAL             65 (setattr + NULL)
+                     LOAD_FAST_LOAD_FAST     61 (settings, key)
+                     LOAD_FAST               16 (intervals_dicts)
+                     CALL                     3
+                     POP_TOP
+    
+     211             LOAD_FAST               16 (intervals_dicts)
+                     TO_BOOL
+                     POP_JUMP_IF_FALSE       68 (to L39)
+    
+     212             LOAD_FAST               16 (intervals_dicts)
+                     LOAD_CONST               8 (0)
+                     BINARY_SUBSCR
+                     STORE_FAST              17 (first)
+    
+     213             LOAD_GLOBAL             67 (_parse_time + NULL)
+                     LOAD_FAST               17 (first)
+                     LOAD_CONST              19 ('start')
+                     BINARY_SUBSCR
+                     CALL                     1
+                     LOAD_FAST                3 (settings)
+                     STORE_ATTR              36 (quiet_hours_start)
+    
+     214             LOAD_GLOBAL             67 (_parse_time + NULL)
+                     LOAD_FAST               17 (first)
+                     LOAD_CONST              20 ('end')
+                     BINARY_SUBSCR
+                     CALL                     1
+                     LOAD_FAST                3 (settings)
+                     STORE_ATTR              37 (quiet_hours_end)
+    
+     215             LOAD_FAST               17 (first)
+                     LOAD_ATTR                1 (get + NULL|self)
+                     LOAD_CONST              21 ('days')
+                     BUILD_LIST               0
+                     LOAD_CONST              22 ((0, 1, 2, 3, 4, 5, 6))
+                     LIST_EXTEND              1
+                     CALL                     2
+                     LOAD_FAST                3 (settings)
+                     STORE_ATTR              38 (quiet_hours_days)
+    
+      --    L39:     JUMP_FORWARD            12 (to L41)
+    
+     217    L40:     LOAD_GLOBAL             65 (setattr + NULL)
+                     LOAD_FAST_LOAD_FAST     61 (settings, key)
+                     LOAD_FAST               14 (value)
+                     CALL                     3
+                     POP_TOP
+    
+     218    L41:     LOAD_FAST               12 (changed_keys)
+                     LOAD_ATTR               79 (append + NULL|self)
+                     LOAD_FAST               13 (key)
+                     CALL                     1
+                     POP_TOP
+                     JUMP_BACKWARD          221 (to L29)
+    
+     205    L42:     END_FOR
+                     POP_TOP
+    
+     220             LOAD_FAST                3 (settings)
+                     COPY                     1
+                     LOAD_ATTR               12 (revision)
+                     LOAD_CONST              23 (1)
+                     BINARY_OP               13 (+=)
+                     SWAP                     2
+                     STORE_ATTR               6 (revision)
+    
+     221             LOAD_GLOBAL             80 (datetime)
+                     LOAD_ATTR               82 (now)
+                     PUSH_NULL
+                     LOAD_GLOBAL             84 (UTC)
+                     CALL                     1
+                     LOAD_FAST                3 (settings)
+                     STORE_ATTR              43 (updated_at)
+    
+     222             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR               88 (device_id)
+                     LOAD_FAST                3 (settings)
+                     STORE_ATTR              45 (updated_by_device_id)
+    
+     224             LOAD_FAST_LOAD_FAST    195 (changed_keys, settings)
+                     LOAD_ATTR               12 (revision)
+                     LOAD_CONST              24 (('changed_keys', 'revision'))
+                     BUILD_CONST_KEY_MAP      2
+                     STORE_FAST              18 (audit_details)
+    
+     225             LOAD_FAST               12 (changed_keys)
+                     GET_ITER
+            L43:     FOR_ITER                23 (to L46)
+                     STORE_FAST              19 (k)
+    
+     226             LOAD_FAST               19 (k)
+                     LOAD_GLOBAL             92 (_SENSITIVE_KEYS)
+                     CONTAINS_OP              1
+            L44:     POP_JUMP_IF_TRUE         2 (to L45)
+                     JUMP_BACKWARD           15 (to L43)
+    
+     227    L45:     LOAD_FAST                4 (changes)
+                     LOAD_FAST               19 (k)
+                     BINARY_SUBSCR
+                     LOAD_FAST               18 (audit_details)
+                     LOAD_FAST               19 (k)
+                     STORE_SUBSCR
+                     JUMP_BACKWARD           25 (to L43)
+    
+     225    L46:     END_FOR
+                     POP_TOP
+    
+     229             LOAD_GLOBAL             94 (audit_service)
+                     LOAD_ATTR               96 (log_event)
+                     PUSH_NULL
+    
+     230             LOAD_FAST                2 (db)
+    
+     231             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR                4 (user_id)
+    
+     232             LOAD_CONST              25 ('settings.updated')
+    
+     233             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR               88 (device_id)
+    
+     234             LOAD_FAST               18 (audit_details)
+    
+     229             LOAD_CONST              26 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                     CALL_KW                  5
+                     GET_AWAITABLE            0
+                     LOAD_CONST               0 (None)
+            L47:     SEND                     3 (to L50)
+            L48:     YIELD_VALUE              1
+            L49:     RESUME                   3
+                     JUMP_BACKWARD_NO_INTERRUPT 5 (to L47)
+            L50:     END_SEND
+                     POP_TOP
+    
+     237             LOAD_CONST              27 ('notification_privacy_mode')
+                     LOAD_FAST               12 (changed_keys)
+                     CONTAINS_OP              0
+                     POP_JUMP_IF_FALSE       57 (to L55)
+    
+     238             LOAD_GLOBAL             94 (audit_service)
+                     LOAD_ATTR               96 (log_event)
+                     PUSH_NULL
+    
+     239             LOAD_FAST                2 (db)
+    
+     240             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR                4 (user_id)
+    
+     241             LOAD_CONST              28 ('settings.privacy_mode_changed')
+    
+     242             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR               88 (device_id)
+    
+     243             LOAD_CONST              29 ('new_mode')
+                     LOAD_FAST                4 (changes)
+                     LOAD_CONST              27 ('notification_privacy_mode')
+                     BINARY_SUBSCR
+                     BUILD_MAP                1
+    
+     238             LOAD_CONST              26 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                     CALL_KW                  5
+                     GET_AWAITABLE            0
+                     LOAD_CONST               0 (None)
+            L51:     SEND                     3 (to L54)
+            L52:     YIELD_VALUE              1
+            L53:     RESUME                   3
+                     JUMP_BACKWARD_NO_INTERRUPT 5 (to L51)
+            L54:     END_SEND
+                     POP_TOP
+    
+     247    L55:     LOAD_CONST              30 ('quiet_hours_enabled')
+                     LOAD_FAST               12 (changed_keys)
+                     CONTAINS_OP              0
+                     POP_JUMP_IF_TRUE        30 (to L56)
+    
+     248             LOAD_CONST              31 ('quiet_hours_start')
+                     LOAD_FAST               12 (changed_keys)
+                     CONTAINS_OP              0
+                     POP_JUMP_IF_TRUE        24 (to L56)
+    
+     249             LOAD_CONST              32 ('quiet_hours_end')
+                     LOAD_FAST               12 (changed_keys)
+                     CONTAINS_OP              0
+                     POP_JUMP_IF_TRUE        18 (to L56)
+    
+     250             LOAD_CONST              33 ('quiet_hours_days')
+                     LOAD_FAST               12 (changed_keys)
+                     CONTAINS_OP              0
+                     POP_JUMP_IF_TRUE        12 (to L56)
+    
+     251             LOAD_CONST              18 ('quiet_hours_intervals')
+                     LOAD_FAST               12 (changed_keys)
+                     CONTAINS_OP              0
+                     POP_JUMP_IF_TRUE         6 (to L56)
+    
+     252             LOAD_CONST              34 ('quiet_hours_allow_vip')
+                     LOAD_FAST               12 (changed_keys)
+                     CONTAINS_OP              0
+                     POP_JUMP_IF_FALSE       51 (to L61)
+    
+     254    L56:     LOAD_GLOBAL             94 (audit_service)
+                     LOAD_ATTR               96 (log_event)
+                     PUSH_NULL
+    
+     255             LOAD_FAST                2 (db)
+    
+     256             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR                4 (user_id)
+    
+     257             LOAD_CONST              35 ('settings.quiet_hours_updated')
+    
+     258             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR               88 (device_id)
+    
+     254             LOAD_CONST              36 (('owner_user_id', 'event_type', 'actor_id'))
+                     CALL_KW                  4
+                     GET_AWAITABLE            0
+                     LOAD_CONST               0 (None)
+            L57:     SEND                     3 (to L60)
+            L58:     YIELD_VALUE              1
+            L59:     RESUME                   3
+                     JUMP_BACKWARD_NO_INTERRUPT 5 (to L57)
+            L60:     END_SEND
+                     POP_TOP
+    
+     261    L61:     LOAD_CONST              37 ('memory_enabled')
+                     LOAD_FAST               12 (changed_keys)
+                     CONTAINS_OP              0
+                     POP_JUMP_IF_FALSE       57 (to L66)
+    
+     262             LOAD_GLOBAL             94 (audit_service)
+                     LOAD_ATTR               96 (log_event)
+                     PUSH_NULL
+    
+     263             LOAD_FAST                2 (db)
+    
+     264             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR                4 (user_id)
+    
+     265             LOAD_CONST              38 ('settings.memory_toggled')
+    
+     266             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR               88 (device_id)
+    
+     267             LOAD_CONST              39 ('enabled')
+                     LOAD_FAST                4 (changes)
+                     LOAD_CONST              37 ('memory_enabled')
+                     BINARY_SUBSCR
+                     BUILD_MAP                1
+    
+     262             LOAD_CONST              26 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                     CALL_KW                  5
+                     GET_AWAITABLE            0
+                     LOAD_CONST               0 (None)
+            L62:     SEND                     3 (to L65)
+            L63:     YIELD_VALUE              1
+            L64:     RESUME                   3
+                     JUMP_BACKWARD_NO_INTERRUPT 5 (to L62)
+            L65:     END_SEND
+                     POP_TOP
+    
+     270    L66:     LOAD_CONST              40 ('biometric_unlock_enabled')
+                     LOAD_FAST               12 (changed_keys)
+                     CONTAINS_OP              0
+                     POP_JUMP_IF_FALSE       51 (to L71)
+    
+     271             LOAD_GLOBAL             94 (audit_service)
+                     LOAD_ATTR               96 (log_event)
+                     PUSH_NULL
+    
+     272             LOAD_FAST                2 (db)
+    
+     273             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR                4 (user_id)
+    
+     274             LOAD_CONST              41 ('settings.biometric_toggled')
+    
+     275             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR               88 (device_id)
+    
+     271             LOAD_CONST              36 (('owner_user_id', 'event_type', 'actor_id'))
+                     CALL_KW                  4
+                     GET_AWAITABLE            0
+                     LOAD_CONST               0 (None)
+            L67:     SEND                     3 (to L70)
+            L68:     YIELD_VALUE              1
+            L69:     RESUME                   3
+                     JUMP_BACKWARD_NO_INTERRUPT 5 (to L67)
+            L70:     END_SEND
+                     POP_TOP
+    
+     278    L71:     LOAD_CONST              42 ('theme_preference')
+                     LOAD_FAST               12 (changed_keys)
+                     CONTAINS_OP              0
+                     POP_JUMP_IF_FALSE       57 (to L76)
+    
+     279             LOAD_GLOBAL             94 (audit_service)
+                     LOAD_ATTR               96 (log_event)
+                     PUSH_NULL
+    
+     280             LOAD_FAST                2 (db)
+    
+     281             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR                4 (user_id)
+    
+     282             LOAD_CONST              43 ('THEME_PREFERENCE_UPDATED')
+    
+     283             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR               88 (device_id)
+    
+     284             LOAD_CONST              44 ('new_value')
+                     LOAD_FAST                4 (changes)
+                     LOAD_CONST              42 ('theme_preference')
+                     BINARY_SUBSCR
+                     BUILD_MAP                1
+    
+     279             LOAD_CONST              26 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                     CALL_KW                  5
+                     GET_AWAITABLE            0
+                     LOAD_CONST               0 (None)
+            L72:     SEND                     3 (to L75)
+            L73:     YIELD_VALUE              1
+            L74:     RESUME                   3
+                     JUMP_BACKWARD_NO_INTERRUPT 5 (to L72)
+            L75:     END_SEND
+                     POP_TOP
+    
+     287    L76:     BUILD_SET                0
+                     LOAD_CONST              45 (frozenset({'handoff_trigger', 'handoff_enabled', 'handoff_offer_timeout_seconds'}))
+                     SET_UPDATE               1
+                     STORE_FAST              20 (handoff_keys)
+    
+     288             LOAD_FAST               20 (handoff_keys)
+                     LOAD_GLOBAL             99 (set + NULL)
+                     LOAD_FAST               12 (changed_keys)
+                     CALL                     1
+                     BINARY_OP                1 (&)
+                     TO_BOOL
+                     POP_JUMP_IF_FALSE       81 (to L87)
+    
+     289             LOAD_GLOBAL             94 (audit_service)
+                     LOAD_ATTR               96 (log_event)
+                     PUSH_NULL
+    
+     290             LOAD_FAST                2 (db)
+    
+     291             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR                4 (user_id)
+    
+     292             LOAD_CONST              46 ('settings.handoff_updated')
+    
+     293             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR               88 (device_id)
+    
+     294             LOAD_FAST               12 (changed_keys)
+                     GET_ITER
+                     LOAD_FAST_AND_CLEAR     19 (k)
+                     SWAP                     2
+            L77:     BUILD_MAP                0
+                     SWAP                     2
+                     GET_ITER
+            L78:     FOR_ITER                17 (to L81)
+                     STORE_FAST              19 (k)
+                     LOAD_FAST               19 (k)
+                     LOAD_FAST               20 (handoff_keys)
+                     CONTAINS_OP              0
+            L79:     POP_JUMP_IF_TRUE         2 (to L80)
+                     JUMP_BACKWARD           11 (to L78)
+            L80:     LOAD_FAST               19 (k)
+                     LOAD_FAST                4 (changes)
+                     LOAD_FAST               19 (k)
+                     BINARY_SUBSCR
+                     MAP_ADD                  2
+                     JUMP_BACKWARD           19 (to L78)
+            L81:     END_FOR
+                     POP_TOP
+            L82:     SWAP                     2
+                     STORE_FAST              19 (k)
+    
+     289             LOAD_CONST              26 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                     CALL_KW                  5
+                     GET_AWAITABLE            0
+                     LOAD_CONST               0 (None)
+            L83:     SEND                     3 (to L86)
+            L84:     YIELD_VALUE              1
+            L85:     RESUME                   3
+                     JUMP_BACKWARD_NO_INTERRUPT 5 (to L83)
+            L86:     END_SEND
+                     POP_TOP
+    
+     297    L87:     LOAD_CONST              47 ('text_approval_mode')
+                     LOAD_FAST               12 (changed_keys)
+                     CONTAINS_OP              0
+                     POP_JUMP_IF_FALSE       57 (to L92)
+    
+     298             LOAD_GLOBAL             94 (audit_service)
+                     LOAD_ATTR               96 (log_event)
+                     PUSH_NULL
+    
+     299             LOAD_FAST                2 (db)
+    
+     300             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR                4 (user_id)
+    
+     301             LOAD_CONST              48 ('settings.text_approval_mode_changed')
+    
+     302             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR               88 (device_id)
+    
+     303             LOAD_CONST              29 ('new_mode')
+                     LOAD_FAST                4 (changes)
+                     LOAD_CONST              47 ('text_approval_mode')
+                     BINARY_SUBSCR
+                     BUILD_MAP                1
+    
+     298             LOAD_CONST              26 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                     CALL_KW                  5
+                     GET_AWAITABLE            0
+                     LOAD_CONST               0 (None)
+            L88:     SEND                     3 (to L91)
+            L89:     YIELD_VALUE              1
+            L90:     RESUME                   3
+                     JUMP_BACKWARD_NO_INTERRUPT 5 (to L88)
+            L91:     END_SEND
+                     POP_TOP
+    
+     306    L92:     LOAD_CONST              49 ('transcript_disclosure_mode')
+                     LOAD_FAST               12 (changed_keys)
+                     CONTAINS_OP              0
+                     POP_JUMP_IF_FALSE       57 (to L97)
+    
+     307             LOAD_GLOBAL             94 (audit_service)
+                     LOAD_ATTR               96 (log_event)
+                     PUSH_NULL
+    
+     308             LOAD_FAST                2 (db)
+    
+     309             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR                4 (user_id)
+    
+     310             LOAD_CONST              50 ('settings.disclosure_mode_changed')
+    
+     311             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR               88 (device_id)
+    
+     312             LOAD_CONST              29 ('new_mode')
+                     LOAD_FAST                4 (changes)
+                     LOAD_CONST              49 ('transcript_disclosure_mode')
+                     BINARY_SUBSCR
+                     BUILD_MAP                1
+    
+     307             LOAD_CONST              26 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                     CALL_KW                  5
+                     GET_AWAITABLE            0
+                     LOAD_CONST               0 (None)
+            L93:     SEND                     3 (to L96)
+            L94:     YIELD_VALUE              1
+            L95:     RESUME                   3
+                     JUMP_BACKWARD_NO_INTERRUPT 5 (to L93)
+            L96:     END_SEND
+                     POP_TOP
+    
+     315    L97:     LOAD_CONST              51 ('biometric_policy')
+                     LOAD_FAST               12 (changed_keys)
+                     CONTAINS_OP              0
+                     POP_JUMP_IF_FALSE       57 (to L102)
+    
+     316             LOAD_GLOBAL             94 (audit_service)
+                     LOAD_ATTR               96 (log_event)
+                     PUSH_NULL
+    
+     317             LOAD_FAST                2 (db)
+    
+     318             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR                4 (user_id)
+    
+     319             LOAD_CONST              52 ('settings.biometric_policy_changed')
+    
+     320             LOAD_FAST                1 (current_user)
+                     LOAD_ATTR               88 (device_id)
+    
+     321             LOAD_CONST              53 ('new_policy')
+                     LOAD_FAST                4 (changes)
+                     LOAD_CONST              51 ('biometric_policy')
+                     BINARY_SUBSCR
+                     BUILD_MAP                1
+    
+     316             LOAD_CONST              26 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                     CALL_KW                  5
+                     GET_AWAITABLE            0
+                     LOAD_CONST               0 (None)
+            L98:     SEND                     3 (to L101)
+            L99:     YIELD_VALUE              1
+           L100:     RESUME                   3
+                     JUMP_BACKWARD_NO_INTERRUPT 5 (to L98)
+           L101:     END_SEND
+                     POP_TOP
+    
+     324   L102:     LOAD_FAST                2 (db)
+                     LOAD_ATTR                9 (flush + NULL|self)
+                     CALL                     0
+                     GET_AWAITABLE            0
+                     LOAD_CONST               0 (None)
+           L103:     SEND                     3 (to L106)
+           L104:     YIELD_VALUE              1
+           L105:     RESUME                   3
+                     JUMP_BACKWARD_NO_INTERRUPT 5 (to L103)
+           L106:     END_SEND
+                     POP_TOP
+    
+     327             BUILD_SET                0
+                     LOAD_CONST              54 (frozenset({'language_primary', 'transcript_disclosure_mode', 'handoff_trigger', 'max_call_length_seconds', 'calendar_default_duration_minutes', 'assistant_name', 'calendar_booking_window_days', 'handoff_enabled', 'greeting_template', 'temperament_preset', 'swearing_rule', 'recording_announcement_required', 'recording_enabled', 'calendar_booking_enabled'}))
+                     SET_UPDATE               1
+                     STORE_FAST              21 (_agent_sync_keys)
+    
+     335             LOAD_FAST               21 (_agent_sync_keys)
+                     LOAD_GLOBAL             99 (set + NULL)
+                     LOAD_FAST               12 (changed_keys)
+                     CALL                     1
+                     BINARY_OP                1 (&)
+                     TO_BOOL
+                     POP_JUMP_IF_FALSE       79 (to L117)
+    
+     336   L107:     NOP
+    
+     337   L108:     LOAD_CONST               8 (0)
+                     LOAD_CONST              55 (('agent_service',))
+                     IMPORT_NAME             50 (app.services)
+                     IMPORT_FROM             51 (agent_service)
+                     STORE_FAST              22 (agent_service)
+                     POP_TOP
+    
+     339             LOAD_FAST               22 (agent_service)
+                     LOAD_ATTR              105 (get_or_create_default_agent + NULL|self)
+    
+     340             LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                     LOAD_ATTR                4 (user_id)
+    
+     339             CALL                     2
+                     GET_AWAITABLE            0
+                     LOAD_CONST               0 (None)
+           L109:     SEND                     3 (to L112)
+           L110:     YIELD_VALUE              1
+           L111:     RESUME                   3
+                     JUMP_BACKWARD_NO_INTERRUPT 5 (to L109)
+           L112:     END_SEND
+                     STORE_FAST              23 (agent)
+    
+     342             LOAD_FAST               22 (agent_service)
+                     LOAD_ATTR              107 (ensure_elevenlabs_agent + NULL|self)
+    
+     343             LOAD_FAST                2 (db)
+                     LOAD_FAST               23 (agent)
+                     LOAD_FAST                1 (current_user)
+                     LOAD_ATTR                4 (user_id)
+    
+     342             CALL                     3
+                     GET_AWAITABLE            0
+                     LOAD_CONST               0 (None)
+           L113:     SEND                     3 (to L116)
+           L114:     YIELD_VALUE              1
+           L115:     RESUME                   3
+                     JUMP_BACKWARD_NO_INTERRUPT 5 (to L113)
+           L116:     END_SEND
+                     POP_TOP
+    
+     351   L117:     LOAD_GLOBAL             23 (SettingsPatchResponse + NULL)
+    
+     352             LOAD_FAST                3 (settings)
+                     LOAD_ATTR               12 (revision)
+                     LOAD_GLOBAL             25 (_settings_to_response + NULL)
+                     LOAD_FAST                3 (settings)
+                     CALL                     1
+    
+     351             LOAD_CONST               7 (('revision', 'settings'))
+                     CALL_KW                  2
+                     RETURN_VALUE
+    
+     126   L118:     CLEANUP_THROW
+           L119:     EXTENDED_ARG             7
+                     JUMP_BACKWARD_NO_INTERRUPT 1841 (to L5)
+    
+     130   L120:     CLEANUP_THROW
+           L121:     EXTENDED_ARG             6
+                     JUMP_BACKWARD_NO_INTERRUPT 1781 (to L9)
+    
+     131   L122:     CLEANUP_THROW
+           L123:     EXTENDED_ARG             6
+                     JUMP_BACKWARD_NO_INTERRUPT 1759 (to L13)
+    
+      --   L124:     SWAP                     2
+                     POP_TOP
+    
+     209             SWAP                     2
+                     STORE_FAST              15 (iv)
+                     RERAISE                  0
+    
+     229   L125:     CLEANUP_THROW
+           L126:     EXTENDED_ARG             3
+                     JUMP_BACKWARD_NO_INTERRUPT 800 (to L50)
+    
+     238   L127:     CLEANUP_THROW
+           L128:     EXTENDED_ARG             2
+                     JUMP_BACKWARD_NO_INTERRUPT 740 (to L54)
+    
+     254   L129:     CLEANUP_THROW
+           L130:     EXTENDED_ARG             2
+                     JUMP_BACKWARD_NO_INTERRUPT 656 (to L60)
+    
+     262   L131:     CLEANUP_THROW
+           L132:     EXTENDED_ARG             2
+                     JUMP_BACKWARD_NO_INTERRUPT 596 (to L65)
+    
+     271   L133:     CLEANUP_THROW
+           L134:     EXTENDED_ARG             2
+                     JUMP_BACKWARD_NO_INTERRUPT 542 (to L70)
+    
+     279   L135:     CLEANUP_THROW
+           L136:     EXTENDED_ARG             1
+                     JUMP_BACKWARD_NO_INTERRUPT 482 (to L75)
+    
+      --   L137:     SWAP                     2
+                     POP_TOP
+    
+     294             SWAP                     2
+                     STORE_FAST              19 (k)
+                     RERAISE                  0
+    
+     289   L138:     CLEANUP_THROW
+           L139:     EXTENDED_ARG             1
+                     JUMP_BACKWARD_NO_INTERRUPT 386 (to L86)
+    
+     298   L140:     CLEANUP_THROW
+           L141:     EXTENDED_ARG             1
+                     JUMP_BACKWARD_NO_INTERRUPT 326 (to L91)
+    
+     307   L142:     CLEANUP_THROW
+           L143:     EXTENDED_ARG             1
+                     JUMP_BACKWARD_NO_INTERRUPT 266 (to L96)
+    
+     316   L144:     CLEANUP_THROW
+           L145:     JUMP_BACKWARD_NO_INTERRUPT 205 (to L101)
+    
+     324   L146:     CLEANUP_THROW
+           L147:     JUMP_BACKWARD_NO_INTERRUPT 183 (to L106)
+    
+     339   L148:     CLEANUP_THROW
+           L149:     JUMP_BACKWARD_NO_INTERRUPT 120 (to L112)
+    
+     342   L150:     CLEANUP_THROW
+           L151:     JUMP_BACKWARD_NO_INTERRUPT 85 (to L116)
+    
+      --   L152:     PUSH_EXC_INFO
+    
+     345             LOAD_GLOBAL            108 (Exception)
+                     CHECK_EXC_MATCH
+                     POP_JUMP_IF_FALSE       43 (to L154)
+                     POP_TOP
+    
+     346             LOAD_CONST               8 (0)
+                     LOAD_CONST               0 (None)
+                     IMPORT_NAME             55 (logging)
+                     STORE_FAST              24 (logging)
+    
+     347             LOAD_FAST               24 (logging)
+                     LOAD_ATTR              113 (getLogger + NULL|self)
+                     LOAD_GLOBAL            114 (__name__)
+                     CALL                     1
+                     LOAD_ATTR              117 (exception + NULL|self)
+    
+     348             LOAD_CONST              56 ('Failed to sync ElevenLabs agent after settings update')
+    
+     347             CALL                     1
+                     POP_TOP
+           L153:     POP_EXCEPT
+                     JUMP_BACKWARD_NO_INTERRUPT 135 (to L117)
+    
+     345   L154:     RERAISE                  0
+    
+      --   L155:     COPY                     3
+                     POP_EXCEPT
+                     RERAISE                  1
+           L156:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                     RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L156 [0] lasti
+      L3 to L4 -> L118 [2]
+      L4 to L7 -> L156 [0] lasti
+      L7 to L8 -> L120 [2]
+      L8 to L11 -> L156 [0] lasti
+      L11 to L12 -> L122 [2]
+      L12 to L33 -> L156 [0] lasti
+      L33 to L38 -> L124 [3]
+      L38 to L44 -> L156 [0] lasti
+      L45 to L48 -> L156 [0] lasti
+      L48 to L49 -> L125 [2]
+      L49 to L52 -> L156 [0] lasti
+      L52 to L53 -> L127 [2]
+      L53 to L58 -> L156 [0] lasti
+      L58 to L59 -> L129 [2]
+      L59 to L63 -> L156 [0] lasti
+      L63 to L64 -> L131 [2]
+      L64 to L68 -> L156 [0] lasti
+      L68 to L69 -> L133 [2]
+      L69 to L73 -> L156 [0] lasti
+      L73 to L74 -> L135 [2]
+      L74 to L77 -> L156 [0] lasti
+      L77 to L79 -> L137 [8]
+      L80 to L82 -> L137 [8]
+      L82 to L84 -> L156 [0] lasti
+      L84 to L85 -> L138 [2]
+      L85 to L89 -> L156 [0] lasti
+      L89 to L90 -> L140 [2]
+      L90 to L94 -> L156 [0] lasti
+      L94 to L95 -> L142 [2]
+      L95 to L99 -> L156 [0] lasti
+      L99 to L100 -> L144 [2]
+      L100 to L104 -> L156 [0] lasti
+      L104 to L105 -> L146 [2]
+      L105 to L107 -> L156 [0] lasti
+      L108 to L110 -> L152 [0]
+      L110 to L111 -> L148 [2]
+      L111 to L114 -> L152 [0]
+      L114 to L115 -> L150 [2]
+      L115 to L117 -> L152 [0]
+      L117 to L119 -> L156 [0] lasti
+      L120 to L121 -> L156 [0] lasti
+      L122 to L123 -> L156 [0] lasti
+      L124 to L126 -> L156 [0] lasti
+      L127 to L128 -> L156 [0] lasti
+      L129 to L130 -> L156 [0] lasti
+      L131 to L132 -> L156 [0] lasti
+      L133 to L134 -> L156 [0] lasti
+      L135 to L136 -> L156 [0] lasti
+      L137 to L139 -> L156 [0] lasti
+      L140 to L141 -> L156 [0] lasti
+      L142 to L143 -> L156 [0] lasti
+      L144 to L145 -> L156 [0] lasti
+      L146 to L147 -> L156 [0] lasti
+      L148 to L149 -> L152 [0]
+      L150 to L151 -> L152 [0]
+      L152 to L153 -> L155 [1] lasti
+      L153 to L154 -> L156 [0] lasti
+      L154 to L155 -> L155 [1] lasti
+      L155 to L156 -> L156 [0] lasti
+    
+# co_names: ('__doc__', 'datetime', 'UTC', 'time', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.core.encryption', 'encrypt_field', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.models.user_settings', 'UserSettings', 'app.schemas.settings', 'SettingsPatchRequest', 'SettingsPatchResponse', 'SettingsResponse', 'app.services', 'audit_service', 'router', '_SENSITIVE_KEYS', '_settings_to_response', 'str', '_parse_time', 'get', 'get_settings', 'patch', 'patch_settings')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('User settings CRUD with optimistic concurrency.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('UTC', 'datetime', 'time'))
+              IMPORT_NAME              1 (datetime)
+              IMPORT_FROM              2 (UTC)
+              STORE_NAME               2 (UTC)
+              IMPORT_FROM              1 (datetime)
+              STORE_NAME               1 (datetime)
+              IMPORT_FROM              3 (time)
+              STORE_NAME               3 (time)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('APIRouter', 'Depends'))
+              IMPORT_NAME              4 (fastapi)
+              IMPORT_FROM              5 (APIRouter)
+              STORE_NAME               5 (APIRouter)
+              IMPORT_FROM              6 (Depends)
+              STORE_NAME               6 (Depends)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('AsyncSession',))
+              IMPORT_NAME              7 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM              8 (AsyncSession)
+              STORE_NAME               8 (AsyncSession)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('CurrentUser', 'get_current_user'))
+              IMPORT_NAME              9 (app.core.dependencies)
+              IMPORT_FROM             10 (CurrentUser)
+              STORE_NAME              10 (CurrentUser)
+              IMPORT_FROM             11 (get_current_user)
+              STORE_NAME              11 (get_current_user)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('encrypt_field',))
+              IMPORT_NAME             12 (app.core.encryption)
+              IMPORT_FROM             13 (encrypt_field)
+              STORE_NAME              13 (encrypt_field)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('get_db',))
+              IMPORT_NAME             14 (app.database)
+              IMPORT_FROM             15 (get_db)
+              STORE_NAME              15 (get_db)
+              POP_TOP
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('AppError',))
+              IMPORT_NAME             16 (app.middleware.error_handler)
+              IMPORT_FROM             17 (AppError)
+              STORE_NAME              17 (AppError)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('UserSettings',))
+              IMPORT_NAME             18 (app.models.user_settings)
+              IMPORT_FROM             19 (UserSettings)
+              STORE_NAME              19 (UserSettings)
+              POP_TOP
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST              10 (('SettingsPatchRequest', 'SettingsPatchResponse', 'SettingsResponse'))
+              IMPORT_NAME             20 (app.schemas.settings)
+              IMPORT_FROM             21 (SettingsPatchRequest)
+              STORE_NAME              21 (SettingsPatchRequest)
+              IMPORT_FROM             22 (SettingsPatchResponse)
+              STORE_NAME              22 (SettingsPatchResponse)
+              IMPORT_FROM             23 (SettingsResponse)
+              STORE_NAME              23 (SettingsResponse)
+              POP_TOP
+
+ 18           LOAD_CONST               1 (0)
+              LOAD_CONST              11 (('audit_service',))
+              IMPORT_NAME             24 (app.services)
+              IMPORT_FROM             25 (audit_service)
+              STORE_NAME              25 (audit_service)
+              POP_TOP
+
+ 20           LOAD_NAME                5 (APIRouter)
+              PUSH_NULL
+              CALL                     0
+              STORE_NAME              26 (router)
+
+ 22           BUILD_SET                0
+              LOAD_CONST              12 (frozenset({'text_approval_mode', 'transcript_disclosure_mode', 'notification_privacy_mode', 'biometric_unlock_enabled', 'biometric_policy', 'recording_announcement_required', 'recording_enabled'}))
+              SET_UPDATE               1
+              STORE_NAME              27 (_SENSITIVE_KEYS)
+
+ 33           LOAD_CONST              13 ('s')
+              LOAD_NAME               19 (UserSettings)
+              LOAD_CONST              14 ('return')
+              LOAD_NAME               23 (SettingsResponse)
+              BUILD_TUPLE              4
+              LOAD_CONST              15 (<code object _settings_to_response at 0x0000024C0FAE7550, file "D:\fluence\Github\mattbot\backend\app\api\v1\settings.py", line 33>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              28 (_settings_to_response)
+
+101           LOAD_CONST              16 ('value')
+              LOAD_NAME               29 (str)
+              LOAD_CONST              14 ('return')
+              LOAD_NAME                3 (time)
+              BUILD_TUPLE              4
+              LOAD_CONST              17 (<code object _parse_time at 0x0000024C114987B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\settings.py", line 101>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              30 (_parse_time)
+
+106           LOAD_NAME               26 (router)
+              LOAD_ATTR               63 (get + NULL|self)
+              LOAD_CONST              18 ('')
+              LOAD_NAME               23 (SettingsResponse)
+              LOAD_CONST              19 (('response_model',))
+              CALL_KW                  2
+
+108           LOAD_NAME                6 (Depends)
+              PUSH_NULL
+              LOAD_NAME               11 (get_current_user)
+              CALL                     1
+
+109           LOAD_NAME                6 (Depends)
+              PUSH_NULL
+              LOAD_NAME               15 (get_db)
+              CALL                     1
+
+107           BUILD_TUPLE              2
+              LOAD_CONST              20 ('current_user')
+
+108           LOAD_NAME               10 (CurrentUser)
+
+107           LOAD_CONST              21 ('db')
+
+109           LOAD_NAME                8 (AsyncSession)
+
+107           LOAD_CONST              14 ('return')
+
+110           LOAD_NAME               23 (SettingsResponse)
+
+107           BUILD_TUPLE              6
+              LOAD_CONST              22 (<code object get_settings at 0x0000024C11475830, file "D:\fluence\Github\mattbot\backend\app\api\v1\settings.py", line 106>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+106           CALL                     0
+
+107           STORE_NAME              32 (get_settings)
+
+120           LOAD_NAME               26 (router)
+              LOAD_ATTR               67 (patch + NULL|self)
+              LOAD_CONST              18 ('')
+              LOAD_NAME               22 (SettingsPatchResponse)
+              LOAD_CONST              19 (('response_model',))
+              CALL_KW                  2
+
+123           LOAD_NAME                6 (Depends)
+              PUSH_NULL
+              LOAD_NAME               11 (get_current_user)
+              CALL                     1
+
+124           LOAD_NAME                6 (Depends)
+              PUSH_NULL
+              LOAD_NAME               15 (get_db)
+              CALL                     1
+
+121           BUILD_TUPLE              2
+              LOAD_CONST              23 ('body')
+
+122           LOAD_NAME               21 (SettingsPatchRequest)
+
+121           LOAD_CONST              20 ('current_user')
+
+123           LOAD_NAME               10 (CurrentUser)
+
+121           LOAD_CONST              21 ('db')
+
+124           LOAD_NAME                8 (AsyncSession)
+
+121           LOAD_CONST              14 ('return')
+
+125           LOAD_NAME               22 (SettingsPatchResponse)
+
+121           BUILD_TUPLE              8
+              LOAD_CONST              24 (<code object patch_settings at 0x0000024C0FBD7560, file "D:\fluence\Github\mattbot\backend\app\api\v1\settings.py", line 120>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+120           CALL                     0
+
+121           STORE_NAME              34 (patch_settings)
+              RETURN_CONST            25 (None)
+
+Disassembly of <code object _settings_to_response at 0x0000024C0FAE7550, file "D:\fluence\Github\mattbot\backend\app\api\v1\settings.py", line 33>:
+  33            RESUME                   0
+
+  34            LOAD_CONST               1 (0)
+                LOAD_CONST               2 (('QuietHoursInterval',))
+                IMPORT_NAME              0 (app.schemas.settings)
+                IMPORT_FROM              1 (QuietHoursInterval)
+                STORE_FAST               1 (QuietHoursInterval)
+                POP_TOP
+
+  36            LOAD_FAST                0 (s)
+                LOAD_ATTR                4 (quiet_hours_intervals)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       12 (to L1)
+                LOAD_FAST                0 (s)
+                LOAD_ATTR                4 (quiet_hours_intervals)
+                JUMP_FORWARD             1 (to L2)
+        L1:     BUILD_LIST               0
+        L2:     STORE_FAST               2 (intervals_raw)
+
+  37            LOAD_FAST                2 (intervals_raw)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       24 (to L7)
+                LOAD_FAST                2 (intervals_raw)
+                GET_ITER
+                LOAD_FAST_AND_CLEAR      3 (iv)
+                SWAP                     2
+        L3:     BUILD_LIST               0
+                SWAP                     2
+                GET_ITER
+        L4:     FOR_ITER                10 (to L5)
+                STORE_FAST_LOAD_FAST    49 (iv, QuietHoursInterval)
+                PUSH_NULL
+                LOAD_CONST              58 (())
+                BUILD_MAP                0
+                LOAD_FAST                3 (iv)
+                DICT_MERGE               1
+                CALL_FUNCTION_EX         1
+                LIST_APPEND              2
+                JUMP_BACKWARD           12 (to L4)
+        L5:     END_FOR
+                POP_TOP
+        L6:     SWAP                     2
+                STORE_FAST               3 (iv)
+                JUMP_FORWARD             1 (to L8)
+        L7:     BUILD_LIST               0
+        L8:     STORE_FAST               4 (intervals)
+
+  39            LOAD_GLOBAL              7 (SettingsResponse + NULL)
+                LOAD_CONST              58 (())
+                BUILD_MAP                0
+                LOAD_CONST               3 ('theme_preference')
+
+  40            LOAD_FAST                0 (s)
+                LOAD_ATTR                8 (theme_preference)
+                MAP_ADD                  1
+
+  39            LOAD_CONST               4 ('notification_privacy_mode')
+
+  41            LOAD_FAST                0 (s)
+                LOAD_ATTR               10 (notification_privacy_mode)
+                MAP_ADD                  1
+
+  39            LOAD_CONST               5 ('quiet_hours_enabled')
+
+  42            LOAD_FAST                0 (s)
+                LOAD_ATTR               12 (quiet_hours_enabled)
+                MAP_ADD                  1
+
+  39            LOAD_CONST               6 ('quiet_hours_start')
+
+  43            LOAD_FAST                0 (s)
+                LOAD_ATTR               14 (quiet_hours_start)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       27 (to L9)
+                LOAD_FAST                0 (s)
+                LOAD_ATTR               14 (quiet_hours_start)
+                LOAD_ATTR               17 (strftime + NULL|self)
+                LOAD_CONST               7 ('%H:%M')
+                CALL                     1
+                JUMP_FORWARD             1 (to L10)
+        L9:     LOAD_CONST               0 (None)
+
+  --   L10:     MAP_ADD                  1
+
+  39            LOAD_CONST               8 ('quiet_hours_end')
+
+  44            LOAD_FAST                0 (s)
+                LOAD_ATTR               18 (quiet_hours_end)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       27 (to L11)
+                LOAD_FAST                0 (s)
+                LOAD_ATTR               18 (quiet_hours_end)
+                LOAD_ATTR               17 (strftime + NULL|self)
+                LOAD_CONST               7 ('%H:%M')
+                CALL                     1
+                JUMP_FORWARD             1 (to L12)
+       L11:     LOAD_CONST               0 (None)
+
+  --   L12:     MAP_ADD                  1
+
+  39            LOAD_CONST               9 ('quiet_hours_days')
+
+  45            LOAD_FAST                0 (s)
+                LOAD_ATTR               20 (quiet_hours_days)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       12 (to L13)
+                LOAD_FAST                0 (s)
+                LOAD_ATTR               20 (quiet_hours_days)
+                JUMP_FORWARD             1 (to L14)
+       L13:     BUILD_LIST               0
+
+  --   L14:     MAP_ADD                  1
+
+  39            LOAD_CONST              10 ('quiet_hours_intervals')
+
+  46            LOAD_FAST                4 (intervals)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              11 ('quiet_hours_allow_vip')
+
+  47            LOAD_FAST                0 (s)
+                LOAD_ATTR               22 (quiet_hours_allow_vip)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              12 ('timezone')
+
+  48            LOAD_FAST                0 (s)
+                LOAD_ATTR               24 (timezone)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              13 ('personal_phone_last4')
+
+  49            LOAD_FAST                0 (s)
+                LOAD_ATTR               26 (personal_phone_last4)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              14 ('memory_enabled')
+
+  50            LOAD_FAST                0 (s)
+                LOAD_ATTR               28 (memory_enabled)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              15 ('data_retention_days')
+
+  51            LOAD_FAST                0 (s)
+                LOAD_ATTR               30 (data_retention_days)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              16 ('biometric_unlock_enabled')
+
+  52            LOAD_FAST                0 (s)
+                LOAD_ATTR               32 (biometric_unlock_enabled)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              17 ('recording_enabled')
+
+  53            LOAD_FAST                0 (s)
+                LOAD_ATTR               34 (recording_enabled)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              18 ('call_objective_mode')
+
+  54            LOAD_FAST                0 (s)
+                LOAD_ATTR               36 (call_objective_mode)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              19 ('max_call_length_seconds')
+
+  55            LOAD_FAST                0 (s)
+                LOAD_ATTR               38 (max_call_length_seconds)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              20 ('vip_max_call_length_seconds')
+
+  56            LOAD_FAST                0 (s)
+                LOAD_ATTR               40 (vip_max_call_length_seconds)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              21 ('handoff_enabled')
+
+  57            LOAD_FAST                0 (s)
+                LOAD_ATTR               42 (handoff_enabled)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              22 ('handoff_trigger')
+
+  58            LOAD_FAST                0 (s)
+                LOAD_ATTR               44 (handoff_trigger)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              23 ('handoff_offer_timeout_seconds')
+
+  59            LOAD_FAST                0 (s)
+                LOAD_ATTR               46 (handoff_offer_timeout_seconds)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              24 ('handoff_target_phone_last4')
+
+  60            LOAD_FAST                0 (s)
+                LOAD_ATTR               48 (handoff_target_phone_last4)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              25 ('business_hours_enabled')
+
+  61            LOAD_FAST                0 (s)
+                LOAD_ATTR               50 (business_hours_enabled)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              26 ('business_hours_start')
+
+  63            LOAD_FAST                0 (s)
+                LOAD_ATTR               52 (business_hours_start)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       27 (to L15)
+                LOAD_FAST                0 (s)
+                LOAD_ATTR               52 (business_hours_start)
+                LOAD_ATTR               17 (strftime + NULL|self)
+                LOAD_CONST               7 ('%H:%M')
+                CALL                     1
+                JUMP_FORWARD             1 (to L16)
+       L15:     LOAD_CONST               0 (None)
+
+  --   L16:     MAP_ADD                  1
+
+  39            LOAD_CONST              27 ('business_hours_end')
+
+  66            LOAD_FAST                0 (s)
+                LOAD_ATTR               54 (business_hours_end)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       27 (to L17)
+                LOAD_FAST                0 (s)
+                LOAD_ATTR               54 (business_hours_end)
+                LOAD_ATTR               17 (strftime + NULL|self)
+                LOAD_CONST               7 ('%H:%M')
+                CALL                     1
+                JUMP_FORWARD             1 (to L18)
+       L17:     LOAD_CONST               0 (None)
+
+  --   L18:     MAP_ADD                  1
+
+  39            LOAD_CONST              28 ('business_hours_days')
+
+  68            LOAD_FAST                0 (s)
+                LOAD_ATTR               56 (business_hours_days)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       12 (to L19)
+                LOAD_FAST                0 (s)
+                LOAD_ATTR               56 (business_hours_days)
+                JUMP_FORWARD             1 (to L20)
+       L19:     BUILD_LIST               0
+
+  --   L20:     MAP_ADD                  1
+
+  39            LOAD_CONST              29 ('after_hours_behavior')
+
+  69            LOAD_FAST                0 (s)
+                LOAD_ATTR               58 (after_hours_behavior)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              30 ('temperament_preset')
+
+  70            LOAD_FAST                0 (s)
+                LOAD_ATTR               60 (temperament_preset)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              31 ('swearing_rule')
+
+  71            LOAD_FAST                0 (s)
+                LOAD_ATTR               62 (swearing_rule)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              32 ('language_primary')
+
+  72            LOAD_FAST                0 (s)
+                LOAD_ATTR               64 (language_primary)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              33 ('language_secondary')
+
+  73            LOAD_FAST                0 (s)
+                LOAD_ATTR               66 (language_secondary)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              34 ('vip_calls_mark_important')
+
+  74            LOAD_FAST                0 (s)
+                LOAD_ATTR               68 (vip_calls_mark_important)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              35 ('vip_notification_intensity')
+
+  75            LOAD_FAST                0 (s)
+                LOAD_ATTR               70 (vip_notification_intensity)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              36 ('blocked_caller_behavior')
+
+  76            LOAD_FAST                0 (s)
+                LOAD_ATTR               72 (blocked_caller_behavior)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              37 ('log_blocked_attempts')
+
+  77            LOAD_FAST                0 (s)
+                LOAD_ATTR               74 (log_blocked_attempts)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              38 ('notify_on_blocked')
+
+  78            LOAD_FAST                0 (s)
+                LOAD_ATTR               76 (notify_on_blocked)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              39 ('spam_labeling_enabled')
+
+  79            LOAD_FAST                0 (s)
+                LOAD_ATTR               78 (spam_labeling_enabled)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              40 ('block_suggestions_enabled')
+
+  80            LOAD_FAST                0 (s)
+                LOAD_ATTR               80 (block_suggestions_enabled)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              41 ('repeat_caller_threshold')
+
+  81            LOAD_FAST                0 (s)
+                LOAD_ATTR               82 (repeat_caller_threshold)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              42 ('text_approval_mode')
+
+  82            LOAD_FAST                0 (s)
+                LOAD_ATTR               84 (text_approval_mode)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              43 ('assistant_name')
+
+  83            LOAD_FAST                0 (s)
+                LOAD_ATTR               86 (assistant_name)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              44 ('greeting_template')
+
+  84            LOAD_FAST                0 (s)
+                LOAD_ATTR               88 (greeting_template)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              45 ('transcript_disclosure_mode')
+
+  85            LOAD_FAST                0 (s)
+                LOAD_ATTR               90 (transcript_disclosure_mode)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              46 ('recording_announcement_required')
+
+  86            LOAD_FAST                0 (s)
+                LOAD_ATTR               92 (recording_announcement_required)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              47 ('important_rule')
+
+  87            LOAD_FAST                0 (s)
+                LOAD_ATTR               94 (important_rule)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              48 ('biometric_policy')
+
+  88            LOAD_FAST                0 (s)
+                LOAD_ATTR               96 (biometric_policy)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              49 ('calendar_booking_enabled')
+
+  89            LOAD_FAST                0 (s)
+                LOAD_ATTR               98 (calendar_booking_enabled)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              50 ('calendar_default_duration_minutes')
+
+  90            LOAD_FAST                0 (s)
+                LOAD_ATTR              100 (calendar_default_duration_minutes)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              51 ('calendar_booking_window_days')
+
+  91            LOAD_FAST                0 (s)
+                LOAD_ATTR              102 (calendar_booking_window_days)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              52 ('urgent_notify_sms')
+
+  92            LOAD_FAST                0 (s)
+                LOAD_ATTR              104 (urgent_notify_sms)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              53 ('urgent_notify_email')
+
+  93            LOAD_FAST                0 (s)
+                LOAD_ATTR              106 (urgent_notify_email)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              54 ('urgent_notify_call')
+
+  94            LOAD_FAST                0 (s)
+                LOAD_ATTR              108 (urgent_notify_call)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              55 ('urgent_notify_phone_last4')
+
+  95            LOAD_FAST                0 (s)
+                LOAD_ATTR              110 (urgent_notify_phone_last4)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              56 ('urgent_notify_email_address')
+
+  96            LOAD_FAST                0 (s)
+                LOAD_ATTR              112 (urgent_notify_email_address)
+                MAP_ADD                  1
+
+  39            LOAD_CONST              57 ('revision')
+
+  97            LOAD_FAST                0 (s)
+                LOAD_ATTR              114 (revision)
+                MAP_ADD                  1
+
+  39            CALL_FUNCTION_EX         1
+                RETURN_VALUE
+
+  --   L21:     SWAP                     2
+                POP_TOP
+
+  37            SWAP                     2
+                STORE_FAST               3 (iv)
+                RERAISE                  0
+ExceptionTable:
+  L3 to L6 -> L21 [2]
+
+Disassembly of <code object _parse_time at 0x0000024C114987B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\settings.py", line 101>:
+101           RESUME                   0
+
+102           LOAD_FAST                0 (value)
+              LOAD_ATTR                1 (split + NULL|self)
+              LOAD_CONST               1 (':')
+              CALL                     1
+              STORE_FAST               1 (parts)
+
+103           LOAD_GLOBAL              3 (time + NULL)
+              LOAD_GLOBAL              5 (int + NULL)
+              LOAD_FAST                1 (parts)
+              LOAD_CONST               2 (0)
+              BINARY_SUBSCR
+              CALL                     1
+              LOAD_GLOBAL              5 (int + NULL)
+              LOAD_FAST                1 (parts)
+              LOAD_CONST               3 (1)
+              BINARY_SUBSCR
+              CALL                     1
+              CALL                     2
+              RETURN_VALUE
+
+Disassembly of <code object get_settings at 0x0000024C11475830, file "D:\fluence\Github\mattbot\backend\app\api\v1\settings.py", line 106>:
+ 106            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 111            LOAD_FAST                1 (db)
+                LOAD_ATTR                1 (get + NULL|self)
+                LOAD_GLOBAL              2 (UserSettings)
+                LOAD_FAST                0 (current_user)
+                LOAD_ATTR                4 (user_id)
+                CALL                     2
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               2 (settings)
+
+ 112            LOAD_FAST                2 (settings)
+                POP_JUMP_IF_NOT_NONE    85 (to L14)
+
+ 113            LOAD_GLOBAL              3 (UserSettings + NULL)
+                LOAD_FAST                0 (current_user)
+                LOAD_ATTR                4 (user_id)
+                LOAD_CONST               1 (('owner_user_id',))
+                CALL_KW                  1
+                STORE_FAST               2 (settings)
+
+ 114            LOAD_FAST                1 (db)
+                LOAD_ATTR                7 (add + NULL|self)
+                LOAD_FAST                2 (settings)
+                CALL                     1
+                POP_TOP
+
+ 115            LOAD_FAST                1 (db)
+                LOAD_ATTR                9 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L6:     SEND                     3 (to L9)
+        L7:     YIELD_VALUE              1
+        L8:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L6)
+        L9:     END_SEND
+                POP_TOP
+
+ 116            LOAD_FAST                1 (db)
+                LOAD_ATTR               11 (refresh + NULL|self)
+                LOAD_FAST                2 (settings)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L10:     SEND                     3 (to L13)
+       L11:     YIELD_VALUE              1
+       L12:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L10)
+       L13:     END_SEND
+                POP_TOP
+
+ 117   L14:     LOAD_GLOBAL             13 (_settings_to_response + NULL)
+                LOAD_FAST                2 (settings)
+                CALL                     1
+                RETURN_VALUE
+
+ 111   L15:     CLEANUP_THROW
+       L16:     JUMP_BACKWARD_NO_INTERRUPT 103 (to L5)
+
+ 115   L17:     CLEANUP_THROW
+       L18:     JUMP_BACKWARD_NO_INTERRUPT 42 (to L9)
+
+ 116   L19:     CLEANUP_THROW
+       L20:     JUMP_BACKWARD_NO_INTERRUPT 19 (to L13)
+
+  --   L21:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L21 [0] lasti
+  L3 to L4 -> L15 [2]
+  L4 to L7 -> L21 [0] lasti
+  L7 to L8 -> L17 [2]
+  L8 to L11 -> L21 [0] lasti
+  L11 to L12 -> L19 [2]
+  L12 to L16 -> L21 [0] lasti
+  L17 to L18 -> L21 [0] lasti
+  L19 to L20 -> L21 [0] lasti
+
+Disassembly of <code object patch_settings at 0x0000024C0FBD7560, file "D:\fluence\Github\mattbot\backend\app\api\v1\settings.py", line 120>:
+ 120             RETURN_GENERATOR
+                 POP_TOP
+         L1:     RESUME                   0
+
+ 126             LOAD_FAST                2 (db)
+                 LOAD_ATTR                1 (get + NULL|self)
+                 LOAD_GLOBAL              2 (UserSettings)
+                 LOAD_FAST                1 (current_user)
+                 LOAD_ATTR                4 (user_id)
+                 CALL                     2
+                 GET_AWAITABLE            0
+                 LOAD_CONST               0 (None)
+         L2:     SEND                     3 (to L5)
+         L3:     YIELD_VALUE              1
+         L4:     RESUME                   3
+                 JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+         L5:     END_SEND
+                 STORE_FAST               3 (settings)
+
+ 127             LOAD_FAST                3 (settings)
+                 POP_JUMP_IF_NOT_NONE    85 (to L14)
+
+ 128             LOAD_GLOBAL              3 (UserSettings + NULL)
+                 LOAD_FAST                1 (current_user)
+                 LOAD_ATTR                4 (user_id)
+                 LOAD_CONST               1 (('owner_user_id',))
+                 CALL_KW                  1
+                 STORE_FAST               3 (settings)
+
+ 129             LOAD_FAST                2 (db)
+                 LOAD_ATTR                7 (add + NULL|self)
+                 LOAD_FAST                3 (settings)
+                 CALL                     1
+                 POP_TOP
+
+ 130             LOAD_FAST                2 (db)
+                 LOAD_ATTR                9 (flush + NULL|self)
+                 CALL                     0
+                 GET_AWAITABLE            0
+                 LOAD_CONST               0 (None)
+         L6:     SEND                     3 (to L9)
+         L7:     YIELD_VALUE              1
+         L8:     RESUME                   3
+                 JUMP_BACKWARD_NO_INTERRUPT 5 (to L6)
+         L9:     END_SEND
+                 POP_TOP
+
+ 131             LOAD_FAST                2 (db)
+                 LOAD_ATTR               11 (refresh + NULL|self)
+                 LOAD_FAST                3 (settings)
+                 CALL                     1
+                 GET_AWAITABLE            0
+                 LOAD_CONST               0 (None)
+        L10:     SEND                     3 (to L13)
+        L11:     YIELD_VALUE              1
+        L12:     RESUME                   3
+                 JUMP_BACKWARD_NO_INTERRUPT 5 (to L10)
+        L13:     END_SEND
+                 POP_TOP
+
+ 133    L14:     LOAD_FAST                3 (settings)
+                 LOAD_ATTR               12 (revision)
+                 LOAD_FAST                0 (body)
+                 LOAD_ATTR               14 (expected_revision)
+                 COMPARE_OP             119 (bool(!=))
+                 POP_JUMP_IF_FALSE       13 (to L15)
+
+ 134             LOAD_GLOBAL             17 (AppError + NULL)
+
+ 135             LOAD_CONST               2 ('REVISION_CONFLICT')
+
+ 136             LOAD_CONST               3 ('Settings were updated on another device. Please refresh and try again.')
+
+ 137             LOAD_CONST               4 (409)
+
+ 134             CALL                     3
+                 RAISE_VARARGS            1
+
+ 140    L15:     LOAD_FAST                0 (body)
+                 LOAD_ATTR               18 (changes)
+                 LOAD_ATTR               21 (model_dump + NULL|self)
+                 LOAD_CONST               5 (True)
+                 LOAD_CONST               6 (('exclude_none',))
+                 CALL_KW                  1
+                 STORE_FAST               4 (changes)
+
+ 141             LOAD_FAST                4 (changes)
+                 TO_BOOL
+                 POP_JUMP_IF_TRUE        29 (to L16)
+
+ 142             LOAD_GLOBAL             23 (SettingsPatchResponse + NULL)
+
+ 143             LOAD_FAST                3 (settings)
+                 LOAD_ATTR               12 (revision)
+                 LOAD_GLOBAL             25 (_settings_to_response + NULL)
+                 LOAD_FAST                3 (settings)
+                 CALL                     1
+
+ 142             LOAD_CONST               7 (('revision', 'settings'))
+                 CALL_KW                  2
+                 RETURN_VALUE
+
+ 146    L16:     LOAD_CONST               8 (0)
+                 LOAD_CONST               0 (None)
+                 IMPORT_NAME             13 (re)
+                 STORE_FAST               5 (re)
+
+ 149             LOAD_CONST               9 ('handoff_target_phone')
+                 LOAD_FAST                4 (changes)
+                 CONTAINS_OP              0
+                 POP_JUMP_IF_FALSE      146 (to L20)
+
+ 150             LOAD_FAST                4 (changes)
+                 LOAD_ATTR               29 (pop + NULL|self)
+                 LOAD_CONST               9 ('handoff_target_phone')
+                 CALL                     1
+                 STORE_FAST               6 (raw_phone)
+
+ 151             LOAD_FAST                6 (raw_phone)
+                 TO_BOOL
+                 POP_JUMP_IF_FALSE       94 (to L19)
+
+ 152             LOAD_FAST                5 (re)
+                 LOAD_ATTR               31 (sub + NULL|self)
+                 LOAD_CONST              10 ('[^+\\d]')
+                 LOAD_CONST              11 ('')
+                 LOAD_FAST                6 (raw_phone)
+                 CALL                     3
+                 STORE_FAST               7 (cleaned)
+
+ 153             LOAD_GLOBAL             33 (encrypt_field + NULL)
+                 LOAD_FAST                7 (cleaned)
+                 LOAD_ATTR               35 (encode + NULL|self)
+                 LOAD_CONST              12 ('utf-8')
+                 CALL                     1
+                 CALL                     1
+                 UNPACK_SEQUENCE          3
+                 STORE_FAST_STORE_FAST  137 (ct, nonce)
+                 STORE_FAST              10 (kv)
+
+ 154             LOAD_FAST_LOAD_FAST    131 (ct, settings)
+                 STORE_ATTR              18 (handoff_target_phone_ciphertext)
+
+ 155             LOAD_FAST_LOAD_FAST    147 (nonce, settings)
+                 STORE_ATTR              19 (handoff_target_phone_nonce)
+
+ 156             LOAD_FAST_LOAD_FAST    163 (kv, settings)
+                 STORE_ATTR              20 (handoff_target_phone_key_version)
+
+ 157             LOAD_GLOBAL             43 (len + NULL)
+                 LOAD_FAST                7 (cleaned)
+                 CALL                     1
+                 LOAD_CONST              13 (4)
+                 COMPARE_OP             188 (bool(>=))
+                 POP_JUMP_IF_FALSE        5 (to L17)
+                 LOAD_FAST                7 (cleaned)
+                 LOAD_CONST              14 (-4)
+                 LOAD_CONST               0 (None)
+                 BINARY_SLICE
+                 JUMP_FORWARD             1 (to L18)
+        L17:     LOAD_FAST                7 (cleaned)
+        L18:     LOAD_FAST                3 (settings)
+                 STORE_ATTR              22 (handoff_target_phone_last4)
+                 JUMP_FORWARD            28 (to L20)
+
+ 160    L19:     LOAD_CONST               0 (None)
+                 LOAD_FAST                3 (settings)
+                 STORE_ATTR              18 (handoff_target_phone_ciphertext)
+
+ 161             LOAD_CONST               0 (None)
+                 LOAD_FAST                3 (settings)
+                 STORE_ATTR              19 (handoff_target_phone_nonce)
+
+ 162             LOAD_CONST               0 (None)
+                 LOAD_FAST                3 (settings)
+                 STORE_ATTR              20 (handoff_target_phone_key_version)
+
+ 163             LOAD_CONST               0 (None)
+                 LOAD_FAST                3 (settings)
+                 STORE_ATTR              22 (handoff_target_phone_last4)
+
+ 166    L20:     LOAD_CONST              15 ('personal_phone')
+                 LOAD_FAST                4 (changes)
+                 CONTAINS_OP              0
+                 POP_JUMP_IF_FALSE      146 (to L24)
+
+ 167             LOAD_FAST                4 (changes)
+                 LOAD_ATTR               29 (pop + NULL|self)
+                 LOAD_CONST              15 ('personal_phone')
+                 CALL                     1
+                 STORE_FAST               6 (raw_phone)
+
+ 168             LOAD_FAST                6 (raw_phone)
+                 TO_BOOL
+                 POP_JUMP_IF_FALSE       94 (to L23)
+
+ 169             LOAD_FAST                5 (re)
+                 LOAD_ATTR               31 (sub + NULL|self)
+                 LOAD_CONST              10 ('[^+\\d]')
+                 LOAD_CONST              11 ('')
+                 LOAD_FAST                6 (raw_phone)
+                 CALL                     3
+                 STORE_FAST               7 (cleaned)
+
+ 170             LOAD_GLOBAL             33 (encrypt_field + NULL)
+                 LOAD_FAST                7 (cleaned)
+                 LOAD_ATTR               35 (encode + NULL|self)
+                 LOAD_CONST              12 ('utf-8')
+                 CALL                     1
+                 CALL                     1
+                 UNPACK_SEQUENCE          3
+                 STORE_FAST_STORE_FAST  137 (ct, nonce)
+                 STORE_FAST              10 (kv)
+
+ 171             LOAD_FAST_LOAD_FAST    131 (ct, settings)
+                 STORE_ATTR              23 (personal_phone_ciphertext)
+
+ 172             LOAD_FAST_LOAD_FAST    147 (nonce, settings)
+                 STORE_ATTR              24 (personal_phone_nonce)
+
+ 173             LOAD_FAST_LOAD_FAST    163 (kv, settings)
+                 STORE_ATTR              25 (personal_phone_key_version)
+
+ 174             LOAD_GLOBAL             43 (len + NULL)
+                 LOAD_FAST                7 (cleaned)
+                 CALL                     1
+                 LOAD_CONST              13 (4)
+                 COMPARE_OP             188 (bool(>=))
+                 POP_JUMP_IF_FALSE        5 (to L21)
+                 LOAD_FAST                7 (cleaned)
+                 LOAD_CONST              14 (-4)
+                 LOAD_CONST               0 (None)
+                 BINARY_SLICE
+                 JUMP_FORWARD             1 (to L22)
+        L21:     LOAD_FAST                7 (cleaned)
+        L22:     LOAD_FAST                3 (settings)
+                 STORE_ATTR              26 (personal_phone_last4)
+                 JUMP_FORWARD            28 (to L24)
+
+ 177    L23:     LOAD_CONST               0 (None)
+                 LOAD_FAST                3 (settings)
+                 STORE_ATTR              23 (personal_phone_ciphertext)
+
+ 178             LOAD_CONST               0 (None)
+                 LOAD_FAST                3 (settings)
+                 STORE_ATTR              24 (personal_phone_nonce)
+
+ 179             LOAD_CONST               0 (None)
+                 LOAD_FAST                3 (settings)
+                 STORE_ATTR              25 (personal_phone_key_version)
+
+ 180             LOAD_CONST               0 (None)
+                 LOAD_FAST                3 (settings)
+                 STORE_ATTR              26 (personal_phone_last4)
+
+ 183    L24:     LOAD_CONST              16 ('urgent_notify_phone')
+                 LOAD_FAST                4 (changes)
+                 CONTAINS_OP              0
+                 POP_JUMP_IF_FALSE      146 (to L28)
+
+ 184             LOAD_FAST                4 (changes)
+                 LOAD_ATTR               29 (pop + NULL|self)
+                 LOAD_CONST              16 ('urgent_notify_phone')
+                 CALL                     1
+                 STORE_FAST               6 (raw_phone)
+
+ 185             LOAD_FAST                6 (raw_phone)
+                 TO_BOOL
+                 POP_JUMP_IF_FALSE       94 (to L27)
+
+ 186             LOAD_FAST                5 (re)
+                 LOAD_ATTR               31 (sub + NULL|self)
+                 LOAD_CONST              10 ('[^+\\d]')
+                 LOAD_CONST              11 ('')
+                 LOAD_FAST                6 (raw_phone)
+                 CALL                     3
+                 STORE_FAST               7 (cleaned)
+
+ 187             LOAD_GLOBAL             33 (encrypt_field + NULL)
+                 LOAD_FAST                7 (cleaned)
+                 LOAD_ATTR               35 (encode + NULL|self)
+                 LOAD_CONST              12 ('utf-8')
+                 CALL                     1
+                 CALL                     1
+                 UNPACK_SEQUENCE          3
+                 STORE_FAST_STORE_FAST  137 (ct, nonce)
+                 STORE_FAST              10 (kv)
+
+ 188             LOAD_FAST_LOAD_FAST    131 (ct, settings)
+                 STORE_ATTR              27 (urgent_notify_phone_ciphertext)
+
+ 189             LOAD_FAST_LOAD_FAST    147 (nonce, settings)
+                 STORE_ATTR              28 (urgent_notify_phone_nonce)
+
+ 190             LOAD_FAST_LOAD_FAST    163 (kv, settings)
+                 STORE_ATTR              29 (urgent_notify_phone_key_version)
+
+ 191             LOAD_GLOBAL             43 (len + NULL)
+                 LOAD_FAST                7 (cleaned)
+                 CALL                     1
+                 LOAD_CONST              13 (4)
+                 COMPARE_OP             188 (bool(>=))
+                 POP_JUMP_IF_FALSE        5 (to L25)
+                 LOAD_FAST                7 (cleaned)
+                 LOAD_CONST              14 (-4)
+                 LOAD_CONST               0 (None)
+                 BINARY_SLICE
+                 JUMP_FORWARD             1 (to L26)
+        L25:     LOAD_FAST                7 (cleaned)
+        L26:     LOAD_FAST                3 (settings)
+                 STORE_ATTR              30 (urgent_notify_phone_last4)
+                 JUMP_FORWARD            28 (to L28)
+
+ 194    L27:     LOAD_CONST               0 (None)
+                 LOAD_FAST                3 (settings)
+                 STORE_ATTR              27 (urgent_notify_phone_ciphertext)
+
+ 195             LOAD_CONST               0 (None)
+                 LOAD_FAST                3 (settings)
+                 STORE_ATTR              28 (urgent_notify_phone_nonce)
+
+ 196             LOAD_CONST               0 (None)
+                 LOAD_FAST                3 (settings)
+                 STORE_ATTR              29 (urgent_notify_phone_key_version)
+
+ 197             LOAD_CONST               0 (None)
+                 LOAD_FAST                3 (settings)
+                 STORE_ATTR              30 (urgent_notify_phone_last4)
+
+ 199    L28:     LOAD_CONST              17 (('quiet_hours_start', 'quiet_hours_end', 'business_hours_start', 'business_hours_end'))
+                 STORE_FAST              11 (time_fields)
+
+ 204             BUILD_LIST               0
+                 STORE_FAST              12 (changed_keys)
+
+ 205             LOAD_FAST                4 (changes)
+                 LOAD_ATTR               63 (items + NULL|self)
+                 CALL                     0
+                 GET_ITER
+        L29:     FOR_ITER               219 (to L42)
+                 UNPACK_SEQUENCE          2
+                 STORE_FAST_STORE_FAST  222 (key, value)
+
+ 206             LOAD_FAST_LOAD_FAST    219 (key, time_fields)
+                 CONTAINS_OP              0
+                 POP_JUMP_IF_FALSE       31 (to L32)
+
+ 207             LOAD_GLOBAL             65 (setattr + NULL)
+                 LOAD_FAST_LOAD_FAST     61 (settings, key)
+                 LOAD_FAST               14 (value)
+                 TO_BOOL
+                 POP_JUMP_IF_FALSE       11 (to L30)
+                 LOAD_GLOBAL             67 (_parse_time + NULL)
+                 LOAD_FAST               14 (value)
+                 CALL                     1
+                 JUMP_FORWARD             1 (to L31)
+        L30:     LOAD_CONST               0 (None)
+        L31:     CALL                     3
+                 POP_TOP
+                 JUMP_FORWARD           161 (to L41)
+
+ 208    L32:     LOAD_FAST               13 (key)
+                 LOAD_CONST              18 ('quiet_hours_intervals')
+                 COMPARE_OP              88 (bool(==))
+                 POP_JUMP_IF_FALSE      143 (to L40)
+
+ 209             LOAD_FAST               14 (value)
+                 GET_ITER
+                 LOAD_FAST_AND_CLEAR     15 (iv)
+                 SWAP                     2
+        L33:     BUILD_LIST               0
+                 SWAP                     2
+                 GET_ITER
+        L34:     FOR_ITER                42 (to L37)
+                 STORE_FAST              15 (iv)
+                 LOAD_GLOBAL             69 (isinstance + NULL)
+                 LOAD_FAST               15 (iv)
+                 LOAD_GLOBAL             70 (dict)
+                 CALL                     2
+                 TO_BOOL
+                 POP_JUMP_IF_FALSE        2 (to L35)
+                 LOAD_FAST               15 (iv)
+                 JUMP_FORWARD            15 (to L36)
+        L35:     LOAD_FAST               15 (iv)
+                 LOAD_ATTR               21 (model_dump + NULL|self)
+                 CALL                     0
+        L36:     LIST_APPEND              2
+                 JUMP_BACKWARD           44 (to L34)
+        L37:     END_FOR
+                 POP_TOP
+        L38:     STORE_FAST              16 (intervals_dicts)
+                 STORE_FAST              15 (iv)
+
+ 210             LOAD_GLOBAL             65 (setattr + NULL)
+                 LOAD_FAST_LOAD_FAST     61 (settings, key)
+                 LOAD_FAST               16 (intervals_dicts)
+                 CALL                     3
+                 POP_TOP
+
+ 211             LOAD_FAST               16 (intervals_dicts)
+                 TO_BOOL
+                 POP_JUMP_IF_FALSE       68 (to L39)
+
+ 212             LOAD_FAST               16 (intervals_dicts)
+                 LOAD_CONST               8 (0)
+                 BINARY_SUBSCR
+                 STORE_FAST              17 (first)
+
+ 213             LOAD_GLOBAL             67 (_parse_time + NULL)
+                 LOAD_FAST               17 (first)
+                 LOAD_CONST              19 ('start')
+                 BINARY_SUBSCR
+                 CALL                     1
+                 LOAD_FAST                3 (settings)
+                 STORE_ATTR              36 (quiet_hours_start)
+
+ 214             LOAD_GLOBAL             67 (_parse_time + NULL)
+                 LOAD_FAST               17 (first)
+                 LOAD_CONST              20 ('end')
+                 BINARY_SUBSCR
+                 CALL                     1
+                 LOAD_FAST                3 (settings)
+                 STORE_ATTR              37 (quiet_hours_end)
+
+ 215             LOAD_FAST               17 (first)
+                 LOAD_ATTR                1 (get + NULL|self)
+                 LOAD_CONST              21 ('days')
+                 BUILD_LIST               0
+                 LOAD_CONST              22 ((0, 1, 2, 3, 4, 5, 6))
+                 LIST_EXTEND              1
+                 CALL                     2
+                 LOAD_FAST                3 (settings)
+                 STORE_ATTR              38 (quiet_hours_days)
+
+  --    L39:     JUMP_FORWARD            12 (to L41)
+
+ 217    L40:     LOAD_GLOBAL             65 (setattr + NULL)
+                 LOAD_FAST_LOAD_FAST     61 (settings, key)
+                 LOAD_FAST               14 (value)
+                 CALL                     3
+                 POP_TOP
+
+ 218    L41:     LOAD_FAST               12 (changed_keys)
+                 LOAD_ATTR               79 (append + NULL|self)
+                 LOAD_FAST               13 (key)
+                 CALL                     1
+                 POP_TOP
+                 JUMP_BACKWARD          221 (to L29)
+
+ 205    L42:     END_FOR
+                 POP_TOP
+
+ 220             LOAD_FAST                3 (settings)
+                 COPY                     1
+                 LOAD_ATTR               12 (revision)
+                 LOAD_CONST              23 (1)
+                 BINARY_OP               13 (+=)
+                 SWAP                     2
+                 STORE_ATTR               6 (revision)
+
+ 221             LOAD_GLOBAL             80 (datetime)
+                 LOAD_ATTR               82 (now)
+                 PUSH_NULL
+                 LOAD_GLOBAL             84 (UTC)
+                 CALL                     1
+                 LOAD_FAST                3 (settings)
+                 STORE_ATTR              43 (updated_at)
+
+ 222             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR               88 (device_id)
+                 LOAD_FAST                3 (settings)
+                 STORE_ATTR              45 (updated_by_device_id)
+
+ 224             LOAD_FAST_LOAD_FAST    195 (changed_keys, settings)
+                 LOAD_ATTR               12 (revision)
+                 LOAD_CONST              24 (('changed_keys', 'revision'))
+                 BUILD_CONST_KEY_MAP      2
+                 STORE_FAST              18 (audit_details)
+
+ 225             LOAD_FAST               12 (changed_keys)
+                 GET_ITER
+        L43:     FOR_ITER                23 (to L46)
+                 STORE_FAST              19 (k)
+
+ 226             LOAD_FAST               19 (k)
+                 LOAD_GLOBAL             92 (_SENSITIVE_KEYS)
+                 CONTAINS_OP              1
+        L44:     POP_JUMP_IF_TRUE         2 (to L45)
+                 JUMP_BACKWARD           15 (to L43)
+
+ 227    L45:     LOAD_FAST                4 (changes)
+                 LOAD_FAST               19 (k)
+                 BINARY_SUBSCR
+                 LOAD_FAST               18 (audit_details)
+                 LOAD_FAST               19 (k)
+                 STORE_SUBSCR
+                 JUMP_BACKWARD           25 (to L43)
+
+ 225    L46:     END_FOR
+                 POP_TOP
+
+ 229             LOAD_GLOBAL             94 (audit_service)
+                 LOAD_ATTR               96 (log_event)
+                 PUSH_NULL
+
+ 230             LOAD_FAST                2 (db)
+
+ 231             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR                4 (user_id)
+
+ 232             LOAD_CONST              25 ('settings.updated')
+
+ 233             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR               88 (device_id)
+
+ 234             LOAD_FAST               18 (audit_details)
+
+ 229             LOAD_CONST              26 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                 CALL_KW                  5
+                 GET_AWAITABLE            0
+                 LOAD_CONST               0 (None)
+        L47:     SEND                     3 (to L50)
+        L48:     YIELD_VALUE              1
+        L49:     RESUME                   3
+                 JUMP_BACKWARD_NO_INTERRUPT 5 (to L47)
+        L50:     END_SEND
+                 POP_TOP
+
+ 237             LOAD_CONST              27 ('notification_privacy_mode')
+                 LOAD_FAST               12 (changed_keys)
+                 CONTAINS_OP              0
+                 POP_JUMP_IF_FALSE       57 (to L55)
+
+ 238             LOAD_GLOBAL             94 (audit_service)
+                 LOAD_ATTR               96 (log_event)
+                 PUSH_NULL
+
+ 239             LOAD_FAST                2 (db)
+
+ 240             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR                4 (user_id)
+
+ 241             LOAD_CONST              28 ('settings.privacy_mode_changed')
+
+ 242             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR               88 (device_id)
+
+ 243             LOAD_CONST              29 ('new_mode')
+                 LOAD_FAST                4 (changes)
+                 LOAD_CONST              27 ('notification_privacy_mode')
+                 BINARY_SUBSCR
+                 BUILD_MAP                1
+
+ 238             LOAD_CONST              26 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                 CALL_KW                  5
+                 GET_AWAITABLE            0
+                 LOAD_CONST               0 (None)
+        L51:     SEND                     3 (to L54)
+        L52:     YIELD_VALUE              1
+        L53:     RESUME                   3
+                 JUMP_BACKWARD_NO_INTERRUPT 5 (to L51)
+        L54:     END_SEND
+                 POP_TOP
+
+ 247    L55:     LOAD_CONST              30 ('quiet_hours_enabled')
+                 LOAD_FAST               12 (changed_keys)
+                 CONTAINS_OP              0
+                 POP_JUMP_IF_TRUE        30 (to L56)
+
+ 248             LOAD_CONST              31 ('quiet_hours_start')
+                 LOAD_FAST               12 (changed_keys)
+                 CONTAINS_OP              0
+                 POP_JUMP_IF_TRUE        24 (to L56)
+
+ 249             LOAD_CONST              32 ('quiet_hours_end')
+                 LOAD_FAST               12 (changed_keys)
+                 CONTAINS_OP              0
+                 POP_JUMP_IF_TRUE        18 (to L56)
+
+ 250             LOAD_CONST              33 ('quiet_hours_days')
+                 LOAD_FAST               12 (changed_keys)
+                 CONTAINS_OP              0
+                 POP_JUMP_IF_TRUE        12 (to L56)
+
+ 251             LOAD_CONST              18 ('quiet_hours_intervals')
+                 LOAD_FAST               12 (changed_keys)
+                 CONTAINS_OP              0
+                 POP_JUMP_IF_TRUE         6 (to L56)
+
+ 252             LOAD_CONST              34 ('quiet_hours_allow_vip')
+                 LOAD_FAST               12 (changed_keys)
+                 CONTAINS_OP              0
+                 POP_JUMP_IF_FALSE       51 (to L61)
+
+ 254    L56:     LOAD_GLOBAL             94 (audit_service)
+                 LOAD_ATTR               96 (log_event)
+                 PUSH_NULL
+
+ 255             LOAD_FAST                2 (db)
+
+ 256             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR                4 (user_id)
+
+ 257             LOAD_CONST              35 ('settings.quiet_hours_updated')
+
+ 258             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR               88 (device_id)
+
+ 254             LOAD_CONST              36 (('owner_user_id', 'event_type', 'actor_id'))
+                 CALL_KW                  4
+                 GET_AWAITABLE            0
+                 LOAD_CONST               0 (None)
+        L57:     SEND                     3 (to L60)
+        L58:     YIELD_VALUE              1
+        L59:     RESUME                   3
+                 JUMP_BACKWARD_NO_INTERRUPT 5 (to L57)
+        L60:     END_SEND
+                 POP_TOP
+
+ 261    L61:     LOAD_CONST              37 ('memory_enabled')
+                 LOAD_FAST               12 (changed_keys)
+                 CONTAINS_OP              0
+                 POP_JUMP_IF_FALSE       57 (to L66)
+
+ 262             LOAD_GLOBAL             94 (audit_service)
+                 LOAD_ATTR               96 (log_event)
+                 PUSH_NULL
+
+ 263             LOAD_FAST                2 (db)
+
+ 264             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR                4 (user_id)
+
+ 265             LOAD_CONST              38 ('settings.memory_toggled')
+
+ 266             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR               88 (device_id)
+
+ 267             LOAD_CONST              39 ('enabled')
+                 LOAD_FAST                4 (changes)
+                 LOAD_CONST              37 ('memory_enabled')
+                 BINARY_SUBSCR
+                 BUILD_MAP                1
+
+ 262             LOAD_CONST              26 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                 CALL_KW                  5
+                 GET_AWAITABLE            0
+                 LOAD_CONST               0 (None)
+        L62:     SEND                     3 (to L65)
+        L63:     YIELD_VALUE              1
+        L64:     RESUME                   3
+                 JUMP_BACKWARD_NO_INTERRUPT 5 (to L62)
+        L65:     END_SEND
+                 POP_TOP
+
+ 270    L66:     LOAD_CONST              40 ('biometric_unlock_enabled')
+                 LOAD_FAST               12 (changed_keys)
+                 CONTAINS_OP              0
+                 POP_JUMP_IF_FALSE       51 (to L71)
+
+ 271             LOAD_GLOBAL             94 (audit_service)
+                 LOAD_ATTR               96 (log_event)
+                 PUSH_NULL
+
+ 272             LOAD_FAST                2 (db)
+
+ 273             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR                4 (user_id)
+
+ 274             LOAD_CONST              41 ('settings.biometric_toggled')
+
+ 275             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR               88 (device_id)
+
+ 271             LOAD_CONST              36 (('owner_user_id', 'event_type', 'actor_id'))
+                 CALL_KW                  4
+                 GET_AWAITABLE            0
+                 LOAD_CONST               0 (None)
+        L67:     SEND                     3 (to L70)
+        L68:     YIELD_VALUE              1
+        L69:     RESUME                   3
+                 JUMP_BACKWARD_NO_INTERRUPT 5 (to L67)
+        L70:     END_SEND
+                 POP_TOP
+
+ 278    L71:     LOAD_CONST              42 ('theme_preference')
+                 LOAD_FAST               12 (changed_keys)
+                 CONTAINS_OP              0
+                 POP_JUMP_IF_FALSE       57 (to L76)
+
+ 279             LOAD_GLOBAL             94 (audit_service)
+                 LOAD_ATTR               96 (log_event)
+                 PUSH_NULL
+
+ 280             LOAD_FAST                2 (db)
+
+ 281             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR                4 (user_id)
+
+ 282             LOAD_CONST              43 ('THEME_PREFERENCE_UPDATED')
+
+ 283             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR               88 (device_id)
+
+ 284             LOAD_CONST              44 ('new_value')
+                 LOAD_FAST                4 (changes)
+                 LOAD_CONST              42 ('theme_preference')
+                 BINARY_SUBSCR
+                 BUILD_MAP                1
+
+ 279             LOAD_CONST              26 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                 CALL_KW                  5
+                 GET_AWAITABLE            0
+                 LOAD_CONST               0 (None)
+        L72:     SEND                     3 (to L75)
+        L73:     YIELD_VALUE              1
+        L74:     RESUME                   3
+                 JUMP_BACKWARD_NO_INTERRUPT 5 (to L72)
+        L75:     END_SEND
+                 POP_TOP
+
+ 287    L76:     BUILD_SET                0
+                 LOAD_CONST              45 (frozenset({'handoff_trigger', 'handoff_enabled', 'handoff_offer_timeout_seconds'}))
+                 SET_UPDATE               1
+                 STORE_FAST              20 (handoff_keys)
+
+ 288             LOAD_FAST               20 (handoff_keys)
+                 LOAD_GLOBAL             99 (set + NULL)
+                 LOAD_FAST               12 (changed_keys)
+                 CALL                     1
+                 BINARY_OP                1 (&)
+                 TO_BOOL
+                 POP_JUMP_IF_FALSE       81 (to L87)
+
+ 289             LOAD_GLOBAL             94 (audit_service)
+                 LOAD_ATTR               96 (log_event)
+                 PUSH_NULL
+
+ 290             LOAD_FAST                2 (db)
+
+ 291             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR                4 (user_id)
+
+ 292             LOAD_CONST              46 ('settings.handoff_updated')
+
+ 293             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR               88 (device_id)
+
+ 294             LOAD_FAST               12 (changed_keys)
+                 GET_ITER
+                 LOAD_FAST_AND_CLEAR     19 (k)
+                 SWAP                     2
+        L77:     BUILD_MAP                0
+                 SWAP                     2
+                 GET_ITER
+        L78:     FOR_ITER                17 (to L81)
+                 STORE_FAST              19 (k)
+                 LOAD_FAST               19 (k)
+                 LOAD_FAST               20 (handoff_keys)
+                 CONTAINS_OP              0
+        L79:     POP_JUMP_IF_TRUE         2 (to L80)
+                 JUMP_BACKWARD           11 (to L78)
+        L80:     LOAD_FAST               19 (k)
+                 LOAD_FAST                4 (changes)
+                 LOAD_FAST               19 (k)
+                 BINARY_SUBSCR
+                 MAP_ADD                  2
+                 JUMP_BACKWARD           19 (to L78)
+        L81:     END_FOR
+                 POP_TOP
+        L82:     SWAP                     2
+                 STORE_FAST              19 (k)
+
+ 289             LOAD_CONST              26 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                 CALL_KW                  5
+                 GET_AWAITABLE            0
+                 LOAD_CONST               0 (None)
+        L83:     SEND                     3 (to L86)
+        L84:     YIELD_VALUE              1
+        L85:     RESUME                   3
+                 JUMP_BACKWARD_NO_INTERRUPT 5 (to L83)
+        L86:     END_SEND
+                 POP_TOP
+
+ 297    L87:     LOAD_CONST              47 ('text_approval_mode')
+                 LOAD_FAST               12 (changed_keys)
+                 CONTAINS_OP              0
+                 POP_JUMP_IF_FALSE       57 (to L92)
+
+ 298             LOAD_GLOBAL             94 (audit_service)
+                 LOAD_ATTR               96 (log_event)
+                 PUSH_NULL
+
+ 299             LOAD_FAST                2 (db)
+
+ 300             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR                4 (user_id)
+
+ 301             LOAD_CONST              48 ('settings.text_approval_mode_changed')
+
+ 302             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR               88 (device_id)
+
+ 303             LOAD_CONST              29 ('new_mode')
+                 LOAD_FAST                4 (changes)
+                 LOAD_CONST              47 ('text_approval_mode')
+                 BINARY_SUBSCR
+                 BUILD_MAP                1
+
+ 298             LOAD_CONST              26 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                 CALL_KW                  5
+                 GET_AWAITABLE            0
+                 LOAD_CONST               0 (None)
+        L88:     SEND                     3 (to L91)
+        L89:     YIELD_VALUE              1
+        L90:     RESUME                   3
+                 JUMP_BACKWARD_NO_INTERRUPT 5 (to L88)
+        L91:     END_SEND
+                 POP_TOP
+
+ 306    L92:     LOAD_CONST              49 ('transcript_disclosure_mode')
+                 LOAD_FAST               12 (changed_keys)
+                 CONTAINS_OP              0
+                 POP_JUMP_IF_FALSE       57 (to L97)
+
+ 307             LOAD_GLOBAL             94 (audit_service)
+                 LOAD_ATTR               96 (log_event)
+                 PUSH_NULL
+
+ 308             LOAD_FAST                2 (db)
+
+ 309             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR                4 (user_id)
+
+ 310             LOAD_CONST              50 ('settings.disclosure_mode_changed')
+
+ 311             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR               88 (device_id)
+
+ 312             LOAD_CONST              29 ('new_mode')
+                 LOAD_FAST                4 (changes)
+                 LOAD_CONST              49 ('transcript_disclosure_mode')
+                 BINARY_SUBSCR
+                 BUILD_MAP                1
+
+ 307             LOAD_CONST              26 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                 CALL_KW                  5
+                 GET_AWAITABLE            0
+                 LOAD_CONST               0 (None)
+        L93:     SEND                     3 (to L96)
+        L94:     YIELD_VALUE              1
+        L95:     RESUME                   3
+                 JUMP_BACKWARD_NO_INTERRUPT 5 (to L93)
+        L96:     END_SEND
+                 POP_TOP
+
+ 315    L97:     LOAD_CONST              51 ('biometric_policy')
+                 LOAD_FAST               12 (changed_keys)
+                 CONTAINS_OP              0
+                 POP_JUMP_IF_FALSE       57 (to L102)
+
+ 316             LOAD_GLOBAL             94 (audit_service)
+                 LOAD_ATTR               96 (log_event)
+                 PUSH_NULL
+
+ 317             LOAD_FAST                2 (db)
+
+ 318             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR                4 (user_id)
+
+ 319             LOAD_CONST              52 ('settings.biometric_policy_changed')
+
+ 320             LOAD_FAST                1 (current_user)
+                 LOAD_ATTR               88 (device_id)
+
+ 321             LOAD_CONST              53 ('new_policy')
+                 LOAD_FAST                4 (changes)
+                 LOAD_CONST              51 ('biometric_policy')
+                 BINARY_SUBSCR
+                 BUILD_MAP                1
+
+ 316             LOAD_CONST              26 (('owner_user_id', 'event_type', 'actor_id', 'details'))
+                 CALL_KW                  5
+                 GET_AWAITABLE            0
+                 LOAD_CONST               0 (None)
+        L98:     SEND                     3 (to L101)
+        L99:     YIELD_VALUE              1
+       L100:     RESUME                   3
+                 JUMP_BACKWARD_NO_INTERRUPT 5 (to L98)
+       L101:     END_SEND
+                 POP_TOP
+
+ 324   L102:     LOAD_FAST                2 (db)
+                 LOAD_ATTR                9 (flush + NULL|self)
+                 CALL                     0
+                 GET_AWAITABLE            0
+                 LOAD_CONST               0 (None)
+       L103:     SEND                     3 (to L106)
+       L104:     YIELD_VALUE              1
+       L105:     RESUME                   3
+                 JUMP_BACKWARD_NO_INTERRUPT 5 (to L103)
+       L106:     END_SEND
+                 POP_TOP
+
+ 327             BUILD_SET                0
+                 LOAD_CONST              54 (frozenset({'language_primary', 'transcript_disclosure_mode', 'handoff_trigger', 'max_call_length_seconds', 'calendar_default_duration_minutes', 'assistant_name', 'calendar_booking_window_days', 'handoff_enabled', 'greeting_template', 'temperament_preset', 'swearing_rule', 'recording_announcement_required', 'recording_enabled', 'calendar_booking_enabled'}))
+                 SET_UPDATE               1
+                 STORE_FAST              21 (_agent_sync_keys)
+
+ 335             LOAD_FAST               21 (_agent_sync_keys)
+                 LOAD_GLOBAL             99 (set + NULL)
+                 LOAD_FAST               12 (changed_keys)
+                 CALL                     1
+                 BINARY_OP                1 (&)
+                 TO_BOOL
+                 POP_JUMP_IF_FALSE       79 (to L117)
+
+ 336   L107:     NOP
+
+ 337   L108:     LOAD_CONST               8 (0)
+                 LOAD_CONST              55 (('agent_service',))
+                 IMPORT_NAME             50 (app.services)
+                 IMPORT_FROM             51 (agent_service)
+                 STORE_FAST              22 (agent_service)
+                 POP_TOP
+
+ 339             LOAD_FAST               22 (agent_service)
+                 LOAD_ATTR              105 (get_or_create_default_agent + NULL|self)
+
+ 340             LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                 LOAD_ATTR                4 (user_id)
+
+ 339             CALL                     2
+                 GET_AWAITABLE            0
+                 LOAD_CONST               0 (None)
+       L109:     SEND                     3 (to L112)
+       L110:     YIELD_VALUE              1
+       L111:     RESUME                   3
+                 JUMP_BACKWARD_NO_INTERRUPT 5 (to L109)
+       L112:     END_SEND
+                 STORE_FAST              23 (agent)
+
+ 342             LOAD_FAST               22 (agent_service)
+                 LOAD_ATTR              107 (ensure_elevenlabs_agent + NULL|self)
+
+ 343             LOAD_FAST                2 (db)
+                 LOAD_FAST               23 (agent)
+                 LOAD_FAST                1 (current_user)
+                 LOAD_ATTR                4 (user_id)
+
+ 342             CALL                     3
+                 GET_AWAITABLE            0
+                 LOAD_CONST               0 (None)
+       L113:     SEND                     3 (to L116)
+       L114:     YIELD_VALUE              1
+       L115:     RESUME                   3
+                 JUMP_BACKWARD_NO_INTERRUPT 5 (to L113)
+       L116:     END_SEND
+                 POP_TOP
+
+ 351   L117:     LOAD_GLOBAL             23 (SettingsPatchResponse + NULL)
+
+ 352             LOAD_FAST                3 (settings)
+                 LOAD_ATTR               12 (revision)
+                 LOAD_GLOBAL             25 (_settings_to_response + NULL)
+                 LOAD_FAST                3 (settings)
+                 CALL                     1
+
+ 351             LOAD_CONST               7 (('revision', 'settings'))
+                 CALL_KW                  2
+                 RETURN_VALUE
+
+ 126   L118:     CLEANUP_THROW
+       L119:     EXTENDED_ARG             7
+                 JUMP_BACKWARD_NO_INTERRUPT 1841 (to L5)
+
+ 130   L120:     CLEANUP_THROW
+       L121:     EXTENDED_ARG             6
+                 JUMP_BACKWARD_NO_INTERRUPT 1781 (to L9)
+
+ 131   L122:     CLEANUP_THROW
+       L123:     EXTENDED_ARG             6
+                 JUMP_BACKWARD_NO_INTERRUPT 1759 (to L13)
+
+  --   L124:     SWAP                     2
+                 POP_TOP
+
+ 209             SWAP                     2
+                 STORE_FAST              15 (iv)
+                 RERAISE                  0
+
+ 229   L125:     CLEANUP_THROW
+       L126:     EXTENDED_ARG             3
+                 JUMP_BACKWARD_NO_INTERRUPT 800 (to L50)
+
+ 238   L127:     CLEANUP_THROW
+       L128:     EXTENDED_ARG             2
+                 JUMP_BACKWARD_NO_INTERRUPT 740 (to L54)
+
+ 254   L129:     CLEANUP_THROW
+       L130:     EXTENDED_ARG             2
+                 JUMP_BACKWARD_NO_INTERRUPT 656 (to L60)
+
+ 262   L131:     CLEANUP_THROW
+       L132:     EXTENDED_ARG             2
+                 JUMP_BACKWARD_NO_INTERRUPT 596 (to L65)
+
+ 271   L133:     CLEANUP_THROW
+       L134:     EXTENDED_ARG             2
+                 JUMP_BACKWARD_NO_INTERRUPT 542 (to L70)
+
+ 279   L135:     CLEANUP_THROW
+       L136:     EXTENDED_ARG             1
+                 JUMP_BACKWARD_NO_INTERRUPT 482 (to L75)
+
+  --   L137:     SWAP                     2
+                 POP_TOP
+
+ 294             SWAP                     2
+                 STORE_FAST              19 (k)
+                 RERAISE                  0
+
+ 289   L138:     CLEANUP_THROW
+       L139:     EXTENDED_ARG             1
+                 JUMP_BACKWARD_NO_INTERRUPT 386 (to L86)
+
+ 298   L140:     CLEANUP_THROW
+       L141:     EXTENDED_ARG             1
+                 JUMP_BACKWARD_NO_INTERRUPT 326 (to L91)
+
+ 307   L142:     CLEANUP_THROW
+       L143:     EXTENDED_ARG             1
+                 JUMP_BACKWARD_NO_INTERRUPT 266 (to L96)
+
+ 316   L144:     CLEANUP_THROW
+       L145:     JUMP_BACKWARD_NO_INTERRUPT 205 (to L101)
+
+ 324   L146:     CLEANUP_THROW
+       L147:     JUMP_BACKWARD_NO_INTERRUPT 183 (to L106)
+
+ 339   L148:     CLEANUP_THROW
+       L149:     JUMP_BACKWARD_NO_INTERRUPT 120 (to L112)
+
+ 342   L150:     CLEANUP_THROW
+       L151:     JUMP_BACKWARD_NO_INTERRUPT 85 (to L116)
+
+  --   L152:     PUSH_EXC_INFO
+
+ 345             LOAD_GLOBAL            108 (Exception)
+                 CHECK_EXC_MATCH
+                 POP_JUMP_IF_FALSE       43 (to L154)
+                 POP_TOP
+
+ 346             LOAD_CONST               8 (0)
+                 LOAD_CONST               0 (None)
+                 IMPORT_NAME             55 (logging)
+                 STORE_FAST              24 (logging)
+
+ 347             LOAD_FAST               24 (logging)
+                 LOAD_ATTR              113 (getLogger + NULL|self)
+                 LOAD_GLOBAL            114 (__name__)
+                 CALL                     1
+                 LOAD_ATTR              117 (exception + NULL|self)
+
+ 348             LOAD_CONST              56 ('Failed to sync ElevenLabs agent after settings update')
+
+ 347             CALL                     1
+                 POP_TOP
+       L153:     POP_EXCEPT
+                 JUMP_BACKWARD_NO_INTERRUPT 135 (to L117)
+
+ 345   L154:     RERAISE                  0
+
+  --   L155:     COPY                     3
+                 POP_EXCEPT
+                 RERAISE                  1
+       L156:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                 RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L156 [0] lasti
+  L3 to L4 -> L118 [2]
+  L4 to L7 -> L156 [0] lasti
+  L7 to L8 -> L120 [2]
+  L8 to L11 -> L156 [0] lasti
+  L11 to L12 -> L122 [2]
+  L12 to L33 -> L156 [0] lasti
+  L33 to L38 -> L124 [3]
+  L38 to L44 -> L156 [0] lasti
+  L45 to L48 -> L156 [0] lasti
+  L48 to L49 -> L125 [2]
+  L49 to L52 -> L156 [0] lasti
+  L52 to L53 -> L127 [2]
+  L53 to L58 -> L156 [0] lasti
+  L58 to L59 -> L129 [2]
+  L59 to L63 -> L156 [0] lasti
+  L63 to L64 -> L131 [2]
+  L64 to L68 -> L156 [0] lasti
+  L68 to L69 -> L133 [2]
+  L69 to L73 -> L156 [0] lasti
+  L73 to L74 -> L135 [2]
+  L74 to L77 -> L156 [0] lasti
+  L77 to L79 -> L137 [8]
+  L80 to L82 -> L137 [8]
+  L82 to L84 -> L156 [0] lasti
+  L84 to L85 -> L138 [2]
+  L85 to L89 -> L156 [0] lasti
+  L89 to L90 -> L140 [2]
+  L90 to L94 -> L156 [0] lasti
+  L94 to L95 -> L142 [2]
+  L95 to L99 -> L156 [0] lasti
+  L99 to L100 -> L144 [2]
+  L100 to L104 -> L156 [0] lasti
+  L104 to L105 -> L146 [2]
+  L105 to L107 -> L156 [0] lasti
+  L108 to L110 -> L152 [0]
+  L110 to L111 -> L148 [2]
+  L111 to L114 -> L152 [0]
+  L114 to L115 -> L150 [2]
+  L115 to L117 -> L152 [0]
+  L117 to L119 -> L156 [0] lasti
+  L120 to L121 -> L156 [0] lasti
+  L122 to L123 -> L156 [0] lasti
+  L124 to L126 -> L156 [0] lasti
+  L127 to L128 -> L156 [0] lasti
+  L129 to L130 -> L156 [0] lasti
+  L131 to L132 -> L156 [0] lasti
+  L133 to L134 -> L156 [0] lasti
+  L135 to L136 -> L156 [0] lasti
+  L137 to L139 -> L156 [0] lasti
+  L140 to L141 -> L156 [0] lasti
+  L142 to L143 -> L156 [0] lasti
+  L144 to L145 -> L156 [0] lasti
+  L146 to L147 -> L156 [0] lasti
+  L148 to L149 -> L152 [0]
+  L150 to L151 -> L152 [0]
+  L152 to L153 -> L155 [1] lasti
+  L153 to L154 -> L156 [0] lasti
+  L154 to L155 -> L155 [1] lasti
+  L155 to L156 -> L156 [0] lasti

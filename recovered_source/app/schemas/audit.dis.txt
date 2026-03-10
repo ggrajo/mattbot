@@ -1,0 +1,240 @@
+# Bytecode dump of: audit.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\schemas\audit.py
+# co_names: ('__doc__', '__future__', 'annotations', 'datetime', 'pydantic', 'BaseModel', 'AuditEventResponse', 'AuditEventListResponse')
+# co_consts (strings): ['Pydantic schemas for audit events endpoint.', 'AuditEventResponse', 'AuditEventListResponse']
+
+# DOCSTRING: """Pydantic schemas for audit events endpoint."""
+# --- Nested code object: AuditEventResponse ---
+    # DOCSTRING: """AuditEventResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'target_type', 'target_id', 'details', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+     10           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('AuditEventResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (10)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     11           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('id')
+                  STORE_SUBSCR
+    
+     12           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('event_type')
+                  STORE_SUBSCR
+    
+     13           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('actor_type')
+                  STORE_SUBSCR
+    
+     14           LOAD_CONST               6 (None)
+                  STORE_NAME               5 (target_type)
+                  LOAD_CONST               7 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('target_type')
+                  STORE_SUBSCR
+    
+     15           LOAD_CONST               6 (None)
+                  STORE_NAME               6 (target_id)
+                  LOAD_CONST               7 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('target_id')
+                  STORE_SUBSCR
+    
+     16           LOAD_CONST              10 ('datetime')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              11 ('created_at')
+                  STORE_SUBSCR
+    
+     17           LOAD_CONST               6 (None)
+                  STORE_NAME               7 (details)
+                  LOAD_CONST              12 ('dict | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              13 ('details')
+                  STORE_SUBSCR
+    
+     19           LOAD_CONST              14 ('from_attributes')
+                  LOAD_CONST              15 (True)
+                  BUILD_MAP                1
+                  STORE_NAME               8 (model_config)
+                  LOAD_CONST              16 (())
+                  STORE_NAME               9 (__static_attributes__)
+                  RETURN_CONST             6 (None)
+    
+# --- Nested code object: AuditEventListResponse ---
+    # DOCSTRING: """AuditEventListResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'next_cursor', 'has_more', '__static_attributes__')
+    # co_varnames: ()
+     22           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('AuditEventListResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (22)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     23           LOAD_CONST               2 ('list[AuditEventResponse]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('items')
+                  STORE_SUBSCR
+    
+     24           LOAD_CONST               4 (None)
+                  STORE_NAME               5 (next_cursor)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('next_cursor')
+                  STORE_SUBSCR
+    
+     25           LOAD_CONST               7 (False)
+                  STORE_NAME               6 (has_more)
+                  LOAD_CONST               8 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('has_more')
+                  STORE_SUBSCR
+                  LOAD_CONST              10 (())
+                  STORE_NAME               7 (__static_attributes__)
+                  RETURN_CONST             4 (None)
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'datetime', 'pydantic', 'BaseModel', 'AuditEventResponse', 'AuditEventListResponse')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Pydantic schemas for audit events endpoint.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('datetime',))
+              IMPORT_NAME              3 (datetime)
+              IMPORT_FROM              3 (datetime)
+              STORE_NAME               3 (datetime)
+              POP_TOP
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('BaseModel',))
+              IMPORT_NAME              4 (pydantic)
+              IMPORT_FROM              5 (BaseModel)
+              STORE_NAME               5 (BaseModel)
+              POP_TOP
+
+ 10           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               5 (<code object AuditEventResponse at 0x0000024C114988F0, file "D:\fluence\Github\mattbot\backend\app\schemas\audit.py", line 10>)
+              MAKE_FUNCTION
+              LOAD_CONST               6 ('AuditEventResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME               6 (AuditEventResponse)
+
+ 22           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               7 (<code object AuditEventListResponse at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\audit.py", line 22>)
+              MAKE_FUNCTION
+              LOAD_CONST               8 ('AuditEventListResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME               7 (AuditEventListResponse)
+              RETURN_CONST             9 (None)
+
+Disassembly of <code object AuditEventResponse at 0x0000024C114988F0, file "D:\fluence\Github\mattbot\backend\app\schemas\audit.py", line 10>:
+ 10           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('AuditEventResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (10)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 11           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('id')
+              STORE_SUBSCR
+
+ 12           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('event_type')
+              STORE_SUBSCR
+
+ 13           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('actor_type')
+              STORE_SUBSCR
+
+ 14           LOAD_CONST               6 (None)
+              STORE_NAME               5 (target_type)
+              LOAD_CONST               7 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('target_type')
+              STORE_SUBSCR
+
+ 15           LOAD_CONST               6 (None)
+              STORE_NAME               6 (target_id)
+              LOAD_CONST               7 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('target_id')
+              STORE_SUBSCR
+
+ 16           LOAD_CONST              10 ('datetime')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('created_at')
+              STORE_SUBSCR
+
+ 17           LOAD_CONST               6 (None)
+              STORE_NAME               7 (details)
+              LOAD_CONST              12 ('dict | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              13 ('details')
+              STORE_SUBSCR
+
+ 19           LOAD_CONST              14 ('from_attributes')
+              LOAD_CONST              15 (True)
+              BUILD_MAP                1
+              STORE_NAME               8 (model_config)
+              LOAD_CONST              16 (())
+              STORE_NAME               9 (__static_attributes__)
+              RETURN_CONST             6 (None)
+
+Disassembly of <code object AuditEventListResponse at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\audit.py", line 22>:
+ 22           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('AuditEventListResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (22)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 23           LOAD_CONST               2 ('list[AuditEventResponse]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('items')
+              STORE_SUBSCR
+
+ 24           LOAD_CONST               4 (None)
+              STORE_NAME               5 (next_cursor)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('next_cursor')
+              STORE_SUBSCR
+
+ 25           LOAD_CONST               7 (False)
+              STORE_NAME               6 (has_more)
+              LOAD_CONST               8 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('has_more')
+              STORE_SUBSCR
+              LOAD_CONST              10 (())
+              STORE_NAME               7 (__static_attributes__)
+              RETURN_CONST             4 (None)

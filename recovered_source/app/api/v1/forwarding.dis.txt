@@ -1,0 +1,341 @@
+# Bytecode dump of: forwarding.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\api\v1\forwarding.py
+# co_names: ('__doc__', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.database', 'get_db', 'app.schemas.telephony', 'ForwardingSetupGuideResponse', 'ForwardingVerifyResponse', 'ForwardingVerifyStatusResponse', 'app.services', 'telephony_service', 'router', 'get', 'get_setup_guide', 'post', 'verify_forwarding', 'get_verify_status')
+# co_consts (strings): ['Forwarding setup guide and verification endpoints.', '/setup-guide', 'current_user', 'return', '/verify', 'db', '/verify/status']
+
+# DOCSTRING: """Forwarding setup guide and verification endpoints."""
+# --- Nested code object: get_setup_guide ---
+    # co_names: ('telephony_service', 'get_forwarding_guide')
+    # co_varnames: ('current_user',)
+      18           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+      22           LOAD_GLOBAL              0 (telephony_service)
+                   LOAD_ATTR                2 (get_forwarding_guide)
+                   PUSH_NULL
+                   CALL                     0
+                   RETURN_VALUE
+    
+      --   L2:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L2 -> L2 [0] lasti
+    
+# --- Nested code object: verify_forwarding ---
+    # co_names: ('telephony_service', 'initiate_forwarding_verification', 'user_id')
+    # co_varnames: ('current_user', 'db')
+      25           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+      30           LOAD_GLOBAL              0 (telephony_service)
+                   LOAD_ATTR                2 (initiate_forwarding_verification)
+                   PUSH_NULL
+    
+      31           LOAD_FAST_LOAD_FAST     16 (db, current_user)
+                   LOAD_ATTR                4 (user_id)
+    
+      30           CALL                     2
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   RETURN_VALUE
+           L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# --- Nested code object: get_verify_status ---
+    # co_names: ('telephony_service', 'check_forwarding_verification', 'user_id')
+    # co_varnames: ('current_user', 'db')
+      35           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+      40           LOAD_GLOBAL              0 (telephony_service)
+                   LOAD_ATTR                2 (check_forwarding_verification)
+                   PUSH_NULL
+    
+      41           LOAD_FAST_LOAD_FAST     16 (db, current_user)
+                   LOAD_ATTR                4 (user_id)
+    
+      40           CALL                     2
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   RETURN_VALUE
+           L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# co_names: ('__doc__', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.database', 'get_db', 'app.schemas.telephony', 'ForwardingSetupGuideResponse', 'ForwardingVerifyResponse', 'ForwardingVerifyStatusResponse', 'app.services', 'telephony_service', 'router', 'get', 'get_setup_guide', 'post', 'verify_forwarding', 'get_verify_status')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Forwarding setup guide and verification endpoints.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('APIRouter', 'Depends'))
+              IMPORT_NAME              1 (fastapi)
+              IMPORT_FROM              2 (APIRouter)
+              STORE_NAME               2 (APIRouter)
+              IMPORT_FROM              3 (Depends)
+              STORE_NAME               3 (Depends)
+              POP_TOP
+
+  4           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('AsyncSession',))
+              IMPORT_NAME              4 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM              5 (AsyncSession)
+              STORE_NAME               5 (AsyncSession)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('CurrentUser', 'get_current_user'))
+              IMPORT_NAME              6 (app.core.dependencies)
+              IMPORT_FROM              7 (CurrentUser)
+              STORE_NAME               7 (CurrentUser)
+              IMPORT_FROM              8 (get_current_user)
+              STORE_NAME               8 (get_current_user)
+              POP_TOP
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('get_db',))
+              IMPORT_NAME              9 (app.database)
+              IMPORT_FROM             10 (get_db)
+              STORE_NAME              10 (get_db)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('ForwardingSetupGuideResponse', 'ForwardingVerifyResponse', 'ForwardingVerifyStatusResponse'))
+              IMPORT_NAME             11 (app.schemas.telephony)
+              IMPORT_FROM             12 (ForwardingSetupGuideResponse)
+              STORE_NAME              12 (ForwardingSetupGuideResponse)
+              IMPORT_FROM             13 (ForwardingVerifyResponse)
+              STORE_NAME              13 (ForwardingVerifyResponse)
+              IMPORT_FROM             14 (ForwardingVerifyStatusResponse)
+              STORE_NAME              14 (ForwardingVerifyStatusResponse)
+              POP_TOP
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('telephony_service',))
+              IMPORT_NAME             15 (app.services)
+              IMPORT_FROM             16 (telephony_service)
+              STORE_NAME              16 (telephony_service)
+              POP_TOP
+
+ 15           LOAD_NAME                2 (APIRouter)
+              PUSH_NULL
+              CALL                     0
+              STORE_NAME              17 (router)
+
+ 18           LOAD_NAME               17 (router)
+              LOAD_ATTR               37 (get + NULL|self)
+              LOAD_CONST               8 ('/setup-guide')
+              LOAD_NAME               12 (ForwardingSetupGuideResponse)
+              LOAD_CONST               9 (('response_model',))
+              CALL_KW                  2
+
+ 20           LOAD_NAME                3 (Depends)
+              PUSH_NULL
+              LOAD_NAME                8 (get_current_user)
+              CALL                     1
+
+ 19           BUILD_TUPLE              1
+              LOAD_CONST              10 ('current_user')
+
+ 20           LOAD_NAME                7 (CurrentUser)
+
+ 19           LOAD_CONST              11 ('return')
+
+ 21           LOAD_NAME               12 (ForwardingSetupGuideResponse)
+
+ 19           BUILD_TUPLE              4
+              LOAD_CONST              12 (<code object get_setup_guide at 0x0000024C11423130, file "D:\fluence\Github\mattbot\backend\app\api\v1\forwarding.py", line 18>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 18           CALL                     0
+
+ 19           STORE_NAME              19 (get_setup_guide)
+
+ 25           LOAD_NAME               17 (router)
+              LOAD_ATTR               41 (post + NULL|self)
+              LOAD_CONST              13 ('/verify')
+              LOAD_NAME               13 (ForwardingVerifyResponse)
+              LOAD_CONST               9 (('response_model',))
+              CALL_KW                  2
+
+ 27           LOAD_NAME                3 (Depends)
+              PUSH_NULL
+              LOAD_NAME                8 (get_current_user)
+              CALL                     1
+
+ 28           LOAD_NAME                3 (Depends)
+              PUSH_NULL
+              LOAD_NAME               10 (get_db)
+              CALL                     1
+
+ 26           BUILD_TUPLE              2
+              LOAD_CONST              10 ('current_user')
+
+ 27           LOAD_NAME                7 (CurrentUser)
+
+ 26           LOAD_CONST              14 ('db')
+
+ 28           LOAD_NAME                5 (AsyncSession)
+
+ 26           LOAD_CONST              11 ('return')
+
+ 29           LOAD_NAME               13 (ForwardingVerifyResponse)
+
+ 26           BUILD_TUPLE              6
+              LOAD_CONST              15 (<code object verify_forwarding at 0x0000024C0EF12760, file "D:\fluence\Github\mattbot\backend\app\api\v1\forwarding.py", line 25>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 25           CALL                     0
+
+ 26           STORE_NAME              21 (verify_forwarding)
+
+ 35           LOAD_NAME               17 (router)
+              LOAD_ATTR               37 (get + NULL|self)
+              LOAD_CONST              16 ('/verify/status')
+              LOAD_NAME               14 (ForwardingVerifyStatusResponse)
+              LOAD_CONST               9 (('response_model',))
+              CALL_KW                  2
+
+ 37           LOAD_NAME                3 (Depends)
+              PUSH_NULL
+              LOAD_NAME                8 (get_current_user)
+              CALL                     1
+
+ 38           LOAD_NAME                3 (Depends)
+              PUSH_NULL
+              LOAD_NAME               10 (get_db)
+              CALL                     1
+
+ 36           BUILD_TUPLE              2
+              LOAD_CONST              10 ('current_user')
+
+ 37           LOAD_NAME                7 (CurrentUser)
+
+ 36           LOAD_CONST              14 ('db')
+
+ 38           LOAD_NAME                5 (AsyncSession)
+
+ 36           LOAD_CONST              11 ('return')
+
+ 39           LOAD_NAME               14 (ForwardingVerifyStatusResponse)
+
+ 36           BUILD_TUPLE              6
+              LOAD_CONST              17 (<code object get_verify_status at 0x0000024C0EF13CC0, file "D:\fluence\Github\mattbot\backend\app\api\v1\forwarding.py", line 35>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 35           CALL                     0
+
+ 36           STORE_NAME              22 (get_verify_status)
+              RETURN_CONST            18 (None)
+
+Disassembly of <code object get_setup_guide at 0x0000024C11423130, file "D:\fluence\Github\mattbot\backend\app\api\v1\forwarding.py", line 18>:
+  18           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+  22           LOAD_GLOBAL              0 (telephony_service)
+               LOAD_ATTR                2 (get_forwarding_guide)
+               PUSH_NULL
+               CALL                     0
+               RETURN_VALUE
+
+  --   L2:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L2 [0] lasti
+
+Disassembly of <code object verify_forwarding at 0x0000024C0EF12760, file "D:\fluence\Github\mattbot\backend\app\api\v1\forwarding.py", line 25>:
+  25           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+  30           LOAD_GLOBAL              0 (telephony_service)
+               LOAD_ATTR                2 (initiate_forwarding_verification)
+               PUSH_NULL
+
+  31           LOAD_FAST_LOAD_FAST     16 (db, current_user)
+               LOAD_ATTR                4 (user_id)
+
+  30           CALL                     2
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               RETURN_VALUE
+       L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti
+
+Disassembly of <code object get_verify_status at 0x0000024C0EF13CC0, file "D:\fluence\Github\mattbot\backend\app\api\v1\forwarding.py", line 35>:
+  35           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+  40           LOAD_GLOBAL              0 (telephony_service)
+               LOAD_ATTR                2 (check_forwarding_verification)
+               PUSH_NULL
+
+  41           LOAD_FAST_LOAD_FAST     16 (db, current_user)
+               LOAD_ATTR                4 (user_id)
+
+  40           CALL                     2
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               RETURN_VALUE
+       L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti

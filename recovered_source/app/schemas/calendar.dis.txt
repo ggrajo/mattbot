@@ -1,0 +1,533 @@
+# Bytecode dump of: calendar.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\schemas\calendar.py
+# co_names: ('__doc__', '__future__', 'annotations', 'pydantic', 'BaseModel', 'CalendarAuthUrlResponse', 'CalendarStatusResponse', 'CalendarEvent', 'CalendarEventsResponse', 'AvailableSlot', 'AvailableSlotsResponse')
+# co_consts (strings): ['Pydantic schemas for Google Calendar API endpoints.', 'CalendarAuthUrlResponse', 'CalendarStatusResponse', 'CalendarEvent', 'CalendarEventsResponse', 'AvailableSlot', 'AvailableSlotsResponse']
+
+# DOCSTRING: """Pydantic schemas for Google Calendar API endpoints."""
+# --- Nested code object: CalendarAuthUrlResponse ---
+    # DOCSTRING: """CalendarAuthUrlResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+      8           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CalendarAuthUrlResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (8)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+      9           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('auth_url')
+                  STORE_SUBSCR
+                  LOAD_CONST               4 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# --- Nested code object: CalendarStatusResponse ---
+    # DOCSTRING: """CalendarStatusResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'email', 'calendar_id', '__static_attributes__')
+    # co_varnames: ()
+     12           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CalendarStatusResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (12)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     13           LOAD_CONST               2 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('connected')
+                  STORE_SUBSCR
+    
+     14           LOAD_CONST               4 (None)
+                  STORE_NAME               5 (email)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('email')
+                  STORE_SUBSCR
+    
+     15           LOAD_CONST               4 (None)
+                  STORE_NAME               6 (calendar_id)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('calendar_id')
+                  STORE_SUBSCR
+                  LOAD_CONST               8 (())
+                  STORE_NAME               7 (__static_attributes__)
+                  RETURN_CONST             4 (None)
+    
+# --- Nested code object: CalendarEvent ---
+    # DOCSTRING: """CalendarEvent"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'description', 'location', 'status', 'call_id', 'is_mattbot_booked', 'caller_name', 'caller_phone', 'organizer_email', 'attendees_count', '__static_attributes__')
+    # co_varnames: ()
+     18           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CalendarEvent')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (18)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     19           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('id')
+                  STORE_SUBSCR
+    
+     20           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('summary')
+                  STORE_SUBSCR
+    
+     21           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('start')
+                  STORE_SUBSCR
+    
+     22           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('end')
+                  STORE_SUBSCR
+    
+     23           LOAD_CONST               7 ('')
+                  STORE_NAME               5 (description)
+                  LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('description')
+                  STORE_SUBSCR
+    
+     24           LOAD_CONST               7 ('')
+                  STORE_NAME               6 (location)
+                  LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('location')
+                  STORE_SUBSCR
+    
+     25           LOAD_CONST              10 ('confirmed')
+                  STORE_NAME               7 (status)
+                  LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              11 ('status')
+                  STORE_SUBSCR
+    
+     26           LOAD_CONST              12 (None)
+                  STORE_NAME               8 (call_id)
+                  LOAD_CONST              13 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              14 ('call_id')
+                  STORE_SUBSCR
+    
+     27           LOAD_CONST              15 (False)
+                  STORE_NAME               9 (is_mattbot_booked)
+                  LOAD_CONST              16 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              17 ('is_mattbot_booked')
+                  STORE_SUBSCR
+    
+     28           LOAD_CONST              12 (None)
+                  STORE_NAME              10 (caller_name)
+                  LOAD_CONST              13 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              18 ('caller_name')
+                  STORE_SUBSCR
+    
+     29           LOAD_CONST              12 (None)
+                  STORE_NAME              11 (caller_phone)
+                  LOAD_CONST              13 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              19 ('caller_phone')
+                  STORE_SUBSCR
+    
+     30           LOAD_CONST               7 ('')
+                  STORE_NAME              12 (organizer_email)
+                  LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              20 ('organizer_email')
+                  STORE_SUBSCR
+    
+     31           LOAD_CONST              21 (0)
+                  STORE_NAME              13 (attendees_count)
+                  LOAD_CONST              22 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              23 ('attendees_count')
+                  STORE_SUBSCR
+                  LOAD_CONST              24 (())
+                  STORE_NAME              14 (__static_attributes__)
+                  RETURN_CONST            12 (None)
+    
+# --- Nested code object: CalendarEventsResponse ---
+    # DOCSTRING: """CalendarEventsResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'timezone', '__static_attributes__')
+    # co_varnames: ()
+     34           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CalendarEventsResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (34)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     35           LOAD_CONST               2 ('list[CalendarEvent]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('events')
+                  STORE_SUBSCR
+    
+     36           LOAD_CONST               4 ('UTC')
+                  STORE_NAME               5 (timezone)
+                  LOAD_CONST               5 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('timezone')
+                  STORE_SUBSCR
+                  LOAD_CONST               7 (())
+                  STORE_NAME               6 (__static_attributes__)
+                  RETURN_CONST             8 (None)
+    
+# --- Nested code object: AvailableSlot ---
+    # DOCSTRING: """AvailableSlot"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     39           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('AvailableSlot')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (39)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     40           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('start')
+                  STORE_SUBSCR
+    
+     41           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('end')
+                  STORE_SUBSCR
+                  LOAD_CONST               5 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             6 (None)
+    
+# --- Nested code object: AvailableSlotsResponse ---
+    # DOCSTRING: """AvailableSlotsResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     44           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('AvailableSlotsResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (44)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     45           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('date')
+                  STORE_SUBSCR
+    
+     46           LOAD_CONST               4 ('list[AvailableSlot]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('slots')
+                  STORE_SUBSCR
+                  LOAD_CONST               6 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             7 (None)
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'pydantic', 'BaseModel', 'CalendarAuthUrlResponse', 'CalendarStatusResponse', 'CalendarEvent', 'CalendarEventsResponse', 'AvailableSlot', 'AvailableSlotsResponse')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Pydantic schemas for Google Calendar API endpoints.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('BaseModel',))
+              IMPORT_NAME              3 (pydantic)
+              IMPORT_FROM              4 (BaseModel)
+              STORE_NAME               4 (BaseModel)
+              POP_TOP
+
+  8           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               4 (<code object CalendarAuthUrlResponse at 0x0000024C0EF2B1E0, file "D:\fluence\Github\mattbot\backend\app\schemas\calendar.py", line 8>)
+              MAKE_FUNCTION
+              LOAD_CONST               5 ('CalendarAuthUrlResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME               5 (CalendarAuthUrlResponse)
+
+ 12           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               6 (<code object CalendarStatusResponse at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\calendar.py", line 12>)
+              MAKE_FUNCTION
+              LOAD_CONST               7 ('CalendarStatusResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME               6 (CalendarStatusResponse)
+
+ 18           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               8 (<code object CalendarEvent at 0x0000024C0EEBE420, file "D:\fluence\Github\mattbot\backend\app\schemas\calendar.py", line 18>)
+              MAKE_FUNCTION
+              LOAD_CONST               9 ('CalendarEvent')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME               7 (CalendarEvent)
+
+ 34           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              10 (<code object CalendarEventsResponse at 0x0000024C11423C30, file "D:\fluence\Github\mattbot\backend\app\schemas\calendar.py", line 34>)
+              MAKE_FUNCTION
+              LOAD_CONST              11 ('CalendarEventsResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME               8 (CalendarEventsResponse)
+
+ 39           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              12 (<code object AvailableSlot at 0x0000024C11423B30, file "D:\fluence\Github\mattbot\backend\app\schemas\calendar.py", line 39>)
+              MAKE_FUNCTION
+              LOAD_CONST              13 ('AvailableSlot')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME               9 (AvailableSlot)
+
+ 44           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              14 (<code object AvailableSlotsResponse at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\schemas\calendar.py", line 44>)
+              MAKE_FUNCTION
+              LOAD_CONST              15 ('AvailableSlotsResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME              10 (AvailableSlotsResponse)
+              RETURN_CONST            16 (None)
+
+Disassembly of <code object CalendarAuthUrlResponse at 0x0000024C0EF2B1E0, file "D:\fluence\Github\mattbot\backend\app\schemas\calendar.py", line 8>:
+  8           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CalendarAuthUrlResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (8)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+  9           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('auth_url')
+              STORE_SUBSCR
+              LOAD_CONST               4 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object CalendarStatusResponse at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\calendar.py", line 12>:
+ 12           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CalendarStatusResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (12)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 13           LOAD_CONST               2 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('connected')
+              STORE_SUBSCR
+
+ 14           LOAD_CONST               4 (None)
+              STORE_NAME               5 (email)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('email')
+              STORE_SUBSCR
+
+ 15           LOAD_CONST               4 (None)
+              STORE_NAME               6 (calendar_id)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('calendar_id')
+              STORE_SUBSCR
+              LOAD_CONST               8 (())
+              STORE_NAME               7 (__static_attributes__)
+              RETURN_CONST             4 (None)
+
+Disassembly of <code object CalendarEvent at 0x0000024C0EEBE420, file "D:\fluence\Github\mattbot\backend\app\schemas\calendar.py", line 18>:
+ 18           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CalendarEvent')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (18)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 19           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('id')
+              STORE_SUBSCR
+
+ 20           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('summary')
+              STORE_SUBSCR
+
+ 21           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('start')
+              STORE_SUBSCR
+
+ 22           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('end')
+              STORE_SUBSCR
+
+ 23           LOAD_CONST               7 ('')
+              STORE_NAME               5 (description)
+              LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('description')
+              STORE_SUBSCR
+
+ 24           LOAD_CONST               7 ('')
+              STORE_NAME               6 (location)
+              LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('location')
+              STORE_SUBSCR
+
+ 25           LOAD_CONST              10 ('confirmed')
+              STORE_NAME               7 (status)
+              LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('status')
+              STORE_SUBSCR
+
+ 26           LOAD_CONST              12 (None)
+              STORE_NAME               8 (call_id)
+              LOAD_CONST              13 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              14 ('call_id')
+              STORE_SUBSCR
+
+ 27           LOAD_CONST              15 (False)
+              STORE_NAME               9 (is_mattbot_booked)
+              LOAD_CONST              16 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              17 ('is_mattbot_booked')
+              STORE_SUBSCR
+
+ 28           LOAD_CONST              12 (None)
+              STORE_NAME              10 (caller_name)
+              LOAD_CONST              13 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              18 ('caller_name')
+              STORE_SUBSCR
+
+ 29           LOAD_CONST              12 (None)
+              STORE_NAME              11 (caller_phone)
+              LOAD_CONST              13 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              19 ('caller_phone')
+              STORE_SUBSCR
+
+ 30           LOAD_CONST               7 ('')
+              STORE_NAME              12 (organizer_email)
+              LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              20 ('organizer_email')
+              STORE_SUBSCR
+
+ 31           LOAD_CONST              21 (0)
+              STORE_NAME              13 (attendees_count)
+              LOAD_CONST              22 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              23 ('attendees_count')
+              STORE_SUBSCR
+              LOAD_CONST              24 (())
+              STORE_NAME              14 (__static_attributes__)
+              RETURN_CONST            12 (None)
+
+Disassembly of <code object CalendarEventsResponse at 0x0000024C11423C30, file "D:\fluence\Github\mattbot\backend\app\schemas\calendar.py", line 34>:
+ 34           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CalendarEventsResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (34)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 35           LOAD_CONST               2 ('list[CalendarEvent]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('events')
+              STORE_SUBSCR
+
+ 36           LOAD_CONST               4 ('UTC')
+              STORE_NAME               5 (timezone)
+              LOAD_CONST               5 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('timezone')
+              STORE_SUBSCR
+              LOAD_CONST               7 (())
+              STORE_NAME               6 (__static_attributes__)
+              RETURN_CONST             8 (None)
+
+Disassembly of <code object AvailableSlot at 0x0000024C11423B30, file "D:\fluence\Github\mattbot\backend\app\schemas\calendar.py", line 39>:
+ 39           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('AvailableSlot')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (39)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 40           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('start')
+              STORE_SUBSCR
+
+ 41           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('end')
+              STORE_SUBSCR
+              LOAD_CONST               5 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             6 (None)
+
+Disassembly of <code object AvailableSlotsResponse at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\schemas\calendar.py", line 44>:
+ 44           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('AvailableSlotsResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (44)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 45           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('date')
+              STORE_SUBSCR
+
+ 46           LOAD_CONST               4 ('list[AvailableSlot]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('slots')
+              STORE_SUBSCR
+              LOAD_CONST               6 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             7 (None)

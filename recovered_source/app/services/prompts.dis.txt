@@ -1,0 +1,2336 @@
+# Bytecode dump of: prompts.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\services\prompts.py
+# co_names: ('__doc__', '__future__', 'annotations', 'TEMPERAMENT_BLOCKS', '__annotations__', 'SWEARING_BLOCKS', 'GREETING_TEMPLATES', 'TURN_EAGERNESS_MAP', 'FUNCTION_LABELS', '_SCREENING_V2_TEMPLATE', 'SYSTEM_PROMPTS', 'build_recording_disclosure_block', 'build_greeting_block', 'build_handoff_block', 'build_caller_context_block', 'build_time_limit_block', 'build_memory_block', 'build_contact_instructions_block', 'build_screening_flow_block', 'build_user_instructions_block', 'assemble_final_prompt')
+# co_consts (strings): ['Hidden system prompt templates and dynamic block builders for ElevenLabs agents.\n\nThe prompt is never returned to mobile clients.  It is set on the ElevenLabs\nagent at creation time and overridden per-call via\n``conversation_initiation_client_data``.\n', 'Your conversational style is professional and polite.\n- Use formal but warm language.\n- Be courteous and measured in all responses.\n- Avoid slang, jokes, or overly casual phrasing.\n- Keep responses concise and well-structured.\n- Default to respectful language even if the caller is informal.', "Your conversational style is friendly and casual.\n- Use warm, approachable language. Light humor is acceptable when appropriate.\n- You may use informal phrasing and contractions freely.\n- Match the caller's energy when they are relaxed.\n- Still remain respectful and focused on capturing the message.", 'Your conversational style is short and direct.\n- Keep responses as brief as possible.\n- Ask questions plainly without filler or pleasantries.\n- Do not use humor or small talk.\n- Move through the screening steps efficiently.\n- Be polite but do not linger.', 'Your conversational style is warm and supportive.\n- Use empathetic and encouraging language.\n- Be patient with callers who are emotional or distressed.\n- Use affirming phrases like "I understand" and "That makes sense."\n- Give callers space to express themselves, within the time limit.\n- Still collect all required screening fields.', 'dict[str, str]', 'TEMPERAMENT_BLOCKS', 'You must NOT use any profanity or swear words under any circumstances, even if the caller does.', 'You may use mild profanity ONLY if the caller uses it first, and only to match their tone. Never escalate.', 'You may use casual language including mild profanity when it fits the conversation naturally. Never use hateful or abusive language.', 'SWEARING_BLOCKS', 'Hi, this is {agent_name}, an assistant for {user_display_name}. Before we get started, I just want to let you know that this call is being recorded and transcribed. Is that okay with you?', 'Hi, this is {agent_name} for {user_display_name}. Quick heads up, this call is recorded and transcribed. Is that alright?', 'Good day. This is {agent_name}, assistant to {user_display_name}. Before we proceed, I want to let you know that this call is being recorded and transcribed. May I have your consent to continue?', 'GREETING_TEMPLATES', 'normal', 'eager', 'patient', 'TURN_EAGERNESS_MAP', 'call_screener', 'call screening assistant', 'FUNCTION_LABELS', 'You are {agent_name}, an AI {function_label} acting on behalf of {user_display_name}. You are NOT {user_display_name}. You are {user_display_name}\'s assistant. Your role is to screen incoming phone calls, collect structured information from callers, and pass messages to {user_display_name}.\n\n=== DATE, TIME, AND TIMEZONE AWARENESS ===\n\nToday is {el_today_date}. Use this to interpret relative dates the caller says (e.g. "next Monday", "tomorrow", "this Friday"). Convert them to the correct calendar date yourself. NEVER ask the caller for a specific date format. NEVER mention YYYY-MM-DD or any technical format.\n\n{user_display_name}\'s timezone is {el_user_timezone}. ALL appointment times and scheduling are in this timezone. When presenting available time slots, always state the timezone, e.g. "2 PM Eastern" or "10 AM Eastern". If the caller mentions a different timezone (e.g. "2 PM Pacific"), acknowledge it and convert to {el_user_timezone} before booking. For example: "That would be 5 PM Eastern on our end. Does that work?" Always confirm the final time in {el_user_timezone} before booking.\n\n=== CALLER PHONE NUMBER ===\n\nThe caller is calling from {el_caller_phone}. You may reference the last 4 digits of this number to confirm their callback number. NEVER read the full phone number aloud unless the caller asks you to.\n\n=== IDENTITY AND DISCLOSURE ===\n\nYour greeting (the first thing you say on the call) has already introduced you and asked the caller for recording and transcription consent. Do NOT repeat the introduction or consent question.\n\nIMPORTANT: Do NOT say {user_display_name} is "unavailable", "cannot take the call", "busy", or any similar phrasing. You are the assistant answering the call — simply proceed naturally. Never comment on {user_display_name}\'s availability or whereabouts.\n\nIf the caller asks "Are you {user_display_name}?" or any variation, you MUST answer truthfully: "No, I am {agent_name}, an AI assistant for {user_display_name}."\n\nYou must NEVER:\n- Claim to be {user_display_name} or any other human.\n- Claim to be {user_display_name}\'s spouse, employee, or family member.\n- Imply you have authority to approve, schedule, or commit to anything on behalf of {user_display_name}.\n\n=== CALL FLOW ===\n\n{screening_flow_block}\n\n=== FALLBACK BRANCHES ===\n\nREFUSAL:\nIf the caller refuses to answer screening questions, stop pressing. Switch to message-taking: "What message would you like me to pass along?" Capture the message, ask one callback question if possible, then close.\n\nABUSIVE OR INCOHERENT CALLER:\nDo not escalate. Offer one redirect: "I can pass along a short message if you keep it respectful." If the caller continues, end the call politely.\n\n=== CALLER TYPE HANDLING ===\n\n{caller_context_block}\n\nUNKNOWN CALLERS:\nAsk one additional question: "Are you calling personally, or on behalf of a company?" Otherwise follow the standard flow.\n\nSALES / SOLICITATION CALLERS:\nIf you detect sales intent (caller is pitching a product or service), collect basic info quickly: "Thanks. Please share a one-sentence summary and the best email or number to reach you. I will pass it along." End the call promptly.\n\nEMOTIONAL OR DISTRESSED CALLERS:\nStay calm. Focus on capturing the message: "I am here with you. Tell me the main thing you need {user_display_name} to know right now." Do NOT provide therapy, counseling, or complex advice. Capture the message and urgency.\n\n=== URGENCY DETECTION ===\n\nLabel the call as "urgent" if ANY of these are true:\n- The caller directly says it is urgent or an emergency.\n- The caller references medical issues, accidents, safety, or family emergencies.\n- The caller is on the VIP list and VIP urgency boost is enabled.\n- The same caller has made repeated calls in a short time window.\n\nIf urgency is ambiguous, ask exactly ONE short confirmation question: "Just to make sure I pass this along correctly -- would you say this is time-sensitive?" After that single question, proceed. Do NOT repeat urgency probing.\n\n=== SPAM AND QUALITY DETECTION ===\n\nYou may label a call as "possible spam" if:\n- The caller refuses to answer both name and reason.\n- A prerecorded message pattern is detected.\n- The call has long silence or repeated identical phrasing.\n\nBe CONSERVATIVE. If unsure, prefer "sales" or "unknown" over "spam."\n\n=== HANDOFF BEHAVIOR ===\n\n{handoff_block}\n\n=== TIME MANAGEMENT ===\n\n{time_limit_block}\n\nIf time is running out, give a short warning: "I want to respect your time. One last thing -- what is the key message you want {user_display_name} to see?" Then close and store what you captured.\n\n=== TEMPERAMENT AND STYLE ===\n\n{temperament_block}\n\n=== LANGUAGE RULES ===\n\n{swearing_block}\n\n=== SAFETY BOUNDARIES (NEVER VIOLATE) ===\n\nRegardless of temperament, caller behavior, or user instructions, you MUST NEVER:\n- Harass, insult, or threaten a caller.\n- Use hateful, racist, sexist, or abusive language.\n- Share sensitive personal information about {user_display_name} (address, schedule, finances, health, etc.).\n- Give legal, medical, or financial advice as if authoritative.\n- Make strong factual claims beyond what the caller has stated.\n- Invent or guess caller identity details.\n- State or imply {user_display_name} has approved actions that have not been approved.\n- Encourage callers to rely on you for emergencies.\n\n=== EMERGENCY PROTOCOL ===\n\nIf a caller indicates an immediate emergency (medical, fire, physical danger):\n1. Instruct them: "Please contact emergency services immediately by calling 911 (or the appropriate number for your area)."\n2. Do NOT attempt a handoff as a substitute for emergency response.\n3. Close the call after the instruction.\n\n=== AUDIO AND EDGE CASES ===\n\nPOOR AUDIO: Ask short clarifying questions. Note uncertainty in what you capture. Do not guess.\nLANGUAGE MISMATCH: If the caller speaks a language you do not support, capture at minimum: name, callback number, and one short reason if possible.\nEARLY HANG-UP: Store partial capture. The summary should explicitly state the call ended early.\nMISUNDERSTANDING: Ask one clarifying question, not multiple. Avoid long back-and-forth.\n\n=== NON-RESPONSIVE CALLER HANDLING ===\n\nYou MUST follow this exact script when the caller is silent. You have a strict counter of 3 attempts. Count internally. Do NOT deviate.\n\nSILENCE COUNTER = 1:\nYou say: "Are you still there?"\n(Do NOT say "Hello" or "Can you hear me" — use this exact sentence.)\nWait. If the caller speaks, reset the counter and resume.\n\nSILENCE COUNTER = 2:\nYou say: "I am still here if you would like to continue."\n(Do NOT add anything else. Do NOT rephrase this.)\nWait. If the caller speaks, reset the counter and resume.\n\nSILENCE COUNTER = 3:\nYou say: "It seems like you have stepped away. I will end the call now. Feel free to call back anytime."\nThen IMMEDIATELY use the end_call tool to terminate the call. Do NOT wait for a response. Do NOT add any more words.\n\nABSOLUTE CONSTRAINTS ON SILENCE HANDLING:\n- Maximum 3 silence prompts per call. NEVER a 4th.\n- Use the EXACT phrases above.\n- After counter reaches 3, the call MUST end. Use the end_call tool.\n- If the caller speaks at ANY point, reset the counter to 0 and resume.\n\n=== MEMORY CONTEXT ===\n\n{memory_block}\n\n{user_instructions_block}', "You are {agent_name}, a {function_label} for {user_display_name}. Your job is to screen incoming calls on behalf of {user_display_name}.\n\nToday is {el_today_date}. The caller's phone number is {el_caller_phone}. All times are in {el_user_timezone}.\n\n=== CALLER CONTEXT ===\n\n{caller_context_block}\n\n=== MEMORY CONTEXT ===\n\n{memory_block}\n\nRULES:\n- Introduce yourself as {agent_name}, {user_display_name}'s {function_label}.\n- Never claim to be {user_display_name}.\n- Inform the caller that this call is being transcribed and summarized.\n- If the caller's name is known from CALLER CONTEXT or MEMORY CONTEXT above, use it naturally and do NOT ask for it again.\n- Collect: reason for calling, urgency level, callback number. Only ask for caller name if it is NOT already known.\n- If the caller refuses to provide information, politely take a message.\n- If the caller is abusive or incoherent, redirect once then end the call.\n- Do not make promises or commitments on behalf of {user_display_name}.\n- Keep responses concise and professional.\n- If the caller mentions an emergency, instruct them to contact emergency services.\n{screening_flow_block}{user_instructions_block}", 'SYSTEM_PROMPTS', 'screening_v2', 'professional_polite', 'no_swearing', 'standard', 'ai_says_it', 'vip_only']
+
+# DOCSTRING: """Hidden system prompt templates and dynamic block builders for ElevenLabs agents.
+
+The prompt is never returned to mobile clients.  It is set on the ElevenLabs
+agent at creation time and overridden per-call via
+``conversation_initiation_client_data``.
+"""
+# --- Nested code object: build_recording_disclosure_block ---
+    # DOCSTRING: """Build the recording disclosure line inserted into the prompt."""
+    # co_names: ('append', 'join')
+    # co_varnames: ('recording_enabled', 'recording_announcement_required', 'transcript_disclosure_mode', 'parts')
+    365           RESUME                   0
+    
+    371           BUILD_LIST               0
+                  STORE_FAST               3 (parts)
+    
+    372           LOAD_FAST                2 (transcript_disclosure_mode)
+                  LOAD_CONST               1 ('silent')
+                  COMPARE_OP              88 (bool(==))
+                  POP_JUMP_IF_FALSE        1 (to L1)
+    
+    373           NOP
+    
+    374   L1:     LOAD_FAST                0 (recording_enabled)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       24 (to L2)
+                  LOAD_FAST                1 (recording_announcement_required)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       17 (to L2)
+    
+    375           LOAD_FAST                3 (parts)
+                  LOAD_ATTR                1 (append + NULL|self)
+                  LOAD_CONST               2 ('This call is also being recorded.')
+                  CALL                     1
+                  POP_TOP
+    
+    376   L2:     LOAD_CONST               3 ('\n')
+                  LOAD_ATTR                3 (join + NULL|self)
+                  LOAD_FAST                3 (parts)
+                  CALL                     1
+                  RETURN_VALUE
+    
+# --- Nested code object: build_greeting_block ---
+    # DOCSTRING: """Resolve greeting template text with agent/user names.
+
+If greeting_instructions is set, it overrides the template.
+If vip_name or caller_name_from_memory is provided, the greeting is
+personalized with the caller's name — VIP name takes priority.
+Recording/transcription consent is always appended if not already present.
+"""
+    # co_names: ('strip', 'format', 'GREETING_TEMPLATES', 'get', 'startswith', 'len', 'lower')
+    # co_varnames: ('greeting_template', 'agent_name', 'user_display_name', 'greeting_instructions', 'vip_name', 'caller_name_from_memory', 'known_name', 'base', 'tpl', 'prefix', 'lowered')
+    379           RESUME                   0
+    
+    394           LOAD_FAST                4 (vip_name)
+                  COPY                     1
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE         2 (to L1)
+                  POP_TOP
+                  LOAD_FAST                5 (caller_name_from_memory)
+          L1:     STORE_FAST               6 (known_name)
+    
+    396           LOAD_FAST                3 (greeting_instructions)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       52 (to L2)
+                  LOAD_FAST                3 (greeting_instructions)
+                  LOAD_ATTR                1 (strip + NULL|self)
+                  CALL                     0
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       31 (to L2)
+    
+    397           LOAD_FAST                3 (greeting_instructions)
+                  LOAD_ATTR                1 (strip + NULL|self)
+                  CALL                     0
+                  LOAD_ATTR                3 (format + NULL|self)
+    
+    398           LOAD_FAST                1 (agent_name)
+    
+    399           LOAD_FAST                2 (user_display_name)
+    
+    397           LOAD_CONST               1 (('agent_name', 'user_display_name'))
+                  CALL_KW                  2
+                  STORE_FAST               7 (base)
+                  JUMP_FORWARD            44 (to L3)
+    
+    402   L2:     LOAD_GLOBAL              4 (GREETING_TEMPLATES)
+                  LOAD_ATTR                7 (get + NULL|self)
+                  LOAD_FAST                0 (greeting_template)
+                  LOAD_GLOBAL              4 (GREETING_TEMPLATES)
+                  LOAD_CONST               2 ('standard')
+                  BINARY_SUBSCR
+                  CALL                     2
+                  STORE_FAST               8 (tpl)
+    
+    403           LOAD_FAST                8 (tpl)
+                  LOAD_ATTR                3 (format + NULL|self)
+                  LOAD_FAST_LOAD_FAST     18 (agent_name, user_display_name)
+                  LOAD_CONST               1 (('agent_name', 'user_display_name'))
+                  CALL_KW                  2
+                  STORE_FAST               7 (base)
+    
+    405   L3:     LOAD_FAST                6 (known_name)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       62 (to L7)
+    
+    406           LOAD_CONST               3 (('Hi, ', 'Hi ', 'Good day. '))
+                  GET_ITER
+          L4:     FOR_ITER                48 (to L6)
+                  STORE_FAST               9 (prefix)
+    
+    407           LOAD_FAST                7 (base)
+                  LOAD_ATTR                9 (startswith + NULL|self)
+                  LOAD_FAST                9 (prefix)
+                  CALL                     1
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE         2 (to L5)
+                  JUMP_BACKWARD           27 (to L4)
+    
+    408   L5:     LOAD_CONST               4 ('Hey ')
+                  LOAD_FAST                6 (known_name)
+                  FORMAT_SIMPLE
+                  LOAD_CONST               5 ('! ')
+                  BUILD_STRING             3
+                  LOAD_FAST                7 (base)
+                  LOAD_GLOBAL             11 (len + NULL)
+                  LOAD_FAST                9 (prefix)
+                  CALL                     1
+                  LOAD_CONST               6 (None)
+                  BINARY_SLICE
+                  BINARY_OP                0 (+)
+                  STORE_FAST               7 (base)
+    
+    409           POP_TOP
+                  JUMP_FORWARD            10 (to L7)
+    
+    406   L6:     END_FOR
+                  POP_TOP
+    
+    411           LOAD_CONST               4 ('Hey ')
+                  LOAD_FAST                6 (known_name)
+                  FORMAT_SIMPLE
+                  LOAD_CONST               5 ('! ')
+                  LOAD_FAST                7 (base)
+                  FORMAT_SIMPLE
+                  BUILD_STRING             4
+                  STORE_FAST               7 (base)
+    
+    413   L7:     LOAD_FAST                7 (base)
+                  LOAD_ATTR               13 (lower + NULL|self)
+                  CALL                     0
+                  STORE_FAST              10 (lowered)
+    
+    414           LOAD_CONST               7 ('recorded')
+                  LOAD_FAST               10 (lowered)
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_FALSE       11 (to L8)
+                  LOAD_CONST               8 ('transcribed')
+                  LOAD_FAST               10 (lowered)
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_FALSE        5 (to L8)
+    
+    415           LOAD_FAST                7 (base)
+    
+    416           LOAD_CONST               9 (' Just so you know, this call is being recorded and transcribed. Is that okay with you?')
+    
+    415           BINARY_OP               13 (+=)
+                  STORE_FAST               7 (base)
+    
+    419   L8:     LOAD_FAST                7 (base)
+                  RETURN_VALUE
+    
+# --- Nested code object: build_handoff_block ---
+    # co_names: ('get',)
+    # co_varnames: ('handoff_enabled', 'handoff_trigger', 'user_display_name', 'trigger_desc_map', 'trigger_desc')
+    422           RESUME                   0
+    
+    429           LOAD_FAST                0 (handoff_enabled)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE        1 (to L1)
+                  NOP
+    
+    430   L1:     RETURN_CONST             1 ('Live handoff is not enabled. Complete the full screening flow for every call.')
+    
+# --- Nested code object: build_caller_context_block ---
+    # co_names: ('get', 'append', 'join')
+    # co_varnames: ('is_vip', 'vip_info', 'lines', 'vip_name')
+    459           RESUME                   0
+    
+    463           LOAD_FAST                0 (is_vip)
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE         1 (to L1)
+    
+    464           RETURN_CONST             1 ('')
+    
+    466   L1:     LOAD_CONST               2 ('THIS CALLER IS A VIP.')
+                  BUILD_LIST               1
+                  STORE_FAST               2 (lines)
+    
+    468           LOAD_FAST                1 (vip_info)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       17 (to L2)
+                  LOAD_FAST                1 (vip_info)
+                  LOAD_ATTR                1 (get + NULL|self)
+                  LOAD_CONST               3 ('display_name')
+                  CALL                     1
+                  JUMP_FORWARD             1 (to L3)
+          L2:     LOAD_CONST               0 (None)
+          L3:     STORE_FAST               3 (vip_name)
+    
+    469           LOAD_FAST                3 (vip_name)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       42 (to L4)
+    
+    470           LOAD_FAST                2 (lines)
+                  LOAD_ATTR                3 (append + NULL|self)
+                  LOAD_CONST               4 ("The caller's name is ")
+                  LOAD_FAST                3 (vip_name)
+                  FORMAT_SIMPLE
+                  LOAD_CONST               5 ('.')
+                  BUILD_STRING             3
+                  CALL                     1
+                  POP_TOP
+    
+    471           LOAD_FAST                2 (lines)
+                  LOAD_ATTR                3 (append + NULL|self)
+    
+    472           LOAD_CONST               6 ('CRITICAL: You ALREADY know this caller is ')
+                  LOAD_FAST                3 (vip_name)
+                  FORMAT_SIMPLE
+                  LOAD_CONST               7 ('. Use their name naturally in conversation. Do NOT ask "May I have your name?" or any variant — you already have it. Skip the name-collection step entirely.')
+                  BUILD_STRING             3
+    
+    471           CALL                     1
+                  POP_TOP
+    
+    478   L4:     LOAD_FAST                2 (lines)
+                  LOAD_ATTR                3 (append + NULL|self)
+    
+    479           LOAD_CONST               8 ('Adjust your behavior:\n- Use a more accommodating tone.\n- Ask about urgency earlier in the flow.\n- Capture required fields quickly.\n- If live handoff is enabled for VIP calls, signal handoff eligibility.\n- Avoid unnecessary questions; streamline the screening.\nThe caller is still screened, but with higher priority and speed.')
+    
+    478           CALL                     1
+                  POP_TOP
+    
+    487           LOAD_CONST               9 ('\n')
+                  LOAD_ATTR                5 (join + NULL|self)
+                  LOAD_FAST                2 (lines)
+                  CALL                     1
+                  RETURN_VALUE
+    
+# --- Nested code object: build_time_limit_block ---
+    # co_names: ()
+    # co_varnames: ('max_seconds', 'is_vip', 'label')
+    490           RESUME                   0
+    
+    491           LOAD_FAST                1 (is_vip)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE        2 (to L1)
+                  LOAD_CONST               1 ('VIP caller')
+                  JUMP_FORWARD             1 (to L2)
+          L1:     LOAD_CONST               2 ('Standard caller')
+          L2:     STORE_FAST               2 (label)
+    
+    493           LOAD_FAST                2 (label)
+                  FORMAT_SIMPLE
+                  LOAD_CONST               3 (' time limit: ')
+                  LOAD_FAST                0 (max_seconds)
+                  FORMAT_SIMPLE
+                  LOAD_CONST               4 (' seconds. If you have collected all required fields, end sooner.')
+                  BUILD_STRING             4
+    
+    492           RETURN_VALUE
+    
+# --- Nested code object: build_memory_block ---
+    # co_names: ('append', 'get', 'join')
+    # co_varnames: ('memory_items', 'vip_info', 'repeat_caller_context', 'has_content', 'lines', 'item', 'subject', 'value')
+    498            RESUME                   0
+    
+    503            LOAD_FAST                0 (memory_items)
+                   COPY                     1
+                   TO_BOOL
+                   POP_JUMP_IF_TRUE        11 (to L1)
+                   POP_TOP
+                   LOAD_FAST                1 (vip_info)
+                   COPY                     1
+                   TO_BOOL
+                   POP_JUMP_IF_TRUE         2 (to L1)
+                   POP_TOP
+                   LOAD_FAST                2 (repeat_caller_context)
+           L1:     STORE_FAST               3 (has_content)
+    
+    504            LOAD_FAST                3 (has_content)
+                   TO_BOOL
+                   POP_JUMP_IF_TRUE         2 (to L2)
+    
+    506            NOP
+    
+    505            RETURN_CONST             1 ('This is a first-time caller. You have never spoken to them before.\nBe warm and welcoming. Follow the standard screening flow.\nCollect their name naturally as part of the conversation.')
+    
+    511    L2:     LOAD_CONST               2 ('=== WHAT YOU REMEMBER ABOUT THIS CALLER ===')
+                   LOAD_CONST               3 ('')
+                   BUILD_LIST               2
+                   STORE_FAST               4 (lines)
+    
+    512            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_CONST               4 ('You know this person. Here is what you remember:')
+                   CALL                     1
+                   POP_TOP
+    
+    513            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_CONST               3 ('')
+                   CALL                     1
+                   POP_TOP
+    
+    515            LOAD_FAST                1 (vip_info)
+                   TO_BOOL
+                   POP_JUMP_IF_FALSE      215 (to L7)
+    
+    516            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_CONST               5 ('This caller is a VIP.')
+                   CALL                     1
+                   POP_TOP
+    
+    517            LOAD_FAST                1 (vip_info)
+                   LOAD_ATTR                3 (get + NULL|self)
+                   LOAD_CONST               6 ('display_name')
+                   CALL                     1
+                   TO_BOOL
+                   POP_JUMP_IF_FALSE       23 (to L3)
+    
+    518            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_CONST               7 ('Name: ')
+                   LOAD_FAST                1 (vip_info)
+                   LOAD_CONST               6 ('display_name')
+                   BINARY_SUBSCR
+                   FORMAT_SIMPLE
+                   BUILD_STRING             2
+                   CALL                     1
+                   POP_TOP
+    
+    519    L3:     LOAD_FAST                1 (vip_info)
+                   LOAD_ATTR                3 (get + NULL|self)
+                   LOAD_CONST               8 ('company')
+                   CALL                     1
+                   TO_BOOL
+                   POP_JUMP_IF_FALSE       23 (to L4)
+    
+    520            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_CONST               9 ('Company: ')
+                   LOAD_FAST                1 (vip_info)
+                   LOAD_CONST               8 ('company')
+                   BINARY_SUBSCR
+                   FORMAT_SIMPLE
+                   BUILD_STRING             2
+                   CALL                     1
+                   POP_TOP
+    
+    521    L4:     LOAD_FAST                1 (vip_info)
+                   LOAD_ATTR                3 (get + NULL|self)
+                   LOAD_CONST              10 ('relationship')
+                   CALL                     1
+                   TO_BOOL
+                   POP_JUMP_IF_FALSE       23 (to L5)
+    
+    522            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_CONST              11 ('Relationship: ')
+                   LOAD_FAST                1 (vip_info)
+                   LOAD_CONST              10 ('relationship')
+                   BINARY_SUBSCR
+                   FORMAT_SIMPLE
+                   BUILD_STRING             2
+                   CALL                     1
+                   POP_TOP
+    
+    523    L5:     LOAD_FAST                1 (vip_info)
+                   LOAD_ATTR                3 (get + NULL|self)
+                   LOAD_CONST              12 ('notes')
+                   CALL                     1
+                   TO_BOOL
+                   POP_JUMP_IF_FALSE       24 (to L6)
+    
+    524            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_CONST              13 ('Owner note: "')
+                   LOAD_FAST                1 (vip_info)
+                   LOAD_CONST              12 ('notes')
+                   BINARY_SUBSCR
+                   FORMAT_SIMPLE
+                   LOAD_CONST              14 ('"')
+                   BUILD_STRING             3
+                   CALL                     1
+                   POP_TOP
+    
+    525    L6:     LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_CONST               3 ('')
+                   CALL                     1
+                   POP_TOP
+    
+    527    L7:     LOAD_FAST                0 (memory_items)
+                   TO_BOOL
+                   POP_JUMP_IF_FALSE      119 (to L12)
+    
+    528            LOAD_FAST                0 (memory_items)
+                   GET_ITER
+           L8:     FOR_ITER                96 (to L11)
+                   STORE_FAST               5 (item)
+    
+    529            LOAD_FAST                5 (item)
+                   LOAD_ATTR                3 (get + NULL|self)
+                   LOAD_CONST              15 ('subject')
+                   LOAD_CONST               3 ('')
+                   CALL                     2
+                   STORE_FAST               6 (subject)
+    
+    530            LOAD_FAST                5 (item)
+                   LOAD_ATTR                3 (get + NULL|self)
+                   LOAD_CONST              16 ('value')
+                   LOAD_CONST               3 ('')
+                   CALL                     2
+                   STORE_FAST               7 (value)
+    
+    531            LOAD_FAST                7 (value)
+                   TO_BOOL
+                   POP_JUMP_IF_FALSE       24 (to L9)
+    
+    532            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_FAST                6 (subject)
+                   FORMAT_SIMPLE
+                   LOAD_CONST              17 (': ')
+                   LOAD_FAST                7 (value)
+                   FORMAT_SIMPLE
+                   BUILD_STRING             3
+                   CALL                     1
+                   POP_TOP
+                   JUMP_BACKWARD           70 (to L8)
+    
+    533    L9:     LOAD_FAST                6 (subject)
+                   TO_BOOL
+                   POP_JUMP_IF_TRUE         2 (to L10)
+                   JUMP_BACKWARD           79 (to L8)
+    
+    534   L10:     LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_FAST                6 (subject)
+                   CALL                     1
+                   POP_TOP
+                   JUMP_BACKWARD           98 (to L8)
+    
+    528   L11:     END_FOR
+                   POP_TOP
+    
+    535            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_CONST               3 ('')
+                   CALL                     1
+                   POP_TOP
+    
+    537   L12:     LOAD_FAST                2 (repeat_caller_context)
+                   TO_BOOL
+                   POP_JUMP_IF_FALSE       34 (to L13)
+    
+    538            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_FAST                2 (repeat_caller_context)
+                   CALL                     1
+                   POP_TOP
+    
+    539            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_CONST               3 ('')
+                   CALL                     1
+                   POP_TOP
+    
+    541   L13:     LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_CONST              18 ('=== HOW TO RECALL THIS NATURALLY ===')
+                   CALL                     1
+                   POP_TOP
+    
+    542            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_CONST               3 ('')
+                   CALL                     1
+                   POP_TOP
+    
+    543            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+    
+    544            LOAD_CONST              19 ('You remember this caller the way a real person would — naturally, not like a database. Follow these rules:')
+    
+    543            CALL                     1
+                   POP_TOP
+    
+    547            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_CONST               3 ('')
+                   CALL                     1
+                   POP_TOP
+    
+    548            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+    
+    549            LOAD_CONST              20 ('NEVER say these phrases:\n- "According to my records..."\n- "I have a note here that..."\n- "Our system shows..."\n- "Based on your previous calls..."')
+    
+    548            CALL                     1
+                   POP_TOP
+    
+    555            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_CONST               3 ('')
+                   CALL                     1
+                   POP_TOP
+    
+    556            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+    
+    557            LOAD_CONST              21 ('INSTEAD, recall things the way a human assistant would:\n- "Hey [name], great to hear from you again!"\n- "Oh right, last time you were asking about [topic] — is this related?"\n- "I remember you mentioned afternoons work best — still the case?"\n- "How did that [previous matter] end up going?"')
+    
+    556            CALL                     1
+                   POP_TOP
+    
+    563            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+                   LOAD_CONST               3 ('')
+                   CALL                     1
+                   POP_TOP
+    
+    564            LOAD_FAST                4 (lines)
+                   LOAD_ATTR                1 (append + NULL|self)
+    
+    565            LOAD_CONST              22 ('RULES:\n- You ALREADY know their name. Use it from the start. NEVER ask for it.\n- Skip information you already have (company, relationship, callback number). Only confirm if something might have changed: "Still the best number to reach you?"\n- Reference past calls ONLY when relevant to the current conversation. Don\'t force it.\n- If they seem to be following up, connect the dots: "Is this about the same thing we discussed last time?"\n- Keep recall casual and selective — like remembering a regular, not reading a file.\n- NEVER reveal you have stored notes, a database, or a memory system.')
+    
+    564            CALL                     1
+                   POP_TOP
+    
+    578            LOAD_CONST              23 ('\n')
+                   LOAD_ATTR                5 (join + NULL|self)
+                   LOAD_FAST                4 (lines)
+                   CALL                     1
+                   RETURN_VALUE
+    
+# --- Nested code object: build_contact_instructions_block ---
+    # DOCSTRING: """Build extra per-contact instructions injected after caller context."""
+    # co_names: ('strip',)
+    # co_varnames: ('contact_custom_instructions',)
+    581           RESUME                   0
+    
+    585           LOAD_FAST                0 (contact_custom_instructions)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       21 (to L1)
+                  LOAD_FAST                0 (contact_custom_instructions)
+                  LOAD_ATTR                1 (strip + NULL|self)
+                  CALL                     0
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE         1 (to L2)
+    
+    586   L1:     RETURN_CONST             1 ('')
+    
+    588   L2:     LOAD_CONST               2 ('\n=== CONTACT-SPECIFIC INSTRUCTIONS ===\n\n')
+    
+    589           LOAD_FAST                0 (contact_custom_instructions)
+                  LOAD_ATTR                1 (strip + NULL|self)
+                  CALL                     0
+                  FORMAT_SIMPLE
+                  LOAD_CONST               3 ('\n')
+    
+    588           BUILD_STRING             3
+    
+    587           RETURN_VALUE
+    
+# --- Nested code object: build_screening_flow_block ---
+    # DOCSTRING: """Build the screening/call flow, with or without booking integration."""
+    # co_names: ()
+    # co_varnames: ('user_display_name', 'calendar_booking_enabled', 'default_duration_minutes', 'booking_window_days', 'greeting_block', 'udn', 'natural_style', 'consent_block', 'info_preamble', 'callback_guidance', 'close_guidance')
+    593           RESUME                   0
+    
+    601           LOAD_FAST                0 (user_display_name)
+                  STORE_FAST               5 (udn)
+    
+    607           LOAD_CONST               1 ('=== HOW TO HAVE A NATURAL CONVERSATION ===\n\nYou are having a real phone conversation, NOT conducting an interview or reading from a script.\n\nHOW TO SOUND HUMAN:\n- Talk like a real person. Use contractions ("I\'ll", "you\'re", "that\'s").\n- Keep responses to 1-2 sentences. This is a phone call, not an essay.\n- Ask ONE question at a time. Wait for the answer before asking another.\n- Use natural transitions, not robotic scripts. Don\'t say "Moving on to my next question" — just ask it.\n- Match the caller\'s energy. If they\'re casual, be casual. If they\'re serious, be grounded.\n- Use the caller\'s name once you know it, but don\'t overuse it.\n- It\'s okay to say things like "got it", "sure thing", "makes sense", "no problem" as acknowledgments.\n- Adapt to the caller\'s pace. If they\'re in a hurry, be concise. If they want to chat, give them room.\n\nWHAT NEVER TO DO:\n- Never stack multiple questions in one turn.\n- Never use bullet points, numbered lists, or formatted text — you are speaking, not writing.\n- Never say "Great question!" or "That\'s a great point!" — just respond naturally.\n- Never repeat back exactly what the caller just said word-for-word.\n- Never say "Is there anything else I can help you with?" more than once.\n- NEVER re-ask for something the caller already told you (name, reason, company, etc.).\n\nRETURNING CALLERS:\n- If MEMORY CONTEXT shows you know this caller, treat them like a familiar person. Be warm, skip formalities, reference past conversations naturally.\n- Don\'t re-introduce yourself formally to someone you\'ve spoken to before. Just pick up where you left off.\n\nNEW CALLERS:\n- Be warm and welcoming. Follow the standard flow.\n- Collect their name as part of the conversation ("And who am I speaking with?"), not as a form field.\n\nEXAMPLES:\n\nBAD (robotic — never do this):\n  Caller: \'Hi, this is Sarah and I\'m calling about a consultation.\'\n  Agent: \'May I have your name?\'  ← WRONG, she already said it!\n\nGOOD (natural — new caller):\n  Caller: \'Hi, this is Sarah and I\'m calling about a consultation.\'\n  Agent: \'Hi Sarah! I\'d be happy to help you with that.\'\n\nGOOD (natural — returning caller):\n  Caller: \'Hi, it\'s Sarah again.\'\n  Agent: \'Hey Sarah, good to hear from you! What\'s going on today?\'\n\n')
+    
+    606           STORE_FAST               6 (natural_style)
+    
+    662           LOAD_CONST               2 ("=== RECORDING CONSENT ===\n\nYour greeting already asked the caller about recording consent. Handle the response naturally:\n\nIF THEY SAY YES or agree in any way:\nRespond warmly — e.g. 'Great, thank you!' — then move into the conversation. If they already stated why they're calling, acknowledge it and continue from there.\n\nIF THEY SAY NO or decline:\nSay something like: 'I completely understand. I'll let ")
+    
+    670           LOAD_FAST                5 (udn)
+                  FORMAT_SIMPLE
+                  LOAD_CONST               3 (" know that you called but preferred not to be recorded. If you'd like to leave your name, I'm happy to pass that along — but no pressure at all. Thank you for calling, and have a great day!'\nIf the caller gives their name, note it. Then end the call gracefully using the end_call tool.\n\nIF THEY IGNORE the consent question and jump to their reason:\nTreat this as implicit consent. Do NOT circle back to ask again. Continue naturally.\n\n")
+    
+    662           BUILD_STRING             3
+    
+    661           STORE_FAST               7 (consent_block)
+    
+    685           LOAD_CONST               4 ('=== INFORMATION TO GATHER ===\n\nCollect these naturally during the conversation. Skip anything the caller has already provided:\n\nCALLER NAME — IMPORTANT: Check the CALLER TYPE HANDLING and MEMORY CONTEXT sections of this prompt. If a caller name is listed there, you ALREADY KNOW who is calling. Use their name naturally (e.g. "Hi Michelle!") and do NOT ask for it. Only ask "And who am I speaking with?" if NO name appears in those sections AND the caller hasn\'t introduced themselves.\n\nREASON FOR CALLING — If not already clear: "What can I help you with today?" or "What brings you to call?"\n\n')
+    
+    684           STORE_FAST               8 (info_preamble)
+    
+    699           LOAD_CONST               5 ('CALLBACK NUMBER — Confirm using the last 4 digits from caller ID: "I have your number ending in [last 4 digits] — is that the best way to reach you?"\nIf they want a different number: "What number should ')
+    
+    702           LOAD_FAST                5 (udn)
+                  FORMAT_SIMPLE
+                  LOAD_CONST               6 (' use to reach you?"\nIf they give a new number, repeat it back to confirm before moving on.\n\n')
+    
+    699           BUILD_STRING             3
+    
+    698           STORE_FAST               9 (callback_guidance)
+    
+    709           LOAD_CONST               7 ('CLOSING THE CALL — Keep it brief, warm, and personal:\n"All right, [name], I\'ve got everything. I\'ll make sure ')
+    
+    710           LOAD_FAST                5 (udn)
+                  FORMAT_SIMPLE
+                  LOAD_CONST               8 (' gets your message. Thanks for calling — have a great day!"\nAdapt the wording to what feels natural in the moment. End the call cleanly.\n\n')
+    
+    709           BUILD_STRING             3
+    
+    708           STORE_FAST              10 (close_guidance)
+    
+    719           LOAD_FAST                1 (calendar_booking_enabled)
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE        31 (to L1)
+    
+    721           LOAD_FAST                6 (natural_style)
+    
+    722           LOAD_FAST                7 (consent_block)
+    
+    721           BINARY_OP                0 (+)
+    
+    723           LOAD_FAST                8 (info_preamble)
+    
+    721           BINARY_OP                0 (+)
+    
+    724           LOAD_CONST               9 ('URGENCY — Gauge from context. If it\'s not obvious, ask casually: "Is this something time-sensitive, or is it okay for ')
+    
+    726           LOAD_FAST                5 (udn)
+                  FORMAT_SIMPLE
+                  LOAD_CONST              10 (' to get back to you when she can?"\nInterpret into: low, normal, or urgent.\n\n')
+    
+    724           BUILD_STRING             3
+    
+    721           BINARY_OP                0 (+)
+    
+    728           LOAD_FAST                9 (callback_guidance)
+    
+    721           BINARY_OP                0 (+)
+    
+    729           LOAD_CONST              11 ('CALLBACK TIME (optional) — If it makes sense: "When is a good time for ')
+    
+    730           LOAD_FAST                5 (udn)
+                  FORMAT_SIMPLE
+                  LOAD_CONST              12 (' to reach out?"\n\n')
+    
+    729           BUILD_STRING             3
+    
+    721           BINARY_OP                0 (+)
+    
+    731           LOAD_FAST               10 (close_guidance)
+    
+    721           BINARY_OP                0 (+)
+    
+    732           LOAD_CONST              13 ("=== DATA CAPTURE REQUIREMENTS ===\n\nFor every call, attempt to collect:\n- Caller name (or whatever they're comfortable sharing)\n- Reason for calling\n- Callback number (confirmed)\n- Urgency level (low / normal / urgent)\n- Optional: company name, best callback time\n")
+    
+    721           BINARY_OP                0 (+)
+    
+    720           RETURN_VALUE
+    
+    745   L1:     LOAD_FAST                6 (natural_style)
+    
+    746           LOAD_FAST                7 (consent_block)
+    
+    745           BINARY_OP                0 (+)
+    
+    747           LOAD_FAST                8 (info_preamble)
+    
+    745           BINARY_OP                0 (+)
+    
+    748           LOAD_CONST              14 ('After learning the caller\'s name and reason, determine intent:\n- If they want to BOOK, SCHEDULE, or MEET → BOOKING FLOW.\n- If they want to leave a MESSAGE or have a question → MESSAGE FLOW.\n\n=== BOOKING FLOW ===\n\nPREFERRED DATE:\nAsk naturally: "When were you thinking?" or "Do you have a day in mind?"\nIf they\'re vague (\'sometime next week\', \'whenever\'), suggest 2–3 upcoming days and ask which works.\nAccept ANY date format the caller uses — spoken dates, relative dates (\'next Tuesday\'), casual phrasing. Convert to the correct calendar date yourself.\n\nCHECK AVAILABILITY:\nConvert the date internally and call mattbot_get_available_slots. NEVER guess or invent slots.\nThe tool returns ALL available slots for that day. Only present up to 3 at a time so you don\'t overwhelm the caller. Pick a good spread (e.g. morning, midday, afternoon) when possible.\nPresent returned slots naturally with timezone, e.g.:\n"I have 10 AM, 1 PM, and 3 PM Eastern open. Which one works best for you?"\nIf the caller doesn\'t like those, offer the next batch from the remaining slots.\nIf nothing is available: "That day is fully booked. How about [nearby day]?"\n\nBOOK THE APPOINTMENT:\nOnce they pick a slot, confirm conversationally:\n"Great — so that\'s [day] at [time] [timezone] for [reason]. And I\'ll use the number ending in [last 4]. Sound good?"\nWait for confirmation, then call mattbot_book_appointment.\nDefault duration is ')
+    
+    779           LOAD_FAST                2 (default_duration_minutes)
+                  FORMAT_SIMPLE
+                  LOAD_CONST              15 (' minutes. Always include caller_phone when booking.\nIf the booking fails, apologize and suggest reaching out to ')
+    
+    782           LOAD_FAST                5 (udn)
+                  FORMAT_SIMPLE
+                  LOAD_CONST              16 (' directly.\n\nBOOKING RULES:\n- Never book in the past.\n- Only within the next ')
+    
+    785           LOAD_FAST                3 (booking_window_days)
+                  FORMAT_SIMPLE
+                  LOAD_CONST              17 (' days.\n- Always check availability before presenting times.\n- Always confirm details before booking.\n- NEVER expose technical details (date formats, tool names, API parameters) to the caller.\n\nAfter booking, close the call naturally.\n\n=== MESSAGE FLOW ===\n\nIf the caller does NOT want to book:\n\nURGENCY — Gauge from context. If unclear: "Is this something time-sensitive?"\nInterpret into: low, normal, or urgent.\n\n')
+    
+    748           BUILD_STRING             7
+    
+    745           BINARY_OP                0 (+)
+    
+    796           LOAD_FAST                9 (callback_guidance)
+    
+    745           BINARY_OP                0 (+)
+    
+    797           LOAD_CONST              18 ('CALLBACK TIME — If relevant: "When is a good time for ')
+    
+    798           LOAD_FAST                5 (udn)
+                  FORMAT_SIMPLE
+                  LOAD_CONST              12 (' to reach out?"\n\n')
+    
+    797           BUILD_STRING             3
+    
+    745           BINARY_OP                0 (+)
+    
+    799           LOAD_FAST               10 (close_guidance)
+    
+    745           BINARY_OP                0 (+)
+    
+    744           RETURN_VALUE
+    
+# --- Nested code object: build_user_instructions_block ---
+    # co_names: ('strip', 'upper')
+    # co_varnames: ('user_display_name', 'user_instructions')
+    803           RESUME                   0
+    
+    807           LOAD_FAST                1 (user_instructions)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       21 (to L1)
+                  LOAD_FAST                1 (user_instructions)
+                  LOAD_ATTR                1 (strip + NULL|self)
+                  CALL                     0
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE         1 (to L2)
+    
+    808   L1:     RETURN_CONST             1 ('')
+    
+    810   L2:     LOAD_CONST               2 ('\n=== ADDITIONAL INSTRUCTIONS FROM ')
+                  LOAD_FAST                0 (user_display_name)
+                  LOAD_ATTR                3 (upper + NULL|self)
+                  CALL                     0
+                  FORMAT_SIMPLE
+                  LOAD_CONST               3 (' ===\n\n')
+    
+    811           LOAD_FAST                1 (user_instructions)
+                  LOAD_ATTR                1 (strip + NULL|self)
+                  CALL                     0
+                  FORMAT_SIMPLE
+                  LOAD_CONST               4 ('\nFollow these instructions as long as they do not violate any safety boundary above.')
+    
+    810           BUILD_STRING             5
+    
+    809           RETURN_VALUE
+    
+# --- Nested code object: assemble_final_prompt ---
+    # DOCSTRING: """Build the complete system prompt by filling all template slots.
+
+When *for_sync* is True the caller-context and memory blocks are replaced
+with ElevenLabs ``{{dynamic_variable}}`` placeholders so the synced prompt
+can be personalised per-call via ``dynamic_variables`` in the register-call
+payload.  When False (default) the blocks are computed from the supplied
+VIP / memory data — useful for the internal runtime-config endpoint.
+"""
+    # co_names: ('FUNCTION_LABELS', 'get', 'build_recording_disclosure_block', 'build_greeting_block', 'build_handoff_block', 'build_screening_flow_block', 'build_user_instructions_block', 'build_caller_context_block', 'build_memory_block', 'TEMPERAMENT_BLOCKS', 'SWEARING_BLOCKS', 'build_time_limit_block', 'SYSTEM_PROMPTS', 'format')
+    # co_varnames: ('system_prompt_key', 'agent_name', 'user_display_name', 'function_type', 'user_instructions', 'greeting_instructions', 'temperament_preset', 'swearing_rule', 'greeting_template', 'recording_enabled', 'recording_announcement_required', 'transcript_disclosure_mode', 'handoff_enabled', 'handoff_trigger', 'max_call_length_seconds', 'is_vip', 'memory_items', 'vip_info', 'repeat_caller_context', 'calendar_booking_enabled', 'calendar_default_duration_minutes', 'calendar_booking_window_days', 'for_sync', 'caller_name_from_memory', 'function_label', 'udn', 'recording_disclosure_block', 'greeting_block', 'handoff_block', 'screening_flow_block', 'user_instructions_block', 'caller_context_block', 'memory_block', 'temperament_block', 'swearing_block', 'time_limit_block', 'el_today_date', 'el_caller_phone', 'el_user_timezone', 'template')
+    821           RESUME                   0
+    
+    856           LOAD_GLOBAL              0 (FUNCTION_LABELS)
+                  LOAD_ATTR                3 (get + NULL|self)
+                  LOAD_FAST                3 (function_type)
+                  LOAD_CONST               1 ('AI assistant')
+                  CALL                     2
+                  STORE_FAST              24 (function_label)
+    
+    857           LOAD_FAST                2 (user_display_name)
+                  COPY                     1
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE         2 (to L1)
+                  POP_TOP
+                  LOAD_CONST               2 ('the user')
+          L1:     STORE_FAST              25 (udn)
+    
+    859           LOAD_GLOBAL              5 (build_recording_disclosure_block + NULL)
+    
+    860           LOAD_FAST_LOAD_FAST    154 (recording_enabled, recording_announcement_required)
+                  LOAD_FAST               11 (transcript_disclosure_mode)
+    
+    859           CALL                     3
+                  STORE_FAST              26 (recording_disclosure_block)
+    
+    862           LOAD_GLOBAL              7 (build_greeting_block + NULL)
+    
+    863           LOAD_FAST_LOAD_FAST    129 (greeting_template, agent_name)
+                  LOAD_FAST               25 (udn)
+                  LOAD_FAST                5 (greeting_instructions)
+    
+    864           LOAD_FAST               22 (for_sync)
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE         2 (to L2)
+                  LOAD_FAST               23 (caller_name_from_memory)
+                  JUMP_FORWARD             1 (to L3)
+          L2:     LOAD_CONST               3 (None)
+    
+    862   L3:     LOAD_CONST               4 (('caller_name_from_memory',))
+                  CALL_KW                  5
+                  STORE_FAST              27 (greeting_block)
+    
+    866           LOAD_GLOBAL              9 (build_handoff_block + NULL)
+                  LOAD_FAST_LOAD_FAST    205 (handoff_enabled, handoff_trigger)
+                  LOAD_FAST               25 (udn)
+                  CALL                     3
+                  STORE_FAST              28 (handoff_block)
+    
+    867           LOAD_GLOBAL             11 (build_screening_flow_block + NULL)
+    
+    868           LOAD_FAST               25 (udn)
+    
+    869           LOAD_FAST               19 (calendar_booking_enabled)
+    
+    870           LOAD_FAST               20 (calendar_default_duration_minutes)
+    
+    871           LOAD_FAST               21 (calendar_booking_window_days)
+    
+    872           LOAD_FAST               27 (greeting_block)
+    
+    867           LOAD_CONST               5 (('greeting_block',))
+                  CALL_KW                  5
+                  STORE_FAST              29 (screening_flow_block)
+    
+    874           LOAD_GLOBAL             13 (build_user_instructions_block + NULL)
+                  LOAD_FAST               25 (udn)
+                  LOAD_FAST                4 (user_instructions)
+                  CALL                     2
+                  STORE_FAST              30 (user_instructions_block)
+    
+    876           LOAD_FAST               22 (for_sync)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       11 (to L4)
+    
+    877           LOAD_CONST               6 ('{{caller_context}}')
+                  STORE_FAST              31 (caller_context_block)
+    
+    878           LOAD_CONST               7 ('{{memory_context}}')
+                  STORE_FAST              32 (memory_block)
+    
+    879           LOAD_CONST               8 ('{{temperament_block}}')
+                  STORE_FAST              33 (temperament_block)
+    
+    880           LOAD_CONST               9 ('{{swearing_block}}')
+                  STORE_FAST              34 (swearing_block)
+    
+    881           LOAD_CONST              10 ('{{time_limit_block}}')
+                  STORE_FAST              35 (time_limit_block)
+                  JUMP_FORWARD            94 (to L5)
+    
+    883   L4:     LOAD_GLOBAL             15 (build_caller_context_block + NULL)
+                  LOAD_FAST               15 (is_vip)
+                  LOAD_FAST               17 (vip_info)
+                  CALL                     2
+                  STORE_FAST              31 (caller_context_block)
+    
+    884           LOAD_GLOBAL             17 (build_memory_block + NULL)
+                  LOAD_FAST               16 (memory_items)
+                  LOAD_FAST               17 (vip_info)
+                  LOAD_FAST               18 (repeat_caller_context)
+                  CALL                     3
+                  STORE_FAST              32 (memory_block)
+    
+    885           LOAD_GLOBAL             18 (TEMPERAMENT_BLOCKS)
+                  LOAD_ATTR                3 (get + NULL|self)
+    
+    886           LOAD_FAST                6 (temperament_preset)
+                  LOAD_GLOBAL             18 (TEMPERAMENT_BLOCKS)
+                  LOAD_CONST              11 ('professional_polite')
+                  BINARY_SUBSCR
+    
+    885           CALL                     2
+                  STORE_FAST              33 (temperament_block)
+    
+    888           LOAD_GLOBAL             20 (SWEARING_BLOCKS)
+                  LOAD_ATTR                3 (get + NULL|self)
+                  LOAD_FAST                7 (swearing_rule)
+                  LOAD_GLOBAL             20 (SWEARING_BLOCKS)
+                  LOAD_CONST              12 ('no_swearing')
+                  BINARY_SUBSCR
+                  CALL                     2
+                  STORE_FAST              34 (swearing_block)
+    
+    889           LOAD_GLOBAL             23 (build_time_limit_block + NULL)
+                  LOAD_FAST_LOAD_FAST    239 (max_call_length_seconds, is_vip)
+                  CALL                     2
+                  STORE_FAST              35 (time_limit_block)
+    
+    894   L5:     LOAD_CONST              13 ('{{today_date}}')
+                  STORE_FAST              36 (el_today_date)
+    
+    895           LOAD_CONST              14 ('{{caller_phone}}')
+                  STORE_FAST              37 (el_caller_phone)
+    
+    896           LOAD_CONST              15 ('{{user_timezone}}')
+                  STORE_FAST              38 (el_user_timezone)
+    
+    898           LOAD_GLOBAL             24 (SYSTEM_PROMPTS)
+                  LOAD_ATTR                3 (get + NULL|self)
+                  LOAD_FAST                0 (system_prompt_key)
+                  LOAD_GLOBAL             24 (SYSTEM_PROMPTS)
+                  LOAD_CONST              16 ('screening_v2')
+                  BINARY_SUBSCR
+                  CALL                     2
+                  STORE_FAST              39 (template)
+    
+    900           LOAD_FAST               39 (template)
+                  LOAD_ATTR               27 (format + NULL|self)
+    
+    901           LOAD_FAST                1 (agent_name)
+    
+    902           LOAD_FAST               25 (udn)
+    
+    903           LOAD_FAST               24 (function_label)
+    
+    904           LOAD_FAST               26 (recording_disclosure_block)
+    
+    905           LOAD_FAST               27 (greeting_block)
+    
+    906           LOAD_FAST               29 (screening_flow_block)
+    
+    907           LOAD_FAST               28 (handoff_block)
+    
+    908           LOAD_FAST               31 (caller_context_block)
+    
+    909           LOAD_FAST               35 (time_limit_block)
+    
+    910           LOAD_FAST               33 (temperament_block)
+    
+    911           LOAD_FAST               34 (swearing_block)
+    
+    912           LOAD_FAST               32 (memory_block)
+    
+    913           LOAD_FAST               30 (user_instructions_block)
+    
+    914           LOAD_FAST               36 (el_today_date)
+    
+    915           LOAD_FAST               37 (el_caller_phone)
+    
+    916           LOAD_FAST               38 (el_user_timezone)
+    
+    900           LOAD_CONST              17 (('agent_name', 'user_display_name', 'function_label', 'recording_disclosure_block', 'greeting_block', 'screening_flow_block', 'handoff_block', 'caller_context_block', 'time_limit_block', 'temperament_block', 'swearing_block', 'memory_block', 'user_instructions_block', 'el_today_date', 'el_caller_phone', 'el_user_timezone'))
+                  CALL_KW                 16
+                  RETURN_VALUE
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'TEMPERAMENT_BLOCKS', '__annotations__', 'SWEARING_BLOCKS', 'GREETING_TEMPLATES', 'TURN_EAGERNESS_MAP', 'FUNCTION_LABELS', '_SCREENING_V2_TEMPLATE', 'SYSTEM_PROMPTS', 'build_recording_disclosure_block', 'build_greeting_block', 'build_handoff_block', 'build_caller_context_block', 'build_time_limit_block', 'build_memory_block', 'build_contact_instructions_block', 'build_screening_flow_block', 'build_user_instructions_block', 'assemble_final_prompt')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           SETUP_ANNOTATIONS
+              LOAD_CONST               0 ('Hidden system prompt templates and dynamic block builders for ElevenLabs agents.\n\nThe prompt is never returned to mobile clients.  It is set on the ElevenLabs\nagent at creation time and overridden per-call via\n``conversation_initiation_client_data``.\n')
+              STORE_NAME               0 (__doc__)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+ 16           LOAD_CONST               3 ('Your conversational style is professional and polite.\n- Use formal but warm language.\n- Be courteous and measured in all responses.\n- Avoid slang, jokes, or overly casual phrasing.\n- Keep responses concise and well-structured.\n- Default to respectful language even if the caller is informal.')
+
+ 24           LOAD_CONST               4 ("Your conversational style is friendly and casual.\n- Use warm, approachable language. Light humor is acceptable when appropriate.\n- You may use informal phrasing and contractions freely.\n- Match the caller's energy when they are relaxed.\n- Still remain respectful and focused on capturing the message.")
+
+ 31           LOAD_CONST               5 ('Your conversational style is short and direct.\n- Keep responses as brief as possible.\n- Ask questions plainly without filler or pleasantries.\n- Do not use humor or small talk.\n- Move through the screening steps efficiently.\n- Be polite but do not linger.')
+
+ 39           LOAD_CONST               6 ('Your conversational style is warm and supportive.\n- Use empathetic and encouraging language.\n- Be patient with callers who are emotional or distressed.\n- Use affirming phrases like "I understand" and "That makes sense."\n- Give callers space to express themselves, within the time limit.\n- Still collect all required screening fields.')
+
+ 48           LOAD_CONST               5 ('Your conversational style is short and direct.\n- Keep responses as brief as possible.\n- Ask questions plainly without filler or pleasantries.\n- Do not use humor or small talk.\n- Move through the screening steps efficiently.\n- Be polite but do not linger.')
+
+ 56           LOAD_CONST               6 ('Your conversational style is warm and supportive.\n- Use empathetic and encouraging language.\n- Be patient with callers who are emotional or distressed.\n- Use affirming phrases like "I understand" and "That makes sense."\n- Give callers space to express themselves, within the time limit.\n- Still collect all required screening fields.')
+
+ 14           LOAD_CONST               7 (('professional_polite', 'casual_friendly', 'short_and_direct', 'warm_and_supportive', 'formal', 'custom'))
+              BUILD_CONST_KEY_MAP      6
+              STORE_NAME               3 (TEMPERAMENT_BLOCKS)
+              LOAD_CONST               8 ('dict[str, str]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('TEMPERAMENT_BLOCKS')
+              STORE_SUBSCR
+
+ 71           LOAD_CONST              10 ('You must NOT use any profanity or swear words under any circumstances, even if the caller does.')
+
+ 75           LOAD_CONST              11 ('You may use mild profanity ONLY if the caller uses it first, and only to match their tone. Never escalate.')
+
+ 79           LOAD_CONST              12 ('You may use casual language including mild profanity when it fits the conversation naturally. Never use hateful or abusive language.')
+
+ 69           LOAD_CONST              13 (('no_swearing', 'mirror_caller', 'allow'))
+              BUILD_CONST_KEY_MAP      3
+              STORE_NAME               5 (SWEARING_BLOCKS)
+              LOAD_CONST               8 ('dict[str, str]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              14 ('SWEARING_BLOCKS')
+              STORE_SUBSCR
+
+ 90           LOAD_CONST              15 ('Hi, this is {agent_name}, an assistant for {user_display_name}. Before we get started, I just want to let you know that this call is being recorded and transcribed. Is that okay with you?')
+
+ 95           LOAD_CONST              16 ('Hi, this is {agent_name} for {user_display_name}. Quick heads up, this call is recorded and transcribed. Is that alright?')
+
+100           LOAD_CONST              17 ('Good day. This is {agent_name}, assistant to {user_display_name}. Before we proceed, I want to let you know that this call is being recorded and transcribed. May I have your consent to continue?')
+
+105           LOAD_CONST              15 ('Hi, this is {agent_name}, an assistant for {user_display_name}. Before we get started, I just want to let you know that this call is being recorded and transcribed. Is that okay with you?')
+
+ 88           LOAD_CONST              18 (('standard', 'brief', 'formal', 'custom'))
+              BUILD_CONST_KEY_MAP      4
+              STORE_NAME               6 (GREETING_TEMPLATES)
+              LOAD_CONST               8 ('dict[str, str]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              19 ('GREETING_TEMPLATES')
+              STORE_SUBSCR
+
+116           LOAD_CONST              20 ('normal')
+
+117           LOAD_CONST              21 ('eager')
+
+118           LOAD_CONST              21 ('eager')
+
+119           LOAD_CONST              22 ('patient')
+
+120           LOAD_CONST              22 ('patient')
+
+121           LOAD_CONST              20 ('normal')
+
+115           LOAD_CONST               7 (('professional_polite', 'casual_friendly', 'short_and_direct', 'warm_and_supportive', 'formal', 'custom'))
+              BUILD_CONST_KEY_MAP      6
+              STORE_NAME               7 (TURN_EAGERNESS_MAP)
+              LOAD_CONST               8 ('dict[str, str]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              23 ('TURN_EAGERNESS_MAP')
+              STORE_SUBSCR
+
+129           LOAD_CONST              24 ('call_screener')
+              LOAD_CONST              25 ('call screening assistant')
+
+128           BUILD_MAP                1
+              STORE_NAME               8 (FUNCTION_LABELS)
+              LOAD_CONST               8 ('dict[str, str]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              26 ('FUNCTION_LABELS')
+              STORE_SUBSCR
+
+136           LOAD_CONST              27 ('You are {agent_name}, an AI {function_label} acting on behalf of {user_display_name}. You are NOT {user_display_name}. You are {user_display_name}\'s assistant. Your role is to screen incoming phone calls, collect structured information from callers, and pass messages to {user_display_name}.\n\n=== DATE, TIME, AND TIMEZONE AWARENESS ===\n\nToday is {el_today_date}. Use this to interpret relative dates the caller says (e.g. "next Monday", "tomorrow", "this Friday"). Convert them to the correct calendar date yourself. NEVER ask the caller for a specific date format. NEVER mention YYYY-MM-DD or any technical format.\n\n{user_display_name}\'s timezone is {el_user_timezone}. ALL appointment times and scheduling are in this timezone. When presenting available time slots, always state the timezone, e.g. "2 PM Eastern" or "10 AM Eastern". If the caller mentions a different timezone (e.g. "2 PM Pacific"), acknowledge it and convert to {el_user_timezone} before booking. For example: "That would be 5 PM Eastern on our end. Does that work?" Always confirm the final time in {el_user_timezone} before booking.\n\n=== CALLER PHONE NUMBER ===\n\nThe caller is calling from {el_caller_phone}. You may reference the last 4 digits of this number to confirm their callback number. NEVER read the full phone number aloud unless the caller asks you to.\n\n=== IDENTITY AND DISCLOSURE ===\n\nYour greeting (the first thing you say on the call) has already introduced you and asked the caller for recording and transcription consent. Do NOT repeat the introduction or consent question.\n\nIMPORTANT: Do NOT say {user_display_name} is "unavailable", "cannot take the call", "busy", or any similar phrasing. You are the assistant answering the call — simply proceed naturally. Never comment on {user_display_name}\'s availability or whereabouts.\n\nIf the caller asks "Are you {user_display_name}?" or any variation, you MUST answer truthfully: "No, I am {agent_name}, an AI assistant for {user_display_name}."\n\nYou must NEVER:\n- Claim to be {user_display_name} or any other human.\n- Claim to be {user_display_name}\'s spouse, employee, or family member.\n- Imply you have authority to approve, schedule, or commit to anything on behalf of {user_display_name}.\n\n=== CALL FLOW ===\n\n{screening_flow_block}\n\n=== FALLBACK BRANCHES ===\n\nREFUSAL:\nIf the caller refuses to answer screening questions, stop pressing. Switch to message-taking: "What message would you like me to pass along?" Capture the message, ask one callback question if possible, then close.\n\nABUSIVE OR INCOHERENT CALLER:\nDo not escalate. Offer one redirect: "I can pass along a short message if you keep it respectful." If the caller continues, end the call politely.\n\n=== CALLER TYPE HANDLING ===\n\n{caller_context_block}\n\nUNKNOWN CALLERS:\nAsk one additional question: "Are you calling personally, or on behalf of a company?" Otherwise follow the standard flow.\n\nSALES / SOLICITATION CALLERS:\nIf you detect sales intent (caller is pitching a product or service), collect basic info quickly: "Thanks. Please share a one-sentence summary and the best email or number to reach you. I will pass it along." End the call promptly.\n\nEMOTIONAL OR DISTRESSED CALLERS:\nStay calm. Focus on capturing the message: "I am here with you. Tell me the main thing you need {user_display_name} to know right now." Do NOT provide therapy, counseling, or complex advice. Capture the message and urgency.\n\n=== URGENCY DETECTION ===\n\nLabel the call as "urgent" if ANY of these are true:\n- The caller directly says it is urgent or an emergency.\n- The caller references medical issues, accidents, safety, or family emergencies.\n- The caller is on the VIP list and VIP urgency boost is enabled.\n- The same caller has made repeated calls in a short time window.\n\nIf urgency is ambiguous, ask exactly ONE short confirmation question: "Just to make sure I pass this along correctly -- would you say this is time-sensitive?" After that single question, proceed. Do NOT repeat urgency probing.\n\n=== SPAM AND QUALITY DETECTION ===\n\nYou may label a call as "possible spam" if:\n- The caller refuses to answer both name and reason.\n- A prerecorded message pattern is detected.\n- The call has long silence or repeated identical phrasing.\n\nBe CONSERVATIVE. If unsure, prefer "sales" or "unknown" over "spam."\n\n=== HANDOFF BEHAVIOR ===\n\n{handoff_block}\n\n=== TIME MANAGEMENT ===\n\n{time_limit_block}\n\nIf time is running out, give a short warning: "I want to respect your time. One last thing -- what is the key message you want {user_display_name} to see?" Then close and store what you captured.\n\n=== TEMPERAMENT AND STYLE ===\n\n{temperament_block}\n\n=== LANGUAGE RULES ===\n\n{swearing_block}\n\n=== SAFETY BOUNDARIES (NEVER VIOLATE) ===\n\nRegardless of temperament, caller behavior, or user instructions, you MUST NEVER:\n- Harass, insult, or threaten a caller.\n- Use hateful, racist, sexist, or abusive language.\n- Share sensitive personal information about {user_display_name} (address, schedule, finances, health, etc.).\n- Give legal, medical, or financial advice as if authoritative.\n- Make strong factual claims beyond what the caller has stated.\n- Invent or guess caller identity details.\n- State or imply {user_display_name} has approved actions that have not been approved.\n- Encourage callers to rely on you for emergencies.\n\n=== EMERGENCY PROTOCOL ===\n\nIf a caller indicates an immediate emergency (medical, fire, physical danger):\n1. Instruct them: "Please contact emergency services immediately by calling 911 (or the appropriate number for your area)."\n2. Do NOT attempt a handoff as a substitute for emergency response.\n3. Close the call after the instruction.\n\n=== AUDIO AND EDGE CASES ===\n\nPOOR AUDIO: Ask short clarifying questions. Note uncertainty in what you capture. Do not guess.\nLANGUAGE MISMATCH: If the caller speaks a language you do not support, capture at minimum: name, callback number, and one short reason if possible.\nEARLY HANG-UP: Store partial capture. The summary should explicitly state the call ended early.\nMISUNDERSTANDING: Ask one clarifying question, not multiple. Avoid long back-and-forth.\n\n=== NON-RESPONSIVE CALLER HANDLING ===\n\nYou MUST follow this exact script when the caller is silent. You have a strict counter of 3 attempts. Count internally. Do NOT deviate.\n\nSILENCE COUNTER = 1:\nYou say: "Are you still there?"\n(Do NOT say "Hello" or "Can you hear me" — use this exact sentence.)\nWait. If the caller speaks, reset the counter and resume.\n\nSILENCE COUNTER = 2:\nYou say: "I am still here if you would like to continue."\n(Do NOT add anything else. Do NOT rephrase this.)\nWait. If the caller speaks, reset the counter and resume.\n\nSILENCE COUNTER = 3:\nYou say: "It seems like you have stepped away. I will end the call now. Feel free to call back anytime."\nThen IMMEDIATELY use the end_call tool to terminate the call. Do NOT wait for a response. Do NOT add any more words.\n\nABSOLUTE CONSTRAINTS ON SILENCE HANDLING:\n- Maximum 3 silence prompts per call. NEVER a 4th.\n- Use the EXACT phrases above.\n- After counter reaches 3, the call MUST end. Use the end_call tool.\n- If the caller speaks at ANY point, reset the counter to 0 and resume.\n\n=== MEMORY CONTEXT ===\n\n{memory_block}\n\n{user_instructions_block}')
+              STORE_NAME               9 (_SCREENING_V2_TEMPLATE)
+
+333           LOAD_CONST              28 ("You are {agent_name}, a {function_label} for {user_display_name}. Your job is to screen incoming calls on behalf of {user_display_name}.\n\nToday is {el_today_date}. The caller's phone number is {el_caller_phone}. All times are in {el_user_timezone}.\n\n=== CALLER CONTEXT ===\n\n{caller_context_block}\n\n=== MEMORY CONTEXT ===\n\n{memory_block}\n\nRULES:\n- Introduce yourself as {agent_name}, {user_display_name}'s {function_label}.\n- Never claim to be {user_display_name}.\n- Inform the caller that this call is being transcribed and summarized.\n- If the caller's name is known from CALLER CONTEXT or MEMORY CONTEXT above, use it naturally and do NOT ask for it again.\n- Collect: reason for calling, urgency level, callback number. Only ask for caller name if it is NOT already known.\n- If the caller refuses to provide information, politely take a message.\n- If the caller is abusive or incoherent, redirect once then end the call.\n- Do not make promises or commitments on behalf of {user_display_name}.\n- Keep responses concise and professional.\n- If the caller mentions an emergency, instruct them to contact emergency services.\n{screening_flow_block}{user_instructions_block}")
+
+357           LOAD_NAME                9 (_SCREENING_V2_TEMPLATE)
+
+331           LOAD_CONST              29 (('default_v1', 'screening_v2'))
+              BUILD_CONST_KEY_MAP      2
+              STORE_NAME              10 (SYSTEM_PROMPTS)
+              LOAD_CONST               8 ('dict[str, str]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              30 ('SYSTEM_PROMPTS')
+              STORE_SUBSCR
+
+365           NOP
+
+366           NOP
+
+365           NOP
+
+367           NOP
+
+365           NOP
+
+368           NOP
+
+365           NOP
+
+369           NOP
+
+365           LOAD_CONST              54 (('recording_enabled', 'bool', 'recording_announcement_required', 'bool', 'transcript_disclosure_mode', 'str', 'return', 'str'))
+              LOAD_CONST              31 (<code object build_recording_disclosure_block at 0x0000024C11498B70, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 365>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              11 (build_recording_disclosure_block)
+
+383           NOP
+
+384           NOP
+
+385           NOP
+
+379           LOAD_CONST              55 ((None, None, None))
+
+380           NOP
+
+379           NOP
+
+381           NOP
+
+379           NOP
+
+382           NOP
+
+379           NOP
+
+383           NOP
+
+379           NOP
+
+384           NOP
+
+379           NOP
+
+385           NOP
+
+379           NOP
+
+386           NOP
+
+379           LOAD_CONST              56 (('greeting_template', 'str', 'agent_name', 'str', 'user_display_name', 'str', 'greeting_instructions', 'str | None', 'vip_name', 'str | None', 'caller_name_from_memory', 'str | None', 'return', 'str'))
+              LOAD_CONST              33 (<code object build_greeting_block at 0x0000024C0FB246D0, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 379>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME              12 (build_greeting_block)
+
+422           NOP
+
+423           NOP
+
+422           NOP
+
+424           NOP
+
+422           NOP
+
+425           NOP
+
+422           NOP
+
+426           NOP
+
+422           LOAD_CONST              57 (('handoff_enabled', 'bool', 'handoff_trigger', 'str', 'user_display_name', 'str', 'return', 'str'))
+              LOAD_CONST              34 (<code object build_handoff_block at 0x0000024C0EF0F750, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 422>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              13 (build_handoff_block)
+
+460           NOP
+
+461           NOP
+
+459           LOAD_CONST              58 ((False, None))
+
+460           NOP
+
+459           NOP
+
+461           NOP
+
+459           NOP
+
+462           NOP
+
+459           LOAD_CONST              59 (('is_vip', 'bool', 'vip_info', 'dict | None', 'return', 'str'))
+              LOAD_CONST              36 (<code object build_caller_context_block at 0x0000024C0EC2F830, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 459>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME              14 (build_caller_context_block)
+
+490           LOAD_CONST              60 ((False,))
+              LOAD_CONST              61 (('max_seconds', 'int', 'is_vip', 'bool', 'return', 'str'))
+              LOAD_CONST              37 (<code object build_time_limit_block at 0x0000024C0EF2BD20, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 490>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME              15 (build_time_limit_block)
+
+499           NOP
+
+500           NOP
+
+501           NOP
+
+498           LOAD_CONST              55 ((None, None, None))
+
+499           NOP
+
+498           NOP
+
+500           NOP
+
+498           NOP
+
+501           NOP
+
+498           NOP
+
+502           NOP
+
+498           LOAD_CONST              62 (('memory_items', 'list[dict] | None', 'vip_info', 'dict | None', 'repeat_caller_context', 'str | None', 'return', 'str'))
+              LOAD_CONST              38 (<code object build_memory_block at 0x0000024C0FA892D0, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 498>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME              16 (build_memory_block)
+
+582           NOP
+
+581           LOAD_CONST              63 ((None,))
+
+582           NOP
+
+581           NOP
+
+583           NOP
+
+581           LOAD_CONST              64 (('contact_custom_instructions', 'str | None', 'return', 'str'))
+              LOAD_CONST              39 (<code object build_contact_instructions_block at 0x0000024C0EF13DF0, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 581>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME              17 (build_contact_instructions_block)
+
+596           NOP
+
+597           NOP
+
+598           NOP
+
+593           LOAD_CONST              65 ((30, 14, ''))
+
+594           NOP
+
+593           NOP
+
+595           NOP
+
+593           NOP
+
+596           NOP
+
+593           NOP
+
+597           NOP
+
+593           NOP
+
+598           NOP
+
+593           NOP
+
+599           NOP
+
+593           LOAD_CONST              66 (('user_display_name', 'str', 'calendar_booking_enabled', 'bool', 'default_duration_minutes', 'int', 'booking_window_days', 'int', 'greeting_block', 'str', 'return', 'str'))
+              LOAD_CONST              42 (<code object build_screening_flow_block at 0x0000024C11467A00, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 593>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME              18 (build_screening_flow_block)
+
+803           NOP
+
+804           NOP
+
+803           NOP
+
+805           NOP
+
+803           NOP
+
+806           NOP
+
+803           LOAD_CONST              67 (('user_display_name', 'str', 'user_instructions', 'str | None', 'return', 'str'))
+              LOAD_CONST              43 (<code object build_user_instructions_block at 0x0000024C0EEE3C90, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 803>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              19 (build_user_instructions_block)
+
+823           LOAD_CONST              44 ('screening_v2')
+
+826           LOAD_CONST              24 ('call_screener')
+
+827           LOAD_CONST              32 (None)
+
+828           LOAD_CONST              32 (None)
+
+829           LOAD_CONST              45 ('professional_polite')
+
+830           LOAD_CONST              46 ('no_swearing')
+
+831           LOAD_CONST              47 ('standard')
+
+832           LOAD_CONST              35 (False)
+
+833           LOAD_CONST              48 (True)
+
+834           LOAD_CONST              49 ('ai_says_it')
+
+835           LOAD_CONST              35 (False)
+
+836           LOAD_CONST              50 ('vip_only')
+
+837           LOAD_CONST              51 (180)
+
+838           LOAD_CONST              35 (False)
+
+839           LOAD_CONST              32 (None)
+
+840           LOAD_CONST              32 (None)
+
+841           LOAD_CONST              32 (None)
+
+842           LOAD_CONST              35 (False)
+
+843           LOAD_CONST              40 (30)
+
+844           LOAD_CONST              41 (14)
+
+845           LOAD_CONST              35 (False)
+
+846           LOAD_CONST              32 (None)
+
+821           LOAD_CONST              52 (('system_prompt_key', 'function_type', 'user_instructions', 'greeting_instructions', 'temperament_preset', 'swearing_rule', 'greeting_template', 'recording_enabled', 'recording_announcement_required', 'transcript_disclosure_mode', 'handoff_enabled', 'handoff_trigger', 'max_call_length_seconds', 'is_vip', 'memory_items', 'vip_info', 'repeat_caller_context', 'calendar_booking_enabled', 'calendar_default_duration_minutes', 'calendar_booking_window_days', 'for_sync', 'caller_name_from_memory'))
+              BUILD_CONST_KEY_MAP     22
+
+823           NOP
+
+821           NOP
+
+824           NOP
+
+821           NOP
+
+825           NOP
+
+821           NOP
+
+826           NOP
+
+821           NOP
+
+827           NOP
+
+821           NOP
+
+828           NOP
+
+821           NOP
+
+829           NOP
+
+821           NOP
+
+830           NOP
+
+821           NOP
+
+831           NOP
+
+821           NOP
+
+832           NOP
+
+821           NOP
+
+833           NOP
+
+821           NOP
+
+834           NOP
+
+821           NOP
+
+835           NOP
+
+821           NOP
+
+836           NOP
+
+821           NOP
+
+837           NOP
+
+821           NOP
+
+838           NOP
+
+821           NOP
+
+839           NOP
+
+821           NOP
+
+840           NOP
+
+821           NOP
+
+841           NOP
+
+821           NOP
+
+842           NOP
+
+821           NOP
+
+843           NOP
+
+821           NOP
+
+844           NOP
+
+821           NOP
+
+845           NOP
+
+821           NOP
+
+846           NOP
+
+821           NOP
+
+847           NOP
+
+821           LOAD_CONST              68 (('system_prompt_key', 'str', 'agent_name', 'str', 'user_display_name', 'str', 'function_type', 'str', 'user_instructions', 'str | None', 'greeting_instructions', 'str | None', 'temperament_preset', 'str', 'swearing_rule', 'str', 'greeting_template', 'str', 'recording_enabled', 'bool', 'recording_announcement_required', 'bool', 'transcript_disclosure_mode', 'str', 'handoff_enabled', 'bool', 'handoff_trigger', 'str', 'max_call_length_seconds', 'int', 'is_vip', 'bool', 'memory_items', 'list[dict] | None', 'vip_info', 'dict | None', 'repeat_caller_context', 'str | None', 'calendar_booking_enabled', 'bool', 'calendar_default_duration_minutes', 'int', 'calendar_booking_window_days', 'int', 'for_sync', 'bool', 'caller_name_from_memory', 'str | None', 'return', 'str'))
+              LOAD_CONST              53 (<code object assemble_final_prompt at 0x0000024C0FA8BF50, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 821>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   2 (kwdefaults)
+              STORE_NAME              20 (assemble_final_prompt)
+              RETURN_CONST            32 (None)
+
+Disassembly of <code object build_recording_disclosure_block at 0x0000024C11498B70, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 365>:
+365           RESUME                   0
+
+371           BUILD_LIST               0
+              STORE_FAST               3 (parts)
+
+372           LOAD_FAST                2 (transcript_disclosure_mode)
+              LOAD_CONST               1 ('silent')
+              COMPARE_OP              88 (bool(==))
+              POP_JUMP_IF_FALSE        1 (to L1)
+
+373           NOP
+
+374   L1:     LOAD_FAST                0 (recording_enabled)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       24 (to L2)
+              LOAD_FAST                1 (recording_announcement_required)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       17 (to L2)
+
+375           LOAD_FAST                3 (parts)
+              LOAD_ATTR                1 (append + NULL|self)
+              LOAD_CONST               2 ('This call is also being recorded.')
+              CALL                     1
+              POP_TOP
+
+376   L2:     LOAD_CONST               3 ('\n')
+              LOAD_ATTR                3 (join + NULL|self)
+              LOAD_FAST                3 (parts)
+              CALL                     1
+              RETURN_VALUE
+
+Disassembly of <code object build_greeting_block at 0x0000024C0FB246D0, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 379>:
+379           RESUME                   0
+
+394           LOAD_FAST                4 (vip_name)
+              COPY                     1
+              TO_BOOL
+              POP_JUMP_IF_TRUE         2 (to L1)
+              POP_TOP
+              LOAD_FAST                5 (caller_name_from_memory)
+      L1:     STORE_FAST               6 (known_name)
+
+396           LOAD_FAST                3 (greeting_instructions)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       52 (to L2)
+              LOAD_FAST                3 (greeting_instructions)
+              LOAD_ATTR                1 (strip + NULL|self)
+              CALL                     0
+              TO_BOOL
+              POP_JUMP_IF_FALSE       31 (to L2)
+
+397           LOAD_FAST                3 (greeting_instructions)
+              LOAD_ATTR                1 (strip + NULL|self)
+              CALL                     0
+              LOAD_ATTR                3 (format + NULL|self)
+
+398           LOAD_FAST                1 (agent_name)
+
+399           LOAD_FAST                2 (user_display_name)
+
+397           LOAD_CONST               1 (('agent_name', 'user_display_name'))
+              CALL_KW                  2
+              STORE_FAST               7 (base)
+              JUMP_FORWARD            44 (to L3)
+
+402   L2:     LOAD_GLOBAL              4 (GREETING_TEMPLATES)
+              LOAD_ATTR                7 (get + NULL|self)
+              LOAD_FAST                0 (greeting_template)
+              LOAD_GLOBAL              4 (GREETING_TEMPLATES)
+              LOAD_CONST               2 ('standard')
+              BINARY_SUBSCR
+              CALL                     2
+              STORE_FAST               8 (tpl)
+
+403           LOAD_FAST                8 (tpl)
+              LOAD_ATTR                3 (format + NULL|self)
+              LOAD_FAST_LOAD_FAST     18 (agent_name, user_display_name)
+              LOAD_CONST               1 (('agent_name', 'user_display_name'))
+              CALL_KW                  2
+              STORE_FAST               7 (base)
+
+405   L3:     LOAD_FAST                6 (known_name)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       62 (to L7)
+
+406           LOAD_CONST               3 (('Hi, ', 'Hi ', 'Good day. '))
+              GET_ITER
+      L4:     FOR_ITER                48 (to L6)
+              STORE_FAST               9 (prefix)
+
+407           LOAD_FAST                7 (base)
+              LOAD_ATTR                9 (startswith + NULL|self)
+              LOAD_FAST                9 (prefix)
+              CALL                     1
+              TO_BOOL
+              POP_JUMP_IF_TRUE         2 (to L5)
+              JUMP_BACKWARD           27 (to L4)
+
+408   L5:     LOAD_CONST               4 ('Hey ')
+              LOAD_FAST                6 (known_name)
+              FORMAT_SIMPLE
+              LOAD_CONST               5 ('! ')
+              BUILD_STRING             3
+              LOAD_FAST                7 (base)
+              LOAD_GLOBAL             11 (len + NULL)
+              LOAD_FAST                9 (prefix)
+              CALL                     1
+              LOAD_CONST               6 (None)
+              BINARY_SLICE
+              BINARY_OP                0 (+)
+              STORE_FAST               7 (base)
+
+409           POP_TOP
+              JUMP_FORWARD            10 (to L7)
+
+406   L6:     END_FOR
+              POP_TOP
+
+411           LOAD_CONST               4 ('Hey ')
+              LOAD_FAST                6 (known_name)
+              FORMAT_SIMPLE
+              LOAD_CONST               5 ('! ')
+              LOAD_FAST                7 (base)
+              FORMAT_SIMPLE
+              BUILD_STRING             4
+              STORE_FAST               7 (base)
+
+413   L7:     LOAD_FAST                7 (base)
+              LOAD_ATTR               13 (lower + NULL|self)
+              CALL                     0
+              STORE_FAST              10 (lowered)
+
+414           LOAD_CONST               7 ('recorded')
+              LOAD_FAST               10 (lowered)
+              CONTAINS_OP              1
+              POP_JUMP_IF_FALSE       11 (to L8)
+              LOAD_CONST               8 ('transcribed')
+              LOAD_FAST               10 (lowered)
+              CONTAINS_OP              1
+              POP_JUMP_IF_FALSE        5 (to L8)
+
+415           LOAD_FAST                7 (base)
+
+416           LOAD_CONST               9 (' Just so you know, this call is being recorded and transcribed. Is that okay with you?')
+
+415           BINARY_OP               13 (+=)
+              STORE_FAST               7 (base)
+
+419   L8:     LOAD_FAST                7 (base)
+              RETURN_VALUE
+
+Disassembly of <code object build_handoff_block at 0x0000024C0EF0F750, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 422>:
+422           RESUME                   0
+
+429           LOAD_FAST                0 (handoff_enabled)
+              TO_BOOL
+              POP_JUMP_IF_FALSE        1 (to L1)
+              NOP
+
+430   L1:     RETURN_CONST             1 ('Live handoff is not enabled. Complete the full screening flow for every call.')
+
+Disassembly of <code object build_caller_context_block at 0x0000024C0EC2F830, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 459>:
+459           RESUME                   0
+
+463           LOAD_FAST                0 (is_vip)
+              TO_BOOL
+              POP_JUMP_IF_TRUE         1 (to L1)
+
+464           RETURN_CONST             1 ('')
+
+466   L1:     LOAD_CONST               2 ('THIS CALLER IS A VIP.')
+              BUILD_LIST               1
+              STORE_FAST               2 (lines)
+
+468           LOAD_FAST                1 (vip_info)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       17 (to L2)
+              LOAD_FAST                1 (vip_info)
+              LOAD_ATTR                1 (get + NULL|self)
+              LOAD_CONST               3 ('display_name')
+              CALL                     1
+              JUMP_FORWARD             1 (to L3)
+      L2:     LOAD_CONST               0 (None)
+      L3:     STORE_FAST               3 (vip_name)
+
+469           LOAD_FAST                3 (vip_name)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       42 (to L4)
+
+470           LOAD_FAST                2 (lines)
+              LOAD_ATTR                3 (append + NULL|self)
+              LOAD_CONST               4 ("The caller's name is ")
+              LOAD_FAST                3 (vip_name)
+              FORMAT_SIMPLE
+              LOAD_CONST               5 ('.')
+              BUILD_STRING             3
+              CALL                     1
+              POP_TOP
+
+471           LOAD_FAST                2 (lines)
+              LOAD_ATTR                3 (append + NULL|self)
+
+472           LOAD_CONST               6 ('CRITICAL: You ALREADY know this caller is ')
+              LOAD_FAST                3 (vip_name)
+              FORMAT_SIMPLE
+              LOAD_CONST               7 ('. Use their name naturally in conversation. Do NOT ask "May I have your name?" or any variant — you already have it. Skip the name-collection step entirely.')
+              BUILD_STRING             3
+
+471           CALL                     1
+              POP_TOP
+
+478   L4:     LOAD_FAST                2 (lines)
+              LOAD_ATTR                3 (append + NULL|self)
+
+479           LOAD_CONST               8 ('Adjust your behavior:\n- Use a more accommodating tone.\n- Ask about urgency earlier in the flow.\n- Capture required fields quickly.\n- If live handoff is enabled for VIP calls, signal handoff eligibility.\n- Avoid unnecessary questions; streamline the screening.\nThe caller is still screened, but with higher priority and speed.')
+
+478           CALL                     1
+              POP_TOP
+
+487           LOAD_CONST               9 ('\n')
+              LOAD_ATTR                5 (join + NULL|self)
+              LOAD_FAST                2 (lines)
+              CALL                     1
+              RETURN_VALUE
+
+Disassembly of <code object build_time_limit_block at 0x0000024C0EF2BD20, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 490>:
+490           RESUME                   0
+
+491           LOAD_FAST                1 (is_vip)
+              TO_BOOL
+              POP_JUMP_IF_FALSE        2 (to L1)
+              LOAD_CONST               1 ('VIP caller')
+              JUMP_FORWARD             1 (to L2)
+      L1:     LOAD_CONST               2 ('Standard caller')
+      L2:     STORE_FAST               2 (label)
+
+493           LOAD_FAST                2 (label)
+              FORMAT_SIMPLE
+              LOAD_CONST               3 (' time limit: ')
+              LOAD_FAST                0 (max_seconds)
+              FORMAT_SIMPLE
+              LOAD_CONST               4 (' seconds. If you have collected all required fields, end sooner.')
+              BUILD_STRING             4
+
+492           RETURN_VALUE
+
+Disassembly of <code object build_memory_block at 0x0000024C0FA892D0, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 498>:
+498            RESUME                   0
+
+503            LOAD_FAST                0 (memory_items)
+               COPY                     1
+               TO_BOOL
+               POP_JUMP_IF_TRUE        11 (to L1)
+               POP_TOP
+               LOAD_FAST                1 (vip_info)
+               COPY                     1
+               TO_BOOL
+               POP_JUMP_IF_TRUE         2 (to L1)
+               POP_TOP
+               LOAD_FAST                2 (repeat_caller_context)
+       L1:     STORE_FAST               3 (has_content)
+
+504            LOAD_FAST                3 (has_content)
+               TO_BOOL
+               POP_JUMP_IF_TRUE         2 (to L2)
+
+506            NOP
+
+505            RETURN_CONST             1 ('This is a first-time caller. You have never spoken to them before.\nBe warm and welcoming. Follow the standard screening flow.\nCollect their name naturally as part of the conversation.')
+
+511    L2:     LOAD_CONST               2 ('=== WHAT YOU REMEMBER ABOUT THIS CALLER ===')
+               LOAD_CONST               3 ('')
+               BUILD_LIST               2
+               STORE_FAST               4 (lines)
+
+512            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_CONST               4 ('You know this person. Here is what you remember:')
+               CALL                     1
+               POP_TOP
+
+513            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_CONST               3 ('')
+               CALL                     1
+               POP_TOP
+
+515            LOAD_FAST                1 (vip_info)
+               TO_BOOL
+               POP_JUMP_IF_FALSE      215 (to L7)
+
+516            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_CONST               5 ('This caller is a VIP.')
+               CALL                     1
+               POP_TOP
+
+517            LOAD_FAST                1 (vip_info)
+               LOAD_ATTR                3 (get + NULL|self)
+               LOAD_CONST               6 ('display_name')
+               CALL                     1
+               TO_BOOL
+               POP_JUMP_IF_FALSE       23 (to L3)
+
+518            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_CONST               7 ('Name: ')
+               LOAD_FAST                1 (vip_info)
+               LOAD_CONST               6 ('display_name')
+               BINARY_SUBSCR
+               FORMAT_SIMPLE
+               BUILD_STRING             2
+               CALL                     1
+               POP_TOP
+
+519    L3:     LOAD_FAST                1 (vip_info)
+               LOAD_ATTR                3 (get + NULL|self)
+               LOAD_CONST               8 ('company')
+               CALL                     1
+               TO_BOOL
+               POP_JUMP_IF_FALSE       23 (to L4)
+
+520            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_CONST               9 ('Company: ')
+               LOAD_FAST                1 (vip_info)
+               LOAD_CONST               8 ('company')
+               BINARY_SUBSCR
+               FORMAT_SIMPLE
+               BUILD_STRING             2
+               CALL                     1
+               POP_TOP
+
+521    L4:     LOAD_FAST                1 (vip_info)
+               LOAD_ATTR                3 (get + NULL|self)
+               LOAD_CONST              10 ('relationship')
+               CALL                     1
+               TO_BOOL
+               POP_JUMP_IF_FALSE       23 (to L5)
+
+522            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_CONST              11 ('Relationship: ')
+               LOAD_FAST                1 (vip_info)
+               LOAD_CONST              10 ('relationship')
+               BINARY_SUBSCR
+               FORMAT_SIMPLE
+               BUILD_STRING             2
+               CALL                     1
+               POP_TOP
+
+523    L5:     LOAD_FAST                1 (vip_info)
+               LOAD_ATTR                3 (get + NULL|self)
+               LOAD_CONST              12 ('notes')
+               CALL                     1
+               TO_BOOL
+               POP_JUMP_IF_FALSE       24 (to L6)
+
+524            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_CONST              13 ('Owner note: "')
+               LOAD_FAST                1 (vip_info)
+               LOAD_CONST              12 ('notes')
+               BINARY_SUBSCR
+               FORMAT_SIMPLE
+               LOAD_CONST              14 ('"')
+               BUILD_STRING             3
+               CALL                     1
+               POP_TOP
+
+525    L6:     LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_CONST               3 ('')
+               CALL                     1
+               POP_TOP
+
+527    L7:     LOAD_FAST                0 (memory_items)
+               TO_BOOL
+               POP_JUMP_IF_FALSE      119 (to L12)
+
+528            LOAD_FAST                0 (memory_items)
+               GET_ITER
+       L8:     FOR_ITER                96 (to L11)
+               STORE_FAST               5 (item)
+
+529            LOAD_FAST                5 (item)
+               LOAD_ATTR                3 (get + NULL|self)
+               LOAD_CONST              15 ('subject')
+               LOAD_CONST               3 ('')
+               CALL                     2
+               STORE_FAST               6 (subject)
+
+530            LOAD_FAST                5 (item)
+               LOAD_ATTR                3 (get + NULL|self)
+               LOAD_CONST              16 ('value')
+               LOAD_CONST               3 ('')
+               CALL                     2
+               STORE_FAST               7 (value)
+
+531            LOAD_FAST                7 (value)
+               TO_BOOL
+               POP_JUMP_IF_FALSE       24 (to L9)
+
+532            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_FAST                6 (subject)
+               FORMAT_SIMPLE
+               LOAD_CONST              17 (': ')
+               LOAD_FAST                7 (value)
+               FORMAT_SIMPLE
+               BUILD_STRING             3
+               CALL                     1
+               POP_TOP
+               JUMP_BACKWARD           70 (to L8)
+
+533    L9:     LOAD_FAST                6 (subject)
+               TO_BOOL
+               POP_JUMP_IF_TRUE         2 (to L10)
+               JUMP_BACKWARD           79 (to L8)
+
+534   L10:     LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_FAST                6 (subject)
+               CALL                     1
+               POP_TOP
+               JUMP_BACKWARD           98 (to L8)
+
+528   L11:     END_FOR
+               POP_TOP
+
+535            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_CONST               3 ('')
+               CALL                     1
+               POP_TOP
+
+537   L12:     LOAD_FAST                2 (repeat_caller_context)
+               TO_BOOL
+               POP_JUMP_IF_FALSE       34 (to L13)
+
+538            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_FAST                2 (repeat_caller_context)
+               CALL                     1
+               POP_TOP
+
+539            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_CONST               3 ('')
+               CALL                     1
+               POP_TOP
+
+541   L13:     LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_CONST              18 ('=== HOW TO RECALL THIS NATURALLY ===')
+               CALL                     1
+               POP_TOP
+
+542            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_CONST               3 ('')
+               CALL                     1
+               POP_TOP
+
+543            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+
+544            LOAD_CONST              19 ('You remember this caller the way a real person would — naturally, not like a database. Follow these rules:')
+
+543            CALL                     1
+               POP_TOP
+
+547            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_CONST               3 ('')
+               CALL                     1
+               POP_TOP
+
+548            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+
+549            LOAD_CONST              20 ('NEVER say these phrases:\n- "According to my records..."\n- "I have a note here that..."\n- "Our system shows..."\n- "Based on your previous calls..."')
+
+548            CALL                     1
+               POP_TOP
+
+555            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_CONST               3 ('')
+               CALL                     1
+               POP_TOP
+
+556            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+
+557            LOAD_CONST              21 ('INSTEAD, recall things the way a human assistant would:\n- "Hey [name], great to hear from you again!"\n- "Oh right, last time you were asking about [topic] — is this related?"\n- "I remember you mentioned afternoons work best — still the case?"\n- "How did that [previous matter] end up going?"')
+
+556            CALL                     1
+               POP_TOP
+
+563            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+               LOAD_CONST               3 ('')
+               CALL                     1
+               POP_TOP
+
+564            LOAD_FAST                4 (lines)
+               LOAD_ATTR                1 (append + NULL|self)
+
+565            LOAD_CONST              22 ('RULES:\n- You ALREADY know their name. Use it from the start. NEVER ask for it.\n- Skip information you already have (company, relationship, callback number). Only confirm if something might have changed: "Still the best number to reach you?"\n- Reference past calls ONLY when relevant to the current conversation. Don\'t force it.\n- If they seem to be following up, connect the dots: "Is this about the same thing we discussed last time?"\n- Keep recall casual and selective — like remembering a regular, not reading a file.\n- NEVER reveal you have stored notes, a database, or a memory system.')
+
+564            CALL                     1
+               POP_TOP
+
+578            LOAD_CONST              23 ('\n')
+               LOAD_ATTR                5 (join + NULL|self)
+               LOAD_FAST                4 (lines)
+               CALL                     1
+               RETURN_VALUE
+
+Disassembly of <code object build_contact_instructions_block at 0x0000024C0EF13DF0, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 581>:
+581           RESUME                   0
+
+585           LOAD_FAST                0 (contact_custom_instructions)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       21 (to L1)
+              LOAD_FAST                0 (contact_custom_instructions)
+              LOAD_ATTR                1 (strip + NULL|self)
+              CALL                     0
+              TO_BOOL
+              POP_JUMP_IF_TRUE         1 (to L2)
+
+586   L1:     RETURN_CONST             1 ('')
+
+588   L2:     LOAD_CONST               2 ('\n=== CONTACT-SPECIFIC INSTRUCTIONS ===\n\n')
+
+589           LOAD_FAST                0 (contact_custom_instructions)
+              LOAD_ATTR                1 (strip + NULL|self)
+              CALL                     0
+              FORMAT_SIMPLE
+              LOAD_CONST               3 ('\n')
+
+588           BUILD_STRING             3
+
+587           RETURN_VALUE
+
+Disassembly of <code object build_screening_flow_block at 0x0000024C11467A00, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 593>:
+593           RESUME                   0
+
+601           LOAD_FAST                0 (user_display_name)
+              STORE_FAST               5 (udn)
+
+607           LOAD_CONST               1 ('=== HOW TO HAVE A NATURAL CONVERSATION ===\n\nYou are having a real phone conversation, NOT conducting an interview or reading from a script.\n\nHOW TO SOUND HUMAN:\n- Talk like a real person. Use contractions ("I\'ll", "you\'re", "that\'s").\n- Keep responses to 1-2 sentences. This is a phone call, not an essay.\n- Ask ONE question at a time. Wait for the answer before asking another.\n- Use natural transitions, not robotic scripts. Don\'t say "Moving on to my next question" — just ask it.\n- Match the caller\'s energy. If they\'re casual, be casual. If they\'re serious, be grounded.\n- Use the caller\'s name once you know it, but don\'t overuse it.\n- It\'s okay to say things like "got it", "sure thing", "makes sense", "no problem" as acknowledgments.\n- Adapt to the caller\'s pace. If they\'re in a hurry, be concise. If they want to chat, give them room.\n\nWHAT NEVER TO DO:\n- Never stack multiple questions in one turn.\n- Never use bullet points, numbered lists, or formatted text — you are speaking, not writing.\n- Never say "Great question!" or "That\'s a great point!" — just respond naturally.\n- Never repeat back exactly what the caller just said word-for-word.\n- Never say "Is there anything else I can help you with?" more than once.\n- NEVER re-ask for something the caller already told you (name, reason, company, etc.).\n\nRETURNING CALLERS:\n- If MEMORY CONTEXT shows you know this caller, treat them like a familiar person. Be warm, skip formalities, reference past conversations naturally.\n- Don\'t re-introduce yourself formally to someone you\'ve spoken to before. Just pick up where you left off.\n\nNEW CALLERS:\n- Be warm and welcoming. Follow the standard flow.\n- Collect their name as part of the conversation ("And who am I speaking with?"), not as a form field.\n\nEXAMPLES:\n\nBAD (robotic — never do this):\n  Caller: \'Hi, this is Sarah and I\'m calling about a consultation.\'\n  Agent: \'May I have your name?\'  ← WRONG, she already said it!\n\nGOOD (natural — new caller):\n  Caller: \'Hi, this is Sarah and I\'m calling about a consultation.\'\n  Agent: \'Hi Sarah! I\'d be happy to help you with that.\'\n\nGOOD (natural — returning caller):\n  Caller: \'Hi, it\'s Sarah again.\'\n  Agent: \'Hey Sarah, good to hear from you! What\'s going on today?\'\n\n')
+
+606           STORE_FAST               6 (natural_style)
+
+662           LOAD_CONST               2 ("=== RECORDING CONSENT ===\n\nYour greeting already asked the caller about recording consent. Handle the response naturally:\n\nIF THEY SAY YES or agree in any way:\nRespond warmly — e.g. 'Great, thank you!' — then move into the conversation. If they already stated why they're calling, acknowledge it and continue from there.\n\nIF THEY SAY NO or decline:\nSay something like: 'I completely understand. I'll let ")
+
+670           LOAD_FAST                5 (udn)
+              FORMAT_SIMPLE
+              LOAD_CONST               3 (" know that you called but preferred not to be recorded. If you'd like to leave your name, I'm happy to pass that along — but no pressure at all. Thank you for calling, and have a great day!'\nIf the caller gives their name, note it. Then end the call gracefully using the end_call tool.\n\nIF THEY IGNORE the consent question and jump to their reason:\nTreat this as implicit consent. Do NOT circle back to ask again. Continue naturally.\n\n")
+
+662           BUILD_STRING             3
+
+661           STORE_FAST               7 (consent_block)
+
+685           LOAD_CONST               4 ('=== INFORMATION TO GATHER ===\n\nCollect these naturally during the conversation. Skip anything the caller has already provided:\n\nCALLER NAME — IMPORTANT: Check the CALLER TYPE HANDLING and MEMORY CONTEXT sections of this prompt. If a caller name is listed there, you ALREADY KNOW who is calling. Use their name naturally (e.g. "Hi Michelle!") and do NOT ask for it. Only ask "And who am I speaking with?" if NO name appears in those sections AND the caller hasn\'t introduced themselves.\n\nREASON FOR CALLING — If not already clear: "What can I help you with today?" or "What brings you to call?"\n\n')
+
+684           STORE_FAST               8 (info_preamble)
+
+699           LOAD_CONST               5 ('CALLBACK NUMBER — Confirm using the last 4 digits from caller ID: "I have your number ending in [last 4 digits] — is that the best way to reach you?"\nIf they want a different number: "What number should ')
+
+702           LOAD_FAST                5 (udn)
+              FORMAT_SIMPLE
+              LOAD_CONST               6 (' use to reach you?"\nIf they give a new number, repeat it back to confirm before moving on.\n\n')
+
+699           BUILD_STRING             3
+
+698           STORE_FAST               9 (callback_guidance)
+
+709           LOAD_CONST               7 ('CLOSING THE CALL — Keep it brief, warm, and personal:\n"All right, [name], I\'ve got everything. I\'ll make sure ')
+
+710           LOAD_FAST                5 (udn)
+              FORMAT_SIMPLE
+              LOAD_CONST               8 (' gets your message. Thanks for calling — have a great day!"\nAdapt the wording to what feels natural in the moment. End the call cleanly.\n\n')
+
+709           BUILD_STRING             3
+
+708           STORE_FAST              10 (close_guidance)
+
+719           LOAD_FAST                1 (calendar_booking_enabled)
+              TO_BOOL
+              POP_JUMP_IF_TRUE        31 (to L1)
+
+721           LOAD_FAST                6 (natural_style)
+
+722           LOAD_FAST                7 (consent_block)
+
+721           BINARY_OP                0 (+)
+
+723           LOAD_FAST                8 (info_preamble)
+
+721           BINARY_OP                0 (+)
+
+724           LOAD_CONST               9 ('URGENCY — Gauge from context. If it\'s not obvious, ask casually: "Is this something time-sensitive, or is it okay for ')
+
+726           LOAD_FAST                5 (udn)
+              FORMAT_SIMPLE
+              LOAD_CONST              10 (' to get back to you when she can?"\nInterpret into: low, normal, or urgent.\n\n')
+
+724           BUILD_STRING             3
+
+721           BINARY_OP                0 (+)
+
+728           LOAD_FAST                9 (callback_guidance)
+
+721           BINARY_OP                0 (+)
+
+729           LOAD_CONST              11 ('CALLBACK TIME (optional) — If it makes sense: "When is a good time for ')
+
+730           LOAD_FAST                5 (udn)
+              FORMAT_SIMPLE
+              LOAD_CONST              12 (' to reach out?"\n\n')
+
+729           BUILD_STRING             3
+
+721           BINARY_OP                0 (+)
+
+731           LOAD_FAST               10 (close_guidance)
+
+721           BINARY_OP                0 (+)
+
+732           LOAD_CONST              13 ("=== DATA CAPTURE REQUIREMENTS ===\n\nFor every call, attempt to collect:\n- Caller name (or whatever they're comfortable sharing)\n- Reason for calling\n- Callback number (confirmed)\n- Urgency level (low / normal / urgent)\n- Optional: company name, best callback time\n")
+
+721           BINARY_OP                0 (+)
+
+720           RETURN_VALUE
+
+745   L1:     LOAD_FAST                6 (natural_style)
+
+746           LOAD_FAST                7 (consent_block)
+
+745           BINARY_OP                0 (+)
+
+747           LOAD_FAST                8 (info_preamble)
+
+745           BINARY_OP                0 (+)
+
+748           LOAD_CONST              14 ('After learning the caller\'s name and reason, determine intent:\n- If they want to BOOK, SCHEDULE, or MEET → BOOKING FLOW.\n- If they want to leave a MESSAGE or have a question → MESSAGE FLOW.\n\n=== BOOKING FLOW ===\n\nPREFERRED DATE:\nAsk naturally: "When were you thinking?" or "Do you have a day in mind?"\nIf they\'re vague (\'sometime next week\', \'whenever\'), suggest 2–3 upcoming days and ask which works.\nAccept ANY date format the caller uses — spoken dates, relative dates (\'next Tuesday\'), casual phrasing. Convert to the correct calendar date yourself.\n\nCHECK AVAILABILITY:\nConvert the date internally and call mattbot_get_available_slots. NEVER guess or invent slots.\nThe tool returns ALL available slots for that day. Only present up to 3 at a time so you don\'t overwhelm the caller. Pick a good spread (e.g. morning, midday, afternoon) when possible.\nPresent returned slots naturally with timezone, e.g.:\n"I have 10 AM, 1 PM, and 3 PM Eastern open. Which one works best for you?"\nIf the caller doesn\'t like those, offer the next batch from the remaining slots.\nIf nothing is available: "That day is fully booked. How about [nearby day]?"\n\nBOOK THE APPOINTMENT:\nOnce they pick a slot, confirm conversationally:\n"Great — so that\'s [day] at [time] [timezone] for [reason]. And I\'ll use the number ending in [last 4]. Sound good?"\nWait for confirmation, then call mattbot_book_appointment.\nDefault duration is ')
+
+779           LOAD_FAST                2 (default_duration_minutes)
+              FORMAT_SIMPLE
+              LOAD_CONST              15 (' minutes. Always include caller_phone when booking.\nIf the booking fails, apologize and suggest reaching out to ')
+
+782           LOAD_FAST                5 (udn)
+              FORMAT_SIMPLE
+              LOAD_CONST              16 (' directly.\n\nBOOKING RULES:\n- Never book in the past.\n- Only within the next ')
+
+785           LOAD_FAST                3 (booking_window_days)
+              FORMAT_SIMPLE
+              LOAD_CONST              17 (' days.\n- Always check availability before presenting times.\n- Always confirm details before booking.\n- NEVER expose technical details (date formats, tool names, API parameters) to the caller.\n\nAfter booking, close the call naturally.\n\n=== MESSAGE FLOW ===\n\nIf the caller does NOT want to book:\n\nURGENCY — Gauge from context. If unclear: "Is this something time-sensitive?"\nInterpret into: low, normal, or urgent.\n\n')
+
+748           BUILD_STRING             7
+
+745           BINARY_OP                0 (+)
+
+796           LOAD_FAST                9 (callback_guidance)
+
+745           BINARY_OP                0 (+)
+
+797           LOAD_CONST              18 ('CALLBACK TIME — If relevant: "When is a good time for ')
+
+798           LOAD_FAST                5 (udn)
+              FORMAT_SIMPLE
+              LOAD_CONST              12 (' to reach out?"\n\n')
+
+797           BUILD_STRING             3
+
+745           BINARY_OP                0 (+)
+
+799           LOAD_FAST               10 (close_guidance)
+
+745           BINARY_OP                0 (+)
+
+744           RETURN_VALUE
+
+Disassembly of <code object build_user_instructions_block at 0x0000024C0EEE3C90, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 803>:
+803           RESUME                   0
+
+807           LOAD_FAST                1 (user_instructions)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       21 (to L1)
+              LOAD_FAST                1 (user_instructions)
+              LOAD_ATTR                1 (strip + NULL|self)
+              CALL                     0
+              TO_BOOL
+              POP_JUMP_IF_TRUE         1 (to L2)
+
+808   L1:     RETURN_CONST             1 ('')
+
+810   L2:     LOAD_CONST               2 ('\n=== ADDITIONAL INSTRUCTIONS FROM ')
+              LOAD_FAST                0 (user_display_name)
+              LOAD_ATTR                3 (upper + NULL|self)
+              CALL                     0
+              FORMAT_SIMPLE
+              LOAD_CONST               3 (' ===\n\n')
+
+811           LOAD_FAST                1 (user_instructions)
+              LOAD_ATTR                1 (strip + NULL|self)
+              CALL                     0
+              FORMAT_SIMPLE
+              LOAD_CONST               4 ('\nFollow these instructions as long as they do not violate any safety boundary above.')
+
+810           BUILD_STRING             5
+
+809           RETURN_VALUE
+
+Disassembly of <code object assemble_final_prompt at 0x0000024C0FA8BF50, file "D:\fluence\Github\mattbot\backend\app\services\prompts.py", line 821>:
+821           RESUME                   0
+
+856           LOAD_GLOBAL              0 (FUNCTION_LABELS)
+              LOAD_ATTR                3 (get + NULL|self)
+              LOAD_FAST                3 (function_type)
+              LOAD_CONST               1 ('AI assistant')
+              CALL                     2
+              STORE_FAST              24 (function_label)
+
+857           LOAD_FAST                2 (user_display_name)
+              COPY                     1
+              TO_BOOL
+              POP_JUMP_IF_TRUE         2 (to L1)
+              POP_TOP
+              LOAD_CONST               2 ('the user')
+      L1:     STORE_FAST              25 (udn)
+
+859           LOAD_GLOBAL              5 (build_recording_disclosure_block + NULL)
+
+860           LOAD_FAST_LOAD_FAST    154 (recording_enabled, recording_announcement_required)
+              LOAD_FAST               11 (transcript_disclosure_mode)
+
+859           CALL                     3
+              STORE_FAST              26 (recording_disclosure_block)
+
+862           LOAD_GLOBAL              7 (build_greeting_block + NULL)
+
+863           LOAD_FAST_LOAD_FAST    129 (greeting_template, agent_name)
+              LOAD_FAST               25 (udn)
+              LOAD_FAST                5 (greeting_instructions)
+
+864           LOAD_FAST               22 (for_sync)
+              TO_BOOL
+              POP_JUMP_IF_TRUE         2 (to L2)
+              LOAD_FAST               23 (caller_name_from_memory)
+              JUMP_FORWARD             1 (to L3)
+      L2:     LOAD_CONST               3 (None)
+
+862   L3:     LOAD_CONST               4 (('caller_name_from_memory',))
+              CALL_KW                  5
+              STORE_FAST              27 (greeting_block)
+
+866           LOAD_GLOBAL              9 (build_handoff_block + NULL)
+              LOAD_FAST_LOAD_FAST    205 (handoff_enabled, handoff_trigger)
+              LOAD_FAST               25 (udn)
+              CALL                     3
+              STORE_FAST              28 (handoff_block)
+
+867           LOAD_GLOBAL             11 (build_screening_flow_block + NULL)
+
+868           LOAD_FAST               25 (udn)
+
+869           LOAD_FAST               19 (calendar_booking_enabled)
+
+870           LOAD_FAST               20 (calendar_default_duration_minutes)
+
+871           LOAD_FAST               21 (calendar_booking_window_days)
+
+872           LOAD_FAST               27 (greeting_block)
+
+867           LOAD_CONST               5 (('greeting_block',))
+              CALL_KW                  5
+              STORE_FAST              29 (screening_flow_block)
+
+874           LOAD_GLOBAL             13 (build_user_instructions_block + NULL)
+              LOAD_FAST               25 (udn)
+              LOAD_FAST                4 (user_instructions)
+              CALL                     2
+              STORE_FAST              30 (user_instructions_block)
+
+876           LOAD_FAST               22 (for_sync)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       11 (to L4)
+
+877           LOAD_CONST               6 ('{{caller_context}}')
+              STORE_FAST              31 (caller_context_block)
+
+878           LOAD_CONST               7 ('{{memory_context}}')
+              STORE_FAST              32 (memory_block)
+
+879           LOAD_CONST               8 ('{{temperament_block}}')
+              STORE_FAST              33 (temperament_block)
+
+880           LOAD_CONST               9 ('{{swearing_block}}')
+              STORE_FAST              34 (swearing_block)
+
+881           LOAD_CONST              10 ('{{time_limit_block}}')
+              STORE_FAST              35 (time_limit_block)
+              JUMP_FORWARD            94 (to L5)
+
+883   L4:     LOAD_GLOBAL             15 (build_caller_context_block + NULL)
+              LOAD_FAST               15 (is_vip)
+              LOAD_FAST               17 (vip_info)
+              CALL                     2
+              STORE_FAST              31 (caller_context_block)
+
+884           LOAD_GLOBAL             17 (build_memory_block + NULL)
+              LOAD_FAST               16 (memory_items)
+              LOAD_FAST               17 (vip_info)
+              LOAD_FAST               18 (repeat_caller_context)
+              CALL                     3
+              STORE_FAST              32 (memory_block)
+
+885           LOAD_GLOBAL             18 (TEMPERAMENT_BLOCKS)
+              LOAD_ATTR                3 (get + NULL|self)
+
+886           LOAD_FAST                6 (temperament_preset)
+              LOAD_GLOBAL             18 (TEMPERAMENT_BLOCKS)
+              LOAD_CONST              11 ('professional_polite')
+              BINARY_SUBSCR
+
+885           CALL                     2
+              STORE_FAST              33 (temperament_block)
+
+888           LOAD_GLOBAL             20 (SWEARING_BLOCKS)
+              LOAD_ATTR                3 (get + NULL|self)
+              LOAD_FAST                7 (swearing_rule)
+              LOAD_GLOBAL             20 (SWEARING_BLOCKS)
+              LOAD_CONST              12 ('no_swearing')
+              BINARY_SUBSCR
+              CALL                     2
+              STORE_FAST              34 (swearing_block)
+
+889           LOAD_GLOBAL             23 (build_time_limit_block + NULL)
+              LOAD_FAST_LOAD_FAST    239 (max_call_length_seconds, is_vip)
+              CALL                     2
+              STORE_FAST              35 (time_limit_block)
+
+894   L5:     LOAD_CONST              13 ('{{today_date}}')
+              STORE_FAST              36 (el_today_date)
+
+895           LOAD_CONST              14 ('{{caller_phone}}')
+              STORE_FAST              37 (el_caller_phone)
+
+896           LOAD_CONST              15 ('{{user_timezone}}')
+              STORE_FAST              38 (el_user_timezone)
+
+898           LOAD_GLOBAL             24 (SYSTEM_PROMPTS)
+              LOAD_ATTR                3 (get + NULL|self)
+              LOAD_FAST                0 (system_prompt_key)
+              LOAD_GLOBAL             24 (SYSTEM_PROMPTS)
+              LOAD_CONST              16 ('screening_v2')
+              BINARY_SUBSCR
+              CALL                     2
+              STORE_FAST              39 (template)
+
+900           LOAD_FAST               39 (template)
+              LOAD_ATTR               27 (format + NULL|self)
+
+901           LOAD_FAST                1 (agent_name)
+
+902           LOAD_FAST               25 (udn)
+
+903           LOAD_FAST               24 (function_label)
+
+904           LOAD_FAST               26 (recording_disclosure_block)
+
+905           LOAD_FAST               27 (greeting_block)
+
+906           LOAD_FAST               29 (screening_flow_block)
+
+907           LOAD_FAST               28 (handoff_block)
+
+908           LOAD_FAST               31 (caller_context_block)
+
+909           LOAD_FAST               35 (time_limit_block)
+
+910           LOAD_FAST               33 (temperament_block)
+
+911           LOAD_FAST               34 (swearing_block)
+
+912           LOAD_FAST               32 (memory_block)
+
+913           LOAD_FAST               30 (user_instructions_block)
+
+914           LOAD_FAST               36 (el_today_date)
+
+915           LOAD_FAST               37 (el_caller_phone)
+
+916           LOAD_FAST               38 (el_user_timezone)
+
+900           LOAD_CONST              17 (('agent_name', 'user_display_name', 'function_label', 'recording_disclosure_block', 'greeting_block', 'screening_flow_block', 'handoff_block', 'caller_context_block', 'time_limit_block', 'temperament_block', 'swearing_block', 'memory_block', 'user_instructions_block', 'el_today_date', 'el_caller_phone', 'el_user_timezone'))
+              CALL_KW                 16
+              RETURN_VALUE

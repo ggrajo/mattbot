@@ -1,0 +1,1002 @@
+# Bytecode dump of: twilio_utils.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py
+# co_names: ('__doc__', '__future__', 'annotations', 'hashlib', 'logging', 'urllib.parse', 'urlencode', 'fastapi', 'Request', 'app.config', 'settings', 'getLogger', '__name__', 'logger', 'validate_twilio_signature', 'mask_phone', 'extract_last4', 'hash_phone', 'redact_twilio_params', 'compute_payload_hash')
+# co_consts (strings): ['Twilio webhook utilities: signature validation and phone masking.']
+
+# DOCSTRING: """Twilio webhook utilities: signature validation and phone masking."""
+# --- Nested code object: validate_twilio_signature ---
+    # DOCSTRING: """Validate X-Twilio-Signature for an incoming webhook request.
+
+Reconstructs the URL using TWILIO_WEBHOOK_BASE_URL to handle ALB/proxy.
+Fails closed: returns False on any error.
+"""
+    # co_names: ('settings', 'TWILIO_AUTH_TOKEN', 'logger', 'warning', 'headers', 'get', 'TWILIO_WEBHOOK_BASE_URL', 'rstrip', 'url', 'path', 'str', 'split', 'twilio.request_validator', 'RequestValidator', 'bool', 'validate', 'ImportError', 'error', 'Exception', 'exception')
+    # co_varnames: ('request', 'form_params', 'auth_token', 'signature', 'base_url', 'url', 'RequestValidator', 'validator')
+      16            RESUME                   0
+    
+      25            LOAD_GLOBAL              0 (settings)
+                    LOAD_ATTR                2 (TWILIO_AUTH_TOKEN)
+                    STORE_FAST               2 (auth_token)
+    
+      26            LOAD_FAST                2 (auth_token)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        22 (to L1)
+    
+      27            LOAD_GLOBAL              4 (logger)
+                    LOAD_ATTR                7 (warning + NULL|self)
+                    LOAD_CONST               1 ('TWILIO_AUTH_TOKEN not configured; rejecting webhook')
+                    CALL                     1
+                    POP_TOP
+    
+      28            RETURN_CONST             2 (False)
+    
+      30    L1:     LOAD_FAST                0 (request)
+                    LOAD_ATTR                8 (headers)
+                    LOAD_ATTR               11 (get + NULL|self)
+                    LOAD_CONST               3 ('X-Twilio-Signature')
+                    LOAD_CONST               4 ('')
+                    CALL                     2
+                    STORE_FAST               3 (signature)
+    
+      31            LOAD_FAST                3 (signature)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L2)
+    
+      32            RETURN_CONST             2 (False)
+    
+      34    L2:     LOAD_GLOBAL              0 (settings)
+                    LOAD_ATTR               12 (TWILIO_WEBHOOK_BASE_URL)
+                    STORE_FAST               4 (base_url)
+    
+      35            LOAD_FAST                4 (base_url)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       40 (to L3)
+                    LOAD_FAST                4 (base_url)
+                    LOAD_ATTR               15 (rstrip + NULL|self)
+                    LOAD_CONST               5 ('/')
+                    CALL                     1
+                    LOAD_FAST                0 (request)
+                    LOAD_ATTR               16 (url)
+                    LOAD_ATTR               18 (path)
+                    BINARY_OP                0 (+)
+                    JUMP_FORWARD            38 (to L4)
+            L3:     LOAD_GLOBAL             21 (str + NULL)
+                    LOAD_FAST                0 (request)
+                    LOAD_ATTR               16 (url)
+                    CALL                     1
+                    LOAD_ATTR               23 (split + NULL|self)
+                    LOAD_CONST               6 ('?')
+                    CALL                     1
+                    LOAD_CONST               7 (0)
+                    BINARY_SUBSCR
+            L4:     STORE_FAST               5 (url)
+    
+      37            NOP
+    
+      38    L5:     LOAD_CONST               7 (0)
+                    LOAD_CONST               8 (('RequestValidator',))
+                    IMPORT_NAME             12 (twilio.request_validator)
+                    IMPORT_FROM             13 (RequestValidator)
+                    STORE_FAST               6 (RequestValidator)
+                    POP_TOP
+    
+      40            LOAD_FAST                6 (RequestValidator)
+                    PUSH_NULL
+                    LOAD_FAST                2 (auth_token)
+                    CALL                     1
+                    STORE_FAST               7 (validator)
+    
+      41            LOAD_GLOBAL             29 (bool + NULL)
+                    LOAD_FAST                7 (validator)
+                    LOAD_ATTR               31 (validate + NULL|self)
+                    LOAD_FAST_LOAD_FAST     81 (url, form_params)
+                    LOAD_FAST                3 (signature)
+                    CALL                     3
+                    CALL                     1
+            L6:     RETURN_VALUE
+    
+      --    L7:     PUSH_EXC_INFO
+    
+      42            LOAD_GLOBAL             32 (ImportError)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       24 (to L9)
+                    POP_TOP
+    
+      43            LOAD_GLOBAL              4 (logger)
+                    LOAD_ATTR               35 (error + NULL|self)
+                    LOAD_CONST               9 ('twilio package not installed; cannot validate signature')
+                    CALL                     1
+                    POP_TOP
+    
+      44    L8:     POP_EXCEPT
+                    RETURN_CONST             2 (False)
+    
+      45    L9:     LOAD_GLOBAL             36 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       24 (to L11)
+                    POP_TOP
+    
+      46            LOAD_GLOBAL              4 (logger)
+                    LOAD_ATTR               39 (exception + NULL|self)
+                    LOAD_CONST              10 ('Twilio signature validation error')
+                    CALL                     1
+                    POP_TOP
+    
+      47   L10:     POP_EXCEPT
+                    RETURN_CONST             2 (False)
+    
+      45   L11:     RERAISE                  0
+    
+      --   L12:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    ExceptionTable:
+      L5 to L6 -> L7 [0]
+      L7 to L8 -> L12 [1] lasti
+      L9 to L10 -> L12 [1] lasti
+      L11 to L12 -> L12 [1] lasti
+    
+# --- Nested code object: mask_phone ---
+    # DOCSTRING: """Mask a phone number for display: +1******1234."""
+    # --- Nested code object: mask_phone.<locals>.<genexpr> ---
+        # co_names: ('isdigit',)
+        # co_varnames: ('.0', 'c')
+          54           RETURN_GENERATOR
+                       POP_TOP
+               L1:     RESUME                   0
+                       LOAD_FAST                0 (.0)
+                       GET_ITER
+               L2:     FOR_ITER                29 (to L5)
+                       STORE_FAST_LOAD_FAST    17 (c, c)
+                       LOAD_ATTR                1 (isdigit + NULL|self)
+                       CALL                     0
+                       TO_BOOL
+               L3:     POP_JUMP_IF_TRUE         2 (to L4)
+                       JUMP_BACKWARD           25 (to L2)
+               L4:     LOAD_FAST                1 (c)
+                       YIELD_VALUE              0
+                       RESUME                   5
+                       POP_TOP
+                       JUMP_BACKWARD           31 (to L2)
+               L5:     END_FOR
+                       POP_TOP
+                       RETURN_CONST             0 (None)
+        
+          --   L6:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                       RERAISE                  1
+        ExceptionTable:
+          L1 to L3 -> L6 [0] lasti
+          L4 to L6 -> L6 [0] lasti
+        
+    # co_names: ('join', 'len', 'startswith')
+    # co_varnames: ('e164', 'digits', 'last4', 'prefix', 'country')
+     50           RESUME                   0
+    
+     52           LOAD_FAST                0 (e164)
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE         1 (to L1)
+    
+     53           RETURN_CONST             1 ('Unknown')
+    
+     54   L1:     LOAD_CONST               2 ('')
+                  LOAD_ATTR                1 (join + NULL|self)
+                  LOAD_CONST               3 (<code object <genexpr> at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 54>)
+                  MAKE_FUNCTION
+                  LOAD_FAST                0 (e164)
+                  GET_ITER
+                  CALL                     0
+                  CALL                     1
+                  STORE_FAST               1 (digits)
+    
+     55           LOAD_GLOBAL              3 (len + NULL)
+                  LOAD_FAST                1 (digits)
+                  CALL                     1
+                  LOAD_CONST               4 (4)
+                  COMPARE_OP              18 (bool(<))
+                  POP_JUMP_IF_FALSE       17 (to L3)
+    
+     56           LOAD_FAST                1 (digits)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE        8 (to L2)
+                  LOAD_CONST               5 ('***')
+                  LOAD_FAST                1 (digits)
+                  LOAD_CONST               6 (-1)
+                  LOAD_CONST               7 (None)
+                  BINARY_SLICE
+                  BINARY_OP                0 (+)
+                  RETURN_VALUE
+          L2:     LOAD_CONST               1 ('Unknown')
+                  RETURN_VALUE
+    
+     57   L3:     LOAD_FAST                1 (digits)
+                  LOAD_CONST               8 (-4)
+                  LOAD_CONST               7 (None)
+                  BINARY_SLICE
+                  STORE_FAST               2 (last4)
+    
+     58           LOAD_FAST                0 (e164)
+                  LOAD_ATTR                5 (startswith + NULL|self)
+                  LOAD_CONST               9 ('+')
+                  CALL                     1
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE        2 (to L4)
+                  LOAD_CONST               9 ('+')
+                  JUMP_FORWARD             1 (to L5)
+          L4:     LOAD_CONST               2 ('')
+          L5:     STORE_FAST               3 (prefix)
+    
+     59           LOAD_GLOBAL              3 (len + NULL)
+                  LOAD_FAST                1 (digits)
+                  CALL                     1
+                  LOAD_CONST              10 (10)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       17 (to L6)
+                  LOAD_FAST                1 (digits)
+                  LOAD_CONST               7 (None)
+                  LOAD_GLOBAL              3 (len + NULL)
+                  LOAD_FAST                1 (digits)
+                  CALL                     1
+                  LOAD_CONST              10 (10)
+                  BINARY_OP               10 (-)
+                  BINARY_SLICE
+                  JUMP_FORWARD             4 (to L7)
+          L6:     LOAD_FAST                1 (digits)
+                  LOAD_CONST               7 (None)
+                  LOAD_CONST              11 (1)
+                  BINARY_SLICE
+          L7:     STORE_FAST               4 (country)
+    
+     60           LOAD_FAST                3 (prefix)
+                  FORMAT_SIMPLE
+                  LOAD_FAST                4 (country)
+                  FORMAT_SIMPLE
+                  LOAD_CONST              12 ('******')
+                  FORMAT_SIMPLE
+                  LOAD_FAST                2 (last4)
+                  FORMAT_SIMPLE
+                  BUILD_STRING             4
+                  RETURN_VALUE
+    
+    Disassembly of <code object <genexpr> at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 54>:
+      54           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+                   LOAD_FAST                0 (.0)
+                   GET_ITER
+           L2:     FOR_ITER                29 (to L5)
+                   STORE_FAST_LOAD_FAST    17 (c, c)
+                   LOAD_ATTR                1 (isdigit + NULL|self)
+                   CALL                     0
+                   TO_BOOL
+           L3:     POP_JUMP_IF_TRUE         2 (to L4)
+                   JUMP_BACKWARD           25 (to L2)
+           L4:     LOAD_FAST                1 (c)
+                   YIELD_VALUE              0
+                   RESUME                   5
+                   POP_TOP
+                   JUMP_BACKWARD           31 (to L2)
+           L5:     END_FOR
+                   POP_TOP
+                   RETURN_CONST             0 (None)
+    
+      --   L6:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L6 [0] lasti
+      L4 to L6 -> L6 [0] lasti
+    
+# --- Nested code object: extract_last4 ---
+    # DOCSTRING: """Extract last 4 digits from a phone number."""
+    # --- Nested code object: extract_last4.<locals>.<genexpr> ---
+        # co_names: ('isdigit',)
+        # co_varnames: ('.0', 'c')
+          65           RETURN_GENERATOR
+                       POP_TOP
+               L1:     RESUME                   0
+                       LOAD_FAST                0 (.0)
+                       GET_ITER
+               L2:     FOR_ITER                29 (to L5)
+                       STORE_FAST_LOAD_FAST    17 (c, c)
+                       LOAD_ATTR                1 (isdigit + NULL|self)
+                       CALL                     0
+                       TO_BOOL
+               L3:     POP_JUMP_IF_TRUE         2 (to L4)
+                       JUMP_BACKWARD           25 (to L2)
+               L4:     LOAD_FAST                1 (c)
+                       YIELD_VALUE              0
+                       RESUME                   5
+                       POP_TOP
+                       JUMP_BACKWARD           31 (to L2)
+               L5:     END_FOR
+                       POP_TOP
+                       RETURN_CONST             0 (None)
+        
+          --   L6:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                       RERAISE                  1
+        ExceptionTable:
+          L1 to L3 -> L6 [0] lasti
+          L4 to L6 -> L6 [0] lasti
+        
+    # co_names: ('join', 'len', 'ljust')
+    # co_varnames: ('e164', 'digits')
+     63           RESUME                   0
+    
+     65           LOAD_CONST               1 ('')
+                  LOAD_ATTR                1 (join + NULL|self)
+                  LOAD_CONST               2 (<code object <genexpr> at 0x0000024C114961F0, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 65>)
+                  MAKE_FUNCTION
+                  LOAD_FAST                0 (e164)
+                  GET_ITER
+                  CALL                     0
+                  CALL                     1
+                  STORE_FAST               1 (digits)
+    
+     66           LOAD_GLOBAL              3 (len + NULL)
+                  LOAD_FAST                1 (digits)
+                  CALL                     1
+                  LOAD_CONST               3 (4)
+                  COMPARE_OP             188 (bool(>=))
+                  POP_JUMP_IF_FALSE        5 (to L1)
+                  LOAD_FAST                1 (digits)
+                  LOAD_CONST               4 (-4)
+                  LOAD_CONST               5 (None)
+                  BINARY_SLICE
+                  RETURN_VALUE
+          L1:     LOAD_FAST                1 (digits)
+                  LOAD_ATTR                5 (ljust + NULL|self)
+                  LOAD_CONST               3 (4)
+                  LOAD_CONST               6 ('0')
+                  CALL                     2
+                  RETURN_VALUE
+    
+    Disassembly of <code object <genexpr> at 0x0000024C114961F0, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 65>:
+      65           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+                   LOAD_FAST                0 (.0)
+                   GET_ITER
+           L2:     FOR_ITER                29 (to L5)
+                   STORE_FAST_LOAD_FAST    17 (c, c)
+                   LOAD_ATTR                1 (isdigit + NULL|self)
+                   CALL                     0
+                   TO_BOOL
+           L3:     POP_JUMP_IF_TRUE         2 (to L4)
+                   JUMP_BACKWARD           25 (to L2)
+           L4:     LOAD_FAST                1 (c)
+                   YIELD_VALUE              0
+                   RESUME                   5
+                   POP_TOP
+                   JUMP_BACKWARD           31 (to L2)
+           L5:     END_FOR
+                   POP_TOP
+                   RETURN_CONST             0 (None)
+    
+      --   L6:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L6 [0] lasti
+      L4 to L6 -> L6 [0] lasti
+    
+# --- Nested code object: hash_phone ---
+    # DOCSTRING: """SHA-256 hash of normalized E.164 number for lookup."""
+    # co_names: ('strip', 'hashlib', 'sha256', 'encode', 'hexdigest')
+    # co_varnames: ('e164', 'normalized')
+     69           RESUME                   0
+    
+     71           LOAD_FAST                0 (e164)
+                  LOAD_ATTR                1 (strip + NULL|self)
+                  CALL                     0
+                  STORE_FAST               1 (normalized)
+    
+     72           LOAD_GLOBAL              2 (hashlib)
+                  LOAD_ATTR                4 (sha256)
+                  PUSH_NULL
+                  LOAD_FAST                1 (normalized)
+                  LOAD_ATTR                7 (encode + NULL|self)
+                  LOAD_CONST               1 ('utf-8')
+                  CALL                     1
+                  CALL                     1
+                  LOAD_ATTR                9 (hexdigest + NULL|self)
+                  CALL                     0
+                  RETURN_VALUE
+    
+# --- Nested code object: redact_twilio_params ---
+    # DOCSTRING: """Redact sensitive fields from Twilio webhook parameters."""
+    # co_names: ('items', 'mask_phone', 'str')
+    # co_varnames: ('params', 'sensitive_keys', 'redacted', 'key', 'value')
+     75           RESUME                   0
+    
+     77           BUILD_SET                0
+                  LOAD_CONST               1 (frozenset({'CallerZip', 'CallerState', 'ForwardedFrom', 'FromState', 'ToZip', 'FromZip', 'FromCountry', 'StirVerstat', 'Caller', 'ToCountry', 'From', 'CallerCity', 'FromCity', 'ToCity', 'CallerCountry', 'ToState', 'Called', 'To'}))
+                  SET_UPDATE               1
+                  STORE_FAST               1 (sensitive_keys)
+    
+     83           BUILD_MAP                0
+                  STORE_FAST               2 (redacted)
+    
+     84           LOAD_FAST                0 (params)
+                  LOAD_ATTR                1 (items + NULL|self)
+                  CALL                     0
+                  GET_ITER
+          L1:     FOR_ITER                75 (to L6)
+                  UNPACK_SEQUENCE          2
+                  STORE_FAST_STORE_FAST   52 (key, value)
+    
+     85           LOAD_FAST_LOAD_FAST     49 (key, sensitive_keys)
+                  CONTAINS_OP              0
+                  POP_JUMP_IF_FALSE       43 (to L3)
+                  LOAD_FAST                4 (value)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       36 (to L3)
+    
+     86           LOAD_FAST                3 (key)
+                  LOAD_CONST               2 (('From', 'To', 'Caller', 'Called', 'ForwardedFrom'))
+                  CONTAINS_OP              0
+                  POP_JUMP_IF_FALSE       24 (to L2)
+    
+     87           LOAD_GLOBAL              3 (mask_phone + NULL)
+                  LOAD_GLOBAL              5 (str + NULL)
+                  LOAD_FAST                4 (value)
+                  CALL                     1
+                  CALL                     1
+                  LOAD_FAST_LOAD_FAST     35 (redacted, key)
+                  STORE_SUBSCR
+                  JUMP_BACKWARD           47 (to L1)
+    
+     89   L2:     LOAD_CONST               3 ('[REDACTED]')
+                  LOAD_FAST_LOAD_FAST     35 (redacted, key)
+                  STORE_SUBSCR
+                  JUMP_BACKWARD           53 (to L1)
+    
+     91   L3:     LOAD_FAST                4 (value)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       11 (to L4)
+                  LOAD_GLOBAL              5 (str + NULL)
+                  LOAD_FAST                4 (value)
+                  CALL                     1
+                  JUMP_FORWARD             1 (to L5)
+          L4:     LOAD_CONST               4 ('')
+          L5:     LOAD_FAST_LOAD_FAST     35 (redacted, key)
+                  STORE_SUBSCR
+                  JUMP_BACKWARD           77 (to L1)
+    
+     84   L6:     END_FOR
+                  POP_TOP
+    
+     92           LOAD_FAST                2 (redacted)
+                  RETURN_VALUE
+    
+# --- Nested code object: compute_payload_hash ---
+    # DOCSTRING: """Compute a SHA-256 hash of sorted webhook params for deduplication."""
+    # co_names: ('urlencode', 'sorted', 'items', 'hashlib', 'sha256', 'encode', 'hexdigest')
+    # co_varnames: ('params', 'canonical')
+     95           RESUME                   0
+    
+     97           LOAD_GLOBAL              1 (urlencode + NULL)
+                  LOAD_GLOBAL              3 (sorted + NULL)
+                  LOAD_FAST                0 (params)
+                  LOAD_ATTR                5 (items + NULL|self)
+                  CALL                     0
+                  CALL                     1
+                  CALL                     1
+                  STORE_FAST               1 (canonical)
+    
+     98           LOAD_GLOBAL              6 (hashlib)
+                  LOAD_ATTR                8 (sha256)
+                  PUSH_NULL
+                  LOAD_FAST                1 (canonical)
+                  LOAD_ATTR               11 (encode + NULL|self)
+                  LOAD_CONST               1 ('utf-8')
+                  CALL                     1
+                  CALL                     1
+                  LOAD_ATTR               13 (hexdigest + NULL|self)
+                  CALL                     0
+                  RETURN_VALUE
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'hashlib', 'logging', 'urllib.parse', 'urlencode', 'fastapi', 'Request', 'app.config', 'settings', 'getLogger', '__name__', 'logger', 'validate_twilio_signature', 'mask_phone', 'extract_last4', 'hash_phone', 'redact_twilio_params', 'compute_payload_hash')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Twilio webhook utilities: signature validation and phone masking.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (hashlib)
+              STORE_NAME               3 (hashlib)
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              4 (logging)
+              STORE_NAME               4 (logging)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('urlencode',))
+              IMPORT_NAME              5 (urllib.parse)
+              IMPORT_FROM              6 (urlencode)
+              STORE_NAME               6 (urlencode)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('Request',))
+              IMPORT_NAME              7 (fastapi)
+              IMPORT_FROM              8 (Request)
+              STORE_NAME               8 (Request)
+              POP_TOP
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('settings',))
+              IMPORT_NAME              9 (app.config)
+              IMPORT_FROM             10 (settings)
+              STORE_NAME              10 (settings)
+              POP_TOP
+
+ 13           LOAD_NAME                4 (logging)
+              LOAD_ATTR               22 (getLogger)
+              PUSH_NULL
+              LOAD_NAME               12 (__name__)
+              CALL                     1
+              STORE_NAME              13 (logger)
+
+ 16           NOP
+
+ 17           NOP
+
+ 16           NOP
+
+ 18           NOP
+
+ 16           NOP
+
+ 19           NOP
+
+ 16           LOAD_CONST              13 (('request', 'Request', 'form_params', 'dict[str, str]', 'return', 'bool'))
+              LOAD_CONST               7 (<code object validate_twilio_signature at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 16>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              14 (validate_twilio_signature)
+
+ 50           LOAD_CONST              14 (('e164', 'str', 'return', 'str'))
+              LOAD_CONST               8 (<code object mask_phone at 0x0000024C0EC33A50, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 50>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              15 (mask_phone)
+
+ 63           LOAD_CONST              14 (('e164', 'str', 'return', 'str'))
+              LOAD_CONST               9 (<code object extract_last4 at 0x0000024C0EEE3C90, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 63>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              16 (extract_last4)
+
+ 69           LOAD_CONST              14 (('e164', 'str', 'return', 'str'))
+              LOAD_CONST              10 (<code object hash_phone at 0x0000024C0EEE3DE0, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 69>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              17 (hash_phone)
+
+ 75           LOAD_CONST              15 (('params', 'dict[str, str]', 'return', 'dict[str, str]'))
+              LOAD_CONST              11 (<code object redact_twilio_params at 0x0000024C0EBFFC50, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 75>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              18 (redact_twilio_params)
+
+ 95           LOAD_CONST              16 (('params', 'dict[str, str]', 'return', 'str'))
+              LOAD_CONST              12 (<code object compute_payload_hash at 0x0000024C0EC47330, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 95>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              19 (compute_payload_hash)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object validate_twilio_signature at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 16>:
+  16            RESUME                   0
+
+  25            LOAD_GLOBAL              0 (settings)
+                LOAD_ATTR                2 (TWILIO_AUTH_TOKEN)
+                STORE_FAST               2 (auth_token)
+
+  26            LOAD_FAST                2 (auth_token)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        22 (to L1)
+
+  27            LOAD_GLOBAL              4 (logger)
+                LOAD_ATTR                7 (warning + NULL|self)
+                LOAD_CONST               1 ('TWILIO_AUTH_TOKEN not configured; rejecting webhook')
+                CALL                     1
+                POP_TOP
+
+  28            RETURN_CONST             2 (False)
+
+  30    L1:     LOAD_FAST                0 (request)
+                LOAD_ATTR                8 (headers)
+                LOAD_ATTR               11 (get + NULL|self)
+                LOAD_CONST               3 ('X-Twilio-Signature')
+                LOAD_CONST               4 ('')
+                CALL                     2
+                STORE_FAST               3 (signature)
+
+  31            LOAD_FAST                3 (signature)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L2)
+
+  32            RETURN_CONST             2 (False)
+
+  34    L2:     LOAD_GLOBAL              0 (settings)
+                LOAD_ATTR               12 (TWILIO_WEBHOOK_BASE_URL)
+                STORE_FAST               4 (base_url)
+
+  35            LOAD_FAST                4 (base_url)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       40 (to L3)
+                LOAD_FAST                4 (base_url)
+                LOAD_ATTR               15 (rstrip + NULL|self)
+                LOAD_CONST               5 ('/')
+                CALL                     1
+                LOAD_FAST                0 (request)
+                LOAD_ATTR               16 (url)
+                LOAD_ATTR               18 (path)
+                BINARY_OP                0 (+)
+                JUMP_FORWARD            38 (to L4)
+        L3:     LOAD_GLOBAL             21 (str + NULL)
+                LOAD_FAST                0 (request)
+                LOAD_ATTR               16 (url)
+                CALL                     1
+                LOAD_ATTR               23 (split + NULL|self)
+                LOAD_CONST               6 ('?')
+                CALL                     1
+                LOAD_CONST               7 (0)
+                BINARY_SUBSCR
+        L4:     STORE_FAST               5 (url)
+
+  37            NOP
+
+  38    L5:     LOAD_CONST               7 (0)
+                LOAD_CONST               8 (('RequestValidator',))
+                IMPORT_NAME             12 (twilio.request_validator)
+                IMPORT_FROM             13 (RequestValidator)
+                STORE_FAST               6 (RequestValidator)
+                POP_TOP
+
+  40            LOAD_FAST                6 (RequestValidator)
+                PUSH_NULL
+                LOAD_FAST                2 (auth_token)
+                CALL                     1
+                STORE_FAST               7 (validator)
+
+  41            LOAD_GLOBAL             29 (bool + NULL)
+                LOAD_FAST                7 (validator)
+                LOAD_ATTR               31 (validate + NULL|self)
+                LOAD_FAST_LOAD_FAST     81 (url, form_params)
+                LOAD_FAST                3 (signature)
+                CALL                     3
+                CALL                     1
+        L6:     RETURN_VALUE
+
+  --    L7:     PUSH_EXC_INFO
+
+  42            LOAD_GLOBAL             32 (ImportError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       24 (to L9)
+                POP_TOP
+
+  43            LOAD_GLOBAL              4 (logger)
+                LOAD_ATTR               35 (error + NULL|self)
+                LOAD_CONST               9 ('twilio package not installed; cannot validate signature')
+                CALL                     1
+                POP_TOP
+
+  44    L8:     POP_EXCEPT
+                RETURN_CONST             2 (False)
+
+  45    L9:     LOAD_GLOBAL             36 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       24 (to L11)
+                POP_TOP
+
+  46            LOAD_GLOBAL              4 (logger)
+                LOAD_ATTR               39 (exception + NULL|self)
+                LOAD_CONST              10 ('Twilio signature validation error')
+                CALL                     1
+                POP_TOP
+
+  47   L10:     POP_EXCEPT
+                RETURN_CONST             2 (False)
+
+  45   L11:     RERAISE                  0
+
+  --   L12:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+ExceptionTable:
+  L5 to L6 -> L7 [0]
+  L7 to L8 -> L12 [1] lasti
+  L9 to L10 -> L12 [1] lasti
+  L11 to L12 -> L12 [1] lasti
+
+Disassembly of <code object mask_phone at 0x0000024C0EC33A50, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 50>:
+ 50           RESUME                   0
+
+ 52           LOAD_FAST                0 (e164)
+              TO_BOOL
+              POP_JUMP_IF_TRUE         1 (to L1)
+
+ 53           RETURN_CONST             1 ('Unknown')
+
+ 54   L1:     LOAD_CONST               2 ('')
+              LOAD_ATTR                1 (join + NULL|self)
+              LOAD_CONST               3 (<code object <genexpr> at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 54>)
+              MAKE_FUNCTION
+              LOAD_FAST                0 (e164)
+              GET_ITER
+              CALL                     0
+              CALL                     1
+              STORE_FAST               1 (digits)
+
+ 55           LOAD_GLOBAL              3 (len + NULL)
+              LOAD_FAST                1 (digits)
+              CALL                     1
+              LOAD_CONST               4 (4)
+              COMPARE_OP              18 (bool(<))
+              POP_JUMP_IF_FALSE       17 (to L3)
+
+ 56           LOAD_FAST                1 (digits)
+              TO_BOOL
+              POP_JUMP_IF_FALSE        8 (to L2)
+              LOAD_CONST               5 ('***')
+              LOAD_FAST                1 (digits)
+              LOAD_CONST               6 (-1)
+              LOAD_CONST               7 (None)
+              BINARY_SLICE
+              BINARY_OP                0 (+)
+              RETURN_VALUE
+      L2:     LOAD_CONST               1 ('Unknown')
+              RETURN_VALUE
+
+ 57   L3:     LOAD_FAST                1 (digits)
+              LOAD_CONST               8 (-4)
+              LOAD_CONST               7 (None)
+              BINARY_SLICE
+              STORE_FAST               2 (last4)
+
+ 58           LOAD_FAST                0 (e164)
+              LOAD_ATTR                5 (startswith + NULL|self)
+              LOAD_CONST               9 ('+')
+              CALL                     1
+              TO_BOOL
+              POP_JUMP_IF_FALSE        2 (to L4)
+              LOAD_CONST               9 ('+')
+              JUMP_FORWARD             1 (to L5)
+      L4:     LOAD_CONST               2 ('')
+      L5:     STORE_FAST               3 (prefix)
+
+ 59           LOAD_GLOBAL              3 (len + NULL)
+              LOAD_FAST                1 (digits)
+              CALL                     1
+              LOAD_CONST              10 (10)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       17 (to L6)
+              LOAD_FAST                1 (digits)
+              LOAD_CONST               7 (None)
+              LOAD_GLOBAL              3 (len + NULL)
+              LOAD_FAST                1 (digits)
+              CALL                     1
+              LOAD_CONST              10 (10)
+              BINARY_OP               10 (-)
+              BINARY_SLICE
+              JUMP_FORWARD             4 (to L7)
+      L6:     LOAD_FAST                1 (digits)
+              LOAD_CONST               7 (None)
+              LOAD_CONST              11 (1)
+              BINARY_SLICE
+      L7:     STORE_FAST               4 (country)
+
+ 60           LOAD_FAST                3 (prefix)
+              FORMAT_SIMPLE
+              LOAD_FAST                4 (country)
+              FORMAT_SIMPLE
+              LOAD_CONST              12 ('******')
+              FORMAT_SIMPLE
+              LOAD_FAST                2 (last4)
+              FORMAT_SIMPLE
+              BUILD_STRING             4
+              RETURN_VALUE
+
+Disassembly of <code object <genexpr> at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 54>:
+  54           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+               LOAD_FAST                0 (.0)
+               GET_ITER
+       L2:     FOR_ITER                29 (to L5)
+               STORE_FAST_LOAD_FAST    17 (c, c)
+               LOAD_ATTR                1 (isdigit + NULL|self)
+               CALL                     0
+               TO_BOOL
+       L3:     POP_JUMP_IF_TRUE         2 (to L4)
+               JUMP_BACKWARD           25 (to L2)
+       L4:     LOAD_FAST                1 (c)
+               YIELD_VALUE              0
+               RESUME                   5
+               POP_TOP
+               JUMP_BACKWARD           31 (to L2)
+       L5:     END_FOR
+               POP_TOP
+               RETURN_CONST             0 (None)
+
+  --   L6:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L6 [0] lasti
+  L4 to L6 -> L6 [0] lasti
+
+Disassembly of <code object extract_last4 at 0x0000024C0EEE3C90, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 63>:
+ 63           RESUME                   0
+
+ 65           LOAD_CONST               1 ('')
+              LOAD_ATTR                1 (join + NULL|self)
+              LOAD_CONST               2 (<code object <genexpr> at 0x0000024C114961F0, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 65>)
+              MAKE_FUNCTION
+              LOAD_FAST                0 (e164)
+              GET_ITER
+              CALL                     0
+              CALL                     1
+              STORE_FAST               1 (digits)
+
+ 66           LOAD_GLOBAL              3 (len + NULL)
+              LOAD_FAST                1 (digits)
+              CALL                     1
+              LOAD_CONST               3 (4)
+              COMPARE_OP             188 (bool(>=))
+              POP_JUMP_IF_FALSE        5 (to L1)
+              LOAD_FAST                1 (digits)
+              LOAD_CONST               4 (-4)
+              LOAD_CONST               5 (None)
+              BINARY_SLICE
+              RETURN_VALUE
+      L1:     LOAD_FAST                1 (digits)
+              LOAD_ATTR                5 (ljust + NULL|self)
+              LOAD_CONST               3 (4)
+              LOAD_CONST               6 ('0')
+              CALL                     2
+              RETURN_VALUE
+
+Disassembly of <code object <genexpr> at 0x0000024C114961F0, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 65>:
+  65           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+               LOAD_FAST                0 (.0)
+               GET_ITER
+       L2:     FOR_ITER                29 (to L5)
+               STORE_FAST_LOAD_FAST    17 (c, c)
+               LOAD_ATTR                1 (isdigit + NULL|self)
+               CALL                     0
+               TO_BOOL
+       L3:     POP_JUMP_IF_TRUE         2 (to L4)
+               JUMP_BACKWARD           25 (to L2)
+       L4:     LOAD_FAST                1 (c)
+               YIELD_VALUE              0
+               RESUME                   5
+               POP_TOP
+               JUMP_BACKWARD           31 (to L2)
+       L5:     END_FOR
+               POP_TOP
+               RETURN_CONST             0 (None)
+
+  --   L6:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L6 [0] lasti
+  L4 to L6 -> L6 [0] lasti
+
+Disassembly of <code object hash_phone at 0x0000024C0EEE3DE0, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 69>:
+ 69           RESUME                   0
+
+ 71           LOAD_FAST                0 (e164)
+              LOAD_ATTR                1 (strip + NULL|self)
+              CALL                     0
+              STORE_FAST               1 (normalized)
+
+ 72           LOAD_GLOBAL              2 (hashlib)
+              LOAD_ATTR                4 (sha256)
+              PUSH_NULL
+              LOAD_FAST                1 (normalized)
+              LOAD_ATTR                7 (encode + NULL|self)
+              LOAD_CONST               1 ('utf-8')
+              CALL                     1
+              CALL                     1
+              LOAD_ATTR                9 (hexdigest + NULL|self)
+              CALL                     0
+              RETURN_VALUE
+
+Disassembly of <code object redact_twilio_params at 0x0000024C0EBFFC50, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 75>:
+ 75           RESUME                   0
+
+ 77           BUILD_SET                0
+              LOAD_CONST               1 (frozenset({'CallerZip', 'CallerState', 'ForwardedFrom', 'FromState', 'ToZip', 'FromZip', 'FromCountry', 'StirVerstat', 'Caller', 'ToCountry', 'From', 'CallerCity', 'FromCity', 'ToCity', 'CallerCountry', 'ToState', 'Called', 'To'}))
+              SET_UPDATE               1
+              STORE_FAST               1 (sensitive_keys)
+
+ 83           BUILD_MAP                0
+              STORE_FAST               2 (redacted)
+
+ 84           LOAD_FAST                0 (params)
+              LOAD_ATTR                1 (items + NULL|self)
+              CALL                     0
+              GET_ITER
+      L1:     FOR_ITER                75 (to L6)
+              UNPACK_SEQUENCE          2
+              STORE_FAST_STORE_FAST   52 (key, value)
+
+ 85           LOAD_FAST_LOAD_FAST     49 (key, sensitive_keys)
+              CONTAINS_OP              0
+              POP_JUMP_IF_FALSE       43 (to L3)
+              LOAD_FAST                4 (value)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       36 (to L3)
+
+ 86           LOAD_FAST                3 (key)
+              LOAD_CONST               2 (('From', 'To', 'Caller', 'Called', 'ForwardedFrom'))
+              CONTAINS_OP              0
+              POP_JUMP_IF_FALSE       24 (to L2)
+
+ 87           LOAD_GLOBAL              3 (mask_phone + NULL)
+              LOAD_GLOBAL              5 (str + NULL)
+              LOAD_FAST                4 (value)
+              CALL                     1
+              CALL                     1
+              LOAD_FAST_LOAD_FAST     35 (redacted, key)
+              STORE_SUBSCR
+              JUMP_BACKWARD           47 (to L1)
+
+ 89   L2:     LOAD_CONST               3 ('[REDACTED]')
+              LOAD_FAST_LOAD_FAST     35 (redacted, key)
+              STORE_SUBSCR
+              JUMP_BACKWARD           53 (to L1)
+
+ 91   L3:     LOAD_FAST                4 (value)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       11 (to L4)
+              LOAD_GLOBAL              5 (str + NULL)
+              LOAD_FAST                4 (value)
+              CALL                     1
+              JUMP_FORWARD             1 (to L5)
+      L4:     LOAD_CONST               4 ('')
+      L5:     LOAD_FAST_LOAD_FAST     35 (redacted, key)
+              STORE_SUBSCR
+              JUMP_BACKWARD           77 (to L1)
+
+ 84   L6:     END_FOR
+              POP_TOP
+
+ 92           LOAD_FAST                2 (redacted)
+              RETURN_VALUE
+
+Disassembly of <code object compute_payload_hash at 0x0000024C0EC47330, file "D:\fluence\Github\mattbot\backend\app\core\twilio_utils.py", line 95>:
+ 95           RESUME                   0
+
+ 97           LOAD_GLOBAL              1 (urlencode + NULL)
+              LOAD_GLOBAL              3 (sorted + NULL)
+              LOAD_FAST                0 (params)
+              LOAD_ATTR                5 (items + NULL|self)
+              CALL                     0
+              CALL                     1
+              CALL                     1
+              STORE_FAST               1 (canonical)
+
+ 98           LOAD_GLOBAL              6 (hashlib)
+              LOAD_ATTR                8 (sha256)
+              PUSH_NULL
+              LOAD_FAST                1 (canonical)
+              LOAD_ATTR               11 (encode + NULL|self)
+              LOAD_CONST               1 ('utf-8')
+              CALL                     1
+              CALL                     1
+              LOAD_ATTR               13 (hexdigest + NULL|self)
+              CALL                     0
+              RETURN_VALUE

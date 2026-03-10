@@ -1,0 +1,665 @@
+# Bytecode dump of: reminder.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\models\reminder.py
+# co_names: ('__doc__', 'uuid', 'datetime', 'UTC', 'sqlalchemy', 'CheckConstraint', 'ForeignKey', 'Index', 'String', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'app.database', 'Base', 'app.models._types', 'tz_datetime', 'Reminder')
+# co_consts (strings): ['Reminder model. User-facing reminders optionally linked to calls.', 'Reminder']
+
+# DOCSTRING: """Reminder model. User-facing reminders optionally linked to calls."""
+# --- Nested code object: Reminder ---
+    # DOCSTRING: """Reminder"""
+    # --- Nested code object: Reminder.<lambda> ---
+        # co_names: ('datetime', 'now', 'UTC')
+        # co_varnames: ()
+         43           RESUME                   0
+                      LOAD_GLOBAL              0 (datetime)
+                      LOAD_ATTR                2 (now)
+                      PUSH_NULL
+                      LOAD_GLOBAL              4 (UTC)
+                      CALL                     1
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__tablename__', 'mapped_column', 'UUID', 'uuid', 'uuid4', 'id', 'Mapped', '__annotations__', 'ForeignKey', 'owner_user_id', 'call_id', 'String', 'title', 'str', 'tz_datetime', 'due_at', 'datetime', 'Text', 'timezone_at_creation', 'status', 'text', 'created_at', 'updated_at', 'created_by_device_id', 'CheckConstraint', 'Index', '__table_args__', '__static_attributes__')
+    # co_varnames: ()
+     14           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('Reminder')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (14)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     15           LOAD_CONST               2 ('reminders')
+                  STORE_NAME               4 (__tablename__)
+    
+     17           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     18           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               3 (True)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               16 (uuid4)
+    
+     17           LOAD_CONST               5 (('primary_key', 'default'))
+                  CALL_KW                  3
+                  STORE_NAME               9 (id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST               6 ('id')
+                  STORE_SUBSCR
+    
+     20           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     21           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     22           LOAD_NAME               12 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST               7 ('users.id')
+                  LOAD_CONST               8 ('CASCADE')
+                  LOAD_CONST               9 (('ondelete',))
+                  CALL_KW                  2
+    
+     23           LOAD_CONST              10 (False)
+    
+     20           LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  3
+                  STORE_NAME              13 (owner_user_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              12 ('owner_user_id')
+                  STORE_SUBSCR
+    
+     25           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     26           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     27           LOAD_NAME               12 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST              13 ('calls.id')
+                  LOAD_CONST              14 ('SET NULL')
+                  LOAD_CONST               9 (('ondelete',))
+                  CALL_KW                  2
+    
+     28           LOAD_CONST               3 (True)
+    
+     25           LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  3
+                  STORE_NAME              14 (call_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  LOAD_CONST              15 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              16 ('call_id')
+                  STORE_SUBSCR
+    
+     30           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               15 (String)
+                  PUSH_NULL
+                  LOAD_CONST              17 (200)
+                  CALL                     1
+                  LOAD_CONST              10 (False)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              16 (title)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               17 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              18 ('title')
+                  STORE_SUBSCR
+    
+     31           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               18 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST              10 (False)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              19 (due_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               20 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              19 ('due_at')
+                  STORE_SUBSCR
+    
+     32           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               21 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              22 (timezone_at_creation)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               17 (str)
+                  LOAD_CONST              15 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              20 ('timezone_at_creation')
+                  STORE_SUBSCR
+    
+     33           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     34           LOAD_NAME               15 (String)
+                  PUSH_NULL
+                  LOAD_CONST              21 (20)
+                  CALL                     1
+                  LOAD_CONST              10 (False)
+                  LOAD_CONST              22 ('scheduled')
+    
+     33           LOAD_CONST              23 (('nullable', 'default'))
+                  CALL_KW                  3
+                  STORE_NAME              23 (status)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               17 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              24 ('status')
+                  STORE_SUBSCR
+    
+     36           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     37           LOAD_NAME               18 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST              10 (False)
+                  LOAD_NAME               24 (text)
+                  PUSH_NULL
+                  LOAD_CONST              25 ('now()')
+                  CALL                     1
+    
+     36           LOAD_CONST              26 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              25 (created_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               20 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              27 ('created_at')
+                  STORE_SUBSCR
+    
+     39           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     40           LOAD_NAME               18 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+    
+     41           LOAD_CONST              10 (False)
+    
+     42           LOAD_NAME               24 (text)
+                  PUSH_NULL
+                  LOAD_CONST              25 ('now()')
+                  CALL                     1
+    
+     43           LOAD_CONST              28 (<code object <lambda> at 0x0000024C11423A30, file "D:\fluence\Github\mattbot\backend\app\models\reminder.py", line 43>)
+                  MAKE_FUNCTION
+    
+     39           LOAD_CONST              29 (('nullable', 'server_default', 'onupdate'))
+                  CALL_KW                  4
+                  STORE_NAME              26 (updated_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               20 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              30 ('updated_at')
+                  STORE_SUBSCR
+    
+     45           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     46           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               3 (True)
+    
+     45           LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              27 (created_by_device_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  LOAD_CONST              15 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              31 ('created_by_device_id')
+                  STORE_SUBSCR
+    
+     50           LOAD_NAME               28 (CheckConstraint)
+                  PUSH_NULL
+    
+     51           LOAD_CONST              32 ("status IN ('scheduled', 'triggered', 'completed', 'cancelled')")
+    
+     52           LOAD_CONST              33 ('ck_reminders_status')
+    
+     50           LOAD_CONST              34 (('name',))
+                  CALL_KW                  2
+    
+     54           LOAD_NAME               29 (Index)
+                  PUSH_NULL
+                  LOAD_CONST              35 ('reminders_user_due_idx')
+                  LOAD_CONST              12 ('owner_user_id')
+                  LOAD_CONST              19 ('due_at')
+                  CALL                     3
+    
+     55           LOAD_NAME               29 (Index)
+                  PUSH_NULL
+    
+     56           LOAD_CONST              36 ('reminders_scheduled_due_idx')
+    
+     57           LOAD_CONST              19 ('due_at')
+    
+     58           LOAD_NAME               24 (text)
+                  PUSH_NULL
+                  LOAD_CONST              37 ("status = 'scheduled'")
+                  CALL                     1
+    
+     55           LOAD_CONST              38 (('postgresql_where',))
+                  CALL_KW                  3
+    
+     49           BUILD_TUPLE              3
+                  STORE_NAME              30 (__table_args__)
+                  LOAD_CONST              39 (())
+                  STORE_NAME              31 (__static_attributes__)
+                  RETURN_CONST            15 (None)
+    
+    Disassembly of <code object <lambda> at 0x0000024C11423A30, file "D:\fluence\Github\mattbot\backend\app\models\reminder.py", line 43>:
+     43           RESUME                   0
+                  LOAD_GLOBAL              0 (datetime)
+                  LOAD_ATTR                2 (now)
+                  PUSH_NULL
+                  LOAD_GLOBAL              4 (UTC)
+                  CALL                     1
+                  RETURN_VALUE
+    
+# co_names: ('__doc__', 'uuid', 'datetime', 'UTC', 'sqlalchemy', 'CheckConstraint', 'ForeignKey', 'Index', 'String', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'app.database', 'Base', 'app.models._types', 'tz_datetime', 'Reminder')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Reminder model. User-facing reminders optionally linked to calls.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (uuid)
+              STORE_NAME               1 (uuid)
+
+  4           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('UTC', 'datetime'))
+              IMPORT_NAME              2 (datetime)
+              IMPORT_FROM              3 (UTC)
+              STORE_NAME               3 (UTC)
+              IMPORT_FROM              2 (datetime)
+              STORE_NAME               2 (datetime)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('CheckConstraint', 'ForeignKey', 'Index', 'String', 'Text', 'text'))
+              IMPORT_NAME              4 (sqlalchemy)
+              IMPORT_FROM              5 (CheckConstraint)
+              STORE_NAME               5 (CheckConstraint)
+              IMPORT_FROM              6 (ForeignKey)
+              STORE_NAME               6 (ForeignKey)
+              IMPORT_FROM              7 (Index)
+              STORE_NAME               7 (Index)
+              IMPORT_FROM              8 (String)
+              STORE_NAME               8 (String)
+              IMPORT_FROM              9 (Text)
+              STORE_NAME               9 (Text)
+              IMPORT_FROM             10 (text)
+              STORE_NAME              10 (text)
+              POP_TOP
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('UUID',))
+              IMPORT_NAME             11 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM             12 (UUID)
+              STORE_NAME              12 (UUID)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('Mapped', 'mapped_column'))
+              IMPORT_NAME             13 (sqlalchemy.orm)
+              IMPORT_FROM             14 (Mapped)
+              STORE_NAME              14 (Mapped)
+              IMPORT_FROM             15 (mapped_column)
+              STORE_NAME              15 (mapped_column)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('Base',))
+              IMPORT_NAME             16 (app.database)
+              IMPORT_FROM             17 (Base)
+              STORE_NAME              17 (Base)
+              POP_TOP
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('tz_datetime',))
+              IMPORT_NAME             18 (app.models._types)
+              IMPORT_FROM             19 (tz_datetime)
+              STORE_NAME              19 (tz_datetime)
+              POP_TOP
+
+ 14           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               9 (<code object Reminder at 0x0000024C0FCA2130, file "D:\fluence\Github\mattbot\backend\app\models\reminder.py", line 14>)
+              MAKE_FUNCTION
+              LOAD_CONST              10 ('Reminder')
+              LOAD_NAME               17 (Base)
+              CALL                     3
+              STORE_NAME              20 (Reminder)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object Reminder at 0x0000024C0FCA2130, file "D:\fluence\Github\mattbot\backend\app\models\reminder.py", line 14>:
+ 14           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('Reminder')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (14)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 15           LOAD_CONST               2 ('reminders')
+              STORE_NAME               4 (__tablename__)
+
+ 17           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 18           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               16 (uuid4)
+
+ 17           LOAD_CONST               5 (('primary_key', 'default'))
+              CALL_KW                  3
+              STORE_NAME               9 (id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               6 ('id')
+              STORE_SUBSCR
+
+ 20           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 21           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 22           LOAD_NAME               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               7 ('users.id')
+              LOAD_CONST               8 ('CASCADE')
+              LOAD_CONST               9 (('ondelete',))
+              CALL_KW                  2
+
+ 23           LOAD_CONST              10 (False)
+
+ 20           LOAD_CONST              11 (('nullable',))
+              CALL_KW                  3
+              STORE_NAME              13 (owner_user_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              12 ('owner_user_id')
+              STORE_SUBSCR
+
+ 25           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 26           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 27           LOAD_NAME               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              13 ('calls.id')
+              LOAD_CONST              14 ('SET NULL')
+              LOAD_CONST               9 (('ondelete',))
+              CALL_KW                  2
+
+ 28           LOAD_CONST               3 (True)
+
+ 25           LOAD_CONST              11 (('nullable',))
+              CALL_KW                  3
+              STORE_NAME              14 (call_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              LOAD_CONST              15 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              16 ('call_id')
+              STORE_SUBSCR
+
+ 30           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               15 (String)
+              PUSH_NULL
+              LOAD_CONST              17 (200)
+              CALL                     1
+              LOAD_CONST              10 (False)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              16 (title)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               17 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              18 ('title')
+              STORE_SUBSCR
+
+ 31           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               18 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              10 (False)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              19 (due_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               20 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              19 ('due_at')
+              STORE_SUBSCR
+
+ 32           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               21 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              22 (timezone_at_creation)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               17 (str)
+              LOAD_CONST              15 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              20 ('timezone_at_creation')
+              STORE_SUBSCR
+
+ 33           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 34           LOAD_NAME               15 (String)
+              PUSH_NULL
+              LOAD_CONST              21 (20)
+              CALL                     1
+              LOAD_CONST              10 (False)
+              LOAD_CONST              22 ('scheduled')
+
+ 33           LOAD_CONST              23 (('nullable', 'default'))
+              CALL_KW                  3
+              STORE_NAME              23 (status)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               17 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              24 ('status')
+              STORE_SUBSCR
+
+ 36           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 37           LOAD_NAME               18 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              10 (False)
+              LOAD_NAME               24 (text)
+              PUSH_NULL
+              LOAD_CONST              25 ('now()')
+              CALL                     1
+
+ 36           LOAD_CONST              26 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              25 (created_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               20 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              27 ('created_at')
+              STORE_SUBSCR
+
+ 39           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 40           LOAD_NAME               18 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+
+ 41           LOAD_CONST              10 (False)
+
+ 42           LOAD_NAME               24 (text)
+              PUSH_NULL
+              LOAD_CONST              25 ('now()')
+              CALL                     1
+
+ 43           LOAD_CONST              28 (<code object <lambda> at 0x0000024C11423A30, file "D:\fluence\Github\mattbot\backend\app\models\reminder.py", line 43>)
+              MAKE_FUNCTION
+
+ 39           LOAD_CONST              29 (('nullable', 'server_default', 'onupdate'))
+              CALL_KW                  4
+              STORE_NAME              26 (updated_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               20 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              30 ('updated_at')
+              STORE_SUBSCR
+
+ 45           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 46           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+
+ 45           LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              27 (created_by_device_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              LOAD_CONST              15 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              31 ('created_by_device_id')
+              STORE_SUBSCR
+
+ 50           LOAD_NAME               28 (CheckConstraint)
+              PUSH_NULL
+
+ 51           LOAD_CONST              32 ("status IN ('scheduled', 'triggered', 'completed', 'cancelled')")
+
+ 52           LOAD_CONST              33 ('ck_reminders_status')
+
+ 50           LOAD_CONST              34 (('name',))
+              CALL_KW                  2
+
+ 54           LOAD_NAME               29 (Index)
+              PUSH_NULL
+              LOAD_CONST              35 ('reminders_user_due_idx')
+              LOAD_CONST              12 ('owner_user_id')
+              LOAD_CONST              19 ('due_at')
+              CALL                     3
+
+ 55           LOAD_NAME               29 (Index)
+              PUSH_NULL
+
+ 56           LOAD_CONST              36 ('reminders_scheduled_due_idx')
+
+ 57           LOAD_CONST              19 ('due_at')
+
+ 58           LOAD_NAME               24 (text)
+              PUSH_NULL
+              LOAD_CONST              37 ("status = 'scheduled'")
+              CALL                     1
+
+ 55           LOAD_CONST              38 (('postgresql_where',))
+              CALL_KW                  3
+
+ 49           BUILD_TUPLE              3
+              STORE_NAME              30 (__table_args__)
+              LOAD_CONST              39 (())
+              STORE_NAME              31 (__static_attributes__)
+              RETURN_CONST            15 (None)
+
+Disassembly of <code object <lambda> at 0x0000024C11423A30, file "D:\fluence\Github\mattbot\backend\app\models\reminder.py", line 43>:
+ 43           RESUME                   0
+              LOAD_GLOBAL              0 (datetime)
+              LOAD_ATTR                2 (now)
+              PUSH_NULL
+              LOAD_GLOBAL              4 (UTC)
+              CALL                     1
+              RETURN_VALUE

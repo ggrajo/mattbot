@@ -1,0 +1,592 @@
+# Bytecode dump of: text_send_attempt.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\models\text_send_attempt.py
+# co_names: ('__doc__', 'uuid', 'datetime', 'sqlalchemy', 'ForeignKey', 'Index', 'Integer', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'relationship', 'app.database', 'Base', 'app.models._types', 'tz_datetime', 'TextSendAttempt')
+# co_consts (strings): ['Send attempt record for outbound messages (SMS delivery tracking).', 'TextSendAttempt']
+
+# DOCSTRING: """Send attempt record for outbound messages (SMS delivery tracking)."""
+# --- Nested code object: TextSendAttempt ---
+    # DOCSTRING: """TextSendAttempt"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__tablename__', 'mapped_column', 'UUID', 'uuid', 'uuid4', 'id', 'Mapped', '__annotations__', 'ForeignKey', 'message_id', 'Integer', 'attempt_number', 'int', 'Text', 'idempotency_key', 'str', 'provider', 'provider_message_sid', 'provider_status', 'provider_error_code', 'provider_error_message_short', 'tz_datetime', 'started_at', 'datetime', 'finished_at', 'relationship', 'message', 'Index', 'text', '__table_args__', '__static_attributes__')
+    # co_varnames: ()
+     14           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('TextSendAttempt')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (14)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     15           LOAD_CONST               2 ('text_send_attempts')
+                  STORE_NAME               4 (__tablename__)
+    
+     17           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     18           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               3 (True)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               16 (uuid4)
+    
+     17           LOAD_CONST               5 (('primary_key', 'default'))
+                  CALL_KW                  3
+                  STORE_NAME               9 (id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST               6 ('id')
+                  STORE_SUBSCR
+    
+     20           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     21           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     22           LOAD_NAME               12 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST               7 ('outbound_messages.id')
+                  LOAD_CONST               8 ('CASCADE')
+                  LOAD_CONST               9 (('ondelete',))
+                  CALL_KW                  2
+    
+     23           LOAD_CONST              10 (False)
+    
+     20           LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  3
+                  STORE_NAME              13 (message_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              12 ('message_id')
+                  STORE_SUBSCR
+    
+     26           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               14 (Integer)
+                  LOAD_CONST              10 (False)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              15 (attempt_number)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               16 (int)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              13 ('attempt_number')
+                  STORE_SUBSCR
+    
+     27           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               17 (Text)
+                  LOAD_CONST              10 (False)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              18 (idempotency_key)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               19 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              14 ('idempotency_key')
+                  STORE_SUBSCR
+    
+     28           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     29           LOAD_NAME               17 (Text)
+                  LOAD_CONST              10 (False)
+                  LOAD_CONST              15 ('twilio')
+    
+     28           LOAD_CONST              16 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              20 (provider)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               19 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              17 ('provider')
+                  STORE_SUBSCR
+    
+     32           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               17 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              21 (provider_message_sid)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               19 (str)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              19 ('provider_message_sid')
+                  STORE_SUBSCR
+    
+     33           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               17 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              22 (provider_status)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               19 (str)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              20 ('provider_status')
+                  STORE_SUBSCR
+    
+     34           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               17 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              23 (provider_error_code)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               19 (str)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              21 ('provider_error_code')
+                  STORE_SUBSCR
+    
+     35           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     36           LOAD_NAME               17 (Text)
+                  LOAD_CONST               3 (True)
+    
+     35           LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              24 (provider_error_message_short)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               19 (str)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              22 ('provider_error_message_short')
+                  STORE_SUBSCR
+    
+     39           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               25 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              26 (started_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               27 (datetime)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              23 ('started_at')
+                  STORE_SUBSCR
+    
+     40           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               25 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              28 (finished_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               27 (datetime)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              24 ('finished_at')
+                  STORE_SUBSCR
+    
+     42           LOAD_NAME               29 (relationship)
+                  PUSH_NULL
+    
+     43           LOAD_CONST              25 ('send_attempts')
+    
+     42           LOAD_CONST              26 (('back_populates',))
+                  CALL_KW                  1
+                  STORE_NAME              30 (message)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_CONST              27 ('OutboundMessage')
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              28 ('message')
+                  STORE_SUBSCR
+    
+     47           LOAD_NAME               31 (Index)
+                  PUSH_NULL
+                  LOAD_CONST              29 ('text_send_attempts_message_idx')
+                  LOAD_CONST              12 ('message_id')
+                  CALL                     2
+    
+     48           LOAD_NAME               31 (Index)
+                  PUSH_NULL
+    
+     49           LOAD_CONST              30 ('text_send_attempts_provider_sid_idx')
+    
+     50           LOAD_CONST              19 ('provider_message_sid')
+    
+     51           LOAD_NAME               32 (text)
+                  PUSH_NULL
+                  LOAD_CONST              31 ('provider_message_sid IS NOT NULL')
+                  CALL                     1
+    
+     48           LOAD_CONST              32 (('postgresql_where',))
+                  CALL_KW                  3
+    
+     46           BUILD_TUPLE              2
+                  STORE_NAME              33 (__table_args__)
+                  LOAD_CONST              33 (())
+                  STORE_NAME              34 (__static_attributes__)
+                  RETURN_CONST            18 (None)
+    
+# co_names: ('__doc__', 'uuid', 'datetime', 'sqlalchemy', 'ForeignKey', 'Index', 'Integer', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'relationship', 'app.database', 'Base', 'app.models._types', 'tz_datetime', 'TextSendAttempt')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Send attempt record for outbound messages (SMS delivery tracking).')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (uuid)
+              STORE_NAME               1 (uuid)
+
+  4           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('datetime',))
+              IMPORT_NAME              2 (datetime)
+              IMPORT_FROM              2 (datetime)
+              STORE_NAME               2 (datetime)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('ForeignKey', 'Index', 'Integer', 'Text', 'text'))
+              IMPORT_NAME              3 (sqlalchemy)
+              IMPORT_FROM              4 (ForeignKey)
+              STORE_NAME               4 (ForeignKey)
+              IMPORT_FROM              5 (Index)
+              STORE_NAME               5 (Index)
+              IMPORT_FROM              6 (Integer)
+              STORE_NAME               6 (Integer)
+              IMPORT_FROM              7 (Text)
+              STORE_NAME               7 (Text)
+              IMPORT_FROM              8 (text)
+              STORE_NAME               8 (text)
+              POP_TOP
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('UUID',))
+              IMPORT_NAME              9 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM             10 (UUID)
+              STORE_NAME              10 (UUID)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('Mapped', 'mapped_column', 'relationship'))
+              IMPORT_NAME             11 (sqlalchemy.orm)
+              IMPORT_FROM             12 (Mapped)
+              STORE_NAME              12 (Mapped)
+              IMPORT_FROM             13 (mapped_column)
+              STORE_NAME              13 (mapped_column)
+              IMPORT_FROM             14 (relationship)
+              STORE_NAME              14 (relationship)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('Base',))
+              IMPORT_NAME             15 (app.database)
+              IMPORT_FROM             16 (Base)
+              STORE_NAME              16 (Base)
+              POP_TOP
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('tz_datetime',))
+              IMPORT_NAME             17 (app.models._types)
+              IMPORT_FROM             18 (tz_datetime)
+              STORE_NAME              18 (tz_datetime)
+              POP_TOP
+
+ 14           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               9 (<code object TextSendAttempt at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\models\text_send_attempt.py", line 14>)
+              MAKE_FUNCTION
+              LOAD_CONST              10 ('TextSendAttempt')
+              LOAD_NAME               16 (Base)
+              CALL                     3
+              STORE_NAME              19 (TextSendAttempt)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object TextSendAttempt at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\models\text_send_attempt.py", line 14>:
+ 14           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('TextSendAttempt')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (14)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 15           LOAD_CONST               2 ('text_send_attempts')
+              STORE_NAME               4 (__tablename__)
+
+ 17           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 18           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               16 (uuid4)
+
+ 17           LOAD_CONST               5 (('primary_key', 'default'))
+              CALL_KW                  3
+              STORE_NAME               9 (id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               6 ('id')
+              STORE_SUBSCR
+
+ 20           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 21           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 22           LOAD_NAME               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               7 ('outbound_messages.id')
+              LOAD_CONST               8 ('CASCADE')
+              LOAD_CONST               9 (('ondelete',))
+              CALL_KW                  2
+
+ 23           LOAD_CONST              10 (False)
+
+ 20           LOAD_CONST              11 (('nullable',))
+              CALL_KW                  3
+              STORE_NAME              13 (message_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              12 ('message_id')
+              STORE_SUBSCR
+
+ 26           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               14 (Integer)
+              LOAD_CONST              10 (False)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              15 (attempt_number)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               16 (int)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              13 ('attempt_number')
+              STORE_SUBSCR
+
+ 27           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               17 (Text)
+              LOAD_CONST              10 (False)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              18 (idempotency_key)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               19 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              14 ('idempotency_key')
+              STORE_SUBSCR
+
+ 28           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 29           LOAD_NAME               17 (Text)
+              LOAD_CONST              10 (False)
+              LOAD_CONST              15 ('twilio')
+
+ 28           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              20 (provider)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               19 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              17 ('provider')
+              STORE_SUBSCR
+
+ 32           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               17 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              21 (provider_message_sid)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               19 (str)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              19 ('provider_message_sid')
+              STORE_SUBSCR
+
+ 33           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               17 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              22 (provider_status)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               19 (str)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              20 ('provider_status')
+              STORE_SUBSCR
+
+ 34           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               17 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              23 (provider_error_code)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               19 (str)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              21 ('provider_error_code')
+              STORE_SUBSCR
+
+ 35           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 36           LOAD_NAME               17 (Text)
+              LOAD_CONST               3 (True)
+
+ 35           LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              24 (provider_error_message_short)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               19 (str)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              22 ('provider_error_message_short')
+              STORE_SUBSCR
+
+ 39           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               25 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              26 (started_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               27 (datetime)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              23 ('started_at')
+              STORE_SUBSCR
+
+ 40           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               25 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              28 (finished_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               27 (datetime)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              24 ('finished_at')
+              STORE_SUBSCR
+
+ 42           LOAD_NAME               29 (relationship)
+              PUSH_NULL
+
+ 43           LOAD_CONST              25 ('send_attempts')
+
+ 42           LOAD_CONST              26 (('back_populates',))
+              CALL_KW                  1
+              STORE_NAME              30 (message)
+              LOAD_NAME               10 (Mapped)
+              LOAD_CONST              27 ('OutboundMessage')
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              28 ('message')
+              STORE_SUBSCR
+
+ 47           LOAD_NAME               31 (Index)
+              PUSH_NULL
+              LOAD_CONST              29 ('text_send_attempts_message_idx')
+              LOAD_CONST              12 ('message_id')
+              CALL                     2
+
+ 48           LOAD_NAME               31 (Index)
+              PUSH_NULL
+
+ 49           LOAD_CONST              30 ('text_send_attempts_provider_sid_idx')
+
+ 50           LOAD_CONST              19 ('provider_message_sid')
+
+ 51           LOAD_NAME               32 (text)
+              PUSH_NULL
+              LOAD_CONST              31 ('provider_message_sid IS NOT NULL')
+              CALL                     1
+
+ 48           LOAD_CONST              32 (('postgresql_where',))
+              CALL_KW                  3
+
+ 46           BUILD_TUPLE              2
+              STORE_NAME              33 (__table_args__)
+              LOAD_CONST              33 (())
+              STORE_NAME              34 (__static_attributes__)
+              RETURN_CONST            18 (None)

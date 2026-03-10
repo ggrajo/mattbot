@@ -1,0 +1,386 @@
+# Bytecode dump of: reminders.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\schemas\reminders.py
+# co_names: ('__doc__', '__future__', 'annotations', 'datetime', 'pydantic', 'BaseModel', 'Field', 'ReminderCreateRequest', 'ReminderUpdateRequest', 'ReminderResponse', 'ReminderListResponse')
+# co_consts (strings): ['Pydantic schemas for reminder endpoints.', 'ReminderCreateRequest', 'ReminderUpdateRequest', 'ReminderResponse', 'ReminderListResponse']
+
+# DOCSTRING: """Pydantic schemas for reminder endpoints."""
+# --- Nested code object: ReminderCreateRequest ---
+    # DOCSTRING: """ReminderCreateRequest"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'Field', 'title', '__annotations__', 'timezone', '__static_attributes__')
+    # co_varnames: ()
+     10           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('ReminderCreateRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (10)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     11           LOAD_NAME                4 (Field)
+                  PUSH_NULL
+                  LOAD_CONST               2 (Ellipsis)
+                  LOAD_CONST               3 (200)
+                  LOAD_CONST               4 (('max_length',))
+                  CALL_KW                  2
+                  STORE_NAME               5 (title)
+                  LOAD_CONST               5 ('str')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST               6 ('title')
+                  STORE_SUBSCR
+    
+     12           LOAD_CONST               7 ('datetime')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST               8 ('due_at')
+                  STORE_SUBSCR
+    
+     13           LOAD_CONST               9 (None)
+                  STORE_NAME               7 (timezone)
+                  LOAD_CONST              10 ('str | None')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST              11 ('timezone')
+                  STORE_SUBSCR
+                  LOAD_CONST              12 (())
+                  STORE_NAME               8 (__static_attributes__)
+                  RETURN_CONST             9 (None)
+    
+# --- Nested code object: ReminderUpdateRequest ---
+    # DOCSTRING: """ReminderUpdateRequest"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'Field', 'title', '__annotations__', 'due_at', '__static_attributes__')
+    # co_varnames: ()
+     16           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('ReminderUpdateRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (16)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     17           LOAD_NAME                4 (Field)
+                  PUSH_NULL
+                  LOAD_CONST               2 (None)
+                  LOAD_CONST               3 (200)
+                  LOAD_CONST               4 (('default', 'max_length'))
+                  CALL_KW                  2
+                  STORE_NAME               5 (title)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST               6 ('title')
+                  STORE_SUBSCR
+    
+     18           LOAD_CONST               2 (None)
+                  STORE_NAME               7 (due_at)
+                  LOAD_CONST               7 ('datetime | None')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST               8 ('due_at')
+                  STORE_SUBSCR
+                  LOAD_CONST               9 (())
+                  STORE_NAME               8 (__static_attributes__)
+                  RETURN_CONST             2 (None)
+    
+# --- Nested code object: ReminderResponse ---
+    # DOCSTRING: """ReminderResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'call_id', 'timezone_at_creation', 'call_from_masked', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+     21           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('ReminderResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (21)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     22           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('id')
+                  STORE_SUBSCR
+    
+     23           LOAD_CONST               4 (None)
+                  STORE_NAME               5 (call_id)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('call_id')
+                  STORE_SUBSCR
+    
+     24           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('title')
+                  STORE_SUBSCR
+    
+     25           LOAD_CONST               8 ('datetime')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('due_at')
+                  STORE_SUBSCR
+    
+     26           LOAD_CONST               4 (None)
+                  STORE_NAME               6 (timezone_at_creation)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              10 ('timezone_at_creation')
+                  STORE_SUBSCR
+    
+     27           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              11 ('status')
+                  STORE_SUBSCR
+    
+     28           LOAD_CONST               8 ('datetime')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              12 ('created_at')
+                  STORE_SUBSCR
+    
+     29           LOAD_CONST               4 (None)
+                  STORE_NAME               7 (call_from_masked)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              13 ('call_from_masked')
+                  STORE_SUBSCR
+    
+     31           LOAD_CONST              14 ('from_attributes')
+                  LOAD_CONST              15 (True)
+                  BUILD_MAP                1
+                  STORE_NAME               8 (model_config)
+                  LOAD_CONST              16 (())
+                  STORE_NAME               9 (__static_attributes__)
+                  RETURN_CONST             4 (None)
+    
+# --- Nested code object: ReminderListResponse ---
+    # DOCSTRING: """ReminderListResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     34           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('ReminderListResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (34)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     35           LOAD_CONST               2 ('list[ReminderResponse]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('items')
+                  STORE_SUBSCR
+                  LOAD_CONST               4 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'datetime', 'pydantic', 'BaseModel', 'Field', 'ReminderCreateRequest', 'ReminderUpdateRequest', 'ReminderResponse', 'ReminderListResponse')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Pydantic schemas for reminder endpoints.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('datetime',))
+              IMPORT_NAME              3 (datetime)
+              IMPORT_FROM              3 (datetime)
+              STORE_NAME               3 (datetime)
+              POP_TOP
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('BaseModel', 'Field'))
+              IMPORT_NAME              4 (pydantic)
+              IMPORT_FROM              5 (BaseModel)
+              STORE_NAME               5 (BaseModel)
+              IMPORT_FROM              6 (Field)
+              STORE_NAME               6 (Field)
+              POP_TOP
+
+ 10           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               5 (<code object ReminderCreateRequest at 0x0000024C1141B990, file "D:\fluence\Github\mattbot\backend\app\schemas\reminders.py", line 10>)
+              MAKE_FUNCTION
+              LOAD_CONST               6 ('ReminderCreateRequest')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME               7 (ReminderCreateRequest)
+
+ 16           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               7 (<code object ReminderUpdateRequest at 0x0000024C1141B880, file "D:\fluence\Github\mattbot\backend\app\schemas\reminders.py", line 16>)
+              MAKE_FUNCTION
+              LOAD_CONST               8 ('ReminderUpdateRequest')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME               8 (ReminderUpdateRequest)
+
+ 21           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               9 (<code object ReminderResponse at 0x0000024C0EEE3C90, file "D:\fluence\Github\mattbot\backend\app\schemas\reminders.py", line 21>)
+              MAKE_FUNCTION
+              LOAD_CONST              10 ('ReminderResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME               9 (ReminderResponse)
+
+ 34           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              11 (<code object ReminderListResponse at 0x0000024C0EF2B1E0, file "D:\fluence\Github\mattbot\backend\app\schemas\reminders.py", line 34>)
+              MAKE_FUNCTION
+              LOAD_CONST              12 ('ReminderListResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              10 (ReminderListResponse)
+              RETURN_CONST            13 (None)
+
+Disassembly of <code object ReminderCreateRequest at 0x0000024C1141B990, file "D:\fluence\Github\mattbot\backend\app\schemas\reminders.py", line 10>:
+ 10           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('ReminderCreateRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (10)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 11           LOAD_NAME                4 (Field)
+              PUSH_NULL
+              LOAD_CONST               2 (Ellipsis)
+              LOAD_CONST               3 (200)
+              LOAD_CONST               4 (('max_length',))
+              CALL_KW                  2
+              STORE_NAME               5 (title)
+              LOAD_CONST               5 ('str')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST               6 ('title')
+              STORE_SUBSCR
+
+ 12           LOAD_CONST               7 ('datetime')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST               8 ('due_at')
+              STORE_SUBSCR
+
+ 13           LOAD_CONST               9 (None)
+              STORE_NAME               7 (timezone)
+              LOAD_CONST              10 ('str | None')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST              11 ('timezone')
+              STORE_SUBSCR
+              LOAD_CONST              12 (())
+              STORE_NAME               8 (__static_attributes__)
+              RETURN_CONST             9 (None)
+
+Disassembly of <code object ReminderUpdateRequest at 0x0000024C1141B880, file "D:\fluence\Github\mattbot\backend\app\schemas\reminders.py", line 16>:
+ 16           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('ReminderUpdateRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (16)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 17           LOAD_NAME                4 (Field)
+              PUSH_NULL
+              LOAD_CONST               2 (None)
+              LOAD_CONST               3 (200)
+              LOAD_CONST               4 (('default', 'max_length'))
+              CALL_KW                  2
+              STORE_NAME               5 (title)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST               6 ('title')
+              STORE_SUBSCR
+
+ 18           LOAD_CONST               2 (None)
+              STORE_NAME               7 (due_at)
+              LOAD_CONST               7 ('datetime | None')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST               8 ('due_at')
+              STORE_SUBSCR
+              LOAD_CONST               9 (())
+              STORE_NAME               8 (__static_attributes__)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object ReminderResponse at 0x0000024C0EEE3C90, file "D:\fluence\Github\mattbot\backend\app\schemas\reminders.py", line 21>:
+ 21           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('ReminderResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (21)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 22           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('id')
+              STORE_SUBSCR
+
+ 23           LOAD_CONST               4 (None)
+              STORE_NAME               5 (call_id)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('call_id')
+              STORE_SUBSCR
+
+ 24           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('title')
+              STORE_SUBSCR
+
+ 25           LOAD_CONST               8 ('datetime')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('due_at')
+              STORE_SUBSCR
+
+ 26           LOAD_CONST               4 (None)
+              STORE_NAME               6 (timezone_at_creation)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('timezone_at_creation')
+              STORE_SUBSCR
+
+ 27           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('status')
+              STORE_SUBSCR
+
+ 28           LOAD_CONST               8 ('datetime')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              12 ('created_at')
+              STORE_SUBSCR
+
+ 29           LOAD_CONST               4 (None)
+              STORE_NAME               7 (call_from_masked)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              13 ('call_from_masked')
+              STORE_SUBSCR
+
+ 31           LOAD_CONST              14 ('from_attributes')
+              LOAD_CONST              15 (True)
+              BUILD_MAP                1
+              STORE_NAME               8 (model_config)
+              LOAD_CONST              16 (())
+              STORE_NAME               9 (__static_attributes__)
+              RETURN_CONST             4 (None)
+
+Disassembly of <code object ReminderListResponse at 0x0000024C0EF2B1E0, file "D:\fluence\Github\mattbot\backend\app\schemas\reminders.py", line 34>:
+ 34           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('ReminderListResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (34)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 35           LOAD_CONST               2 ('list[ReminderResponse]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('items')
+              STORE_SUBSCR
+              LOAD_CONST               4 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             5 (None)

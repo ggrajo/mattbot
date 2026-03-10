@@ -1,0 +1,542 @@
+# Bytecode dump of: _types.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\models\_types.py
+# co_names: ('__doc__', '__future__', 'annotations', 'typing', 'Any', 'sqlalchemy', 'DateTime', 'Text', 'TypeDecorator', 'sqlalchemy.dialects.postgresql', 'INET', 'PG_INET', 'JSONB', 'PG_JSONB', 'sqlalchemy.engine.interfaces', 'Dialect', 'str', 'InetString', 'JsonbDict', 'tz_datetime')
+# co_consts (strings): ['Custom SQLAlchemy types that work across PostgreSQL and SQLite.', 'InetString', 'JsonbDict']
+
+# DOCSTRING: """Custom SQLAlchemy types that work across PostgreSQL and SQLite."""
+# --- Nested code object: InetString ---
+    # DOCSTRING: """InetString"""
+    # --- Nested code object: InetString.load_dialect_impl ---
+        # co_names: ('name', 'type_descriptor', 'PG_INET', 'Text')
+        # co_varnames: ('self', 'dialect')
+         18           RESUME                   0
+        
+         19           LOAD_FAST                1 (dialect)
+                      LOAD_ATTR                0 (name)
+                      LOAD_CONST               1 ('postgresql')
+                      COMPARE_OP              88 (bool(==))
+                      POP_JUMP_IF_FALSE       25 (to L1)
+        
+         20           LOAD_FAST                1 (dialect)
+                      LOAD_ATTR                3 (type_descriptor + NULL|self)
+                      LOAD_GLOBAL              5 (PG_INET + NULL)
+                      CALL                     0
+                      CALL                     1
+                      RETURN_VALUE
+        
+         21   L1:     LOAD_FAST                1 (dialect)
+                      LOAD_ATTR                3 (type_descriptor + NULL|self)
+                      LOAD_GLOBAL              7 (Text + NULL)
+                      CALL                     0
+                      CALL                     1
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__doc__', 'Text', 'impl', 'cache_ok', 'load_dialect_impl', '__static_attributes__')
+    # co_varnames: ()
+     13           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('InetString')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (13)
+                  STORE_NAME               3 (__firstlineno__)
+    
+     14           LOAD_CONST               2 ('Stores IP addresses as INET on PostgreSQL, TEXT on other dialects.')
+                  STORE_NAME               4 (__doc__)
+    
+     15           LOAD_NAME                5 (Text)
+                  STORE_NAME               6 (impl)
+    
+     16           LOAD_CONST               3 (True)
+                  STORE_NAME               7 (cache_ok)
+    
+     18           LOAD_CONST               7 (('dialect', 'Dialect', 'return', 'Any'))
+                  LOAD_CONST               4 (<code object load_dialect_impl at 0x0000024C0EEE3DE0, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 18>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+                  STORE_NAME               8 (load_dialect_impl)
+                  LOAD_CONST               5 (())
+                  STORE_NAME               9 (__static_attributes__)
+                  RETURN_CONST             6 (None)
+    
+    Disassembly of <code object load_dialect_impl at 0x0000024C0EEE3DE0, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 18>:
+     18           RESUME                   0
+    
+     19           LOAD_FAST                1 (dialect)
+                  LOAD_ATTR                0 (name)
+                  LOAD_CONST               1 ('postgresql')
+                  COMPARE_OP              88 (bool(==))
+                  POP_JUMP_IF_FALSE       25 (to L1)
+    
+     20           LOAD_FAST                1 (dialect)
+                  LOAD_ATTR                3 (type_descriptor + NULL|self)
+                  LOAD_GLOBAL              5 (PG_INET + NULL)
+                  CALL                     0
+                  CALL                     1
+                  RETURN_VALUE
+    
+     21   L1:     LOAD_FAST                1 (dialect)
+                  LOAD_ATTR                3 (type_descriptor + NULL|self)
+                  LOAD_GLOBAL              7 (Text + NULL)
+                  CALL                     0
+                  CALL                     1
+                  RETURN_VALUE
+    
+# --- Nested code object: JsonbDict ---
+    # DOCSTRING: """JsonbDict"""
+    # --- Nested code object: JsonbDict.load_dialect_impl ---
+        # co_names: ('name', 'type_descriptor', 'PG_JSONB', 'Text')
+        # co_varnames: ('self', 'dialect')
+         29           RESUME                   0
+        
+         30           LOAD_FAST                1 (dialect)
+                      LOAD_ATTR                0 (name)
+                      LOAD_CONST               1 ('postgresql')
+                      COMPARE_OP              88 (bool(==))
+                      POP_JUMP_IF_FALSE       25 (to L1)
+        
+         31           LOAD_FAST                1 (dialect)
+                      LOAD_ATTR                3 (type_descriptor + NULL|self)
+                      LOAD_GLOBAL              5 (PG_JSONB + NULL)
+                      CALL                     0
+                      CALL                     1
+                      RETURN_VALUE
+        
+         32   L1:     LOAD_FAST                1 (dialect)
+                      LOAD_ATTR                3 (type_descriptor + NULL|self)
+                      LOAD_GLOBAL              7 (Text + NULL)
+                      CALL                     0
+                      CALL                     1
+                      RETURN_VALUE
+        
+    # --- Nested code object: JsonbDict.process_bind_param ---
+        # co_names: ('name', 'json', 'dumps')
+        # co_varnames: ('self', 'value', 'dialect', 'json')
+         34           RESUME                   0
+        
+         35           LOAD_FAST                2 (dialect)
+                      LOAD_ATTR                0 (name)
+                      LOAD_CONST               1 ('postgresql')
+                      COMPARE_OP             119 (bool(!=))
+                      POP_JUMP_IF_FALSE       24 (to L1)
+                      LOAD_FAST                1 (value)
+                      POP_JUMP_IF_NONE        21 (to L1)
+        
+         36           LOAD_CONST               2 (0)
+                      LOAD_CONST               0 (None)
+                      IMPORT_NAME              1 (json)
+                      STORE_FAST               3 (json)
+        
+         37           LOAD_FAST                3 (json)
+                      LOAD_ATTR                5 (dumps + NULL|self)
+                      LOAD_FAST                1 (value)
+                      CALL                     1
+                      RETURN_VALUE
+        
+         38   L1:     LOAD_FAST                1 (value)
+                      RETURN_VALUE
+        
+    # --- Nested code object: JsonbDict.process_result_value ---
+        # co_names: ('name', 'json', 'loads')
+        # co_varnames: ('self', 'value', 'dialect', 'json')
+         40           RESUME                   0
+        
+         41           LOAD_FAST                2 (dialect)
+                      LOAD_ATTR                0 (name)
+                      LOAD_CONST               1 ('postgresql')
+                      COMPARE_OP             119 (bool(!=))
+                      POP_JUMP_IF_FALSE       24 (to L1)
+                      LOAD_FAST                1 (value)
+                      POP_JUMP_IF_NONE        21 (to L1)
+        
+         42           LOAD_CONST               2 (0)
+                      LOAD_CONST               0 (None)
+                      IMPORT_NAME              1 (json)
+                      STORE_FAST               3 (json)
+        
+         43           LOAD_FAST                3 (json)
+                      LOAD_ATTR                5 (loads + NULL|self)
+                      LOAD_FAST                1 (value)
+                      CALL                     1
+                      RETURN_VALUE
+        
+         44   L1:     LOAD_FAST                1 (value)
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__doc__', 'Text', 'impl', 'cache_ok', 'load_dialect_impl', 'process_bind_param', 'process_result_value', '__static_attributes__')
+    # co_varnames: ()
+     24           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('JsonbDict')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (24)
+                  STORE_NAME               3 (__firstlineno__)
+    
+     25           LOAD_CONST               2 ('Stores JSON as JSONB on PostgreSQL, TEXT on other dialects.')
+                  STORE_NAME               4 (__doc__)
+    
+     26           LOAD_NAME                5 (Text)
+                  STORE_NAME               6 (impl)
+    
+     27           LOAD_CONST               3 (True)
+                  STORE_NAME               7 (cache_ok)
+    
+     29           LOAD_CONST               9 (('dialect', 'Dialect', 'return', 'Any'))
+                  LOAD_CONST               4 (<code object load_dialect_impl at 0x0000024C0EEE3C90, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 29>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+                  STORE_NAME               8 (load_dialect_impl)
+    
+     34           LOAD_CONST              10 (('value', 'Any', 'dialect', 'Dialect', 'return', 'Any'))
+                  LOAD_CONST               5 (<code object process_bind_param at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 34>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+                  STORE_NAME               9 (process_bind_param)
+    
+     40           LOAD_CONST              10 (('value', 'Any', 'dialect', 'Dialect', 'return', 'Any'))
+                  LOAD_CONST               6 (<code object process_result_value at 0x0000024C114961F0, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 40>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+                  STORE_NAME              10 (process_result_value)
+                  LOAD_CONST               7 (())
+                  STORE_NAME              11 (__static_attributes__)
+                  RETURN_CONST             8 (None)
+    
+    Disassembly of <code object load_dialect_impl at 0x0000024C0EEE3C90, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 29>:
+     29           RESUME                   0
+    
+     30           LOAD_FAST                1 (dialect)
+                  LOAD_ATTR                0 (name)
+                  LOAD_CONST               1 ('postgresql')
+                  COMPARE_OP              88 (bool(==))
+                  POP_JUMP_IF_FALSE       25 (to L1)
+    
+     31           LOAD_FAST                1 (dialect)
+                  LOAD_ATTR                3 (type_descriptor + NULL|self)
+                  LOAD_GLOBAL              5 (PG_JSONB + NULL)
+                  CALL                     0
+                  CALL                     1
+                  RETURN_VALUE
+    
+     32   L1:     LOAD_FAST                1 (dialect)
+                  LOAD_ATTR                3 (type_descriptor + NULL|self)
+                  LOAD_GLOBAL              7 (Text + NULL)
+                  CALL                     0
+                  CALL                     1
+                  RETURN_VALUE
+    
+    Disassembly of <code object process_bind_param at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 34>:
+     34           RESUME                   0
+    
+     35           LOAD_FAST                2 (dialect)
+                  LOAD_ATTR                0 (name)
+                  LOAD_CONST               1 ('postgresql')
+                  COMPARE_OP             119 (bool(!=))
+                  POP_JUMP_IF_FALSE       24 (to L1)
+                  LOAD_FAST                1 (value)
+                  POP_JUMP_IF_NONE        21 (to L1)
+    
+     36           LOAD_CONST               2 (0)
+                  LOAD_CONST               0 (None)
+                  IMPORT_NAME              1 (json)
+                  STORE_FAST               3 (json)
+    
+     37           LOAD_FAST                3 (json)
+                  LOAD_ATTR                5 (dumps + NULL|self)
+                  LOAD_FAST                1 (value)
+                  CALL                     1
+                  RETURN_VALUE
+    
+     38   L1:     LOAD_FAST                1 (value)
+                  RETURN_VALUE
+    
+    Disassembly of <code object process_result_value at 0x0000024C114961F0, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 40>:
+     40           RESUME                   0
+    
+     41           LOAD_FAST                2 (dialect)
+                  LOAD_ATTR                0 (name)
+                  LOAD_CONST               1 ('postgresql')
+                  COMPARE_OP             119 (bool(!=))
+                  POP_JUMP_IF_FALSE       24 (to L1)
+                  LOAD_FAST                1 (value)
+                  POP_JUMP_IF_NONE        21 (to L1)
+    
+     42           LOAD_CONST               2 (0)
+                  LOAD_CONST               0 (None)
+                  IMPORT_NAME              1 (json)
+                  STORE_FAST               3 (json)
+    
+     43           LOAD_FAST                3 (json)
+                  LOAD_ATTR                5 (loads + NULL|self)
+                  LOAD_FAST                1 (value)
+                  CALL                     1
+                  RETURN_VALUE
+    
+     44   L1:     LOAD_FAST                1 (value)
+                  RETURN_VALUE
+    
+# --- Nested code object: tz_datetime ---
+    # DOCSTRING: """Create a fresh timezone-aware DateTime instance."""
+    # co_names: ('DateTime',)
+    # co_varnames: ()
+     47           RESUME                   0
+    
+     49           LOAD_GLOBAL              1 (DateTime + NULL)
+                  LOAD_CONST               1 (True)
+                  LOAD_CONST               2 (('timezone',))
+                  CALL_KW                  1
+                  RETURN_VALUE
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'typing', 'Any', 'sqlalchemy', 'DateTime', 'Text', 'TypeDecorator', 'sqlalchemy.dialects.postgresql', 'INET', 'PG_INET', 'JSONB', 'PG_JSONB', 'sqlalchemy.engine.interfaces', 'Dialect', 'str', 'InetString', 'JsonbDict', 'tz_datetime')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Custom SQLAlchemy types that work across PostgreSQL and SQLite.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('Any',))
+              IMPORT_NAME              3 (typing)
+              IMPORT_FROM              4 (Any)
+              STORE_NAME               4 (Any)
+              POP_TOP
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('DateTime', 'Text', 'TypeDecorator'))
+              IMPORT_NAME              5 (sqlalchemy)
+              IMPORT_FROM              6 (DateTime)
+              STORE_NAME               6 (DateTime)
+              IMPORT_FROM              7 (Text)
+              STORE_NAME               7 (Text)
+              IMPORT_FROM              8 (TypeDecorator)
+              STORE_NAME               8 (TypeDecorator)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('INET',))
+              IMPORT_NAME              9 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM             10 (INET)
+              STORE_NAME              11 (PG_INET)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('JSONB',))
+              IMPORT_NAME              9 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM             12 (JSONB)
+              STORE_NAME              13 (PG_JSONB)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('Dialect',))
+              IMPORT_NAME             14 (sqlalchemy.engine.interfaces)
+              IMPORT_FROM             15 (Dialect)
+              STORE_NAME              15 (Dialect)
+              POP_TOP
+
+ 13           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               8 (<code object InetString at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 13>)
+              MAKE_FUNCTION
+              LOAD_CONST               9 ('InetString')
+              LOAD_NAME                8 (TypeDecorator)
+              LOAD_NAME               16 (str)
+              BINARY_SUBSCR
+              CALL                     3
+              STORE_NAME              17 (InetString)
+
+ 24           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              10 (<code object JsonbDict at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 24>)
+              MAKE_FUNCTION
+              LOAD_CONST              11 ('JsonbDict')
+              LOAD_NAME                8 (TypeDecorator)
+              LOAD_NAME                4 (Any)
+              BINARY_SUBSCR
+              CALL                     3
+              STORE_NAME              18 (JsonbDict)
+
+ 47           LOAD_CONST              14 (('return', 'DateTime'))
+              LOAD_CONST              12 (<code object tz_datetime at 0x0000024C0EF0FD70, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 47>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              19 (tz_datetime)
+              RETURN_CONST            13 (None)
+
+Disassembly of <code object InetString at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 13>:
+ 13           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('InetString')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (13)
+              STORE_NAME               3 (__firstlineno__)
+
+ 14           LOAD_CONST               2 ('Stores IP addresses as INET on PostgreSQL, TEXT on other dialects.')
+              STORE_NAME               4 (__doc__)
+
+ 15           LOAD_NAME                5 (Text)
+              STORE_NAME               6 (impl)
+
+ 16           LOAD_CONST               3 (True)
+              STORE_NAME               7 (cache_ok)
+
+ 18           LOAD_CONST               7 (('dialect', 'Dialect', 'return', 'Any'))
+              LOAD_CONST               4 (<code object load_dialect_impl at 0x0000024C0EEE3DE0, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 18>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME               8 (load_dialect_impl)
+              LOAD_CONST               5 (())
+              STORE_NAME               9 (__static_attributes__)
+              RETURN_CONST             6 (None)
+
+Disassembly of <code object load_dialect_impl at 0x0000024C0EEE3DE0, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 18>:
+ 18           RESUME                   0
+
+ 19           LOAD_FAST                1 (dialect)
+              LOAD_ATTR                0 (name)
+              LOAD_CONST               1 ('postgresql')
+              COMPARE_OP              88 (bool(==))
+              POP_JUMP_IF_FALSE       25 (to L1)
+
+ 20           LOAD_FAST                1 (dialect)
+              LOAD_ATTR                3 (type_descriptor + NULL|self)
+              LOAD_GLOBAL              5 (PG_INET + NULL)
+              CALL                     0
+              CALL                     1
+              RETURN_VALUE
+
+ 21   L1:     LOAD_FAST                1 (dialect)
+              LOAD_ATTR                3 (type_descriptor + NULL|self)
+              LOAD_GLOBAL              7 (Text + NULL)
+              CALL                     0
+              CALL                     1
+              RETURN_VALUE
+
+Disassembly of <code object JsonbDict at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 24>:
+ 24           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('JsonbDict')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (24)
+              STORE_NAME               3 (__firstlineno__)
+
+ 25           LOAD_CONST               2 ('Stores JSON as JSONB on PostgreSQL, TEXT on other dialects.')
+              STORE_NAME               4 (__doc__)
+
+ 26           LOAD_NAME                5 (Text)
+              STORE_NAME               6 (impl)
+
+ 27           LOAD_CONST               3 (True)
+              STORE_NAME               7 (cache_ok)
+
+ 29           LOAD_CONST               9 (('dialect', 'Dialect', 'return', 'Any'))
+              LOAD_CONST               4 (<code object load_dialect_impl at 0x0000024C0EEE3C90, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 29>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME               8 (load_dialect_impl)
+
+ 34           LOAD_CONST              10 (('value', 'Any', 'dialect', 'Dialect', 'return', 'Any'))
+              LOAD_CONST               5 (<code object process_bind_param at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 34>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME               9 (process_bind_param)
+
+ 40           LOAD_CONST              10 (('value', 'Any', 'dialect', 'Dialect', 'return', 'Any'))
+              LOAD_CONST               6 (<code object process_result_value at 0x0000024C114961F0, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 40>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              10 (process_result_value)
+              LOAD_CONST               7 (())
+              STORE_NAME              11 (__static_attributes__)
+              RETURN_CONST             8 (None)
+
+Disassembly of <code object load_dialect_impl at 0x0000024C0EEE3C90, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 29>:
+ 29           RESUME                   0
+
+ 30           LOAD_FAST                1 (dialect)
+              LOAD_ATTR                0 (name)
+              LOAD_CONST               1 ('postgresql')
+              COMPARE_OP              88 (bool(==))
+              POP_JUMP_IF_FALSE       25 (to L1)
+
+ 31           LOAD_FAST                1 (dialect)
+              LOAD_ATTR                3 (type_descriptor + NULL|self)
+              LOAD_GLOBAL              5 (PG_JSONB + NULL)
+              CALL                     0
+              CALL                     1
+              RETURN_VALUE
+
+ 32   L1:     LOAD_FAST                1 (dialect)
+              LOAD_ATTR                3 (type_descriptor + NULL|self)
+              LOAD_GLOBAL              7 (Text + NULL)
+              CALL                     0
+              CALL                     1
+              RETURN_VALUE
+
+Disassembly of <code object process_bind_param at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 34>:
+ 34           RESUME                   0
+
+ 35           LOAD_FAST                2 (dialect)
+              LOAD_ATTR                0 (name)
+              LOAD_CONST               1 ('postgresql')
+              COMPARE_OP             119 (bool(!=))
+              POP_JUMP_IF_FALSE       24 (to L1)
+              LOAD_FAST                1 (value)
+              POP_JUMP_IF_NONE        21 (to L1)
+
+ 36           LOAD_CONST               2 (0)
+              LOAD_CONST               0 (None)
+              IMPORT_NAME              1 (json)
+              STORE_FAST               3 (json)
+
+ 37           LOAD_FAST                3 (json)
+              LOAD_ATTR                5 (dumps + NULL|self)
+              LOAD_FAST                1 (value)
+              CALL                     1
+              RETURN_VALUE
+
+ 38   L1:     LOAD_FAST                1 (value)
+              RETURN_VALUE
+
+Disassembly of <code object process_result_value at 0x0000024C114961F0, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 40>:
+ 40           RESUME                   0
+
+ 41           LOAD_FAST                2 (dialect)
+              LOAD_ATTR                0 (name)
+              LOAD_CONST               1 ('postgresql')
+              COMPARE_OP             119 (bool(!=))
+              POP_JUMP_IF_FALSE       24 (to L1)
+              LOAD_FAST                1 (value)
+              POP_JUMP_IF_NONE        21 (to L1)
+
+ 42           LOAD_CONST               2 (0)
+              LOAD_CONST               0 (None)
+              IMPORT_NAME              1 (json)
+              STORE_FAST               3 (json)
+
+ 43           LOAD_FAST                3 (json)
+              LOAD_ATTR                5 (loads + NULL|self)
+              LOAD_FAST                1 (value)
+              CALL                     1
+              RETURN_VALUE
+
+ 44   L1:     LOAD_FAST                1 (value)
+              RETURN_VALUE
+
+Disassembly of <code object tz_datetime at 0x0000024C0EF0FD70, file "D:\fluence\Github\mattbot\backend\app\models\_types.py", line 47>:
+ 47           RESUME                   0
+
+ 49           LOAD_GLOBAL              1 (DateTime + NULL)
+              LOAD_CONST               1 (True)
+              LOAD_CONST               2 (('timezone',))
+              CALL_KW                  1
+              RETURN_VALUE

@@ -1,0 +1,2878 @@
+# Bytecode dump of: contacts.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\schemas\contacts.py
+# co_names: ('__doc__', '__future__', 'annotations', 're', 'datetime', 'pydantic', 'BaseModel', 'field_validator', 'DEFAULT_CATEGORIES', '__annotations__', 'compile', '_SLUG_RE', '_TEMPERAMENTS', '_SWEARING_RULES', '_GREETING_TEMPLATES', '_validate_category_slug', 'ContactCreateRequest', 'ContactUpdateRequest', 'ContactResponse', 'ContactListResponse', 'CategoryDefaultsRequest', 'CategoryDefaultsResponse', 'CustomCategoryCreateRequest', 'CategoryItem', 'CategoriesListResponse')
+# co_consts (strings): ['Pydantic schemas for contact profile endpoints.', 'set[str]', 'DEFAULT_CATEGORIES', '^[a-z][a-z0-9_]{0,49}$', 'ContactCreateRequest', 'ContactUpdateRequest', 'ContactResponse', 'ContactListResponse', 'CategoryDefaultsRequest', 'CategoryDefaultsResponse', 'CustomCategoryCreateRequest', 'CategoryItem', 'CategoriesListResponse']
+
+# DOCSTRING: """Pydantic schemas for contact profile endpoints."""
+# --- Nested code object: _validate_category_slug ---
+    # DOCSTRING: """Validate that a category value looks like a valid slug."""
+    # co_names: ('_SLUG_RE', 'match', 'ValueError')
+    # co_varnames: ('v',)
+     25           RESUME                   0
+    
+     27           LOAD_GLOBAL              0 (_SLUG_RE)
+                  LOAD_ATTR                3 (match + NULL|self)
+                  LOAD_FAST                0 (v)
+                  CALL                     1
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE        11 (to L1)
+    
+     28           LOAD_GLOBAL              5 (ValueError + NULL)
+    
+     29           LOAD_CONST               1 ('Category must be lowercase alphanumeric/underscore, start with a letter, max 50 chars')
+    
+     28           CALL                     1
+                  RAISE_VARARGS            1
+    
+     32   L1:     LOAD_FAST                0 (v)
+                  RETURN_VALUE
+    
+# --- Nested code object: ContactCreateRequest ---
+    # DOCSTRING: """ContactCreateRequest"""
+    # --- Nested code object: ContactCreateRequest.validate_e164 ---
+        # co_names: ('re', 'sub', 'strip', 'match', 'ValueError')
+        # co_varnames: ('cls', 'v')
+         53           RESUME                   0
+        
+         56           LOAD_GLOBAL              0 (re)
+                      LOAD_ATTR                2 (sub)
+                      PUSH_NULL
+                      LOAD_CONST               1 ('[\\s\\-\\(\\)\\.]+')
+                      LOAD_CONST               2 ('')
+                      LOAD_FAST                1 (v)
+                      LOAD_ATTR                5 (strip + NULL|self)
+                      CALL                     0
+                      CALL                     3
+                      STORE_FAST               1 (v)
+        
+         57           LOAD_GLOBAL              0 (re)
+                      LOAD_ATTR                6 (match)
+                      PUSH_NULL
+                      LOAD_CONST               3 ('^\\+[1-9]\\d{1,14}$')
+                      LOAD_FAST                1 (v)
+                      CALL                     2
+                      TO_BOOL
+                      POP_JUMP_IF_TRUE        11 (to L1)
+        
+         58           LOAD_GLOBAL              9 (ValueError + NULL)
+                      LOAD_CONST               4 ('Phone number must be in E.164 format')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         59   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: ContactCreateRequest.validate_category ---
+        # co_names: ('_validate_category_slug',)
+        # co_varnames: ('cls', 'v')
+         61           RESUME                   0
+        
+         64           LOAD_GLOBAL              1 (_validate_category_slug + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      RETURN_VALUE
+        
+    # --- Nested code object: ContactCreateRequest.validate_temperament ---
+        # co_names: ('_TEMPERAMENTS', 'ValueError')
+        # co_varnames: ('cls', 'v')
+         66           RESUME                   0
+        
+         69           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        28 (to L1)
+                      LOAD_FAST                1 (v)
+                      LOAD_GLOBAL              0 (_TEMPERAMENTS)
+                      CONTAINS_OP              1
+                      POP_JUMP_IF_FALSE       18 (to L1)
+        
+         70           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               1 ('ai_temperament_preset must be one of ')
+                      LOAD_GLOBAL              0 (_TEMPERAMENTS)
+                      FORMAT_SIMPLE
+                      BUILD_STRING             2
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         71   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: ContactCreateRequest.validate_swearing ---
+        # co_names: ('_SWEARING_RULES', 'ValueError')
+        # co_varnames: ('cls', 'v')
+         73           RESUME                   0
+        
+         76           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        28 (to L1)
+                      LOAD_FAST                1 (v)
+                      LOAD_GLOBAL              0 (_SWEARING_RULES)
+                      CONTAINS_OP              1
+                      POP_JUMP_IF_FALSE       18 (to L1)
+        
+         77           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               1 ('ai_swearing_rule must be one of ')
+                      LOAD_GLOBAL              0 (_SWEARING_RULES)
+                      FORMAT_SIMPLE
+                      BUILD_STRING             2
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         78   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: ContactCreateRequest.validate_greeting ---
+        # co_names: ('_GREETING_TEMPLATES', 'ValueError')
+        # co_varnames: ('cls', 'v')
+         80           RESUME                   0
+        
+         83           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        28 (to L1)
+                      LOAD_FAST                1 (v)
+                      LOAD_GLOBAL              0 (_GREETING_TEMPLATES)
+                      CONTAINS_OP              1
+                      POP_JUMP_IF_FALSE       18 (to L1)
+        
+         84           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               1 ('ai_greeting_template must be one of ')
+                      LOAD_GLOBAL              0 (_GREETING_TEMPLATES)
+                      FORMAT_SIMPLE
+                      BUILD_STRING             2
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         85   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: ContactCreateRequest.validate_max_call ---
+        # co_names: ('ValueError',)
+        # co_varnames: ('cls', 'v')
+         87           RESUME                   0
+        
+         90           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        26 (to L3)
+                      LOAD_CONST               1 (60)
+                      LOAD_FAST                1 (v)
+                      SWAP                     2
+                      COPY                     2
+                      COMPARE_OP              58 (bool(<=))
+                      POP_JUMP_IF_FALSE        6 (to L1)
+                      LOAD_CONST               2 (900)
+                      COMPARE_OP              58 (bool(<=))
+                      POP_JUMP_IF_TRUE        13 (to L3)
+                      JUMP_FORWARD             1 (to L2)
+              L1:     POP_TOP
+        
+         91   L2:     LOAD_GLOBAL              1 (ValueError + NULL)
+                      LOAD_CONST               3 ('ai_max_call_length_seconds must be between 60 and 900')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         92   L3:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: ContactCreateRequest.validate_display_name ---
+        # co_names: ('len', 'ValueError')
+        # co_varnames: ('cls', 'v')
+         94           RESUME                   0
+        
+         97           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        26 (to L1)
+                      LOAD_GLOBAL              1 (len + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      LOAD_CONST               1 (100)
+                      COMPARE_OP             148 (bool(>))
+                      POP_JUMP_IF_FALSE       11 (to L1)
+        
+         98           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               2 ('Display name must be 100 characters or fewer')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         99   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'display_name', 'company', 'relationship', 'email', 'notes', 'category', 'is_vip', 'is_blocked', 'block_reason', 'ai_temperament_preset', 'ai_greeting_template', 'ai_greeting_instructions', 'ai_swearing_rule', 'ai_max_call_length_seconds', 'ai_custom_instructions', 'field_validator', 'classmethod', 'validate_e164', 'validate_category', 'validate_temperament', 'validate_swearing', 'validate_greeting', 'validate_max_call', 'validate_display_name', '__static_attributes__')
+    # co_varnames: ()
+     35           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('ContactCreateRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (35)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     36           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('phone_number')
+                  STORE_SUBSCR
+    
+     37           LOAD_CONST               4 (None)
+                  STORE_NAME               5 (display_name)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('display_name')
+                  STORE_SUBSCR
+    
+     38           LOAD_CONST               4 (None)
+                  STORE_NAME               6 (company)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('company')
+                  STORE_SUBSCR
+    
+     39           LOAD_CONST               4 (None)
+                  STORE_NAME               7 (relationship)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('relationship')
+                  STORE_SUBSCR
+    
+     40           LOAD_CONST               4 (None)
+                  STORE_NAME               8 (email)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('email')
+                  STORE_SUBSCR
+    
+     41           LOAD_CONST               4 (None)
+                  STORE_NAME               9 (notes)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              10 ('notes')
+                  STORE_SUBSCR
+    
+     42           LOAD_CONST              11 ('other')
+                  STORE_NAME              10 (category)
+                  LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              12 ('category')
+                  STORE_SUBSCR
+    
+     43           LOAD_CONST              13 (False)
+                  STORE_NAME              11 (is_vip)
+                  LOAD_CONST              14 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              15 ('is_vip')
+                  STORE_SUBSCR
+    
+     44           LOAD_CONST              13 (False)
+                  STORE_NAME              12 (is_blocked)
+                  LOAD_CONST              14 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              16 ('is_blocked')
+                  STORE_SUBSCR
+    
+     45           LOAD_CONST               4 (None)
+                  STORE_NAME              13 (block_reason)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              17 ('block_reason')
+                  STORE_SUBSCR
+    
+     46           LOAD_CONST               4 (None)
+                  STORE_NAME              14 (ai_temperament_preset)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              18 ('ai_temperament_preset')
+                  STORE_SUBSCR
+    
+     47           LOAD_CONST               4 (None)
+                  STORE_NAME              15 (ai_greeting_template)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              19 ('ai_greeting_template')
+                  STORE_SUBSCR
+    
+     48           LOAD_CONST               4 (None)
+                  STORE_NAME              16 (ai_greeting_instructions)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              20 ('ai_greeting_instructions')
+                  STORE_SUBSCR
+    
+     49           LOAD_CONST               4 (None)
+                  STORE_NAME              17 (ai_swearing_rule)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              21 ('ai_swearing_rule')
+                  STORE_SUBSCR
+    
+     50           LOAD_CONST               4 (None)
+                  STORE_NAME              18 (ai_max_call_length_seconds)
+                  LOAD_CONST              22 ('int | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              23 ('ai_max_call_length_seconds')
+                  STORE_SUBSCR
+    
+     51           LOAD_CONST               4 (None)
+                  STORE_NAME              19 (ai_custom_instructions)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              24 ('ai_custom_instructions')
+                  STORE_SUBSCR
+    
+     53           LOAD_NAME               20 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               3 ('phone_number')
+                  CALL                     1
+    
+     54           LOAD_NAME               21 (classmethod)
+    
+     55           LOAD_CONST              33 (('v', 'str', 'return', 'str'))
+                  LOAD_CONST              25 (<code object validate_e164 at 0x0000024C114355C0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 53>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     54           CALL                     0
+    
+     53           CALL                     0
+    
+     55           STORE_NAME              22 (validate_e164)
+    
+     61           LOAD_NAME               20 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST              12 ('category')
+                  CALL                     1
+    
+     62           LOAD_NAME               21 (classmethod)
+    
+     63           LOAD_CONST              33 (('v', 'str', 'return', 'str'))
+                  LOAD_CONST              26 (<code object validate_category at 0x0000024C114E0030, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 61>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     62           CALL                     0
+    
+     61           CALL                     0
+    
+     63           STORE_NAME              23 (validate_category)
+    
+     66           LOAD_NAME               20 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST              18 ('ai_temperament_preset')
+                  CALL                     1
+    
+     67           LOAD_NAME               21 (classmethod)
+    
+     68           LOAD_CONST              34 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              27 (<code object validate_temperament at 0x0000024C1141B880, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 66>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     67           CALL                     0
+    
+     66           CALL                     0
+    
+     68           STORE_NAME              24 (validate_temperament)
+    
+     73           LOAD_NAME               20 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST              21 ('ai_swearing_rule')
+                  CALL                     1
+    
+     74           LOAD_NAME               21 (classmethod)
+    
+     75           LOAD_CONST              34 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              28 (<code object validate_swearing at 0x0000024C1141B990, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 73>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     74           CALL                     0
+    
+     73           CALL                     0
+    
+     75           STORE_NAME              25 (validate_swearing)
+    
+     80           LOAD_NAME               20 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST              19 ('ai_greeting_template')
+                  CALL                     1
+    
+     81           LOAD_NAME               21 (classmethod)
+    
+     82           LOAD_CONST              34 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              29 (<code object validate_greeting at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 80>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     81           CALL                     0
+    
+     80           CALL                     0
+    
+     82           STORE_NAME              26 (validate_greeting)
+    
+     87           LOAD_NAME               20 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST              23 ('ai_max_call_length_seconds')
+                  CALL                     1
+    
+     88           LOAD_NAME               21 (classmethod)
+    
+     89           LOAD_CONST              35 (('v', 'int | None', 'return', 'int | None'))
+                  LOAD_CONST              30 (<code object validate_max_call at 0x0000024C1141B330, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 87>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     88           CALL                     0
+    
+     87           CALL                     0
+    
+     89           STORE_NAME              27 (validate_max_call)
+    
+     94           LOAD_NAME               20 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               6 ('display_name')
+                  CALL                     1
+    
+     95           LOAD_NAME               21 (classmethod)
+    
+     96           LOAD_CONST              34 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              31 (<code object validate_display_name at 0x0000024C1141B550, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 94>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     95           CALL                     0
+    
+     94           CALL                     0
+    
+     96           STORE_NAME              28 (validate_display_name)
+                  LOAD_CONST              32 (())
+                  STORE_NAME              29 (__static_attributes__)
+                  RETURN_CONST             4 (None)
+    
+    Disassembly of <code object validate_e164 at 0x0000024C114355C0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 53>:
+     53           RESUME                   0
+    
+     56           LOAD_GLOBAL              0 (re)
+                  LOAD_ATTR                2 (sub)
+                  PUSH_NULL
+                  LOAD_CONST               1 ('[\\s\\-\\(\\)\\.]+')
+                  LOAD_CONST               2 ('')
+                  LOAD_FAST                1 (v)
+                  LOAD_ATTR                5 (strip + NULL|self)
+                  CALL                     0
+                  CALL                     3
+                  STORE_FAST               1 (v)
+    
+     57           LOAD_GLOBAL              0 (re)
+                  LOAD_ATTR                6 (match)
+                  PUSH_NULL
+                  LOAD_CONST               3 ('^\\+[1-9]\\d{1,14}$')
+                  LOAD_FAST                1 (v)
+                  CALL                     2
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE        11 (to L1)
+    
+     58           LOAD_GLOBAL              9 (ValueError + NULL)
+                  LOAD_CONST               4 ('Phone number must be in E.164 format')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     59   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_category at 0x0000024C114E0030, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 61>:
+     61           RESUME                   0
+    
+     64           LOAD_GLOBAL              1 (_validate_category_slug + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_temperament at 0x0000024C1141B880, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 66>:
+     66           RESUME                   0
+    
+     69           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        28 (to L1)
+                  LOAD_FAST                1 (v)
+                  LOAD_GLOBAL              0 (_TEMPERAMENTS)
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_FALSE       18 (to L1)
+    
+     70           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               1 ('ai_temperament_preset must be one of ')
+                  LOAD_GLOBAL              0 (_TEMPERAMENTS)
+                  FORMAT_SIMPLE
+                  BUILD_STRING             2
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     71   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_swearing at 0x0000024C1141B990, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 73>:
+     73           RESUME                   0
+    
+     76           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        28 (to L1)
+                  LOAD_FAST                1 (v)
+                  LOAD_GLOBAL              0 (_SWEARING_RULES)
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_FALSE       18 (to L1)
+    
+     77           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               1 ('ai_swearing_rule must be one of ')
+                  LOAD_GLOBAL              0 (_SWEARING_RULES)
+                  FORMAT_SIMPLE
+                  BUILD_STRING             2
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     78   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_greeting at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 80>:
+     80           RESUME                   0
+    
+     83           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        28 (to L1)
+                  LOAD_FAST                1 (v)
+                  LOAD_GLOBAL              0 (_GREETING_TEMPLATES)
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_FALSE       18 (to L1)
+    
+     84           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               1 ('ai_greeting_template must be one of ')
+                  LOAD_GLOBAL              0 (_GREETING_TEMPLATES)
+                  FORMAT_SIMPLE
+                  BUILD_STRING             2
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     85   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_max_call at 0x0000024C1141B330, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 87>:
+     87           RESUME                   0
+    
+     90           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        26 (to L3)
+                  LOAD_CONST               1 (60)
+                  LOAD_FAST                1 (v)
+                  SWAP                     2
+                  COPY                     2
+                  COMPARE_OP              58 (bool(<=))
+                  POP_JUMP_IF_FALSE        6 (to L1)
+                  LOAD_CONST               2 (900)
+                  COMPARE_OP              58 (bool(<=))
+                  POP_JUMP_IF_TRUE        13 (to L3)
+                  JUMP_FORWARD             1 (to L2)
+          L1:     POP_TOP
+    
+     91   L2:     LOAD_GLOBAL              1 (ValueError + NULL)
+                  LOAD_CONST               3 ('ai_max_call_length_seconds must be between 60 and 900')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     92   L3:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_display_name at 0x0000024C1141B550, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 94>:
+     94           RESUME                   0
+    
+     97           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        26 (to L1)
+                  LOAD_GLOBAL              1 (len + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  LOAD_CONST               1 (100)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       11 (to L1)
+    
+     98           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               2 ('Display name must be 100 characters or fewer')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     99   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+# --- Nested code object: ContactUpdateRequest ---
+    # DOCSTRING: """ContactUpdateRequest"""
+    # --- Nested code object: ContactUpdateRequest.validate_category ---
+        # co_names: ('_validate_category_slug',)
+        # co_varnames: ('cls', 'v')
+        125           RESUME                   0
+        
+        128           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        11 (to L1)
+        
+        129           LOAD_GLOBAL              1 (_validate_category_slug + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      POP_TOP
+        
+        130   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: ContactUpdateRequest.validate_temperament ---
+        # co_names: ('_TEMPERAMENTS', 'ValueError')
+        # co_varnames: ('cls', 'v')
+        132           RESUME                   0
+        
+        135           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        28 (to L1)
+                      LOAD_FAST                1 (v)
+                      LOAD_GLOBAL              0 (_TEMPERAMENTS)
+                      CONTAINS_OP              1
+                      POP_JUMP_IF_FALSE       18 (to L1)
+        
+        136           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               1 ('ai_temperament_preset must be one of ')
+                      LOAD_GLOBAL              0 (_TEMPERAMENTS)
+                      FORMAT_SIMPLE
+                      BUILD_STRING             2
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+        137   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: ContactUpdateRequest.validate_swearing ---
+        # co_names: ('_SWEARING_RULES', 'ValueError')
+        # co_varnames: ('cls', 'v')
+        139           RESUME                   0
+        
+        142           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        28 (to L1)
+                      LOAD_FAST                1 (v)
+                      LOAD_GLOBAL              0 (_SWEARING_RULES)
+                      CONTAINS_OP              1
+                      POP_JUMP_IF_FALSE       18 (to L1)
+        
+        143           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               1 ('ai_swearing_rule must be one of ')
+                      LOAD_GLOBAL              0 (_SWEARING_RULES)
+                      FORMAT_SIMPLE
+                      BUILD_STRING             2
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+        144   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: ContactUpdateRequest.validate_greeting ---
+        # co_names: ('_GREETING_TEMPLATES', 'ValueError')
+        # co_varnames: ('cls', 'v')
+        146           RESUME                   0
+        
+        149           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        28 (to L1)
+                      LOAD_FAST                1 (v)
+                      LOAD_GLOBAL              0 (_GREETING_TEMPLATES)
+                      CONTAINS_OP              1
+                      POP_JUMP_IF_FALSE       18 (to L1)
+        
+        150           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               1 ('ai_greeting_template must be one of ')
+                      LOAD_GLOBAL              0 (_GREETING_TEMPLATES)
+                      FORMAT_SIMPLE
+                      BUILD_STRING             2
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+        151   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'display_name', '__annotations__', 'company', 'relationship', 'email', 'notes', 'category', 'is_vip', 'is_blocked', 'block_reason', 'ai_temperament_preset', 'ai_greeting_template', 'ai_greeting_instructions', 'ai_swearing_rule', 'ai_max_call_length_seconds', 'ai_custom_instructions', 'clear_ai_temperament', 'clear_ai_greeting_template', 'clear_ai_greeting_instructions', 'clear_ai_swearing_rule', 'clear_ai_max_call_length', 'clear_ai_custom_instructions', 'field_validator', 'classmethod', 'validate_category', 'validate_temperament', 'validate_swearing', 'validate_greeting', '__static_attributes__')
+    # co_varnames: ()
+    102           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('ContactUpdateRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (102)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    103           LOAD_CONST               2 (None)
+                  STORE_NAME               4 (display_name)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               4 ('display_name')
+                  STORE_SUBSCR
+    
+    104           LOAD_CONST               2 (None)
+                  STORE_NAME               6 (company)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               5 ('company')
+                  STORE_SUBSCR
+    
+    105           LOAD_CONST               2 (None)
+                  STORE_NAME               7 (relationship)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               6 ('relationship')
+                  STORE_SUBSCR
+    
+    106           LOAD_CONST               2 (None)
+                  STORE_NAME               8 (email)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               7 ('email')
+                  STORE_SUBSCR
+    
+    107           LOAD_CONST               2 (None)
+                  STORE_NAME               9 (notes)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               8 ('notes')
+                  STORE_SUBSCR
+    
+    108           LOAD_CONST               2 (None)
+                  STORE_NAME              10 (category)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               9 ('category')
+                  STORE_SUBSCR
+    
+    109           LOAD_CONST               2 (None)
+                  STORE_NAME              11 (is_vip)
+                  LOAD_CONST              10 ('bool | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              11 ('is_vip')
+                  STORE_SUBSCR
+    
+    110           LOAD_CONST               2 (None)
+                  STORE_NAME              12 (is_blocked)
+                  LOAD_CONST              10 ('bool | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              12 ('is_blocked')
+                  STORE_SUBSCR
+    
+    111           LOAD_CONST               2 (None)
+                  STORE_NAME              13 (block_reason)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              13 ('block_reason')
+                  STORE_SUBSCR
+    
+    112           LOAD_CONST               2 (None)
+                  STORE_NAME              14 (ai_temperament_preset)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              14 ('ai_temperament_preset')
+                  STORE_SUBSCR
+    
+    113           LOAD_CONST               2 (None)
+                  STORE_NAME              15 (ai_greeting_template)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              15 ('ai_greeting_template')
+                  STORE_SUBSCR
+    
+    114           LOAD_CONST               2 (None)
+                  STORE_NAME              16 (ai_greeting_instructions)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              16 ('ai_greeting_instructions')
+                  STORE_SUBSCR
+    
+    115           LOAD_CONST               2 (None)
+                  STORE_NAME              17 (ai_swearing_rule)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              17 ('ai_swearing_rule')
+                  STORE_SUBSCR
+    
+    116           LOAD_CONST               2 (None)
+                  STORE_NAME              18 (ai_max_call_length_seconds)
+                  LOAD_CONST              18 ('int | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              19 ('ai_max_call_length_seconds')
+                  STORE_SUBSCR
+    
+    117           LOAD_CONST               2 (None)
+                  STORE_NAME              19 (ai_custom_instructions)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              20 ('ai_custom_instructions')
+                  STORE_SUBSCR
+    
+    118           LOAD_CONST              21 (False)
+                  STORE_NAME              20 (clear_ai_temperament)
+                  LOAD_CONST              22 ('bool')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              23 ('clear_ai_temperament')
+                  STORE_SUBSCR
+    
+    119           LOAD_CONST              21 (False)
+                  STORE_NAME              21 (clear_ai_greeting_template)
+                  LOAD_CONST              22 ('bool')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              24 ('clear_ai_greeting_template')
+                  STORE_SUBSCR
+    
+    120           LOAD_CONST              21 (False)
+                  STORE_NAME              22 (clear_ai_greeting_instructions)
+                  LOAD_CONST              22 ('bool')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              25 ('clear_ai_greeting_instructions')
+                  STORE_SUBSCR
+    
+    121           LOAD_CONST              21 (False)
+                  STORE_NAME              23 (clear_ai_swearing_rule)
+                  LOAD_CONST              22 ('bool')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              26 ('clear_ai_swearing_rule')
+                  STORE_SUBSCR
+    
+    122           LOAD_CONST              21 (False)
+                  STORE_NAME              24 (clear_ai_max_call_length)
+                  LOAD_CONST              22 ('bool')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              27 ('clear_ai_max_call_length')
+                  STORE_SUBSCR
+    
+    123           LOAD_CONST              21 (False)
+                  STORE_NAME              25 (clear_ai_custom_instructions)
+                  LOAD_CONST              22 ('bool')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              28 ('clear_ai_custom_instructions')
+                  STORE_SUBSCR
+    
+    125           LOAD_NAME               26 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               9 ('category')
+                  CALL                     1
+    
+    126           LOAD_NAME               27 (classmethod)
+    
+    127           LOAD_CONST              34 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              29 (<code object validate_category at 0x0000024C0EF2B1E0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 125>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+    126           CALL                     0
+    
+    125           CALL                     0
+    
+    127           STORE_NAME              28 (validate_category)
+    
+    132           LOAD_NAME               26 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST              14 ('ai_temperament_preset')
+                  CALL                     1
+    
+    133           LOAD_NAME               27 (classmethod)
+    
+    134           LOAD_CONST              34 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              30 (<code object validate_temperament at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 132>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+    133           CALL                     0
+    
+    132           CALL                     0
+    
+    134           STORE_NAME              29 (validate_temperament)
+    
+    139           LOAD_NAME               26 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST              17 ('ai_swearing_rule')
+                  CALL                     1
+    
+    140           LOAD_NAME               27 (classmethod)
+    
+    141           LOAD_CONST              34 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              31 (<code object validate_swearing at 0x0000024C1141B220, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 139>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+    140           CALL                     0
+    
+    139           CALL                     0
+    
+    141           STORE_NAME              30 (validate_swearing)
+    
+    146           LOAD_NAME               26 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST              15 ('ai_greeting_template')
+                  CALL                     1
+    
+    147           LOAD_NAME               27 (classmethod)
+    
+    148           LOAD_CONST              34 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              32 (<code object validate_greeting at 0x0000024C1141B660, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 146>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+    147           CALL                     0
+    
+    146           CALL                     0
+    
+    148           STORE_NAME              31 (validate_greeting)
+                  LOAD_CONST              33 (())
+                  STORE_NAME              32 (__static_attributes__)
+                  RETURN_CONST             2 (None)
+    
+    Disassembly of <code object validate_category at 0x0000024C0EF2B1E0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 125>:
+    125           RESUME                   0
+    
+    128           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        11 (to L1)
+    
+    129           LOAD_GLOBAL              1 (_validate_category_slug + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  POP_TOP
+    
+    130   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_temperament at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 132>:
+    132           RESUME                   0
+    
+    135           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        28 (to L1)
+                  LOAD_FAST                1 (v)
+                  LOAD_GLOBAL              0 (_TEMPERAMENTS)
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_FALSE       18 (to L1)
+    
+    136           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               1 ('ai_temperament_preset must be one of ')
+                  LOAD_GLOBAL              0 (_TEMPERAMENTS)
+                  FORMAT_SIMPLE
+                  BUILD_STRING             2
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+    137   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_swearing at 0x0000024C1141B220, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 139>:
+    139           RESUME                   0
+    
+    142           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        28 (to L1)
+                  LOAD_FAST                1 (v)
+                  LOAD_GLOBAL              0 (_SWEARING_RULES)
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_FALSE       18 (to L1)
+    
+    143           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               1 ('ai_swearing_rule must be one of ')
+                  LOAD_GLOBAL              0 (_SWEARING_RULES)
+                  FORMAT_SIMPLE
+                  BUILD_STRING             2
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+    144   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_greeting at 0x0000024C1141B660, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 146>:
+    146           RESUME                   0
+    
+    149           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        28 (to L1)
+                  LOAD_FAST                1 (v)
+                  LOAD_GLOBAL              0 (_GREETING_TEMPLATES)
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_FALSE       18 (to L1)
+    
+    150           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               1 ('ai_greeting_template must be one of ')
+                  LOAD_GLOBAL              0 (_GREETING_TEMPLATES)
+                  FORMAT_SIMPLE
+                  BUILD_STRING             2
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+    151   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+# --- Nested code object: ContactResponse ---
+    # DOCSTRING: """ContactResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'display_name', 'company', 'relationship', 'email', 'notes', 'block_reason', 'ai_temperament_preset', 'ai_greeting_template', 'ai_swearing_rule', 'ai_max_call_length_seconds', 'has_custom_greeting', 'has_custom_instructions', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+    154           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('ContactResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (154)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    155           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('id')
+                  STORE_SUBSCR
+    
+    156           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('phone_last4')
+                  STORE_SUBSCR
+    
+    157           LOAD_CONST               5 (None)
+                  STORE_NAME               5 (display_name)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('display_name')
+                  STORE_SUBSCR
+    
+    158           LOAD_CONST               5 (None)
+                  STORE_NAME               6 (company)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('company')
+                  STORE_SUBSCR
+    
+    159           LOAD_CONST               5 (None)
+                  STORE_NAME               7 (relationship)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('relationship')
+                  STORE_SUBSCR
+    
+    160           LOAD_CONST               5 (None)
+                  STORE_NAME               8 (email)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              10 ('email')
+                  STORE_SUBSCR
+    
+    161           LOAD_CONST               5 (None)
+                  STORE_NAME               9 (notes)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              11 ('notes')
+                  STORE_SUBSCR
+    
+    162           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              12 ('category')
+                  STORE_SUBSCR
+    
+    163           LOAD_CONST              13 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              14 ('is_vip')
+                  STORE_SUBSCR
+    
+    164           LOAD_CONST              13 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              15 ('is_blocked')
+                  STORE_SUBSCR
+    
+    165           LOAD_CONST               5 (None)
+                  STORE_NAME              10 (block_reason)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              16 ('block_reason')
+                  STORE_SUBSCR
+    
+    166           LOAD_CONST               5 (None)
+                  STORE_NAME              11 (ai_temperament_preset)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              17 ('ai_temperament_preset')
+                  STORE_SUBSCR
+    
+    167           LOAD_CONST               5 (None)
+                  STORE_NAME              12 (ai_greeting_template)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              18 ('ai_greeting_template')
+                  STORE_SUBSCR
+    
+    168           LOAD_CONST               5 (None)
+                  STORE_NAME              13 (ai_swearing_rule)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              19 ('ai_swearing_rule')
+                  STORE_SUBSCR
+    
+    169           LOAD_CONST               5 (None)
+                  STORE_NAME              14 (ai_max_call_length_seconds)
+                  LOAD_CONST              20 ('int | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              21 ('ai_max_call_length_seconds')
+                  STORE_SUBSCR
+    
+    170           LOAD_CONST              22 (False)
+                  STORE_NAME              15 (has_custom_greeting)
+                  LOAD_CONST              13 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              23 ('has_custom_greeting')
+                  STORE_SUBSCR
+    
+    171           LOAD_CONST              22 (False)
+                  STORE_NAME              16 (has_custom_instructions)
+                  LOAD_CONST              13 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              24 ('has_custom_instructions')
+                  STORE_SUBSCR
+    
+    172           LOAD_CONST              25 ('datetime')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              26 ('created_at')
+                  STORE_SUBSCR
+    
+    173           LOAD_CONST              25 ('datetime')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              27 ('updated_at')
+                  STORE_SUBSCR
+    
+    175           LOAD_CONST              28 ('from_attributes')
+                  LOAD_CONST              29 (True)
+                  BUILD_MAP                1
+                  STORE_NAME              17 (model_config)
+                  LOAD_CONST              30 (())
+                  STORE_NAME              18 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# --- Nested code object: ContactListResponse ---
+    # DOCSTRING: """ContactListResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+    178           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('ContactListResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (178)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    179           LOAD_CONST               2 ('list[ContactResponse]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('items')
+                  STORE_SUBSCR
+    
+    180           LOAD_CONST               4 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('total')
+                  STORE_SUBSCR
+                  LOAD_CONST               6 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             7 (None)
+    
+# --- Nested code object: CategoryDefaultsRequest ---
+    # DOCSTRING: """CategoryDefaultsRequest"""
+    # --- Nested code object: CategoryDefaultsRequest.validate_defaults ---
+        # co_names: ('_validate_category_slug', '_TEMPERAMENTS', 'ValueError', '_SWEARING_RULES', '_GREETING_TEMPLATES')
+        # co_varnames: ('cls', 'v', 'cat', 'inner')
+        186           RESUME                   0
+        
+        189           LOAD_FAST                1 (v)
+                      GET_ITER
+              L1:     FOR_ITER               119 (to L6)
+                      STORE_FAST               2 (cat)
+        
+        190           LOAD_GLOBAL              1 (_validate_category_slug + NULL)
+                      LOAD_FAST                2 (cat)
+                      CALL                     1
+                      POP_TOP
+        
+        191           LOAD_FAST_LOAD_FAST     18 (v, cat)
+                      BINARY_SUBSCR
+                      STORE_FAST               3 (inner)
+        
+        192           LOAD_CONST               1 ('temperament_preset')
+                      LOAD_FAST                3 (inner)
+                      CONTAINS_OP              0
+                      POP_JUMP_IF_FALSE       27 (to L2)
+                      LOAD_FAST                3 (inner)
+                      LOAD_CONST               1 ('temperament_preset')
+                      BINARY_SUBSCR
+                      LOAD_GLOBAL              2 (_TEMPERAMENTS)
+                      CONTAINS_OP              1
+                      POP_JUMP_IF_FALSE       14 (to L2)
+        
+        193           LOAD_GLOBAL              5 (ValueError + NULL)
+                      LOAD_CONST               2 ('Invalid temperament_preset in ')
+                      LOAD_FAST                2 (cat)
+                      FORMAT_SIMPLE
+                      BUILD_STRING             2
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+        194   L2:     LOAD_CONST               3 ('swearing_rule')
+                      LOAD_FAST                3 (inner)
+                      CONTAINS_OP              0
+                      POP_JUMP_IF_FALSE       27 (to L3)
+                      LOAD_FAST                3 (inner)
+                      LOAD_CONST               3 ('swearing_rule')
+                      BINARY_SUBSCR
+                      LOAD_GLOBAL              6 (_SWEARING_RULES)
+                      CONTAINS_OP              1
+                      POP_JUMP_IF_FALSE       14 (to L3)
+        
+        195           LOAD_GLOBAL              5 (ValueError + NULL)
+                      LOAD_CONST               4 ('Invalid swearing_rule in ')
+                      LOAD_FAST                2 (cat)
+                      FORMAT_SIMPLE
+                      BUILD_STRING             2
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+        196   L3:     LOAD_CONST               5 ('greeting_template')
+                      LOAD_FAST                3 (inner)
+                      CONTAINS_OP              0
+                      POP_JUMP_IF_TRUE         2 (to L4)
+                      JUMP_BACKWARD           92 (to L1)
+              L4:     LOAD_FAST                3 (inner)
+                      LOAD_CONST               5 ('greeting_template')
+                      BINARY_SUBSCR
+                      LOAD_GLOBAL              8 (_GREETING_TEMPLATES)
+                      CONTAINS_OP              1
+                      POP_JUMP_IF_TRUE         2 (to L5)
+                      JUMP_BACKWARD          107 (to L1)
+        
+        197   L5:     LOAD_GLOBAL              5 (ValueError + NULL)
+                      LOAD_CONST               6 ('Invalid greeting_template in ')
+                      LOAD_FAST                2 (cat)
+                      FORMAT_SIMPLE
+                      BUILD_STRING             2
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+        189   L6:     END_FOR
+                      POP_TOP
+        
+        198           LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'field_validator', 'classmethod', 'validate_defaults', '__static_attributes__')
+    # co_varnames: ()
+    183           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CategoryDefaultsRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (183)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    184           LOAD_CONST               2 ('dict[str, dict]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('defaults')
+                  STORE_SUBSCR
+    
+    186           LOAD_NAME                5 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               3 ('defaults')
+                  CALL                     1
+    
+    187           LOAD_NAME                6 (classmethod)
+    
+    188           LOAD_CONST               7 (('v', 'dict', 'return', 'dict'))
+                  LOAD_CONST               4 (<code object validate_defaults at 0x0000024C0EBDFA30, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 186>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+    187           CALL                     0
+    
+    186           CALL                     0
+    
+    188           STORE_NAME               7 (validate_defaults)
+                  LOAD_CONST               5 (())
+                  STORE_NAME               8 (__static_attributes__)
+                  RETURN_CONST             6 (None)
+    
+    Disassembly of <code object validate_defaults at 0x0000024C0EBDFA30, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 186>:
+    186           RESUME                   0
+    
+    189           LOAD_FAST                1 (v)
+                  GET_ITER
+          L1:     FOR_ITER               119 (to L6)
+                  STORE_FAST               2 (cat)
+    
+    190           LOAD_GLOBAL              1 (_validate_category_slug + NULL)
+                  LOAD_FAST                2 (cat)
+                  CALL                     1
+                  POP_TOP
+    
+    191           LOAD_FAST_LOAD_FAST     18 (v, cat)
+                  BINARY_SUBSCR
+                  STORE_FAST               3 (inner)
+    
+    192           LOAD_CONST               1 ('temperament_preset')
+                  LOAD_FAST                3 (inner)
+                  CONTAINS_OP              0
+                  POP_JUMP_IF_FALSE       27 (to L2)
+                  LOAD_FAST                3 (inner)
+                  LOAD_CONST               1 ('temperament_preset')
+                  BINARY_SUBSCR
+                  LOAD_GLOBAL              2 (_TEMPERAMENTS)
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_FALSE       14 (to L2)
+    
+    193           LOAD_GLOBAL              5 (ValueError + NULL)
+                  LOAD_CONST               2 ('Invalid temperament_preset in ')
+                  LOAD_FAST                2 (cat)
+                  FORMAT_SIMPLE
+                  BUILD_STRING             2
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+    194   L2:     LOAD_CONST               3 ('swearing_rule')
+                  LOAD_FAST                3 (inner)
+                  CONTAINS_OP              0
+                  POP_JUMP_IF_FALSE       27 (to L3)
+                  LOAD_FAST                3 (inner)
+                  LOAD_CONST               3 ('swearing_rule')
+                  BINARY_SUBSCR
+                  LOAD_GLOBAL              6 (_SWEARING_RULES)
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_FALSE       14 (to L3)
+    
+    195           LOAD_GLOBAL              5 (ValueError + NULL)
+                  LOAD_CONST               4 ('Invalid swearing_rule in ')
+                  LOAD_FAST                2 (cat)
+                  FORMAT_SIMPLE
+                  BUILD_STRING             2
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+    196   L3:     LOAD_CONST               5 ('greeting_template')
+                  LOAD_FAST                3 (inner)
+                  CONTAINS_OP              0
+                  POP_JUMP_IF_TRUE         2 (to L4)
+                  JUMP_BACKWARD           92 (to L1)
+          L4:     LOAD_FAST                3 (inner)
+                  LOAD_CONST               5 ('greeting_template')
+                  BINARY_SUBSCR
+                  LOAD_GLOBAL              8 (_GREETING_TEMPLATES)
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_TRUE         2 (to L5)
+                  JUMP_BACKWARD          107 (to L1)
+    
+    197   L5:     LOAD_GLOBAL              5 (ValueError + NULL)
+                  LOAD_CONST               6 ('Invalid greeting_template in ')
+                  LOAD_FAST                2 (cat)
+                  FORMAT_SIMPLE
+                  BUILD_STRING             2
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+    189   L6:     END_FOR
+                  POP_TOP
+    
+    198           LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+# --- Nested code object: CategoryDefaultsResponse ---
+    # DOCSTRING: """CategoryDefaultsResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+    201           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CategoryDefaultsResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (201)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    202           LOAD_CONST               2 ('dict[str, dict]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('defaults')
+                  STORE_SUBSCR
+                  LOAD_CONST               4 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# --- Nested code object: CustomCategoryCreateRequest ---
+    # DOCSTRING: """CustomCategoryCreateRequest"""
+    # --- Nested code object: CustomCategoryCreateRequest.validate_slug ---
+        # co_names: ('_validate_category_slug',)
+        # co_varnames: ('cls', 'v')
+        209           RESUME                   0
+        
+        212           LOAD_GLOBAL              1 (_validate_category_slug + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      RETURN_VALUE
+        
+    # --- Nested code object: CustomCategoryCreateRequest.validate_label ---
+        # co_names: ('strip', 'len', 'ValueError')
+        # co_varnames: ('cls', 'v')
+        214           RESUME                   0
+        
+        217           LOAD_FAST                1 (v)
+                      LOAD_ATTR                1 (strip + NULL|self)
+                      CALL                     0
+                      STORE_FAST               1 (v)
+        
+        218           LOAD_FAST                1 (v)
+                      TO_BOOL
+                      POP_JUMP_IF_FALSE       15 (to L1)
+                      LOAD_GLOBAL              3 (len + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      LOAD_CONST               1 (60)
+                      COMPARE_OP             148 (bool(>))
+                      POP_JUMP_IF_FALSE       11 (to L2)
+        
+        219   L1:     LOAD_GLOBAL              5 (ValueError + NULL)
+                      LOAD_CONST               2 ('Label must be 1-60 characters')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+        220   L2:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'field_validator', 'classmethod', 'validate_slug', 'validate_label', '__static_attributes__')
+    # co_varnames: ()
+    205           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CustomCategoryCreateRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (205)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    206           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('slug')
+                  STORE_SUBSCR
+    
+    207           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('label')
+                  STORE_SUBSCR
+    
+    209           LOAD_NAME                5 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               3 ('slug')
+                  CALL                     1
+    
+    210           LOAD_NAME                6 (classmethod)
+    
+    211           LOAD_CONST               9 (('v', 'str', 'return', 'str'))
+                  LOAD_CONST               5 (<code object validate_slug at 0x0000024C114E01F0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 209>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+    210           CALL                     0
+    
+    209           CALL                     0
+    
+    211           STORE_NAME               7 (validate_slug)
+    
+    214           LOAD_NAME                5 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               4 ('label')
+                  CALL                     1
+    
+    215           LOAD_NAME                6 (classmethod)
+    
+    216           LOAD_CONST               9 (('v', 'str', 'return', 'str'))
+                  LOAD_CONST               6 (<code object validate_label at 0x0000024C0EF12760, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 214>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+    215           CALL                     0
+    
+    214           CALL                     0
+    
+    216           STORE_NAME               8 (validate_label)
+                  LOAD_CONST               7 (())
+                  STORE_NAME               9 (__static_attributes__)
+                  RETURN_CONST             8 (None)
+    
+    Disassembly of <code object validate_slug at 0x0000024C114E01F0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 209>:
+    209           RESUME                   0
+    
+    212           LOAD_GLOBAL              1 (_validate_category_slug + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_label at 0x0000024C0EF12760, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 214>:
+    214           RESUME                   0
+    
+    217           LOAD_FAST                1 (v)
+                  LOAD_ATTR                1 (strip + NULL|self)
+                  CALL                     0
+                  STORE_FAST               1 (v)
+    
+    218           LOAD_FAST                1 (v)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       15 (to L1)
+                  LOAD_GLOBAL              3 (len + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  LOAD_CONST               1 (60)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       11 (to L2)
+    
+    219   L1:     LOAD_GLOBAL              5 (ValueError + NULL)
+                  LOAD_CONST               2 ('Label must be 1-60 characters')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+    220   L2:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+# --- Nested code object: CategoryItem ---
+    # DOCSTRING: """CategoryItem"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+    223           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CategoryItem')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (223)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    224           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('slug')
+                  STORE_SUBSCR
+    
+    225           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('label')
+                  STORE_SUBSCR
+    
+    226           LOAD_CONST               5 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('is_default')
+                  STORE_SUBSCR
+                  LOAD_CONST               7 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             8 (None)
+    
+# --- Nested code object: CategoriesListResponse ---
+    # DOCSTRING: """CategoriesListResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+    229           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CategoriesListResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (229)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    230           LOAD_CONST               2 ('list[CategoryItem]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('categories')
+                  STORE_SUBSCR
+                  LOAD_CONST               4 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# co_names: ('__doc__', '__future__', 'annotations', 're', 'datetime', 'pydantic', 'BaseModel', 'field_validator', 'DEFAULT_CATEGORIES', '__annotations__', 'compile', '_SLUG_RE', '_TEMPERAMENTS', '_SWEARING_RULES', '_GREETING_TEMPLATES', '_validate_category_slug', 'ContactCreateRequest', 'ContactUpdateRequest', 'ContactResponse', 'ContactListResponse', 'CategoryDefaultsRequest', 'CategoryDefaultsResponse', 'CustomCategoryCreateRequest', 'CategoryItem', 'CategoriesListResponse')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           SETUP_ANNOTATIONS
+              LOAD_CONST               0 ('Pydantic schemas for contact profile endpoints.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (re)
+              STORE_NAME               3 (re)
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('datetime',))
+              IMPORT_NAME              4 (datetime)
+              IMPORT_FROM              4 (datetime)
+              STORE_NAME               4 (datetime)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('BaseModel', 'field_validator'))
+              IMPORT_NAME              5 (pydantic)
+              IMPORT_FROM              6 (BaseModel)
+              STORE_NAME               6 (BaseModel)
+              IMPORT_FROM              7 (field_validator)
+              STORE_NAME               7 (field_validator)
+              POP_TOP
+
+ 10           BUILD_SET                0
+              LOAD_CONST               6 (frozenset({'colleagues', 'friends', 'vendors', 'clients', 'healthcare', 'business', 'family', 'other', 'acquaintances'}))
+              SET_UPDATE               1
+              STORE_NAME               8 (DEFAULT_CATEGORIES)
+              LOAD_CONST               7 ('set[str]')
+              LOAD_NAME                9 (__annotations__)
+              LOAD_CONST               8 ('DEFAULT_CATEGORIES')
+              STORE_SUBSCR
+
+ 15           LOAD_NAME                3 (re)
+              LOAD_ATTR               20 (compile)
+              PUSH_NULL
+              LOAD_CONST               9 ('^[a-z][a-z0-9_]{0,49}$')
+              CALL                     1
+              STORE_NAME              11 (_SLUG_RE)
+
+ 17           BUILD_SET                0
+              LOAD_CONST              10 (frozenset({'warm_and_supportive', 'casual_friendly', 'short_and_direct', 'custom', 'professional_polite', 'formal'}))
+              SET_UPDATE               1
+              STORE_NAME              12 (_TEMPERAMENTS)
+
+ 21           BUILD_SET                0
+              LOAD_CONST              11 (frozenset({'mirror_caller', 'no_swearing', 'allow'}))
+              SET_UPDATE               1
+              STORE_NAME              13 (_SWEARING_RULES)
+
+ 22           BUILD_SET                0
+              LOAD_CONST              12 (frozenset({'custom', 'brief', 'formal', 'standard'}))
+              SET_UPDATE               1
+              STORE_NAME              14 (_GREETING_TEMPLATES)
+
+ 25           LOAD_CONST              32 (('v', 'str', 'return', 'str'))
+              LOAD_CONST              13 (<code object _validate_category_slug at 0x0000024C11495D70, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 25>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              15 (_validate_category_slug)
+
+ 35           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              14 (<code object ContactCreateRequest at 0x0000024C0FB6C330, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 35>)
+              MAKE_FUNCTION
+              LOAD_CONST              15 ('ContactCreateRequest')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME              16 (ContactCreateRequest)
+
+102           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              16 (<code object ContactUpdateRequest at 0x0000024C0FC755D0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 102>)
+              MAKE_FUNCTION
+              LOAD_CONST              17 ('ContactUpdateRequest')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME              17 (ContactUpdateRequest)
+
+154           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              18 (<code object ContactResponse at 0x0000024C0EC4BE10, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 154>)
+              MAKE_FUNCTION
+              LOAD_CONST              19 ('ContactResponse')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME              18 (ContactResponse)
+
+178           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              20 (<code object ContactListResponse at 0x0000024C11423A30, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 178>)
+              MAKE_FUNCTION
+              LOAD_CONST              21 ('ContactListResponse')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME              19 (ContactListResponse)
+
+183           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              22 (<code object CategoryDefaultsRequest at 0x0000024C114961F0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 183>)
+              MAKE_FUNCTION
+              LOAD_CONST              23 ('CategoryDefaultsRequest')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME              20 (CategoryDefaultsRequest)
+
+201           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              24 (<code object CategoryDefaultsResponse at 0x0000024C0EF2B0F0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 201>)
+              MAKE_FUNCTION
+              LOAD_CONST              25 ('CategoryDefaultsResponse')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME              21 (CategoryDefaultsResponse)
+
+205           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              26 (<code object CustomCategoryCreateRequest at 0x0000024C0EEE3C90, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 205>)
+              MAKE_FUNCTION
+              LOAD_CONST              27 ('CustomCategoryCreateRequest')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME              22 (CustomCategoryCreateRequest)
+
+223           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              28 (<code object CategoryItem at 0x0000024C11423C30, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 223>)
+              MAKE_FUNCTION
+              LOAD_CONST              29 ('CategoryItem')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME              23 (CategoryItem)
+
+229           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              30 (<code object CategoriesListResponse at 0x0000024C0EF2A790, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 229>)
+              MAKE_FUNCTION
+              LOAD_CONST              31 ('CategoriesListResponse')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME              24 (CategoriesListResponse)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object _validate_category_slug at 0x0000024C11495D70, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 25>:
+ 25           RESUME                   0
+
+ 27           LOAD_GLOBAL              0 (_SLUG_RE)
+              LOAD_ATTR                3 (match + NULL|self)
+              LOAD_FAST                0 (v)
+              CALL                     1
+              TO_BOOL
+              POP_JUMP_IF_TRUE        11 (to L1)
+
+ 28           LOAD_GLOBAL              5 (ValueError + NULL)
+
+ 29           LOAD_CONST               1 ('Category must be lowercase alphanumeric/underscore, start with a letter, max 50 chars')
+
+ 28           CALL                     1
+              RAISE_VARARGS            1
+
+ 32   L1:     LOAD_FAST                0 (v)
+              RETURN_VALUE
+
+Disassembly of <code object ContactCreateRequest at 0x0000024C0FB6C330, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 35>:
+ 35           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('ContactCreateRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (35)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 36           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('phone_number')
+              STORE_SUBSCR
+
+ 37           LOAD_CONST               4 (None)
+              STORE_NAME               5 (display_name)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('display_name')
+              STORE_SUBSCR
+
+ 38           LOAD_CONST               4 (None)
+              STORE_NAME               6 (company)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('company')
+              STORE_SUBSCR
+
+ 39           LOAD_CONST               4 (None)
+              STORE_NAME               7 (relationship)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('relationship')
+              STORE_SUBSCR
+
+ 40           LOAD_CONST               4 (None)
+              STORE_NAME               8 (email)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('email')
+              STORE_SUBSCR
+
+ 41           LOAD_CONST               4 (None)
+              STORE_NAME               9 (notes)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('notes')
+              STORE_SUBSCR
+
+ 42           LOAD_CONST              11 ('other')
+              STORE_NAME              10 (category)
+              LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              12 ('category')
+              STORE_SUBSCR
+
+ 43           LOAD_CONST              13 (False)
+              STORE_NAME              11 (is_vip)
+              LOAD_CONST              14 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              15 ('is_vip')
+              STORE_SUBSCR
+
+ 44           LOAD_CONST              13 (False)
+              STORE_NAME              12 (is_blocked)
+              LOAD_CONST              14 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              16 ('is_blocked')
+              STORE_SUBSCR
+
+ 45           LOAD_CONST               4 (None)
+              STORE_NAME              13 (block_reason)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              17 ('block_reason')
+              STORE_SUBSCR
+
+ 46           LOAD_CONST               4 (None)
+              STORE_NAME              14 (ai_temperament_preset)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              18 ('ai_temperament_preset')
+              STORE_SUBSCR
+
+ 47           LOAD_CONST               4 (None)
+              STORE_NAME              15 (ai_greeting_template)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              19 ('ai_greeting_template')
+              STORE_SUBSCR
+
+ 48           LOAD_CONST               4 (None)
+              STORE_NAME              16 (ai_greeting_instructions)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              20 ('ai_greeting_instructions')
+              STORE_SUBSCR
+
+ 49           LOAD_CONST               4 (None)
+              STORE_NAME              17 (ai_swearing_rule)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              21 ('ai_swearing_rule')
+              STORE_SUBSCR
+
+ 50           LOAD_CONST               4 (None)
+              STORE_NAME              18 (ai_max_call_length_seconds)
+              LOAD_CONST              22 ('int | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              23 ('ai_max_call_length_seconds')
+              STORE_SUBSCR
+
+ 51           LOAD_CONST               4 (None)
+              STORE_NAME              19 (ai_custom_instructions)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              24 ('ai_custom_instructions')
+              STORE_SUBSCR
+
+ 53           LOAD_NAME               20 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               3 ('phone_number')
+              CALL                     1
+
+ 54           LOAD_NAME               21 (classmethod)
+
+ 55           LOAD_CONST              33 (('v', 'str', 'return', 'str'))
+              LOAD_CONST              25 (<code object validate_e164 at 0x0000024C114355C0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 53>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 54           CALL                     0
+
+ 53           CALL                     0
+
+ 55           STORE_NAME              22 (validate_e164)
+
+ 61           LOAD_NAME               20 (field_validator)
+              PUSH_NULL
+              LOAD_CONST              12 ('category')
+              CALL                     1
+
+ 62           LOAD_NAME               21 (classmethod)
+
+ 63           LOAD_CONST              33 (('v', 'str', 'return', 'str'))
+              LOAD_CONST              26 (<code object validate_category at 0x0000024C114E0030, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 61>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 62           CALL                     0
+
+ 61           CALL                     0
+
+ 63           STORE_NAME              23 (validate_category)
+
+ 66           LOAD_NAME               20 (field_validator)
+              PUSH_NULL
+              LOAD_CONST              18 ('ai_temperament_preset')
+              CALL                     1
+
+ 67           LOAD_NAME               21 (classmethod)
+
+ 68           LOAD_CONST              34 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              27 (<code object validate_temperament at 0x0000024C1141B880, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 66>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 67           CALL                     0
+
+ 66           CALL                     0
+
+ 68           STORE_NAME              24 (validate_temperament)
+
+ 73           LOAD_NAME               20 (field_validator)
+              PUSH_NULL
+              LOAD_CONST              21 ('ai_swearing_rule')
+              CALL                     1
+
+ 74           LOAD_NAME               21 (classmethod)
+
+ 75           LOAD_CONST              34 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              28 (<code object validate_swearing at 0x0000024C1141B990, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 73>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 74           CALL                     0
+
+ 73           CALL                     0
+
+ 75           STORE_NAME              25 (validate_swearing)
+
+ 80           LOAD_NAME               20 (field_validator)
+              PUSH_NULL
+              LOAD_CONST              19 ('ai_greeting_template')
+              CALL                     1
+
+ 81           LOAD_NAME               21 (classmethod)
+
+ 82           LOAD_CONST              34 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              29 (<code object validate_greeting at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 80>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 81           CALL                     0
+
+ 80           CALL                     0
+
+ 82           STORE_NAME              26 (validate_greeting)
+
+ 87           LOAD_NAME               20 (field_validator)
+              PUSH_NULL
+              LOAD_CONST              23 ('ai_max_call_length_seconds')
+              CALL                     1
+
+ 88           LOAD_NAME               21 (classmethod)
+
+ 89           LOAD_CONST              35 (('v', 'int | None', 'return', 'int | None'))
+              LOAD_CONST              30 (<code object validate_max_call at 0x0000024C1141B330, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 87>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 88           CALL                     0
+
+ 87           CALL                     0
+
+ 89           STORE_NAME              27 (validate_max_call)
+
+ 94           LOAD_NAME               20 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               6 ('display_name')
+              CALL                     1
+
+ 95           LOAD_NAME               21 (classmethod)
+
+ 96           LOAD_CONST              34 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              31 (<code object validate_display_name at 0x0000024C1141B550, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 94>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 95           CALL                     0
+
+ 94           CALL                     0
+
+ 96           STORE_NAME              28 (validate_display_name)
+              LOAD_CONST              32 (())
+              STORE_NAME              29 (__static_attributes__)
+              RETURN_CONST             4 (None)
+
+Disassembly of <code object validate_e164 at 0x0000024C114355C0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 53>:
+ 53           RESUME                   0
+
+ 56           LOAD_GLOBAL              0 (re)
+              LOAD_ATTR                2 (sub)
+              PUSH_NULL
+              LOAD_CONST               1 ('[\\s\\-\\(\\)\\.]+')
+              LOAD_CONST               2 ('')
+              LOAD_FAST                1 (v)
+              LOAD_ATTR                5 (strip + NULL|self)
+              CALL                     0
+              CALL                     3
+              STORE_FAST               1 (v)
+
+ 57           LOAD_GLOBAL              0 (re)
+              LOAD_ATTR                6 (match)
+              PUSH_NULL
+              LOAD_CONST               3 ('^\\+[1-9]\\d{1,14}$')
+              LOAD_FAST                1 (v)
+              CALL                     2
+              TO_BOOL
+              POP_JUMP_IF_TRUE        11 (to L1)
+
+ 58           LOAD_GLOBAL              9 (ValueError + NULL)
+              LOAD_CONST               4 ('Phone number must be in E.164 format')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 59   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_category at 0x0000024C114E0030, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 61>:
+ 61           RESUME                   0
+
+ 64           LOAD_GLOBAL              1 (_validate_category_slug + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              RETURN_VALUE
+
+Disassembly of <code object validate_temperament at 0x0000024C1141B880, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 66>:
+ 66           RESUME                   0
+
+ 69           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        28 (to L1)
+              LOAD_FAST                1 (v)
+              LOAD_GLOBAL              0 (_TEMPERAMENTS)
+              CONTAINS_OP              1
+              POP_JUMP_IF_FALSE       18 (to L1)
+
+ 70           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               1 ('ai_temperament_preset must be one of ')
+              LOAD_GLOBAL              0 (_TEMPERAMENTS)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 71   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_swearing at 0x0000024C1141B990, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 73>:
+ 73           RESUME                   0
+
+ 76           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        28 (to L1)
+              LOAD_FAST                1 (v)
+              LOAD_GLOBAL              0 (_SWEARING_RULES)
+              CONTAINS_OP              1
+              POP_JUMP_IF_FALSE       18 (to L1)
+
+ 77           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               1 ('ai_swearing_rule must be one of ')
+              LOAD_GLOBAL              0 (_SWEARING_RULES)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 78   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_greeting at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 80>:
+ 80           RESUME                   0
+
+ 83           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        28 (to L1)
+              LOAD_FAST                1 (v)
+              LOAD_GLOBAL              0 (_GREETING_TEMPLATES)
+              CONTAINS_OP              1
+              POP_JUMP_IF_FALSE       18 (to L1)
+
+ 84           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               1 ('ai_greeting_template must be one of ')
+              LOAD_GLOBAL              0 (_GREETING_TEMPLATES)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 85   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_max_call at 0x0000024C1141B330, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 87>:
+ 87           RESUME                   0
+
+ 90           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        26 (to L3)
+              LOAD_CONST               1 (60)
+              LOAD_FAST                1 (v)
+              SWAP                     2
+              COPY                     2
+              COMPARE_OP              58 (bool(<=))
+              POP_JUMP_IF_FALSE        6 (to L1)
+              LOAD_CONST               2 (900)
+              COMPARE_OP              58 (bool(<=))
+              POP_JUMP_IF_TRUE        13 (to L3)
+              JUMP_FORWARD             1 (to L2)
+      L1:     POP_TOP
+
+ 91   L2:     LOAD_GLOBAL              1 (ValueError + NULL)
+              LOAD_CONST               3 ('ai_max_call_length_seconds must be between 60 and 900')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 92   L3:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_display_name at 0x0000024C1141B550, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 94>:
+ 94           RESUME                   0
+
+ 97           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        26 (to L1)
+              LOAD_GLOBAL              1 (len + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              LOAD_CONST               1 (100)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       11 (to L1)
+
+ 98           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               2 ('Display name must be 100 characters or fewer')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 99   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object ContactUpdateRequest at 0x0000024C0FC755D0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 102>:
+102           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('ContactUpdateRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (102)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+103           LOAD_CONST               2 (None)
+              STORE_NAME               4 (display_name)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               4 ('display_name')
+              STORE_SUBSCR
+
+104           LOAD_CONST               2 (None)
+              STORE_NAME               6 (company)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               5 ('company')
+              STORE_SUBSCR
+
+105           LOAD_CONST               2 (None)
+              STORE_NAME               7 (relationship)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               6 ('relationship')
+              STORE_SUBSCR
+
+106           LOAD_CONST               2 (None)
+              STORE_NAME               8 (email)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               7 ('email')
+              STORE_SUBSCR
+
+107           LOAD_CONST               2 (None)
+              STORE_NAME               9 (notes)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               8 ('notes')
+              STORE_SUBSCR
+
+108           LOAD_CONST               2 (None)
+              STORE_NAME              10 (category)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               9 ('category')
+              STORE_SUBSCR
+
+109           LOAD_CONST               2 (None)
+              STORE_NAME              11 (is_vip)
+              LOAD_CONST              10 ('bool | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              11 ('is_vip')
+              STORE_SUBSCR
+
+110           LOAD_CONST               2 (None)
+              STORE_NAME              12 (is_blocked)
+              LOAD_CONST              10 ('bool | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              12 ('is_blocked')
+              STORE_SUBSCR
+
+111           LOAD_CONST               2 (None)
+              STORE_NAME              13 (block_reason)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              13 ('block_reason')
+              STORE_SUBSCR
+
+112           LOAD_CONST               2 (None)
+              STORE_NAME              14 (ai_temperament_preset)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              14 ('ai_temperament_preset')
+              STORE_SUBSCR
+
+113           LOAD_CONST               2 (None)
+              STORE_NAME              15 (ai_greeting_template)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              15 ('ai_greeting_template')
+              STORE_SUBSCR
+
+114           LOAD_CONST               2 (None)
+              STORE_NAME              16 (ai_greeting_instructions)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              16 ('ai_greeting_instructions')
+              STORE_SUBSCR
+
+115           LOAD_CONST               2 (None)
+              STORE_NAME              17 (ai_swearing_rule)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              17 ('ai_swearing_rule')
+              STORE_SUBSCR
+
+116           LOAD_CONST               2 (None)
+              STORE_NAME              18 (ai_max_call_length_seconds)
+              LOAD_CONST              18 ('int | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              19 ('ai_max_call_length_seconds')
+              STORE_SUBSCR
+
+117           LOAD_CONST               2 (None)
+              STORE_NAME              19 (ai_custom_instructions)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              20 ('ai_custom_instructions')
+              STORE_SUBSCR
+
+118           LOAD_CONST              21 (False)
+              STORE_NAME              20 (clear_ai_temperament)
+              LOAD_CONST              22 ('bool')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              23 ('clear_ai_temperament')
+              STORE_SUBSCR
+
+119           LOAD_CONST              21 (False)
+              STORE_NAME              21 (clear_ai_greeting_template)
+              LOAD_CONST              22 ('bool')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              24 ('clear_ai_greeting_template')
+              STORE_SUBSCR
+
+120           LOAD_CONST              21 (False)
+              STORE_NAME              22 (clear_ai_greeting_instructions)
+              LOAD_CONST              22 ('bool')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              25 ('clear_ai_greeting_instructions')
+              STORE_SUBSCR
+
+121           LOAD_CONST              21 (False)
+              STORE_NAME              23 (clear_ai_swearing_rule)
+              LOAD_CONST              22 ('bool')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              26 ('clear_ai_swearing_rule')
+              STORE_SUBSCR
+
+122           LOAD_CONST              21 (False)
+              STORE_NAME              24 (clear_ai_max_call_length)
+              LOAD_CONST              22 ('bool')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              27 ('clear_ai_max_call_length')
+              STORE_SUBSCR
+
+123           LOAD_CONST              21 (False)
+              STORE_NAME              25 (clear_ai_custom_instructions)
+              LOAD_CONST              22 ('bool')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              28 ('clear_ai_custom_instructions')
+              STORE_SUBSCR
+
+125           LOAD_NAME               26 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               9 ('category')
+              CALL                     1
+
+126           LOAD_NAME               27 (classmethod)
+
+127           LOAD_CONST              34 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              29 (<code object validate_category at 0x0000024C0EF2B1E0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 125>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+126           CALL                     0
+
+125           CALL                     0
+
+127           STORE_NAME              28 (validate_category)
+
+132           LOAD_NAME               26 (field_validator)
+              PUSH_NULL
+              LOAD_CONST              14 ('ai_temperament_preset')
+              CALL                     1
+
+133           LOAD_NAME               27 (classmethod)
+
+134           LOAD_CONST              34 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              30 (<code object validate_temperament at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 132>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+133           CALL                     0
+
+132           CALL                     0
+
+134           STORE_NAME              29 (validate_temperament)
+
+139           LOAD_NAME               26 (field_validator)
+              PUSH_NULL
+              LOAD_CONST              17 ('ai_swearing_rule')
+              CALL                     1
+
+140           LOAD_NAME               27 (classmethod)
+
+141           LOAD_CONST              34 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              31 (<code object validate_swearing at 0x0000024C1141B220, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 139>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+140           CALL                     0
+
+139           CALL                     0
+
+141           STORE_NAME              30 (validate_swearing)
+
+146           LOAD_NAME               26 (field_validator)
+              PUSH_NULL
+              LOAD_CONST              15 ('ai_greeting_template')
+              CALL                     1
+
+147           LOAD_NAME               27 (classmethod)
+
+148           LOAD_CONST              34 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              32 (<code object validate_greeting at 0x0000024C1141B660, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 146>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+147           CALL                     0
+
+146           CALL                     0
+
+148           STORE_NAME              31 (validate_greeting)
+              LOAD_CONST              33 (())
+              STORE_NAME              32 (__static_attributes__)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object validate_category at 0x0000024C0EF2B1E0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 125>:
+125           RESUME                   0
+
+128           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        11 (to L1)
+
+129           LOAD_GLOBAL              1 (_validate_category_slug + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              POP_TOP
+
+130   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_temperament at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 132>:
+132           RESUME                   0
+
+135           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        28 (to L1)
+              LOAD_FAST                1 (v)
+              LOAD_GLOBAL              0 (_TEMPERAMENTS)
+              CONTAINS_OP              1
+              POP_JUMP_IF_FALSE       18 (to L1)
+
+136           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               1 ('ai_temperament_preset must be one of ')
+              LOAD_GLOBAL              0 (_TEMPERAMENTS)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+137   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_swearing at 0x0000024C1141B220, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 139>:
+139           RESUME                   0
+
+142           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        28 (to L1)
+              LOAD_FAST                1 (v)
+              LOAD_GLOBAL              0 (_SWEARING_RULES)
+              CONTAINS_OP              1
+              POP_JUMP_IF_FALSE       18 (to L1)
+
+143           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               1 ('ai_swearing_rule must be one of ')
+              LOAD_GLOBAL              0 (_SWEARING_RULES)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+144   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_greeting at 0x0000024C1141B660, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 146>:
+146           RESUME                   0
+
+149           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        28 (to L1)
+              LOAD_FAST                1 (v)
+              LOAD_GLOBAL              0 (_GREETING_TEMPLATES)
+              CONTAINS_OP              1
+              POP_JUMP_IF_FALSE       18 (to L1)
+
+150           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               1 ('ai_greeting_template must be one of ')
+              LOAD_GLOBAL              0 (_GREETING_TEMPLATES)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+151   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object ContactResponse at 0x0000024C0EC4BE10, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 154>:
+154           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('ContactResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (154)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+155           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('id')
+              STORE_SUBSCR
+
+156           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('phone_last4')
+              STORE_SUBSCR
+
+157           LOAD_CONST               5 (None)
+              STORE_NAME               5 (display_name)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('display_name')
+              STORE_SUBSCR
+
+158           LOAD_CONST               5 (None)
+              STORE_NAME               6 (company)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('company')
+              STORE_SUBSCR
+
+159           LOAD_CONST               5 (None)
+              STORE_NAME               7 (relationship)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('relationship')
+              STORE_SUBSCR
+
+160           LOAD_CONST               5 (None)
+              STORE_NAME               8 (email)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('email')
+              STORE_SUBSCR
+
+161           LOAD_CONST               5 (None)
+              STORE_NAME               9 (notes)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('notes')
+              STORE_SUBSCR
+
+162           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              12 ('category')
+              STORE_SUBSCR
+
+163           LOAD_CONST              13 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              14 ('is_vip')
+              STORE_SUBSCR
+
+164           LOAD_CONST              13 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              15 ('is_blocked')
+              STORE_SUBSCR
+
+165           LOAD_CONST               5 (None)
+              STORE_NAME              10 (block_reason)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              16 ('block_reason')
+              STORE_SUBSCR
+
+166           LOAD_CONST               5 (None)
+              STORE_NAME              11 (ai_temperament_preset)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              17 ('ai_temperament_preset')
+              STORE_SUBSCR
+
+167           LOAD_CONST               5 (None)
+              STORE_NAME              12 (ai_greeting_template)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              18 ('ai_greeting_template')
+              STORE_SUBSCR
+
+168           LOAD_CONST               5 (None)
+              STORE_NAME              13 (ai_swearing_rule)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              19 ('ai_swearing_rule')
+              STORE_SUBSCR
+
+169           LOAD_CONST               5 (None)
+              STORE_NAME              14 (ai_max_call_length_seconds)
+              LOAD_CONST              20 ('int | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              21 ('ai_max_call_length_seconds')
+              STORE_SUBSCR
+
+170           LOAD_CONST              22 (False)
+              STORE_NAME              15 (has_custom_greeting)
+              LOAD_CONST              13 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              23 ('has_custom_greeting')
+              STORE_SUBSCR
+
+171           LOAD_CONST              22 (False)
+              STORE_NAME              16 (has_custom_instructions)
+              LOAD_CONST              13 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              24 ('has_custom_instructions')
+              STORE_SUBSCR
+
+172           LOAD_CONST              25 ('datetime')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              26 ('created_at')
+              STORE_SUBSCR
+
+173           LOAD_CONST              25 ('datetime')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              27 ('updated_at')
+              STORE_SUBSCR
+
+175           LOAD_CONST              28 ('from_attributes')
+              LOAD_CONST              29 (True)
+              BUILD_MAP                1
+              STORE_NAME              17 (model_config)
+              LOAD_CONST              30 (())
+              STORE_NAME              18 (__static_attributes__)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object ContactListResponse at 0x0000024C11423A30, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 178>:
+178           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('ContactListResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (178)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+179           LOAD_CONST               2 ('list[ContactResponse]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('items')
+              STORE_SUBSCR
+
+180           LOAD_CONST               4 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('total')
+              STORE_SUBSCR
+              LOAD_CONST               6 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             7 (None)
+
+Disassembly of <code object CategoryDefaultsRequest at 0x0000024C114961F0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 183>:
+183           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CategoryDefaultsRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (183)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+184           LOAD_CONST               2 ('dict[str, dict]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('defaults')
+              STORE_SUBSCR
+
+186           LOAD_NAME                5 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               3 ('defaults')
+              CALL                     1
+
+187           LOAD_NAME                6 (classmethod)
+
+188           LOAD_CONST               7 (('v', 'dict', 'return', 'dict'))
+              LOAD_CONST               4 (<code object validate_defaults at 0x0000024C0EBDFA30, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 186>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+187           CALL                     0
+
+186           CALL                     0
+
+188           STORE_NAME               7 (validate_defaults)
+              LOAD_CONST               5 (())
+              STORE_NAME               8 (__static_attributes__)
+              RETURN_CONST             6 (None)
+
+Disassembly of <code object validate_defaults at 0x0000024C0EBDFA30, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 186>:
+186           RESUME                   0
+
+189           LOAD_FAST                1 (v)
+              GET_ITER
+      L1:     FOR_ITER               119 (to L6)
+              STORE_FAST               2 (cat)
+
+190           LOAD_GLOBAL              1 (_validate_category_slug + NULL)
+              LOAD_FAST                2 (cat)
+              CALL                     1
+              POP_TOP
+
+191           LOAD_FAST_LOAD_FAST     18 (v, cat)
+              BINARY_SUBSCR
+              STORE_FAST               3 (inner)
+
+192           LOAD_CONST               1 ('temperament_preset')
+              LOAD_FAST                3 (inner)
+              CONTAINS_OP              0
+              POP_JUMP_IF_FALSE       27 (to L2)
+              LOAD_FAST                3 (inner)
+              LOAD_CONST               1 ('temperament_preset')
+              BINARY_SUBSCR
+              LOAD_GLOBAL              2 (_TEMPERAMENTS)
+              CONTAINS_OP              1
+              POP_JUMP_IF_FALSE       14 (to L2)
+
+193           LOAD_GLOBAL              5 (ValueError + NULL)
+              LOAD_CONST               2 ('Invalid temperament_preset in ')
+              LOAD_FAST                2 (cat)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+194   L2:     LOAD_CONST               3 ('swearing_rule')
+              LOAD_FAST                3 (inner)
+              CONTAINS_OP              0
+              POP_JUMP_IF_FALSE       27 (to L3)
+              LOAD_FAST                3 (inner)
+              LOAD_CONST               3 ('swearing_rule')
+              BINARY_SUBSCR
+              LOAD_GLOBAL              6 (_SWEARING_RULES)
+              CONTAINS_OP              1
+              POP_JUMP_IF_FALSE       14 (to L3)
+
+195           LOAD_GLOBAL              5 (ValueError + NULL)
+              LOAD_CONST               4 ('Invalid swearing_rule in ')
+              LOAD_FAST                2 (cat)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+196   L3:     LOAD_CONST               5 ('greeting_template')
+              LOAD_FAST                3 (inner)
+              CONTAINS_OP              0
+              POP_JUMP_IF_TRUE         2 (to L4)
+              JUMP_BACKWARD           92 (to L1)
+      L4:     LOAD_FAST                3 (inner)
+              LOAD_CONST               5 ('greeting_template')
+              BINARY_SUBSCR
+              LOAD_GLOBAL              8 (_GREETING_TEMPLATES)
+              CONTAINS_OP              1
+              POP_JUMP_IF_TRUE         2 (to L5)
+              JUMP_BACKWARD          107 (to L1)
+
+197   L5:     LOAD_GLOBAL              5 (ValueError + NULL)
+              LOAD_CONST               6 ('Invalid greeting_template in ')
+              LOAD_FAST                2 (cat)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+189   L6:     END_FOR
+              POP_TOP
+
+198           LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object CategoryDefaultsResponse at 0x0000024C0EF2B0F0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 201>:
+201           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CategoryDefaultsResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (201)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+202           LOAD_CONST               2 ('dict[str, dict]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('defaults')
+              STORE_SUBSCR
+              LOAD_CONST               4 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object CustomCategoryCreateRequest at 0x0000024C0EEE3C90, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 205>:
+205           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CustomCategoryCreateRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (205)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+206           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('slug')
+              STORE_SUBSCR
+
+207           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('label')
+              STORE_SUBSCR
+
+209           LOAD_NAME                5 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               3 ('slug')
+              CALL                     1
+
+210           LOAD_NAME                6 (classmethod)
+
+211           LOAD_CONST               9 (('v', 'str', 'return', 'str'))
+              LOAD_CONST               5 (<code object validate_slug at 0x0000024C114E01F0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 209>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+210           CALL                     0
+
+209           CALL                     0
+
+211           STORE_NAME               7 (validate_slug)
+
+214           LOAD_NAME                5 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               4 ('label')
+              CALL                     1
+
+215           LOAD_NAME                6 (classmethod)
+
+216           LOAD_CONST               9 (('v', 'str', 'return', 'str'))
+              LOAD_CONST               6 (<code object validate_label at 0x0000024C0EF12760, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 214>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+215           CALL                     0
+
+214           CALL                     0
+
+216           STORE_NAME               8 (validate_label)
+              LOAD_CONST               7 (())
+              STORE_NAME               9 (__static_attributes__)
+              RETURN_CONST             8 (None)
+
+Disassembly of <code object validate_slug at 0x0000024C114E01F0, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 209>:
+209           RESUME                   0
+
+212           LOAD_GLOBAL              1 (_validate_category_slug + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              RETURN_VALUE
+
+Disassembly of <code object validate_label at 0x0000024C0EF12760, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 214>:
+214           RESUME                   0
+
+217           LOAD_FAST                1 (v)
+              LOAD_ATTR                1 (strip + NULL|self)
+              CALL                     0
+              STORE_FAST               1 (v)
+
+218           LOAD_FAST                1 (v)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       15 (to L1)
+              LOAD_GLOBAL              3 (len + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              LOAD_CONST               1 (60)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       11 (to L2)
+
+219   L1:     LOAD_GLOBAL              5 (ValueError + NULL)
+              LOAD_CONST               2 ('Label must be 1-60 characters')
+              CALL                     1
+              RAISE_VARARGS            1
+
+220   L2:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object CategoryItem at 0x0000024C11423C30, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 223>:
+223           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CategoryItem')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (223)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+224           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('slug')
+              STORE_SUBSCR
+
+225           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('label')
+              STORE_SUBSCR
+
+226           LOAD_CONST               5 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('is_default')
+              STORE_SUBSCR
+              LOAD_CONST               7 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             8 (None)
+
+Disassembly of <code object CategoriesListResponse at 0x0000024C0EF2A790, file "D:\fluence\Github\mattbot\backend\app\schemas\contacts.py", line 229>:
+229           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CategoriesListResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (229)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+230           LOAD_CONST               2 ('list[CategoryItem]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('categories')
+              STORE_SUBSCR
+              LOAD_CONST               4 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             5 (None)

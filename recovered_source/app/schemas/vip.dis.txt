@@ -1,0 +1,1051 @@
+# Bytecode dump of: vip.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\schemas\vip.py
+# co_names: ('__doc__', '__future__', 'annotations', 're', 'datetime', 'pydantic', 'BaseModel', 'field_validator', 'VipCreateRequest', 'VipEntryResponse', 'VipListResponse')
+# co_consts (strings): ['Pydantic schemas for VIP list endpoints.', 'VipCreateRequest', 'VipEntryResponse', 'VipListResponse']
+
+# DOCSTRING: """Pydantic schemas for VIP list endpoints."""
+# --- Nested code object: VipCreateRequest ---
+    # DOCSTRING: """VipCreateRequest"""
+    # --- Nested code object: VipCreateRequest.validate_e164 ---
+        # co_names: ('re', 'sub', 'strip', 'match', 'ValueError')
+        # co_varnames: ('cls', 'v')
+         19           RESUME                   0
+        
+         22           LOAD_GLOBAL              0 (re)
+                      LOAD_ATTR                2 (sub)
+                      PUSH_NULL
+                      LOAD_CONST               1 ('[\\s\\-\\(\\)\\.]+')
+                      LOAD_CONST               2 ('')
+                      LOAD_FAST                1 (v)
+                      LOAD_ATTR                5 (strip + NULL|self)
+                      CALL                     0
+                      CALL                     3
+                      STORE_FAST               1 (v)
+        
+         23           LOAD_GLOBAL              0 (re)
+                      LOAD_ATTR                6 (match)
+                      PUSH_NULL
+                      LOAD_CONST               3 ('^\\+[1-9]\\d{1,14}$')
+                      LOAD_FAST                1 (v)
+                      CALL                     2
+                      TO_BOOL
+                      POP_JUMP_IF_TRUE        11 (to L1)
+        
+         24           LOAD_GLOBAL              9 (ValueError + NULL)
+        
+         25           LOAD_CONST               4 ('Phone number must be in E.164 format (e.g. +14155551234)')
+        
+         24           CALL                     1
+                      RAISE_VARARGS            1
+        
+         27   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: VipCreateRequest.validate_display_name ---
+        # co_names: ('len', 'ValueError')
+        # co_varnames: ('cls', 'v')
+         29           RESUME                   0
+        
+         32           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        26 (to L1)
+                      LOAD_GLOBAL              1 (len + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      LOAD_CONST               1 (100)
+                      COMPARE_OP             148 (bool(>))
+                      POP_JUMP_IF_FALSE       11 (to L1)
+        
+         33           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               2 ('Display name must be 100 characters or fewer')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         34   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: VipCreateRequest.validate_company ---
+        # co_names: ('len', 'ValueError')
+        # co_varnames: ('cls', 'v')
+         36           RESUME                   0
+        
+         39           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        26 (to L1)
+                      LOAD_GLOBAL              1 (len + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      LOAD_CONST               1 (200)
+                      COMPARE_OP             148 (bool(>))
+                      POP_JUMP_IF_FALSE       11 (to L1)
+        
+         40           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               2 ('Company must be 200 characters or fewer')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         41   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: VipCreateRequest.validate_relationship ---
+        # co_names: ('len', 'ValueError')
+        # co_varnames: ('cls', 'v')
+         43           RESUME                   0
+        
+         46           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        26 (to L1)
+                      LOAD_GLOBAL              1 (len + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      LOAD_CONST               1 (100)
+                      COMPARE_OP             148 (bool(>))
+                      POP_JUMP_IF_FALSE       11 (to L1)
+        
+         47           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               2 ('Relationship must be 100 characters or fewer')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         48   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: VipCreateRequest.validate_email ---
+        # co_names: ('strip', 'len', 'ValueError', 're', 'match')
+        # co_varnames: ('cls', 'v')
+         50           RESUME                   0
+        
+         53           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        88 (to L2)
+        
+         54           LOAD_FAST                1 (v)
+                      LOAD_ATTR                1 (strip + NULL|self)
+                      CALL                     0
+                      STORE_FAST               1 (v)
+        
+         55           LOAD_GLOBAL              3 (len + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      LOAD_CONST               1 (254)
+                      COMPARE_OP             148 (bool(>))
+                      POP_JUMP_IF_FALSE       11 (to L1)
+        
+         56           LOAD_GLOBAL              5 (ValueError + NULL)
+                      LOAD_CONST               2 ('Email must be 254 characters or fewer')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         57   L1:     LOAD_FAST                1 (v)
+                      TO_BOOL
+                      POP_JUMP_IF_FALSE       39 (to L2)
+                      LOAD_GLOBAL              6 (re)
+                      LOAD_ATTR                8 (match)
+                      PUSH_NULL
+                      LOAD_CONST               3 ('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+                      LOAD_FAST                1 (v)
+                      CALL                     2
+                      TO_BOOL
+                      POP_JUMP_IF_TRUE        11 (to L2)
+        
+         58           LOAD_GLOBAL              5 (ValueError + NULL)
+                      LOAD_CONST               4 ('Invalid email format')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         59   L2:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: VipCreateRequest.validate_notes ---
+        # co_names: ('len', 'ValueError')
+        # co_varnames: ('cls', 'v')
+         61           RESUME                   0
+        
+         64           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        26 (to L1)
+                      LOAD_GLOBAL              1 (len + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      LOAD_CONST               1 (1000)
+                      COMPARE_OP             148 (bool(>))
+                      POP_JUMP_IF_FALSE       11 (to L1)
+        
+         65           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               2 ('Notes must be 1000 characters or fewer')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         66   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'display_name', 'company', 'relationship', 'email', 'notes', 'field_validator', 'classmethod', 'validate_e164', 'validate_display_name', 'validate_company', 'validate_relationship', 'validate_email', 'validate_notes', '__static_attributes__')
+    # co_varnames: ()
+     11           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('VipCreateRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (11)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     12           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('phone_number')
+                  STORE_SUBSCR
+    
+     13           LOAD_CONST               4 (None)
+                  STORE_NAME               5 (display_name)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('display_name')
+                  STORE_SUBSCR
+    
+     14           LOAD_CONST               4 (None)
+                  STORE_NAME               6 (company)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('company')
+                  STORE_SUBSCR
+    
+     15           LOAD_CONST               4 (None)
+                  STORE_NAME               7 (relationship)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('relationship')
+                  STORE_SUBSCR
+    
+     16           LOAD_CONST               4 (None)
+                  STORE_NAME               8 (email)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('email')
+                  STORE_SUBSCR
+    
+     17           LOAD_CONST               4 (None)
+                  STORE_NAME               9 (notes)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              10 ('notes')
+                  STORE_SUBSCR
+    
+     19           LOAD_NAME               10 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               3 ('phone_number')
+                  CALL                     1
+    
+     20           LOAD_NAME               11 (classmethod)
+    
+     21           LOAD_CONST              18 (('v', 'str', 'return', 'str'))
+                  LOAD_CONST              11 (<code object validate_e164 at 0x0000024C11435450, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 19>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     20           CALL                     0
+    
+     19           CALL                     0
+    
+     21           STORE_NAME              12 (validate_e164)
+    
+     29           LOAD_NAME               10 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               6 ('display_name')
+                  CALL                     1
+    
+     30           LOAD_NAME               11 (classmethod)
+    
+     31           LOAD_CONST              19 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              12 (<code object validate_display_name at 0x0000024C1141B880, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 29>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     30           CALL                     0
+    
+     29           CALL                     0
+    
+     31           STORE_NAME              13 (validate_display_name)
+    
+     36           LOAD_NAME               10 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               7 ('company')
+                  CALL                     1
+    
+     37           LOAD_NAME               11 (classmethod)
+    
+     38           LOAD_CONST              19 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              13 (<code object validate_company at 0x0000024C1141BBB0, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 36>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     37           CALL                     0
+    
+     36           CALL                     0
+    
+     38           STORE_NAME              14 (validate_company)
+    
+     43           LOAD_NAME               10 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               8 ('relationship')
+                  CALL                     1
+    
+     44           LOAD_NAME               11 (classmethod)
+    
+     45           LOAD_CONST              19 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              14 (<code object validate_relationship at 0x0000024C1141B990, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 43>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     44           CALL                     0
+    
+     43           CALL                     0
+    
+     45           STORE_NAME              15 (validate_relationship)
+    
+     50           LOAD_NAME               10 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               9 ('email')
+                  CALL                     1
+    
+     51           LOAD_NAME               11 (classmethod)
+    
+     52           LOAD_CONST              19 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              15 (<code object validate_email at 0x0000024C11467A00, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 50>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     51           CALL                     0
+    
+     50           CALL                     0
+    
+     52           STORE_NAME              16 (validate_email)
+    
+     61           LOAD_NAME               10 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST              10 ('notes')
+                  CALL                     1
+    
+     62           LOAD_NAME               11 (classmethod)
+    
+     63           LOAD_CONST              19 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              16 (<code object validate_notes at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 61>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     62           CALL                     0
+    
+     61           CALL                     0
+    
+     63           STORE_NAME              17 (validate_notes)
+                  LOAD_CONST              17 (())
+                  STORE_NAME              18 (__static_attributes__)
+                  RETURN_CONST             4 (None)
+    
+    Disassembly of <code object validate_e164 at 0x0000024C11435450, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 19>:
+     19           RESUME                   0
+    
+     22           LOAD_GLOBAL              0 (re)
+                  LOAD_ATTR                2 (sub)
+                  PUSH_NULL
+                  LOAD_CONST               1 ('[\\s\\-\\(\\)\\.]+')
+                  LOAD_CONST               2 ('')
+                  LOAD_FAST                1 (v)
+                  LOAD_ATTR                5 (strip + NULL|self)
+                  CALL                     0
+                  CALL                     3
+                  STORE_FAST               1 (v)
+    
+     23           LOAD_GLOBAL              0 (re)
+                  LOAD_ATTR                6 (match)
+                  PUSH_NULL
+                  LOAD_CONST               3 ('^\\+[1-9]\\d{1,14}$')
+                  LOAD_FAST                1 (v)
+                  CALL                     2
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE        11 (to L1)
+    
+     24           LOAD_GLOBAL              9 (ValueError + NULL)
+    
+     25           LOAD_CONST               4 ('Phone number must be in E.164 format (e.g. +14155551234)')
+    
+     24           CALL                     1
+                  RAISE_VARARGS            1
+    
+     27   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_display_name at 0x0000024C1141B880, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 29>:
+     29           RESUME                   0
+    
+     32           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        26 (to L1)
+                  LOAD_GLOBAL              1 (len + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  LOAD_CONST               1 (100)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       11 (to L1)
+    
+     33           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               2 ('Display name must be 100 characters or fewer')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     34   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_company at 0x0000024C1141BBB0, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 36>:
+     36           RESUME                   0
+    
+     39           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        26 (to L1)
+                  LOAD_GLOBAL              1 (len + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  LOAD_CONST               1 (200)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       11 (to L1)
+    
+     40           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               2 ('Company must be 200 characters or fewer')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     41   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_relationship at 0x0000024C1141B990, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 43>:
+     43           RESUME                   0
+    
+     46           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        26 (to L1)
+                  LOAD_GLOBAL              1 (len + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  LOAD_CONST               1 (100)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       11 (to L1)
+    
+     47           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               2 ('Relationship must be 100 characters or fewer')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     48   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_email at 0x0000024C11467A00, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 50>:
+     50           RESUME                   0
+    
+     53           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        88 (to L2)
+    
+     54           LOAD_FAST                1 (v)
+                  LOAD_ATTR                1 (strip + NULL|self)
+                  CALL                     0
+                  STORE_FAST               1 (v)
+    
+     55           LOAD_GLOBAL              3 (len + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  LOAD_CONST               1 (254)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       11 (to L1)
+    
+     56           LOAD_GLOBAL              5 (ValueError + NULL)
+                  LOAD_CONST               2 ('Email must be 254 characters or fewer')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     57   L1:     LOAD_FAST                1 (v)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       39 (to L2)
+                  LOAD_GLOBAL              6 (re)
+                  LOAD_ATTR                8 (match)
+                  PUSH_NULL
+                  LOAD_CONST               3 ('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+                  LOAD_FAST                1 (v)
+                  CALL                     2
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE        11 (to L2)
+    
+     58           LOAD_GLOBAL              5 (ValueError + NULL)
+                  LOAD_CONST               4 ('Invalid email format')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     59   L2:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_notes at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 61>:
+     61           RESUME                   0
+    
+     64           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        26 (to L1)
+                  LOAD_GLOBAL              1 (len + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  LOAD_CONST               1 (1000)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       11 (to L1)
+    
+     65           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               2 ('Notes must be 1000 characters or fewer')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     66   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+# --- Nested code object: VipEntryResponse ---
+    # DOCSTRING: """VipEntryResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'display_name', 'company', 'relationship', 'email', 'notes', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+     69           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('VipEntryResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (69)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     70           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('id')
+                  STORE_SUBSCR
+    
+     71           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('phone_last4')
+                  STORE_SUBSCR
+    
+     72           LOAD_CONST               5 (None)
+                  STORE_NAME               5 (display_name)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('display_name')
+                  STORE_SUBSCR
+    
+     73           LOAD_CONST               5 (None)
+                  STORE_NAME               6 (company)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('company')
+                  STORE_SUBSCR
+    
+     74           LOAD_CONST               5 (None)
+                  STORE_NAME               7 (relationship)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('relationship')
+                  STORE_SUBSCR
+    
+     75           LOAD_CONST               5 (None)
+                  STORE_NAME               8 (email)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              10 ('email')
+                  STORE_SUBSCR
+    
+     76           LOAD_CONST               5 (None)
+                  STORE_NAME               9 (notes)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              11 ('notes')
+                  STORE_SUBSCR
+    
+     77           LOAD_CONST              12 ('datetime')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              13 ('created_at')
+                  STORE_SUBSCR
+    
+     79           LOAD_CONST              14 ('from_attributes')
+                  LOAD_CONST              15 (True)
+                  BUILD_MAP                1
+                  STORE_NAME              10 (model_config)
+                  LOAD_CONST              16 (())
+                  STORE_NAME              11 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# --- Nested code object: VipListResponse ---
+    # DOCSTRING: """VipListResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     82           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('VipListResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (82)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     83           LOAD_CONST               2 ('list[VipEntryResponse]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('items')
+                  STORE_SUBSCR
+                  LOAD_CONST               4 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# co_names: ('__doc__', '__future__', 'annotations', 're', 'datetime', 'pydantic', 'BaseModel', 'field_validator', 'VipCreateRequest', 'VipEntryResponse', 'VipListResponse')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Pydantic schemas for VIP list endpoints.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (re)
+              STORE_NAME               3 (re)
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('datetime',))
+              IMPORT_NAME              4 (datetime)
+              IMPORT_FROM              4 (datetime)
+              STORE_NAME               4 (datetime)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('BaseModel', 'field_validator'))
+              IMPORT_NAME              5 (pydantic)
+              IMPORT_FROM              6 (BaseModel)
+              STORE_NAME               6 (BaseModel)
+              IMPORT_FROM              7 (field_validator)
+              STORE_NAME               7 (field_validator)
+              POP_TOP
+
+ 11           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               6 (<code object VipCreateRequest at 0x0000024C0FBE97B0, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 11>)
+              MAKE_FUNCTION
+              LOAD_CONST               7 ('VipCreateRequest')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME               8 (VipCreateRequest)
+
+ 69           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               8 (<code object VipEntryResponse at 0x0000024C0EEE3DE0, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 69>)
+              MAKE_FUNCTION
+              LOAD_CONST               9 ('VipEntryResponse')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME               9 (VipEntryResponse)
+
+ 82           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              10 (<code object VipListResponse at 0x0000024C0EF2AA60, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 82>)
+              MAKE_FUNCTION
+              LOAD_CONST              11 ('VipListResponse')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME              10 (VipListResponse)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object VipCreateRequest at 0x0000024C0FBE97B0, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 11>:
+ 11           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('VipCreateRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (11)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 12           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('phone_number')
+              STORE_SUBSCR
+
+ 13           LOAD_CONST               4 (None)
+              STORE_NAME               5 (display_name)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('display_name')
+              STORE_SUBSCR
+
+ 14           LOAD_CONST               4 (None)
+              STORE_NAME               6 (company)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('company')
+              STORE_SUBSCR
+
+ 15           LOAD_CONST               4 (None)
+              STORE_NAME               7 (relationship)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('relationship')
+              STORE_SUBSCR
+
+ 16           LOAD_CONST               4 (None)
+              STORE_NAME               8 (email)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('email')
+              STORE_SUBSCR
+
+ 17           LOAD_CONST               4 (None)
+              STORE_NAME               9 (notes)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('notes')
+              STORE_SUBSCR
+
+ 19           LOAD_NAME               10 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               3 ('phone_number')
+              CALL                     1
+
+ 20           LOAD_NAME               11 (classmethod)
+
+ 21           LOAD_CONST              18 (('v', 'str', 'return', 'str'))
+              LOAD_CONST              11 (<code object validate_e164 at 0x0000024C11435450, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 19>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 20           CALL                     0
+
+ 19           CALL                     0
+
+ 21           STORE_NAME              12 (validate_e164)
+
+ 29           LOAD_NAME               10 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               6 ('display_name')
+              CALL                     1
+
+ 30           LOAD_NAME               11 (classmethod)
+
+ 31           LOAD_CONST              19 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              12 (<code object validate_display_name at 0x0000024C1141B880, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 29>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 30           CALL                     0
+
+ 29           CALL                     0
+
+ 31           STORE_NAME              13 (validate_display_name)
+
+ 36           LOAD_NAME               10 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               7 ('company')
+              CALL                     1
+
+ 37           LOAD_NAME               11 (classmethod)
+
+ 38           LOAD_CONST              19 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              13 (<code object validate_company at 0x0000024C1141BBB0, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 36>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 37           CALL                     0
+
+ 36           CALL                     0
+
+ 38           STORE_NAME              14 (validate_company)
+
+ 43           LOAD_NAME               10 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               8 ('relationship')
+              CALL                     1
+
+ 44           LOAD_NAME               11 (classmethod)
+
+ 45           LOAD_CONST              19 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              14 (<code object validate_relationship at 0x0000024C1141B990, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 43>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 44           CALL                     0
+
+ 43           CALL                     0
+
+ 45           STORE_NAME              15 (validate_relationship)
+
+ 50           LOAD_NAME               10 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               9 ('email')
+              CALL                     1
+
+ 51           LOAD_NAME               11 (classmethod)
+
+ 52           LOAD_CONST              19 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              15 (<code object validate_email at 0x0000024C11467A00, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 50>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 51           CALL                     0
+
+ 50           CALL                     0
+
+ 52           STORE_NAME              16 (validate_email)
+
+ 61           LOAD_NAME               10 (field_validator)
+              PUSH_NULL
+              LOAD_CONST              10 ('notes')
+              CALL                     1
+
+ 62           LOAD_NAME               11 (classmethod)
+
+ 63           LOAD_CONST              19 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              16 (<code object validate_notes at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 61>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 62           CALL                     0
+
+ 61           CALL                     0
+
+ 63           STORE_NAME              17 (validate_notes)
+              LOAD_CONST              17 (())
+              STORE_NAME              18 (__static_attributes__)
+              RETURN_CONST             4 (None)
+
+Disassembly of <code object validate_e164 at 0x0000024C11435450, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 19>:
+ 19           RESUME                   0
+
+ 22           LOAD_GLOBAL              0 (re)
+              LOAD_ATTR                2 (sub)
+              PUSH_NULL
+              LOAD_CONST               1 ('[\\s\\-\\(\\)\\.]+')
+              LOAD_CONST               2 ('')
+              LOAD_FAST                1 (v)
+              LOAD_ATTR                5 (strip + NULL|self)
+              CALL                     0
+              CALL                     3
+              STORE_FAST               1 (v)
+
+ 23           LOAD_GLOBAL              0 (re)
+              LOAD_ATTR                6 (match)
+              PUSH_NULL
+              LOAD_CONST               3 ('^\\+[1-9]\\d{1,14}$')
+              LOAD_FAST                1 (v)
+              CALL                     2
+              TO_BOOL
+              POP_JUMP_IF_TRUE        11 (to L1)
+
+ 24           LOAD_GLOBAL              9 (ValueError + NULL)
+
+ 25           LOAD_CONST               4 ('Phone number must be in E.164 format (e.g. +14155551234)')
+
+ 24           CALL                     1
+              RAISE_VARARGS            1
+
+ 27   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_display_name at 0x0000024C1141B880, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 29>:
+ 29           RESUME                   0
+
+ 32           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        26 (to L1)
+              LOAD_GLOBAL              1 (len + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              LOAD_CONST               1 (100)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       11 (to L1)
+
+ 33           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               2 ('Display name must be 100 characters or fewer')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 34   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_company at 0x0000024C1141BBB0, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 36>:
+ 36           RESUME                   0
+
+ 39           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        26 (to L1)
+              LOAD_GLOBAL              1 (len + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              LOAD_CONST               1 (200)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       11 (to L1)
+
+ 40           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               2 ('Company must be 200 characters or fewer')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 41   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_relationship at 0x0000024C1141B990, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 43>:
+ 43           RESUME                   0
+
+ 46           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        26 (to L1)
+              LOAD_GLOBAL              1 (len + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              LOAD_CONST               1 (100)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       11 (to L1)
+
+ 47           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               2 ('Relationship must be 100 characters or fewer')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 48   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_email at 0x0000024C11467A00, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 50>:
+ 50           RESUME                   0
+
+ 53           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        88 (to L2)
+
+ 54           LOAD_FAST                1 (v)
+              LOAD_ATTR                1 (strip + NULL|self)
+              CALL                     0
+              STORE_FAST               1 (v)
+
+ 55           LOAD_GLOBAL              3 (len + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              LOAD_CONST               1 (254)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       11 (to L1)
+
+ 56           LOAD_GLOBAL              5 (ValueError + NULL)
+              LOAD_CONST               2 ('Email must be 254 characters or fewer')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 57   L1:     LOAD_FAST                1 (v)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       39 (to L2)
+              LOAD_GLOBAL              6 (re)
+              LOAD_ATTR                8 (match)
+              PUSH_NULL
+              LOAD_CONST               3 ('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+              LOAD_FAST                1 (v)
+              CALL                     2
+              TO_BOOL
+              POP_JUMP_IF_TRUE        11 (to L2)
+
+ 58           LOAD_GLOBAL              5 (ValueError + NULL)
+              LOAD_CONST               4 ('Invalid email format')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 59   L2:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_notes at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 61>:
+ 61           RESUME                   0
+
+ 64           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        26 (to L1)
+              LOAD_GLOBAL              1 (len + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              LOAD_CONST               1 (1000)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       11 (to L1)
+
+ 65           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               2 ('Notes must be 1000 characters or fewer')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 66   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object VipEntryResponse at 0x0000024C0EEE3DE0, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 69>:
+ 69           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('VipEntryResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (69)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 70           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('id')
+              STORE_SUBSCR
+
+ 71           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('phone_last4')
+              STORE_SUBSCR
+
+ 72           LOAD_CONST               5 (None)
+              STORE_NAME               5 (display_name)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('display_name')
+              STORE_SUBSCR
+
+ 73           LOAD_CONST               5 (None)
+              STORE_NAME               6 (company)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('company')
+              STORE_SUBSCR
+
+ 74           LOAD_CONST               5 (None)
+              STORE_NAME               7 (relationship)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('relationship')
+              STORE_SUBSCR
+
+ 75           LOAD_CONST               5 (None)
+              STORE_NAME               8 (email)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('email')
+              STORE_SUBSCR
+
+ 76           LOAD_CONST               5 (None)
+              STORE_NAME               9 (notes)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('notes')
+              STORE_SUBSCR
+
+ 77           LOAD_CONST              12 ('datetime')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              13 ('created_at')
+              STORE_SUBSCR
+
+ 79           LOAD_CONST              14 ('from_attributes')
+              LOAD_CONST              15 (True)
+              BUILD_MAP                1
+              STORE_NAME              10 (model_config)
+              LOAD_CONST              16 (())
+              STORE_NAME              11 (__static_attributes__)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object VipListResponse at 0x0000024C0EF2AA60, file "D:\fluence\Github\mattbot\backend\app\schemas\vip.py", line 82>:
+ 82           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('VipListResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (82)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 83           LOAD_CONST               2 ('list[VipEntryResponse]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('items')
+              STORE_SUBSCR
+              LOAD_CONST               4 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             5 (None)

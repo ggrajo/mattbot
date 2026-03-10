@@ -1,0 +1,2942 @@
+# Bytecode dump of: reminders.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\api\v1\reminders.py
+# co_names: ('__doc__', '__future__', 'annotations', 'uuid', 'datetime', 'UTC', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.core.rate_limiter', 'check_rate_limit', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.models.reminder', 'Reminder', 'app.schemas.common', 'MessageResponse', 'app.schemas.reminders', 'ReminderCreateRequest', 'ReminderListResponse', 'ReminderResponse', 'ReminderUpdateRequest', 'app.services', 'audit_service', 'router', '_STATUS_MAP', '_to_response', '_get_user_reminder', 'get', 'list_reminders', 'post', 'create_reminder', 'patch', 'update_reminder', 'complete_reminder', 'cancel_reminder', 'delete', 'delete_reminder')
+# co_consts (strings): ['Reminder CRUD API endpoints.', 'pending', 'overdue', '', '/calls/{call_id}', '/{reminder_id}', '/{reminder_id}/complete', '/{reminder_id}/cancel']
+
+# DOCSTRING: """Reminder CRUD API endpoints."""
+# --- Nested code object: _to_response ---
+    # co_names: ('ReminderResponse', 'str', 'id', 'call_id', 'title', 'due_at', 'timezone_at_creation', '_STATUS_MAP', 'get', 'status', 'created_at')
+    # co_varnames: ('r', 'call_from_masked')
+     33           RESUME                   0
+    
+     34           LOAD_GLOBAL              1 (ReminderResponse + NULL)
+    
+     35           LOAD_GLOBAL              3 (str + NULL)
+                  LOAD_FAST                0 (r)
+                  LOAD_ATTR                4 (id)
+                  CALL                     1
+    
+     36           LOAD_FAST                0 (r)
+                  LOAD_ATTR                6 (call_id)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       21 (to L1)
+                  LOAD_GLOBAL              3 (str + NULL)
+                  LOAD_FAST                0 (r)
+                  LOAD_ATTR                6 (call_id)
+                  CALL                     1
+                  JUMP_FORWARD             1 (to L2)
+          L1:     LOAD_CONST               0 (None)
+    
+     37   L2:     LOAD_FAST                0 (r)
+                  LOAD_ATTR                8 (title)
+    
+     38           LOAD_FAST                0 (r)
+                  LOAD_ATTR               10 (due_at)
+    
+     39           LOAD_FAST                0 (r)
+                  LOAD_ATTR               12 (timezone_at_creation)
+    
+     40           LOAD_GLOBAL             14 (_STATUS_MAP)
+                  LOAD_ATTR               17 (get + NULL|self)
+                  LOAD_FAST                0 (r)
+                  LOAD_ATTR               18 (status)
+                  LOAD_FAST                0 (r)
+                  LOAD_ATTR               18 (status)
+                  CALL                     2
+    
+     41           LOAD_FAST                0 (r)
+                  LOAD_ATTR               20 (created_at)
+    
+     42           LOAD_FAST                1 (call_from_masked)
+    
+     34           LOAD_CONST               1 (('id', 'call_id', 'title', 'due_at', 'timezone_at_creation', 'status', 'created_at', 'call_from_masked'))
+                  CALL_KW                  8
+                  RETURN_VALUE
+    
+# --- Nested code object: _get_user_reminder ---
+    # co_names: ('select', 'Reminder', 'where', 'id', 'owner_user_id', 'execute', 'scalar_one_or_none', 'AppError')
+    # co_varnames: ('db', 'user_id', 'reminder_id', 'stmt', 'result', 'reminder')
+      46           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+      49           LOAD_GLOBAL              1 (select + NULL)
+                   LOAD_GLOBAL              2 (Reminder)
+                   CALL                     1
+                   LOAD_ATTR                5 (where + NULL|self)
+    
+      50           LOAD_GLOBAL              2 (Reminder)
+                   LOAD_ATTR                6 (id)
+                   LOAD_FAST                2 (reminder_id)
+                   COMPARE_OP              72 (==)
+    
+      51           LOAD_GLOBAL              2 (Reminder)
+                   LOAD_ATTR                8 (owner_user_id)
+                   LOAD_FAST                1 (user_id)
+                   COMPARE_OP              72 (==)
+    
+      49           CALL                     2
+                   STORE_FAST               3 (stmt)
+    
+      53           LOAD_FAST                0 (db)
+                   LOAD_ATTR               11 (execute + NULL|self)
+                   LOAD_FAST                3 (stmt)
+                   CALL                     1
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   STORE_FAST               4 (result)
+    
+      54           LOAD_FAST                4 (result)
+                   LOAD_ATTR               13 (scalar_one_or_none + NULL|self)
+                   CALL                     0
+                   STORE_FAST               5 (reminder)
+    
+      55           LOAD_FAST                5 (reminder)
+                   POP_JUMP_IF_NOT_NONE    11 (to L6)
+    
+      56           LOAD_GLOBAL             15 (AppError + NULL)
+    
+      57           LOAD_CONST               1 ('REMINDER_NOT_FOUND')
+                   LOAD_CONST               2 ('Reminder not found')
+                   LOAD_CONST               3 (404)
+    
+      56           LOAD_CONST               4 (('code', 'message', 'status_code'))
+                   CALL_KW                  3
+                   RAISE_VARARGS            1
+    
+      59   L6:     LOAD_FAST                5 (reminder)
+                   RETURN_VALUE
+    
+      53   L7:     CLEANUP_THROW
+           L8:     JUMP_BACKWARD_NO_INTERRUPT 36 (to L5)
+    
+      --   L9:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L9 [0] lasti
+      L3 to L4 -> L7 [2]
+      L4 to L8 -> L9 [0] lasti
+    
+# --- Nested code object: list_reminders ---
+    # co_names: ('app.models.call', 'Call', 'check_rate_limit', 'user', 'id', 'settings', 'RATE_LIMIT_API_STANDARD_MAX', 'RATE_LIMIT_API_STANDARD_WINDOW', 'AppError', 'select', 'Reminder', 'from_masked', 'outerjoin', 'call_id', 'where', 'owner_user_id', 'order_by', 'due_at', 'execute', 'all', 'ReminderListResponse', '_to_response')
+    # co_varnames: ('current_user', 'db', 'Call', 'allowed', '_', 'stmt', 'rows', 'r', 'fm')
+      62            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      67            LOAD_CONST               1 (0)
+                    LOAD_CONST               2 (('Call',))
+                    IMPORT_NAME              0 (app.models.call)
+                    IMPORT_FROM              1 (Call)
+                    STORE_FAST               2 (Call)
+                    POP_TOP
+    
+      69            LOAD_GLOBAL              5 (check_rate_limit + NULL)
+    
+      70            LOAD_CONST               3 ('reminders:list:')
+                    LOAD_FAST                0 (current_user)
+                    LOAD_ATTR                6 (user)
+                    LOAD_ATTR                8 (id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+      71            LOAD_GLOBAL             10 (settings)
+                    LOAD_ATTR               12 (RATE_LIMIT_API_STANDARD_MAX)
+    
+      72            LOAD_GLOBAL             10 (settings)
+                    LOAD_ATTR               14 (RATE_LIMIT_API_STANDARD_WINDOW)
+    
+      69            LOAD_CONST               4 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   52 (allowed, _)
+    
+      74            LOAD_FAST                3 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+      75            LOAD_GLOBAL             17 (AppError + NULL)
+                    LOAD_CONST               5 ('RATE_LIMITED')
+                    LOAD_CONST               6 ('Too many requests')
+                    LOAD_CONST               7 (429)
+                    LOAD_CONST               8 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+      78    L6:     LOAD_GLOBAL             19 (select + NULL)
+                    LOAD_GLOBAL             20 (Reminder)
+                    LOAD_FAST                2 (Call)
+                    LOAD_ATTR               22 (from_masked)
+                    CALL                     2
+    
+      79            LOAD_ATTR               25 (outerjoin + NULL|self)
+                    LOAD_FAST                2 (Call)
+                    LOAD_GLOBAL             20 (Reminder)
+                    LOAD_ATTR               26 (call_id)
+                    LOAD_FAST                2 (Call)
+                    LOAD_ATTR                8 (id)
+                    COMPARE_OP              72 (==)
+                    CALL                     2
+    
+      80            LOAD_ATTR               29 (where + NULL|self)
+                    LOAD_GLOBAL             20 (Reminder)
+                    LOAD_ATTR               30 (owner_user_id)
+                    LOAD_FAST                0 (current_user)
+                    LOAD_ATTR                6 (user)
+                    LOAD_ATTR                8 (id)
+                    COMPARE_OP              72 (==)
+                    CALL                     1
+    
+      81            LOAD_ATTR               33 (order_by + NULL|self)
+                    LOAD_GLOBAL             20 (Reminder)
+                    LOAD_ATTR               34 (due_at)
+                    CALL                     1
+    
+      77            STORE_FAST               5 (stmt)
+    
+      83            LOAD_FAST                1 (db)
+                    LOAD_ATTR               37 (execute + NULL|self)
+                    LOAD_FAST                5 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    LOAD_ATTR               39 (all + NULL|self)
+                    CALL                     0
+                    STORE_FAST               6 (rows)
+    
+      84            LOAD_GLOBAL             41 (ReminderListResponse + NULL)
+    
+      85            LOAD_FAST                6 (rows)
+                    GET_ITER
+                    LOAD_FAST_AND_CLEAR      7 (r)
+                    LOAD_FAST_AND_CLEAR      8 (fm)
+                    SWAP                     3
+           L11:     BUILD_LIST               0
+                    SWAP                     2
+                    GET_ITER
+           L12:     FOR_ITER                14 (to L13)
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST  120 (r, fm)
+                    LOAD_GLOBAL             43 (_to_response + NULL)
+                    LOAD_FAST_LOAD_FAST    120 (r, fm)
+                    LOAD_CONST               9 (('call_from_masked',))
+                    CALL_KW                  2
+                    LIST_APPEND              2
+                    JUMP_BACKWARD           16 (to L12)
+           L13:     END_FOR
+                    POP_TOP
+           L14:     SWAP                     3
+                    STORE_FAST               8 (fm)
+                    STORE_FAST               7 (r)
+    
+      84            LOAD_CONST              10 (('items',))
+                    CALL_KW                  1
+                    RETURN_VALUE
+    
+      69   L15:     CLEANUP_THROW
+           L16:     JUMP_BACKWARD_NO_INTERRUPT 250 (to L5)
+    
+      83   L17:     CLEANUP_THROW
+           L18:     JUMP_BACKWARD_NO_INTERRUPT 57 (to L10)
+    
+      --   L19:     SWAP                     2
+                    POP_TOP
+    
+      85            SWAP                     3
+                    STORE_FAST               8 (fm)
+                    STORE_FAST               7 (r)
+                    RERAISE                  0
+    
+      --   L20:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L20 [0] lasti
+      L3 to L4 -> L15 [2]
+      L4 to L8 -> L20 [0] lasti
+      L8 to L9 -> L17 [2]
+      L9 to L11 -> L20 [0] lasti
+      L11 to L14 -> L19 [5]
+      L14 to L16 -> L20 [0] lasti
+      L17 to L18 -> L20 [0] lasti
+      L19 to L20 -> L20 [0] lasti
+    
+# --- Nested code object: create_reminder ---
+    # co_names: ('check_rate_limit', 'user', 'id', 'settings', 'RATE_LIMIT_API_WRITE_MAX', 'RATE_LIMIT_API_WRITE_WINDOW', 'AppError', 'datetime', 'now', 'UTC', 'due_at', 'tzinfo', 'replace', 'app.models.call', 'Call', 'select', 'where', 'owner_user_id', 'execute', 'scalar_one_or_none', 'Reminder', 'title', 'timezone', 'device_id', 'add', 'audit_service', 'log_event', 'str', 'commit', 'refresh', '_to_response', 'from_masked')
+    # co_varnames: ('call_id', 'body', 'current_user', 'db', 'allowed', '_', 'now', 'due', 'Call', 'stmt', 'result', 'call', 'reminder')
+      89            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     100            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+     101            LOAD_CONST               1 ('reminders:create:')
+                    LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+     102            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+    
+     103            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+    
+     100            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   69 (allowed, _)
+    
+     105            LOAD_FAST                4 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+     106            LOAD_GLOBAL             13 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     108    L6:     LOAD_GLOBAL             14 (datetime)
+                    LOAD_ATTR               16 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL             18 (UTC)
+                    CALL                     1
+                    STORE_FAST               6 (now)
+    
+     109            LOAD_FAST                1 (body)
+                    LOAD_ATTR               20 (due_at)
+                    LOAD_ATTR               22 (tzinfo)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       12 (to L7)
+                    LOAD_FAST                1 (body)
+                    LOAD_ATTR               20 (due_at)
+                    JUMP_FORWARD            28 (to L8)
+            L7:     LOAD_FAST                1 (body)
+                    LOAD_ATTR               20 (due_at)
+                    LOAD_ATTR               25 (replace + NULL|self)
+                    LOAD_GLOBAL             18 (UTC)
+                    LOAD_CONST               7 (('tzinfo',))
+                    CALL_KW                  1
+            L8:     STORE_FAST               7 (due)
+    
+     110            LOAD_FAST_LOAD_FAST    118 (due, now)
+                    COMPARE_OP              58 (bool(<=))
+                    POP_JUMP_IF_FALSE       11 (to L9)
+    
+     111            LOAD_GLOBAL             13 (AppError + NULL)
+    
+     112            LOAD_CONST               8 ('INVALID_DUE_DATE')
+    
+     113            LOAD_CONST               9 ('due_at must be in the future')
+    
+     114            LOAD_CONST              10 (422)
+    
+     111            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     117    L9:     LOAD_CONST              11 (0)
+                    LOAD_CONST              12 (('Call',))
+                    IMPORT_NAME             13 (app.models.call)
+                    IMPORT_FROM             14 (Call)
+                    STORE_FAST               8 (Call)
+                    POP_TOP
+    
+     119            LOAD_GLOBAL             31 (select + NULL)
+                    LOAD_FAST                8 (Call)
+                    CALL                     1
+                    LOAD_ATTR               33 (where + NULL|self)
+    
+     120            LOAD_FAST                8 (Call)
+                    LOAD_ATTR                4 (id)
+                    LOAD_FAST                0 (call_id)
+                    COMPARE_OP              72 (==)
+                    LOAD_FAST                8 (Call)
+                    LOAD_ATTR               34 (owner_user_id)
+                    LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    COMPARE_OP              72 (==)
+    
+     119            CALL                     2
+                    STORE_FAST               9 (stmt)
+    
+     122            LOAD_FAST                3 (db)
+                    LOAD_ATTR               37 (execute + NULL|self)
+                    LOAD_FAST                9 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L10:     SEND                     3 (to L13)
+           L11:     YIELD_VALUE              1
+           L12:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L10)
+           L13:     END_SEND
+                    STORE_FAST              10 (result)
+    
+     123            LOAD_FAST               10 (result)
+                    LOAD_ATTR               39 (scalar_one_or_none + NULL|self)
+                    CALL                     0
+                    STORE_FAST              11 (call)
+    
+     124            LOAD_FAST               11 (call)
+                    POP_JUMP_IF_NOT_NONE    11 (to L14)
+    
+     125            LOAD_GLOBAL             13 (AppError + NULL)
+                    LOAD_CONST              13 ('CALL_NOT_FOUND')
+                    LOAD_CONST              14 ('Call not found')
+                    LOAD_CONST              15 (404)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     127   L14:     LOAD_GLOBAL             41 (Reminder + NULL)
+    
+     128            LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+    
+     129            LOAD_FAST                0 (call_id)
+    
+     130            LOAD_FAST                1 (body)
+                    LOAD_ATTR               42 (title)
+    
+     131            LOAD_FAST                7 (due)
+    
+     132            LOAD_FAST                1 (body)
+                    LOAD_ATTR               44 (timezone)
+    
+     133            LOAD_FAST                2 (current_user)
+                    LOAD_ATTR               46 (device_id)
+    
+     127            LOAD_CONST              16 (('owner_user_id', 'call_id', 'title', 'due_at', 'timezone_at_creation', 'created_by_device_id'))
+                    CALL_KW                  6
+                    STORE_FAST              12 (reminder)
+    
+     135            LOAD_FAST                3 (db)
+                    LOAD_ATTR               49 (add + NULL|self)
+                    LOAD_FAST               12 (reminder)
+                    CALL                     1
+                    POP_TOP
+    
+     137            LOAD_GLOBAL             50 (audit_service)
+                    LOAD_ATTR               52 (log_event)
+                    PUSH_NULL
+    
+     138            LOAD_FAST                3 (db)
+    
+     139            LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+    
+     140            LOAD_CONST              17 ('REMINDER_CREATED')
+    
+     141            LOAD_CONST              18 ('reminder')
+    
+     142            LOAD_FAST               12 (reminder)
+                    LOAD_ATTR                4 (id)
+    
+     143            LOAD_CONST              19 ('call_id')
+                    LOAD_GLOBAL             55 (str + NULL)
+                    LOAD_FAST                0 (call_id)
+                    CALL                     1
+                    BUILD_MAP                1
+    
+     137            LOAD_CONST              20 (('owner_user_id', 'event_type', 'target_type', 'target_id', 'details'))
+                    CALL_KW                  6
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L15:     SEND                     3 (to L18)
+           L16:     YIELD_VALUE              1
+           L17:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+           L18:     END_SEND
+                    POP_TOP
+    
+     146            LOAD_FAST                3 (db)
+                    LOAD_ATTR               57 (commit + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L19:     SEND                     3 (to L22)
+           L20:     YIELD_VALUE              1
+           L21:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+           L22:     END_SEND
+                    POP_TOP
+    
+     147            LOAD_FAST                3 (db)
+                    LOAD_ATTR               59 (refresh + NULL|self)
+                    LOAD_FAST               12 (reminder)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L23:     SEND                     3 (to L26)
+           L24:     YIELD_VALUE              1
+           L25:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L23)
+           L26:     END_SEND
+                    POP_TOP
+    
+     148            LOAD_GLOBAL             61 (_to_response + NULL)
+                    LOAD_FAST_LOAD_FAST    203 (reminder, call)
+                    LOAD_ATTR               62 (from_masked)
+                    LOAD_CONST              21 (('call_from_masked',))
+                    CALL_KW                  2
+                    RETURN_VALUE
+    
+     100   L27:     CLEANUP_THROW
+           L28:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 492 (to L5)
+    
+     122   L29:     CLEANUP_THROW
+           L30:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 261 (to L13)
+    
+     137   L31:     CLEANUP_THROW
+           L32:     JUMP_BACKWARD_NO_INTERRUPT 78 (to L18)
+    
+     146   L33:     CLEANUP_THROW
+           L34:     JUMP_BACKWARD_NO_INTERRUPT 56 (to L22)
+    
+     147   L35:     CLEANUP_THROW
+           L36:     JUMP_BACKWARD_NO_INTERRUPT 33 (to L26)
+    
+      --   L37:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L37 [0] lasti
+      L3 to L4 -> L27 [2]
+      L4 to L11 -> L37 [0] lasti
+      L11 to L12 -> L29 [2]
+      L12 to L16 -> L37 [0] lasti
+      L16 to L17 -> L31 [2]
+      L17 to L20 -> L37 [0] lasti
+      L20 to L21 -> L33 [2]
+      L21 to L24 -> L37 [0] lasti
+      L24 to L25 -> L35 [2]
+      L25 to L28 -> L37 [0] lasti
+      L29 to L30 -> L37 [0] lasti
+      L31 to L32 -> L37 [0] lasti
+      L33 to L34 -> L37 [0] lasti
+      L35 to L36 -> L37 [0] lasti
+    
+# --- Nested code object: update_reminder ---
+    # co_names: ('check_rate_limit', 'user', 'id', 'settings', 'RATE_LIMIT_API_WRITE_MAX', 'RATE_LIMIT_API_WRITE_WINDOW', 'AppError', '_get_user_reminder', 'status', 'title', 'due_at', 'tzinfo', 'replace', 'UTC', 'datetime', 'now', 'isoformat', '_to_response', 'audit_service', 'log_event', 'commit', 'refresh')
+    # co_varnames: ('reminder_id', 'body', 'current_user', 'db', 'allowed', '_', 'reminder', 'changes', 'due')
+     151            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     158            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+     159            LOAD_CONST               1 ('reminders:update:')
+                    LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+     160            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+    
+     161            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+    
+     158            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   69 (allowed, _)
+    
+     163            LOAD_FAST                4 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+     164            LOAD_GLOBAL             13 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     166    L6:     LOAD_GLOBAL             15 (_get_user_reminder + NULL)
+                    LOAD_FAST_LOAD_FAST     50 (db, current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    LOAD_FAST                0 (reminder_id)
+                    CALL                     3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    STORE_FAST               6 (reminder)
+    
+     168            LOAD_FAST                6 (reminder)
+                    LOAD_ATTR               16 (status)
+                    LOAD_CONST               7 ('scheduled')
+                    COMPARE_OP             119 (bool(!=))
+                    POP_JUMP_IF_FALSE       11 (to L11)
+    
+     169            LOAD_GLOBAL             13 (AppError + NULL)
+    
+     170            LOAD_CONST               8 ('REMINDER_NOT_EDITABLE')
+    
+     171            LOAD_CONST               9 ('Only scheduled reminders can be updated')
+    
+     172            LOAD_CONST              10 (409)
+    
+     169            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     175   L11:     BUILD_MAP                0
+                    STORE_FAST               7 (changes)
+    
+     177            LOAD_FAST                1 (body)
+                    LOAD_ATTR               18 (title)
+                    POP_JUMP_IF_NONE        32 (to L12)
+    
+     178            LOAD_FAST                1 (body)
+                    LOAD_ATTR               18 (title)
+                    LOAD_FAST                6 (reminder)
+                    STORE_ATTR               9 (title)
+    
+     179            LOAD_FAST                1 (body)
+                    LOAD_ATTR               18 (title)
+                    LOAD_FAST                7 (changes)
+                    LOAD_CONST              11 ('title')
+                    STORE_SUBSCR
+    
+     181   L12:     LOAD_FAST                1 (body)
+                    LOAD_ATTR               20 (due_at)
+                    POP_JUMP_IF_NONE       134 (to L16)
+    
+     182            LOAD_FAST                1 (body)
+                    LOAD_ATTR               20 (due_at)
+                    LOAD_ATTR               22 (tzinfo)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       12 (to L13)
+                    LOAD_FAST                1 (body)
+                    LOAD_ATTR               20 (due_at)
+                    JUMP_FORWARD            28 (to L14)
+           L13:     LOAD_FAST                1 (body)
+                    LOAD_ATTR               20 (due_at)
+                    LOAD_ATTR               25 (replace + NULL|self)
+                    LOAD_GLOBAL             26 (UTC)
+                    LOAD_CONST              12 (('tzinfo',))
+                    CALL_KW                  1
+           L14:     STORE_FAST               8 (due)
+    
+     183            LOAD_FAST                8 (due)
+                    LOAD_GLOBAL             28 (datetime)
+                    LOAD_ATTR               30 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL             26 (UTC)
+                    CALL                     1
+                    COMPARE_OP              58 (bool(<=))
+                    POP_JUMP_IF_FALSE       11 (to L15)
+    
+     184            LOAD_GLOBAL             13 (AppError + NULL)
+    
+     185            LOAD_CONST              13 ('INVALID_DUE_DATE')
+    
+     186            LOAD_CONST              14 ('due_at must be in the future')
+    
+     187            LOAD_CONST              15 (422)
+    
+     184            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     189   L15:     LOAD_FAST_LOAD_FAST    134 (due, reminder)
+                    STORE_ATTR              10 (due_at)
+    
+     190            LOAD_FAST                8 (due)
+                    LOAD_ATTR               33 (isoformat + NULL|self)
+                    CALL                     0
+                    LOAD_FAST                7 (changes)
+                    LOAD_CONST              16 ('due_at')
+                    STORE_SUBSCR
+    
+     192   L16:     LOAD_FAST                7 (changes)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L17)
+    
+     193            LOAD_GLOBAL             35 (_to_response + NULL)
+                    LOAD_FAST                6 (reminder)
+                    CALL                     1
+                    RETURN_VALUE
+    
+     195   L17:     LOAD_GLOBAL             36 (audit_service)
+                    LOAD_ATTR               38 (log_event)
+                    PUSH_NULL
+    
+     196            LOAD_FAST                3 (db)
+    
+     197            LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+    
+     198            LOAD_CONST              17 ('REMINDER_UPDATED')
+    
+     199            LOAD_CONST              18 ('reminder')
+    
+     200            LOAD_FAST                0 (reminder_id)
+    
+     201            LOAD_FAST                7 (changes)
+    
+     195            LOAD_CONST              19 (('owner_user_id', 'event_type', 'target_type', 'target_id', 'details'))
+                    CALL_KW                  6
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L18:     SEND                     3 (to L21)
+           L19:     YIELD_VALUE              1
+           L20:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L18)
+           L21:     END_SEND
+                    POP_TOP
+    
+     204            LOAD_FAST                3 (db)
+                    LOAD_ATTR               41 (commit + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L22:     SEND                     3 (to L25)
+           L23:     YIELD_VALUE              1
+           L24:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L22)
+           L25:     END_SEND
+                    POP_TOP
+    
+     205            LOAD_FAST                3 (db)
+                    LOAD_ATTR               43 (refresh + NULL|self)
+                    LOAD_FAST                6 (reminder)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L26:     SEND                     3 (to L29)
+           L27:     YIELD_VALUE              1
+           L28:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L26)
+           L29:     END_SEND
+                    POP_TOP
+    
+     206            LOAD_GLOBAL             35 (_to_response + NULL)
+                    LOAD_FAST                6 (reminder)
+                    CALL                     1
+                    RETURN_VALUE
+    
+     158   L30:     CLEANUP_THROW
+           L31:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 417 (to L5)
+    
+     166   L32:     CLEANUP_THROW
+           L33:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 360 (to L10)
+    
+     195   L34:     CLEANUP_THROW
+           L35:     JUMP_BACKWARD_NO_INTERRUPT 70 (to L21)
+    
+     204   L36:     CLEANUP_THROW
+           L37:     JUMP_BACKWARD_NO_INTERRUPT 48 (to L25)
+    
+     205   L38:     CLEANUP_THROW
+           L39:     JUMP_BACKWARD_NO_INTERRUPT 25 (to L29)
+    
+      --   L40:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L40 [0] lasti
+      L3 to L4 -> L30 [2]
+      L4 to L8 -> L40 [0] lasti
+      L8 to L9 -> L32 [2]
+      L9 to L19 -> L40 [0] lasti
+      L19 to L20 -> L34 [2]
+      L20 to L23 -> L40 [0] lasti
+      L23 to L24 -> L36 [2]
+      L24 to L27 -> L40 [0] lasti
+      L27 to L28 -> L38 [2]
+      L28 to L31 -> L40 [0] lasti
+      L32 to L33 -> L40 [0] lasti
+      L34 to L35 -> L40 [0] lasti
+      L36 to L37 -> L40 [0] lasti
+      L38 to L39 -> L40 [0] lasti
+    
+# --- Nested code object: complete_reminder ---
+    # co_names: ('check_rate_limit', 'user', 'id', 'settings', 'RATE_LIMIT_API_WRITE_MAX', 'RATE_LIMIT_API_WRITE_WINDOW', 'AppError', '_get_user_reminder', 'status', 'audit_service', 'log_event', 'commit', 'refresh', '_to_response')
+    # co_varnames: ('reminder_id', 'current_user', 'db', 'allowed', '_', 'reminder')
+     209            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     215            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+     216            LOAD_CONST               1 ('reminders:complete:')
+                    LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+     217            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+    
+     218            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+    
+     215            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   52 (allowed, _)
+    
+     220            LOAD_FAST                3 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+     221            LOAD_GLOBAL             13 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     223    L6:     LOAD_GLOBAL             15 (_get_user_reminder + NULL)
+                    LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    LOAD_FAST                0 (reminder_id)
+                    CALL                     3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    STORE_FAST               5 (reminder)
+    
+     224            LOAD_CONST               7 ('completed')
+                    LOAD_FAST                5 (reminder)
+                    STORE_ATTR               8 (status)
+    
+     226            LOAD_GLOBAL             18 (audit_service)
+                    LOAD_ATTR               20 (log_event)
+                    PUSH_NULL
+    
+     227            LOAD_FAST                2 (db)
+    
+     228            LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+    
+     229            LOAD_CONST               8 ('REMINDER_COMPLETED')
+    
+     230            LOAD_CONST               9 ('reminder')
+    
+     231            LOAD_FAST                0 (reminder_id)
+    
+     226            LOAD_CONST              10 (('owner_user_id', 'event_type', 'target_type', 'target_id'))
+                    CALL_KW                  5
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L11:     SEND                     3 (to L14)
+           L12:     YIELD_VALUE              1
+           L13:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+           L14:     END_SEND
+                    POP_TOP
+    
+     234            LOAD_FAST                2 (db)
+                    LOAD_ATTR               23 (commit + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L15:     SEND                     3 (to L18)
+           L16:     YIELD_VALUE              1
+           L17:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+           L18:     END_SEND
+                    POP_TOP
+    
+     235            LOAD_FAST                2 (db)
+                    LOAD_ATTR               25 (refresh + NULL|self)
+                    LOAD_FAST                5 (reminder)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L19:     SEND                     3 (to L22)
+           L20:     YIELD_VALUE              1
+           L21:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+           L22:     END_SEND
+                    POP_TOP
+    
+     236            LOAD_GLOBAL             27 (_to_response + NULL)
+                    LOAD_FAST                5 (reminder)
+                    CALL                     1
+                    RETURN_VALUE
+    
+     215   L23:     CLEANUP_THROW
+           L24:     JUMP_BACKWARD_NO_INTERRUPT 183 (to L5)
+    
+     223   L25:     CLEANUP_THROW
+           L26:     JUMP_BACKWARD_NO_INTERRUPT 125 (to L10)
+    
+     226   L27:     CLEANUP_THROW
+           L28:     JUMP_BACKWARD_NO_INTERRUPT 68 (to L14)
+    
+     234   L29:     CLEANUP_THROW
+           L30:     JUMP_BACKWARD_NO_INTERRUPT 46 (to L18)
+    
+     235   L31:     CLEANUP_THROW
+           L32:     JUMP_BACKWARD_NO_INTERRUPT 23 (to L22)
+    
+      --   L33:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L33 [0] lasti
+      L3 to L4 -> L23 [2]
+      L4 to L8 -> L33 [0] lasti
+      L8 to L9 -> L25 [2]
+      L9 to L12 -> L33 [0] lasti
+      L12 to L13 -> L27 [2]
+      L13 to L16 -> L33 [0] lasti
+      L16 to L17 -> L29 [2]
+      L17 to L20 -> L33 [0] lasti
+      L20 to L21 -> L31 [2]
+      L21 to L24 -> L33 [0] lasti
+      L25 to L26 -> L33 [0] lasti
+      L27 to L28 -> L33 [0] lasti
+      L29 to L30 -> L33 [0] lasti
+      L31 to L32 -> L33 [0] lasti
+    
+# --- Nested code object: cancel_reminder ---
+    # co_names: ('check_rate_limit', 'user', 'id', 'settings', 'RATE_LIMIT_API_WRITE_MAX', 'RATE_LIMIT_API_WRITE_WINDOW', 'AppError', '_get_user_reminder', 'status', 'audit_service', 'log_event', 'commit', 'refresh', '_to_response')
+    # co_varnames: ('reminder_id', 'current_user', 'db', 'allowed', '_', 'reminder')
+     239            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     245            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+     246            LOAD_CONST               1 ('reminders:cancel:')
+                    LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+     247            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+    
+     248            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+    
+     245            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   52 (allowed, _)
+    
+     250            LOAD_FAST                3 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+     251            LOAD_GLOBAL             13 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     253    L6:     LOAD_GLOBAL             15 (_get_user_reminder + NULL)
+                    LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    LOAD_FAST                0 (reminder_id)
+                    CALL                     3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    STORE_FAST               5 (reminder)
+    
+     254            LOAD_CONST               7 ('cancelled')
+                    LOAD_FAST                5 (reminder)
+                    STORE_ATTR               8 (status)
+    
+     256            LOAD_GLOBAL             18 (audit_service)
+                    LOAD_ATTR               20 (log_event)
+                    PUSH_NULL
+    
+     257            LOAD_FAST                2 (db)
+    
+     258            LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+    
+     259            LOAD_CONST               8 ('REMINDER_CANCELLED')
+    
+     260            LOAD_CONST               9 ('reminder')
+    
+     261            LOAD_FAST                0 (reminder_id)
+    
+     256            LOAD_CONST              10 (('owner_user_id', 'event_type', 'target_type', 'target_id'))
+                    CALL_KW                  5
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L11:     SEND                     3 (to L14)
+           L12:     YIELD_VALUE              1
+           L13:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+           L14:     END_SEND
+                    POP_TOP
+    
+     264            LOAD_FAST                2 (db)
+                    LOAD_ATTR               23 (commit + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L15:     SEND                     3 (to L18)
+           L16:     YIELD_VALUE              1
+           L17:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+           L18:     END_SEND
+                    POP_TOP
+    
+     265            LOAD_FAST                2 (db)
+                    LOAD_ATTR               25 (refresh + NULL|self)
+                    LOAD_FAST                5 (reminder)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L19:     SEND                     3 (to L22)
+           L20:     YIELD_VALUE              1
+           L21:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+           L22:     END_SEND
+                    POP_TOP
+    
+     266            LOAD_GLOBAL             27 (_to_response + NULL)
+                    LOAD_FAST                5 (reminder)
+                    CALL                     1
+                    RETURN_VALUE
+    
+     245   L23:     CLEANUP_THROW
+           L24:     JUMP_BACKWARD_NO_INTERRUPT 183 (to L5)
+    
+     253   L25:     CLEANUP_THROW
+           L26:     JUMP_BACKWARD_NO_INTERRUPT 125 (to L10)
+    
+     256   L27:     CLEANUP_THROW
+           L28:     JUMP_BACKWARD_NO_INTERRUPT 68 (to L14)
+    
+     264   L29:     CLEANUP_THROW
+           L30:     JUMP_BACKWARD_NO_INTERRUPT 46 (to L18)
+    
+     265   L31:     CLEANUP_THROW
+           L32:     JUMP_BACKWARD_NO_INTERRUPT 23 (to L22)
+    
+      --   L33:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L33 [0] lasti
+      L3 to L4 -> L23 [2]
+      L4 to L8 -> L33 [0] lasti
+      L8 to L9 -> L25 [2]
+      L9 to L12 -> L33 [0] lasti
+      L12 to L13 -> L27 [2]
+      L13 to L16 -> L33 [0] lasti
+      L16 to L17 -> L29 [2]
+      L17 to L20 -> L33 [0] lasti
+      L20 to L21 -> L31 [2]
+      L21 to L24 -> L33 [0] lasti
+      L25 to L26 -> L33 [0] lasti
+      L27 to L28 -> L33 [0] lasti
+      L29 to L30 -> L33 [0] lasti
+      L31 to L32 -> L33 [0] lasti
+    
+# --- Nested code object: delete_reminder ---
+    # co_names: ('check_rate_limit', 'user', 'id', 'settings', 'RATE_LIMIT_API_WRITE_MAX', 'RATE_LIMIT_API_WRITE_WINDOW', 'AppError', '_get_user_reminder', 'audit_service', 'log_event', 'delete', 'commit', 'MessageResponse')
+    # co_varnames: ('reminder_id', 'current_user', 'db', 'allowed', '_', 'reminder')
+     269            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     275            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+     276            LOAD_CONST               1 ('reminders:delete:')
+                    LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+     277            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+    
+     278            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+    
+     275            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   52 (allowed, _)
+    
+     280            LOAD_FAST                3 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+     281            LOAD_GLOBAL             13 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     283    L6:     LOAD_GLOBAL             15 (_get_user_reminder + NULL)
+                    LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    LOAD_FAST                0 (reminder_id)
+                    CALL                     3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    STORE_FAST               5 (reminder)
+    
+     285            LOAD_GLOBAL             16 (audit_service)
+                    LOAD_ATTR               18 (log_event)
+                    PUSH_NULL
+    
+     286            LOAD_FAST                2 (db)
+    
+     287            LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+    
+     288            LOAD_CONST               7 ('REMINDER_DELETED')
+    
+     289            LOAD_CONST               8 ('reminder')
+    
+     290            LOAD_FAST                0 (reminder_id)
+    
+     285            LOAD_CONST               9 (('owner_user_id', 'event_type', 'target_type', 'target_id'))
+                    CALL_KW                  5
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L11:     SEND                     3 (to L14)
+           L12:     YIELD_VALUE              1
+           L13:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+           L14:     END_SEND
+                    POP_TOP
+    
+     293            LOAD_FAST                2 (db)
+                    LOAD_ATTR               21 (delete + NULL|self)
+                    LOAD_FAST                5 (reminder)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L15:     SEND                     3 (to L18)
+           L16:     YIELD_VALUE              1
+           L17:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+           L18:     END_SEND
+                    POP_TOP
+    
+     294            LOAD_FAST                2 (db)
+                    LOAD_ATTR               23 (commit + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L19:     SEND                     3 (to L22)
+           L20:     YIELD_VALUE              1
+           L21:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+           L22:     END_SEND
+                    POP_TOP
+    
+     295            LOAD_GLOBAL             25 (MessageResponse + NULL)
+                    LOAD_CONST              10 ('Reminder deleted successfully')
+                    LOAD_CONST              11 (('message',))
+                    CALL_KW                  1
+                    RETURN_VALUE
+    
+     275   L23:     CLEANUP_THROW
+           L24:     JUMP_BACKWARD_NO_INTERRUPT 174 (to L5)
+    
+     283   L25:     CLEANUP_THROW
+           L26:     JUMP_BACKWARD_NO_INTERRUPT 116 (to L10)
+    
+     285   L27:     CLEANUP_THROW
+           L28:     JUMP_BACKWARD_NO_INTERRUPT 66 (to L14)
+    
+     293   L29:     CLEANUP_THROW
+           L30:     JUMP_BACKWARD_NO_INTERRUPT 43 (to L18)
+    
+     294   L31:     CLEANUP_THROW
+           L32:     JUMP_BACKWARD_NO_INTERRUPT 21 (to L22)
+    
+      --   L33:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L33 [0] lasti
+      L3 to L4 -> L23 [2]
+      L4 to L8 -> L33 [0] lasti
+      L8 to L9 -> L25 [2]
+      L9 to L12 -> L33 [0] lasti
+      L12 to L13 -> L27 [2]
+      L13 to L16 -> L33 [0] lasti
+      L16 to L17 -> L29 [2]
+      L17 to L20 -> L33 [0] lasti
+      L20 to L21 -> L31 [2]
+      L21 to L24 -> L33 [0] lasti
+      L25 to L26 -> L33 [0] lasti
+      L27 to L28 -> L33 [0] lasti
+      L29 to L30 -> L33 [0] lasti
+      L31 to L32 -> L33 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'uuid', 'datetime', 'UTC', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.core.rate_limiter', 'check_rate_limit', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.models.reminder', 'Reminder', 'app.schemas.common', 'MessageResponse', 'app.schemas.reminders', 'ReminderCreateRequest', 'ReminderListResponse', 'ReminderResponse', 'ReminderUpdateRequest', 'app.services', 'audit_service', 'router', '_STATUS_MAP', '_to_response', '_get_user_reminder', 'get', 'list_reminders', 'post', 'create_reminder', 'patch', 'update_reminder', 'complete_reminder', 'cancel_reminder', 'delete', 'delete_reminder')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Reminder CRUD API endpoints.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (uuid)
+              STORE_NAME               3 (uuid)
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('UTC', 'datetime'))
+              IMPORT_NAME              4 (datetime)
+              IMPORT_FROM              5 (UTC)
+              STORE_NAME               5 (UTC)
+              IMPORT_FROM              4 (datetime)
+              STORE_NAME               4 (datetime)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('APIRouter', 'Depends'))
+              IMPORT_NAME              6 (fastapi)
+              IMPORT_FROM              7 (APIRouter)
+              STORE_NAME               7 (APIRouter)
+              IMPORT_FROM              8 (Depends)
+              STORE_NAME               8 (Depends)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('select',))
+              IMPORT_NAME              9 (sqlalchemy)
+              IMPORT_FROM             10 (select)
+              STORE_NAME              10 (select)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('AsyncSession',))
+              IMPORT_NAME             11 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM             12 (AsyncSession)
+              STORE_NAME              12 (AsyncSession)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('settings',))
+              IMPORT_NAME             13 (app.config)
+              IMPORT_FROM             14 (settings)
+              STORE_NAME              14 (settings)
+              POP_TOP
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('CurrentUser', 'get_current_user'))
+              IMPORT_NAME             15 (app.core.dependencies)
+              IMPORT_FROM             16 (CurrentUser)
+              STORE_NAME              16 (CurrentUser)
+              IMPORT_FROM             17 (get_current_user)
+              STORE_NAME              17 (get_current_user)
+              POP_TOP
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST              10 (('check_rate_limit',))
+              IMPORT_NAME             18 (app.core.rate_limiter)
+              IMPORT_FROM             19 (check_rate_limit)
+              STORE_NAME              19 (check_rate_limit)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST              11 (('get_db',))
+              IMPORT_NAME             20 (app.database)
+              IMPORT_FROM             21 (get_db)
+              STORE_NAME              21 (get_db)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST              12 (('AppError',))
+              IMPORT_NAME             22 (app.middleware.error_handler)
+              IMPORT_FROM             23 (AppError)
+              STORE_NAME              23 (AppError)
+              POP_TOP
+
+ 17           LOAD_CONST               1 (0)
+              LOAD_CONST              13 (('Reminder',))
+              IMPORT_NAME             24 (app.models.reminder)
+              IMPORT_FROM             25 (Reminder)
+              STORE_NAME              25 (Reminder)
+              POP_TOP
+
+ 18           LOAD_CONST               1 (0)
+              LOAD_CONST              14 (('MessageResponse',))
+              IMPORT_NAME             26 (app.schemas.common)
+              IMPORT_FROM             27 (MessageResponse)
+              STORE_NAME              27 (MessageResponse)
+              POP_TOP
+
+ 19           LOAD_CONST               1 (0)
+              LOAD_CONST              15 (('ReminderCreateRequest', 'ReminderListResponse', 'ReminderResponse', 'ReminderUpdateRequest'))
+              IMPORT_NAME             28 (app.schemas.reminders)
+              IMPORT_FROM             29 (ReminderCreateRequest)
+              STORE_NAME              29 (ReminderCreateRequest)
+              IMPORT_FROM             30 (ReminderListResponse)
+              STORE_NAME              30 (ReminderListResponse)
+              IMPORT_FROM             31 (ReminderResponse)
+              STORE_NAME              31 (ReminderResponse)
+              IMPORT_FROM             32 (ReminderUpdateRequest)
+              STORE_NAME              32 (ReminderUpdateRequest)
+              POP_TOP
+
+ 25           LOAD_CONST               1 (0)
+              LOAD_CONST              16 (('audit_service',))
+              IMPORT_NAME             33 (app.services)
+              IMPORT_FROM             34 (audit_service)
+              STORE_NAME              34 (audit_service)
+              POP_TOP
+
+ 27           LOAD_NAME                7 (APIRouter)
+              PUSH_NULL
+              CALL                     0
+              STORE_NAME              35 (router)
+
+ 30           LOAD_CONST              17 ('pending')
+              LOAD_CONST              18 ('overdue')
+              LOAD_CONST              19 (('scheduled', 'triggered'))
+              BUILD_CONST_KEY_MAP      2
+              STORE_NAME              36 (_STATUS_MAP)
+
+ 33           LOAD_CONST              36 ((None,))
+              LOAD_CONST              37 (('r', 'Reminder', 'call_from_masked', 'str | None', 'return', 'ReminderResponse'))
+              LOAD_CONST              20 (<code object _to_response at 0x0000024C11474C30, file "D:\fluence\Github\mattbot\backend\app\api\v1\reminders.py", line 33>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME              37 (_to_response)
+
+ 46           NOP
+
+ 47           NOP
+
+ 46           NOP
+
+ 47           NOP
+
+ 46           NOP
+
+ 47           NOP
+
+ 46           NOP
+
+ 48           NOP
+
+ 46           LOAD_CONST              38 (('db', 'AsyncSession', 'user_id', 'uuid.UUID', 'reminder_id', 'uuid.UUID', 'return', 'Reminder'))
+              LOAD_CONST              21 (<code object _get_user_reminder at 0x0000024C0EBDFA30, file "D:\fluence\Github\mattbot\backend\app\api\v1\reminders.py", line 46>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              38 (_get_user_reminder)
+
+ 62           LOAD_NAME               35 (router)
+              LOAD_ATTR               79 (get + NULL|self)
+              LOAD_CONST              22 ('')
+              LOAD_NAME               30 (ReminderListResponse)
+              LOAD_CONST              23 (('response_model',))
+              CALL_KW                  2
+
+ 64           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               17 (get_current_user)
+              CALL                     1
+
+ 65           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               21 (get_db)
+              CALL                     1
+
+ 63           BUILD_TUPLE              2
+
+ 64           NOP
+
+ 63           NOP
+
+ 65           NOP
+
+ 63           NOP
+
+ 66           NOP
+
+ 63           LOAD_CONST              39 (('current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'ReminderListResponse'))
+              LOAD_CONST              24 (<code object list_reminders at 0x0000024C0FB6E730, file "D:\fluence\Github\mattbot\backend\app\api\v1\reminders.py", line 62>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 62           CALL                     0
+
+ 63           STORE_NAME              40 (list_reminders)
+
+ 89           LOAD_NAME               35 (router)
+              LOAD_ATTR               83 (post + NULL|self)
+
+ 90           LOAD_CONST              25 ('/calls/{call_id}')
+
+ 91           LOAD_NAME               31 (ReminderResponse)
+
+ 92           LOAD_CONST              26 (201)
+
+ 89           LOAD_CONST              27 (('response_model', 'status_code'))
+              CALL_KW                  3
+
+ 97           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               17 (get_current_user)
+              CALL                     1
+
+ 98           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               21 (get_db)
+              CALL                     1
+
+ 94           BUILD_TUPLE              2
+
+ 95           NOP
+
+ 94           NOP
+
+ 96           NOP
+
+ 94           NOP
+
+ 97           NOP
+
+ 94           NOP
+
+ 98           NOP
+
+ 94           NOP
+
+ 99           NOP
+
+ 94           LOAD_CONST              40 (('call_id', 'uuid.UUID', 'body', 'ReminderCreateRequest', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'ReminderResponse'))
+              LOAD_CONST              28 (<code object create_reminder at 0x0000024C0FB5B050, file "D:\fluence\Github\mattbot\backend\app\api\v1\reminders.py", line 89>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 89           CALL                     0
+
+ 94           STORE_NAME              42 (create_reminder)
+
+151           LOAD_NAME               35 (router)
+              LOAD_ATTR               87 (patch + NULL|self)
+              LOAD_CONST              29 ('/{reminder_id}')
+              LOAD_NAME               31 (ReminderResponse)
+              LOAD_CONST              23 (('response_model',))
+              CALL_KW                  2
+
+155           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               17 (get_current_user)
+              CALL                     1
+
+156           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               21 (get_db)
+              CALL                     1
+
+152           BUILD_TUPLE              2
+
+153           NOP
+
+152           NOP
+
+154           NOP
+
+152           NOP
+
+155           NOP
+
+152           NOP
+
+156           NOP
+
+152           NOP
+
+157           NOP
+
+152           LOAD_CONST              41 (('reminder_id', 'uuid.UUID', 'body', 'ReminderUpdateRequest', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'ReminderResponse'))
+              LOAD_CONST              30 (<code object update_reminder at 0x0000024C0FB58CD0, file "D:\fluence\Github\mattbot\backend\app\api\v1\reminders.py", line 151>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+151           CALL                     0
+
+152           STORE_NAME              44 (update_reminder)
+
+209           LOAD_NAME               35 (router)
+              LOAD_ATTR               83 (post + NULL|self)
+              LOAD_CONST              31 ('/{reminder_id}/complete')
+              LOAD_NAME               31 (ReminderResponse)
+              LOAD_CONST              23 (('response_model',))
+              CALL_KW                  2
+
+212           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               17 (get_current_user)
+              CALL                     1
+
+213           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               21 (get_db)
+              CALL                     1
+
+210           BUILD_TUPLE              2
+
+211           NOP
+
+210           NOP
+
+212           NOP
+
+210           NOP
+
+213           NOP
+
+210           NOP
+
+214           NOP
+
+210           LOAD_CONST              42 (('reminder_id', 'uuid.UUID', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'ReminderResponse'))
+              LOAD_CONST              32 (<code object complete_reminder at 0x0000024C0FB6C050, file "D:\fluence\Github\mattbot\backend\app\api\v1\reminders.py", line 209>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+209           CALL                     0
+
+210           STORE_NAME              45 (complete_reminder)
+
+239           LOAD_NAME               35 (router)
+              LOAD_ATTR               83 (post + NULL|self)
+              LOAD_CONST              33 ('/{reminder_id}/cancel')
+              LOAD_NAME               31 (ReminderResponse)
+              LOAD_CONST              23 (('response_model',))
+              CALL_KW                  2
+
+242           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               17 (get_current_user)
+              CALL                     1
+
+243           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               21 (get_db)
+              CALL                     1
+
+240           BUILD_TUPLE              2
+
+241           NOP
+
+240           NOP
+
+242           NOP
+
+240           NOP
+
+243           NOP
+
+240           NOP
+
+244           NOP
+
+240           LOAD_CONST              42 (('reminder_id', 'uuid.UUID', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'ReminderResponse'))
+              LOAD_CONST              34 (<code object cancel_reminder at 0x0000024C0FB6C330, file "D:\fluence\Github\mattbot\backend\app\api\v1\reminders.py", line 239>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+239           CALL                     0
+
+240           STORE_NAME              46 (cancel_reminder)
+
+269           LOAD_NAME               35 (router)
+              LOAD_ATTR               95 (delete + NULL|self)
+              LOAD_CONST              29 ('/{reminder_id}')
+              LOAD_NAME               27 (MessageResponse)
+              LOAD_CONST              23 (('response_model',))
+              CALL_KW                  2
+
+272           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               17 (get_current_user)
+              CALL                     1
+
+273           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               21 (get_db)
+              CALL                     1
+
+270           BUILD_TUPLE              2
+
+271           NOP
+
+270           NOP
+
+272           NOP
+
+270           NOP
+
+273           NOP
+
+270           NOP
+
+274           NOP
+
+270           LOAD_CONST              43 (('reminder_id', 'uuid.UUID', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'MessageResponse'))
+              LOAD_CONST              35 (<code object delete_reminder at 0x0000024C0FBED8C0, file "D:\fluence\Github\mattbot\backend\app\api\v1\reminders.py", line 269>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+269           CALL                     0
+
+270           STORE_NAME              48 (delete_reminder)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object _to_response at 0x0000024C11474C30, file "D:\fluence\Github\mattbot\backend\app\api\v1\reminders.py", line 33>:
+ 33           RESUME                   0
+
+ 34           LOAD_GLOBAL              1 (ReminderResponse + NULL)
+
+ 35           LOAD_GLOBAL              3 (str + NULL)
+              LOAD_FAST                0 (r)
+              LOAD_ATTR                4 (id)
+              CALL                     1
+
+ 36           LOAD_FAST                0 (r)
+              LOAD_ATTR                6 (call_id)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       21 (to L1)
+              LOAD_GLOBAL              3 (str + NULL)
+              LOAD_FAST                0 (r)
+              LOAD_ATTR                6 (call_id)
+              CALL                     1
+              JUMP_FORWARD             1 (to L2)
+      L1:     LOAD_CONST               0 (None)
+
+ 37   L2:     LOAD_FAST                0 (r)
+              LOAD_ATTR                8 (title)
+
+ 38           LOAD_FAST                0 (r)
+              LOAD_ATTR               10 (due_at)
+
+ 39           LOAD_FAST                0 (r)
+              LOAD_ATTR               12 (timezone_at_creation)
+
+ 40           LOAD_GLOBAL             14 (_STATUS_MAP)
+              LOAD_ATTR               17 (get + NULL|self)
+              LOAD_FAST                0 (r)
+              LOAD_ATTR               18 (status)
+              LOAD_FAST                0 (r)
+              LOAD_ATTR               18 (status)
+              CALL                     2
+
+ 41           LOAD_FAST                0 (r)
+              LOAD_ATTR               20 (created_at)
+
+ 42           LOAD_FAST                1 (call_from_masked)
+
+ 34           LOAD_CONST               1 (('id', 'call_id', 'title', 'due_at', 'timezone_at_creation', 'status', 'created_at', 'call_from_masked'))
+              CALL_KW                  8
+              RETURN_VALUE
+
+Disassembly of <code object _get_user_reminder at 0x0000024C0EBDFA30, file "D:\fluence\Github\mattbot\backend\app\api\v1\reminders.py", line 46>:
+  46           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+  49           LOAD_GLOBAL              1 (select + NULL)
+               LOAD_GLOBAL              2 (Reminder)
+               CALL                     1
+               LOAD_ATTR                5 (where + NULL|self)
+
+  50           LOAD_GLOBAL              2 (Reminder)
+               LOAD_ATTR                6 (id)
+               LOAD_FAST                2 (reminder_id)
+               COMPARE_OP              72 (==)
+
+  51           LOAD_GLOBAL              2 (Reminder)
+               LOAD_ATTR                8 (owner_user_id)
+               LOAD_FAST                1 (user_id)
+               COMPARE_OP              72 (==)
+
+  49           CALL                     2
+               STORE_FAST               3 (stmt)
+
+  53           LOAD_FAST                0 (db)
+               LOAD_ATTR               11 (execute + NULL|self)
+               LOAD_FAST                3 (stmt)
+               CALL                     1
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               STORE_FAST               4 (result)
+
+  54           LOAD_FAST                4 (result)
+               LOAD_ATTR               13 (scalar_one_or_none + NULL|self)
+               CALL                     0
+               STORE_FAST               5 (reminder)
+
+  55           LOAD_FAST                5 (reminder)
+               POP_JUMP_IF_NOT_NONE    11 (to L6)
+
+  56           LOAD_GLOBAL             15 (AppError + NULL)
+
+  57           LOAD_CONST               1 ('REMINDER_NOT_FOUND')
+               LOAD_CONST               2 ('Reminder not found')
+               LOAD_CONST               3 (404)
+
+  56           LOAD_CONST               4 (('code', 'message', 'status_code'))
+               CALL_KW                  3
+               RAISE_VARARGS            1
+
+  59   L6:     LOAD_FAST                5 (reminder)
+               RETURN_VALUE
+
+  53   L7:     CLEANUP_THROW
+       L8:     JUMP_BACKWARD_NO_INTERRUPT 36 (to L5)
+
+  --   L9:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L9 [0] lasti
+  L3 to L4 -> L7 [2]
+  L4 to L8 -> L9 [0] lasti
+
+Disassembly of <code object list_reminders at 0x0000024C0FB6E730, file "D:\fluence\Github\mattbot\backend\app\api\v1\reminders.py", line 62>:
+  62            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  67            LOAD_CONST               1 (0)
+                LOAD_CONST               2 (('Call',))
+                IMPORT_NAME              0 (app.models.call)
+                IMPORT_FROM              1 (Call)
+                STORE_FAST               2 (Call)
+                POP_TOP
+
+  69            LOAD_GLOBAL              5 (check_rate_limit + NULL)
+
+  70            LOAD_CONST               3 ('reminders:list:')
+                LOAD_FAST                0 (current_user)
+                LOAD_ATTR                6 (user)
+                LOAD_ATTR                8 (id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+  71            LOAD_GLOBAL             10 (settings)
+                LOAD_ATTR               12 (RATE_LIMIT_API_STANDARD_MAX)
+
+  72            LOAD_GLOBAL             10 (settings)
+                LOAD_ATTR               14 (RATE_LIMIT_API_STANDARD_WINDOW)
+
+  69            LOAD_CONST               4 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   52 (allowed, _)
+
+  74            LOAD_FAST                3 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+  75            LOAD_GLOBAL             17 (AppError + NULL)
+                LOAD_CONST               5 ('RATE_LIMITED')
+                LOAD_CONST               6 ('Too many requests')
+                LOAD_CONST               7 (429)
+                LOAD_CONST               8 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+  78    L6:     LOAD_GLOBAL             19 (select + NULL)
+                LOAD_GLOBAL             20 (Reminder)
+                LOAD_FAST                2 (Call)
+                LOAD_ATTR               22 (from_masked)
+                CALL                     2
+
+  79            LOAD_ATTR               25 (outerjoin + NULL|self)
+                LOAD_FAST                2 (Call)
+                LOAD_GLOBAL             20 (Reminder)
+                LOAD_ATTR               26 (call_id)
+                LOAD_FAST                2 (Call)
+                LOAD_ATTR                8 (id)
+                COMPARE_OP              72 (==)
+                CALL                     2
+
+  80            LOAD_ATTR               29 (where + NULL|self)
+                LOAD_GLOBAL             20 (Reminder)
+                LOAD_ATTR               30 (owner_user_id)
+                LOAD_FAST                0 (current_user)
+                LOAD_ATTR                6 (user)
+                LOAD_ATTR                8 (id)
+                COMPARE_OP              72 (==)
+                CALL                     1
+
+  81            LOAD_ATTR               33 (order_by + NULL|self)
+                LOAD_GLOBAL             20 (Reminder)
+                LOAD_ATTR               34 (due_at)
+                CALL                     1
+
+  77            STORE_FAST               5 (stmt)
+
+  83            LOAD_FAST                1 (db)
+                LOAD_ATTR               37 (execute + NULL|self)
+                LOAD_FAST                5 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                LOAD_ATTR               39 (all + NULL|self)
+                CALL                     0
+                STORE_FAST               6 (rows)
+
+  84            LOAD_GLOBAL             41 (ReminderListResponse + NULL)
+
+  85            LOAD_FAST                6 (rows)
+                GET_ITER
+                LOAD_FAST_AND_CLEAR      7 (r)
+                LOAD_FAST_AND_CLEAR      8 (fm)
+                SWAP                     3
+       L11:     BUILD_LIST               0
+                SWAP                     2
+                GET_ITER
+       L12:     FOR_ITER                14 (to L13)
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST  120 (r, fm)
+                LOAD_GLOBAL             43 (_to_response + NULL)
+                LOAD_FAST_LOAD_FAST    120 (r, fm)
+                LOAD_CONST               9 (('call_from_masked',))
+                CALL_KW                  2
+                LIST_APPEND              2
+                JUMP_BACKWARD           16 (to L12)
+       L13:     END_FOR
+                POP_TOP
+       L14:     SWAP                     3
+                STORE_FAST               8 (fm)
+                STORE_FAST               7 (r)
+
+  84            LOAD_CONST              10 (('items',))
+                CALL_KW                  1
+                RETURN_VALUE
+
+  69   L15:     CLEANUP_THROW
+       L16:     JUMP_BACKWARD_NO_INTERRUPT 250 (to L5)
+
+  83   L17:     CLEANUP_THROW
+       L18:     JUMP_BACKWARD_NO_INTERRUPT 57 (to L10)
+
+  --   L19:     SWAP                     2
+                POP_TOP
+
+  85            SWAP                     3
+                STORE_FAST               8 (fm)
+                STORE_FAST               7 (r)
+                RERAISE                  0
+
+  --   L20:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L20 [0] lasti
+  L3 to L4 -> L15 [2]
+  L4 to L8 -> L20 [0] lasti
+  L8 to L9 -> L17 [2]
+  L9 to L11 -> L20 [0] lasti
+  L11 to L14 -> L19 [5]
+  L14 to L16 -> L20 [0] lasti
+  L17 to L18 -> L20 [0] lasti
+  L19 to L20 -> L20 [0] lasti
+
+Disassembly of <code object create_reminder at 0x0000024C0FB5B050, file "D:\fluence\Github\mattbot\backend\app\api\v1\reminders.py", line 89>:
+  89            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 100            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+ 101            LOAD_CONST               1 ('reminders:create:')
+                LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 102            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+
+ 103            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+
+ 100            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   69 (allowed, _)
+
+ 105            LOAD_FAST                4 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+ 106            LOAD_GLOBAL             13 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 108    L6:     LOAD_GLOBAL             14 (datetime)
+                LOAD_ATTR               16 (now)
+                PUSH_NULL
+                LOAD_GLOBAL             18 (UTC)
+                CALL                     1
+                STORE_FAST               6 (now)
+
+ 109            LOAD_FAST                1 (body)
+                LOAD_ATTR               20 (due_at)
+                LOAD_ATTR               22 (tzinfo)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       12 (to L7)
+                LOAD_FAST                1 (body)
+                LOAD_ATTR               20 (due_at)
+                JUMP_FORWARD            28 (to L8)
+        L7:     LOAD_FAST                1 (body)
+                LOAD_ATTR               20 (due_at)
+                LOAD_ATTR               25 (replace + NULL|self)
+                LOAD_GLOBAL             18 (UTC)
+                LOAD_CONST               7 (('tzinfo',))
+                CALL_KW                  1
+        L8:     STORE_FAST               7 (due)
+
+ 110            LOAD_FAST_LOAD_FAST    118 (due, now)
+                COMPARE_OP              58 (bool(<=))
+                POP_JUMP_IF_FALSE       11 (to L9)
+
+ 111            LOAD_GLOBAL             13 (AppError + NULL)
+
+ 112            LOAD_CONST               8 ('INVALID_DUE_DATE')
+
+ 113            LOAD_CONST               9 ('due_at must be in the future')
+
+ 114            LOAD_CONST              10 (422)
+
+ 111            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 117    L9:     LOAD_CONST              11 (0)
+                LOAD_CONST              12 (('Call',))
+                IMPORT_NAME             13 (app.models.call)
+                IMPORT_FROM             14 (Call)
+                STORE_FAST               8 (Call)
+                POP_TOP
+
+ 119            LOAD_GLOBAL             31 (select + NULL)
+                LOAD_FAST                8 (Call)
+                CALL                     1
+                LOAD_ATTR               33 (where + NULL|self)
+
+ 120            LOAD_FAST                8 (Call)
+                LOAD_ATTR                4 (id)
+                LOAD_FAST                0 (call_id)
+                COMPARE_OP              72 (==)
+                LOAD_FAST                8 (Call)
+                LOAD_ATTR               34 (owner_user_id)
+                LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                COMPARE_OP              72 (==)
+
+ 119            CALL                     2
+                STORE_FAST               9 (stmt)
+
+ 122            LOAD_FAST                3 (db)
+                LOAD_ATTR               37 (execute + NULL|self)
+                LOAD_FAST                9 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L10:     SEND                     3 (to L13)
+       L11:     YIELD_VALUE              1
+       L12:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L10)
+       L13:     END_SEND
+                STORE_FAST              10 (result)
+
+ 123            LOAD_FAST               10 (result)
+                LOAD_ATTR               39 (scalar_one_or_none + NULL|self)
+                CALL                     0
+                STORE_FAST              11 (call)
+
+ 124            LOAD_FAST               11 (call)
+                POP_JUMP_IF_NOT_NONE    11 (to L14)
+
+ 125            LOAD_GLOBAL             13 (AppError + NULL)
+                LOAD_CONST              13 ('CALL_NOT_FOUND')
+                LOAD_CONST              14 ('Call not found')
+                LOAD_CONST              15 (404)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 127   L14:     LOAD_GLOBAL             41 (Reminder + NULL)
+
+ 128            LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+
+ 129            LOAD_FAST                0 (call_id)
+
+ 130            LOAD_FAST                1 (body)
+                LOAD_ATTR               42 (title)
+
+ 131            LOAD_FAST                7 (due)
+
+ 132            LOAD_FAST                1 (body)
+                LOAD_ATTR               44 (timezone)
+
+ 133            LOAD_FAST                2 (current_user)
+                LOAD_ATTR               46 (device_id)
+
+ 127            LOAD_CONST              16 (('owner_user_id', 'call_id', 'title', 'due_at', 'timezone_at_creation', 'created_by_device_id'))
+                CALL_KW                  6
+                STORE_FAST              12 (reminder)
+
+ 135            LOAD_FAST                3 (db)
+                LOAD_ATTR               49 (add + NULL|self)
+                LOAD_FAST               12 (reminder)
+                CALL                     1
+                POP_TOP
+
+ 137            LOAD_GLOBAL             50 (audit_service)
+                LOAD_ATTR               52 (log_event)
+                PUSH_NULL
+
+ 138            LOAD_FAST                3 (db)
+
+ 139            LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+
+ 140            LOAD_CONST              17 ('REMINDER_CREATED')
+
+ 141            LOAD_CONST              18 ('reminder')
+
+ 142            LOAD_FAST               12 (reminder)
+                LOAD_ATTR                4 (id)
+
+ 143            LOAD_CONST              19 ('call_id')
+                LOAD_GLOBAL             55 (str + NULL)
+                LOAD_FAST                0 (call_id)
+                CALL                     1
+                BUILD_MAP                1
+
+ 137            LOAD_CONST              20 (('owner_user_id', 'event_type', 'target_type', 'target_id', 'details'))
+                CALL_KW                  6
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L15:     SEND                     3 (to L18)
+       L16:     YIELD_VALUE              1
+       L17:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+       L18:     END_SEND
+                POP_TOP
+
+ 146            LOAD_FAST                3 (db)
+                LOAD_ATTR               57 (commit + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L19:     SEND                     3 (to L22)
+       L20:     YIELD_VALUE              1
+       L21:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+       L22:     END_SEND
+                POP_TOP
+
+ 147            LOAD_FAST                3 (db)
+                LOAD_ATTR               59 (refresh + NULL|self)
+                LOAD_FAST               12 (reminder)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L23:     SEND                     3 (to L26)
+       L24:     YIELD_VALUE              1
+       L25:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L23)
+       L26:     END_SEND
+                POP_TOP
+
+ 148            LOAD_GLOBAL             61 (_to_response + NULL)
+                LOAD_FAST_LOAD_FAST    203 (reminder, call)
+                LOAD_ATTR               62 (from_masked)
+                LOAD_CONST              21 (('call_from_masked',))
+                CALL_KW                  2
+                RETURN_VALUE
+
+ 100   L27:     CLEANUP_THROW
+       L28:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 492 (to L5)
+
+ 122   L29:     CLEANUP_THROW
+       L30:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 261 (to L13)
+
+ 137   L31:     CLEANUP_THROW
+       L32:     JUMP_BACKWARD_NO_INTERRUPT 78 (to L18)
+
+ 146   L33:     CLEANUP_THROW
+       L34:     JUMP_BACKWARD_NO_INTERRUPT 56 (to L22)
+
+ 147   L35:     CLEANUP_THROW
+       L36:     JUMP_BACKWARD_NO_INTERRUPT 33 (to L26)
+
+  --   L37:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L37 [0] lasti
+  L3 to L4 -> L27 [2]
+  L4 to L11 -> L37 [0] lasti
+  L11 to L12 -> L29 [2]
+  L12 to L16 -> L37 [0] lasti
+  L16 to L17 -> L31 [2]
+  L17 to L20 -> L37 [0] lasti
+  L20 to L21 -> L33 [2]
+  L21 to L24 -> L37 [0] lasti
+  L24 to L25 -> L35 [2]
+  L25 to L28 -> L37 [0] lasti
+  L29 to L30 -> L37 [0] lasti
+  L31 to L32 -> L37 [0] lasti
+  L33 to L34 -> L37 [0] lasti
+  L35 to L36 -> L37 [0] lasti
+
+Disassembly of <code object update_reminder at 0x0000024C0FB58CD0, file "D:\fluence\Github\mattbot\backend\app\api\v1\reminders.py", line 151>:
+ 151            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 158            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+ 159            LOAD_CONST               1 ('reminders:update:')
+                LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 160            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+
+ 161            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+
+ 158            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   69 (allowed, _)
+
+ 163            LOAD_FAST                4 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+ 164            LOAD_GLOBAL             13 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 166    L6:     LOAD_GLOBAL             15 (_get_user_reminder + NULL)
+                LOAD_FAST_LOAD_FAST     50 (db, current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                LOAD_FAST                0 (reminder_id)
+                CALL                     3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                STORE_FAST               6 (reminder)
+
+ 168            LOAD_FAST                6 (reminder)
+                LOAD_ATTR               16 (status)
+                LOAD_CONST               7 ('scheduled')
+                COMPARE_OP             119 (bool(!=))
+                POP_JUMP_IF_FALSE       11 (to L11)
+
+ 169            LOAD_GLOBAL             13 (AppError + NULL)
+
+ 170            LOAD_CONST               8 ('REMINDER_NOT_EDITABLE')
+
+ 171            LOAD_CONST               9 ('Only scheduled reminders can be updated')
+
+ 172            LOAD_CONST              10 (409)
+
+ 169            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 175   L11:     BUILD_MAP                0
+                STORE_FAST               7 (changes)
+
+ 177            LOAD_FAST                1 (body)
+                LOAD_ATTR               18 (title)
+                POP_JUMP_IF_NONE        32 (to L12)
+
+ 178            LOAD_FAST                1 (body)
+                LOAD_ATTR               18 (title)
+                LOAD_FAST                6 (reminder)
+                STORE_ATTR               9 (title)
+
+ 179            LOAD_FAST                1 (body)
+                LOAD_ATTR               18 (title)
+                LOAD_FAST                7 (changes)
+                LOAD_CONST              11 ('title')
+                STORE_SUBSCR
+
+ 181   L12:     LOAD_FAST                1 (body)
+                LOAD_ATTR               20 (due_at)
+                POP_JUMP_IF_NONE       134 (to L16)
+
+ 182            LOAD_FAST                1 (body)
+                LOAD_ATTR               20 (due_at)
+                LOAD_ATTR               22 (tzinfo)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       12 (to L13)
+                LOAD_FAST                1 (body)
+                LOAD_ATTR               20 (due_at)
+                JUMP_FORWARD            28 (to L14)
+       L13:     LOAD_FAST                1 (body)
+                LOAD_ATTR               20 (due_at)
+                LOAD_ATTR               25 (replace + NULL|self)
+                LOAD_GLOBAL             26 (UTC)
+                LOAD_CONST              12 (('tzinfo',))
+                CALL_KW                  1
+       L14:     STORE_FAST               8 (due)
+
+ 183            LOAD_FAST                8 (due)
+                LOAD_GLOBAL             28 (datetime)
+                LOAD_ATTR               30 (now)
+                PUSH_NULL
+                LOAD_GLOBAL             26 (UTC)
+                CALL                     1
+                COMPARE_OP              58 (bool(<=))
+                POP_JUMP_IF_FALSE       11 (to L15)
+
+ 184            LOAD_GLOBAL             13 (AppError + NULL)
+
+ 185            LOAD_CONST              13 ('INVALID_DUE_DATE')
+
+ 186            LOAD_CONST              14 ('due_at must be in the future')
+
+ 187            LOAD_CONST              15 (422)
+
+ 184            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 189   L15:     LOAD_FAST_LOAD_FAST    134 (due, reminder)
+                STORE_ATTR              10 (due_at)
+
+ 190            LOAD_FAST                8 (due)
+                LOAD_ATTR               33 (isoformat + NULL|self)
+                CALL                     0
+                LOAD_FAST                7 (changes)
+                LOAD_CONST              16 ('due_at')
+                STORE_SUBSCR
+
+ 192   L16:     LOAD_FAST                7 (changes)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L17)
+
+ 193            LOAD_GLOBAL             35 (_to_response + NULL)
+                LOAD_FAST                6 (reminder)
+                CALL                     1
+                RETURN_VALUE
+
+ 195   L17:     LOAD_GLOBAL             36 (audit_service)
+                LOAD_ATTR               38 (log_event)
+                PUSH_NULL
+
+ 196            LOAD_FAST                3 (db)
+
+ 197            LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+
+ 198            LOAD_CONST              17 ('REMINDER_UPDATED')
+
+ 199            LOAD_CONST              18 ('reminder')
+
+ 200            LOAD_FAST                0 (reminder_id)
+
+ 201            LOAD_FAST                7 (changes)
+
+ 195            LOAD_CONST              19 (('owner_user_id', 'event_type', 'target_type', 'target_id', 'details'))
+                CALL_KW                  6
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L18:     SEND                     3 (to L21)
+       L19:     YIELD_VALUE              1
+       L20:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L18)
+       L21:     END_SEND
+                POP_TOP
+
+ 204            LOAD_FAST                3 (db)
+                LOAD_ATTR               41 (commit + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L22:     SEND                     3 (to L25)
+       L23:     YIELD_VALUE              1
+       L24:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L22)
+       L25:     END_SEND
+                POP_TOP
+
+ 205            LOAD_FAST                3 (db)
+                LOAD_ATTR               43 (refresh + NULL|self)
+                LOAD_FAST                6 (reminder)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L26:     SEND                     3 (to L29)
+       L27:     YIELD_VALUE              1
+       L28:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L26)
+       L29:     END_SEND
+                POP_TOP
+
+ 206            LOAD_GLOBAL             35 (_to_response + NULL)
+                LOAD_FAST                6 (reminder)
+                CALL                     1
+                RETURN_VALUE
+
+ 158   L30:     CLEANUP_THROW
+       L31:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 417 (to L5)
+
+ 166   L32:     CLEANUP_THROW
+       L33:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 360 (to L10)
+
+ 195   L34:     CLEANUP_THROW
+       L35:     JUMP_BACKWARD_NO_INTERRUPT 70 (to L21)
+
+ 204   L36:     CLEANUP_THROW
+       L37:     JUMP_BACKWARD_NO_INTERRUPT 48 (to L25)
+
+ 205   L38:     CLEANUP_THROW
+       L39:     JUMP_BACKWARD_NO_INTERRUPT 25 (to L29)
+
+  --   L40:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L40 [0] lasti
+  L3 to L4 -> L30 [2]
+  L4 to L8 -> L40 [0] lasti
+  L8 to L9 -> L32 [2]
+  L9 to L19 -> L40 [0] lasti
+  L19 to L20 -> L34 [2]
+  L20 to L23 -> L40 [0] lasti
+  L23 to L24 -> L36 [2]
+  L24 to L27 -> L40 [0] lasti
+  L27 to L28 -> L38 [2]
+  L28 to L31 -> L40 [0] lasti
+  L32 to L33 -> L40 [0] lasti
+  L34 to L35 -> L40 [0] lasti
+  L36 to L37 -> L40 [0] lasti
+  L38 to L39 -> L40 [0] lasti
+
+Disassembly of <code object complete_reminder at 0x0000024C0FB6C050, file "D:\fluence\Github\mattbot\backend\app\api\v1\reminders.py", line 209>:
+ 209            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 215            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+ 216            LOAD_CONST               1 ('reminders:complete:')
+                LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 217            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+
+ 218            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+
+ 215            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   52 (allowed, _)
+
+ 220            LOAD_FAST                3 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+ 221            LOAD_GLOBAL             13 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 223    L6:     LOAD_GLOBAL             15 (_get_user_reminder + NULL)
+                LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                LOAD_FAST                0 (reminder_id)
+                CALL                     3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                STORE_FAST               5 (reminder)
+
+ 224            LOAD_CONST               7 ('completed')
+                LOAD_FAST                5 (reminder)
+                STORE_ATTR               8 (status)
+
+ 226            LOAD_GLOBAL             18 (audit_service)
+                LOAD_ATTR               20 (log_event)
+                PUSH_NULL
+
+ 227            LOAD_FAST                2 (db)
+
+ 228            LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+
+ 229            LOAD_CONST               8 ('REMINDER_COMPLETED')
+
+ 230            LOAD_CONST               9 ('reminder')
+
+ 231            LOAD_FAST                0 (reminder_id)
+
+ 226            LOAD_CONST              10 (('owner_user_id', 'event_type', 'target_type', 'target_id'))
+                CALL_KW                  5
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L11:     SEND                     3 (to L14)
+       L12:     YIELD_VALUE              1
+       L13:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+       L14:     END_SEND
+                POP_TOP
+
+ 234            LOAD_FAST                2 (db)
+                LOAD_ATTR               23 (commit + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L15:     SEND                     3 (to L18)
+       L16:     YIELD_VALUE              1
+       L17:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+       L18:     END_SEND
+                POP_TOP
+
+ 235            LOAD_FAST                2 (db)
+                LOAD_ATTR               25 (refresh + NULL|self)
+                LOAD_FAST                5 (reminder)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L19:     SEND                     3 (to L22)
+       L20:     YIELD_VALUE              1
+       L21:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+       L22:     END_SEND
+                POP_TOP
+
+ 236            LOAD_GLOBAL             27 (_to_response + NULL)
+                LOAD_FAST                5 (reminder)
+                CALL                     1
+                RETURN_VALUE
+
+ 215   L23:     CLEANUP_THROW
+       L24:     JUMP_BACKWARD_NO_INTERRUPT 183 (to L5)
+
+ 223   L25:     CLEANUP_THROW
+       L26:     JUMP_BACKWARD_NO_INTERRUPT 125 (to L10)
+
+ 226   L27:     CLEANUP_THROW
+       L28:     JUMP_BACKWARD_NO_INTERRUPT 68 (to L14)
+
+ 234   L29:     CLEANUP_THROW
+       L30:     JUMP_BACKWARD_NO_INTERRUPT 46 (to L18)
+
+ 235   L31:     CLEANUP_THROW
+       L32:     JUMP_BACKWARD_NO_INTERRUPT 23 (to L22)
+
+  --   L33:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L33 [0] lasti
+  L3 to L4 -> L23 [2]
+  L4 to L8 -> L33 [0] lasti
+  L8 to L9 -> L25 [2]
+  L9 to L12 -> L33 [0] lasti
+  L12 to L13 -> L27 [2]
+  L13 to L16 -> L33 [0] lasti
+  L16 to L17 -> L29 [2]
+  L17 to L20 -> L33 [0] lasti
+  L20 to L21 -> L31 [2]
+  L21 to L24 -> L33 [0] lasti
+  L25 to L26 -> L33 [0] lasti
+  L27 to L28 -> L33 [0] lasti
+  L29 to L30 -> L33 [0] lasti
+  L31 to L32 -> L33 [0] lasti
+
+Disassembly of <code object cancel_reminder at 0x0000024C0FB6C330, file "D:\fluence\Github\mattbot\backend\app\api\v1\reminders.py", line 239>:
+ 239            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 245            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+ 246            LOAD_CONST               1 ('reminders:cancel:')
+                LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 247            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+
+ 248            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+
+ 245            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   52 (allowed, _)
+
+ 250            LOAD_FAST                3 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+ 251            LOAD_GLOBAL             13 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 253    L6:     LOAD_GLOBAL             15 (_get_user_reminder + NULL)
+                LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                LOAD_FAST                0 (reminder_id)
+                CALL                     3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                STORE_FAST               5 (reminder)
+
+ 254            LOAD_CONST               7 ('cancelled')
+                LOAD_FAST                5 (reminder)
+                STORE_ATTR               8 (status)
+
+ 256            LOAD_GLOBAL             18 (audit_service)
+                LOAD_ATTR               20 (log_event)
+                PUSH_NULL
+
+ 257            LOAD_FAST                2 (db)
+
+ 258            LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+
+ 259            LOAD_CONST               8 ('REMINDER_CANCELLED')
+
+ 260            LOAD_CONST               9 ('reminder')
+
+ 261            LOAD_FAST                0 (reminder_id)
+
+ 256            LOAD_CONST              10 (('owner_user_id', 'event_type', 'target_type', 'target_id'))
+                CALL_KW                  5
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L11:     SEND                     3 (to L14)
+       L12:     YIELD_VALUE              1
+       L13:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+       L14:     END_SEND
+                POP_TOP
+
+ 264            LOAD_FAST                2 (db)
+                LOAD_ATTR               23 (commit + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L15:     SEND                     3 (to L18)
+       L16:     YIELD_VALUE              1
+       L17:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+       L18:     END_SEND
+                POP_TOP
+
+ 265            LOAD_FAST                2 (db)
+                LOAD_ATTR               25 (refresh + NULL|self)
+                LOAD_FAST                5 (reminder)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L19:     SEND                     3 (to L22)
+       L20:     YIELD_VALUE              1
+       L21:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+       L22:     END_SEND
+                POP_TOP
+
+ 266            LOAD_GLOBAL             27 (_to_response + NULL)
+                LOAD_FAST                5 (reminder)
+                CALL                     1
+                RETURN_VALUE
+
+ 245   L23:     CLEANUP_THROW
+       L24:     JUMP_BACKWARD_NO_INTERRUPT 183 (to L5)
+
+ 253   L25:     CLEANUP_THROW
+       L26:     JUMP_BACKWARD_NO_INTERRUPT 125 (to L10)
+
+ 256   L27:     CLEANUP_THROW
+       L28:     JUMP_BACKWARD_NO_INTERRUPT 68 (to L14)
+
+ 264   L29:     CLEANUP_THROW
+       L30:     JUMP_BACKWARD_NO_INTERRUPT 46 (to L18)
+
+ 265   L31:     CLEANUP_THROW
+       L32:     JUMP_BACKWARD_NO_INTERRUPT 23 (to L22)
+
+  --   L33:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L33 [0] lasti
+  L3 to L4 -> L23 [2]
+  L4 to L8 -> L33 [0] lasti
+  L8 to L9 -> L25 [2]
+  L9 to L12 -> L33 [0] lasti
+  L12 to L13 -> L27 [2]
+  L13 to L16 -> L33 [0] lasti
+  L16 to L17 -> L29 [2]
+  L17 to L20 -> L33 [0] lasti
+  L20 to L21 -> L31 [2]
+  L21 to L24 -> L33 [0] lasti
+  L25 to L26 -> L33 [0] lasti
+  L27 to L28 -> L33 [0] lasti
+  L29 to L30 -> L33 [0] lasti
+  L31 to L32 -> L33 [0] lasti
+
+Disassembly of <code object delete_reminder at 0x0000024C0FBED8C0, file "D:\fluence\Github\mattbot\backend\app\api\v1\reminders.py", line 269>:
+ 269            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 275            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+ 276            LOAD_CONST               1 ('reminders:delete:')
+                LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 277            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+
+ 278            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+
+ 275            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   52 (allowed, _)
+
+ 280            LOAD_FAST                3 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+ 281            LOAD_GLOBAL             13 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 283    L6:     LOAD_GLOBAL             15 (_get_user_reminder + NULL)
+                LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                LOAD_FAST                0 (reminder_id)
+                CALL                     3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                STORE_FAST               5 (reminder)
+
+ 285            LOAD_GLOBAL             16 (audit_service)
+                LOAD_ATTR               18 (log_event)
+                PUSH_NULL
+
+ 286            LOAD_FAST                2 (db)
+
+ 287            LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+
+ 288            LOAD_CONST               7 ('REMINDER_DELETED')
+
+ 289            LOAD_CONST               8 ('reminder')
+
+ 290            LOAD_FAST                0 (reminder_id)
+
+ 285            LOAD_CONST               9 (('owner_user_id', 'event_type', 'target_type', 'target_id'))
+                CALL_KW                  5
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L11:     SEND                     3 (to L14)
+       L12:     YIELD_VALUE              1
+       L13:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+       L14:     END_SEND
+                POP_TOP
+
+ 293            LOAD_FAST                2 (db)
+                LOAD_ATTR               21 (delete + NULL|self)
+                LOAD_FAST                5 (reminder)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L15:     SEND                     3 (to L18)
+       L16:     YIELD_VALUE              1
+       L17:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+       L18:     END_SEND
+                POP_TOP
+
+ 294            LOAD_FAST                2 (db)
+                LOAD_ATTR               23 (commit + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L19:     SEND                     3 (to L22)
+       L20:     YIELD_VALUE              1
+       L21:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+       L22:     END_SEND
+                POP_TOP
+
+ 295            LOAD_GLOBAL             25 (MessageResponse + NULL)
+                LOAD_CONST              10 ('Reminder deleted successfully')
+                LOAD_CONST              11 (('message',))
+                CALL_KW                  1
+                RETURN_VALUE
+
+ 275   L23:     CLEANUP_THROW
+       L24:     JUMP_BACKWARD_NO_INTERRUPT 174 (to L5)
+
+ 283   L25:     CLEANUP_THROW
+       L26:     JUMP_BACKWARD_NO_INTERRUPT 116 (to L10)
+
+ 285   L27:     CLEANUP_THROW
+       L28:     JUMP_BACKWARD_NO_INTERRUPT 66 (to L14)
+
+ 293   L29:     CLEANUP_THROW
+       L30:     JUMP_BACKWARD_NO_INTERRUPT 43 (to L18)
+
+ 294   L31:     CLEANUP_THROW
+       L32:     JUMP_BACKWARD_NO_INTERRUPT 21 (to L22)
+
+  --   L33:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L33 [0] lasti
+  L3 to L4 -> L23 [2]
+  L4 to L8 -> L33 [0] lasti
+  L8 to L9 -> L25 [2]
+  L9 to L12 -> L33 [0] lasti
+  L12 to L13 -> L27 [2]
+  L13 to L16 -> L33 [0] lasti
+  L16 to L17 -> L29 [2]
+  L17 to L20 -> L33 [0] lasti
+  L20 to L21 -> L31 [2]
+  L21 to L24 -> L33 [0] lasti
+  L25 to L26 -> L33 [0] lasti
+  L27 to L28 -> L33 [0] lasti
+  L29 to L30 -> L33 [0] lasti
+  L31 to L32 -> L33 [0] lasti

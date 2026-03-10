@@ -1,0 +1,392 @@
+# Bytecode dump of: handoff_suppression.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\models\handoff_suppression.py
+# co_names: ('__doc__', 'uuid', 'datetime', 'sqlalchemy', 'ForeignKey', 'Index', 'String', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'app.database', 'Base', 'app.models._types', 'tz_datetime', 'HandoffSuppression')
+# co_consts (strings): ['Handoff suppression model. Short-lived entries to prevent transfer loops.', 'HandoffSuppression']
+
+# DOCSTRING: """Handoff suppression model. Short-lived entries to prevent transfer loops."""
+# --- Nested code object: HandoffSuppression ---
+    # DOCSTRING: """HandoffSuppression"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__tablename__', 'mapped_column', 'UUID', 'uuid', 'uuid4', 'id', 'Mapped', '__annotations__', 'ForeignKey', 'owner_user_id', 'String', 'destination_phone_hash', 'str', 'tz_datetime', 'suppression_expires_at', 'datetime', 'Text', 'reason', 'text', 'created_at', 'Index', '__table_args__', '__static_attributes__')
+    # co_varnames: ()
+     14           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('HandoffSuppression')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (14)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     15           LOAD_CONST               2 ('handoff_suppressions')
+                  STORE_NAME               4 (__tablename__)
+    
+     17           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     18           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               3 (True)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               16 (uuid4)
+    
+     17           LOAD_CONST               5 (('primary_key', 'default'))
+                  CALL_KW                  3
+                  STORE_NAME               9 (id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST               6 ('id')
+                  STORE_SUBSCR
+    
+     20           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     21           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     22           LOAD_NAME               12 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST               7 ('users.id')
+                  LOAD_CONST               8 ('CASCADE')
+                  LOAD_CONST               9 (('ondelete',))
+                  CALL_KW                  2
+    
+     23           LOAD_CONST              10 (False)
+    
+     20           LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  3
+                  STORE_NAME              13 (owner_user_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              12 ('owner_user_id')
+                  STORE_SUBSCR
+    
+     25           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               14 (String)
+                  PUSH_NULL
+                  LOAD_CONST              13 (64)
+                  CALL                     1
+                  LOAD_CONST              10 (False)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              15 (destination_phone_hash)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               16 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              14 ('destination_phone_hash')
+                  STORE_SUBSCR
+    
+     26           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     27           LOAD_NAME               17 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST              10 (False)
+    
+     26           LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              18 (suppression_expires_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               19 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              15 ('suppression_expires_at')
+                  STORE_SUBSCR
+    
+     29           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               20 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              21 (reason)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               16 (str)
+                  LOAD_CONST              16 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              17 ('reason')
+                  STORE_SUBSCR
+    
+     30           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     31           LOAD_NAME               17 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST              10 (False)
+                  LOAD_NAME               22 (text)
+                  PUSH_NULL
+                  LOAD_CONST              18 ('now()')
+                  CALL                     1
+    
+     30           LOAD_CONST              19 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              23 (created_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               19 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              20 ('created_at')
+                  STORE_SUBSCR
+    
+     35           LOAD_NAME               24 (Index)
+                  PUSH_NULL
+    
+     36           LOAD_CONST              21 ('handoff_suppressions_user_dest_idx')
+    
+     37           LOAD_CONST              12 ('owner_user_id')
+    
+     38           LOAD_CONST              14 ('destination_phone_hash')
+    
+     35           CALL                     3
+    
+     34           BUILD_TUPLE              1
+                  STORE_NAME              25 (__table_args__)
+                  LOAD_CONST              22 (())
+                  STORE_NAME              26 (__static_attributes__)
+                  RETURN_CONST            16 (None)
+    
+# co_names: ('__doc__', 'uuid', 'datetime', 'sqlalchemy', 'ForeignKey', 'Index', 'String', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'app.database', 'Base', 'app.models._types', 'tz_datetime', 'HandoffSuppression')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Handoff suppression model. Short-lived entries to prevent transfer loops.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (uuid)
+              STORE_NAME               1 (uuid)
+
+  4           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('datetime',))
+              IMPORT_NAME              2 (datetime)
+              IMPORT_FROM              2 (datetime)
+              STORE_NAME               2 (datetime)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('ForeignKey', 'Index', 'String', 'Text', 'text'))
+              IMPORT_NAME              3 (sqlalchemy)
+              IMPORT_FROM              4 (ForeignKey)
+              STORE_NAME               4 (ForeignKey)
+              IMPORT_FROM              5 (Index)
+              STORE_NAME               5 (Index)
+              IMPORT_FROM              6 (String)
+              STORE_NAME               6 (String)
+              IMPORT_FROM              7 (Text)
+              STORE_NAME               7 (Text)
+              IMPORT_FROM              8 (text)
+              STORE_NAME               8 (text)
+              POP_TOP
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('UUID',))
+              IMPORT_NAME              9 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM             10 (UUID)
+              STORE_NAME              10 (UUID)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('Mapped', 'mapped_column'))
+              IMPORT_NAME             11 (sqlalchemy.orm)
+              IMPORT_FROM             12 (Mapped)
+              STORE_NAME              12 (Mapped)
+              IMPORT_FROM             13 (mapped_column)
+              STORE_NAME              13 (mapped_column)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('Base',))
+              IMPORT_NAME             14 (app.database)
+              IMPORT_FROM             15 (Base)
+              STORE_NAME              15 (Base)
+              POP_TOP
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('tz_datetime',))
+              IMPORT_NAME             16 (app.models._types)
+              IMPORT_FROM             17 (tz_datetime)
+              STORE_NAME              17 (tz_datetime)
+              POP_TOP
+
+ 14           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               9 (<code object HandoffSuppression at 0x0000024C0FBC7010, file "D:\fluence\Github\mattbot\backend\app\models\handoff_suppression.py", line 14>)
+              MAKE_FUNCTION
+              LOAD_CONST              10 ('HandoffSuppression')
+              LOAD_NAME               15 (Base)
+              CALL                     3
+              STORE_NAME              18 (HandoffSuppression)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object HandoffSuppression at 0x0000024C0FBC7010, file "D:\fluence\Github\mattbot\backend\app\models\handoff_suppression.py", line 14>:
+ 14           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('HandoffSuppression')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (14)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 15           LOAD_CONST               2 ('handoff_suppressions')
+              STORE_NAME               4 (__tablename__)
+
+ 17           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 18           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               16 (uuid4)
+
+ 17           LOAD_CONST               5 (('primary_key', 'default'))
+              CALL_KW                  3
+              STORE_NAME               9 (id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               6 ('id')
+              STORE_SUBSCR
+
+ 20           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 21           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 22           LOAD_NAME               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               7 ('users.id')
+              LOAD_CONST               8 ('CASCADE')
+              LOAD_CONST               9 (('ondelete',))
+              CALL_KW                  2
+
+ 23           LOAD_CONST              10 (False)
+
+ 20           LOAD_CONST              11 (('nullable',))
+              CALL_KW                  3
+              STORE_NAME              13 (owner_user_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              12 ('owner_user_id')
+              STORE_SUBSCR
+
+ 25           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               14 (String)
+              PUSH_NULL
+              LOAD_CONST              13 (64)
+              CALL                     1
+              LOAD_CONST              10 (False)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              15 (destination_phone_hash)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               16 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              14 ('destination_phone_hash')
+              STORE_SUBSCR
+
+ 26           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 27           LOAD_NAME               17 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              10 (False)
+
+ 26           LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              18 (suppression_expires_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               19 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              15 ('suppression_expires_at')
+              STORE_SUBSCR
+
+ 29           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               20 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              21 (reason)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               16 (str)
+              LOAD_CONST              16 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              17 ('reason')
+              STORE_SUBSCR
+
+ 30           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 31           LOAD_NAME               17 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              10 (False)
+              LOAD_NAME               22 (text)
+              PUSH_NULL
+              LOAD_CONST              18 ('now()')
+              CALL                     1
+
+ 30           LOAD_CONST              19 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              23 (created_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               19 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              20 ('created_at')
+              STORE_SUBSCR
+
+ 35           LOAD_NAME               24 (Index)
+              PUSH_NULL
+
+ 36           LOAD_CONST              21 ('handoff_suppressions_user_dest_idx')
+
+ 37           LOAD_CONST              12 ('owner_user_id')
+
+ 38           LOAD_CONST              14 ('destination_phone_hash')
+
+ 35           CALL                     3
+
+ 34           BUILD_TUPLE              1
+              STORE_NAME              25 (__table_args__)
+              LOAD_CONST              22 (())
+              STORE_NAME              26 (__static_attributes__)
+              RETURN_CONST            16 (None)

@@ -1,0 +1,1213 @@
+# Bytecode dump of: fcm_service.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\services\fcm_service.py
+# co_names: ('__doc__', 'logging', 'pathlib', 'Path', 'app.config', 'settings', 'getLogger', '__name__', 'logger', '_messaging_client', '_get_fcm_client', 'str', 'dict', 'bool', 'send_push_notification', 'list', 'send_multicast_push_notification')
+# co_consts (strings): ['Firebase Cloud Messaging (FCM) push notification service.', 'fcm_token', 'title', 'body', 'data', 'return', 'fcm_tokens']
+
+# DOCSTRING: """Firebase Cloud Messaging (FCM) push notification service."""
+# --- Nested code object: _get_fcm_client ---
+    # DOCSTRING: """Lazy-load Firebase Admin SDK."""
+    # co_names: ('_messaging_client', 'firebase_admin', 'credentials', 'messaging', 'ImportError', 'logger', 'error', 'get_app', 'info', 'ValueError', 'settings', 'FCM_SERVICE_ACCOUNT_JSON', 'warning', 'Path', 'absolute', 'exists', 'Certificate', 'str', 'initialize_app', 'Exception')
+    # co_varnames: ('firebase_admin', 'credentials', 'messaging', 'cred_path', 'cred_file', 'cred', 'e')
+      14            RESUME                   0
+    
+      18            LOAD_GLOBAL              0 (_messaging_client)
+                    POP_JUMP_IF_NONE         6 (to L1)
+    
+      19            LOAD_GLOBAL              0 (_messaging_client)
+                    RETURN_VALUE
+    
+      21    L1:     NOP
+    
+      22    L2:     LOAD_CONST               2 (0)
+                    LOAD_CONST               1 (None)
+                    IMPORT_NAME              1 (firebase_admin)
+                    STORE_FAST               0 (firebase_admin)
+    
+      23            LOAD_CONST               2 (0)
+                    LOAD_CONST               3 (('credentials', 'messaging'))
+                    IMPORT_NAME              1 (firebase_admin)
+                    IMPORT_FROM              2 (credentials)
+                    STORE_FAST               1 (credentials)
+                    IMPORT_FROM              3 (messaging)
+                    STORE_FAST               2 (messaging)
+                    POP_TOP
+    
+      28    L3:     NOP
+    
+      29    L4:     LOAD_FAST                0 (firebase_admin)
+                    LOAD_ATTR               15 (get_app + NULL|self)
+                    LOAD_CONST               1 (None)
+                    CALL                     1
+                    POP_TOP
+    
+      30            LOAD_GLOBAL             10 (logger)
+                    LOAD_ATTR               17 (info + NULL|self)
+                    LOAD_CONST               5 ('Firebase app already initialized')
+                    CALL                     1
+                    POP_TOP
+    
+      53    L5:     NOP
+    
+      54    L6:     LOAD_FAST                2 (messaging)
+                    STORE_GLOBAL             0 (_messaging_client)
+    
+      55            LOAD_GLOBAL              0 (_messaging_client)
+            L7:     RETURN_VALUE
+    
+      --    L8:     PUSH_EXC_INFO
+    
+      24            LOAD_GLOBAL              8 (ImportError)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       24 (to L10)
+                    POP_TOP
+    
+      25            LOAD_GLOBAL             10 (logger)
+                    LOAD_ATTR               13 (error + NULL|self)
+                    LOAD_CONST               4 ('firebase-admin not installed. Install with: pip install firebase-admin')
+                    CALL                     1
+                    POP_TOP
+    
+      26    L9:     POP_EXCEPT
+                    RETURN_CONST             1 (None)
+    
+      24   L10:     RERAISE                  0
+    
+      --   L11:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L12:     PUSH_EXC_INFO
+    
+      31            LOAD_GLOBAL             18 (ValueError)
+                    CHECK_EXC_MATCH
+                    EXTENDED_ARG             1
+                    POP_JUMP_IF_FALSE      286 (to L26)
+                    POP_TOP
+    
+      33            LOAD_GLOBAL             20 (settings)
+                    LOAD_ATTR               22 (FCM_SERVICE_ACCOUNT_JSON)
+                    STORE_FAST               3 (cred_path)
+    
+      34            LOAD_FAST                3 (cred_path)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        23 (to L14)
+    
+      35            LOAD_GLOBAL             10 (logger)
+                    LOAD_ATTR               25 (warning + NULL|self)
+                    LOAD_CONST               6 ('FCM_SERVICE_ACCOUNT_JSON not configured')
+                    CALL                     1
+                    POP_TOP
+    
+      36   L13:     POP_EXCEPT
+                    RETURN_CONST             1 (None)
+    
+      38   L14:     NOP
+    
+      39   L15:     LOAD_GLOBAL             27 (Path + NULL)
+                    LOAD_FAST                3 (cred_path)
+                    CALL                     1
+                    STORE_FAST               4 (cred_file)
+    
+      40            LOAD_GLOBAL             10 (logger)
+                    LOAD_ATTR               17 (info + NULL|self)
+                    LOAD_CONST               7 ('Loading Firebase credentials from: ')
+                    LOAD_FAST                4 (cred_file)
+                    LOAD_ATTR               29 (absolute + NULL|self)
+                    CALL                     0
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+                    CALL                     1
+                    POP_TOP
+    
+      42            LOAD_FAST                4 (cred_file)
+                    LOAD_ATTR               31 (exists + NULL|self)
+                    CALL                     0
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        40 (to L17)
+    
+      43            LOAD_GLOBAL             10 (logger)
+                    LOAD_ATTR               13 (error + NULL|self)
+                    LOAD_CONST               8 ('Firebase credentials file not found: ')
+                    LOAD_FAST                4 (cred_file)
+                    LOAD_ATTR               29 (absolute + NULL|self)
+                    CALL                     0
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+                    CALL                     1
+                    POP_TOP
+    
+      44   L16:     POP_EXCEPT
+                    RETURN_CONST             1 (None)
+    
+      46   L17:     LOAD_FAST                1 (credentials)
+                    LOAD_ATTR               33 (Certificate + NULL|self)
+                    LOAD_GLOBAL             35 (str + NULL)
+                    LOAD_FAST                4 (cred_file)
+                    LOAD_ATTR               29 (absolute + NULL|self)
+                    CALL                     0
+                    CALL                     1
+                    CALL                     1
+                    STORE_FAST               5 (cred)
+    
+      47            LOAD_FAST                0 (firebase_admin)
+                    LOAD_ATTR               37 (initialize_app + NULL|self)
+                    LOAD_FAST                5 (cred)
+                    CALL                     1
+                    POP_TOP
+    
+      48            LOAD_GLOBAL             10 (logger)
+                    LOAD_ATTR               17 (info + NULL|self)
+                    LOAD_CONST               9 ('Firebase Admin SDK initialized successfully')
+                    CALL                     1
+                    POP_TOP
+           L18:     POP_EXCEPT
+                    EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 295 (to L5)
+    
+      --   L19:     PUSH_EXC_INFO
+    
+      49            LOAD_GLOBAL             38 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       34 (to L24)
+                    STORE_FAST               6 (e)
+    
+      50   L20:     LOAD_GLOBAL             10 (logger)
+                    LOAD_ATTR               13 (error + NULL|self)
+                    LOAD_CONST              10 ('Failed to initialize Firebase: ')
+                    LOAD_FAST                6 (e)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+                    LOAD_CONST              11 (True)
+                    LOAD_CONST              12 (('exc_info',))
+                    CALL_KW                  2
+                    POP_TOP
+    
+      51   L21:     POP_EXCEPT
+                    LOAD_CONST               1 (None)
+                    STORE_FAST               6 (e)
+                    DELETE_FAST              6 (e)
+           L22:     POP_EXCEPT
+                    RETURN_CONST             1 (None)
+    
+      --   L23:     LOAD_CONST               1 (None)
+                    STORE_FAST               6 (e)
+                    DELETE_FAST              6 (e)
+                    RERAISE                  1
+    
+      49   L24:     RERAISE                  0
+    
+      --   L25:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+      31   L26:     RERAISE                  0
+    
+      --   L27:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L28:     PUSH_EXC_INFO
+    
+      56            LOAD_GLOBAL             38 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       33 (to L32)
+                    STORE_FAST               6 (e)
+    
+      57   L29:     LOAD_GLOBAL             10 (logger)
+                    LOAD_ATTR               13 (error + NULL|self)
+                    LOAD_CONST              13 ('Failed to import messaging: ')
+                    LOAD_FAST                6 (e)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+                    LOAD_CONST              11 (True)
+                    LOAD_CONST              12 (('exc_info',))
+                    CALL_KW                  2
+                    POP_TOP
+    
+      58   L30:     POP_EXCEPT
+                    LOAD_CONST               1 (None)
+                    STORE_FAST               6 (e)
+                    DELETE_FAST              6 (e)
+                    RETURN_CONST             1 (None)
+    
+      --   L31:     LOAD_CONST               1 (None)
+                    STORE_FAST               6 (e)
+                    DELETE_FAST              6 (e)
+                    RERAISE                  1
+    
+      56   L32:     RERAISE                  0
+    
+      --   L33:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    ExceptionTable:
+      L2 to L3 -> L8 [0]
+      L4 to L5 -> L12 [0]
+      L6 to L7 -> L28 [0]
+      L8 to L9 -> L11 [1] lasti
+      L10 to L11 -> L11 [1] lasti
+      L12 to L13 -> L27 [1] lasti
+      L15 to L16 -> L19 [1]
+      L17 to L18 -> L19 [1]
+      L19 to L20 -> L25 [2] lasti
+      L20 to L21 -> L23 [2] lasti
+      L21 to L22 -> L27 [1] lasti
+      L23 to L25 -> L25 [2] lasti
+      L25 to L27 -> L27 [1] lasti
+      L28 to L29 -> L33 [1] lasti
+      L29 to L30 -> L31 [1] lasti
+      L31 to L33 -> L33 [1] lasti
+    
+# --- Nested code object: send_push_notification ---
+    # DOCSTRING: """Send a single push notification via FCM.
+
+Args:
+    fcm_token: FCM registration token from the client
+    title: Notification title
+    body: Notification body text
+    data: Optional dictionary of additional data
+
+Returns:
+    True if sent successfully, False otherwise
+"""
+    # co_names: ('_get_fcm_client', 'logger', 'warning', 'info', 'Message', 'Notification', 'send', 'Exception', 'error')
+    # co_varnames: ('fcm_token', 'title', 'body', 'data', 'messaging', 'message', 'response', 'e')
+      61            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      78            LOAD_GLOBAL              1 (_get_fcm_client + NULL)
+                    CALL                     0
+                    STORE_FAST               4 (messaging)
+    
+      79            LOAD_FAST                4 (messaging)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        22 (to L2)
+    
+      80            LOAD_GLOBAL              2 (logger)
+                    LOAD_ATTR                5 (warning + NULL|self)
+                    LOAD_CONST               1 ('FCM not available, skipping push notification')
+                    CALL                     1
+                    POP_TOP
+    
+      81            RETURN_CONST             2 (False)
+    
+      83    L2:     NOP
+    
+      84    L3:     LOAD_GLOBAL              2 (logger)
+                    LOAD_ATTR                7 (info + NULL|self)
+                    LOAD_CONST               3 ('Sending push to token: ')
+                    LOAD_FAST                0 (fcm_token)
+                    LOAD_CONST               4 (None)
+                    LOAD_CONST               5 (20)
+                    BINARY_SLICE
+                    FORMAT_SIMPLE
+                    LOAD_CONST               6 ('...')
+                    BUILD_STRING             3
+                    CALL                     1
+                    POP_TOP
+    
+      85            LOAD_FAST                4 (messaging)
+                    LOAD_ATTR                9 (Message + NULL|self)
+    
+      86            LOAD_FAST                4 (messaging)
+                    LOAD_ATTR               11 (Notification + NULL|self)
+                    LOAD_FAST_LOAD_FAST     18 (title, body)
+                    LOAD_CONST               7 (('title', 'body'))
+                    CALL_KW                  2
+    
+      87            LOAD_FAST                3 (data)
+                    COPY                     1
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L4)
+                    POP_TOP
+                    BUILD_MAP                0
+    
+      88    L4:     LOAD_FAST                0 (fcm_token)
+    
+      85            LOAD_CONST               8 (('notification', 'data', 'token'))
+                    CALL_KW                  3
+                    STORE_FAST               5 (message)
+    
+      91            LOAD_FAST                4 (messaging)
+                    LOAD_ATTR               13 (send + NULL|self)
+                    LOAD_FAST                5 (message)
+                    CALL                     1
+                    STORE_FAST               6 (response)
+    
+      92            LOAD_GLOBAL              2 (logger)
+                    LOAD_ATTR                7 (info + NULL|self)
+                    LOAD_CONST               9 ('Push notification sent successfully. Message ID: ')
+                    LOAD_FAST                6 (response)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+                    CALL                     1
+                    POP_TOP
+    
+      93    L5:     RETURN_CONST            10 (True)
+    
+      --    L6:     PUSH_EXC_INFO
+    
+      94            LOAD_GLOBAL             14 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       33 (to L10)
+                    STORE_FAST               7 (e)
+    
+      95    L7:     LOAD_GLOBAL              2 (logger)
+                    LOAD_ATTR               17 (error + NULL|self)
+                    LOAD_CONST              11 ('Failed to send push notification: ')
+                    LOAD_FAST                7 (e)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+                    LOAD_CONST              10 (True)
+                    LOAD_CONST              12 (('exc_info',))
+                    CALL_KW                  2
+                    POP_TOP
+    
+      96    L8:     POP_EXCEPT
+                    LOAD_CONST               4 (None)
+                    STORE_FAST               7 (e)
+                    DELETE_FAST              7 (e)
+                    RETURN_CONST             2 (False)
+    
+      --    L9:     LOAD_CONST               4 (None)
+                    STORE_FAST               7 (e)
+                    DELETE_FAST              7 (e)
+                    RERAISE                  1
+    
+      94   L10:     RERAISE                  0
+    
+      --   L11:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L12:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L2 -> L12 [0] lasti
+      L3 to L5 -> L6 [0]
+      L5 to L6 -> L12 [0] lasti
+      L6 to L7 -> L11 [1] lasti
+      L7 to L8 -> L9 [1] lasti
+      L8 to L9 -> L12 [0] lasti
+      L9 to L11 -> L11 [1] lasti
+      L11 to L12 -> L12 [0] lasti
+    
+# --- Nested code object: send_multicast_push_notification ---
+    # DOCSTRING: """Send push notifications to multiple devices.
+
+Args:
+    fcm_tokens: List of FCM registration tokens
+    title: Notification title
+    body: Notification body text
+    data: Optional dictionary of additional data
+
+Returns:
+    Dictionary with 'successful' and 'failed' counts
+"""
+    # co_names: ('logger', 'info', '_get_fcm_client', 'warning', 'len', 'MulticastMessage', 'Notification', 'send_multicast', 'success_count', 'failure_count', 'Exception', 'error')
+    # co_varnames: ('fcm_tokens', 'title', 'body', 'data', 'messaging', 'message', 'response', 'e')
+      99            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     116            LOAD_FAST                0 (fcm_tokens)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        26 (to L2)
+    
+     117            LOAD_GLOBAL              0 (logger)
+                    LOAD_ATTR                3 (info + NULL|self)
+                    LOAD_CONST               1 ('No FCM tokens to send to')
+                    CALL                     1
+                    POP_TOP
+    
+     118            LOAD_CONST               2 (0)
+                    LOAD_CONST               2 (0)
+                    LOAD_CONST               3 (('successful', 'failed'))
+                    BUILD_CONST_KEY_MAP      2
+                    RETURN_VALUE
+    
+     120    L2:     LOAD_GLOBAL              5 (_get_fcm_client + NULL)
+                    CALL                     0
+                    STORE_FAST               4 (messaging)
+    
+     121            LOAD_FAST                4 (messaging)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        35 (to L3)
+    
+     122            LOAD_GLOBAL              0 (logger)
+                    LOAD_ATTR                7 (warning + NULL|self)
+                    LOAD_CONST               4 ('FCM not available, skipping multicast push')
+                    CALL                     1
+                    POP_TOP
+    
+     123            LOAD_CONST               2 (0)
+                    LOAD_GLOBAL              9 (len + NULL)
+                    LOAD_FAST                0 (fcm_tokens)
+                    CALL                     1
+                    LOAD_CONST               3 (('successful', 'failed'))
+                    BUILD_CONST_KEY_MAP      2
+                    RETURN_VALUE
+    
+     125    L3:     NOP
+    
+     126    L4:     LOAD_GLOBAL              0 (logger)
+                    LOAD_ATTR                3 (info + NULL|self)
+                    LOAD_CONST               5 ('Sending multicast push to ')
+                    LOAD_GLOBAL              9 (len + NULL)
+                    LOAD_FAST                0 (fcm_tokens)
+                    CALL                     1
+                    FORMAT_SIMPLE
+                    LOAD_CONST               6 (' devices')
+                    BUILD_STRING             3
+                    CALL                     1
+                    POP_TOP
+    
+     127            LOAD_FAST                4 (messaging)
+                    LOAD_ATTR               11 (MulticastMessage + NULL|self)
+    
+     128            LOAD_FAST                4 (messaging)
+                    LOAD_ATTR               13 (Notification + NULL|self)
+                    LOAD_FAST_LOAD_FAST     18 (title, body)
+                    LOAD_CONST               7 (('title', 'body'))
+                    CALL_KW                  2
+    
+     129            LOAD_FAST                3 (data)
+                    COPY                     1
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L5)
+                    POP_TOP
+                    BUILD_MAP                0
+    
+     130    L5:     LOAD_FAST                0 (fcm_tokens)
+    
+     127            LOAD_CONST               8 (('notification', 'data', 'tokens'))
+                    CALL_KW                  3
+                    STORE_FAST               5 (message)
+    
+     133            LOAD_FAST                4 (messaging)
+                    LOAD_ATTR               15 (send_multicast + NULL|self)
+                    LOAD_FAST                5 (message)
+                    CALL                     1
+                    STORE_FAST               6 (response)
+    
+     134            LOAD_GLOBAL              0 (logger)
+                    LOAD_ATTR                3 (info + NULL|self)
+    
+     135            LOAD_CONST               9 ('Multicast push sent: ')
+                    LOAD_FAST                6 (response)
+                    LOAD_ATTR               16 (success_count)
+                    FORMAT_SIMPLE
+                    LOAD_CONST              10 (' successful, ')
+    
+     136            LOAD_FAST                6 (response)
+                    LOAD_ATTR               18 (failure_count)
+                    FORMAT_SIMPLE
+                    LOAD_CONST              11 (' failed')
+    
+     135            BUILD_STRING             5
+    
+     134            CALL                     1
+                    POP_TOP
+    
+     138            LOAD_FAST                6 (response)
+                    LOAD_ATTR               16 (success_count)
+                    LOAD_FAST                6 (response)
+                    LOAD_ATTR               18 (failure_count)
+                    LOAD_CONST               3 (('successful', 'failed'))
+                    BUILD_CONST_KEY_MAP      2
+            L6:     RETURN_VALUE
+    
+      --    L7:     PUSH_EXC_INFO
+    
+     139            LOAD_GLOBAL             20 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       47 (to L12)
+                    STORE_FAST               7 (e)
+    
+     140    L8:     LOAD_GLOBAL              0 (logger)
+                    LOAD_ATTR               23 (error + NULL|self)
+                    LOAD_CONST              12 ('Failed to send multicast push: ')
+                    LOAD_FAST                7 (e)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+                    LOAD_CONST              13 (True)
+                    LOAD_CONST              14 (('exc_info',))
+                    CALL_KW                  2
+                    POP_TOP
+    
+     141            LOAD_CONST               2 (0)
+                    LOAD_GLOBAL              9 (len + NULL)
+                    LOAD_FAST                0 (fcm_tokens)
+                    CALL                     1
+                    LOAD_CONST               3 (('successful', 'failed'))
+                    BUILD_CONST_KEY_MAP      2
+            L9:     SWAP                     2
+           L10:     POP_EXCEPT
+                    LOAD_CONST              15 (None)
+                    STORE_FAST               7 (e)
+                    DELETE_FAST              7 (e)
+                    RETURN_VALUE
+    
+      --   L11:     LOAD_CONST              15 (None)
+                    STORE_FAST               7 (e)
+                    DELETE_FAST              7 (e)
+                    RERAISE                  1
+    
+     139   L12:     RERAISE                  0
+    
+      --   L13:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L14:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L14 [0] lasti
+      L4 to L6 -> L7 [0]
+      L6 to L7 -> L14 [0] lasti
+      L7 to L8 -> L13 [1] lasti
+      L8 to L9 -> L11 [1] lasti
+      L9 to L10 -> L13 [1] lasti
+      L10 to L11 -> L14 [0] lasti
+      L11 to L13 -> L13 [1] lasti
+      L13 to L14 -> L14 [0] lasti
+    
+# co_names: ('__doc__', 'logging', 'pathlib', 'Path', 'app.config', 'settings', 'getLogger', '__name__', 'logger', '_messaging_client', '_get_fcm_client', 'str', 'dict', 'bool', 'send_push_notification', 'list', 'send_multicast_push_notification')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Firebase Cloud Messaging (FCM) push notification service.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (logging)
+              STORE_NAME               1 (logging)
+
+  4           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('Path',))
+              IMPORT_NAME              2 (pathlib)
+              IMPORT_FROM              3 (Path)
+              STORE_NAME               3 (Path)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('settings',))
+              IMPORT_NAME              4 (app.config)
+              IMPORT_FROM              5 (settings)
+              STORE_NAME               5 (settings)
+              POP_TOP
+
+  8           LOAD_NAME                1 (logging)
+              LOAD_ATTR               12 (getLogger)
+              PUSH_NULL
+              LOAD_NAME                7 (__name__)
+              CALL                     1
+              STORE_NAME               8 (logger)
+
+ 11           LOAD_CONST               2 (None)
+              STORE_GLOBAL             9 (_messaging_client)
+
+ 14           LOAD_CONST               5 (<code object _get_fcm_client at 0x0000024C0FB43A60, file "D:\fluence\Github\mattbot\backend\app\services\fcm_service.py", line 14>)
+              MAKE_FUNCTION
+              STORE_NAME              10 (_get_fcm_client)
+
+ 65           NOP
+
+ 61           LOAD_CONST              14 ((None,))
+              LOAD_CONST               6 ('fcm_token')
+
+ 62           LOAD_NAME               11 (str)
+
+ 61           LOAD_CONST               7 ('title')
+
+ 63           LOAD_NAME               11 (str)
+
+ 61           LOAD_CONST               8 ('body')
+
+ 64           LOAD_NAME               11 (str)
+
+ 61           LOAD_CONST               9 ('data')
+
+ 65           LOAD_NAME               12 (dict)
+              LOAD_CONST               2 (None)
+              BINARY_OP                7 (|)
+
+ 61           LOAD_CONST              10 ('return')
+
+ 66           LOAD_NAME               13 (bool)
+
+ 61           BUILD_TUPLE             10
+              LOAD_CONST              11 (<code object send_push_notification at 0x0000024C0FAD89D0, file "D:\fluence\Github\mattbot\backend\app\services\fcm_service.py", line 61>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME              14 (send_push_notification)
+
+103           NOP
+
+ 99           LOAD_CONST              14 ((None,))
+              LOAD_CONST              12 ('fcm_tokens')
+
+100           LOAD_NAME               15 (list)
+              LOAD_NAME               11 (str)
+              BINARY_SUBSCR
+
+ 99           LOAD_CONST               7 ('title')
+
+101           LOAD_NAME               11 (str)
+
+ 99           LOAD_CONST               8 ('body')
+
+102           LOAD_NAME               11 (str)
+
+ 99           LOAD_CONST               9 ('data')
+
+103           LOAD_NAME               12 (dict)
+              LOAD_CONST               2 (None)
+              BINARY_OP                7 (|)
+
+ 99           LOAD_CONST              10 ('return')
+
+104           LOAD_NAME               12 (dict)
+
+ 99           BUILD_TUPLE             10
+              LOAD_CONST              13 (<code object send_multicast_push_notification at 0x0000024C0FE4D390, file "D:\fluence\Github\mattbot\backend\app\services\fcm_service.py", line 99>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME              16 (send_multicast_push_notification)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object _get_fcm_client at 0x0000024C0FB43A60, file "D:\fluence\Github\mattbot\backend\app\services\fcm_service.py", line 14>:
+  14            RESUME                   0
+
+  18            LOAD_GLOBAL              0 (_messaging_client)
+                POP_JUMP_IF_NONE         6 (to L1)
+
+  19            LOAD_GLOBAL              0 (_messaging_client)
+                RETURN_VALUE
+
+  21    L1:     NOP
+
+  22    L2:     LOAD_CONST               2 (0)
+                LOAD_CONST               1 (None)
+                IMPORT_NAME              1 (firebase_admin)
+                STORE_FAST               0 (firebase_admin)
+
+  23            LOAD_CONST               2 (0)
+                LOAD_CONST               3 (('credentials', 'messaging'))
+                IMPORT_NAME              1 (firebase_admin)
+                IMPORT_FROM              2 (credentials)
+                STORE_FAST               1 (credentials)
+                IMPORT_FROM              3 (messaging)
+                STORE_FAST               2 (messaging)
+                POP_TOP
+
+  28    L3:     NOP
+
+  29    L4:     LOAD_FAST                0 (firebase_admin)
+                LOAD_ATTR               15 (get_app + NULL|self)
+                LOAD_CONST               1 (None)
+                CALL                     1
+                POP_TOP
+
+  30            LOAD_GLOBAL             10 (logger)
+                LOAD_ATTR               17 (info + NULL|self)
+                LOAD_CONST               5 ('Firebase app already initialized')
+                CALL                     1
+                POP_TOP
+
+  53    L5:     NOP
+
+  54    L6:     LOAD_FAST                2 (messaging)
+                STORE_GLOBAL             0 (_messaging_client)
+
+  55            LOAD_GLOBAL              0 (_messaging_client)
+        L7:     RETURN_VALUE
+
+  --    L8:     PUSH_EXC_INFO
+
+  24            LOAD_GLOBAL              8 (ImportError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       24 (to L10)
+                POP_TOP
+
+  25            LOAD_GLOBAL             10 (logger)
+                LOAD_ATTR               13 (error + NULL|self)
+                LOAD_CONST               4 ('firebase-admin not installed. Install with: pip install firebase-admin')
+                CALL                     1
+                POP_TOP
+
+  26    L9:     POP_EXCEPT
+                RETURN_CONST             1 (None)
+
+  24   L10:     RERAISE                  0
+
+  --   L11:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L12:     PUSH_EXC_INFO
+
+  31            LOAD_GLOBAL             18 (ValueError)
+                CHECK_EXC_MATCH
+                EXTENDED_ARG             1
+                POP_JUMP_IF_FALSE      286 (to L26)
+                POP_TOP
+
+  33            LOAD_GLOBAL             20 (settings)
+                LOAD_ATTR               22 (FCM_SERVICE_ACCOUNT_JSON)
+                STORE_FAST               3 (cred_path)
+
+  34            LOAD_FAST                3 (cred_path)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        23 (to L14)
+
+  35            LOAD_GLOBAL             10 (logger)
+                LOAD_ATTR               25 (warning + NULL|self)
+                LOAD_CONST               6 ('FCM_SERVICE_ACCOUNT_JSON not configured')
+                CALL                     1
+                POP_TOP
+
+  36   L13:     POP_EXCEPT
+                RETURN_CONST             1 (None)
+
+  38   L14:     NOP
+
+  39   L15:     LOAD_GLOBAL             27 (Path + NULL)
+                LOAD_FAST                3 (cred_path)
+                CALL                     1
+                STORE_FAST               4 (cred_file)
+
+  40            LOAD_GLOBAL             10 (logger)
+                LOAD_ATTR               17 (info + NULL|self)
+                LOAD_CONST               7 ('Loading Firebase credentials from: ')
+                LOAD_FAST                4 (cred_file)
+                LOAD_ATTR               29 (absolute + NULL|self)
+                CALL                     0
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                CALL                     1
+                POP_TOP
+
+  42            LOAD_FAST                4 (cred_file)
+                LOAD_ATTR               31 (exists + NULL|self)
+                CALL                     0
+                TO_BOOL
+                POP_JUMP_IF_TRUE        40 (to L17)
+
+  43            LOAD_GLOBAL             10 (logger)
+                LOAD_ATTR               13 (error + NULL|self)
+                LOAD_CONST               8 ('Firebase credentials file not found: ')
+                LOAD_FAST                4 (cred_file)
+                LOAD_ATTR               29 (absolute + NULL|self)
+                CALL                     0
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                CALL                     1
+                POP_TOP
+
+  44   L16:     POP_EXCEPT
+                RETURN_CONST             1 (None)
+
+  46   L17:     LOAD_FAST                1 (credentials)
+                LOAD_ATTR               33 (Certificate + NULL|self)
+                LOAD_GLOBAL             35 (str + NULL)
+                LOAD_FAST                4 (cred_file)
+                LOAD_ATTR               29 (absolute + NULL|self)
+                CALL                     0
+                CALL                     1
+                CALL                     1
+                STORE_FAST               5 (cred)
+
+  47            LOAD_FAST                0 (firebase_admin)
+                LOAD_ATTR               37 (initialize_app + NULL|self)
+                LOAD_FAST                5 (cred)
+                CALL                     1
+                POP_TOP
+
+  48            LOAD_GLOBAL             10 (logger)
+                LOAD_ATTR               17 (info + NULL|self)
+                LOAD_CONST               9 ('Firebase Admin SDK initialized successfully')
+                CALL                     1
+                POP_TOP
+       L18:     POP_EXCEPT
+                EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 295 (to L5)
+
+  --   L19:     PUSH_EXC_INFO
+
+  49            LOAD_GLOBAL             38 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       34 (to L24)
+                STORE_FAST               6 (e)
+
+  50   L20:     LOAD_GLOBAL             10 (logger)
+                LOAD_ATTR               13 (error + NULL|self)
+                LOAD_CONST              10 ('Failed to initialize Firebase: ')
+                LOAD_FAST                6 (e)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                LOAD_CONST              11 (True)
+                LOAD_CONST              12 (('exc_info',))
+                CALL_KW                  2
+                POP_TOP
+
+  51   L21:     POP_EXCEPT
+                LOAD_CONST               1 (None)
+                STORE_FAST               6 (e)
+                DELETE_FAST              6 (e)
+       L22:     POP_EXCEPT
+                RETURN_CONST             1 (None)
+
+  --   L23:     LOAD_CONST               1 (None)
+                STORE_FAST               6 (e)
+                DELETE_FAST              6 (e)
+                RERAISE                  1
+
+  49   L24:     RERAISE                  0
+
+  --   L25:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+  31   L26:     RERAISE                  0
+
+  --   L27:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L28:     PUSH_EXC_INFO
+
+  56            LOAD_GLOBAL             38 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       33 (to L32)
+                STORE_FAST               6 (e)
+
+  57   L29:     LOAD_GLOBAL             10 (logger)
+                LOAD_ATTR               13 (error + NULL|self)
+                LOAD_CONST              13 ('Failed to import messaging: ')
+                LOAD_FAST                6 (e)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                LOAD_CONST              11 (True)
+                LOAD_CONST              12 (('exc_info',))
+                CALL_KW                  2
+                POP_TOP
+
+  58   L30:     POP_EXCEPT
+                LOAD_CONST               1 (None)
+                STORE_FAST               6 (e)
+                DELETE_FAST              6 (e)
+                RETURN_CONST             1 (None)
+
+  --   L31:     LOAD_CONST               1 (None)
+                STORE_FAST               6 (e)
+                DELETE_FAST              6 (e)
+                RERAISE                  1
+
+  56   L32:     RERAISE                  0
+
+  --   L33:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+ExceptionTable:
+  L2 to L3 -> L8 [0]
+  L4 to L5 -> L12 [0]
+  L6 to L7 -> L28 [0]
+  L8 to L9 -> L11 [1] lasti
+  L10 to L11 -> L11 [1] lasti
+  L12 to L13 -> L27 [1] lasti
+  L15 to L16 -> L19 [1]
+  L17 to L18 -> L19 [1]
+  L19 to L20 -> L25 [2] lasti
+  L20 to L21 -> L23 [2] lasti
+  L21 to L22 -> L27 [1] lasti
+  L23 to L25 -> L25 [2] lasti
+  L25 to L27 -> L27 [1] lasti
+  L28 to L29 -> L33 [1] lasti
+  L29 to L30 -> L31 [1] lasti
+  L31 to L33 -> L33 [1] lasti
+
+Disassembly of <code object send_push_notification at 0x0000024C0FAD89D0, file "D:\fluence\Github\mattbot\backend\app\services\fcm_service.py", line 61>:
+  61            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  78            LOAD_GLOBAL              1 (_get_fcm_client + NULL)
+                CALL                     0
+                STORE_FAST               4 (messaging)
+
+  79            LOAD_FAST                4 (messaging)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        22 (to L2)
+
+  80            LOAD_GLOBAL              2 (logger)
+                LOAD_ATTR                5 (warning + NULL|self)
+                LOAD_CONST               1 ('FCM not available, skipping push notification')
+                CALL                     1
+                POP_TOP
+
+  81            RETURN_CONST             2 (False)
+
+  83    L2:     NOP
+
+  84    L3:     LOAD_GLOBAL              2 (logger)
+                LOAD_ATTR                7 (info + NULL|self)
+                LOAD_CONST               3 ('Sending push to token: ')
+                LOAD_FAST                0 (fcm_token)
+                LOAD_CONST               4 (None)
+                LOAD_CONST               5 (20)
+                BINARY_SLICE
+                FORMAT_SIMPLE
+                LOAD_CONST               6 ('...')
+                BUILD_STRING             3
+                CALL                     1
+                POP_TOP
+
+  85            LOAD_FAST                4 (messaging)
+                LOAD_ATTR                9 (Message + NULL|self)
+
+  86            LOAD_FAST                4 (messaging)
+                LOAD_ATTR               11 (Notification + NULL|self)
+                LOAD_FAST_LOAD_FAST     18 (title, body)
+                LOAD_CONST               7 (('title', 'body'))
+                CALL_KW                  2
+
+  87            LOAD_FAST                3 (data)
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L4)
+                POP_TOP
+                BUILD_MAP                0
+
+  88    L4:     LOAD_FAST                0 (fcm_token)
+
+  85            LOAD_CONST               8 (('notification', 'data', 'token'))
+                CALL_KW                  3
+                STORE_FAST               5 (message)
+
+  91            LOAD_FAST                4 (messaging)
+                LOAD_ATTR               13 (send + NULL|self)
+                LOAD_FAST                5 (message)
+                CALL                     1
+                STORE_FAST               6 (response)
+
+  92            LOAD_GLOBAL              2 (logger)
+                LOAD_ATTR                7 (info + NULL|self)
+                LOAD_CONST               9 ('Push notification sent successfully. Message ID: ')
+                LOAD_FAST                6 (response)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                CALL                     1
+                POP_TOP
+
+  93    L5:     RETURN_CONST            10 (True)
+
+  --    L6:     PUSH_EXC_INFO
+
+  94            LOAD_GLOBAL             14 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       33 (to L10)
+                STORE_FAST               7 (e)
+
+  95    L7:     LOAD_GLOBAL              2 (logger)
+                LOAD_ATTR               17 (error + NULL|self)
+                LOAD_CONST              11 ('Failed to send push notification: ')
+                LOAD_FAST                7 (e)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                LOAD_CONST              10 (True)
+                LOAD_CONST              12 (('exc_info',))
+                CALL_KW                  2
+                POP_TOP
+
+  96    L8:     POP_EXCEPT
+                LOAD_CONST               4 (None)
+                STORE_FAST               7 (e)
+                DELETE_FAST              7 (e)
+                RETURN_CONST             2 (False)
+
+  --    L9:     LOAD_CONST               4 (None)
+                STORE_FAST               7 (e)
+                DELETE_FAST              7 (e)
+                RERAISE                  1
+
+  94   L10:     RERAISE                  0
+
+  --   L11:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L12:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L12 [0] lasti
+  L3 to L5 -> L6 [0]
+  L5 to L6 -> L12 [0] lasti
+  L6 to L7 -> L11 [1] lasti
+  L7 to L8 -> L9 [1] lasti
+  L8 to L9 -> L12 [0] lasti
+  L9 to L11 -> L11 [1] lasti
+  L11 to L12 -> L12 [0] lasti
+
+Disassembly of <code object send_multicast_push_notification at 0x0000024C0FE4D390, file "D:\fluence\Github\mattbot\backend\app\services\fcm_service.py", line 99>:
+  99            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 116            LOAD_FAST                0 (fcm_tokens)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        26 (to L2)
+
+ 117            LOAD_GLOBAL              0 (logger)
+                LOAD_ATTR                3 (info + NULL|self)
+                LOAD_CONST               1 ('No FCM tokens to send to')
+                CALL                     1
+                POP_TOP
+
+ 118            LOAD_CONST               2 (0)
+                LOAD_CONST               2 (0)
+                LOAD_CONST               3 (('successful', 'failed'))
+                BUILD_CONST_KEY_MAP      2
+                RETURN_VALUE
+
+ 120    L2:     LOAD_GLOBAL              5 (_get_fcm_client + NULL)
+                CALL                     0
+                STORE_FAST               4 (messaging)
+
+ 121            LOAD_FAST                4 (messaging)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        35 (to L3)
+
+ 122            LOAD_GLOBAL              0 (logger)
+                LOAD_ATTR                7 (warning + NULL|self)
+                LOAD_CONST               4 ('FCM not available, skipping multicast push')
+                CALL                     1
+                POP_TOP
+
+ 123            LOAD_CONST               2 (0)
+                LOAD_GLOBAL              9 (len + NULL)
+                LOAD_FAST                0 (fcm_tokens)
+                CALL                     1
+                LOAD_CONST               3 (('successful', 'failed'))
+                BUILD_CONST_KEY_MAP      2
+                RETURN_VALUE
+
+ 125    L3:     NOP
+
+ 126    L4:     LOAD_GLOBAL              0 (logger)
+                LOAD_ATTR                3 (info + NULL|self)
+                LOAD_CONST               5 ('Sending multicast push to ')
+                LOAD_GLOBAL              9 (len + NULL)
+                LOAD_FAST                0 (fcm_tokens)
+                CALL                     1
+                FORMAT_SIMPLE
+                LOAD_CONST               6 (' devices')
+                BUILD_STRING             3
+                CALL                     1
+                POP_TOP
+
+ 127            LOAD_FAST                4 (messaging)
+                LOAD_ATTR               11 (MulticastMessage + NULL|self)
+
+ 128            LOAD_FAST                4 (messaging)
+                LOAD_ATTR               13 (Notification + NULL|self)
+                LOAD_FAST_LOAD_FAST     18 (title, body)
+                LOAD_CONST               7 (('title', 'body'))
+                CALL_KW                  2
+
+ 129            LOAD_FAST                3 (data)
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L5)
+                POP_TOP
+                BUILD_MAP                0
+
+ 130    L5:     LOAD_FAST                0 (fcm_tokens)
+
+ 127            LOAD_CONST               8 (('notification', 'data', 'tokens'))
+                CALL_KW                  3
+                STORE_FAST               5 (message)
+
+ 133            LOAD_FAST                4 (messaging)
+                LOAD_ATTR               15 (send_multicast + NULL|self)
+                LOAD_FAST                5 (message)
+                CALL                     1
+                STORE_FAST               6 (response)
+
+ 134            LOAD_GLOBAL              0 (logger)
+                LOAD_ATTR                3 (info + NULL|self)
+
+ 135            LOAD_CONST               9 ('Multicast push sent: ')
+                LOAD_FAST                6 (response)
+                LOAD_ATTR               16 (success_count)
+                FORMAT_SIMPLE
+                LOAD_CONST              10 (' successful, ')
+
+ 136            LOAD_FAST                6 (response)
+                LOAD_ATTR               18 (failure_count)
+                FORMAT_SIMPLE
+                LOAD_CONST              11 (' failed')
+
+ 135            BUILD_STRING             5
+
+ 134            CALL                     1
+                POP_TOP
+
+ 138            LOAD_FAST                6 (response)
+                LOAD_ATTR               16 (success_count)
+                LOAD_FAST                6 (response)
+                LOAD_ATTR               18 (failure_count)
+                LOAD_CONST               3 (('successful', 'failed'))
+                BUILD_CONST_KEY_MAP      2
+        L6:     RETURN_VALUE
+
+  --    L7:     PUSH_EXC_INFO
+
+ 139            LOAD_GLOBAL             20 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       47 (to L12)
+                STORE_FAST               7 (e)
+
+ 140    L8:     LOAD_GLOBAL              0 (logger)
+                LOAD_ATTR               23 (error + NULL|self)
+                LOAD_CONST              12 ('Failed to send multicast push: ')
+                LOAD_FAST                7 (e)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                LOAD_CONST              13 (True)
+                LOAD_CONST              14 (('exc_info',))
+                CALL_KW                  2
+                POP_TOP
+
+ 141            LOAD_CONST               2 (0)
+                LOAD_GLOBAL              9 (len + NULL)
+                LOAD_FAST                0 (fcm_tokens)
+                CALL                     1
+                LOAD_CONST               3 (('successful', 'failed'))
+                BUILD_CONST_KEY_MAP      2
+        L9:     SWAP                     2
+       L10:     POP_EXCEPT
+                LOAD_CONST              15 (None)
+                STORE_FAST               7 (e)
+                DELETE_FAST              7 (e)
+                RETURN_VALUE
+
+  --   L11:     LOAD_CONST              15 (None)
+                STORE_FAST               7 (e)
+                DELETE_FAST              7 (e)
+                RERAISE                  1
+
+ 139   L12:     RERAISE                  0
+
+  --   L13:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L14:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L14 [0] lasti
+  L4 to L6 -> L7 [0]
+  L6 to L7 -> L14 [0] lasti
+  L7 to L8 -> L13 [1] lasti
+  L8 to L9 -> L11 [1] lasti
+  L9 to L10 -> L13 [1] lasti
+  L10 to L11 -> L14 [0] lasti
+  L11 to L13 -> L13 [1] lasti
+  L13 to L14 -> L14 [0] lasti

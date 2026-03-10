@@ -1,0 +1,708 @@
+# Bytecode dump of: handoff_offer.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\models\handoff_offer.py
+# co_names: ('__doc__', 'uuid', 'datetime', 'sqlalchemy', 'CheckConstraint', 'ForeignKey', 'Index', 'Text', 'UniqueConstraint', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'app.database', 'Base', 'app.models._types', 'JsonbDict', 'tz_datetime', 'HandoffOffer')
+# co_consts (strings): ['Handoff offer model. One offer per live call, with time-bound acceptance.', 'HandoffOffer']
+
+# DOCSTRING: """Handoff offer model. One offer per live call, with time-bound acceptance."""
+# --- Nested code object: HandoffOffer ---
+    # DOCSTRING: """HandoffOffer"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__tablename__', 'mapped_column', 'UUID', 'uuid', 'uuid4', 'id', 'Mapped', '__annotations__', 'ForeignKey', 'call_id', 'owner_user_id', 'Text', 'text', 'status', 'str', 'offer_reason', 'tz_datetime', 'expires_at', 'datetime', 'selected_device_id', 'accepted_at', 'declined_at', 'JsonbDict', 'preview_payload', 'dict', 'created_at', 'UniqueConstraint', 'CheckConstraint', 'Index', '__table_args__', '__static_attributes__')
+    # co_varnames: ()
+     21           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('HandoffOffer')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (21)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     22           LOAD_CONST               2 ('handoff_offers')
+                  STORE_NAME               4 (__tablename__)
+    
+     24           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     25           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               3 (True)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               16 (uuid4)
+    
+     24           LOAD_CONST               5 (('primary_key', 'default'))
+                  CALL_KW                  3
+                  STORE_NAME               9 (id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST               6 ('id')
+                  STORE_SUBSCR
+    
+     27           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     28           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     29           LOAD_NAME               12 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST               7 ('calls.id')
+                  LOAD_CONST               8 ('CASCADE')
+                  LOAD_CONST               9 (('ondelete',))
+                  CALL_KW                  2
+    
+     30           LOAD_CONST              10 (False)
+    
+     27           LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  3
+                  STORE_NAME              13 (call_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              12 ('call_id')
+                  STORE_SUBSCR
+    
+     32           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     33           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     34           LOAD_NAME               12 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST              13 ('users.id')
+                  LOAD_CONST               8 ('CASCADE')
+                  LOAD_CONST               9 (('ondelete',))
+                  CALL_KW                  2
+    
+     35           LOAD_CONST              10 (False)
+    
+     32           LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  3
+                  STORE_NAME              14 (owner_user_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              14 ('owner_user_id')
+                  STORE_SUBSCR
+    
+     37           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     38           LOAD_NAME               15 (Text)
+                  LOAD_CONST              10 (False)
+                  LOAD_NAME               16 (text)
+                  PUSH_NULL
+                  LOAD_CONST              15 ("'offered'")
+                  CALL                     1
+    
+     37           LOAD_CONST              16 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              17 (status)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               18 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              17 ('status')
+                  STORE_SUBSCR
+    
+     40           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               15 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              19 (offer_reason)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               18 (str)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              19 ('offer_reason')
+                  STORE_SUBSCR
+    
+     41           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               20 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST              10 (False)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              21 (expires_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               22 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              20 ('expires_at')
+                  STORE_SUBSCR
+    
+     42           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     43           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     44           LOAD_NAME               12 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST              21 ('devices.id')
+                  LOAD_CONST              22 ('SET NULL')
+                  LOAD_CONST               9 (('ondelete',))
+                  CALL_KW                  2
+    
+     45           LOAD_CONST               3 (True)
+    
+     42           LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  3
+                  STORE_NAME              23 (selected_device_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              23 ('selected_device_id')
+                  STORE_SUBSCR
+    
+     47           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               20 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              24 (accepted_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               22 (datetime)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              24 ('accepted_at')
+                  STORE_SUBSCR
+    
+     48           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               20 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              25 (declined_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               22 (datetime)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              25 ('declined_at')
+                  STORE_SUBSCR
+    
+     49           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     50           LOAD_NAME               26 (JsonbDict)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               3 (True)
+    
+     49           LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              27 (preview_payload)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               28 (dict)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              26 ('preview_payload')
+                  STORE_SUBSCR
+    
+     52           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     53           LOAD_NAME               20 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST              10 (False)
+                  LOAD_NAME               16 (text)
+                  PUSH_NULL
+                  LOAD_CONST              27 ('now()')
+                  CALL                     1
+    
+     52           LOAD_CONST              16 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              29 (created_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               22 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              28 ('created_at')
+                  STORE_SUBSCR
+    
+     57           LOAD_NAME               30 (UniqueConstraint)
+                  PUSH_NULL
+                  LOAD_CONST              12 ('call_id')
+                  LOAD_CONST              29 ('uq_handoff_offers_call')
+                  LOAD_CONST              30 (('name',))
+                  CALL_KW                  2
+    
+     58           LOAD_NAME               31 (CheckConstraint)
+                  PUSH_NULL
+    
+     59           LOAD_CONST              31 ("status IN ('offered', 'accepted', 'declined', 'expired')")
+    
+     60           LOAD_CONST              32 ('ck_handoff_offers_status')
+    
+     58           LOAD_CONST              30 (('name',))
+                  CALL_KW                  2
+    
+     62           LOAD_NAME               31 (CheckConstraint)
+                  PUSH_NULL
+    
+     63           LOAD_CONST              33 ("offer_reason IS NULL OR offer_reason IN ('always', 'vip', 'urgent', 'vip_and_urgent')")
+    
+     64           LOAD_CONST              34 ('ck_handoff_offers_reason')
+    
+     62           LOAD_CONST              30 (('name',))
+                  CALL_KW                  2
+    
+     66           LOAD_NAME               32 (Index)
+                  PUSH_NULL
+                  LOAD_CONST              35 ('handoff_offers_user_idx')
+                  LOAD_CONST              14 ('owner_user_id')
+                  CALL                     2
+    
+     67           LOAD_NAME               32 (Index)
+                  PUSH_NULL
+    
+     68           LOAD_CONST              36 ('handoff_offers_pending_idx')
+    
+     69           LOAD_CONST              17 ('status')
+    
+     70           LOAD_CONST              20 ('expires_at')
+    
+     71           LOAD_NAME               16 (text)
+                  PUSH_NULL
+                  LOAD_CONST              37 ("status = 'offered'")
+                  CALL                     1
+    
+     67           LOAD_CONST              38 (('postgresql_where',))
+                  CALL_KW                  4
+    
+     56           BUILD_TUPLE              5
+                  STORE_NAME              33 (__table_args__)
+                  LOAD_CONST              39 (())
+                  STORE_NAME              34 (__static_attributes__)
+                  RETURN_CONST            18 (None)
+    
+# co_names: ('__doc__', 'uuid', 'datetime', 'sqlalchemy', 'CheckConstraint', 'ForeignKey', 'Index', 'Text', 'UniqueConstraint', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'app.database', 'Base', 'app.models._types', 'JsonbDict', 'tz_datetime', 'HandoffOffer')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Handoff offer model. One offer per live call, with time-bound acceptance.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (uuid)
+              STORE_NAME               1 (uuid)
+
+  4           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('datetime',))
+              IMPORT_NAME              2 (datetime)
+              IMPORT_FROM              2 (datetime)
+              STORE_NAME               2 (datetime)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('CheckConstraint', 'ForeignKey', 'Index', 'Text', 'UniqueConstraint', 'text'))
+              IMPORT_NAME              3 (sqlalchemy)
+              IMPORT_FROM              4 (CheckConstraint)
+              STORE_NAME               4 (CheckConstraint)
+              IMPORT_FROM              5 (ForeignKey)
+              STORE_NAME               5 (ForeignKey)
+              IMPORT_FROM              6 (Index)
+              STORE_NAME               6 (Index)
+              IMPORT_FROM              7 (Text)
+              STORE_NAME               7 (Text)
+              IMPORT_FROM              8 (UniqueConstraint)
+              STORE_NAME               8 (UniqueConstraint)
+              IMPORT_FROM              9 (text)
+              STORE_NAME               9 (text)
+              POP_TOP
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('UUID',))
+              IMPORT_NAME             10 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM             11 (UUID)
+              STORE_NAME              11 (UUID)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('Mapped', 'mapped_column'))
+              IMPORT_NAME             12 (sqlalchemy.orm)
+              IMPORT_FROM             13 (Mapped)
+              STORE_NAME              13 (Mapped)
+              IMPORT_FROM             14 (mapped_column)
+              STORE_NAME              14 (mapped_column)
+              POP_TOP
+
+ 17           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('Base',))
+              IMPORT_NAME             15 (app.database)
+              IMPORT_FROM             16 (Base)
+              STORE_NAME              16 (Base)
+              POP_TOP
+
+ 18           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('JsonbDict', 'tz_datetime'))
+              IMPORT_NAME             17 (app.models._types)
+              IMPORT_FROM             18 (JsonbDict)
+              STORE_NAME              18 (JsonbDict)
+              IMPORT_FROM             19 (tz_datetime)
+              STORE_NAME              19 (tz_datetime)
+              POP_TOP
+
+ 21           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               9 (<code object HandoffOffer at 0x0000024C0FA659B0, file "D:\fluence\Github\mattbot\backend\app\models\handoff_offer.py", line 21>)
+              MAKE_FUNCTION
+              LOAD_CONST              10 ('HandoffOffer')
+              LOAD_NAME               16 (Base)
+              CALL                     3
+              STORE_NAME              20 (HandoffOffer)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object HandoffOffer at 0x0000024C0FA659B0, file "D:\fluence\Github\mattbot\backend\app\models\handoff_offer.py", line 21>:
+ 21           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('HandoffOffer')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (21)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 22           LOAD_CONST               2 ('handoff_offers')
+              STORE_NAME               4 (__tablename__)
+
+ 24           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 25           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               16 (uuid4)
+
+ 24           LOAD_CONST               5 (('primary_key', 'default'))
+              CALL_KW                  3
+              STORE_NAME               9 (id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               6 ('id')
+              STORE_SUBSCR
+
+ 27           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 28           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 29           LOAD_NAME               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               7 ('calls.id')
+              LOAD_CONST               8 ('CASCADE')
+              LOAD_CONST               9 (('ondelete',))
+              CALL_KW                  2
+
+ 30           LOAD_CONST              10 (False)
+
+ 27           LOAD_CONST              11 (('nullable',))
+              CALL_KW                  3
+              STORE_NAME              13 (call_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              12 ('call_id')
+              STORE_SUBSCR
+
+ 32           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 33           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 34           LOAD_NAME               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              13 ('users.id')
+              LOAD_CONST               8 ('CASCADE')
+              LOAD_CONST               9 (('ondelete',))
+              CALL_KW                  2
+
+ 35           LOAD_CONST              10 (False)
+
+ 32           LOAD_CONST              11 (('nullable',))
+              CALL_KW                  3
+              STORE_NAME              14 (owner_user_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              14 ('owner_user_id')
+              STORE_SUBSCR
+
+ 37           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 38           LOAD_NAME               15 (Text)
+              LOAD_CONST              10 (False)
+              LOAD_NAME               16 (text)
+              PUSH_NULL
+              LOAD_CONST              15 ("'offered'")
+              CALL                     1
+
+ 37           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              17 (status)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               18 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              17 ('status')
+              STORE_SUBSCR
+
+ 40           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               15 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              19 (offer_reason)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               18 (str)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              19 ('offer_reason')
+              STORE_SUBSCR
+
+ 41           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               20 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              10 (False)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              21 (expires_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               22 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              20 ('expires_at')
+              STORE_SUBSCR
+
+ 42           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 43           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 44           LOAD_NAME               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              21 ('devices.id')
+              LOAD_CONST              22 ('SET NULL')
+              LOAD_CONST               9 (('ondelete',))
+              CALL_KW                  2
+
+ 45           LOAD_CONST               3 (True)
+
+ 42           LOAD_CONST              11 (('nullable',))
+              CALL_KW                  3
+              STORE_NAME              23 (selected_device_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              23 ('selected_device_id')
+              STORE_SUBSCR
+
+ 47           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               20 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              24 (accepted_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               22 (datetime)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              24 ('accepted_at')
+              STORE_SUBSCR
+
+ 48           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               20 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              25 (declined_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               22 (datetime)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              25 ('declined_at')
+              STORE_SUBSCR
+
+ 49           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 50           LOAD_NAME               26 (JsonbDict)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+
+ 49           LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              27 (preview_payload)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               28 (dict)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              26 ('preview_payload')
+              STORE_SUBSCR
+
+ 52           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 53           LOAD_NAME               20 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              10 (False)
+              LOAD_NAME               16 (text)
+              PUSH_NULL
+              LOAD_CONST              27 ('now()')
+              CALL                     1
+
+ 52           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              29 (created_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               22 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              28 ('created_at')
+              STORE_SUBSCR
+
+ 57           LOAD_NAME               30 (UniqueConstraint)
+              PUSH_NULL
+              LOAD_CONST              12 ('call_id')
+              LOAD_CONST              29 ('uq_handoff_offers_call')
+              LOAD_CONST              30 (('name',))
+              CALL_KW                  2
+
+ 58           LOAD_NAME               31 (CheckConstraint)
+              PUSH_NULL
+
+ 59           LOAD_CONST              31 ("status IN ('offered', 'accepted', 'declined', 'expired')")
+
+ 60           LOAD_CONST              32 ('ck_handoff_offers_status')
+
+ 58           LOAD_CONST              30 (('name',))
+              CALL_KW                  2
+
+ 62           LOAD_NAME               31 (CheckConstraint)
+              PUSH_NULL
+
+ 63           LOAD_CONST              33 ("offer_reason IS NULL OR offer_reason IN ('always', 'vip', 'urgent', 'vip_and_urgent')")
+
+ 64           LOAD_CONST              34 ('ck_handoff_offers_reason')
+
+ 62           LOAD_CONST              30 (('name',))
+              CALL_KW                  2
+
+ 66           LOAD_NAME               32 (Index)
+              PUSH_NULL
+              LOAD_CONST              35 ('handoff_offers_user_idx')
+              LOAD_CONST              14 ('owner_user_id')
+              CALL                     2
+
+ 67           LOAD_NAME               32 (Index)
+              PUSH_NULL
+
+ 68           LOAD_CONST              36 ('handoff_offers_pending_idx')
+
+ 69           LOAD_CONST              17 ('status')
+
+ 70           LOAD_CONST              20 ('expires_at')
+
+ 71           LOAD_NAME               16 (text)
+              PUSH_NULL
+              LOAD_CONST              37 ("status = 'offered'")
+              CALL                     1
+
+ 67           LOAD_CONST              38 (('postgresql_where',))
+              CALL_KW                  4
+
+ 56           BUILD_TUPLE              5
+              STORE_NAME              33 (__table_args__)
+              LOAD_CONST              39 (())
+              STORE_NAME              34 (__static_attributes__)
+              RETURN_CONST            18 (None)

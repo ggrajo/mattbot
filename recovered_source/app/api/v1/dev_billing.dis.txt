@@ -1,0 +1,298 @@
+# Bytecode dump of: dev_billing.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\api\v1\dev_billing.py
+# co_names: ('__doc__', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.database', 'get_db', 'app.schemas.billing', 'DevSetPlanRequest', 'DevSimulateUsageRequest', 'SubscribeResponse', 'app.services', 'billing_service', 'router', 'post', 'dev_set_plan', 'dict', 'dev_simulate_usage')
+# co_consts (strings): ['Dev-only billing endpoints for manual plan setting and usage simulation.', '/set-plan', 'body', 'current_user', 'db', 'return', '/simulate-usage-minutes']
+
+# DOCSTRING: """Dev-only billing endpoints for manual plan setting and usage simulation."""
+# --- Nested code object: dev_set_plan ---
+    # co_names: ('billing_service', 'dev_set_plan', 'user_id', 'plan', 'status')
+    # co_varnames: ('body', 'current_user', 'db')
+      14           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+      20           LOAD_GLOBAL              0 (billing_service)
+                   LOAD_ATTR                2 (dev_set_plan)
+                   PUSH_NULL
+    
+      21           LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                   LOAD_ATTR                4 (user_id)
+                   LOAD_FAST                0 (body)
+                   LOAD_ATTR                6 (plan)
+                   LOAD_FAST                0 (body)
+                   LOAD_ATTR                8 (status)
+    
+      20           CALL                     4
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   RETURN_VALUE
+           L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# --- Nested code object: dev_simulate_usage ---
+    # co_names: ('billing_service', 'record_usage', 'user_id', 'minutes')
+    # co_varnames: ('body', 'current_user', 'db')
+      25           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+      31           LOAD_GLOBAL              0 (billing_service)
+                   LOAD_ATTR                2 (record_usage)
+                   PUSH_NULL
+    
+      32           LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                   LOAD_ATTR                4 (user_id)
+                   LOAD_FAST                0 (body)
+                   LOAD_ATTR                6 (minutes)
+                   LOAD_CONST               1 ('dev_simulation')
+    
+      31           LOAD_CONST               2 (('source',))
+                   CALL_KW                  4
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   RETURN_VALUE
+           L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# co_names: ('__doc__', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.database', 'get_db', 'app.schemas.billing', 'DevSetPlanRequest', 'DevSimulateUsageRequest', 'SubscribeResponse', 'app.services', 'billing_service', 'router', 'post', 'dev_set_plan', 'dict', 'dev_simulate_usage')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Dev-only billing endpoints for manual plan setting and usage simulation.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('APIRouter', 'Depends'))
+              IMPORT_NAME              1 (fastapi)
+              IMPORT_FROM              2 (APIRouter)
+              STORE_NAME               2 (APIRouter)
+              IMPORT_FROM              3 (Depends)
+              STORE_NAME               3 (Depends)
+              POP_TOP
+
+  4           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('AsyncSession',))
+              IMPORT_NAME              4 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM              5 (AsyncSession)
+              STORE_NAME               5 (AsyncSession)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('CurrentUser', 'get_current_user'))
+              IMPORT_NAME              6 (app.core.dependencies)
+              IMPORT_FROM              7 (CurrentUser)
+              STORE_NAME               7 (CurrentUser)
+              IMPORT_FROM              8 (get_current_user)
+              STORE_NAME               8 (get_current_user)
+              POP_TOP
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('get_db',))
+              IMPORT_NAME              9 (app.database)
+              IMPORT_FROM             10 (get_db)
+              STORE_NAME              10 (get_db)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('DevSetPlanRequest', 'DevSimulateUsageRequest', 'SubscribeResponse'))
+              IMPORT_NAME             11 (app.schemas.billing)
+              IMPORT_FROM             12 (DevSetPlanRequest)
+              STORE_NAME              12 (DevSetPlanRequest)
+              IMPORT_FROM             13 (DevSimulateUsageRequest)
+              STORE_NAME              13 (DevSimulateUsageRequest)
+              IMPORT_FROM             14 (SubscribeResponse)
+              STORE_NAME              14 (SubscribeResponse)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('billing_service',))
+              IMPORT_NAME             15 (app.services)
+              IMPORT_FROM             16 (billing_service)
+              STORE_NAME              16 (billing_service)
+              POP_TOP
+
+ 11           LOAD_NAME                2 (APIRouter)
+              PUSH_NULL
+              CALL                     0
+              STORE_NAME              17 (router)
+
+ 14           LOAD_NAME               17 (router)
+              LOAD_ATTR               37 (post + NULL|self)
+              LOAD_CONST               8 ('/set-plan')
+              LOAD_NAME               14 (SubscribeResponse)
+              LOAD_CONST               9 (('response_model',))
+              CALL_KW                  2
+
+ 17           LOAD_NAME                3 (Depends)
+              PUSH_NULL
+              LOAD_NAME                8 (get_current_user)
+              CALL                     1
+
+ 18           LOAD_NAME                3 (Depends)
+              PUSH_NULL
+              LOAD_NAME               10 (get_db)
+              CALL                     1
+
+ 15           BUILD_TUPLE              2
+              LOAD_CONST              10 ('body')
+
+ 16           LOAD_NAME               12 (DevSetPlanRequest)
+
+ 15           LOAD_CONST              11 ('current_user')
+
+ 17           LOAD_NAME                7 (CurrentUser)
+
+ 15           LOAD_CONST              12 ('db')
+
+ 18           LOAD_NAME                5 (AsyncSession)
+
+ 15           LOAD_CONST              13 ('return')
+
+ 19           LOAD_NAME               14 (SubscribeResponse)
+
+ 15           BUILD_TUPLE              8
+              LOAD_CONST              14 (<code object dev_set_plan at 0x0000024C0EEFA6B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\dev_billing.py", line 14>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 14           CALL                     0
+
+ 15           STORE_NAME              19 (dev_set_plan)
+
+ 25           LOAD_NAME               17 (router)
+              LOAD_ATTR               37 (post + NULL|self)
+              LOAD_CONST              15 ('/simulate-usage-minutes')
+              CALL                     1
+
+ 28           LOAD_NAME                3 (Depends)
+              PUSH_NULL
+              LOAD_NAME                8 (get_current_user)
+              CALL                     1
+
+ 29           LOAD_NAME                3 (Depends)
+              PUSH_NULL
+              LOAD_NAME               10 (get_db)
+              CALL                     1
+
+ 26           BUILD_TUPLE              2
+              LOAD_CONST              10 ('body')
+
+ 27           LOAD_NAME               13 (DevSimulateUsageRequest)
+
+ 26           LOAD_CONST              11 ('current_user')
+
+ 28           LOAD_NAME                7 (CurrentUser)
+
+ 26           LOAD_CONST              12 ('db')
+
+ 29           LOAD_NAME                5 (AsyncSession)
+
+ 26           LOAD_CONST              13 ('return')
+
+ 30           LOAD_NAME               20 (dict)
+
+ 26           BUILD_TUPLE              8
+              LOAD_CONST              16 (<code object dev_simulate_usage at 0x0000024C11498A30, file "D:\fluence\Github\mattbot\backend\app\api\v1\dev_billing.py", line 25>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 25           CALL                     0
+
+ 26           STORE_NAME              21 (dev_simulate_usage)
+              RETURN_CONST            17 (None)
+
+Disassembly of <code object dev_set_plan at 0x0000024C0EEFA6B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\dev_billing.py", line 14>:
+  14           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+  20           LOAD_GLOBAL              0 (billing_service)
+               LOAD_ATTR                2 (dev_set_plan)
+               PUSH_NULL
+
+  21           LOAD_FAST_LOAD_FAST     33 (db, current_user)
+               LOAD_ATTR                4 (user_id)
+               LOAD_FAST                0 (body)
+               LOAD_ATTR                6 (plan)
+               LOAD_FAST                0 (body)
+               LOAD_ATTR                8 (status)
+
+  20           CALL                     4
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               RETURN_VALUE
+       L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti
+
+Disassembly of <code object dev_simulate_usage at 0x0000024C11498A30, file "D:\fluence\Github\mattbot\backend\app\api\v1\dev_billing.py", line 25>:
+  25           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+  31           LOAD_GLOBAL              0 (billing_service)
+               LOAD_ATTR                2 (record_usage)
+               PUSH_NULL
+
+  32           LOAD_FAST_LOAD_FAST     33 (db, current_user)
+               LOAD_ATTR                4 (user_id)
+               LOAD_FAST                0 (body)
+               LOAD_ATTR                6 (minutes)
+               LOAD_CONST               1 ('dev_simulation')
+
+  31           LOAD_CONST               2 (('source',))
+               CALL_KW                  4
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               RETURN_VALUE
+       L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti

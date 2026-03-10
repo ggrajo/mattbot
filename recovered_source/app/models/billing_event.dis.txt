@@ -1,0 +1,382 @@
+# Bytecode dump of: billing_event.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\models\billing_event.py
+# co_names: ('uuid', 'datetime', 'sqlalchemy', 'DateTime', 'Index', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'app.database', 'Base', 'app.models._types', 'JsonbDict', '_tz', 'BillingEvent')
+# co_consts (strings): ['return', 'BillingEvent']
+
+# --- Nested code object: _tz ---
+    # co_names: ('DateTime',)
+    # co_varnames: ()
+     12           RESUME                   0
+    
+     13           LOAD_GLOBAL              1 (DateTime + NULL)
+                  LOAD_CONST               1 (True)
+                  LOAD_CONST               2 (('timezone',))
+                  CALL_KW                  1
+                  RETURN_VALUE
+    
+# --- Nested code object: BillingEvent ---
+    # DOCSTRING: """BillingEvent"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__tablename__', 'mapped_column', 'UUID', 'uuid', 'uuid4', 'id', 'Mapped', '__annotations__', 'Text', 'provider_event_id', 'str', 'event_type', 'JsonbDict', 'payload_redacted', 'dict', '_tz', 'processed_at', 'datetime', 'text', 'created_at', 'Index', '__table_args__', '__static_attributes__')
+    # co_varnames: ()
+     16           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('BillingEvent')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (16)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     17           LOAD_CONST               2 ('billing_events')
+                  STORE_NAME               4 (__tablename__)
+    
+     19           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     20           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               3 (True)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               16 (uuid4)
+    
+     19           LOAD_CONST               5 (('primary_key', 'default'))
+                  CALL_KW                  3
+                  STORE_NAME               9 (id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST               6 ('id')
+                  STORE_SUBSCR
+    
+     22           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     23           LOAD_NAME               12 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               7 (False)
+    
+     22           LOAD_CONST               8 (('unique', 'nullable'))
+                  CALL_KW                  3
+                  STORE_NAME              13 (provider_event_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               14 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST               9 ('provider_event_id')
+                  STORE_SUBSCR
+    
+     25           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               12 (Text)
+                  LOAD_CONST               7 (False)
+                  LOAD_CONST              10 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              15 (event_type)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               14 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              11 ('event_type')
+                  STORE_SUBSCR
+    
+     26           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     27           LOAD_NAME               16 (JsonbDict)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               3 (True)
+    
+     26           LOAD_CONST              10 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              17 (payload_redacted)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               18 (dict)
+                  LOAD_CONST              12 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              13 ('payload_redacted')
+                  STORE_SUBSCR
+    
+     29           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               19 (_tz)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              10 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              20 (processed_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               21 (datetime)
+                  LOAD_CONST              12 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              14 ('processed_at')
+                  STORE_SUBSCR
+    
+     30           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     31           LOAD_NAME               19 (_tz)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               7 (False)
+                  LOAD_NAME               22 (text)
+                  PUSH_NULL
+                  LOAD_CONST              15 ('now()')
+                  CALL                     1
+    
+     30           LOAD_CONST              16 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              23 (created_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               21 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              17 ('created_at')
+                  STORE_SUBSCR
+    
+     35           LOAD_NAME               24 (Index)
+                  PUSH_NULL
+                  LOAD_CONST              18 ('ix_billing_events_event_type')
+                  LOAD_CONST              11 ('event_type')
+                  CALL                     2
+    
+     34           BUILD_TUPLE              1
+                  STORE_NAME              25 (__table_args__)
+                  LOAD_CONST              19 (())
+                  STORE_NAME              26 (__static_attributes__)
+                  RETURN_CONST            12 (None)
+    
+# co_names: ('uuid', 'datetime', 'sqlalchemy', 'DateTime', 'Index', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'app.database', 'Base', 'app.models._types', 'JsonbDict', '_tz', 'BillingEvent')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 (0)
+              LOAD_CONST               1 (None)
+              IMPORT_NAME              0 (uuid)
+              STORE_NAME               0 (uuid)
+
+  2           LOAD_CONST               0 (0)
+              LOAD_CONST               2 (('datetime',))
+              IMPORT_NAME              1 (datetime)
+              IMPORT_FROM              1 (datetime)
+              STORE_NAME               1 (datetime)
+              POP_TOP
+
+  4           LOAD_CONST               0 (0)
+              LOAD_CONST               3 (('DateTime', 'Index', 'Text', 'text'))
+              IMPORT_NAME              2 (sqlalchemy)
+              IMPORT_FROM              3 (DateTime)
+              STORE_NAME               3 (DateTime)
+              IMPORT_FROM              4 (Index)
+              STORE_NAME               4 (Index)
+              IMPORT_FROM              5 (Text)
+              STORE_NAME               5 (Text)
+              IMPORT_FROM              6 (text)
+              STORE_NAME               6 (text)
+              POP_TOP
+
+  5           LOAD_CONST               0 (0)
+              LOAD_CONST               4 (('UUID',))
+              IMPORT_NAME              7 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM              8 (UUID)
+              STORE_NAME               8 (UUID)
+              POP_TOP
+
+  6           LOAD_CONST               0 (0)
+              LOAD_CONST               5 (('Mapped', 'mapped_column'))
+              IMPORT_NAME              9 (sqlalchemy.orm)
+              IMPORT_FROM             10 (Mapped)
+              STORE_NAME              10 (Mapped)
+              IMPORT_FROM             11 (mapped_column)
+              STORE_NAME              11 (mapped_column)
+              POP_TOP
+
+  8           LOAD_CONST               0 (0)
+              LOAD_CONST               6 (('Base',))
+              IMPORT_NAME             12 (app.database)
+              IMPORT_FROM             13 (Base)
+              STORE_NAME              13 (Base)
+              POP_TOP
+
+  9           LOAD_CONST               0 (0)
+              LOAD_CONST               7 (('JsonbDict',))
+              IMPORT_NAME             14 (app.models._types)
+              IMPORT_FROM             15 (JsonbDict)
+              STORE_NAME              15 (JsonbDict)
+              POP_TOP
+
+ 12           LOAD_CONST               8 ('return')
+              LOAD_NAME                3 (DateTime)
+              BUILD_TUPLE              2
+              LOAD_CONST               9 (<code object _tz at 0x0000024C0EF0F750, file "D:\fluence\Github\mattbot\backend\app\models\billing_event.py", line 12>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              16 (_tz)
+
+ 16           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              10 (<code object BillingEvent at 0x0000024C0FBECBF0, file "D:\fluence\Github\mattbot\backend\app\models\billing_event.py", line 16>)
+              MAKE_FUNCTION
+              LOAD_CONST              11 ('BillingEvent')
+              LOAD_NAME               13 (Base)
+              CALL                     3
+              STORE_NAME              17 (BillingEvent)
+              RETURN_CONST             1 (None)
+
+Disassembly of <code object _tz at 0x0000024C0EF0F750, file "D:\fluence\Github\mattbot\backend\app\models\billing_event.py", line 12>:
+ 12           RESUME                   0
+
+ 13           LOAD_GLOBAL              1 (DateTime + NULL)
+              LOAD_CONST               1 (True)
+              LOAD_CONST               2 (('timezone',))
+              CALL_KW                  1
+              RETURN_VALUE
+
+Disassembly of <code object BillingEvent at 0x0000024C0FBECBF0, file "D:\fluence\Github\mattbot\backend\app\models\billing_event.py", line 16>:
+ 16           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('BillingEvent')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (16)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 17           LOAD_CONST               2 ('billing_events')
+              STORE_NAME               4 (__tablename__)
+
+ 19           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 20           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               16 (uuid4)
+
+ 19           LOAD_CONST               5 (('primary_key', 'default'))
+              CALL_KW                  3
+              STORE_NAME               9 (id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               6 ('id')
+              STORE_SUBSCR
+
+ 22           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 23           LOAD_NAME               12 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               7 (False)
+
+ 22           LOAD_CONST               8 (('unique', 'nullable'))
+              CALL_KW                  3
+              STORE_NAME              13 (provider_event_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               14 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               9 ('provider_event_id')
+              STORE_SUBSCR
+
+ 25           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               12 (Text)
+              LOAD_CONST               7 (False)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              15 (event_type)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               14 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              11 ('event_type')
+              STORE_SUBSCR
+
+ 26           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 27           LOAD_NAME               16 (JsonbDict)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+
+ 26           LOAD_CONST              10 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              17 (payload_redacted)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               18 (dict)
+              LOAD_CONST              12 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              13 ('payload_redacted')
+              STORE_SUBSCR
+
+ 29           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               19 (_tz)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              10 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              20 (processed_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               21 (datetime)
+              LOAD_CONST              12 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              14 ('processed_at')
+              STORE_SUBSCR
+
+ 30           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 31           LOAD_NAME               19 (_tz)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               7 (False)
+              LOAD_NAME               22 (text)
+              PUSH_NULL
+              LOAD_CONST              15 ('now()')
+              CALL                     1
+
+ 30           LOAD_CONST              16 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              23 (created_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               21 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              17 ('created_at')
+              STORE_SUBSCR
+
+ 35           LOAD_NAME               24 (Index)
+              PUSH_NULL
+              LOAD_CONST              18 ('ix_billing_events_event_type')
+              LOAD_CONST              11 ('event_type')
+              CALL                     2
+
+ 34           BUILD_TUPLE              1
+              STORE_NAME              25 (__table_args__)
+              LOAD_CONST              19 (())
+              STORE_NAME              26 (__static_attributes__)
+              RETURN_CONST            12 (None)

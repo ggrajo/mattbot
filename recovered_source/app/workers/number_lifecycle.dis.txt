@@ -1,0 +1,1046 @@
+# Bytecode dump of: number_lifecycle.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\workers\number_lifecycle.py
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'datetime', 'UTC', 'timedelta', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.models.user_number', 'UserNumber', 'app.services', 'audit_service', 'app.services.telephony_service', 'SUSPENSION_GRACE_DAYS', '_rollback_twilio_number', 'configure_number_webhooks', 'getLogger', '__name__', 'logger', 'cleanup_stale_pending_numbers', 'release_numbers_after_grace', 'repair_pending_configurations')
+# co_consts (strings): ['Background tasks for Twilio number lifecycle management.\n\ncleanup_stale_pending_numbers  - release numbers stuck in pending > 15 min\nrelease_numbers_after_grace    - release suspended numbers after grace period\nrepair_pending_configurations  - fix active numbers missing webhook config\n']
+
+# DOCSTRING: """Background tasks for Twilio number lifecycle management.
+
+cleanup_stale_pending_numbers  - release numbers stuck in pending > 15 min
+release_numbers_after_grace    - release suspended numbers after grace period
+repair_pending_configurations  - fix active numbers missing webhook config
+"""
+# --- Nested code object: cleanup_stale_pending_numbers ---
+    # DOCSTRING: """Release numbers stuck in 'pending' longer than PENDING_TTL_MINUTES."""
+    # co_names: ('datetime', 'now', 'UTC', 'timedelta', 'settings', 'NUMBER_PENDING_TTL_MINUTES', 'select', 'UserNumber', 'where', 'status', 'updated_at', 'execute', 'scalars', 'all', 'twilio_number_sid', '_rollback_twilio_number', 'released_at', 'last_error', 'audit_service', 'log_event', 'owner_user_id', 'str', 'id', 'logger', 'info', 'flush')
+    # co_varnames: ('db', 'cutoff', 'stmt', 'result', 'numbers', 'released', 'num')
+      28            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      30            LOAD_GLOBAL              0 (datetime)
+                    LOAD_ATTR                2 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL              4 (UTC)
+                    CALL                     1
+                    LOAD_GLOBAL              7 (timedelta + NULL)
+                    LOAD_GLOBAL              8 (settings)
+                    LOAD_ATTR               10 (NUMBER_PENDING_TTL_MINUTES)
+                    LOAD_CONST               1 (('minutes',))
+                    CALL_KW                  1
+                    BINARY_OP               10 (-)
+                    STORE_FAST               1 (cutoff)
+    
+      31            LOAD_GLOBAL             13 (select + NULL)
+                    LOAD_GLOBAL             14 (UserNumber)
+                    CALL                     1
+                    LOAD_ATTR               17 (where + NULL|self)
+    
+      32            LOAD_GLOBAL             14 (UserNumber)
+                    LOAD_ATTR               18 (status)
+                    LOAD_CONST               2 ('pending')
+                    COMPARE_OP              72 (==)
+    
+      33            LOAD_GLOBAL             14 (UserNumber)
+                    LOAD_ATTR               20 (updated_at)
+                    LOAD_FAST                1 (cutoff)
+                    COMPARE_OP               2 (<)
+    
+      31            CALL                     2
+                    STORE_FAST               2 (stmt)
+    
+      35            LOAD_FAST                0 (db)
+                    LOAD_ATTR               23 (execute + NULL|self)
+                    LOAD_FAST                2 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               3 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               3 (result)
+    
+      36            LOAD_FAST                3 (result)
+                    LOAD_ATTR               25 (scalars + NULL|self)
+                    CALL                     0
+                    LOAD_ATTR               27 (all + NULL|self)
+                    CALL                     0
+                    STORE_FAST               4 (numbers)
+    
+      38            LOAD_CONST               4 (0)
+                    STORE_FAST               5 (released)
+    
+      39            LOAD_FAST                4 (numbers)
+                    GET_ITER
+            L6:     FOR_ITER               221 (to L12)
+                    STORE_FAST               6 (num)
+    
+      40            LOAD_FAST                6 (num)
+                    LOAD_ATTR               28 (twilio_number_sid)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       21 (to L7)
+    
+      41            LOAD_GLOBAL             31 (_rollback_twilio_number + NULL)
+                    LOAD_FAST                6 (num)
+                    LOAD_ATTR               28 (twilio_number_sid)
+                    CALL                     1
+                    POP_TOP
+    
+      43    L7:     LOAD_CONST               5 ('released')
+                    LOAD_FAST                6 (num)
+                    STORE_ATTR               9 (status)
+    
+      44            LOAD_GLOBAL              0 (datetime)
+                    LOAD_ATTR                2 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL              4 (UTC)
+                    CALL                     1
+                    LOAD_FAST                6 (num)
+                    STORE_ATTR              16 (released_at)
+    
+      45            LOAD_CONST               6 ('pending_ttl_exceeded')
+                    LOAD_FAST                6 (num)
+                    STORE_ATTR              17 (last_error)
+    
+      47            LOAD_GLOBAL             36 (audit_service)
+                    LOAD_ATTR               38 (log_event)
+                    PUSH_NULL
+    
+      48            LOAD_FAST                0 (db)
+    
+      49            LOAD_FAST                6 (num)
+                    LOAD_ATTR               40 (owner_user_id)
+    
+      50            LOAD_CONST               7 ('TWILIO_NUMBER_RELEASED')
+    
+      52            LOAD_CONST               6 ('pending_ttl_exceeded')
+    
+      53            LOAD_GLOBAL             43 (str + NULL)
+                    LOAD_FAST                6 (num)
+                    LOAD_ATTR               44 (id)
+                    CALL                     1
+    
+      51            LOAD_CONST               8 (('reason', 'number_id'))
+                    BUILD_CONST_KEY_MAP      2
+    
+      47            LOAD_CONST               9 (('owner_user_id', 'event_type', 'details'))
+                    CALL_KW                  4
+                    GET_AWAITABLE            0
+                    LOAD_CONST               3 (None)
+            L8:     SEND                     3 (to L11)
+            L9:     YIELD_VALUE              1
+           L10:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L8)
+           L11:     END_SEND
+                    POP_TOP
+    
+      56            LOAD_FAST                5 (released)
+                    LOAD_CONST              10 (1)
+                    BINARY_OP               13 (+=)
+                    STORE_FAST               5 (released)
+    
+      57            LOAD_GLOBAL             46 (logger)
+                    LOAD_ATTR               49 (info + NULL|self)
+    
+      58            LOAD_CONST              11 ('Cleaned up stale pending number %s for user %s')
+    
+      59            LOAD_GLOBAL             43 (str + NULL)
+                    LOAD_FAST                6 (num)
+                    LOAD_ATTR               44 (id)
+                    CALL                     1
+                    LOAD_CONST               3 (None)
+                    LOAD_CONST              12 (8)
+                    BINARY_SLICE
+                    LOAD_GLOBAL             43 (str + NULL)
+                    LOAD_FAST                6 (num)
+                    LOAD_ATTR               40 (owner_user_id)
+                    CALL                     1
+                    LOAD_CONST               3 (None)
+                    LOAD_CONST              12 (8)
+                    BINARY_SLICE
+    
+      57            CALL                     3
+                    POP_TOP
+                    JUMP_BACKWARD          223 (to L6)
+    
+      39   L12:     END_FOR
+                    POP_TOP
+    
+      62            LOAD_FAST                5 (released)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       24 (to L17)
+    
+      63            LOAD_FAST                0 (db)
+                    LOAD_ATTR               51 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               3 (None)
+           L13:     SEND                     3 (to L16)
+           L14:     YIELD_VALUE              1
+           L15:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L13)
+           L16:     END_SEND
+                    POP_TOP
+    
+      64   L17:     LOAD_FAST                5 (released)
+                    RETURN_VALUE
+    
+      35   L18:     CLEANUP_THROW
+           L19:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 297 (to L5)
+    
+      47   L20:     CLEANUP_THROW
+           L21:     JUMP_BACKWARD_NO_INTERRUPT 116 (to L11)
+    
+      63   L22:     CLEANUP_THROW
+           L23:     JUMP_BACKWARD_NO_INTERRUPT 11 (to L16)
+    
+      --   L24:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L24 [0] lasti
+      L3 to L4 -> L18 [2]
+      L4 to L9 -> L24 [0] lasti
+      L9 to L10 -> L20 [3]
+      L10 to L14 -> L24 [0] lasti
+      L14 to L15 -> L22 [2]
+      L15 to L19 -> L24 [0] lasti
+      L20 to L21 -> L24 [0] lasti
+      L22 to L23 -> L24 [0] lasti
+    
+# --- Nested code object: release_numbers_after_grace ---
+    # DOCSTRING: """Release suspended numbers whose grace period has expired."""
+    # co_names: ('datetime', 'now', 'UTC', 'timedelta', 'select', 'UserNumber', 'where', 'status', 'suspended_at', 'execute', 'scalars', 'all', 'app.services', 'telephony_service', 'release_number', 'owner_user_id')
+    # co_varnames: ('db', 'grace_days', 'cutoff', 'stmt', 'result', 'numbers', 'released', 'num', 'telephony_service', 'ok')
+      67            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      72            LOAD_GLOBAL              0 (datetime)
+                    LOAD_ATTR                2 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL              4 (UTC)
+                    CALL                     1
+                    LOAD_GLOBAL              7 (timedelta + NULL)
+                    LOAD_FAST                1 (grace_days)
+                    LOAD_CONST               1 (('days',))
+                    CALL_KW                  1
+                    BINARY_OP               10 (-)
+                    STORE_FAST               2 (cutoff)
+    
+      73            LOAD_GLOBAL              9 (select + NULL)
+                    LOAD_GLOBAL             10 (UserNumber)
+                    CALL                     1
+                    LOAD_ATTR               13 (where + NULL|self)
+    
+      74            LOAD_GLOBAL             10 (UserNumber)
+                    LOAD_ATTR               14 (status)
+                    LOAD_CONST               2 ('suspended')
+                    COMPARE_OP              72 (==)
+    
+      75            LOAD_GLOBAL             10 (UserNumber)
+                    LOAD_ATTR               16 (suspended_at)
+                    LOAD_FAST                2 (cutoff)
+                    COMPARE_OP               2 (<)
+    
+      73            CALL                     2
+                    STORE_FAST               3 (stmt)
+    
+      77            LOAD_FAST                0 (db)
+                    LOAD_ATTR               19 (execute + NULL|self)
+                    LOAD_FAST                3 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               3 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               4 (result)
+    
+      78            LOAD_FAST                4 (result)
+                    LOAD_ATTR               21 (scalars + NULL|self)
+                    CALL                     0
+                    LOAD_ATTR               23 (all + NULL|self)
+                    CALL                     0
+                    STORE_FAST               5 (numbers)
+    
+      80            LOAD_CONST               4 (0)
+                    STORE_FAST               6 (released)
+    
+      81            LOAD_FAST                5 (numbers)
+                    GET_ITER
+            L6:     FOR_ITER                57 (to L13)
+                    STORE_FAST               7 (num)
+    
+      82            LOAD_CONST               4 (0)
+                    LOAD_CONST               5 (('telephony_service',))
+                    IMPORT_NAME             12 (app.services)
+                    IMPORT_FROM             13 (telephony_service)
+                    STORE_FAST               8 (telephony_service)
+                    POP_TOP
+    
+      83            LOAD_FAST                8 (telephony_service)
+                    LOAD_ATTR               29 (release_number + NULL|self)
+    
+      84            LOAD_FAST_LOAD_FAST      7 (db, num)
+                    LOAD_ATTR               30 (owner_user_id)
+                    LOAD_CONST               6 ('grace_period_expired')
+    
+      83            LOAD_CONST               7 (('reason',))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               3 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    STORE_FAST               9 (ok)
+    
+      86            LOAD_FAST                9 (ok)
+                    TO_BOOL
+           L11:     POP_JUMP_IF_TRUE         2 (to L12)
+                    JUMP_BACKWARD           52 (to L6)
+    
+      87   L12:     LOAD_FAST                6 (released)
+                    LOAD_CONST               8 (1)
+                    BINARY_OP               13 (+=)
+                    STORE_FAST               6 (released)
+                    JUMP_BACKWARD           59 (to L6)
+    
+      81   L13:     END_FOR
+                    POP_TOP
+    
+      89            LOAD_FAST                6 (released)
+                    RETURN_VALUE
+    
+      77   L14:     CLEANUP_THROW
+           L15:     JUMP_BACKWARD_NO_INTERRUPT 101 (to L5)
+    
+      83   L16:     CLEANUP_THROW
+           L17:     JUMP_BACKWARD_NO_INTERRUPT 26 (to L10)
+    
+      --   L18:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L18 [0] lasti
+      L3 to L4 -> L14 [2]
+      L4 to L8 -> L18 [0] lasti
+      L8 to L9 -> L16 [3]
+      L9 to L11 -> L18 [0] lasti
+      L12 to L15 -> L18 [0] lasti
+      L16 to L17 -> L18 [0] lasti
+    
+# --- Nested code object: repair_pending_configurations ---
+    # DOCSTRING: """Fix active numbers that are missing webhook configuration."""
+    # co_names: ('select', 'UserNumber', 'where', 'status', 'webhook_url', 'is_', 'execute', 'scalars', 'all', 'configure_number_webhooks', 'logger', 'info', 'str', 'id', 'flush')
+    # co_varnames: ('db', 'stmt', 'result', 'numbers', 'repaired', 'num', 'ok')
+      92            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      94            LOAD_GLOBAL              1 (select + NULL)
+                    LOAD_GLOBAL              2 (UserNumber)
+                    CALL                     1
+                    LOAD_ATTR                5 (where + NULL|self)
+    
+      95            LOAD_GLOBAL              2 (UserNumber)
+                    LOAD_ATTR                6 (status)
+                    LOAD_CONST               1 ('active')
+                    COMPARE_OP              72 (==)
+    
+      96            LOAD_GLOBAL              2 (UserNumber)
+                    LOAD_ATTR                8 (webhook_url)
+                    LOAD_ATTR               11 (is_ + NULL|self)
+                    LOAD_CONST               2 (None)
+                    CALL                     1
+    
+      94            CALL                     2
+                    STORE_FAST               1 (stmt)
+    
+      98            LOAD_FAST                0 (db)
+                    LOAD_ATTR               13 (execute + NULL|self)
+                    LOAD_FAST                1 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               2 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               2 (result)
+    
+      99            LOAD_FAST                2 (result)
+                    LOAD_ATTR               15 (scalars + NULL|self)
+                    CALL                     0
+                    LOAD_ATTR               17 (all + NULL|self)
+                    CALL                     0
+                    STORE_FAST               3 (numbers)
+    
+     101            LOAD_CONST               3 (0)
+                    STORE_FAST               4 (repaired)
+    
+     102            LOAD_FAST                3 (numbers)
+                    GET_ITER
+            L6:     FOR_ITER                80 (to L13)
+                    STORE_FAST               5 (num)
+    
+     103            LOAD_GLOBAL             19 (configure_number_webhooks + NULL)
+                    LOAD_FAST_LOAD_FAST      5 (db, num)
+                    CALL                     2
+                    GET_AWAITABLE            0
+                    LOAD_CONST               2 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    STORE_FAST               6 (ok)
+    
+     104            LOAD_FAST                6 (ok)
+                    TO_BOOL
+           L11:     POP_JUMP_IF_TRUE         2 (to L12)
+                    JUMP_BACKWARD           31 (to L6)
+    
+     105   L12:     LOAD_FAST                4 (repaired)
+                    LOAD_CONST               4 (1)
+                    BINARY_OP               13 (+=)
+                    STORE_FAST               4 (repaired)
+    
+     106            LOAD_GLOBAL             20 (logger)
+                    LOAD_ATTR               23 (info + NULL|self)
+    
+     107            LOAD_CONST               5 ('Repaired webhook config for number %s')
+    
+     108            LOAD_GLOBAL             25 (str + NULL)
+                    LOAD_FAST                5 (num)
+                    LOAD_ATTR               26 (id)
+                    CALL                     1
+                    LOAD_CONST               2 (None)
+                    LOAD_CONST               6 (8)
+                    BINARY_SLICE
+    
+     106            CALL                     2
+                    POP_TOP
+                    JUMP_BACKWARD           82 (to L6)
+    
+     102   L13:     END_FOR
+                    POP_TOP
+    
+     111            LOAD_FAST                4 (repaired)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       24 (to L18)
+    
+     112            LOAD_FAST                0 (db)
+                    LOAD_ATTR               29 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               2 (None)
+           L14:     SEND                     3 (to L17)
+           L15:     YIELD_VALUE              1
+           L16:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+           L17:     END_SEND
+                    POP_TOP
+    
+     113   L18:     LOAD_FAST                4 (repaired)
+                    RETURN_VALUE
+    
+      98   L19:     CLEANUP_THROW
+           L20:     JUMP_BACKWARD_NO_INTERRUPT 155 (to L5)
+    
+     103   L21:     CLEANUP_THROW
+           L22:     JUMP_BACKWARD_NO_INTERRUPT 101 (to L10)
+    
+     112   L23:     CLEANUP_THROW
+           L24:     JUMP_BACKWARD_NO_INTERRUPT 10 (to L17)
+    
+      --   L25:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L25 [0] lasti
+      L3 to L4 -> L19 [2]
+      L4 to L8 -> L25 [0] lasti
+      L8 to L9 -> L21 [3]
+      L9 to L11 -> L25 [0] lasti
+      L12 to L15 -> L25 [0] lasti
+      L15 to L16 -> L23 [2]
+      L16 to L20 -> L25 [0] lasti
+      L21 to L22 -> L25 [0] lasti
+      L23 to L24 -> L25 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'datetime', 'UTC', 'timedelta', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.models.user_number', 'UserNumber', 'app.services', 'audit_service', 'app.services.telephony_service', 'SUSPENSION_GRACE_DAYS', '_rollback_twilio_number', 'configure_number_webhooks', 'getLogger', '__name__', 'logger', 'cleanup_stale_pending_numbers', 'release_numbers_after_grace', 'repair_pending_configurations')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Background tasks for Twilio number lifecycle management.\n\ncleanup_stale_pending_numbers  - release numbers stuck in pending > 15 min\nrelease_numbers_after_grace    - release suspended numbers after grace period\nrepair_pending_configurations  - fix active numbers missing webhook config\n')
+              STORE_NAME               0 (__doc__)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (logging)
+              STORE_NAME               3 (logging)
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('UTC', 'datetime', 'timedelta'))
+              IMPORT_NAME              4 (datetime)
+              IMPORT_FROM              5 (UTC)
+              STORE_NAME               5 (UTC)
+              IMPORT_FROM              4 (datetime)
+              STORE_NAME               4 (datetime)
+              IMPORT_FROM              6 (timedelta)
+              STORE_NAME               6 (timedelta)
+              POP_TOP
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('select',))
+              IMPORT_NAME              7 (sqlalchemy)
+              IMPORT_FROM              8 (select)
+              STORE_NAME               8 (select)
+              POP_TOP
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('AsyncSession',))
+              IMPORT_NAME              9 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM             10 (AsyncSession)
+              STORE_NAME              10 (AsyncSession)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('settings',))
+              IMPORT_NAME             11 (app.config)
+              IMPORT_FROM             12 (settings)
+              STORE_NAME              12 (settings)
+              POP_TOP
+
+ 17           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('UserNumber',))
+              IMPORT_NAME             13 (app.models.user_number)
+              IMPORT_FROM             14 (UserNumber)
+              STORE_NAME              14 (UserNumber)
+              POP_TOP
+
+ 18           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('audit_service',))
+              IMPORT_NAME             15 (app.services)
+              IMPORT_FROM             16 (audit_service)
+              STORE_NAME              16 (audit_service)
+              POP_TOP
+
+ 19           LOAD_CONST               1 (0)
+              LOAD_CONST              10 (('SUSPENSION_GRACE_DAYS', '_rollback_twilio_number', 'configure_number_webhooks'))
+              IMPORT_NAME             17 (app.services.telephony_service)
+              IMPORT_FROM             18 (SUSPENSION_GRACE_DAYS)
+              STORE_NAME              18 (SUSPENSION_GRACE_DAYS)
+              IMPORT_FROM             19 (_rollback_twilio_number)
+              STORE_NAME              19 (_rollback_twilio_number)
+              IMPORT_FROM             20 (configure_number_webhooks)
+              STORE_NAME              20 (configure_number_webhooks)
+              POP_TOP
+
+ 25           LOAD_NAME                3 (logging)
+              LOAD_ATTR               42 (getLogger)
+              PUSH_NULL
+              LOAD_NAME               22 (__name__)
+              CALL                     1
+              STORE_NAME              23 (logger)
+
+ 28           LOAD_CONST              14 (('db', 'AsyncSession', 'return', 'int'))
+              LOAD_CONST              11 (<code object cleanup_stale_pending_numbers at 0x0000024C0FB69150, file "D:\fluence\Github\mattbot\backend\app\workers\number_lifecycle.py", line 28>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              24 (cleanup_stale_pending_numbers)
+
+ 69           LOAD_NAME               18 (SUSPENSION_GRACE_DAYS)
+
+ 67           BUILD_TUPLE              1
+
+ 68           NOP
+
+ 67           NOP
+
+ 69           NOP
+
+ 67           NOP
+
+ 70           NOP
+
+ 67           LOAD_CONST              15 (('db', 'AsyncSession', 'grace_days', 'int', 'return', 'int'))
+              LOAD_CONST              12 (<code object release_numbers_after_grace at 0x0000024C0FED7D70, file "D:\fluence\Github\mattbot\backend\app\workers\number_lifecycle.py", line 67>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME              25 (release_numbers_after_grace)
+
+ 92           LOAD_CONST              14 (('db', 'AsyncSession', 'return', 'int'))
+              LOAD_CONST              13 (<code object repair_pending_configurations at 0x0000024C0FB6C050, file "D:\fluence\Github\mattbot\backend\app\workers\number_lifecycle.py", line 92>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              26 (repair_pending_configurations)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object cleanup_stale_pending_numbers at 0x0000024C0FB69150, file "D:\fluence\Github\mattbot\backend\app\workers\number_lifecycle.py", line 28>:
+  28            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  30            LOAD_GLOBAL              0 (datetime)
+                LOAD_ATTR                2 (now)
+                PUSH_NULL
+                LOAD_GLOBAL              4 (UTC)
+                CALL                     1
+                LOAD_GLOBAL              7 (timedelta + NULL)
+                LOAD_GLOBAL              8 (settings)
+                LOAD_ATTR               10 (NUMBER_PENDING_TTL_MINUTES)
+                LOAD_CONST               1 (('minutes',))
+                CALL_KW                  1
+                BINARY_OP               10 (-)
+                STORE_FAST               1 (cutoff)
+
+  31            LOAD_GLOBAL             13 (select + NULL)
+                LOAD_GLOBAL             14 (UserNumber)
+                CALL                     1
+                LOAD_ATTR               17 (where + NULL|self)
+
+  32            LOAD_GLOBAL             14 (UserNumber)
+                LOAD_ATTR               18 (status)
+                LOAD_CONST               2 ('pending')
+                COMPARE_OP              72 (==)
+
+  33            LOAD_GLOBAL             14 (UserNumber)
+                LOAD_ATTR               20 (updated_at)
+                LOAD_FAST                1 (cutoff)
+                COMPARE_OP               2 (<)
+
+  31            CALL                     2
+                STORE_FAST               2 (stmt)
+
+  35            LOAD_FAST                0 (db)
+                LOAD_ATTR               23 (execute + NULL|self)
+                LOAD_FAST                2 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               3 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               3 (result)
+
+  36            LOAD_FAST                3 (result)
+                LOAD_ATTR               25 (scalars + NULL|self)
+                CALL                     0
+                LOAD_ATTR               27 (all + NULL|self)
+                CALL                     0
+                STORE_FAST               4 (numbers)
+
+  38            LOAD_CONST               4 (0)
+                STORE_FAST               5 (released)
+
+  39            LOAD_FAST                4 (numbers)
+                GET_ITER
+        L6:     FOR_ITER               221 (to L12)
+                STORE_FAST               6 (num)
+
+  40            LOAD_FAST                6 (num)
+                LOAD_ATTR               28 (twilio_number_sid)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       21 (to L7)
+
+  41            LOAD_GLOBAL             31 (_rollback_twilio_number + NULL)
+                LOAD_FAST                6 (num)
+                LOAD_ATTR               28 (twilio_number_sid)
+                CALL                     1
+                POP_TOP
+
+  43    L7:     LOAD_CONST               5 ('released')
+                LOAD_FAST                6 (num)
+                STORE_ATTR               9 (status)
+
+  44            LOAD_GLOBAL              0 (datetime)
+                LOAD_ATTR                2 (now)
+                PUSH_NULL
+                LOAD_GLOBAL              4 (UTC)
+                CALL                     1
+                LOAD_FAST                6 (num)
+                STORE_ATTR              16 (released_at)
+
+  45            LOAD_CONST               6 ('pending_ttl_exceeded')
+                LOAD_FAST                6 (num)
+                STORE_ATTR              17 (last_error)
+
+  47            LOAD_GLOBAL             36 (audit_service)
+                LOAD_ATTR               38 (log_event)
+                PUSH_NULL
+
+  48            LOAD_FAST                0 (db)
+
+  49            LOAD_FAST                6 (num)
+                LOAD_ATTR               40 (owner_user_id)
+
+  50            LOAD_CONST               7 ('TWILIO_NUMBER_RELEASED')
+
+  52            LOAD_CONST               6 ('pending_ttl_exceeded')
+
+  53            LOAD_GLOBAL             43 (str + NULL)
+                LOAD_FAST                6 (num)
+                LOAD_ATTR               44 (id)
+                CALL                     1
+
+  51            LOAD_CONST               8 (('reason', 'number_id'))
+                BUILD_CONST_KEY_MAP      2
+
+  47            LOAD_CONST               9 (('owner_user_id', 'event_type', 'details'))
+                CALL_KW                  4
+                GET_AWAITABLE            0
+                LOAD_CONST               3 (None)
+        L8:     SEND                     3 (to L11)
+        L9:     YIELD_VALUE              1
+       L10:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L8)
+       L11:     END_SEND
+                POP_TOP
+
+  56            LOAD_FAST                5 (released)
+                LOAD_CONST              10 (1)
+                BINARY_OP               13 (+=)
+                STORE_FAST               5 (released)
+
+  57            LOAD_GLOBAL             46 (logger)
+                LOAD_ATTR               49 (info + NULL|self)
+
+  58            LOAD_CONST              11 ('Cleaned up stale pending number %s for user %s')
+
+  59            LOAD_GLOBAL             43 (str + NULL)
+                LOAD_FAST                6 (num)
+                LOAD_ATTR               44 (id)
+                CALL                     1
+                LOAD_CONST               3 (None)
+                LOAD_CONST              12 (8)
+                BINARY_SLICE
+                LOAD_GLOBAL             43 (str + NULL)
+                LOAD_FAST                6 (num)
+                LOAD_ATTR               40 (owner_user_id)
+                CALL                     1
+                LOAD_CONST               3 (None)
+                LOAD_CONST              12 (8)
+                BINARY_SLICE
+
+  57            CALL                     3
+                POP_TOP
+                JUMP_BACKWARD          223 (to L6)
+
+  39   L12:     END_FOR
+                POP_TOP
+
+  62            LOAD_FAST                5 (released)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       24 (to L17)
+
+  63            LOAD_FAST                0 (db)
+                LOAD_ATTR               51 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               3 (None)
+       L13:     SEND                     3 (to L16)
+       L14:     YIELD_VALUE              1
+       L15:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L13)
+       L16:     END_SEND
+                POP_TOP
+
+  64   L17:     LOAD_FAST                5 (released)
+                RETURN_VALUE
+
+  35   L18:     CLEANUP_THROW
+       L19:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 297 (to L5)
+
+  47   L20:     CLEANUP_THROW
+       L21:     JUMP_BACKWARD_NO_INTERRUPT 116 (to L11)
+
+  63   L22:     CLEANUP_THROW
+       L23:     JUMP_BACKWARD_NO_INTERRUPT 11 (to L16)
+
+  --   L24:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L24 [0] lasti
+  L3 to L4 -> L18 [2]
+  L4 to L9 -> L24 [0] lasti
+  L9 to L10 -> L20 [3]
+  L10 to L14 -> L24 [0] lasti
+  L14 to L15 -> L22 [2]
+  L15 to L19 -> L24 [0] lasti
+  L20 to L21 -> L24 [0] lasti
+  L22 to L23 -> L24 [0] lasti
+
+Disassembly of <code object release_numbers_after_grace at 0x0000024C0FED7D70, file "D:\fluence\Github\mattbot\backend\app\workers\number_lifecycle.py", line 67>:
+  67            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  72            LOAD_GLOBAL              0 (datetime)
+                LOAD_ATTR                2 (now)
+                PUSH_NULL
+                LOAD_GLOBAL              4 (UTC)
+                CALL                     1
+                LOAD_GLOBAL              7 (timedelta + NULL)
+                LOAD_FAST                1 (grace_days)
+                LOAD_CONST               1 (('days',))
+                CALL_KW                  1
+                BINARY_OP               10 (-)
+                STORE_FAST               2 (cutoff)
+
+  73            LOAD_GLOBAL              9 (select + NULL)
+                LOAD_GLOBAL             10 (UserNumber)
+                CALL                     1
+                LOAD_ATTR               13 (where + NULL|self)
+
+  74            LOAD_GLOBAL             10 (UserNumber)
+                LOAD_ATTR               14 (status)
+                LOAD_CONST               2 ('suspended')
+                COMPARE_OP              72 (==)
+
+  75            LOAD_GLOBAL             10 (UserNumber)
+                LOAD_ATTR               16 (suspended_at)
+                LOAD_FAST                2 (cutoff)
+                COMPARE_OP               2 (<)
+
+  73            CALL                     2
+                STORE_FAST               3 (stmt)
+
+  77            LOAD_FAST                0 (db)
+                LOAD_ATTR               19 (execute + NULL|self)
+                LOAD_FAST                3 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               3 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               4 (result)
+
+  78            LOAD_FAST                4 (result)
+                LOAD_ATTR               21 (scalars + NULL|self)
+                CALL                     0
+                LOAD_ATTR               23 (all + NULL|self)
+                CALL                     0
+                STORE_FAST               5 (numbers)
+
+  80            LOAD_CONST               4 (0)
+                STORE_FAST               6 (released)
+
+  81            LOAD_FAST                5 (numbers)
+                GET_ITER
+        L6:     FOR_ITER                57 (to L13)
+                STORE_FAST               7 (num)
+
+  82            LOAD_CONST               4 (0)
+                LOAD_CONST               5 (('telephony_service',))
+                IMPORT_NAME             12 (app.services)
+                IMPORT_FROM             13 (telephony_service)
+                STORE_FAST               8 (telephony_service)
+                POP_TOP
+
+  83            LOAD_FAST                8 (telephony_service)
+                LOAD_ATTR               29 (release_number + NULL|self)
+
+  84            LOAD_FAST_LOAD_FAST      7 (db, num)
+                LOAD_ATTR               30 (owner_user_id)
+                LOAD_CONST               6 ('grace_period_expired')
+
+  83            LOAD_CONST               7 (('reason',))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               3 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                STORE_FAST               9 (ok)
+
+  86            LOAD_FAST                9 (ok)
+                TO_BOOL
+       L11:     POP_JUMP_IF_TRUE         2 (to L12)
+                JUMP_BACKWARD           52 (to L6)
+
+  87   L12:     LOAD_FAST                6 (released)
+                LOAD_CONST               8 (1)
+                BINARY_OP               13 (+=)
+                STORE_FAST               6 (released)
+                JUMP_BACKWARD           59 (to L6)
+
+  81   L13:     END_FOR
+                POP_TOP
+
+  89            LOAD_FAST                6 (released)
+                RETURN_VALUE
+
+  77   L14:     CLEANUP_THROW
+       L15:     JUMP_BACKWARD_NO_INTERRUPT 101 (to L5)
+
+  83   L16:     CLEANUP_THROW
+       L17:     JUMP_BACKWARD_NO_INTERRUPT 26 (to L10)
+
+  --   L18:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L18 [0] lasti
+  L3 to L4 -> L14 [2]
+  L4 to L8 -> L18 [0] lasti
+  L8 to L9 -> L16 [3]
+  L9 to L11 -> L18 [0] lasti
+  L12 to L15 -> L18 [0] lasti
+  L16 to L17 -> L18 [0] lasti
+
+Disassembly of <code object repair_pending_configurations at 0x0000024C0FB6C050, file "D:\fluence\Github\mattbot\backend\app\workers\number_lifecycle.py", line 92>:
+  92            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  94            LOAD_GLOBAL              1 (select + NULL)
+                LOAD_GLOBAL              2 (UserNumber)
+                CALL                     1
+                LOAD_ATTR                5 (where + NULL|self)
+
+  95            LOAD_GLOBAL              2 (UserNumber)
+                LOAD_ATTR                6 (status)
+                LOAD_CONST               1 ('active')
+                COMPARE_OP              72 (==)
+
+  96            LOAD_GLOBAL              2 (UserNumber)
+                LOAD_ATTR                8 (webhook_url)
+                LOAD_ATTR               11 (is_ + NULL|self)
+                LOAD_CONST               2 (None)
+                CALL                     1
+
+  94            CALL                     2
+                STORE_FAST               1 (stmt)
+
+  98            LOAD_FAST                0 (db)
+                LOAD_ATTR               13 (execute + NULL|self)
+                LOAD_FAST                1 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               2 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               2 (result)
+
+  99            LOAD_FAST                2 (result)
+                LOAD_ATTR               15 (scalars + NULL|self)
+                CALL                     0
+                LOAD_ATTR               17 (all + NULL|self)
+                CALL                     0
+                STORE_FAST               3 (numbers)
+
+ 101            LOAD_CONST               3 (0)
+                STORE_FAST               4 (repaired)
+
+ 102            LOAD_FAST                3 (numbers)
+                GET_ITER
+        L6:     FOR_ITER                80 (to L13)
+                STORE_FAST               5 (num)
+
+ 103            LOAD_GLOBAL             19 (configure_number_webhooks + NULL)
+                LOAD_FAST_LOAD_FAST      5 (db, num)
+                CALL                     2
+                GET_AWAITABLE            0
+                LOAD_CONST               2 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                STORE_FAST               6 (ok)
+
+ 104            LOAD_FAST                6 (ok)
+                TO_BOOL
+       L11:     POP_JUMP_IF_TRUE         2 (to L12)
+                JUMP_BACKWARD           31 (to L6)
+
+ 105   L12:     LOAD_FAST                4 (repaired)
+                LOAD_CONST               4 (1)
+                BINARY_OP               13 (+=)
+                STORE_FAST               4 (repaired)
+
+ 106            LOAD_GLOBAL             20 (logger)
+                LOAD_ATTR               23 (info + NULL|self)
+
+ 107            LOAD_CONST               5 ('Repaired webhook config for number %s')
+
+ 108            LOAD_GLOBAL             25 (str + NULL)
+                LOAD_FAST                5 (num)
+                LOAD_ATTR               26 (id)
+                CALL                     1
+                LOAD_CONST               2 (None)
+                LOAD_CONST               6 (8)
+                BINARY_SLICE
+
+ 106            CALL                     2
+                POP_TOP
+                JUMP_BACKWARD           82 (to L6)
+
+ 102   L13:     END_FOR
+                POP_TOP
+
+ 111            LOAD_FAST                4 (repaired)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       24 (to L18)
+
+ 112            LOAD_FAST                0 (db)
+                LOAD_ATTR               29 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               2 (None)
+       L14:     SEND                     3 (to L17)
+       L15:     YIELD_VALUE              1
+       L16:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+       L17:     END_SEND
+                POP_TOP
+
+ 113   L18:     LOAD_FAST                4 (repaired)
+                RETURN_VALUE
+
+  98   L19:     CLEANUP_THROW
+       L20:     JUMP_BACKWARD_NO_INTERRUPT 155 (to L5)
+
+ 103   L21:     CLEANUP_THROW
+       L22:     JUMP_BACKWARD_NO_INTERRUPT 101 (to L10)
+
+ 112   L23:     CLEANUP_THROW
+       L24:     JUMP_BACKWARD_NO_INTERRUPT 10 (to L17)
+
+  --   L25:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L25 [0] lasti
+  L3 to L4 -> L19 [2]
+  L4 to L8 -> L25 [0] lasti
+  L8 to L9 -> L21 [3]
+  L9 to L11 -> L25 [0] lasti
+  L12 to L15 -> L25 [0] lasti
+  L15 to L16 -> L23 [2]
+  L16 to L20 -> L25 [0] lasti
+  L21 to L22 -> L25 [0] lasti
+  L23 to L24 -> L25 [0] lasti

@@ -1,0 +1,1339 @@
+# Bytecode dump of: billing.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\api\v1\billing.py
+# co_names: ('__doc__', 'uuid', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.database', 'get_db', 'app.schemas.billing', 'AddPaymentMethodRequest', 'BillingPlanResponse', 'BillingPlansListResponse', 'BillingStatusResponse', 'CancelResponse', 'ChangePlanRequest', 'ChangePlanResponse', 'PaymentMethodResponse', 'PaymentMethodsListResponse', 'SetupIntentResponse', 'SubscribeRequest', 'SubscribeResponse', 'app.services', 'billing_service', 'app.services.billing_config_service', 'get_billing_config_async', 'router', 'get', 'get_plans', 'get_billing_status', 'post', 'create_setup_intent', 'subscribe', 'change_plan', 'cancel_subscription', 'list_payment_methods', 'add_payment_method', 'delete', 'UUID', 'dict', 'remove_payment_method', 'put', 'set_default_payment_method')
+# co_consts (strings): ['Billing endpoints: status, setup-intent, subscribe, change-plan, cancel, plans, payment-methods.', '/plans', '_current_user', 'return', '/status', 'current_user', 'db', '/setup-intent', '/subscribe', 'body', '/change-plan', '/cancel', '/payment-methods', '/payment-methods/add', '/payment-methods/{pm_id}', 'pm_id', '/payment-methods/{pm_id}/default']
+
+# DOCSTRING: """Billing endpoints: status, setup-intent, subscribe, change-plan, cancel, plans, payment-methods."""
+# --- Nested code object: get_plans ---
+    # --- Nested code object: get_plans.<locals>.<lambda> ---
+        # co_names: ('sort_order',)
+        # co_varnames: ('x',)
+         48           RESUME                   0
+                      LOAD_FAST                0 (x)
+                      LOAD_ATTR                0 (sort_order)
+                      RETURN_VALUE
+        
+    # co_names: ('get_billing_config_async', 'BillingPlansListResponse', 'sorted', 'plans', 'BillingPlanResponse', 'code', 'name', 'price_usd', 'included_minutes', 'requires_credit_card', 'limited', 'sort_order', 'description', 'icon')
+    # co_varnames: ('_current_user', 'config', 'p')
+      30            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      34            LOAD_GLOBAL              1 (get_billing_config_async + NULL)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               1 (config)
+    
+      35            LOAD_GLOBAL              3 (BillingPlansListResponse + NULL)
+    
+      48            LOAD_GLOBAL              5 (sorted + NULL)
+                    LOAD_FAST                1 (config)
+                    LOAD_ATTR                6 (plans)
+                    LOAD_CONST               1 (<code object <lambda> at 0x0000024C0EF2A5B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 48>)
+                    MAKE_FUNCTION
+                    LOAD_CONST               2 (('key',))
+                    CALL_KW                  2
+                    GET_ITER
+    
+      36            LOAD_FAST_AND_CLEAR      2 (p)
+                    SWAP                     2
+            L6:     BUILD_LIST               0
+                    SWAP                     2
+    
+      48            GET_ITER
+            L7:     FOR_ITER               110 (to L8)
+                    STORE_FAST               2 (p)
+    
+      37            LOAD_GLOBAL              9 (BillingPlanResponse + NULL)
+    
+      38            LOAD_FAST                2 (p)
+                    LOAD_ATTR               10 (code)
+    
+      39            LOAD_FAST                2 (p)
+                    LOAD_ATTR               12 (name)
+    
+      40            LOAD_FAST                2 (p)
+                    LOAD_ATTR               14 (price_usd)
+    
+      41            LOAD_FAST                2 (p)
+                    LOAD_ATTR               16 (included_minutes)
+    
+      42            LOAD_FAST                2 (p)
+                    LOAD_ATTR               18 (requires_credit_card)
+    
+      43            LOAD_FAST                2 (p)
+                    LOAD_ATTR               20 (limited)
+    
+      44            LOAD_FAST                2 (p)
+                    LOAD_ATTR               22 (sort_order)
+    
+      45            LOAD_FAST                2 (p)
+                    LOAD_ATTR               24 (description)
+    
+      46            LOAD_FAST                2 (p)
+                    LOAD_ATTR               26 (icon)
+    
+      37            LOAD_CONST               3 (('code', 'name', 'price_usd', 'included_minutes', 'requires_credit_card', 'limited', 'sort_order', 'description', 'icon'))
+                    CALL_KW                  9
+                    LIST_APPEND              2
+                    JUMP_BACKWARD          112 (to L7)
+    
+      48    L8:     END_FOR
+                    POP_TOP
+    
+      36    L9:     SWAP                     2
+                    STORE_FAST               2 (p)
+    
+      35            LOAD_CONST               4 (('plans',))
+                    CALL_KW                  1
+                    RETURN_VALUE
+    
+      34   L10:     CLEANUP_THROW
+           L11:     JUMP_BACKWARD_NO_INTERRUPT 154 (to L5)
+    
+      --   L12:     SWAP                     2
+                    POP_TOP
+    
+      36            SWAP                     2
+                    STORE_FAST               2 (p)
+                    RERAISE                  0
+    
+      --   L13:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L13 [0] lasti
+      L3 to L4 -> L10 [2]
+      L4 to L6 -> L13 [0] lasti
+      L6 to L9 -> L12 [4]
+      L9 to L11 -> L13 [0] lasti
+      L12 to L13 -> L13 [0] lasti
+    
+    Disassembly of <code object <lambda> at 0x0000024C0EF2A5B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 48>:
+     48           RESUME                   0
+                  LOAD_FAST                0 (x)
+                  LOAD_ATTR                0 (sort_order)
+                  RETURN_VALUE
+    
+# --- Nested code object: get_billing_status ---
+    # co_names: ('billing_service', 'get_billing_status', 'user_id')
+    # co_varnames: ('current_user', 'db')
+      53           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+      58           LOAD_GLOBAL              0 (billing_service)
+                   LOAD_ATTR                2 (get_billing_status)
+                   PUSH_NULL
+                   LOAD_FAST_LOAD_FAST     16 (db, current_user)
+                   LOAD_ATTR                4 (user_id)
+                   CALL                     2
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   RETURN_VALUE
+           L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# --- Nested code object: create_setup_intent ---
+    # co_names: ('billing_service', 'create_setup_intent', 'user_id')
+    # co_varnames: ('current_user', 'db')
+      61           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+      66           LOAD_GLOBAL              0 (billing_service)
+                   LOAD_ATTR                2 (create_setup_intent)
+                   PUSH_NULL
+                   LOAD_FAST_LOAD_FAST     16 (db, current_user)
+                   LOAD_ATTR                4 (user_id)
+                   CALL                     2
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   RETURN_VALUE
+           L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# --- Nested code object: subscribe ---
+    # co_names: ('billing_service', 'subscribe', 'user_id', 'plan', 'payment_method_id')
+    # co_varnames: ('body', 'current_user', 'db')
+      69           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+      75           LOAD_GLOBAL              0 (billing_service)
+                   LOAD_ATTR                2 (subscribe)
+                   PUSH_NULL
+    
+      76           LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                   LOAD_ATTR                4 (user_id)
+                   LOAD_FAST                0 (body)
+                   LOAD_ATTR                6 (plan)
+                   LOAD_FAST                0 (body)
+                   LOAD_ATTR                8 (payment_method_id)
+    
+      75           CALL                     4
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   RETURN_VALUE
+           L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# --- Nested code object: change_plan ---
+    # co_names: ('billing_service', 'change_plan', 'user_id', 'new_plan')
+    # co_varnames: ('body', 'current_user', 'db')
+      80           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+      86           LOAD_GLOBAL              0 (billing_service)
+                   LOAD_ATTR                2 (change_plan)
+                   PUSH_NULL
+                   LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                   LOAD_ATTR                4 (user_id)
+                   LOAD_FAST                0 (body)
+                   LOAD_ATTR                6 (new_plan)
+                   CALL                     3
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   RETURN_VALUE
+           L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# --- Nested code object: cancel_subscription ---
+    # co_names: ('billing_service', 'cancel_subscription', 'user_id')
+    # co_varnames: ('current_user', 'db')
+      89           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+      94           LOAD_GLOBAL              0 (billing_service)
+                   LOAD_ATTR                2 (cancel_subscription)
+                   PUSH_NULL
+                   LOAD_FAST_LOAD_FAST     16 (db, current_user)
+                   LOAD_ATTR                4 (user_id)
+                   CALL                     2
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   RETURN_VALUE
+           L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# --- Nested code object: list_payment_methods ---
+    # co_names: ('billing_service', 'list_payment_methods', 'user_id', 'PaymentMethodsListResponse')
+    # co_varnames: ('current_user', 'db', 'methods')
+      97           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+     102           LOAD_GLOBAL              0 (billing_service)
+                   LOAD_ATTR                2 (list_payment_methods)
+                   PUSH_NULL
+                   LOAD_FAST_LOAD_FAST     16 (db, current_user)
+                   LOAD_ATTR                4 (user_id)
+                   CALL                     2
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   STORE_FAST               2 (methods)
+    
+     103           LOAD_GLOBAL              7 (PaymentMethodsListResponse + NULL)
+                   LOAD_FAST                2 (methods)
+                   LOAD_CONST               1 (('payment_methods',))
+                   CALL_KW                  1
+                   RETURN_VALUE
+    
+     102   L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 13 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# --- Nested code object: add_payment_method ---
+    # co_names: ('billing_service', 'add_payment_method', 'user_id', 'payment_method_id', 'set_as_default')
+    # co_varnames: ('body', 'current_user', 'db')
+     106           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+     112           LOAD_GLOBAL              0 (billing_service)
+                   LOAD_ATTR                2 (add_payment_method)
+                   PUSH_NULL
+    
+     113           LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                   LOAD_ATTR                4 (user_id)
+                   LOAD_FAST                0 (body)
+                   LOAD_ATTR                6 (payment_method_id)
+                   LOAD_FAST                0 (body)
+                   LOAD_ATTR                8 (set_as_default)
+    
+     112           CALL                     4
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   RETURN_VALUE
+           L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# --- Nested code object: remove_payment_method ---
+    # co_names: ('billing_service', 'remove_payment_method', 'user_id')
+    # co_varnames: ('pm_id', 'current_user', 'db')
+     117           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+     123           LOAD_GLOBAL              0 (billing_service)
+                   LOAD_ATTR                2 (remove_payment_method)
+                   PUSH_NULL
+                   LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                   LOAD_ATTR                4 (user_id)
+                   LOAD_FAST                0 (pm_id)
+                   CALL                     3
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   POP_TOP
+    
+     124           LOAD_CONST               1 ('ok')
+                   LOAD_CONST               2 (True)
+                   BUILD_MAP                1
+                   RETURN_VALUE
+    
+     123   L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 8 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# --- Nested code object: set_default_payment_method ---
+    # co_names: ('billing_service', 'set_default_payment_method', 'user_id')
+    # co_varnames: ('pm_id', 'current_user', 'db')
+     127           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+     133           LOAD_GLOBAL              0 (billing_service)
+                   LOAD_ATTR                2 (set_default_payment_method)
+                   PUSH_NULL
+                   LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                   LOAD_ATTR                4 (user_id)
+                   LOAD_FAST                0 (pm_id)
+                   CALL                     3
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   POP_TOP
+    
+     134           LOAD_CONST               1 ('ok')
+                   LOAD_CONST               2 (True)
+                   BUILD_MAP                1
+                   RETURN_VALUE
+    
+     133   L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 8 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# co_names: ('__doc__', 'uuid', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.database', 'get_db', 'app.schemas.billing', 'AddPaymentMethodRequest', 'BillingPlanResponse', 'BillingPlansListResponse', 'BillingStatusResponse', 'CancelResponse', 'ChangePlanRequest', 'ChangePlanResponse', 'PaymentMethodResponse', 'PaymentMethodsListResponse', 'SetupIntentResponse', 'SubscribeRequest', 'SubscribeResponse', 'app.services', 'billing_service', 'app.services.billing_config_service', 'get_billing_config_async', 'router', 'get', 'get_plans', 'get_billing_status', 'post', 'create_setup_intent', 'subscribe', 'change_plan', 'cancel_subscription', 'list_payment_methods', 'add_payment_method', 'delete', 'UUID', 'dict', 'remove_payment_method', 'put', 'set_default_payment_method')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Billing endpoints: status, setup-intent, subscribe, change-plan, cancel, plans, payment-methods.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (uuid)
+              STORE_NAME               1 (uuid)
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('APIRouter', 'Depends'))
+              IMPORT_NAME              2 (fastapi)
+              IMPORT_FROM              3 (APIRouter)
+              STORE_NAME               3 (APIRouter)
+              IMPORT_FROM              4 (Depends)
+              STORE_NAME               4 (Depends)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('AsyncSession',))
+              IMPORT_NAME              5 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM              6 (AsyncSession)
+              STORE_NAME               6 (AsyncSession)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('CurrentUser', 'get_current_user'))
+              IMPORT_NAME              7 (app.core.dependencies)
+              IMPORT_FROM              8 (CurrentUser)
+              STORE_NAME               8 (CurrentUser)
+              IMPORT_FROM              9 (get_current_user)
+              STORE_NAME               9 (get_current_user)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('get_db',))
+              IMPORT_NAME             10 (app.database)
+              IMPORT_FROM             11 (get_db)
+              STORE_NAME              11 (get_db)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('AddPaymentMethodRequest', 'BillingPlanResponse', 'BillingPlansListResponse', 'BillingStatusResponse', 'CancelResponse', 'ChangePlanRequest', 'ChangePlanResponse', 'PaymentMethodResponse', 'PaymentMethodsListResponse', 'SetupIntentResponse', 'SubscribeRequest', 'SubscribeResponse'))
+              IMPORT_NAME             12 (app.schemas.billing)
+              IMPORT_FROM             13 (AddPaymentMethodRequest)
+              STORE_NAME              13 (AddPaymentMethodRequest)
+              IMPORT_FROM             14 (BillingPlanResponse)
+              STORE_NAME              14 (BillingPlanResponse)
+              IMPORT_FROM             15 (BillingPlansListResponse)
+              STORE_NAME              15 (BillingPlansListResponse)
+              IMPORT_FROM             16 (BillingStatusResponse)
+              STORE_NAME              16 (BillingStatusResponse)
+              IMPORT_FROM             17 (CancelResponse)
+              STORE_NAME              17 (CancelResponse)
+              IMPORT_FROM             18 (ChangePlanRequest)
+              STORE_NAME              18 (ChangePlanRequest)
+              IMPORT_FROM             19 (ChangePlanResponse)
+              STORE_NAME              19 (ChangePlanResponse)
+              IMPORT_FROM             20 (PaymentMethodResponse)
+              STORE_NAME              20 (PaymentMethodResponse)
+              IMPORT_FROM             21 (PaymentMethodsListResponse)
+              STORE_NAME              21 (PaymentMethodsListResponse)
+              IMPORT_FROM             22 (SetupIntentResponse)
+              STORE_NAME              22 (SetupIntentResponse)
+              IMPORT_FROM             23 (SubscribeRequest)
+              STORE_NAME              23 (SubscribeRequest)
+              IMPORT_FROM             24 (SubscribeResponse)
+              STORE_NAME              24 (SubscribeResponse)
+              POP_TOP
+
+ 24           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('billing_service',))
+              IMPORT_NAME             25 (app.services)
+              IMPORT_FROM             26 (billing_service)
+              STORE_NAME              26 (billing_service)
+              POP_TOP
+
+ 25           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('get_billing_config_async',))
+              IMPORT_NAME             27 (app.services.billing_config_service)
+              IMPORT_FROM             28 (get_billing_config_async)
+              STORE_NAME              28 (get_billing_config_async)
+              POP_TOP
+
+ 27           LOAD_NAME                3 (APIRouter)
+              PUSH_NULL
+              CALL                     0
+              STORE_NAME              29 (router)
+
+ 30           LOAD_NAME               29 (router)
+              LOAD_ATTR               61 (get + NULL|self)
+              LOAD_CONST              10 ('/plans')
+              LOAD_NAME               15 (BillingPlansListResponse)
+              LOAD_CONST              11 (('response_model',))
+              CALL_KW                  2
+
+ 32           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME                9 (get_current_user)
+              CALL                     1
+
+ 31           BUILD_TUPLE              1
+              LOAD_CONST              12 ('_current_user')
+
+ 32           LOAD_NAME                8 (CurrentUser)
+
+ 31           LOAD_CONST              13 ('return')
+
+ 33           LOAD_NAME               15 (BillingPlansListResponse)
+
+ 31           BUILD_TUPLE              4
+              LOAD_CONST              14 (<code object get_plans at 0x0000024C0FBE97B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 30>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 30           CALL                     0
+
+ 31           STORE_NAME              31 (get_plans)
+
+ 53           LOAD_NAME               29 (router)
+              LOAD_ATTR               61 (get + NULL|self)
+              LOAD_CONST              15 ('/status')
+              LOAD_NAME               16 (BillingStatusResponse)
+              LOAD_CONST              11 (('response_model',))
+              CALL_KW                  2
+
+ 55           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME                9 (get_current_user)
+              CALL                     1
+
+ 56           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME               11 (get_db)
+              CALL                     1
+
+ 54           BUILD_TUPLE              2
+              LOAD_CONST              16 ('current_user')
+
+ 55           LOAD_NAME                8 (CurrentUser)
+
+ 54           LOAD_CONST              17 ('db')
+
+ 56           LOAD_NAME                6 (AsyncSession)
+
+ 54           LOAD_CONST              13 ('return')
+
+ 57           LOAD_NAME               16 (BillingStatusResponse)
+
+ 54           BUILD_TUPLE              6
+              LOAD_CONST              18 (<code object get_billing_status at 0x0000024C0EF12760, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 53>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 53           CALL                     0
+
+ 54           STORE_NAME              32 (get_billing_status)
+
+ 61           LOAD_NAME               29 (router)
+              LOAD_ATTR               67 (post + NULL|self)
+              LOAD_CONST              19 ('/setup-intent')
+              LOAD_NAME               22 (SetupIntentResponse)
+              LOAD_CONST              11 (('response_model',))
+              CALL_KW                  2
+
+ 63           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME                9 (get_current_user)
+              CALL                     1
+
+ 64           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME               11 (get_db)
+              CALL                     1
+
+ 62           BUILD_TUPLE              2
+              LOAD_CONST              16 ('current_user')
+
+ 63           LOAD_NAME                8 (CurrentUser)
+
+ 62           LOAD_CONST              17 ('db')
+
+ 64           LOAD_NAME                6 (AsyncSession)
+
+ 62           LOAD_CONST              13 ('return')
+
+ 65           LOAD_NAME               22 (SetupIntentResponse)
+
+ 62           BUILD_TUPLE              6
+              LOAD_CONST              20 (<code object create_setup_intent at 0x0000024C0EF10D40, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 61>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 61           CALL                     0
+
+ 62           STORE_NAME              34 (create_setup_intent)
+
+ 69           LOAD_NAME               29 (router)
+              LOAD_ATTR               67 (post + NULL|self)
+              LOAD_CONST              21 ('/subscribe')
+              LOAD_NAME               24 (SubscribeResponse)
+              LOAD_CONST              11 (('response_model',))
+              CALL_KW                  2
+
+ 72           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME                9 (get_current_user)
+              CALL                     1
+
+ 73           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME               11 (get_db)
+              CALL                     1
+
+ 70           BUILD_TUPLE              2
+              LOAD_CONST              22 ('body')
+
+ 71           LOAD_NAME               23 (SubscribeRequest)
+
+ 70           LOAD_CONST              16 ('current_user')
+
+ 72           LOAD_NAME                8 (CurrentUser)
+
+ 70           LOAD_CONST              17 ('db')
+
+ 73           LOAD_NAME                6 (AsyncSession)
+
+ 70           LOAD_CONST              13 ('return')
+
+ 74           LOAD_NAME               24 (SubscribeResponse)
+
+ 70           BUILD_TUPLE              8
+              LOAD_CONST              23 (<code object subscribe at 0x0000024C0EEFA6B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 69>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 69           CALL                     0
+
+ 70           STORE_NAME              35 (subscribe)
+
+ 80           LOAD_NAME               29 (router)
+              LOAD_ATTR               67 (post + NULL|self)
+              LOAD_CONST              24 ('/change-plan')
+              LOAD_NAME               19 (ChangePlanResponse)
+              LOAD_CONST              11 (('response_model',))
+              CALL_KW                  2
+
+ 83           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME                9 (get_current_user)
+              CALL                     1
+
+ 84           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME               11 (get_db)
+              CALL                     1
+
+ 81           BUILD_TUPLE              2
+              LOAD_CONST              22 ('body')
+
+ 82           LOAD_NAME               18 (ChangePlanRequest)
+
+ 81           LOAD_CONST              16 ('current_user')
+
+ 83           LOAD_NAME                8 (CurrentUser)
+
+ 81           LOAD_CONST              17 ('db')
+
+ 84           LOAD_NAME                6 (AsyncSession)
+
+ 81           LOAD_CONST              13 ('return')
+
+ 85           LOAD_NAME               19 (ChangePlanResponse)
+
+ 81           BUILD_TUPLE              8
+              LOAD_CONST              25 (<code object change_plan at 0x0000024C114987B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 80>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 80           CALL                     0
+
+ 81           STORE_NAME              36 (change_plan)
+
+ 89           LOAD_NAME               29 (router)
+              LOAD_ATTR               67 (post + NULL|self)
+              LOAD_CONST              26 ('/cancel')
+              LOAD_NAME               17 (CancelResponse)
+              LOAD_CONST              11 (('response_model',))
+              CALL_KW                  2
+
+ 91           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME                9 (get_current_user)
+              CALL                     1
+
+ 92           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME               11 (get_db)
+              CALL                     1
+
+ 90           BUILD_TUPLE              2
+              LOAD_CONST              16 ('current_user')
+
+ 91           LOAD_NAME                8 (CurrentUser)
+
+ 90           LOAD_CONST              17 ('db')
+
+ 92           LOAD_NAME                6 (AsyncSession)
+
+ 90           LOAD_CONST              13 ('return')
+
+ 93           LOAD_NAME               17 (CancelResponse)
+
+ 90           BUILD_TUPLE              6
+              LOAD_CONST              27 (<code object cancel_subscription at 0x0000024C0EF13B90, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 89>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 89           CALL                     0
+
+ 90           STORE_NAME              37 (cancel_subscription)
+
+ 97           LOAD_NAME               29 (router)
+              LOAD_ATTR               61 (get + NULL|self)
+              LOAD_CONST              28 ('/payment-methods')
+              LOAD_NAME               21 (PaymentMethodsListResponse)
+              LOAD_CONST              11 (('response_model',))
+              CALL_KW                  2
+
+ 99           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME                9 (get_current_user)
+              CALL                     1
+
+100           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME               11 (get_db)
+              CALL                     1
+
+ 98           BUILD_TUPLE              2
+              LOAD_CONST              16 ('current_user')
+
+ 99           LOAD_NAME                8 (CurrentUser)
+
+ 98           LOAD_CONST              17 ('db')
+
+100           LOAD_NAME                6 (AsyncSession)
+
+ 98           LOAD_CONST              13 ('return')
+
+101           LOAD_NAME               21 (PaymentMethodsListResponse)
+
+ 98           BUILD_TUPLE              6
+              LOAD_CONST              29 (<code object list_payment_methods at 0x0000024C11498530, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 97>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 97           CALL                     0
+
+ 98           STORE_NAME              38 (list_payment_methods)
+
+106           LOAD_NAME               29 (router)
+              LOAD_ATTR               67 (post + NULL|self)
+              LOAD_CONST              30 ('/payment-methods/add')
+              LOAD_NAME               20 (PaymentMethodResponse)
+              LOAD_CONST              11 (('response_model',))
+              CALL_KW                  2
+
+109           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME                9 (get_current_user)
+              CALL                     1
+
+110           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME               11 (get_db)
+              CALL                     1
+
+107           BUILD_TUPLE              2
+              LOAD_CONST              22 ('body')
+
+108           LOAD_NAME               13 (AddPaymentMethodRequest)
+
+107           LOAD_CONST              16 ('current_user')
+
+109           LOAD_NAME                8 (CurrentUser)
+
+107           LOAD_CONST              17 ('db')
+
+110           LOAD_NAME                6 (AsyncSession)
+
+107           LOAD_CONST              13 ('return')
+
+111           LOAD_NAME               20 (PaymentMethodResponse)
+
+107           BUILD_TUPLE              8
+              LOAD_CONST              31 (<code object add_payment_method at 0x0000024C0EEFAD90, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 106>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+106           CALL                     0
+
+107           STORE_NAME              39 (add_payment_method)
+
+117           LOAD_NAME               29 (router)
+              LOAD_ATTR               81 (delete + NULL|self)
+              LOAD_CONST              32 ('/payment-methods/{pm_id}')
+              CALL                     1
+
+120           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME                9 (get_current_user)
+              CALL                     1
+
+121           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME               11 (get_db)
+              CALL                     1
+
+118           BUILD_TUPLE              2
+              LOAD_CONST              33 ('pm_id')
+
+119           LOAD_NAME                1 (uuid)
+              LOAD_ATTR               82 (UUID)
+
+118           LOAD_CONST              16 ('current_user')
+
+120           LOAD_NAME                8 (CurrentUser)
+
+118           LOAD_CONST              17 ('db')
+
+121           LOAD_NAME                6 (AsyncSession)
+
+118           LOAD_CONST              13 ('return')
+
+122           LOAD_NAME               42 (dict)
+
+118           BUILD_TUPLE              8
+              LOAD_CONST              34 (<code object remove_payment_method at 0x0000024C0EF13CC0, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 117>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+117           CALL                     0
+
+118           STORE_NAME              43 (remove_payment_method)
+
+127           LOAD_NAME               29 (router)
+              LOAD_ATTR               89 (put + NULL|self)
+              LOAD_CONST              35 ('/payment-methods/{pm_id}/default')
+              CALL                     1
+
+130           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME                9 (get_current_user)
+              CALL                     1
+
+131           LOAD_NAME                4 (Depends)
+              PUSH_NULL
+              LOAD_NAME               11 (get_db)
+              CALL                     1
+
+128           BUILD_TUPLE              2
+              LOAD_CONST              33 ('pm_id')
+
+129           LOAD_NAME                1 (uuid)
+              LOAD_ATTR               82 (UUID)
+
+128           LOAD_CONST              16 ('current_user')
+
+130           LOAD_NAME                8 (CurrentUser)
+
+128           LOAD_CONST              17 ('db')
+
+131           LOAD_NAME                6 (AsyncSession)
+
+128           LOAD_CONST              13 ('return')
+
+132           LOAD_NAME               42 (dict)
+
+128           BUILD_TUPLE              8
+              LOAD_CONST              36 (<code object set_default_payment_method at 0x0000024C0EF13DF0, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 127>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+127           CALL                     0
+
+128           STORE_NAME              45 (set_default_payment_method)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object get_plans at 0x0000024C0FBE97B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 30>:
+  30            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  34            LOAD_GLOBAL              1 (get_billing_config_async + NULL)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               1 (config)
+
+  35            LOAD_GLOBAL              3 (BillingPlansListResponse + NULL)
+
+  48            LOAD_GLOBAL              5 (sorted + NULL)
+                LOAD_FAST                1 (config)
+                LOAD_ATTR                6 (plans)
+                LOAD_CONST               1 (<code object <lambda> at 0x0000024C0EF2A5B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 48>)
+                MAKE_FUNCTION
+                LOAD_CONST               2 (('key',))
+                CALL_KW                  2
+                GET_ITER
+
+  36            LOAD_FAST_AND_CLEAR      2 (p)
+                SWAP                     2
+        L6:     BUILD_LIST               0
+                SWAP                     2
+
+  48            GET_ITER
+        L7:     FOR_ITER               110 (to L8)
+                STORE_FAST               2 (p)
+
+  37            LOAD_GLOBAL              9 (BillingPlanResponse + NULL)
+
+  38            LOAD_FAST                2 (p)
+                LOAD_ATTR               10 (code)
+
+  39            LOAD_FAST                2 (p)
+                LOAD_ATTR               12 (name)
+
+  40            LOAD_FAST                2 (p)
+                LOAD_ATTR               14 (price_usd)
+
+  41            LOAD_FAST                2 (p)
+                LOAD_ATTR               16 (included_minutes)
+
+  42            LOAD_FAST                2 (p)
+                LOAD_ATTR               18 (requires_credit_card)
+
+  43            LOAD_FAST                2 (p)
+                LOAD_ATTR               20 (limited)
+
+  44            LOAD_FAST                2 (p)
+                LOAD_ATTR               22 (sort_order)
+
+  45            LOAD_FAST                2 (p)
+                LOAD_ATTR               24 (description)
+
+  46            LOAD_FAST                2 (p)
+                LOAD_ATTR               26 (icon)
+
+  37            LOAD_CONST               3 (('code', 'name', 'price_usd', 'included_minutes', 'requires_credit_card', 'limited', 'sort_order', 'description', 'icon'))
+                CALL_KW                  9
+                LIST_APPEND              2
+                JUMP_BACKWARD          112 (to L7)
+
+  48    L8:     END_FOR
+                POP_TOP
+
+  36    L9:     SWAP                     2
+                STORE_FAST               2 (p)
+
+  35            LOAD_CONST               4 (('plans',))
+                CALL_KW                  1
+                RETURN_VALUE
+
+  34   L10:     CLEANUP_THROW
+       L11:     JUMP_BACKWARD_NO_INTERRUPT 154 (to L5)
+
+  --   L12:     SWAP                     2
+                POP_TOP
+
+  36            SWAP                     2
+                STORE_FAST               2 (p)
+                RERAISE                  0
+
+  --   L13:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L13 [0] lasti
+  L3 to L4 -> L10 [2]
+  L4 to L6 -> L13 [0] lasti
+  L6 to L9 -> L12 [4]
+  L9 to L11 -> L13 [0] lasti
+  L12 to L13 -> L13 [0] lasti
+
+Disassembly of <code object <lambda> at 0x0000024C0EF2A5B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 48>:
+ 48           RESUME                   0
+              LOAD_FAST                0 (x)
+              LOAD_ATTR                0 (sort_order)
+              RETURN_VALUE
+
+Disassembly of <code object get_billing_status at 0x0000024C0EF12760, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 53>:
+  53           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+  58           LOAD_GLOBAL              0 (billing_service)
+               LOAD_ATTR                2 (get_billing_status)
+               PUSH_NULL
+               LOAD_FAST_LOAD_FAST     16 (db, current_user)
+               LOAD_ATTR                4 (user_id)
+               CALL                     2
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               RETURN_VALUE
+       L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti
+
+Disassembly of <code object create_setup_intent at 0x0000024C0EF10D40, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 61>:
+  61           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+  66           LOAD_GLOBAL              0 (billing_service)
+               LOAD_ATTR                2 (create_setup_intent)
+               PUSH_NULL
+               LOAD_FAST_LOAD_FAST     16 (db, current_user)
+               LOAD_ATTR                4 (user_id)
+               CALL                     2
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               RETURN_VALUE
+       L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti
+
+Disassembly of <code object subscribe at 0x0000024C0EEFA6B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 69>:
+  69           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+  75           LOAD_GLOBAL              0 (billing_service)
+               LOAD_ATTR                2 (subscribe)
+               PUSH_NULL
+
+  76           LOAD_FAST_LOAD_FAST     33 (db, current_user)
+               LOAD_ATTR                4 (user_id)
+               LOAD_FAST                0 (body)
+               LOAD_ATTR                6 (plan)
+               LOAD_FAST                0 (body)
+               LOAD_ATTR                8 (payment_method_id)
+
+  75           CALL                     4
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               RETURN_VALUE
+       L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti
+
+Disassembly of <code object change_plan at 0x0000024C114987B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 80>:
+  80           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+  86           LOAD_GLOBAL              0 (billing_service)
+               LOAD_ATTR                2 (change_plan)
+               PUSH_NULL
+               LOAD_FAST_LOAD_FAST     33 (db, current_user)
+               LOAD_ATTR                4 (user_id)
+               LOAD_FAST                0 (body)
+               LOAD_ATTR                6 (new_plan)
+               CALL                     3
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               RETURN_VALUE
+       L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti
+
+Disassembly of <code object cancel_subscription at 0x0000024C0EF13B90, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 89>:
+  89           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+  94           LOAD_GLOBAL              0 (billing_service)
+               LOAD_ATTR                2 (cancel_subscription)
+               PUSH_NULL
+               LOAD_FAST_LOAD_FAST     16 (db, current_user)
+               LOAD_ATTR                4 (user_id)
+               CALL                     2
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               RETURN_VALUE
+       L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti
+
+Disassembly of <code object list_payment_methods at 0x0000024C11498530, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 97>:
+  97           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+ 102           LOAD_GLOBAL              0 (billing_service)
+               LOAD_ATTR                2 (list_payment_methods)
+               PUSH_NULL
+               LOAD_FAST_LOAD_FAST     16 (db, current_user)
+               LOAD_ATTR                4 (user_id)
+               CALL                     2
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               STORE_FAST               2 (methods)
+
+ 103           LOAD_GLOBAL              7 (PaymentMethodsListResponse + NULL)
+               LOAD_FAST                2 (methods)
+               LOAD_CONST               1 (('payment_methods',))
+               CALL_KW                  1
+               RETURN_VALUE
+
+ 102   L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 13 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti
+
+Disassembly of <code object add_payment_method at 0x0000024C0EEFAD90, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 106>:
+ 106           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+ 112           LOAD_GLOBAL              0 (billing_service)
+               LOAD_ATTR                2 (add_payment_method)
+               PUSH_NULL
+
+ 113           LOAD_FAST_LOAD_FAST     33 (db, current_user)
+               LOAD_ATTR                4 (user_id)
+               LOAD_FAST                0 (body)
+               LOAD_ATTR                6 (payment_method_id)
+               LOAD_FAST                0 (body)
+               LOAD_ATTR                8 (set_as_default)
+
+ 112           CALL                     4
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               RETURN_VALUE
+       L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti
+
+Disassembly of <code object remove_payment_method at 0x0000024C0EF13CC0, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 117>:
+ 117           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+ 123           LOAD_GLOBAL              0 (billing_service)
+               LOAD_ATTR                2 (remove_payment_method)
+               PUSH_NULL
+               LOAD_FAST_LOAD_FAST     33 (db, current_user)
+               LOAD_ATTR                4 (user_id)
+               LOAD_FAST                0 (pm_id)
+               CALL                     3
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               POP_TOP
+
+ 124           LOAD_CONST               1 ('ok')
+               LOAD_CONST               2 (True)
+               BUILD_MAP                1
+               RETURN_VALUE
+
+ 123   L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 8 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti
+
+Disassembly of <code object set_default_payment_method at 0x0000024C0EF13DF0, file "D:\fluence\Github\mattbot\backend\app\api\v1\billing.py", line 127>:
+ 127           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+ 133           LOAD_GLOBAL              0 (billing_service)
+               LOAD_ATTR                2 (set_default_payment_method)
+               PUSH_NULL
+               LOAD_FAST_LOAD_FAST     33 (db, current_user)
+               LOAD_ATTR                4 (user_id)
+               LOAD_FAST                0 (pm_id)
+               CALL                     3
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               POP_TOP
+
+ 134           LOAD_CONST               1 ('ok')
+               LOAD_CONST               2 (True)
+               BUILD_MAP                1
+               RETURN_VALUE
+
+ 133   L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 8 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti

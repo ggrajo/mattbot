@@ -1,0 +1,367 @@
+# Bytecode dump of: onboarding.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\schemas\onboarding.py
+# co_names: ('__future__', 'annotations', 'pydantic', 'BaseModel', 'field_validator', 'ONBOARDING_STEPS', 'COMPLETABLE_STEPS', 'OnboardingResponse', 'OnboardingCompleteStepRequest', 'OnboardingCompleteStepResponse')
+# co_consts (strings): ['OnboardingResponse', 'OnboardingCompleteStepRequest', 'OnboardingCompleteStepResponse']
+
+# --- Nested code object: OnboardingResponse ---
+    # DOCSTRING: """OnboardingResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'next_step', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+     33           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('OnboardingResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (33)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     34           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('current_step')
+                  STORE_SUBSCR
+    
+     35           LOAD_CONST               4 ('list[str]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('steps_completed')
+                  STORE_SUBSCR
+    
+     36           LOAD_CONST               6 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('is_complete')
+                  STORE_SUBSCR
+    
+     37           LOAD_CONST               8 (None)
+                  STORE_NAME               5 (next_step)
+                  LOAD_CONST               9 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              10 ('next_step')
+                  STORE_SUBSCR
+    
+     39           LOAD_CONST              11 ('from_attributes')
+                  LOAD_CONST              12 (True)
+                  BUILD_MAP                1
+                  STORE_NAME               6 (model_config)
+                  LOAD_CONST              13 (())
+                  STORE_NAME               7 (__static_attributes__)
+                  RETURN_CONST             8 (None)
+    
+# --- Nested code object: OnboardingCompleteStepRequest ---
+    # DOCSTRING: """OnboardingCompleteStepRequest"""
+    # --- Nested code object: OnboardingCompleteStepRequest.validate_step ---
+        # co_names: ('COMPLETABLE_STEPS', 'ValueError', 'join', 'sorted')
+        # co_varnames: ('cls', 'v')
+         45           RESUME                   0
+        
+         48           LOAD_FAST                1 (v)
+                      LOAD_GLOBAL              0 (COMPLETABLE_STEPS)
+                      CONTAINS_OP              1
+                      POP_JUMP_IF_FALSE       42 (to L1)
+        
+         49           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               1 ('Step must be one of: ')
+                      LOAD_CONST               2 (', ')
+                      LOAD_ATTR                5 (join + NULL|self)
+                      LOAD_GLOBAL              7 (sorted + NULL)
+                      LOAD_GLOBAL              0 (COMPLETABLE_STEPS)
+                      CALL                     1
+                      CALL                     1
+                      FORMAT_SIMPLE
+                      BUILD_STRING             2
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         50   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'field_validator', 'classmethod', 'validate_step', '__static_attributes__')
+    # co_varnames: ()
+     42           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('OnboardingCompleteStepRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (42)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     43           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('step')
+                  STORE_SUBSCR
+    
+     45           LOAD_NAME                5 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               3 ('step')
+                  CALL                     1
+    
+     46           LOAD_NAME                6 (classmethod)
+    
+     47           LOAD_CONST               7 (('v', 'str', 'return', 'str'))
+                  LOAD_CONST               4 (<code object validate_step at 0x0000024C114988F0, file "D:\fluence\Github\mattbot\backend\app\schemas\onboarding.py", line 45>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     46           CALL                     0
+    
+     45           CALL                     0
+    
+     47           STORE_NAME               7 (validate_step)
+                  LOAD_CONST               5 (())
+                  STORE_NAME               8 (__static_attributes__)
+                  RETURN_CONST             6 (None)
+    
+    Disassembly of <code object validate_step at 0x0000024C114988F0, file "D:\fluence\Github\mattbot\backend\app\schemas\onboarding.py", line 45>:
+     45           RESUME                   0
+    
+     48           LOAD_FAST                1 (v)
+                  LOAD_GLOBAL              0 (COMPLETABLE_STEPS)
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_FALSE       42 (to L1)
+    
+     49           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               1 ('Step must be one of: ')
+                  LOAD_CONST               2 (', ')
+                  LOAD_ATTR                5 (join + NULL|self)
+                  LOAD_GLOBAL              7 (sorted + NULL)
+                  LOAD_GLOBAL              0 (COMPLETABLE_STEPS)
+                  CALL                     1
+                  CALL                     1
+                  FORMAT_SIMPLE
+                  BUILD_STRING             2
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     50   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+# --- Nested code object: OnboardingCompleteStepResponse ---
+    # DOCSTRING: """OnboardingCompleteStepResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'next_step', '__static_attributes__')
+    # co_varnames: ()
+     53           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('OnboardingCompleteStepResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (53)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     54           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('current_step')
+                  STORE_SUBSCR
+    
+     55           LOAD_CONST               4 ('list[str]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('steps_completed')
+                  STORE_SUBSCR
+    
+     56           LOAD_CONST               6 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('is_complete')
+                  STORE_SUBSCR
+    
+     57           LOAD_CONST               8 (None)
+                  STORE_NAME               5 (next_step)
+                  LOAD_CONST               9 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              10 ('next_step')
+                  STORE_SUBSCR
+                  LOAD_CONST              11 (())
+                  STORE_NAME               6 (__static_attributes__)
+                  RETURN_CONST             8 (None)
+    
+# co_names: ('__future__', 'annotations', 'pydantic', 'BaseModel', 'field_validator', 'ONBOARDING_STEPS', 'COMPLETABLE_STEPS', 'OnboardingResponse', 'OnboardingCompleteStepRequest', 'OnboardingCompleteStepResponse')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 (0)
+              LOAD_CONST               1 (('annotations',))
+              IMPORT_NAME              0 (__future__)
+              IMPORT_FROM              1 (annotations)
+              STORE_NAME               1 (annotations)
+              POP_TOP
+
+  3           LOAD_CONST               0 (0)
+              LOAD_CONST               2 (('BaseModel', 'field_validator'))
+              IMPORT_NAME              2 (pydantic)
+              IMPORT_FROM              3 (BaseModel)
+              STORE_NAME               3 (BaseModel)
+              IMPORT_FROM              4 (field_validator)
+              STORE_NAME               4 (field_validator)
+              POP_TOP
+
+  5           BUILD_LIST               0
+              LOAD_CONST               3 (('account_created', 'email_verified', 'mfa_enrolled', 'privacy_review', 'settings_configured', 'assistant_setup', 'calendar_setup', 'plan_selected', 'payment_method_added', 'number_provisioned', 'call_modes_configured', 'onboarding_complete'))
+              LIST_EXTEND              1
+              STORE_NAME               5 (ONBOARDING_STEPS)
+
+ 20           BUILD_SET                0
+              LOAD_CONST               4 (frozenset({'plan_selected', 'call_modes_configured', 'assistant_setup', 'onboarding_complete', 'payment_method_added', 'privacy_review', 'number_provisioned', 'settings_configured', 'calendar_setup'}))
+              SET_UPDATE               1
+              STORE_NAME               6 (COMPLETABLE_STEPS)
+
+ 33           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               5 (<code object OnboardingResponse at 0x0000024C11496310, file "D:\fluence\Github\mattbot\backend\app\schemas\onboarding.py", line 33>)
+              MAKE_FUNCTION
+              LOAD_CONST               6 ('OnboardingResponse')
+              LOAD_NAME                3 (BaseModel)
+              CALL                     3
+              STORE_NAME               7 (OnboardingResponse)
+
+ 42           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               7 (<code object OnboardingCompleteStepRequest at 0x0000024C11495D70, file "D:\fluence\Github\mattbot\backend\app\schemas\onboarding.py", line 42>)
+              MAKE_FUNCTION
+              LOAD_CONST               8 ('OnboardingCompleteStepRequest')
+              LOAD_NAME                3 (BaseModel)
+              CALL                     3
+              STORE_NAME               8 (OnboardingCompleteStepRequest)
+
+ 53           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               9 (<code object OnboardingCompleteStepResponse at 0x0000024C1141B990, file "D:\fluence\Github\mattbot\backend\app\schemas\onboarding.py", line 53>)
+              MAKE_FUNCTION
+              LOAD_CONST              10 ('OnboardingCompleteStepResponse')
+              LOAD_NAME                3 (BaseModel)
+              CALL                     3
+              STORE_NAME               9 (OnboardingCompleteStepResponse)
+              RETURN_CONST            11 (None)
+
+Disassembly of <code object OnboardingResponse at 0x0000024C11496310, file "D:\fluence\Github\mattbot\backend\app\schemas\onboarding.py", line 33>:
+ 33           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('OnboardingResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (33)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 34           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('current_step')
+              STORE_SUBSCR
+
+ 35           LOAD_CONST               4 ('list[str]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('steps_completed')
+              STORE_SUBSCR
+
+ 36           LOAD_CONST               6 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('is_complete')
+              STORE_SUBSCR
+
+ 37           LOAD_CONST               8 (None)
+              STORE_NAME               5 (next_step)
+              LOAD_CONST               9 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('next_step')
+              STORE_SUBSCR
+
+ 39           LOAD_CONST              11 ('from_attributes')
+              LOAD_CONST              12 (True)
+              BUILD_MAP                1
+              STORE_NAME               6 (model_config)
+              LOAD_CONST              13 (())
+              STORE_NAME               7 (__static_attributes__)
+              RETURN_CONST             8 (None)
+
+Disassembly of <code object OnboardingCompleteStepRequest at 0x0000024C11495D70, file "D:\fluence\Github\mattbot\backend\app\schemas\onboarding.py", line 42>:
+ 42           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('OnboardingCompleteStepRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (42)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 43           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('step')
+              STORE_SUBSCR
+
+ 45           LOAD_NAME                5 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               3 ('step')
+              CALL                     1
+
+ 46           LOAD_NAME                6 (classmethod)
+
+ 47           LOAD_CONST               7 (('v', 'str', 'return', 'str'))
+              LOAD_CONST               4 (<code object validate_step at 0x0000024C114988F0, file "D:\fluence\Github\mattbot\backend\app\schemas\onboarding.py", line 45>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 46           CALL                     0
+
+ 45           CALL                     0
+
+ 47           STORE_NAME               7 (validate_step)
+              LOAD_CONST               5 (())
+              STORE_NAME               8 (__static_attributes__)
+              RETURN_CONST             6 (None)
+
+Disassembly of <code object validate_step at 0x0000024C114988F0, file "D:\fluence\Github\mattbot\backend\app\schemas\onboarding.py", line 45>:
+ 45           RESUME                   0
+
+ 48           LOAD_FAST                1 (v)
+              LOAD_GLOBAL              0 (COMPLETABLE_STEPS)
+              CONTAINS_OP              1
+              POP_JUMP_IF_FALSE       42 (to L1)
+
+ 49           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               1 ('Step must be one of: ')
+              LOAD_CONST               2 (', ')
+              LOAD_ATTR                5 (join + NULL|self)
+              LOAD_GLOBAL              7 (sorted + NULL)
+              LOAD_GLOBAL              0 (COMPLETABLE_STEPS)
+              CALL                     1
+              CALL                     1
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 50   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object OnboardingCompleteStepResponse at 0x0000024C1141B990, file "D:\fluence\Github\mattbot\backend\app\schemas\onboarding.py", line 53>:
+ 53           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('OnboardingCompleteStepResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (53)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 54           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('current_step')
+              STORE_SUBSCR
+
+ 55           LOAD_CONST               4 ('list[str]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('steps_completed')
+              STORE_SUBSCR
+
+ 56           LOAD_CONST               6 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('is_complete')
+              STORE_SUBSCR
+
+ 57           LOAD_CONST               8 (None)
+              STORE_NAME               5 (next_step)
+              LOAD_CONST               9 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('next_step')
+              STORE_SUBSCR
+              LOAD_CONST              11 (())
+              STORE_NAME               6 (__static_attributes__)
+              RETURN_CONST             8 (None)

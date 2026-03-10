@@ -1,0 +1,3531 @@
+# Bytecode dump of: messages.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\api\v1\messages.py
+# co_names: ('__doc__', '__future__', 'annotations', 'uuid', 'datetime', 'UTC', 'fastapi', 'APIRouter', 'Depends', 'Query', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.core.encryption', 'decrypt_field', 'encrypt_field', 'app.core.rate_limiter', 'check_rate_limit', 'app.core.twilio_utils', 'extract_last4', 'hash_phone', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.models.call', 'Call', 'app.models.outbound_message', 'OutboundMessage', 'app.models.text_back_template', 'TextBackTemplate', 'app.schemas.messaging', 'TemplateListResponse', 'TemplateResponse', 'TextBackApproveRequest', 'TextBackDraftRequest', 'TextBackResponse', 'TextBackUpdateRequest', 'app.services', 'audit_service', 'router', '_DRAFT_STATUSES', '_APPROVABLE_STATUSES', 'get', 'list_text_back_templates', 'post', 'create_text_back_draft', 'patch', 'update_text_back_draft', 'approve_text_back', 'retry_text_back', 'cancel_text_back', '_get_owned_call', '_get_owned_message', '_find_draft_for_call', '_decrypt_caller_phone', '_decrypt_body', '_build_response')
+# co_consts (strings): ['Messaging / text-back API endpoints.', '/templates/text-back', '/calls/{call_id}/text-back/draft', '/actions/{action_id}/text-back', '/actions/{action_id}/approve', '/actions/{action_id}/retry', '/actions/{action_id}/cancel']
+
+# DOCSTRING: """Messaging / text-back API endpoints."""
+# --- Nested code object: list_text_back_templates ---
+    # co_names: ('select', 'TextBackTemplate', 'where', 'is_builtin', 'is_', 'category', 'tone_tag', 'order_by', 'title', 'execute', 'scalars', 'all', 'TemplateListResponse', 'TemplateResponse', 'str', 'id', 'body')
+    # co_varnames: ('current_user', 'db', 'category', 'tone_tag', 'stmt', 'result', 'templates', 't')
+      43            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      50            LOAD_GLOBAL              1 (select + NULL)
+                    LOAD_GLOBAL              2 (TextBackTemplate)
+                    CALL                     1
+                    LOAD_ATTR                5 (where + NULL|self)
+                    LOAD_GLOBAL              2 (TextBackTemplate)
+                    LOAD_ATTR                6 (is_builtin)
+                    LOAD_ATTR                9 (is_ + NULL|self)
+                    LOAD_CONST               1 (True)
+                    CALL                     1
+                    CALL                     1
+                    STORE_FAST               4 (stmt)
+    
+      51            LOAD_FAST                2 (category)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       34 (to L2)
+    
+      52            LOAD_FAST                4 (stmt)
+                    LOAD_ATTR                5 (where + NULL|self)
+                    LOAD_GLOBAL              2 (TextBackTemplate)
+                    LOAD_ATTR               10 (category)
+                    LOAD_FAST                2 (category)
+                    COMPARE_OP              72 (==)
+                    CALL                     1
+                    STORE_FAST               4 (stmt)
+    
+      53    L2:     LOAD_FAST                3 (tone_tag)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       34 (to L3)
+    
+      54            LOAD_FAST                4 (stmt)
+                    LOAD_ATTR                5 (where + NULL|self)
+                    LOAD_GLOBAL              2 (TextBackTemplate)
+                    LOAD_ATTR               12 (tone_tag)
+                    LOAD_FAST                3 (tone_tag)
+                    COMPARE_OP              72 (==)
+                    CALL                     1
+                    STORE_FAST               4 (stmt)
+    
+      55    L3:     LOAD_FAST                4 (stmt)
+                    LOAD_ATTR               15 (order_by + NULL|self)
+                    LOAD_GLOBAL              2 (TextBackTemplate)
+                    LOAD_ATTR               10 (category)
+                    LOAD_GLOBAL              2 (TextBackTemplate)
+                    LOAD_ATTR               16 (title)
+                    CALL                     2
+                    STORE_FAST               4 (stmt)
+    
+      57            LOAD_FAST                1 (db)
+                    LOAD_ATTR               19 (execute + NULL|self)
+                    LOAD_FAST                4 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L4:     SEND                     3 (to L7)
+            L5:     YIELD_VALUE              1
+            L6:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+            L7:     END_SEND
+                    STORE_FAST               5 (result)
+    
+      58            LOAD_FAST                5 (result)
+                    LOAD_ATTR               21 (scalars + NULL|self)
+                    CALL                     0
+                    LOAD_ATTR               23 (all + NULL|self)
+                    CALL                     0
+                    STORE_FAST               6 (templates)
+    
+      60            LOAD_GLOBAL             25 (TemplateListResponse + NULL)
+    
+      69            LOAD_FAST                6 (templates)
+                    GET_ITER
+    
+      61            LOAD_FAST_AND_CLEAR      7 (t)
+                    SWAP                     2
+            L8:     BUILD_LIST               0
+                    SWAP                     2
+    
+      69            GET_ITER
+            L9:     FOR_ITER                75 (to L10)
+                    STORE_FAST               7 (t)
+    
+      62            LOAD_GLOBAL             27 (TemplateResponse + NULL)
+    
+      63            LOAD_GLOBAL             29 (str + NULL)
+                    LOAD_FAST                7 (t)
+                    LOAD_ATTR               30 (id)
+                    CALL                     1
+    
+      64            LOAD_FAST                7 (t)
+                    LOAD_ATTR               10 (category)
+    
+      65            LOAD_FAST                7 (t)
+                    LOAD_ATTR               16 (title)
+    
+      66            LOAD_FAST                7 (t)
+                    LOAD_ATTR               32 (body)
+    
+      67            LOAD_FAST                7 (t)
+                    LOAD_ATTR               12 (tone_tag)
+    
+      62            LOAD_CONST               2 (('id', 'category', 'title', 'body', 'tone_tag'))
+                    CALL_KW                  5
+                    LIST_APPEND              2
+                    JUMP_BACKWARD           77 (to L9)
+    
+      69   L10:     END_FOR
+                    POP_TOP
+    
+      61   L11:     SWAP                     2
+                    STORE_FAST               7 (t)
+    
+      60            LOAD_CONST               3 (('items',))
+                    CALL_KW                  1
+                    RETURN_VALUE
+    
+      57   L12:     CLEANUP_THROW
+           L13:     JUMP_BACKWARD_NO_INTERRUPT 130 (to L7)
+    
+      --   L14:     SWAP                     2
+                    POP_TOP
+    
+      61            SWAP                     2
+                    STORE_FAST               7 (t)
+                    RERAISE                  0
+    
+      --   L15:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L5 -> L15 [0] lasti
+      L5 to L6 -> L12 [2]
+      L6 to L8 -> L15 [0] lasti
+      L8 to L11 -> L14 [4]
+      L11 to L13 -> L15 [0] lasti
+      L14 to L15 -> L15 [0] lasti
+    
+# --- Nested code object: create_text_back_draft ---
+    # co_names: ('check_rate_limit', 'user', 'id', 'settings', 'RATE_LIMIT_API_WRITE_MAX', 'RATE_LIMIT_API_WRITE_WINDOW', 'AppError', '_get_owned_call', '_find_draft_for_call', '_build_response', 'custom_body', 'template_id', 'get', 'TextBackTemplate', 'uuid', 'UUID', 'body', 'to_number', '_decrypt_caller_phone', 'encrypt_field', 'encode', 'OutboundMessage', 'hash_phone', 'extract_last4', 'add', 'flush', 'audit_service', 'log_event', 'str')
+    # co_varnames: ('call_id', 'body', 'current_user', 'db', 'allowed', '_', 'call', 'existing', 'draft_body', 'template_id_used', 'template', 'to_number', 'ct_body', 'nonce_body', 'kv_body', 'ct_to', 'nonce_to', 'kv_to', 'msg')
+      79            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      86            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+      87            LOAD_CONST               1 ('text_back_draft:')
+                    LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+      88            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+    
+      89            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+    
+      86            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   69 (allowed, _)
+    
+      91            LOAD_FAST                4 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+      92            LOAD_GLOBAL             13 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+      94    L6:     LOAD_GLOBAL             15 (_get_owned_call + NULL)
+                    LOAD_FAST_LOAD_FAST     50 (db, current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    LOAD_FAST                0 (call_id)
+                    CALL                     3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    STORE_FAST               6 (call)
+    
+      97            LOAD_GLOBAL             17 (_find_draft_for_call + NULL)
+                    LOAD_FAST_LOAD_FAST     50 (db, current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    LOAD_FAST                0 (call_id)
+                    CALL                     3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L11:     SEND                     3 (to L14)
+           L12:     YIELD_VALUE              1
+           L13:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+           L14:     END_SEND
+                    STORE_FAST               7 (existing)
+    
+      98            LOAD_FAST                7 (existing)
+                    POP_JUMP_IF_NONE        11 (to L15)
+    
+      99            LOAD_GLOBAL             19 (_build_response + NULL)
+                    LOAD_FAST                7 (existing)
+                    CALL                     1
+                    RETURN_VALUE
+    
+     102   L15:     LOAD_FAST                1 (body)
+                    LOAD_ATTR               20 (custom_body)
+                    COPY                     1
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L16)
+                    POP_TOP
+                    LOAD_CONST               7 ('')
+           L16:     STORE_FAST               8 (draft_body)
+    
+     103            LOAD_CONST               0 (None)
+                    STORE_FAST               9 (template_id_used)
+    
+     105            LOAD_FAST                1 (body)
+                    LOAD_ATTR               22 (template_id)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE      115 (to L22)
+                    LOAD_FAST                1 (body)
+                    LOAD_ATTR               20 (custom_body)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        98 (to L22)
+    
+     106            LOAD_FAST                3 (db)
+                    LOAD_ATTR               25 (get + NULL|self)
+                    LOAD_GLOBAL             26 (TextBackTemplate)
+                    LOAD_GLOBAL             28 (uuid)
+                    LOAD_ATTR               30 (UUID)
+                    PUSH_NULL
+                    LOAD_FAST                1 (body)
+                    LOAD_ATTR               22 (template_id)
+                    CALL                     1
+                    CALL                     2
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L17:     SEND                     3 (to L20)
+           L18:     YIELD_VALUE              1
+           L19:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L17)
+           L20:     END_SEND
+                    STORE_FAST              10 (template)
+    
+     107            LOAD_FAST               10 (template)
+                    POP_JUMP_IF_NOT_NONE    11 (to L21)
+    
+     108            LOAD_GLOBAL             13 (AppError + NULL)
+    
+     109            LOAD_CONST               8 ('TEMPLATE_NOT_FOUND')
+    
+     110            LOAD_CONST               9 ('Template not found')
+    
+     111            LOAD_CONST              10 (404)
+    
+     108            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     113   L21:     LOAD_FAST               10 (template)
+                    LOAD_ATTR               32 (body)
+                    STORE_FAST               8 (draft_body)
+    
+     114            LOAD_FAST               10 (template)
+                    LOAD_ATTR                4 (id)
+                    STORE_FAST               9 (template_id_used)
+    
+     116   L22:     LOAD_FAST                8 (draft_body)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L23)
+    
+     117            LOAD_GLOBAL             13 (AppError + NULL)
+    
+     118            LOAD_CONST              11 ('EMPTY_BODY')
+    
+     119            LOAD_CONST              12 ('Provide either template_id or custom_body')
+    
+     120            LOAD_CONST              13 (422)
+    
+     117            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     124   L23:     LOAD_FAST                1 (body)
+                    LOAD_ATTR               34 (to_number)
+                    STORE_FAST              11 (to_number)
+    
+     125            LOAD_FAST               11 (to_number)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L24)
+    
+     126            LOAD_GLOBAL             37 (_decrypt_caller_phone + NULL)
+                    LOAD_FAST                6 (call)
+                    CALL                     1
+                    STORE_FAST              11 (to_number)
+    
+     127   L24:     LOAD_FAST               11 (to_number)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L25)
+    
+     128            LOAD_GLOBAL             13 (AppError + NULL)
+    
+     129            LOAD_CONST              14 ('MISSING_RECIPIENT')
+    
+     130            LOAD_CONST              15 ('Cannot determine recipient; provide to_number')
+    
+     131            LOAD_CONST              13 (422)
+    
+     128            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     134   L25:     LOAD_GLOBAL             39 (encrypt_field + NULL)
+                    LOAD_FAST                8 (draft_body)
+                    LOAD_ATTR               41 (encode + NULL|self)
+                    LOAD_CONST              16 ('utf-8')
+                    CALL                     1
+                    CALL                     1
+                    UNPACK_SEQUENCE          3
+                    STORE_FAST_STORE_FAST  205 (ct_body, nonce_body)
+                    STORE_FAST              14 (kv_body)
+    
+     135            LOAD_GLOBAL             39 (encrypt_field + NULL)
+                    LOAD_FAST               11 (to_number)
+                    LOAD_ATTR               41 (encode + NULL|self)
+                    LOAD_CONST              16 ('utf-8')
+                    CALL                     1
+                    CALL                     1
+                    UNPACK_SEQUENCE          3
+                    STORE_FAST              15 (ct_to)
+                    STORE_FAST              16 (nonce_to)
+                    STORE_FAST              17 (kv_to)
+    
+     137            LOAD_GLOBAL             43 (OutboundMessage + NULL)
+    
+     138            LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+    
+     139            LOAD_FAST                0 (call_id)
+    
+     140            LOAD_CONST              17 ('text_back')
+    
+     141            LOAD_CONST              18 ('drafted')
+    
+     142            LOAD_FAST               15 (ct_to)
+    
+     143            LOAD_FAST               16 (nonce_to)
+    
+     144            LOAD_FAST               17 (kv_to)
+    
+     145            LOAD_GLOBAL             45 (hash_phone + NULL)
+                    LOAD_FAST               11 (to_number)
+                    CALL                     1
+    
+     146            LOAD_GLOBAL             47 (extract_last4 + NULL)
+                    LOAD_FAST               11 (to_number)
+                    CALL                     1
+    
+     147            LOAD_FAST               12 (ct_body)
+    
+     148            LOAD_FAST               13 (nonce_body)
+    
+     149            LOAD_FAST               14 (kv_body)
+    
+     150            LOAD_FAST                9 (template_id_used)
+    
+     137            LOAD_CONST              19 (('owner_user_id', 'call_id', 'action_type', 'status', 'to_number_ciphertext', 'to_number_nonce', 'to_number_key_version', 'to_number_hash', 'to_number_last4', 'draft_body_ciphertext', 'draft_body_nonce', 'draft_body_key_version', 'template_id_used'))
+                    CALL_KW                 13
+                    STORE_FAST              18 (msg)
+    
+     152            LOAD_FAST                3 (db)
+                    LOAD_ATTR               49 (add + NULL|self)
+                    LOAD_FAST               18 (msg)
+                    CALL                     1
+                    POP_TOP
+    
+     153            LOAD_FAST                3 (db)
+                    LOAD_ATTR               51 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L26:     SEND                     3 (to L29)
+           L27:     YIELD_VALUE              1
+           L28:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L26)
+           L29:     END_SEND
+                    POP_TOP
+    
+     155            LOAD_GLOBAL             52 (audit_service)
+                    LOAD_ATTR               54 (log_event)
+                    PUSH_NULL
+    
+     156            LOAD_FAST                3 (db)
+    
+     157            LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+    
+     158            LOAD_CONST              20 ('TEXT_BACK_DRAFT_CREATED')
+    
+     159            LOAD_CONST              21 ('outbound_message')
+    
+     160            LOAD_FAST               18 (msg)
+                    LOAD_ATTR                4 (id)
+    
+     161            LOAD_CONST              22 ('call_id')
+                    LOAD_GLOBAL             57 (str + NULL)
+                    LOAD_FAST                0 (call_id)
+                    CALL                     1
+                    BUILD_MAP                1
+    
+     155            LOAD_CONST              23 (('owner_user_id', 'event_type', 'target_type', 'target_id', 'details'))
+                    CALL_KW                  6
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L30:     SEND                     3 (to L33)
+           L31:     YIELD_VALUE              1
+           L32:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L30)
+           L33:     END_SEND
+                    POP_TOP
+    
+     164            LOAD_GLOBAL             19 (_build_response + NULL)
+                    LOAD_FAST               18 (msg)
+                    LOAD_FAST                8 (draft_body)
+                    LOAD_CONST              24 (('draft_body_plain',))
+                    CALL_KW                  2
+                    RETURN_VALUE
+    
+      86   L34:     CLEANUP_THROW
+           L35:     EXTENDED_ARG             2
+                    JUMP_BACKWARD_NO_INTERRUPT 583 (to L5)
+    
+      94   L36:     CLEANUP_THROW
+           L37:     EXTENDED_ARG             2
+                    JUMP_BACKWARD_NO_INTERRUPT 526 (to L10)
+    
+      97   L38:     CLEANUP_THROW
+           L39:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 489 (to L14)
+    
+     106   L40:     CLEANUP_THROW
+           L41:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 361 (to L20)
+    
+     153   L42:     CLEANUP_THROW
+           L43:     JUMP_BACKWARD_NO_INTERRUPT 100 (to L29)
+    
+     155   L44:     CLEANUP_THROW
+           L45:     JUMP_BACKWARD_NO_INTERRUPT 28 (to L33)
+    
+      --   L46:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L46 [0] lasti
+      L3 to L4 -> L34 [2]
+      L4 to L8 -> L46 [0] lasti
+      L8 to L9 -> L36 [2]
+      L9 to L12 -> L46 [0] lasti
+      L12 to L13 -> L38 [2]
+      L13 to L18 -> L46 [0] lasti
+      L18 to L19 -> L40 [2]
+      L19 to L27 -> L46 [0] lasti
+      L27 to L28 -> L42 [2]
+      L28 to L31 -> L46 [0] lasti
+      L31 to L32 -> L44 [2]
+      L32 to L35 -> L46 [0] lasti
+      L36 to L37 -> L46 [0] lasti
+      L38 to L39 -> L46 [0] lasti
+      L40 to L41 -> L46 [0] lasti
+      L42 to L43 -> L46 [0] lasti
+      L44 to L45 -> L46 [0] lasti
+    
+# --- Nested code object: update_text_back_draft ---
+    # co_names: ('_get_owned_message', 'user', 'id', 'status', '_DRAFT_STATUSES', 'AppError', 'body', 'encrypt_field', 'encode', 'draft_body_ciphertext', 'draft_body_nonce', 'draft_body_key_version', 'to_number', 'to_number_ciphertext', 'to_number_nonce', 'to_number_key_version', 'hash_phone', 'to_number_hash', 'extract_last4', 'to_number_last4', 'flush', '_build_response')
+    # co_varnames: ('action_id', 'body', 'current_user', 'db', 'msg', 'ct', 'nonce', 'kv')
+     172            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     179            LOAD_GLOBAL              1 (_get_owned_message + NULL)
+                    LOAD_FAST_LOAD_FAST     50 (db, current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    LOAD_FAST                0 (action_id)
+                    CALL                     3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               4 (msg)
+    
+     181            LOAD_FAST                4 (msg)
+                    LOAD_ATTR                6 (status)
+                    LOAD_GLOBAL              8 (_DRAFT_STATUSES)
+                    CONTAINS_OP              1
+                    POP_JUMP_IF_FALSE       11 (to L6)
+    
+     182            LOAD_GLOBAL             11 (AppError + NULL)
+    
+     183            LOAD_CONST               1 ('NOT_EDITABLE')
+    
+     184            LOAD_CONST               2 ('Message is no longer in a draft state')
+    
+     185            LOAD_CONST               3 (409)
+    
+     182            LOAD_CONST               4 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     188    L6:     LOAD_FAST                1 (body)
+                    LOAD_ATTR               12 (body)
+                    POP_JUMP_IF_NONE        57 (to L7)
+    
+     189            LOAD_GLOBAL             15 (encrypt_field + NULL)
+                    LOAD_FAST                1 (body)
+                    LOAD_ATTR               12 (body)
+                    LOAD_ATTR               17 (encode + NULL|self)
+                    LOAD_CONST               5 ('utf-8')
+                    CALL                     1
+                    CALL                     1
+                    UNPACK_SEQUENCE          3
+                    STORE_FAST_STORE_FAST   86 (ct, nonce)
+                    STORE_FAST               7 (kv)
+    
+     190            LOAD_FAST_LOAD_FAST     84 (ct, msg)
+                    STORE_ATTR               9 (draft_body_ciphertext)
+    
+     191            LOAD_FAST_LOAD_FAST    100 (nonce, msg)
+                    STORE_ATTR              10 (draft_body_nonce)
+    
+     192            LOAD_FAST_LOAD_FAST    116 (kv, msg)
+                    STORE_ATTR              11 (draft_body_key_version)
+    
+     194    L7:     LOAD_FAST                1 (body)
+                    LOAD_ATTR               24 (to_number)
+                    POP_JUMP_IF_NONE       109 (to L8)
+    
+     195            LOAD_GLOBAL             15 (encrypt_field + NULL)
+                    LOAD_FAST                1 (body)
+                    LOAD_ATTR               24 (to_number)
+                    LOAD_ATTR               17 (encode + NULL|self)
+                    LOAD_CONST               5 ('utf-8')
+                    CALL                     1
+                    CALL                     1
+                    UNPACK_SEQUENCE          3
+                    STORE_FAST_STORE_FAST   86 (ct, nonce)
+                    STORE_FAST               7 (kv)
+    
+     196            LOAD_FAST_LOAD_FAST     84 (ct, msg)
+                    STORE_ATTR              13 (to_number_ciphertext)
+    
+     197            LOAD_FAST_LOAD_FAST    100 (nonce, msg)
+                    STORE_ATTR              14 (to_number_nonce)
+    
+     198            LOAD_FAST_LOAD_FAST    116 (kv, msg)
+                    STORE_ATTR              15 (to_number_key_version)
+    
+     199            LOAD_GLOBAL             33 (hash_phone + NULL)
+                    LOAD_FAST                1 (body)
+                    LOAD_ATTR               24 (to_number)
+                    CALL                     1
+                    LOAD_FAST                4 (msg)
+                    STORE_ATTR              17 (to_number_hash)
+    
+     200            LOAD_GLOBAL             37 (extract_last4 + NULL)
+                    LOAD_FAST                1 (body)
+                    LOAD_ATTR               24 (to_number)
+                    CALL                     1
+                    LOAD_FAST                4 (msg)
+                    STORE_ATTR              19 (to_number_last4)
+    
+     202    L8:     LOAD_FAST                3 (db)
+                    LOAD_ATTR               41 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L9:     SEND                     3 (to L12)
+           L10:     YIELD_VALUE              1
+           L11:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+           L12:     END_SEND
+                    POP_TOP
+    
+     203            LOAD_GLOBAL             43 (_build_response + NULL)
+                    LOAD_FAST                4 (msg)
+                    CALL                     1
+                    RETURN_VALUE
+    
+     179   L13:     CLEANUP_THROW
+           L14:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 263 (to L5)
+    
+     202   L15:     CLEANUP_THROW
+           L16:     JUMP_BACKWARD_NO_INTERRUPT 18 (to L12)
+    
+      --   L17:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L17 [0] lasti
+      L3 to L4 -> L13 [2]
+      L4 to L10 -> L17 [0] lasti
+      L10 to L11 -> L15 [2]
+      L11 to L14 -> L17 [0] lasti
+      L15 to L16 -> L17 [0] lasti
+    
+# --- Nested code object: approve_text_back ---
+    # co_names: ('check_rate_limit', 'user', 'id', 'settings', 'RATE_LIMIT_API_WRITE_MAX', 'RATE_LIMIT_API_WRITE_WINDOW', 'AppError', '_get_owned_message', 'status', '_APPROVABLE_STATUSES', 'encrypt_field', 'final_body', 'encode', 'final_body_ciphertext', 'final_body_nonce', 'final_body_key_version', 'to_number', 'to_number_ciphertext', 'to_number_nonce', 'to_number_key_version', 'hash_phone', 'to_number_hash', 'extract_last4', 'to_number_last4', 'datetime', 'now', 'UTC', 'approved_at', 'uuid', 'UUID', 'device_id', 'approved_by_device_id', 'flush', 'audit_service', 'log_event', 'idempotency_key', '_build_response')
+    # co_varnames: ('action_id', 'body', 'current_user', 'db', 'allowed', '_', 'msg', 'ct_final', 'nonce_final', 'kv_final', 'ct_to', 'nonce_to', 'kv_to', 'now')
+     211            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     218            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+     219            LOAD_CONST               1 ('text_back_approve:')
+                    LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+     220            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+    
+     221            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+    
+     218            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   69 (allowed, _)
+    
+     223            LOAD_FAST                4 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+     224            LOAD_GLOBAL             13 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     226    L6:     LOAD_GLOBAL             15 (_get_owned_message + NULL)
+                    LOAD_FAST_LOAD_FAST     50 (db, current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    LOAD_FAST                0 (action_id)
+                    CALL                     3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    STORE_FAST               6 (msg)
+    
+     228            LOAD_FAST                6 (msg)
+                    LOAD_ATTR               16 (status)
+                    LOAD_GLOBAL             18 (_APPROVABLE_STATUSES)
+                    CONTAINS_OP              1
+                    POP_JUMP_IF_FALSE       25 (to L11)
+    
+     229            LOAD_GLOBAL             13 (AppError + NULL)
+    
+     230            LOAD_CONST               7 ('NOT_APPROVABLE')
+    
+     231            LOAD_CONST               8 ("Cannot approve message in '")
+                    LOAD_FAST                6 (msg)
+                    LOAD_ATTR               16 (status)
+                    FORMAT_SIMPLE
+                    LOAD_CONST               9 ("' status")
+                    BUILD_STRING             3
+    
+     232            LOAD_CONST              10 (409)
+    
+     229            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     236   L11:     LOAD_GLOBAL             21 (encrypt_field + NULL)
+    
+     237            LOAD_FAST                1 (body)
+                    LOAD_ATTR               22 (final_body)
+                    LOAD_ATTR               25 (encode + NULL|self)
+                    LOAD_CONST              11 ('utf-8')
+                    CALL                     1
+    
+     236            CALL                     1
+                    UNPACK_SEQUENCE          3
+                    STORE_FAST_STORE_FAST  120 (ct_final, nonce_final)
+                    STORE_FAST               9 (kv_final)
+    
+     239            LOAD_FAST_LOAD_FAST    118 (ct_final, msg)
+                    STORE_ATTR              13 (final_body_ciphertext)
+    
+     240            LOAD_FAST_LOAD_FAST    134 (nonce_final, msg)
+                    STORE_ATTR              14 (final_body_nonce)
+    
+     241            LOAD_FAST_LOAD_FAST    150 (kv_final, msg)
+                    STORE_ATTR              15 (final_body_key_version)
+    
+     244            LOAD_GLOBAL             21 (encrypt_field + NULL)
+                    LOAD_FAST                1 (body)
+                    LOAD_ATTR               32 (to_number)
+                    LOAD_ATTR               25 (encode + NULL|self)
+                    LOAD_CONST              11 ('utf-8')
+                    CALL                     1
+                    CALL                     1
+                    UNPACK_SEQUENCE          3
+                    STORE_FAST_STORE_FAST  171 (ct_to, nonce_to)
+                    STORE_FAST              12 (kv_to)
+    
+     245            LOAD_FAST_LOAD_FAST    166 (ct_to, msg)
+                    STORE_ATTR              17 (to_number_ciphertext)
+    
+     246            LOAD_FAST_LOAD_FAST    182 (nonce_to, msg)
+                    STORE_ATTR              18 (to_number_nonce)
+    
+     247            LOAD_FAST_LOAD_FAST    198 (kv_to, msg)
+                    STORE_ATTR              19 (to_number_key_version)
+    
+     248            LOAD_GLOBAL             41 (hash_phone + NULL)
+                    LOAD_FAST                1 (body)
+                    LOAD_ATTR               32 (to_number)
+                    CALL                     1
+                    LOAD_FAST                6 (msg)
+                    STORE_ATTR              21 (to_number_hash)
+    
+     249            LOAD_GLOBAL             45 (extract_last4 + NULL)
+                    LOAD_FAST                1 (body)
+                    LOAD_ATTR               32 (to_number)
+                    CALL                     1
+                    LOAD_FAST                6 (msg)
+                    STORE_ATTR              23 (to_number_last4)
+    
+     251            LOAD_GLOBAL             48 (datetime)
+                    LOAD_ATTR               50 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL             52 (UTC)
+                    CALL                     1
+                    STORE_FAST              13 (now)
+    
+     252            LOAD_CONST              12 ('approved')
+                    LOAD_FAST                6 (msg)
+                    STORE_ATTR               8 (status)
+    
+     253            LOAD_FAST_LOAD_FAST    214 (now, msg)
+                    STORE_ATTR              27 (approved_at)
+    
+     254            LOAD_GLOBAL             56 (uuid)
+                    LOAD_ATTR               58 (UUID)
+                    PUSH_NULL
+                    LOAD_FAST                1 (body)
+                    LOAD_ATTR               60 (device_id)
+                    CALL                     1
+                    LOAD_FAST                6 (msg)
+                    STORE_ATTR              31 (approved_by_device_id)
+    
+     256            LOAD_FAST                3 (db)
+                    LOAD_ATTR               65 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L12:     SEND                     3 (to L15)
+           L13:     YIELD_VALUE              1
+           L14:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L12)
+           L15:     END_SEND
+                    POP_TOP
+    
+     258            LOAD_GLOBAL             66 (audit_service)
+                    LOAD_ATTR               68 (log_event)
+                    PUSH_NULL
+    
+     259            LOAD_FAST                3 (db)
+    
+     260            LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+    
+     261            LOAD_CONST              13 ('TEXT_BACK_APPROVED')
+    
+     262            LOAD_CONST              14 ('outbound_message')
+    
+     263            LOAD_FAST                6 (msg)
+                    LOAD_ATTR                4 (id)
+    
+     265            LOAD_FAST                1 (body)
+                    LOAD_ATTR               60 (device_id)
+    
+     266            LOAD_FAST                1 (body)
+                    LOAD_ATTR               70 (idempotency_key)
+    
+     264            LOAD_CONST              15 (('device_id', 'idempotency_key'))
+                    BUILD_CONST_KEY_MAP      2
+    
+     258            LOAD_CONST              16 (('owner_user_id', 'event_type', 'target_type', 'target_id', 'details'))
+                    CALL_KW                  6
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L16:     SEND                     3 (to L19)
+           L17:     YIELD_VALUE              1
+           L18:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L16)
+           L19:     END_SEND
+                    POP_TOP
+    
+     270            LOAD_GLOBAL             73 (_build_response + NULL)
+                    LOAD_FAST_LOAD_FAST     97 (msg, body)
+                    LOAD_ATTR               22 (final_body)
+                    LOAD_CONST              17 (('final_body_plain',))
+                    CALL_KW                  2
+                    RETURN_VALUE
+    
+     218   L20:     CLEANUP_THROW
+           L21:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 481 (to L5)
+    
+     226   L22:     CLEANUP_THROW
+           L23:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 424 (to L10)
+    
+     256   L24:     CLEANUP_THROW
+           L25:     JUMP_BACKWARD_NO_INTERRUPT 115 (to L15)
+    
+     258   L26:     CLEANUP_THROW
+           L27:     JUMP_BACKWARD_NO_INTERRUPT 31 (to L19)
+    
+      --   L28:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L28 [0] lasti
+      L3 to L4 -> L20 [2]
+      L4 to L8 -> L28 [0] lasti
+      L8 to L9 -> L22 [2]
+      L9 to L13 -> L28 [0] lasti
+      L13 to L14 -> L24 [2]
+      L14 to L17 -> L28 [0] lasti
+      L17 to L18 -> L26 [2]
+      L18 to L21 -> L28 [0] lasti
+      L22 to L23 -> L28 [0] lasti
+      L24 to L25 -> L28 [0] lasti
+      L26 to L27 -> L28 [0] lasti
+    
+# --- Nested code object: retry_text_back ---
+    # co_names: ('_get_owned_message', 'user', 'id', 'status', 'AppError', 'last_error_code', 'last_error_message_short', 'flush', 'audit_service', 'log_event', '_build_response')
+    # co_varnames: ('action_id', 'current_user', 'db', 'msg')
+     278            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     284            LOAD_GLOBAL              1 (_get_owned_message + NULL)
+                    LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    LOAD_FAST                0 (action_id)
+                    CALL                     3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               3 (msg)
+    
+     286            LOAD_FAST                3 (msg)
+                    LOAD_ATTR                6 (status)
+                    LOAD_CONST               1 ('failed')
+                    COMPARE_OP             119 (bool(!=))
+                    POP_JUMP_IF_FALSE       11 (to L6)
+    
+     287            LOAD_GLOBAL              9 (AppError + NULL)
+    
+     288            LOAD_CONST               2 ('NOT_RETRYABLE')
+    
+     289            LOAD_CONST               3 ('Only failed messages can be retried')
+    
+     290            LOAD_CONST               4 (409)
+    
+     287            LOAD_CONST               5 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     293    L6:     LOAD_CONST               6 ('approved')
+                    LOAD_FAST                3 (msg)
+                    STORE_ATTR               3 (status)
+    
+     294            LOAD_CONST               0 (None)
+                    LOAD_FAST                3 (msg)
+                    STORE_ATTR               5 (last_error_code)
+    
+     295            LOAD_CONST               0 (None)
+                    LOAD_FAST                3 (msg)
+                    STORE_ATTR               6 (last_error_message_short)
+    
+     297            LOAD_FAST                2 (db)
+                    LOAD_ATTR               15 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    POP_TOP
+    
+     299            LOAD_GLOBAL             16 (audit_service)
+                    LOAD_ATTR               18 (log_event)
+                    PUSH_NULL
+    
+     300            LOAD_FAST                2 (db)
+    
+     301            LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+    
+     302            LOAD_CONST               7 ('TEXT_BACK_RETRY')
+    
+     303            LOAD_CONST               8 ('outbound_message')
+    
+     304            LOAD_FAST                3 (msg)
+                    LOAD_ATTR                4 (id)
+    
+     299            LOAD_CONST               9 (('owner_user_id', 'event_type', 'target_type', 'target_id'))
+                    CALL_KW                  5
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L11:     SEND                     3 (to L14)
+           L12:     YIELD_VALUE              1
+           L13:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+           L14:     END_SEND
+                    POP_TOP
+    
+     307            LOAD_GLOBAL             21 (_build_response + NULL)
+                    LOAD_FAST                3 (msg)
+                    CALL                     1
+                    RETURN_VALUE
+    
+     284   L15:     CLEANUP_THROW
+           L16:     JUMP_BACKWARD_NO_INTERRUPT 149 (to L5)
+    
+     297   L17:     CLEANUP_THROW
+           L18:     JUMP_BACKWARD_NO_INTERRUPT 79 (to L10)
+    
+     299   L19:     CLEANUP_THROW
+           L20:     JUMP_BACKWARD_NO_INTERRUPT 19 (to L14)
+    
+      --   L21:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L21 [0] lasti
+      L3 to L4 -> L15 [2]
+      L4 to L8 -> L21 [0] lasti
+      L8 to L9 -> L17 [2]
+      L9 to L12 -> L21 [0] lasti
+      L12 to L13 -> L19 [2]
+      L13 to L16 -> L21 [0] lasti
+      L17 to L18 -> L21 [0] lasti
+      L19 to L20 -> L21 [0] lasti
+    
+# --- Nested code object: cancel_text_back ---
+    # co_names: ('_get_owned_message', 'user', 'id', 'status', '_DRAFT_STATUSES', 'AppError', 'flush', 'audit_service', 'log_event', '_build_response')
+    # co_varnames: ('action_id', 'current_user', 'db', 'msg')
+     315            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     321            LOAD_GLOBAL              1 (_get_owned_message + NULL)
+                    LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    LOAD_FAST                0 (action_id)
+                    CALL                     3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               3 (msg)
+    
+     323            LOAD_FAST                3 (msg)
+                    LOAD_ATTR                6 (status)
+                    LOAD_GLOBAL              8 (_DRAFT_STATUSES)
+                    CONTAINS_OP              1
+                    POP_JUMP_IF_FALSE       11 (to L6)
+    
+     324            LOAD_GLOBAL             11 (AppError + NULL)
+    
+     325            LOAD_CONST               1 ('NOT_CANCELLABLE')
+    
+     326            LOAD_CONST               2 ('Only drafted/awaiting_approval messages can be cancelled')
+    
+     327            LOAD_CONST               3 (409)
+    
+     324            LOAD_CONST               4 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     330    L6:     LOAD_CONST               5 ('cancelled')
+                    LOAD_FAST                3 (msg)
+                    STORE_ATTR               3 (status)
+    
+     331            LOAD_FAST                2 (db)
+                    LOAD_ATTR               13 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    POP_TOP
+    
+     333            LOAD_GLOBAL             14 (audit_service)
+                    LOAD_ATTR               16 (log_event)
+                    PUSH_NULL
+    
+     334            LOAD_FAST                2 (db)
+    
+     335            LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+    
+     336            LOAD_CONST               6 ('TEXT_BACK_CANCELLED')
+    
+     337            LOAD_CONST               7 ('outbound_message')
+    
+     338            LOAD_FAST                3 (msg)
+                    LOAD_ATTR                4 (id)
+    
+     333            LOAD_CONST               8 (('owner_user_id', 'event_type', 'target_type', 'target_id'))
+                    CALL_KW                  5
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L11:     SEND                     3 (to L14)
+           L12:     YIELD_VALUE              1
+           L13:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+           L14:     END_SEND
+                    POP_TOP
+    
+     341            LOAD_GLOBAL             19 (_build_response + NULL)
+                    LOAD_FAST                3 (msg)
+                    CALL                     1
+                    RETURN_VALUE
+    
+     321   L15:     CLEANUP_THROW
+           L16:     JUMP_BACKWARD_NO_INTERRUPT 139 (to L5)
+    
+     331   L17:     CLEANUP_THROW
+           L18:     JUMP_BACKWARD_NO_INTERRUPT 79 (to L10)
+    
+     333   L19:     CLEANUP_THROW
+           L20:     JUMP_BACKWARD_NO_INTERRUPT 19 (to L14)
+    
+      --   L21:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L21 [0] lasti
+      L3 to L4 -> L15 [2]
+      L4 to L8 -> L21 [0] lasti
+      L8 to L9 -> L17 [2]
+      L9 to L12 -> L21 [0] lasti
+      L12 to L13 -> L19 [2]
+      L13 to L16 -> L21 [0] lasti
+      L17 to L18 -> L21 [0] lasti
+      L19 to L20 -> L21 [0] lasti
+    
+# --- Nested code object: _get_owned_call ---
+    # co_names: ('select', 'Call', 'where', 'id', 'owner_user_id', 'deleted_at', 'is_', 'execute', 'scalar_one_or_none', 'AppError')
+    # co_varnames: ('db', 'user_id', 'call_id', 'stmt', 'result', 'call')
+     349           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+     352           LOAD_GLOBAL              1 (select + NULL)
+                   LOAD_GLOBAL              2 (Call)
+                   CALL                     1
+                   LOAD_ATTR                5 (where + NULL|self)
+    
+     353           LOAD_GLOBAL              2 (Call)
+                   LOAD_ATTR                6 (id)
+                   LOAD_FAST                2 (call_id)
+                   COMPARE_OP              72 (==)
+    
+     354           LOAD_GLOBAL              2 (Call)
+                   LOAD_ATTR                8 (owner_user_id)
+                   LOAD_FAST                1 (user_id)
+                   COMPARE_OP              72 (==)
+    
+     355           LOAD_GLOBAL              2 (Call)
+                   LOAD_ATTR               10 (deleted_at)
+                   LOAD_ATTR               13 (is_ + NULL|self)
+                   LOAD_CONST               0 (None)
+                   CALL                     1
+    
+     352           CALL                     3
+                   STORE_FAST               3 (stmt)
+    
+     357           LOAD_FAST                0 (db)
+                   LOAD_ATTR               15 (execute + NULL|self)
+                   LOAD_FAST                3 (stmt)
+                   CALL                     1
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   STORE_FAST               4 (result)
+    
+     358           LOAD_FAST                4 (result)
+                   LOAD_ATTR               17 (scalar_one_or_none + NULL|self)
+                   CALL                     0
+                   STORE_FAST               5 (call)
+    
+     359           LOAD_FAST                5 (call)
+                   POP_JUMP_IF_NOT_NONE    11 (to L6)
+    
+     360           LOAD_GLOBAL             19 (AppError + NULL)
+                   LOAD_CONST               1 ('CALL_NOT_FOUND')
+                   LOAD_CONST               2 ('Call not found')
+                   LOAD_CONST               3 (404)
+                   LOAD_CONST               4 (('code', 'message', 'status_code'))
+                   CALL_KW                  3
+                   RAISE_VARARGS            1
+    
+     361   L6:     LOAD_FAST                5 (call)
+                   RETURN_VALUE
+    
+     357   L7:     CLEANUP_THROW
+           L8:     JUMP_BACKWARD_NO_INTERRUPT 36 (to L5)
+    
+      --   L9:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L9 [0] lasti
+      L3 to L4 -> L7 [2]
+      L4 to L8 -> L9 [0] lasti
+    
+# --- Nested code object: _get_owned_message ---
+    # co_names: ('select', 'OutboundMessage', 'where', 'id', 'owner_user_id', 'execute', 'scalar_one_or_none', 'AppError')
+    # co_varnames: ('db', 'user_id', 'message_id', 'stmt', 'result', 'msg')
+     364           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+     367           LOAD_GLOBAL              1 (select + NULL)
+                   LOAD_GLOBAL              2 (OutboundMessage)
+                   CALL                     1
+                   LOAD_ATTR                5 (where + NULL|self)
+    
+     368           LOAD_GLOBAL              2 (OutboundMessage)
+                   LOAD_ATTR                6 (id)
+                   LOAD_FAST                2 (message_id)
+                   COMPARE_OP              72 (==)
+    
+     369           LOAD_GLOBAL              2 (OutboundMessage)
+                   LOAD_ATTR                8 (owner_user_id)
+                   LOAD_FAST                1 (user_id)
+                   COMPARE_OP              72 (==)
+    
+     367           CALL                     2
+                   STORE_FAST               3 (stmt)
+    
+     371           LOAD_FAST                0 (db)
+                   LOAD_ATTR               11 (execute + NULL|self)
+                   LOAD_FAST                3 (stmt)
+                   CALL                     1
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   STORE_FAST               4 (result)
+    
+     372           LOAD_FAST                4 (result)
+                   LOAD_ATTR               13 (scalar_one_or_none + NULL|self)
+                   CALL                     0
+                   STORE_FAST               5 (msg)
+    
+     373           LOAD_FAST                5 (msg)
+                   POP_JUMP_IF_NOT_NONE    11 (to L6)
+    
+     374           LOAD_GLOBAL             15 (AppError + NULL)
+    
+     375           LOAD_CONST               1 ('MESSAGE_NOT_FOUND')
+    
+     376           LOAD_CONST               2 ('Message not found')
+    
+     377           LOAD_CONST               3 (404)
+    
+     374           LOAD_CONST               4 (('code', 'message', 'status_code'))
+                   CALL_KW                  3
+                   RAISE_VARARGS            1
+    
+     379   L6:     LOAD_FAST                5 (msg)
+                   RETURN_VALUE
+    
+     371   L7:     CLEANUP_THROW
+           L8:     JUMP_BACKWARD_NO_INTERRUPT 36 (to L5)
+    
+      --   L9:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L9 [0] lasti
+      L3 to L4 -> L7 [2]
+      L4 to L8 -> L9 [0] lasti
+    
+# --- Nested code object: _find_draft_for_call ---
+    # co_names: ('select', 'OutboundMessage', 'where', 'owner_user_id', 'call_id', 'action_type', 'status', 'in_', '_DRAFT_STATUSES', 'execute', 'scalar_one_or_none')
+    # co_varnames: ('db', 'user_id', 'call_id', 'stmt', 'result')
+     382           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+     385           LOAD_GLOBAL              1 (select + NULL)
+                   LOAD_GLOBAL              2 (OutboundMessage)
+                   CALL                     1
+                   LOAD_ATTR                5 (where + NULL|self)
+    
+     386           LOAD_GLOBAL              2 (OutboundMessage)
+                   LOAD_ATTR                6 (owner_user_id)
+                   LOAD_FAST                1 (user_id)
+                   COMPARE_OP              72 (==)
+    
+     387           LOAD_GLOBAL              2 (OutboundMessage)
+                   LOAD_ATTR                8 (call_id)
+                   LOAD_FAST                2 (call_id)
+                   COMPARE_OP              72 (==)
+    
+     388           LOAD_GLOBAL              2 (OutboundMessage)
+                   LOAD_ATTR               10 (action_type)
+                   LOAD_CONST               1 ('text_back')
+                   COMPARE_OP              72 (==)
+    
+     389           LOAD_GLOBAL              2 (OutboundMessage)
+                   LOAD_ATTR               12 (status)
+                   LOAD_ATTR               15 (in_ + NULL|self)
+                   LOAD_GLOBAL             16 (_DRAFT_STATUSES)
+                   CALL                     1
+    
+     385           CALL                     4
+                   STORE_FAST               3 (stmt)
+    
+     391           LOAD_FAST                0 (db)
+                   LOAD_ATTR               19 (execute + NULL|self)
+                   LOAD_FAST                3 (stmt)
+                   CALL                     1
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   STORE_FAST               4 (result)
+    
+     392           LOAD_FAST                4 (result)
+                   LOAD_ATTR               21 (scalar_one_or_none + NULL|self)
+                   CALL                     0
+                   RETURN_VALUE
+    
+     391   L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 20 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# --- Nested code object: _decrypt_caller_phone ---
+    # DOCSTRING: """Best-effort decrypt the caller phone from the call record."""
+    # co_names: ('decrypt_field', 'caller_phone_ciphertext', 'caller_phone_nonce', 'caller_phone_key_version', 'decode', 'Exception')
+    # co_varnames: ('call', 'plaintext')
+     395           RESUME                   0
+    
+     397           NOP
+    
+     398   L1:     LOAD_GLOBAL              1 (decrypt_field + NULL)
+    
+     399           LOAD_FAST                0 (call)
+                   LOAD_ATTR                2 (caller_phone_ciphertext)
+    
+     400           LOAD_FAST                0 (call)
+                   LOAD_ATTR                4 (caller_phone_nonce)
+    
+     401           LOAD_FAST                0 (call)
+                   LOAD_ATTR                6 (caller_phone_key_version)
+    
+     398           CALL                     3
+                   STORE_FAST               1 (plaintext)
+    
+     403           LOAD_FAST                1 (plaintext)
+                   LOAD_ATTR                9 (decode + NULL|self)
+                   LOAD_CONST               1 ('utf-8')
+                   CALL                     1
+           L2:     RETURN_VALUE
+    
+      --   L3:     PUSH_EXC_INFO
+    
+     404           LOAD_GLOBAL             10 (Exception)
+                   CHECK_EXC_MATCH
+                   POP_JUMP_IF_FALSE        3 (to L5)
+                   POP_TOP
+    
+     405   L4:     POP_EXCEPT
+                   RETURN_CONST             2 (None)
+    
+     404   L5:     RERAISE                  0
+    
+      --   L6:     COPY                     3
+                   POP_EXCEPT
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L2 -> L3 [0]
+      L3 to L4 -> L6 [1] lasti
+      L5 to L6 -> L6 [1] lasti
+    
+# --- Nested code object: _decrypt_body ---
+    # co_names: ('decrypt_field', 'decode', 'Exception')
+    # co_varnames: ('ct', 'nonce', 'kv')
+     408           RESUME                   0
+    
+     409           NOP
+    
+     410   L1:     LOAD_GLOBAL              1 (decrypt_field + NULL)
+                   LOAD_FAST_LOAD_FAST      1 (ct, nonce)
+                   LOAD_FAST                2 (kv)
+                   CALL                     3
+                   LOAD_ATTR                3 (decode + NULL|self)
+                   LOAD_CONST               1 ('utf-8')
+                   CALL                     1
+           L2:     RETURN_VALUE
+    
+      --   L3:     PUSH_EXC_INFO
+    
+     411           LOAD_GLOBAL              4 (Exception)
+                   CHECK_EXC_MATCH
+                   POP_JUMP_IF_FALSE        3 (to L5)
+                   POP_TOP
+    
+     412   L4:     POP_EXCEPT
+                   RETURN_CONST             0 (None)
+    
+     411   L5:     RERAISE                  0
+    
+      --   L6:     COPY                     3
+                   POP_EXCEPT
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L2 -> L3 [0]
+      L3 to L4 -> L6 [1] lasti
+      L5 to L6 -> L6 [1] lasti
+    
+# --- Nested code object: _build_response ---
+    # co_names: ('_decrypt_body', 'draft_body_ciphertext', 'draft_body_nonce', 'draft_body_key_version', 'final_body_ciphertext', 'final_body_nonce', 'final_body_key_version', 'TextBackResponse', 'str', 'id', 'call_id', 'status', 'to_number_last4', 'template_id_used', 'approved_at', 'last_error_code', 'created_at')
+    # co_varnames: ('msg', 'draft_body_plain', 'final_body_plain')
+    415           RESUME                   0
+    
+    421           LOAD_FAST                1 (draft_body_plain)
+                  POP_JUMP_IF_NOT_NONE    43 (to L1)
+    
+    422           LOAD_GLOBAL              1 (_decrypt_body + NULL)
+    
+    423           LOAD_FAST                0 (msg)
+                  LOAD_ATTR                2 (draft_body_ciphertext)
+    
+    424           LOAD_FAST                0 (msg)
+                  LOAD_ATTR                4 (draft_body_nonce)
+    
+    425           LOAD_FAST                0 (msg)
+                  LOAD_ATTR                6 (draft_body_key_version)
+    
+    422           CALL                     3
+                  STORE_FAST               1 (draft_body_plain)
+    
+    428   L1:     LOAD_FAST                2 (final_body_plain)
+                  POP_JUMP_IF_NOT_NONE    56 (to L2)
+                  LOAD_FAST                0 (msg)
+                  LOAD_ATTR                8 (final_body_ciphertext)
+                  POP_JUMP_IF_NONE        43 (to L2)
+    
+    429           LOAD_GLOBAL              1 (_decrypt_body + NULL)
+    
+    430           LOAD_FAST                0 (msg)
+                  LOAD_ATTR                8 (final_body_ciphertext)
+    
+    431           LOAD_FAST                0 (msg)
+                  LOAD_ATTR               10 (final_body_nonce)
+    
+    432           LOAD_FAST                0 (msg)
+                  LOAD_ATTR               12 (final_body_key_version)
+    
+    429           CALL                     3
+                  STORE_FAST               2 (final_body_plain)
+    
+    435   L2:     LOAD_GLOBAL             15 (TextBackResponse + NULL)
+    
+    436           LOAD_GLOBAL             17 (str + NULL)
+                  LOAD_FAST                0 (msg)
+                  LOAD_ATTR               18 (id)
+                  CALL                     1
+    
+    437           LOAD_FAST                0 (msg)
+                  LOAD_ATTR               20 (call_id)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       21 (to L3)
+                  LOAD_GLOBAL             17 (str + NULL)
+                  LOAD_FAST                0 (msg)
+                  LOAD_ATTR               20 (call_id)
+                  CALL                     1
+                  JUMP_FORWARD             1 (to L4)
+          L3:     LOAD_CONST               0 (None)
+    
+    438   L4:     LOAD_FAST                0 (msg)
+                  LOAD_ATTR               22 (status)
+    
+    439           LOAD_FAST                0 (msg)
+                  LOAD_ATTR               24 (to_number_last4)
+    
+    440           LOAD_FAST                1 (draft_body_plain)
+    
+    441           LOAD_FAST                2 (final_body_plain)
+    
+    442           LOAD_FAST                0 (msg)
+                  LOAD_ATTR               26 (template_id_used)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       21 (to L5)
+                  LOAD_GLOBAL             17 (str + NULL)
+                  LOAD_FAST                0 (msg)
+                  LOAD_ATTR               26 (template_id_used)
+                  CALL                     1
+                  JUMP_FORWARD             1 (to L6)
+          L5:     LOAD_CONST               0 (None)
+    
+    443   L6:     LOAD_FAST                0 (msg)
+                  LOAD_ATTR               28 (approved_at)
+    
+    444           LOAD_FAST                0 (msg)
+                  LOAD_ATTR               30 (last_error_code)
+    
+    445           LOAD_FAST                0 (msg)
+                  LOAD_ATTR               32 (created_at)
+    
+    435           LOAD_CONST               1 (('id', 'call_id', 'status', 'to_number_last4', 'draft_body', 'final_body', 'template_id_used', 'approved_at', 'last_error_code', 'created_at'))
+                  CALL_KW                 10
+                  RETURN_VALUE
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'uuid', 'datetime', 'UTC', 'fastapi', 'APIRouter', 'Depends', 'Query', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.core.encryption', 'decrypt_field', 'encrypt_field', 'app.core.rate_limiter', 'check_rate_limit', 'app.core.twilio_utils', 'extract_last4', 'hash_phone', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.models.call', 'Call', 'app.models.outbound_message', 'OutboundMessage', 'app.models.text_back_template', 'TextBackTemplate', 'app.schemas.messaging', 'TemplateListResponse', 'TemplateResponse', 'TextBackApproveRequest', 'TextBackDraftRequest', 'TextBackResponse', 'TextBackUpdateRequest', 'app.services', 'audit_service', 'router', '_DRAFT_STATUSES', '_APPROVABLE_STATUSES', 'get', 'list_text_back_templates', 'post', 'create_text_back_draft', 'patch', 'update_text_back_draft', 'approve_text_back', 'retry_text_back', 'cancel_text_back', '_get_owned_call', '_get_owned_message', '_find_draft_for_call', '_decrypt_caller_phone', '_decrypt_body', '_build_response')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Messaging / text-back API endpoints.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (uuid)
+              STORE_NAME               3 (uuid)
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('UTC', 'datetime'))
+              IMPORT_NAME              4 (datetime)
+              IMPORT_FROM              5 (UTC)
+              STORE_NAME               5 (UTC)
+              IMPORT_FROM              4 (datetime)
+              STORE_NAME               4 (datetime)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('APIRouter', 'Depends', 'Query'))
+              IMPORT_NAME              6 (fastapi)
+              IMPORT_FROM              7 (APIRouter)
+              STORE_NAME               7 (APIRouter)
+              IMPORT_FROM              8 (Depends)
+              STORE_NAME               8 (Depends)
+              IMPORT_FROM              9 (Query)
+              STORE_NAME               9 (Query)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('select',))
+              IMPORT_NAME             10 (sqlalchemy)
+              IMPORT_FROM             11 (select)
+              STORE_NAME              11 (select)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('AsyncSession',))
+              IMPORT_NAME             12 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM             13 (AsyncSession)
+              STORE_NAME              13 (AsyncSession)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('settings',))
+              IMPORT_NAME             14 (app.config)
+              IMPORT_FROM             15 (settings)
+              STORE_NAME              15 (settings)
+              POP_TOP
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('CurrentUser', 'get_current_user'))
+              IMPORT_NAME             16 (app.core.dependencies)
+              IMPORT_FROM             17 (CurrentUser)
+              STORE_NAME              17 (CurrentUser)
+              IMPORT_FROM             18 (get_current_user)
+              STORE_NAME              18 (get_current_user)
+              POP_TOP
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST              10 (('decrypt_field', 'encrypt_field'))
+              IMPORT_NAME             19 (app.core.encryption)
+              IMPORT_FROM             20 (decrypt_field)
+              STORE_NAME              20 (decrypt_field)
+              IMPORT_FROM             21 (encrypt_field)
+              STORE_NAME              21 (encrypt_field)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST              11 (('check_rate_limit',))
+              IMPORT_NAME             22 (app.core.rate_limiter)
+              IMPORT_FROM             23 (check_rate_limit)
+              STORE_NAME              23 (check_rate_limit)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST              12 (('extract_last4', 'hash_phone'))
+              IMPORT_NAME             24 (app.core.twilio_utils)
+              IMPORT_FROM             25 (extract_last4)
+              STORE_NAME              25 (extract_last4)
+              IMPORT_FROM             26 (hash_phone)
+              STORE_NAME              26 (hash_phone)
+              POP_TOP
+
+ 17           LOAD_CONST               1 (0)
+              LOAD_CONST              13 (('get_db',))
+              IMPORT_NAME             27 (app.database)
+              IMPORT_FROM             28 (get_db)
+              STORE_NAME              28 (get_db)
+              POP_TOP
+
+ 18           LOAD_CONST               1 (0)
+              LOAD_CONST              14 (('AppError',))
+              IMPORT_NAME             29 (app.middleware.error_handler)
+              IMPORT_FROM             30 (AppError)
+              STORE_NAME              30 (AppError)
+              POP_TOP
+
+ 19           LOAD_CONST               1 (0)
+              LOAD_CONST              15 (('Call',))
+              IMPORT_NAME             31 (app.models.call)
+              IMPORT_FROM             32 (Call)
+              STORE_NAME              32 (Call)
+              POP_TOP
+
+ 20           LOAD_CONST               1 (0)
+              LOAD_CONST              16 (('OutboundMessage',))
+              IMPORT_NAME             33 (app.models.outbound_message)
+              IMPORT_FROM             34 (OutboundMessage)
+              STORE_NAME              34 (OutboundMessage)
+              POP_TOP
+
+ 21           LOAD_CONST               1 (0)
+              LOAD_CONST              17 (('TextBackTemplate',))
+              IMPORT_NAME             35 (app.models.text_back_template)
+              IMPORT_FROM             36 (TextBackTemplate)
+              STORE_NAME              36 (TextBackTemplate)
+              POP_TOP
+
+ 22           LOAD_CONST               1 (0)
+              LOAD_CONST              18 (('TemplateListResponse', 'TemplateResponse', 'TextBackApproveRequest', 'TextBackDraftRequest', 'TextBackResponse', 'TextBackUpdateRequest'))
+              IMPORT_NAME             37 (app.schemas.messaging)
+              IMPORT_FROM             38 (TemplateListResponse)
+              STORE_NAME              38 (TemplateListResponse)
+              IMPORT_FROM             39 (TemplateResponse)
+              STORE_NAME              39 (TemplateResponse)
+              IMPORT_FROM             40 (TextBackApproveRequest)
+              STORE_NAME              40 (TextBackApproveRequest)
+              IMPORT_FROM             41 (TextBackDraftRequest)
+              STORE_NAME              41 (TextBackDraftRequest)
+              IMPORT_FROM             42 (TextBackResponse)
+              STORE_NAME              42 (TextBackResponse)
+              IMPORT_FROM             43 (TextBackUpdateRequest)
+              STORE_NAME              43 (TextBackUpdateRequest)
+              POP_TOP
+
+ 30           LOAD_CONST               1 (0)
+              LOAD_CONST              19 (('audit_service',))
+              IMPORT_NAME             44 (app.services)
+              IMPORT_FROM             45 (audit_service)
+              STORE_NAME              45 (audit_service)
+              POP_TOP
+
+ 32           LOAD_NAME                7 (APIRouter)
+              PUSH_NULL
+              CALL                     0
+              STORE_NAME              46 (router)
+
+ 34           LOAD_CONST              20 (('drafted', 'awaiting_approval'))
+              STORE_NAME              47 (_DRAFT_STATUSES)
+
+ 35           LOAD_CONST              20 (('drafted', 'awaiting_approval'))
+              STORE_NAME              48 (_APPROVABLE_STATUSES)
+
+ 43           LOAD_NAME               46 (router)
+              LOAD_ATTR               99 (get + NULL|self)
+              LOAD_CONST              21 ('/templates/text-back')
+              LOAD_NAME               38 (TemplateListResponse)
+              LOAD_CONST              22 (('response_model',))
+              CALL_KW                  2
+
+ 45           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               18 (get_current_user)
+              CALL                     1
+
+ 46           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               28 (get_db)
+              CALL                     1
+
+ 47           LOAD_NAME                9 (Query)
+              PUSH_NULL
+              LOAD_CONST               3 (None)
+              LOAD_CONST              23 (('default',))
+              CALL_KW                  1
+
+ 48           LOAD_NAME                9 (Query)
+              PUSH_NULL
+              LOAD_CONST               3 (None)
+              LOAD_CONST              23 (('default',))
+              CALL_KW                  1
+
+ 44           BUILD_TUPLE              4
+
+ 45           NOP
+
+ 44           NOP
+
+ 46           NOP
+
+ 44           NOP
+
+ 47           NOP
+
+ 44           NOP
+
+ 48           NOP
+
+ 44           NOP
+
+ 49           NOP
+
+ 44           LOAD_CONST              42 (('current_user', 'CurrentUser', 'db', 'AsyncSession', 'category', 'str | None', 'tone_tag', 'str | None', 'return', 'TemplateListResponse'))
+              LOAD_CONST              24 (<code object list_text_back_templates at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 43>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 43           CALL                     0
+
+ 44           STORE_NAME              50 (list_text_back_templates)
+
+ 79           LOAD_NAME               46 (router)
+              LOAD_ATTR              103 (post + NULL|self)
+              LOAD_CONST              25 ('/calls/{call_id}/text-back/draft')
+              LOAD_NAME               42 (TextBackResponse)
+              LOAD_CONST              22 (('response_model',))
+              CALL_KW                  2
+
+ 83           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               18 (get_current_user)
+              CALL                     1
+
+ 84           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               28 (get_db)
+              CALL                     1
+
+ 80           BUILD_TUPLE              2
+
+ 81           NOP
+
+ 80           NOP
+
+ 82           NOP
+
+ 80           NOP
+
+ 83           NOP
+
+ 80           NOP
+
+ 84           NOP
+
+ 80           NOP
+
+ 85           NOP
+
+ 80           LOAD_CONST              43 (('call_id', 'uuid.UUID', 'body', 'TextBackDraftRequest', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'TextBackResponse'))
+              LOAD_CONST              26 (<code object create_text_back_draft at 0x0000024C0FBAACD0, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 79>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 79           CALL                     0
+
+ 80           STORE_NAME              52 (create_text_back_draft)
+
+172           LOAD_NAME               46 (router)
+              LOAD_ATTR              107 (patch + NULL|self)
+              LOAD_CONST              27 ('/actions/{action_id}/text-back')
+              LOAD_NAME               42 (TextBackResponse)
+              LOAD_CONST              22 (('response_model',))
+              CALL_KW                  2
+
+176           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               18 (get_current_user)
+              CALL                     1
+
+177           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               28 (get_db)
+              CALL                     1
+
+173           BUILD_TUPLE              2
+
+174           NOP
+
+173           NOP
+
+175           NOP
+
+173           NOP
+
+176           NOP
+
+173           NOP
+
+177           NOP
+
+173           NOP
+
+178           NOP
+
+173           LOAD_CONST              44 (('action_id', 'uuid.UUID', 'body', 'TextBackUpdateRequest', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'TextBackResponse'))
+              LOAD_CONST              28 (<code object update_text_back_draft at 0x0000024C0FBE2570, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 172>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+172           CALL                     0
+
+173           STORE_NAME              54 (update_text_back_draft)
+
+211           LOAD_NAME               46 (router)
+              LOAD_ATTR              103 (post + NULL|self)
+              LOAD_CONST              29 ('/actions/{action_id}/approve')
+              LOAD_NAME               42 (TextBackResponse)
+              LOAD_CONST              22 (('response_model',))
+              CALL_KW                  2
+
+215           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               18 (get_current_user)
+              CALL                     1
+
+216           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               28 (get_db)
+              CALL                     1
+
+212           BUILD_TUPLE              2
+
+213           NOP
+
+212           NOP
+
+214           NOP
+
+212           NOP
+
+215           NOP
+
+212           NOP
+
+216           NOP
+
+212           NOP
+
+217           NOP
+
+212           LOAD_CONST              45 (('action_id', 'uuid.UUID', 'body', 'TextBackApproveRequest', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'TextBackResponse'))
+              LOAD_CONST              30 (<code object approve_text_back at 0x0000024C0FBE28B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 211>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+211           CALL                     0
+
+212           STORE_NAME              55 (approve_text_back)
+
+278           LOAD_NAME               46 (router)
+              LOAD_ATTR              103 (post + NULL|self)
+              LOAD_CONST              31 ('/actions/{action_id}/retry')
+              LOAD_NAME               42 (TextBackResponse)
+              LOAD_CONST              22 (('response_model',))
+              CALL_KW                  2
+
+281           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               18 (get_current_user)
+              CALL                     1
+
+282           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               28 (get_db)
+              CALL                     1
+
+279           BUILD_TUPLE              2
+
+280           NOP
+
+279           NOP
+
+281           NOP
+
+279           NOP
+
+282           NOP
+
+279           NOP
+
+283           NOP
+
+279           LOAD_CONST              46 (('action_id', 'uuid.UUID', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'TextBackResponse'))
+              LOAD_CONST              32 (<code object retry_text_back at 0x0000024C0FB66740, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 278>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+278           CALL                     0
+
+279           STORE_NAME              56 (retry_text_back)
+
+315           LOAD_NAME               46 (router)
+              LOAD_ATTR              103 (post + NULL|self)
+              LOAD_CONST              33 ('/actions/{action_id}/cancel')
+              LOAD_NAME               42 (TextBackResponse)
+              LOAD_CONST              22 (('response_model',))
+              CALL_KW                  2
+
+318           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               18 (get_current_user)
+              CALL                     1
+
+319           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               28 (get_db)
+              CALL                     1
+
+316           BUILD_TUPLE              2
+
+317           NOP
+
+316           NOP
+
+318           NOP
+
+316           NOP
+
+319           NOP
+
+316           NOP
+
+320           NOP
+
+316           LOAD_CONST              46 (('action_id', 'uuid.UUID', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'TextBackResponse'))
+              LOAD_CONST              34 (<code object cancel_text_back at 0x0000024C0FBC9D10, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 315>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+315           CALL                     0
+
+316           STORE_NAME              57 (cancel_text_back)
+
+349           NOP
+
+350           NOP
+
+349           NOP
+
+350           NOP
+
+349           NOP
+
+350           NOP
+
+349           NOP
+
+351           NOP
+
+349           LOAD_CONST              47 (('db', 'AsyncSession', 'user_id', 'uuid.UUID', 'call_id', 'uuid.UUID', 'return', 'Call'))
+              LOAD_CONST              35 (<code object _get_owned_call at 0x0000024C0FBF9780, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 349>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              58 (_get_owned_call)
+
+364           NOP
+
+365           NOP
+
+364           NOP
+
+365           NOP
+
+364           NOP
+
+365           NOP
+
+364           NOP
+
+366           NOP
+
+364           LOAD_CONST              48 (('db', 'AsyncSession', 'user_id', 'uuid.UUID', 'message_id', 'uuid.UUID', 'return', 'OutboundMessage'))
+              LOAD_CONST              36 (<code object _get_owned_message at 0x0000024C114EC030, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 364>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              59 (_get_owned_message)
+
+382           NOP
+
+383           NOP
+
+382           NOP
+
+383           NOP
+
+382           NOP
+
+383           NOP
+
+382           NOP
+
+384           NOP
+
+382           LOAD_CONST              49 (('db', 'AsyncSession', 'user_id', 'uuid.UUID', 'call_id', 'uuid.UUID', 'return', 'OutboundMessage | None'))
+              LOAD_CONST              37 (<code object _find_draft_for_call at 0x0000024C0FBEC150, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 382>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              60 (_find_draft_for_call)
+
+395           LOAD_CONST              50 (('call', 'Call', 'return', 'str | None'))
+              LOAD_CONST              38 (<code object _decrypt_caller_phone at 0x0000024C114352E0, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 395>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              61 (_decrypt_caller_phone)
+
+408           LOAD_CONST              51 (('ct', 'bytes', 'nonce', 'bytes', 'kv', 'int', 'return', 'str | None'))
+              LOAD_CONST              39 (<code object _decrypt_body at 0x0000024C0EF10D40, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 408>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              62 (_decrypt_body)
+
+418           LOAD_CONST               3 (None)
+
+419           LOAD_CONST               3 (None)
+
+415           LOAD_CONST              40 (('draft_body_plain', 'final_body_plain'))
+              BUILD_CONST_KEY_MAP      2
+
+416           NOP
+
+415           NOP
+
+418           NOP
+
+415           NOP
+
+419           NOP
+
+415           NOP
+
+420           NOP
+
+415           LOAD_CONST              52 (('msg', 'OutboundMessage', 'draft_body_plain', 'str | None', 'final_body_plain', 'str | None', 'return', 'TextBackResponse'))
+              LOAD_CONST              41 (<code object _build_response at 0x0000024C0F1FEAC0, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 415>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   2 (kwdefaults)
+              STORE_NAME              63 (_build_response)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object list_text_back_templates at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 43>:
+  43            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  50            LOAD_GLOBAL              1 (select + NULL)
+                LOAD_GLOBAL              2 (TextBackTemplate)
+                CALL                     1
+                LOAD_ATTR                5 (where + NULL|self)
+                LOAD_GLOBAL              2 (TextBackTemplate)
+                LOAD_ATTR                6 (is_builtin)
+                LOAD_ATTR                9 (is_ + NULL|self)
+                LOAD_CONST               1 (True)
+                CALL                     1
+                CALL                     1
+                STORE_FAST               4 (stmt)
+
+  51            LOAD_FAST                2 (category)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       34 (to L2)
+
+  52            LOAD_FAST                4 (stmt)
+                LOAD_ATTR                5 (where + NULL|self)
+                LOAD_GLOBAL              2 (TextBackTemplate)
+                LOAD_ATTR               10 (category)
+                LOAD_FAST                2 (category)
+                COMPARE_OP              72 (==)
+                CALL                     1
+                STORE_FAST               4 (stmt)
+
+  53    L2:     LOAD_FAST                3 (tone_tag)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       34 (to L3)
+
+  54            LOAD_FAST                4 (stmt)
+                LOAD_ATTR                5 (where + NULL|self)
+                LOAD_GLOBAL              2 (TextBackTemplate)
+                LOAD_ATTR               12 (tone_tag)
+                LOAD_FAST                3 (tone_tag)
+                COMPARE_OP              72 (==)
+                CALL                     1
+                STORE_FAST               4 (stmt)
+
+  55    L3:     LOAD_FAST                4 (stmt)
+                LOAD_ATTR               15 (order_by + NULL|self)
+                LOAD_GLOBAL              2 (TextBackTemplate)
+                LOAD_ATTR               10 (category)
+                LOAD_GLOBAL              2 (TextBackTemplate)
+                LOAD_ATTR               16 (title)
+                CALL                     2
+                STORE_FAST               4 (stmt)
+
+  57            LOAD_FAST                1 (db)
+                LOAD_ATTR               19 (execute + NULL|self)
+                LOAD_FAST                4 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L4:     SEND                     3 (to L7)
+        L5:     YIELD_VALUE              1
+        L6:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+        L7:     END_SEND
+                STORE_FAST               5 (result)
+
+  58            LOAD_FAST                5 (result)
+                LOAD_ATTR               21 (scalars + NULL|self)
+                CALL                     0
+                LOAD_ATTR               23 (all + NULL|self)
+                CALL                     0
+                STORE_FAST               6 (templates)
+
+  60            LOAD_GLOBAL             25 (TemplateListResponse + NULL)
+
+  69            LOAD_FAST                6 (templates)
+                GET_ITER
+
+  61            LOAD_FAST_AND_CLEAR      7 (t)
+                SWAP                     2
+        L8:     BUILD_LIST               0
+                SWAP                     2
+
+  69            GET_ITER
+        L9:     FOR_ITER                75 (to L10)
+                STORE_FAST               7 (t)
+
+  62            LOAD_GLOBAL             27 (TemplateResponse + NULL)
+
+  63            LOAD_GLOBAL             29 (str + NULL)
+                LOAD_FAST                7 (t)
+                LOAD_ATTR               30 (id)
+                CALL                     1
+
+  64            LOAD_FAST                7 (t)
+                LOAD_ATTR               10 (category)
+
+  65            LOAD_FAST                7 (t)
+                LOAD_ATTR               16 (title)
+
+  66            LOAD_FAST                7 (t)
+                LOAD_ATTR               32 (body)
+
+  67            LOAD_FAST                7 (t)
+                LOAD_ATTR               12 (tone_tag)
+
+  62            LOAD_CONST               2 (('id', 'category', 'title', 'body', 'tone_tag'))
+                CALL_KW                  5
+                LIST_APPEND              2
+                JUMP_BACKWARD           77 (to L9)
+
+  69   L10:     END_FOR
+                POP_TOP
+
+  61   L11:     SWAP                     2
+                STORE_FAST               7 (t)
+
+  60            LOAD_CONST               3 (('items',))
+                CALL_KW                  1
+                RETURN_VALUE
+
+  57   L12:     CLEANUP_THROW
+       L13:     JUMP_BACKWARD_NO_INTERRUPT 130 (to L7)
+
+  --   L14:     SWAP                     2
+                POP_TOP
+
+  61            SWAP                     2
+                STORE_FAST               7 (t)
+                RERAISE                  0
+
+  --   L15:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L5 -> L15 [0] lasti
+  L5 to L6 -> L12 [2]
+  L6 to L8 -> L15 [0] lasti
+  L8 to L11 -> L14 [4]
+  L11 to L13 -> L15 [0] lasti
+  L14 to L15 -> L15 [0] lasti
+
+Disassembly of <code object create_text_back_draft at 0x0000024C0FBAACD0, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 79>:
+  79            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  86            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+  87            LOAD_CONST               1 ('text_back_draft:')
+                LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+  88            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+
+  89            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+
+  86            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   69 (allowed, _)
+
+  91            LOAD_FAST                4 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+  92            LOAD_GLOBAL             13 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+  94    L6:     LOAD_GLOBAL             15 (_get_owned_call + NULL)
+                LOAD_FAST_LOAD_FAST     50 (db, current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                LOAD_FAST                0 (call_id)
+                CALL                     3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                STORE_FAST               6 (call)
+
+  97            LOAD_GLOBAL             17 (_find_draft_for_call + NULL)
+                LOAD_FAST_LOAD_FAST     50 (db, current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                LOAD_FAST                0 (call_id)
+                CALL                     3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L11:     SEND                     3 (to L14)
+       L12:     YIELD_VALUE              1
+       L13:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+       L14:     END_SEND
+                STORE_FAST               7 (existing)
+
+  98            LOAD_FAST                7 (existing)
+                POP_JUMP_IF_NONE        11 (to L15)
+
+  99            LOAD_GLOBAL             19 (_build_response + NULL)
+                LOAD_FAST                7 (existing)
+                CALL                     1
+                RETURN_VALUE
+
+ 102   L15:     LOAD_FAST                1 (body)
+                LOAD_ATTR               20 (custom_body)
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L16)
+                POP_TOP
+                LOAD_CONST               7 ('')
+       L16:     STORE_FAST               8 (draft_body)
+
+ 103            LOAD_CONST               0 (None)
+                STORE_FAST               9 (template_id_used)
+
+ 105            LOAD_FAST                1 (body)
+                LOAD_ATTR               22 (template_id)
+                TO_BOOL
+                POP_JUMP_IF_FALSE      115 (to L22)
+                LOAD_FAST                1 (body)
+                LOAD_ATTR               20 (custom_body)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        98 (to L22)
+
+ 106            LOAD_FAST                3 (db)
+                LOAD_ATTR               25 (get + NULL|self)
+                LOAD_GLOBAL             26 (TextBackTemplate)
+                LOAD_GLOBAL             28 (uuid)
+                LOAD_ATTR               30 (UUID)
+                PUSH_NULL
+                LOAD_FAST                1 (body)
+                LOAD_ATTR               22 (template_id)
+                CALL                     1
+                CALL                     2
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L17:     SEND                     3 (to L20)
+       L18:     YIELD_VALUE              1
+       L19:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L17)
+       L20:     END_SEND
+                STORE_FAST              10 (template)
+
+ 107            LOAD_FAST               10 (template)
+                POP_JUMP_IF_NOT_NONE    11 (to L21)
+
+ 108            LOAD_GLOBAL             13 (AppError + NULL)
+
+ 109            LOAD_CONST               8 ('TEMPLATE_NOT_FOUND')
+
+ 110            LOAD_CONST               9 ('Template not found')
+
+ 111            LOAD_CONST              10 (404)
+
+ 108            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 113   L21:     LOAD_FAST               10 (template)
+                LOAD_ATTR               32 (body)
+                STORE_FAST               8 (draft_body)
+
+ 114            LOAD_FAST               10 (template)
+                LOAD_ATTR                4 (id)
+                STORE_FAST               9 (template_id_used)
+
+ 116   L22:     LOAD_FAST                8 (draft_body)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L23)
+
+ 117            LOAD_GLOBAL             13 (AppError + NULL)
+
+ 118            LOAD_CONST              11 ('EMPTY_BODY')
+
+ 119            LOAD_CONST              12 ('Provide either template_id or custom_body')
+
+ 120            LOAD_CONST              13 (422)
+
+ 117            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 124   L23:     LOAD_FAST                1 (body)
+                LOAD_ATTR               34 (to_number)
+                STORE_FAST              11 (to_number)
+
+ 125            LOAD_FAST               11 (to_number)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L24)
+
+ 126            LOAD_GLOBAL             37 (_decrypt_caller_phone + NULL)
+                LOAD_FAST                6 (call)
+                CALL                     1
+                STORE_FAST              11 (to_number)
+
+ 127   L24:     LOAD_FAST               11 (to_number)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L25)
+
+ 128            LOAD_GLOBAL             13 (AppError + NULL)
+
+ 129            LOAD_CONST              14 ('MISSING_RECIPIENT')
+
+ 130            LOAD_CONST              15 ('Cannot determine recipient; provide to_number')
+
+ 131            LOAD_CONST              13 (422)
+
+ 128            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 134   L25:     LOAD_GLOBAL             39 (encrypt_field + NULL)
+                LOAD_FAST                8 (draft_body)
+                LOAD_ATTR               41 (encode + NULL|self)
+                LOAD_CONST              16 ('utf-8')
+                CALL                     1
+                CALL                     1
+                UNPACK_SEQUENCE          3
+                STORE_FAST_STORE_FAST  205 (ct_body, nonce_body)
+                STORE_FAST              14 (kv_body)
+
+ 135            LOAD_GLOBAL             39 (encrypt_field + NULL)
+                LOAD_FAST               11 (to_number)
+                LOAD_ATTR               41 (encode + NULL|self)
+                LOAD_CONST              16 ('utf-8')
+                CALL                     1
+                CALL                     1
+                UNPACK_SEQUENCE          3
+                STORE_FAST              15 (ct_to)
+                STORE_FAST              16 (nonce_to)
+                STORE_FAST              17 (kv_to)
+
+ 137            LOAD_GLOBAL             43 (OutboundMessage + NULL)
+
+ 138            LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+
+ 139            LOAD_FAST                0 (call_id)
+
+ 140            LOAD_CONST              17 ('text_back')
+
+ 141            LOAD_CONST              18 ('drafted')
+
+ 142            LOAD_FAST               15 (ct_to)
+
+ 143            LOAD_FAST               16 (nonce_to)
+
+ 144            LOAD_FAST               17 (kv_to)
+
+ 145            LOAD_GLOBAL             45 (hash_phone + NULL)
+                LOAD_FAST               11 (to_number)
+                CALL                     1
+
+ 146            LOAD_GLOBAL             47 (extract_last4 + NULL)
+                LOAD_FAST               11 (to_number)
+                CALL                     1
+
+ 147            LOAD_FAST               12 (ct_body)
+
+ 148            LOAD_FAST               13 (nonce_body)
+
+ 149            LOAD_FAST               14 (kv_body)
+
+ 150            LOAD_FAST                9 (template_id_used)
+
+ 137            LOAD_CONST              19 (('owner_user_id', 'call_id', 'action_type', 'status', 'to_number_ciphertext', 'to_number_nonce', 'to_number_key_version', 'to_number_hash', 'to_number_last4', 'draft_body_ciphertext', 'draft_body_nonce', 'draft_body_key_version', 'template_id_used'))
+                CALL_KW                 13
+                STORE_FAST              18 (msg)
+
+ 152            LOAD_FAST                3 (db)
+                LOAD_ATTR               49 (add + NULL|self)
+                LOAD_FAST               18 (msg)
+                CALL                     1
+                POP_TOP
+
+ 153            LOAD_FAST                3 (db)
+                LOAD_ATTR               51 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L26:     SEND                     3 (to L29)
+       L27:     YIELD_VALUE              1
+       L28:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L26)
+       L29:     END_SEND
+                POP_TOP
+
+ 155            LOAD_GLOBAL             52 (audit_service)
+                LOAD_ATTR               54 (log_event)
+                PUSH_NULL
+
+ 156            LOAD_FAST                3 (db)
+
+ 157            LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+
+ 158            LOAD_CONST              20 ('TEXT_BACK_DRAFT_CREATED')
+
+ 159            LOAD_CONST              21 ('outbound_message')
+
+ 160            LOAD_FAST               18 (msg)
+                LOAD_ATTR                4 (id)
+
+ 161            LOAD_CONST              22 ('call_id')
+                LOAD_GLOBAL             57 (str + NULL)
+                LOAD_FAST                0 (call_id)
+                CALL                     1
+                BUILD_MAP                1
+
+ 155            LOAD_CONST              23 (('owner_user_id', 'event_type', 'target_type', 'target_id', 'details'))
+                CALL_KW                  6
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L30:     SEND                     3 (to L33)
+       L31:     YIELD_VALUE              1
+       L32:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L30)
+       L33:     END_SEND
+                POP_TOP
+
+ 164            LOAD_GLOBAL             19 (_build_response + NULL)
+                LOAD_FAST               18 (msg)
+                LOAD_FAST                8 (draft_body)
+                LOAD_CONST              24 (('draft_body_plain',))
+                CALL_KW                  2
+                RETURN_VALUE
+
+  86   L34:     CLEANUP_THROW
+       L35:     EXTENDED_ARG             2
+                JUMP_BACKWARD_NO_INTERRUPT 583 (to L5)
+
+  94   L36:     CLEANUP_THROW
+       L37:     EXTENDED_ARG             2
+                JUMP_BACKWARD_NO_INTERRUPT 526 (to L10)
+
+  97   L38:     CLEANUP_THROW
+       L39:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 489 (to L14)
+
+ 106   L40:     CLEANUP_THROW
+       L41:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 361 (to L20)
+
+ 153   L42:     CLEANUP_THROW
+       L43:     JUMP_BACKWARD_NO_INTERRUPT 100 (to L29)
+
+ 155   L44:     CLEANUP_THROW
+       L45:     JUMP_BACKWARD_NO_INTERRUPT 28 (to L33)
+
+  --   L46:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L46 [0] lasti
+  L3 to L4 -> L34 [2]
+  L4 to L8 -> L46 [0] lasti
+  L8 to L9 -> L36 [2]
+  L9 to L12 -> L46 [0] lasti
+  L12 to L13 -> L38 [2]
+  L13 to L18 -> L46 [0] lasti
+  L18 to L19 -> L40 [2]
+  L19 to L27 -> L46 [0] lasti
+  L27 to L28 -> L42 [2]
+  L28 to L31 -> L46 [0] lasti
+  L31 to L32 -> L44 [2]
+  L32 to L35 -> L46 [0] lasti
+  L36 to L37 -> L46 [0] lasti
+  L38 to L39 -> L46 [0] lasti
+  L40 to L41 -> L46 [0] lasti
+  L42 to L43 -> L46 [0] lasti
+  L44 to L45 -> L46 [0] lasti
+
+Disassembly of <code object update_text_back_draft at 0x0000024C0FBE2570, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 172>:
+ 172            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 179            LOAD_GLOBAL              1 (_get_owned_message + NULL)
+                LOAD_FAST_LOAD_FAST     50 (db, current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                LOAD_FAST                0 (action_id)
+                CALL                     3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               4 (msg)
+
+ 181            LOAD_FAST                4 (msg)
+                LOAD_ATTR                6 (status)
+                LOAD_GLOBAL              8 (_DRAFT_STATUSES)
+                CONTAINS_OP              1
+                POP_JUMP_IF_FALSE       11 (to L6)
+
+ 182            LOAD_GLOBAL             11 (AppError + NULL)
+
+ 183            LOAD_CONST               1 ('NOT_EDITABLE')
+
+ 184            LOAD_CONST               2 ('Message is no longer in a draft state')
+
+ 185            LOAD_CONST               3 (409)
+
+ 182            LOAD_CONST               4 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 188    L6:     LOAD_FAST                1 (body)
+                LOAD_ATTR               12 (body)
+                POP_JUMP_IF_NONE        57 (to L7)
+
+ 189            LOAD_GLOBAL             15 (encrypt_field + NULL)
+                LOAD_FAST                1 (body)
+                LOAD_ATTR               12 (body)
+                LOAD_ATTR               17 (encode + NULL|self)
+                LOAD_CONST               5 ('utf-8')
+                CALL                     1
+                CALL                     1
+                UNPACK_SEQUENCE          3
+                STORE_FAST_STORE_FAST   86 (ct, nonce)
+                STORE_FAST               7 (kv)
+
+ 190            LOAD_FAST_LOAD_FAST     84 (ct, msg)
+                STORE_ATTR               9 (draft_body_ciphertext)
+
+ 191            LOAD_FAST_LOAD_FAST    100 (nonce, msg)
+                STORE_ATTR              10 (draft_body_nonce)
+
+ 192            LOAD_FAST_LOAD_FAST    116 (kv, msg)
+                STORE_ATTR              11 (draft_body_key_version)
+
+ 194    L7:     LOAD_FAST                1 (body)
+                LOAD_ATTR               24 (to_number)
+                POP_JUMP_IF_NONE       109 (to L8)
+
+ 195            LOAD_GLOBAL             15 (encrypt_field + NULL)
+                LOAD_FAST                1 (body)
+                LOAD_ATTR               24 (to_number)
+                LOAD_ATTR               17 (encode + NULL|self)
+                LOAD_CONST               5 ('utf-8')
+                CALL                     1
+                CALL                     1
+                UNPACK_SEQUENCE          3
+                STORE_FAST_STORE_FAST   86 (ct, nonce)
+                STORE_FAST               7 (kv)
+
+ 196            LOAD_FAST_LOAD_FAST     84 (ct, msg)
+                STORE_ATTR              13 (to_number_ciphertext)
+
+ 197            LOAD_FAST_LOAD_FAST    100 (nonce, msg)
+                STORE_ATTR              14 (to_number_nonce)
+
+ 198            LOAD_FAST_LOAD_FAST    116 (kv, msg)
+                STORE_ATTR              15 (to_number_key_version)
+
+ 199            LOAD_GLOBAL             33 (hash_phone + NULL)
+                LOAD_FAST                1 (body)
+                LOAD_ATTR               24 (to_number)
+                CALL                     1
+                LOAD_FAST                4 (msg)
+                STORE_ATTR              17 (to_number_hash)
+
+ 200            LOAD_GLOBAL             37 (extract_last4 + NULL)
+                LOAD_FAST                1 (body)
+                LOAD_ATTR               24 (to_number)
+                CALL                     1
+                LOAD_FAST                4 (msg)
+                STORE_ATTR              19 (to_number_last4)
+
+ 202    L8:     LOAD_FAST                3 (db)
+                LOAD_ATTR               41 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L9:     SEND                     3 (to L12)
+       L10:     YIELD_VALUE              1
+       L11:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+       L12:     END_SEND
+                POP_TOP
+
+ 203            LOAD_GLOBAL             43 (_build_response + NULL)
+                LOAD_FAST                4 (msg)
+                CALL                     1
+                RETURN_VALUE
+
+ 179   L13:     CLEANUP_THROW
+       L14:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 263 (to L5)
+
+ 202   L15:     CLEANUP_THROW
+       L16:     JUMP_BACKWARD_NO_INTERRUPT 18 (to L12)
+
+  --   L17:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L17 [0] lasti
+  L3 to L4 -> L13 [2]
+  L4 to L10 -> L17 [0] lasti
+  L10 to L11 -> L15 [2]
+  L11 to L14 -> L17 [0] lasti
+  L15 to L16 -> L17 [0] lasti
+
+Disassembly of <code object approve_text_back at 0x0000024C0FBE28B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 211>:
+ 211            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 218            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+ 219            LOAD_CONST               1 ('text_back_approve:')
+                LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 220            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+
+ 221            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+
+ 218            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   69 (allowed, _)
+
+ 223            LOAD_FAST                4 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+ 224            LOAD_GLOBAL             13 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 226    L6:     LOAD_GLOBAL             15 (_get_owned_message + NULL)
+                LOAD_FAST_LOAD_FAST     50 (db, current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                LOAD_FAST                0 (action_id)
+                CALL                     3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                STORE_FAST               6 (msg)
+
+ 228            LOAD_FAST                6 (msg)
+                LOAD_ATTR               16 (status)
+                LOAD_GLOBAL             18 (_APPROVABLE_STATUSES)
+                CONTAINS_OP              1
+                POP_JUMP_IF_FALSE       25 (to L11)
+
+ 229            LOAD_GLOBAL             13 (AppError + NULL)
+
+ 230            LOAD_CONST               7 ('NOT_APPROVABLE')
+
+ 231            LOAD_CONST               8 ("Cannot approve message in '")
+                LOAD_FAST                6 (msg)
+                LOAD_ATTR               16 (status)
+                FORMAT_SIMPLE
+                LOAD_CONST               9 ("' status")
+                BUILD_STRING             3
+
+ 232            LOAD_CONST              10 (409)
+
+ 229            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 236   L11:     LOAD_GLOBAL             21 (encrypt_field + NULL)
+
+ 237            LOAD_FAST                1 (body)
+                LOAD_ATTR               22 (final_body)
+                LOAD_ATTR               25 (encode + NULL|self)
+                LOAD_CONST              11 ('utf-8')
+                CALL                     1
+
+ 236            CALL                     1
+                UNPACK_SEQUENCE          3
+                STORE_FAST_STORE_FAST  120 (ct_final, nonce_final)
+                STORE_FAST               9 (kv_final)
+
+ 239            LOAD_FAST_LOAD_FAST    118 (ct_final, msg)
+                STORE_ATTR              13 (final_body_ciphertext)
+
+ 240            LOAD_FAST_LOAD_FAST    134 (nonce_final, msg)
+                STORE_ATTR              14 (final_body_nonce)
+
+ 241            LOAD_FAST_LOAD_FAST    150 (kv_final, msg)
+                STORE_ATTR              15 (final_body_key_version)
+
+ 244            LOAD_GLOBAL             21 (encrypt_field + NULL)
+                LOAD_FAST                1 (body)
+                LOAD_ATTR               32 (to_number)
+                LOAD_ATTR               25 (encode + NULL|self)
+                LOAD_CONST              11 ('utf-8')
+                CALL                     1
+                CALL                     1
+                UNPACK_SEQUENCE          3
+                STORE_FAST_STORE_FAST  171 (ct_to, nonce_to)
+                STORE_FAST              12 (kv_to)
+
+ 245            LOAD_FAST_LOAD_FAST    166 (ct_to, msg)
+                STORE_ATTR              17 (to_number_ciphertext)
+
+ 246            LOAD_FAST_LOAD_FAST    182 (nonce_to, msg)
+                STORE_ATTR              18 (to_number_nonce)
+
+ 247            LOAD_FAST_LOAD_FAST    198 (kv_to, msg)
+                STORE_ATTR              19 (to_number_key_version)
+
+ 248            LOAD_GLOBAL             41 (hash_phone + NULL)
+                LOAD_FAST                1 (body)
+                LOAD_ATTR               32 (to_number)
+                CALL                     1
+                LOAD_FAST                6 (msg)
+                STORE_ATTR              21 (to_number_hash)
+
+ 249            LOAD_GLOBAL             45 (extract_last4 + NULL)
+                LOAD_FAST                1 (body)
+                LOAD_ATTR               32 (to_number)
+                CALL                     1
+                LOAD_FAST                6 (msg)
+                STORE_ATTR              23 (to_number_last4)
+
+ 251            LOAD_GLOBAL             48 (datetime)
+                LOAD_ATTR               50 (now)
+                PUSH_NULL
+                LOAD_GLOBAL             52 (UTC)
+                CALL                     1
+                STORE_FAST              13 (now)
+
+ 252            LOAD_CONST              12 ('approved')
+                LOAD_FAST                6 (msg)
+                STORE_ATTR               8 (status)
+
+ 253            LOAD_FAST_LOAD_FAST    214 (now, msg)
+                STORE_ATTR              27 (approved_at)
+
+ 254            LOAD_GLOBAL             56 (uuid)
+                LOAD_ATTR               58 (UUID)
+                PUSH_NULL
+                LOAD_FAST                1 (body)
+                LOAD_ATTR               60 (device_id)
+                CALL                     1
+                LOAD_FAST                6 (msg)
+                STORE_ATTR              31 (approved_by_device_id)
+
+ 256            LOAD_FAST                3 (db)
+                LOAD_ATTR               65 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L12:     SEND                     3 (to L15)
+       L13:     YIELD_VALUE              1
+       L14:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L12)
+       L15:     END_SEND
+                POP_TOP
+
+ 258            LOAD_GLOBAL             66 (audit_service)
+                LOAD_ATTR               68 (log_event)
+                PUSH_NULL
+
+ 259            LOAD_FAST                3 (db)
+
+ 260            LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+
+ 261            LOAD_CONST              13 ('TEXT_BACK_APPROVED')
+
+ 262            LOAD_CONST              14 ('outbound_message')
+
+ 263            LOAD_FAST                6 (msg)
+                LOAD_ATTR                4 (id)
+
+ 265            LOAD_FAST                1 (body)
+                LOAD_ATTR               60 (device_id)
+
+ 266            LOAD_FAST                1 (body)
+                LOAD_ATTR               70 (idempotency_key)
+
+ 264            LOAD_CONST              15 (('device_id', 'idempotency_key'))
+                BUILD_CONST_KEY_MAP      2
+
+ 258            LOAD_CONST              16 (('owner_user_id', 'event_type', 'target_type', 'target_id', 'details'))
+                CALL_KW                  6
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L16:     SEND                     3 (to L19)
+       L17:     YIELD_VALUE              1
+       L18:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L16)
+       L19:     END_SEND
+                POP_TOP
+
+ 270            LOAD_GLOBAL             73 (_build_response + NULL)
+                LOAD_FAST_LOAD_FAST     97 (msg, body)
+                LOAD_ATTR               22 (final_body)
+                LOAD_CONST              17 (('final_body_plain',))
+                CALL_KW                  2
+                RETURN_VALUE
+
+ 218   L20:     CLEANUP_THROW
+       L21:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 481 (to L5)
+
+ 226   L22:     CLEANUP_THROW
+       L23:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 424 (to L10)
+
+ 256   L24:     CLEANUP_THROW
+       L25:     JUMP_BACKWARD_NO_INTERRUPT 115 (to L15)
+
+ 258   L26:     CLEANUP_THROW
+       L27:     JUMP_BACKWARD_NO_INTERRUPT 31 (to L19)
+
+  --   L28:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L28 [0] lasti
+  L3 to L4 -> L20 [2]
+  L4 to L8 -> L28 [0] lasti
+  L8 to L9 -> L22 [2]
+  L9 to L13 -> L28 [0] lasti
+  L13 to L14 -> L24 [2]
+  L14 to L17 -> L28 [0] lasti
+  L17 to L18 -> L26 [2]
+  L18 to L21 -> L28 [0] lasti
+  L22 to L23 -> L28 [0] lasti
+  L24 to L25 -> L28 [0] lasti
+  L26 to L27 -> L28 [0] lasti
+
+Disassembly of <code object retry_text_back at 0x0000024C0FB66740, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 278>:
+ 278            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 284            LOAD_GLOBAL              1 (_get_owned_message + NULL)
+                LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                LOAD_FAST                0 (action_id)
+                CALL                     3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               3 (msg)
+
+ 286            LOAD_FAST                3 (msg)
+                LOAD_ATTR                6 (status)
+                LOAD_CONST               1 ('failed')
+                COMPARE_OP             119 (bool(!=))
+                POP_JUMP_IF_FALSE       11 (to L6)
+
+ 287            LOAD_GLOBAL              9 (AppError + NULL)
+
+ 288            LOAD_CONST               2 ('NOT_RETRYABLE')
+
+ 289            LOAD_CONST               3 ('Only failed messages can be retried')
+
+ 290            LOAD_CONST               4 (409)
+
+ 287            LOAD_CONST               5 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 293    L6:     LOAD_CONST               6 ('approved')
+                LOAD_FAST                3 (msg)
+                STORE_ATTR               3 (status)
+
+ 294            LOAD_CONST               0 (None)
+                LOAD_FAST                3 (msg)
+                STORE_ATTR               5 (last_error_code)
+
+ 295            LOAD_CONST               0 (None)
+                LOAD_FAST                3 (msg)
+                STORE_ATTR               6 (last_error_message_short)
+
+ 297            LOAD_FAST                2 (db)
+                LOAD_ATTR               15 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                POP_TOP
+
+ 299            LOAD_GLOBAL             16 (audit_service)
+                LOAD_ATTR               18 (log_event)
+                PUSH_NULL
+
+ 300            LOAD_FAST                2 (db)
+
+ 301            LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+
+ 302            LOAD_CONST               7 ('TEXT_BACK_RETRY')
+
+ 303            LOAD_CONST               8 ('outbound_message')
+
+ 304            LOAD_FAST                3 (msg)
+                LOAD_ATTR                4 (id)
+
+ 299            LOAD_CONST               9 (('owner_user_id', 'event_type', 'target_type', 'target_id'))
+                CALL_KW                  5
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L11:     SEND                     3 (to L14)
+       L12:     YIELD_VALUE              1
+       L13:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+       L14:     END_SEND
+                POP_TOP
+
+ 307            LOAD_GLOBAL             21 (_build_response + NULL)
+                LOAD_FAST                3 (msg)
+                CALL                     1
+                RETURN_VALUE
+
+ 284   L15:     CLEANUP_THROW
+       L16:     JUMP_BACKWARD_NO_INTERRUPT 149 (to L5)
+
+ 297   L17:     CLEANUP_THROW
+       L18:     JUMP_BACKWARD_NO_INTERRUPT 79 (to L10)
+
+ 299   L19:     CLEANUP_THROW
+       L20:     JUMP_BACKWARD_NO_INTERRUPT 19 (to L14)
+
+  --   L21:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L21 [0] lasti
+  L3 to L4 -> L15 [2]
+  L4 to L8 -> L21 [0] lasti
+  L8 to L9 -> L17 [2]
+  L9 to L12 -> L21 [0] lasti
+  L12 to L13 -> L19 [2]
+  L13 to L16 -> L21 [0] lasti
+  L17 to L18 -> L21 [0] lasti
+  L19 to L20 -> L21 [0] lasti
+
+Disassembly of <code object cancel_text_back at 0x0000024C0FBC9D10, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 315>:
+ 315            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 321            LOAD_GLOBAL              1 (_get_owned_message + NULL)
+                LOAD_FAST_LOAD_FAST     33 (db, current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                LOAD_FAST                0 (action_id)
+                CALL                     3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               3 (msg)
+
+ 323            LOAD_FAST                3 (msg)
+                LOAD_ATTR                6 (status)
+                LOAD_GLOBAL              8 (_DRAFT_STATUSES)
+                CONTAINS_OP              1
+                POP_JUMP_IF_FALSE       11 (to L6)
+
+ 324            LOAD_GLOBAL             11 (AppError + NULL)
+
+ 325            LOAD_CONST               1 ('NOT_CANCELLABLE')
+
+ 326            LOAD_CONST               2 ('Only drafted/awaiting_approval messages can be cancelled')
+
+ 327            LOAD_CONST               3 (409)
+
+ 324            LOAD_CONST               4 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 330    L6:     LOAD_CONST               5 ('cancelled')
+                LOAD_FAST                3 (msg)
+                STORE_ATTR               3 (status)
+
+ 331            LOAD_FAST                2 (db)
+                LOAD_ATTR               13 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                POP_TOP
+
+ 333            LOAD_GLOBAL             14 (audit_service)
+                LOAD_ATTR               16 (log_event)
+                PUSH_NULL
+
+ 334            LOAD_FAST                2 (db)
+
+ 335            LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+
+ 336            LOAD_CONST               6 ('TEXT_BACK_CANCELLED')
+
+ 337            LOAD_CONST               7 ('outbound_message')
+
+ 338            LOAD_FAST                3 (msg)
+                LOAD_ATTR                4 (id)
+
+ 333            LOAD_CONST               8 (('owner_user_id', 'event_type', 'target_type', 'target_id'))
+                CALL_KW                  5
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L11:     SEND                     3 (to L14)
+       L12:     YIELD_VALUE              1
+       L13:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+       L14:     END_SEND
+                POP_TOP
+
+ 341            LOAD_GLOBAL             19 (_build_response + NULL)
+                LOAD_FAST                3 (msg)
+                CALL                     1
+                RETURN_VALUE
+
+ 321   L15:     CLEANUP_THROW
+       L16:     JUMP_BACKWARD_NO_INTERRUPT 139 (to L5)
+
+ 331   L17:     CLEANUP_THROW
+       L18:     JUMP_BACKWARD_NO_INTERRUPT 79 (to L10)
+
+ 333   L19:     CLEANUP_THROW
+       L20:     JUMP_BACKWARD_NO_INTERRUPT 19 (to L14)
+
+  --   L21:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L21 [0] lasti
+  L3 to L4 -> L15 [2]
+  L4 to L8 -> L21 [0] lasti
+  L8 to L9 -> L17 [2]
+  L9 to L12 -> L21 [0] lasti
+  L12 to L13 -> L19 [2]
+  L13 to L16 -> L21 [0] lasti
+  L17 to L18 -> L21 [0] lasti
+  L19 to L20 -> L21 [0] lasti
+
+Disassembly of <code object _get_owned_call at 0x0000024C0FBF9780, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 349>:
+ 349           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+ 352           LOAD_GLOBAL              1 (select + NULL)
+               LOAD_GLOBAL              2 (Call)
+               CALL                     1
+               LOAD_ATTR                5 (where + NULL|self)
+
+ 353           LOAD_GLOBAL              2 (Call)
+               LOAD_ATTR                6 (id)
+               LOAD_FAST                2 (call_id)
+               COMPARE_OP              72 (==)
+
+ 354           LOAD_GLOBAL              2 (Call)
+               LOAD_ATTR                8 (owner_user_id)
+               LOAD_FAST                1 (user_id)
+               COMPARE_OP              72 (==)
+
+ 355           LOAD_GLOBAL              2 (Call)
+               LOAD_ATTR               10 (deleted_at)
+               LOAD_ATTR               13 (is_ + NULL|self)
+               LOAD_CONST               0 (None)
+               CALL                     1
+
+ 352           CALL                     3
+               STORE_FAST               3 (stmt)
+
+ 357           LOAD_FAST                0 (db)
+               LOAD_ATTR               15 (execute + NULL|self)
+               LOAD_FAST                3 (stmt)
+               CALL                     1
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               STORE_FAST               4 (result)
+
+ 358           LOAD_FAST                4 (result)
+               LOAD_ATTR               17 (scalar_one_or_none + NULL|self)
+               CALL                     0
+               STORE_FAST               5 (call)
+
+ 359           LOAD_FAST                5 (call)
+               POP_JUMP_IF_NOT_NONE    11 (to L6)
+
+ 360           LOAD_GLOBAL             19 (AppError + NULL)
+               LOAD_CONST               1 ('CALL_NOT_FOUND')
+               LOAD_CONST               2 ('Call not found')
+               LOAD_CONST               3 (404)
+               LOAD_CONST               4 (('code', 'message', 'status_code'))
+               CALL_KW                  3
+               RAISE_VARARGS            1
+
+ 361   L6:     LOAD_FAST                5 (call)
+               RETURN_VALUE
+
+ 357   L7:     CLEANUP_THROW
+       L8:     JUMP_BACKWARD_NO_INTERRUPT 36 (to L5)
+
+  --   L9:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L9 [0] lasti
+  L3 to L4 -> L7 [2]
+  L4 to L8 -> L9 [0] lasti
+
+Disassembly of <code object _get_owned_message at 0x0000024C114EC030, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 364>:
+ 364           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+ 367           LOAD_GLOBAL              1 (select + NULL)
+               LOAD_GLOBAL              2 (OutboundMessage)
+               CALL                     1
+               LOAD_ATTR                5 (where + NULL|self)
+
+ 368           LOAD_GLOBAL              2 (OutboundMessage)
+               LOAD_ATTR                6 (id)
+               LOAD_FAST                2 (message_id)
+               COMPARE_OP              72 (==)
+
+ 369           LOAD_GLOBAL              2 (OutboundMessage)
+               LOAD_ATTR                8 (owner_user_id)
+               LOAD_FAST                1 (user_id)
+               COMPARE_OP              72 (==)
+
+ 367           CALL                     2
+               STORE_FAST               3 (stmt)
+
+ 371           LOAD_FAST                0 (db)
+               LOAD_ATTR               11 (execute + NULL|self)
+               LOAD_FAST                3 (stmt)
+               CALL                     1
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               STORE_FAST               4 (result)
+
+ 372           LOAD_FAST                4 (result)
+               LOAD_ATTR               13 (scalar_one_or_none + NULL|self)
+               CALL                     0
+               STORE_FAST               5 (msg)
+
+ 373           LOAD_FAST                5 (msg)
+               POP_JUMP_IF_NOT_NONE    11 (to L6)
+
+ 374           LOAD_GLOBAL             15 (AppError + NULL)
+
+ 375           LOAD_CONST               1 ('MESSAGE_NOT_FOUND')
+
+ 376           LOAD_CONST               2 ('Message not found')
+
+ 377           LOAD_CONST               3 (404)
+
+ 374           LOAD_CONST               4 (('code', 'message', 'status_code'))
+               CALL_KW                  3
+               RAISE_VARARGS            1
+
+ 379   L6:     LOAD_FAST                5 (msg)
+               RETURN_VALUE
+
+ 371   L7:     CLEANUP_THROW
+       L8:     JUMP_BACKWARD_NO_INTERRUPT 36 (to L5)
+
+  --   L9:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L9 [0] lasti
+  L3 to L4 -> L7 [2]
+  L4 to L8 -> L9 [0] lasti
+
+Disassembly of <code object _find_draft_for_call at 0x0000024C0FBEC150, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 382>:
+ 382           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+ 385           LOAD_GLOBAL              1 (select + NULL)
+               LOAD_GLOBAL              2 (OutboundMessage)
+               CALL                     1
+               LOAD_ATTR                5 (where + NULL|self)
+
+ 386           LOAD_GLOBAL              2 (OutboundMessage)
+               LOAD_ATTR                6 (owner_user_id)
+               LOAD_FAST                1 (user_id)
+               COMPARE_OP              72 (==)
+
+ 387           LOAD_GLOBAL              2 (OutboundMessage)
+               LOAD_ATTR                8 (call_id)
+               LOAD_FAST                2 (call_id)
+               COMPARE_OP              72 (==)
+
+ 388           LOAD_GLOBAL              2 (OutboundMessage)
+               LOAD_ATTR               10 (action_type)
+               LOAD_CONST               1 ('text_back')
+               COMPARE_OP              72 (==)
+
+ 389           LOAD_GLOBAL              2 (OutboundMessage)
+               LOAD_ATTR               12 (status)
+               LOAD_ATTR               15 (in_ + NULL|self)
+               LOAD_GLOBAL             16 (_DRAFT_STATUSES)
+               CALL                     1
+
+ 385           CALL                     4
+               STORE_FAST               3 (stmt)
+
+ 391           LOAD_FAST                0 (db)
+               LOAD_ATTR               19 (execute + NULL|self)
+               LOAD_FAST                3 (stmt)
+               CALL                     1
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               STORE_FAST               4 (result)
+
+ 392           LOAD_FAST                4 (result)
+               LOAD_ATTR               21 (scalar_one_or_none + NULL|self)
+               CALL                     0
+               RETURN_VALUE
+
+ 391   L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 20 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti
+
+Disassembly of <code object _decrypt_caller_phone at 0x0000024C114352E0, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 395>:
+ 395           RESUME                   0
+
+ 397           NOP
+
+ 398   L1:     LOAD_GLOBAL              1 (decrypt_field + NULL)
+
+ 399           LOAD_FAST                0 (call)
+               LOAD_ATTR                2 (caller_phone_ciphertext)
+
+ 400           LOAD_FAST                0 (call)
+               LOAD_ATTR                4 (caller_phone_nonce)
+
+ 401           LOAD_FAST                0 (call)
+               LOAD_ATTR                6 (caller_phone_key_version)
+
+ 398           CALL                     3
+               STORE_FAST               1 (plaintext)
+
+ 403           LOAD_FAST                1 (plaintext)
+               LOAD_ATTR                9 (decode + NULL|self)
+               LOAD_CONST               1 ('utf-8')
+               CALL                     1
+       L2:     RETURN_VALUE
+
+  --   L3:     PUSH_EXC_INFO
+
+ 404           LOAD_GLOBAL             10 (Exception)
+               CHECK_EXC_MATCH
+               POP_JUMP_IF_FALSE        3 (to L5)
+               POP_TOP
+
+ 405   L4:     POP_EXCEPT
+               RETURN_CONST             2 (None)
+
+ 404   L5:     RERAISE                  0
+
+  --   L6:     COPY                     3
+               POP_EXCEPT
+               RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L3 [0]
+  L3 to L4 -> L6 [1] lasti
+  L5 to L6 -> L6 [1] lasti
+
+Disassembly of <code object _decrypt_body at 0x0000024C0EF10D40, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 408>:
+ 408           RESUME                   0
+
+ 409           NOP
+
+ 410   L1:     LOAD_GLOBAL              1 (decrypt_field + NULL)
+               LOAD_FAST_LOAD_FAST      1 (ct, nonce)
+               LOAD_FAST                2 (kv)
+               CALL                     3
+               LOAD_ATTR                3 (decode + NULL|self)
+               LOAD_CONST               1 ('utf-8')
+               CALL                     1
+       L2:     RETURN_VALUE
+
+  --   L3:     PUSH_EXC_INFO
+
+ 411           LOAD_GLOBAL              4 (Exception)
+               CHECK_EXC_MATCH
+               POP_JUMP_IF_FALSE        3 (to L5)
+               POP_TOP
+
+ 412   L4:     POP_EXCEPT
+               RETURN_CONST             0 (None)
+
+ 411   L5:     RERAISE                  0
+
+  --   L6:     COPY                     3
+               POP_EXCEPT
+               RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L3 [0]
+  L3 to L4 -> L6 [1] lasti
+  L5 to L6 -> L6 [1] lasti
+
+Disassembly of <code object _build_response at 0x0000024C0F1FEAC0, file "D:\fluence\Github\mattbot\backend\app\api\v1\messages.py", line 415>:
+415           RESUME                   0
+
+421           LOAD_FAST                1 (draft_body_plain)
+              POP_JUMP_IF_NOT_NONE    43 (to L1)
+
+422           LOAD_GLOBAL              1 (_decrypt_body + NULL)
+
+423           LOAD_FAST                0 (msg)
+              LOAD_ATTR                2 (draft_body_ciphertext)
+
+424           LOAD_FAST                0 (msg)
+              LOAD_ATTR                4 (draft_body_nonce)
+
+425           LOAD_FAST                0 (msg)
+              LOAD_ATTR                6 (draft_body_key_version)
+
+422           CALL                     3
+              STORE_FAST               1 (draft_body_plain)
+
+428   L1:     LOAD_FAST                2 (final_body_plain)
+              POP_JUMP_IF_NOT_NONE    56 (to L2)
+              LOAD_FAST                0 (msg)
+              LOAD_ATTR                8 (final_body_ciphertext)
+              POP_JUMP_IF_NONE        43 (to L2)
+
+429           LOAD_GLOBAL              1 (_decrypt_body + NULL)
+
+430           LOAD_FAST                0 (msg)
+              LOAD_ATTR                8 (final_body_ciphertext)
+
+431           LOAD_FAST                0 (msg)
+              LOAD_ATTR               10 (final_body_nonce)
+
+432           LOAD_FAST                0 (msg)
+              LOAD_ATTR               12 (final_body_key_version)
+
+429           CALL                     3
+              STORE_FAST               2 (final_body_plain)
+
+435   L2:     LOAD_GLOBAL             15 (TextBackResponse + NULL)
+
+436           LOAD_GLOBAL             17 (str + NULL)
+              LOAD_FAST                0 (msg)
+              LOAD_ATTR               18 (id)
+              CALL                     1
+
+437           LOAD_FAST                0 (msg)
+              LOAD_ATTR               20 (call_id)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       21 (to L3)
+              LOAD_GLOBAL             17 (str + NULL)
+              LOAD_FAST                0 (msg)
+              LOAD_ATTR               20 (call_id)
+              CALL                     1
+              JUMP_FORWARD             1 (to L4)
+      L3:     LOAD_CONST               0 (None)
+
+438   L4:     LOAD_FAST                0 (msg)
+              LOAD_ATTR               22 (status)
+
+439           LOAD_FAST                0 (msg)
+              LOAD_ATTR               24 (to_number_last4)
+
+440           LOAD_FAST                1 (draft_body_plain)
+
+441           LOAD_FAST                2 (final_body_plain)
+
+442           LOAD_FAST                0 (msg)
+              LOAD_ATTR               26 (template_id_used)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       21 (to L5)
+              LOAD_GLOBAL             17 (str + NULL)
+              LOAD_FAST                0 (msg)
+              LOAD_ATTR               26 (template_id_used)
+              CALL                     1
+              JUMP_FORWARD             1 (to L6)
+      L5:     LOAD_CONST               0 (None)
+
+443   L6:     LOAD_FAST                0 (msg)
+              LOAD_ATTR               28 (approved_at)
+
+444           LOAD_FAST                0 (msg)
+              LOAD_ATTR               30 (last_error_code)
+
+445           LOAD_FAST                0 (msg)
+              LOAD_ATTR               32 (created_at)
+
+435           LOAD_CONST               1 (('id', 'call_id', 'status', 'to_number_last4', 'draft_body', 'final_body', 'template_id_used', 'approved_at', 'last_error_code', 'created_at'))
+              CALL_KW                 10
+              RETURN_VALUE

@@ -1,0 +1,746 @@
+# Bytecode dump of: telephony.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\schemas\telephony.py
+# co_names: ('__future__', 'annotations', 'datetime', 'pydantic', 'BaseModel', 'field_validator', 'NumberProvisionResponse', 'NumberListResponse', 'CallModesResponse', 'CallModesPatchRequest', 'CarrierGuide', 'ForwardingSetupGuideResponse', 'ForwardingVerifyResponse', 'ForwardingVerifyStatusResponse')
+# co_consts (strings): ['NumberProvisionResponse', 'NumberListResponse', 'CallModesResponse', 'CallModesPatchRequest', 'CarrierGuide', 'ForwardingSetupGuideResponse', 'ForwardingVerifyResponse', 'ForwardingVerifyStatusResponse']
+
+# --- Nested code object: NumberProvisionResponse ---
+    # DOCSTRING: """NumberProvisionResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'provisioned_at', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+      8           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('NumberProvisionResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (8)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+      9           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('id')
+                  STORE_SUBSCR
+    
+     10           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('e164')
+                  STORE_SUBSCR
+    
+     11           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('status')
+                  STORE_SUBSCR
+    
+     12           LOAD_CONST               6 (None)
+                  STORE_NAME               5 (provisioned_at)
+                  LOAD_CONST               7 ('datetime | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('provisioned_at')
+                  STORE_SUBSCR
+    
+     14           LOAD_CONST               9 ('from_attributes')
+                  LOAD_CONST              10 (True)
+                  BUILD_MAP                1
+                  STORE_NAME               6 (model_config)
+                  LOAD_CONST              11 (())
+                  STORE_NAME               7 (__static_attributes__)
+                  RETURN_CONST             6 (None)
+    
+# --- Nested code object: NumberListResponse ---
+    # DOCSTRING: """NumberListResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'items', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     17           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('NumberListResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (17)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     18           BUILD_LIST               0
+                  STORE_NAME               4 (items)
+                  LOAD_CONST               2 ('list[NumberProvisionResponse]')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               3 ('items')
+                  STORE_SUBSCR
+                  LOAD_CONST               4 (())
+                  STORE_NAME               6 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# --- Nested code object: CallModesResponse ---
+    # DOCSTRING: """CallModesResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'mode_a_enabled', '__annotations__', 'mode_b_enabled', 'access_control', 'verification_status', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+     21           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CallModesResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (21)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     22           LOAD_CONST               2 (True)
+                  STORE_NAME               4 (mode_a_enabled)
+                  LOAD_CONST               3 ('bool')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               4 ('mode_a_enabled')
+                  STORE_SUBSCR
+    
+     23           LOAD_CONST               5 (False)
+                  STORE_NAME               6 (mode_b_enabled)
+                  LOAD_CONST               3 ('bool')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               6 ('mode_b_enabled')
+                  STORE_SUBSCR
+    
+     24           LOAD_CONST               7 ('everyone')
+                  STORE_NAME               7 (access_control)
+                  LOAD_CONST               8 ('str')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               9 ('access_control')
+                  STORE_SUBSCR
+    
+     25           LOAD_CONST              10 ('unverified')
+                  STORE_NAME               8 (verification_status)
+                  LOAD_CONST               8 ('str')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              11 ('verification_status')
+                  STORE_SUBSCR
+    
+     27           LOAD_CONST              12 ('from_attributes')
+                  LOAD_CONST               2 (True)
+                  BUILD_MAP                1
+                  STORE_NAME               9 (model_config)
+                  LOAD_CONST              13 (())
+                  STORE_NAME              10 (__static_attributes__)
+                  RETURN_CONST            14 (None)
+    
+# --- Nested code object: CallModesPatchRequest ---
+    # DOCSTRING: """CallModesPatchRequest"""
+    # --- Nested code object: CallModesPatchRequest.validate_access ---
+        # co_names: ('ValueError',)
+        # co_varnames: ('cls', 'v')
+         36           RESUME                   0
+        
+         39           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        17 (to L1)
+                      LOAD_FAST                1 (v)
+                      LOAD_CONST               1 (('everyone', 'contacts', 'vip'))
+                      CONTAINS_OP              1
+                      POP_JUMP_IF_FALSE       11 (to L1)
+        
+         40           LOAD_GLOBAL              1 (ValueError + NULL)
+                      LOAD_CONST               2 ('Must be one of: everyone, contacts, vip')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         41   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'mode_a_enabled', '__annotations__', 'mode_b_enabled', 'access_control', 'personal_number_e164', 'field_validator', 'classmethod', 'validate_access', '__static_attributes__')
+    # co_varnames: ()
+     30           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CallModesPatchRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (30)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     31           LOAD_CONST               2 (None)
+                  STORE_NAME               4 (mode_a_enabled)
+                  LOAD_CONST               3 ('bool | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               4 ('mode_a_enabled')
+                  STORE_SUBSCR
+    
+     32           LOAD_CONST               2 (None)
+                  STORE_NAME               6 (mode_b_enabled)
+                  LOAD_CONST               3 ('bool | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               5 ('mode_b_enabled')
+                  STORE_SUBSCR
+    
+     33           LOAD_CONST               2 (None)
+                  STORE_NAME               7 (access_control)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               7 ('access_control')
+                  STORE_SUBSCR
+    
+     34           LOAD_CONST               2 (None)
+                  STORE_NAME               8 (personal_number_e164)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               8 ('personal_number_e164')
+                  STORE_SUBSCR
+    
+     36           LOAD_NAME                9 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               7 ('access_control')
+                  CALL                     1
+    
+     37           LOAD_NAME               10 (classmethod)
+    
+     38           LOAD_CONST              11 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST               9 (<code object validate_access at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 36>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     37           CALL                     0
+    
+     36           CALL                     0
+    
+     38           STORE_NAME              11 (validate_access)
+                  LOAD_CONST              10 (())
+                  STORE_NAME              12 (__static_attributes__)
+                  RETURN_CONST             2 (None)
+    
+    Disassembly of <code object validate_access at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 36>:
+     36           RESUME                   0
+    
+     39           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        17 (to L1)
+                  LOAD_FAST                1 (v)
+                  LOAD_CONST               1 (('everyone', 'contacts', 'vip'))
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_FALSE       11 (to L1)
+    
+     40           LOAD_GLOBAL              1 (ValueError + NULL)
+                  LOAD_CONST               2 ('Must be one of: everyone, contacts, vip')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     41   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+# --- Nested code object: CarrierGuide ---
+    # DOCSTRING: """CarrierGuide"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     44           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CarrierGuide')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (44)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     45           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('carrier')
+                  STORE_SUBSCR
+    
+     46           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('enable_busy')
+                  STORE_SUBSCR
+    
+     47           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('enable_unreachable')
+                  STORE_SUBSCR
+    
+     48           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('disable')
+                  STORE_SUBSCR
+                  LOAD_CONST               7 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             8 (None)
+    
+# --- Nested code object: ForwardingSetupGuideResponse ---
+    # DOCSTRING: """ForwardingSetupGuideResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     51           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('ForwardingSetupGuideResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (51)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     52           LOAD_CONST               2 ('list[str]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('generic_instructions')
+                  STORE_SUBSCR
+    
+     53           LOAD_CONST               4 ('list[CarrierGuide]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('carrier_guides')
+                  STORE_SUBSCR
+                  LOAD_CONST               6 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             7 (None)
+    
+# --- Nested code object: ForwardingVerifyResponse ---
+    # DOCSTRING: """ForwardingVerifyResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     56           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('ForwardingVerifyResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (56)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     57           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('attempt_id')
+                  STORE_SUBSCR
+    
+     58           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('status')
+                  STORE_SUBSCR
+    
+     59           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('message')
+                  STORE_SUBSCR
+                  LOAD_CONST               6 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             7 (None)
+    
+# --- Nested code object: ForwardingVerifyStatusResponse ---
+    # DOCSTRING: """ForwardingVerifyStatusResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'last_verified_at', 'latest_attempt_status', '__static_attributes__')
+    # co_varnames: ()
+     62           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('ForwardingVerifyStatusResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (62)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     63           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('verification_status')
+                  STORE_SUBSCR
+    
+     64           LOAD_CONST               4 (None)
+                  STORE_NAME               5 (last_verified_at)
+                  LOAD_CONST               5 ('datetime | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('last_verified_at')
+                  STORE_SUBSCR
+    
+     65           LOAD_CONST               4 (None)
+                  STORE_NAME               6 (latest_attempt_status)
+                  LOAD_CONST               7 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('latest_attempt_status')
+                  STORE_SUBSCR
+                  LOAD_CONST               9 (())
+                  STORE_NAME               7 (__static_attributes__)
+                  RETURN_CONST             4 (None)
+    
+# co_names: ('__future__', 'annotations', 'datetime', 'pydantic', 'BaseModel', 'field_validator', 'NumberProvisionResponse', 'NumberListResponse', 'CallModesResponse', 'CallModesPatchRequest', 'CarrierGuide', 'ForwardingSetupGuideResponse', 'ForwardingVerifyResponse', 'ForwardingVerifyStatusResponse')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 (0)
+              LOAD_CONST               1 (('annotations',))
+              IMPORT_NAME              0 (__future__)
+              IMPORT_FROM              1 (annotations)
+              STORE_NAME               1 (annotations)
+              POP_TOP
+
+  3           LOAD_CONST               0 (0)
+              LOAD_CONST               2 (('datetime',))
+              IMPORT_NAME              2 (datetime)
+              IMPORT_FROM              2 (datetime)
+              STORE_NAME               2 (datetime)
+              POP_TOP
+
+  5           LOAD_CONST               0 (0)
+              LOAD_CONST               3 (('BaseModel', 'field_validator'))
+              IMPORT_NAME              3 (pydantic)
+              IMPORT_FROM              4 (BaseModel)
+              STORE_NAME               4 (BaseModel)
+              IMPORT_FROM              5 (field_validator)
+              STORE_NAME               5 (field_validator)
+              POP_TOP
+
+  8           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               4 (<code object NumberProvisionResponse at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 8>)
+              MAKE_FUNCTION
+              LOAD_CONST               5 ('NumberProvisionResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME               6 (NumberProvisionResponse)
+
+ 17           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               6 (<code object NumberListResponse at 0x0000024C0EF2B0F0, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 17>)
+              MAKE_FUNCTION
+              LOAD_CONST               7 ('NumberListResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME               7 (NumberListResponse)
+
+ 21           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               8 (<code object CallModesResponse at 0x0000024C11496310, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 21>)
+              MAKE_FUNCTION
+              LOAD_CONST               9 ('CallModesResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME               8 (CallModesResponse)
+
+ 30           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              10 (<code object CallModesPatchRequest at 0x0000024C11498B70, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 30>)
+              MAKE_FUNCTION
+              LOAD_CONST              11 ('CallModesPatchRequest')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME               9 (CallModesPatchRequest)
+
+ 44           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              12 (<code object CarrierGuide at 0x0000024C1141BBB0, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 44>)
+              MAKE_FUNCTION
+              LOAD_CONST              13 ('CarrierGuide')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME              10 (CarrierGuide)
+
+ 51           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              14 (<code object ForwardingSetupGuideResponse at 0x0000024C11423B30, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 51>)
+              MAKE_FUNCTION
+              LOAD_CONST              15 ('ForwardingSetupGuideResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME              11 (ForwardingSetupGuideResponse)
+
+ 56           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              16 (<code object ForwardingVerifyResponse at 0x0000024C11423C30, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 56>)
+              MAKE_FUNCTION
+              LOAD_CONST              17 ('ForwardingVerifyResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME              12 (ForwardingVerifyResponse)
+
+ 62           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              18 (<code object ForwardingVerifyStatusResponse at 0x0000024C1141B990, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 62>)
+              MAKE_FUNCTION
+              LOAD_CONST              19 ('ForwardingVerifyStatusResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME              13 (ForwardingVerifyStatusResponse)
+              RETURN_CONST            20 (None)
+
+Disassembly of <code object NumberProvisionResponse at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 8>:
+  8           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('NumberProvisionResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (8)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+  9           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('id')
+              STORE_SUBSCR
+
+ 10           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('e164')
+              STORE_SUBSCR
+
+ 11           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('status')
+              STORE_SUBSCR
+
+ 12           LOAD_CONST               6 (None)
+              STORE_NAME               5 (provisioned_at)
+              LOAD_CONST               7 ('datetime | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('provisioned_at')
+              STORE_SUBSCR
+
+ 14           LOAD_CONST               9 ('from_attributes')
+              LOAD_CONST              10 (True)
+              BUILD_MAP                1
+              STORE_NAME               6 (model_config)
+              LOAD_CONST              11 (())
+              STORE_NAME               7 (__static_attributes__)
+              RETURN_CONST             6 (None)
+
+Disassembly of <code object NumberListResponse at 0x0000024C0EF2B0F0, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 17>:
+ 17           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('NumberListResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (17)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 18           BUILD_LIST               0
+              STORE_NAME               4 (items)
+              LOAD_CONST               2 ('list[NumberProvisionResponse]')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               3 ('items')
+              STORE_SUBSCR
+              LOAD_CONST               4 (())
+              STORE_NAME               6 (__static_attributes__)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object CallModesResponse at 0x0000024C11496310, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 21>:
+ 21           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CallModesResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (21)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 22           LOAD_CONST               2 (True)
+              STORE_NAME               4 (mode_a_enabled)
+              LOAD_CONST               3 ('bool')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               4 ('mode_a_enabled')
+              STORE_SUBSCR
+
+ 23           LOAD_CONST               5 (False)
+              STORE_NAME               6 (mode_b_enabled)
+              LOAD_CONST               3 ('bool')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               6 ('mode_b_enabled')
+              STORE_SUBSCR
+
+ 24           LOAD_CONST               7 ('everyone')
+              STORE_NAME               7 (access_control)
+              LOAD_CONST               8 ('str')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               9 ('access_control')
+              STORE_SUBSCR
+
+ 25           LOAD_CONST              10 ('unverified')
+              STORE_NAME               8 (verification_status)
+              LOAD_CONST               8 ('str')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              11 ('verification_status')
+              STORE_SUBSCR
+
+ 27           LOAD_CONST              12 ('from_attributes')
+              LOAD_CONST               2 (True)
+              BUILD_MAP                1
+              STORE_NAME               9 (model_config)
+              LOAD_CONST              13 (())
+              STORE_NAME              10 (__static_attributes__)
+              RETURN_CONST            14 (None)
+
+Disassembly of <code object CallModesPatchRequest at 0x0000024C11498B70, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 30>:
+ 30           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CallModesPatchRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (30)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 31           LOAD_CONST               2 (None)
+              STORE_NAME               4 (mode_a_enabled)
+              LOAD_CONST               3 ('bool | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               4 ('mode_a_enabled')
+              STORE_SUBSCR
+
+ 32           LOAD_CONST               2 (None)
+              STORE_NAME               6 (mode_b_enabled)
+              LOAD_CONST               3 ('bool | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               5 ('mode_b_enabled')
+              STORE_SUBSCR
+
+ 33           LOAD_CONST               2 (None)
+              STORE_NAME               7 (access_control)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               7 ('access_control')
+              STORE_SUBSCR
+
+ 34           LOAD_CONST               2 (None)
+              STORE_NAME               8 (personal_number_e164)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               8 ('personal_number_e164')
+              STORE_SUBSCR
+
+ 36           LOAD_NAME                9 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               7 ('access_control')
+              CALL                     1
+
+ 37           LOAD_NAME               10 (classmethod)
+
+ 38           LOAD_CONST              11 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST               9 (<code object validate_access at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 36>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 37           CALL                     0
+
+ 36           CALL                     0
+
+ 38           STORE_NAME              11 (validate_access)
+              LOAD_CONST              10 (())
+              STORE_NAME              12 (__static_attributes__)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object validate_access at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 36>:
+ 36           RESUME                   0
+
+ 39           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        17 (to L1)
+              LOAD_FAST                1 (v)
+              LOAD_CONST               1 (('everyone', 'contacts', 'vip'))
+              CONTAINS_OP              1
+              POP_JUMP_IF_FALSE       11 (to L1)
+
+ 40           LOAD_GLOBAL              1 (ValueError + NULL)
+              LOAD_CONST               2 ('Must be one of: everyone, contacts, vip')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 41   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object CarrierGuide at 0x0000024C1141BBB0, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 44>:
+ 44           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CarrierGuide')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (44)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 45           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('carrier')
+              STORE_SUBSCR
+
+ 46           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('enable_busy')
+              STORE_SUBSCR
+
+ 47           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('enable_unreachable')
+              STORE_SUBSCR
+
+ 48           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('disable')
+              STORE_SUBSCR
+              LOAD_CONST               7 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             8 (None)
+
+Disassembly of <code object ForwardingSetupGuideResponse at 0x0000024C11423B30, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 51>:
+ 51           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('ForwardingSetupGuideResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (51)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 52           LOAD_CONST               2 ('list[str]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('generic_instructions')
+              STORE_SUBSCR
+
+ 53           LOAD_CONST               4 ('list[CarrierGuide]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('carrier_guides')
+              STORE_SUBSCR
+              LOAD_CONST               6 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             7 (None)
+
+Disassembly of <code object ForwardingVerifyResponse at 0x0000024C11423C30, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 56>:
+ 56           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('ForwardingVerifyResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (56)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 57           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('attempt_id')
+              STORE_SUBSCR
+
+ 58           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('status')
+              STORE_SUBSCR
+
+ 59           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('message')
+              STORE_SUBSCR
+              LOAD_CONST               6 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             7 (None)
+
+Disassembly of <code object ForwardingVerifyStatusResponse at 0x0000024C1141B990, file "D:\fluence\Github\mattbot\backend\app\schemas\telephony.py", line 62>:
+ 62           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('ForwardingVerifyStatusResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (62)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 63           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('verification_status')
+              STORE_SUBSCR
+
+ 64           LOAD_CONST               4 (None)
+              STORE_NAME               5 (last_verified_at)
+              LOAD_CONST               5 ('datetime | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('last_verified_at')
+              STORE_SUBSCR
+
+ 65           LOAD_CONST               4 (None)
+              STORE_NAME               6 (latest_attempt_status)
+              LOAD_CONST               7 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('latest_attempt_status')
+              STORE_SUBSCR
+              LOAD_CONST               9 (())
+              STORE_NAME               7 (__static_attributes__)
+              RETURN_CONST             4 (None)

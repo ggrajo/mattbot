@@ -1,0 +1,9 @@
+# Bytecode dump of: __init__.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\workers\__init__.py
+# co_names: ()
+# co_consts (strings): []
+
+# co_names: ()
+# co_varnames: ()
+          RESUME                   0
+          RETURN_CONST             0 (None)

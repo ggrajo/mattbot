@@ -1,0 +1,343 @@
+# Bytecode dump of: prompt_suggestions.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\api\v1\prompt_suggestions.py
+# co_names: ('__doc__', '__future__', 'annotations', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.database', 'get_db', 'app.models.prompt_suggestion', 'PromptSuggestion', 'app.schemas.agents', 'PromptSuggestionItem', 'PromptSuggestionsResponse', 'router', 'get', 'list_prompt_suggestions')
+# co_consts (strings): ['Prompt suggestions endpoint.', '']
+
+# DOCSTRING: """Prompt suggestions endpoint."""
+# --- Nested code object: list_prompt_suggestions ---
+    # co_names: ('select', 'PromptSuggestion', 'where', 'is_active', 'is_', 'order_by', 'sort_order', 'asc', 'execute', 'scalars', 'all', 'PromptSuggestionsResponse', 'PromptSuggestionItem', 'str', 'id', 'title', 'text')
+    # co_varnames: ('_current_user', 'db', 'stmt', 'result', 'suggestions', 's')
+      17            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      23            LOAD_GLOBAL              1 (select + NULL)
+                    LOAD_GLOBAL              2 (PromptSuggestion)
+                    CALL                     1
+    
+      24            LOAD_ATTR                5 (where + NULL|self)
+                    LOAD_GLOBAL              2 (PromptSuggestion)
+                    LOAD_ATTR                6 (is_active)
+                    LOAD_ATTR                9 (is_ + NULL|self)
+                    LOAD_CONST               1 (True)
+                    CALL                     1
+                    CALL                     1
+    
+      25            LOAD_ATTR               11 (order_by + NULL|self)
+                    LOAD_GLOBAL              2 (PromptSuggestion)
+                    LOAD_ATTR               12 (sort_order)
+                    LOAD_ATTR               15 (asc + NULL|self)
+                    CALL                     0
+                    CALL                     1
+    
+      22            STORE_FAST               2 (stmt)
+    
+      27            LOAD_FAST                1 (db)
+                    LOAD_ATTR               17 (execute + NULL|self)
+                    LOAD_FAST                2 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               3 (result)
+    
+      28            LOAD_FAST                3 (result)
+                    LOAD_ATTR               19 (scalars + NULL|self)
+                    CALL                     0
+                    LOAD_ATTR               21 (all + NULL|self)
+                    CALL                     0
+                    STORE_FAST               4 (suggestions)
+    
+      29            LOAD_GLOBAL             23 (PromptSuggestionsResponse + NULL)
+    
+      37            LOAD_FAST                4 (suggestions)
+                    GET_ITER
+    
+      30            LOAD_FAST_AND_CLEAR      5 (s)
+                    SWAP                     2
+            L6:     BUILD_LIST               0
+                    SWAP                     2
+    
+      37            GET_ITER
+            L7:     FOR_ITER                64 (to L8)
+                    STORE_FAST               5 (s)
+    
+      31            LOAD_GLOBAL             25 (PromptSuggestionItem + NULL)
+    
+      32            LOAD_GLOBAL             27 (str + NULL)
+                    LOAD_FAST                5 (s)
+                    LOAD_ATTR               28 (id)
+                    CALL                     1
+    
+      33            LOAD_FAST                5 (s)
+                    LOAD_ATTR               30 (title)
+    
+      34            LOAD_FAST                5 (s)
+                    LOAD_ATTR               32 (text)
+    
+      35            LOAD_FAST                5 (s)
+                    LOAD_ATTR               12 (sort_order)
+    
+      31            LOAD_CONST               2 (('id', 'title', 'text', 'sort_order'))
+                    CALL_KW                  4
+                    LIST_APPEND              2
+                    JUMP_BACKWARD           66 (to L7)
+    
+      37    L8:     END_FOR
+                    POP_TOP
+    
+      30    L9:     SWAP                     2
+                    STORE_FAST               5 (s)
+    
+      29            LOAD_CONST               3 (('items',))
+                    CALL_KW                  1
+                    RETURN_VALUE
+    
+      27   L10:     CLEANUP_THROW
+           L11:     JUMP_BACKWARD_NO_INTERRUPT 119 (to L5)
+    
+      --   L12:     SWAP                     2
+                    POP_TOP
+    
+      30            SWAP                     2
+                    STORE_FAST               5 (s)
+                    RERAISE                  0
+    
+      --   L13:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L13 [0] lasti
+      L3 to L4 -> L10 [2]
+      L4 to L6 -> L13 [0] lasti
+      L6 to L9 -> L12 [4]
+      L9 to L11 -> L13 [0] lasti
+      L12 to L13 -> L13 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.database', 'get_db', 'app.models.prompt_suggestion', 'PromptSuggestion', 'app.schemas.agents', 'PromptSuggestionItem', 'PromptSuggestionsResponse', 'router', 'get', 'list_prompt_suggestions')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Prompt suggestions endpoint.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('APIRouter', 'Depends'))
+              IMPORT_NAME              3 (fastapi)
+              IMPORT_FROM              4 (APIRouter)
+              STORE_NAME               4 (APIRouter)
+              IMPORT_FROM              5 (Depends)
+              STORE_NAME               5 (Depends)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('select',))
+              IMPORT_NAME              6 (sqlalchemy)
+              IMPORT_FROM              7 (select)
+              STORE_NAME               7 (select)
+              POP_TOP
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('AsyncSession',))
+              IMPORT_NAME              8 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM              9 (AsyncSession)
+              STORE_NAME               9 (AsyncSession)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('CurrentUser', 'get_current_user'))
+              IMPORT_NAME             10 (app.core.dependencies)
+              IMPORT_FROM             11 (CurrentUser)
+              STORE_NAME              11 (CurrentUser)
+              IMPORT_FROM             12 (get_current_user)
+              STORE_NAME              12 (get_current_user)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('get_db',))
+              IMPORT_NAME             13 (app.database)
+              IMPORT_FROM             14 (get_db)
+              STORE_NAME              14 (get_db)
+              POP_TOP
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('PromptSuggestion',))
+              IMPORT_NAME             15 (app.models.prompt_suggestion)
+              IMPORT_FROM             16 (PromptSuggestion)
+              STORE_NAME              16 (PromptSuggestion)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('PromptSuggestionItem', 'PromptSuggestionsResponse'))
+              IMPORT_NAME             17 (app.schemas.agents)
+              IMPORT_FROM             18 (PromptSuggestionItem)
+              STORE_NAME              18 (PromptSuggestionItem)
+              IMPORT_FROM             19 (PromptSuggestionsResponse)
+              STORE_NAME              19 (PromptSuggestionsResponse)
+              POP_TOP
+
+ 14           LOAD_NAME                4 (APIRouter)
+              PUSH_NULL
+              CALL                     0
+              STORE_NAME              20 (router)
+
+ 17           LOAD_NAME               20 (router)
+              LOAD_ATTR               43 (get + NULL|self)
+              LOAD_CONST              10 ('')
+              LOAD_NAME               19 (PromptSuggestionsResponse)
+              LOAD_CONST              11 (('response_model',))
+              CALL_KW                  2
+
+ 19           LOAD_NAME                5 (Depends)
+              PUSH_NULL
+              LOAD_NAME               12 (get_current_user)
+              CALL                     1
+
+ 20           LOAD_NAME                5 (Depends)
+              PUSH_NULL
+              LOAD_NAME               14 (get_db)
+              CALL                     1
+
+ 18           BUILD_TUPLE              2
+
+ 19           NOP
+
+ 18           NOP
+
+ 20           NOP
+
+ 18           NOP
+
+ 21           NOP
+
+ 18           LOAD_CONST              14 (('_current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'PromptSuggestionsResponse'))
+              LOAD_CONST              12 (<code object list_prompt_suggestions at 0x0000024C0FBED320, file "D:\fluence\Github\mattbot\backend\app\api\v1\prompt_suggestions.py", line 17>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 17           CALL                     0
+
+ 18           STORE_NAME              22 (list_prompt_suggestions)
+              RETURN_CONST            13 (None)
+
+Disassembly of <code object list_prompt_suggestions at 0x0000024C0FBED320, file "D:\fluence\Github\mattbot\backend\app\api\v1\prompt_suggestions.py", line 17>:
+  17            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  23            LOAD_GLOBAL              1 (select + NULL)
+                LOAD_GLOBAL              2 (PromptSuggestion)
+                CALL                     1
+
+  24            LOAD_ATTR                5 (where + NULL|self)
+                LOAD_GLOBAL              2 (PromptSuggestion)
+                LOAD_ATTR                6 (is_active)
+                LOAD_ATTR                9 (is_ + NULL|self)
+                LOAD_CONST               1 (True)
+                CALL                     1
+                CALL                     1
+
+  25            LOAD_ATTR               11 (order_by + NULL|self)
+                LOAD_GLOBAL              2 (PromptSuggestion)
+                LOAD_ATTR               12 (sort_order)
+                LOAD_ATTR               15 (asc + NULL|self)
+                CALL                     0
+                CALL                     1
+
+  22            STORE_FAST               2 (stmt)
+
+  27            LOAD_FAST                1 (db)
+                LOAD_ATTR               17 (execute + NULL|self)
+                LOAD_FAST                2 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               3 (result)
+
+  28            LOAD_FAST                3 (result)
+                LOAD_ATTR               19 (scalars + NULL|self)
+                CALL                     0
+                LOAD_ATTR               21 (all + NULL|self)
+                CALL                     0
+                STORE_FAST               4 (suggestions)
+
+  29            LOAD_GLOBAL             23 (PromptSuggestionsResponse + NULL)
+
+  37            LOAD_FAST                4 (suggestions)
+                GET_ITER
+
+  30            LOAD_FAST_AND_CLEAR      5 (s)
+                SWAP                     2
+        L6:     BUILD_LIST               0
+                SWAP                     2
+
+  37            GET_ITER
+        L7:     FOR_ITER                64 (to L8)
+                STORE_FAST               5 (s)
+
+  31            LOAD_GLOBAL             25 (PromptSuggestionItem + NULL)
+
+  32            LOAD_GLOBAL             27 (str + NULL)
+                LOAD_FAST                5 (s)
+                LOAD_ATTR               28 (id)
+                CALL                     1
+
+  33            LOAD_FAST                5 (s)
+                LOAD_ATTR               30 (title)
+
+  34            LOAD_FAST                5 (s)
+                LOAD_ATTR               32 (text)
+
+  35            LOAD_FAST                5 (s)
+                LOAD_ATTR               12 (sort_order)
+
+  31            LOAD_CONST               2 (('id', 'title', 'text', 'sort_order'))
+                CALL_KW                  4
+                LIST_APPEND              2
+                JUMP_BACKWARD           66 (to L7)
+
+  37    L8:     END_FOR
+                POP_TOP
+
+  30    L9:     SWAP                     2
+                STORE_FAST               5 (s)
+
+  29            LOAD_CONST               3 (('items',))
+                CALL_KW                  1
+                RETURN_VALUE
+
+  27   L10:     CLEANUP_THROW
+       L11:     JUMP_BACKWARD_NO_INTERRUPT 119 (to L5)
+
+  --   L12:     SWAP                     2
+                POP_TOP
+
+  30            SWAP                     2
+                STORE_FAST               5 (s)
+                RERAISE                  0
+
+  --   L13:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L13 [0] lasti
+  L3 to L4 -> L10 [2]
+  L4 to L6 -> L13 [0] lasti
+  L6 to L9 -> L12 [4]
+  L9 to L11 -> L13 [0] lasti
+  L12 to L13 -> L13 [0] lasti

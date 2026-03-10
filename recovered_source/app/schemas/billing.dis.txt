@@ -1,0 +1,1682 @@
+# Bytecode dump of: billing.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\schemas\billing.py
+# co_names: ('__future__', 'annotations', 'datetime', 'pydantic', 'BaseModel', 'Field', 'field_validator', 'BillingPlanResponse', 'BillingPlansListResponse', 'PaymentMethodInfo', 'BillingStatusResponse', 'SetupIntentResponse', '_validate_plan_code', 'SubscribeRequest', 'SubscribeResponse', 'ChangePlanRequest', 'ChangePlanResponse', 'CancelResponse', 'PaymentMethodResponse', 'PaymentMethodsListResponse', 'AddPaymentMethodRequest', 'DevSetPlanRequest', 'DevSimulateUsageRequest')
+# co_consts (strings): ['BillingPlanResponse', 'BillingPlansListResponse', 'PaymentMethodInfo', 'BillingStatusResponse', 'SetupIntentResponse', 'SubscribeRequest', 'SubscribeResponse', 'ChangePlanRequest', 'ChangePlanResponse', 'CancelResponse', 'PaymentMethodResponse', 'PaymentMethodsListResponse', 'AddPaymentMethodRequest', 'DevSetPlanRequest', 'DevSimulateUsageRequest']
+
+# --- Nested code object: BillingPlanResponse ---
+    # DOCSTRING: """BillingPlanResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'requires_credit_card', 'limited', 'sort_order', 'description', 'icon', '__static_attributes__')
+    # co_varnames: ()
+      8           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('BillingPlanResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (8)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+      9           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('code')
+                  STORE_SUBSCR
+    
+     10           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('name')
+                  STORE_SUBSCR
+    
+     11           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('price_usd')
+                  STORE_SUBSCR
+    
+     12           LOAD_CONST               6 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('included_minutes')
+                  STORE_SUBSCR
+    
+     13           LOAD_CONST               8 (True)
+                  STORE_NAME               5 (requires_credit_card)
+                  LOAD_CONST               9 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              10 ('requires_credit_card')
+                  STORE_SUBSCR
+    
+     14           LOAD_CONST              11 (False)
+                  STORE_NAME               6 (limited)
+                  LOAD_CONST               9 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              12 ('limited')
+                  STORE_SUBSCR
+    
+     15           LOAD_CONST              13 (0)
+                  STORE_NAME               7 (sort_order)
+                  LOAD_CONST               6 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              14 ('sort_order')
+                  STORE_SUBSCR
+    
+     16           LOAD_CONST              15 ('')
+                  STORE_NAME               8 (description)
+                  LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              16 ('description')
+                  STORE_SUBSCR
+    
+     17           LOAD_CONST              15 ('')
+                  STORE_NAME               9 (icon)
+                  LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              17 ('icon')
+                  STORE_SUBSCR
+                  LOAD_CONST              18 (())
+                  STORE_NAME              10 (__static_attributes__)
+                  RETURN_CONST            19 (None)
+    
+# --- Nested code object: BillingPlansListResponse ---
+    # DOCSTRING: """BillingPlansListResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     20           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('BillingPlansListResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (20)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     21           LOAD_CONST               2 ('list[BillingPlanResponse]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('plans')
+                  STORE_SUBSCR
+                  LOAD_CONST               4 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# --- Nested code object: PaymentMethodInfo ---
+    # DOCSTRING: """PaymentMethodInfo"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'brand', '__annotations__', 'last4', 'exp_month', 'exp_year', '__static_attributes__')
+    # co_varnames: ()
+     24           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('PaymentMethodInfo')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (24)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     25           LOAD_CONST               2 (None)
+                  STORE_NAME               4 (brand)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               4 ('brand')
+                  STORE_SUBSCR
+    
+     26           LOAD_CONST               2 (None)
+                  STORE_NAME               6 (last4)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               5 ('last4')
+                  STORE_SUBSCR
+    
+     27           LOAD_CONST               2 (None)
+                  STORE_NAME               7 (exp_month)
+                  LOAD_CONST               6 ('int | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               7 ('exp_month')
+                  STORE_SUBSCR
+    
+     28           LOAD_CONST               2 (None)
+                  STORE_NAME               8 (exp_year)
+                  LOAD_CONST               6 ('int | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               8 ('exp_year')
+                  STORE_SUBSCR
+                  LOAD_CONST               9 (())
+                  STORE_NAME               9 (__static_attributes__)
+                  RETURN_CONST             2 (None)
+    
+# --- Nested code object: BillingStatusResponse ---
+    # DOCSTRING: """BillingStatusResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'plan', '__annotations__', 'status', 'minutes_included', 'minutes_used', 'minutes_remaining', 'minutes_carried_over', 'payment_method', 'current_period_end', 'cancel_at_period_end', 'has_subscription', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+     31           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('BillingStatusResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (31)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     32           LOAD_CONST               2 (None)
+                  STORE_NAME               4 (plan)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               4 ('plan')
+                  STORE_SUBSCR
+    
+     33           LOAD_CONST               2 (None)
+                  STORE_NAME               6 (status)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               5 ('status')
+                  STORE_SUBSCR
+    
+     34           LOAD_CONST               6 (0)
+                  STORE_NAME               7 (minutes_included)
+                  LOAD_CONST               7 ('int')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               8 ('minutes_included')
+                  STORE_SUBSCR
+    
+     35           LOAD_CONST               6 (0)
+                  STORE_NAME               8 (minutes_used)
+                  LOAD_CONST               7 ('int')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               9 ('minutes_used')
+                  STORE_SUBSCR
+    
+     36           LOAD_CONST               6 (0)
+                  STORE_NAME               9 (minutes_remaining)
+                  LOAD_CONST               7 ('int')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              10 ('minutes_remaining')
+                  STORE_SUBSCR
+    
+     37           LOAD_CONST               6 (0)
+                  STORE_NAME              10 (minutes_carried_over)
+                  LOAD_CONST               7 ('int')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              11 ('minutes_carried_over')
+                  STORE_SUBSCR
+    
+     38           LOAD_CONST               2 (None)
+                  STORE_NAME              11 (payment_method)
+                  LOAD_CONST              12 ('PaymentMethodInfo | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              13 ('payment_method')
+                  STORE_SUBSCR
+    
+     39           LOAD_CONST               2 (None)
+                  STORE_NAME              12 (current_period_end)
+                  LOAD_CONST              14 ('datetime | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              15 ('current_period_end')
+                  STORE_SUBSCR
+    
+     40           LOAD_CONST              16 (False)
+                  STORE_NAME              13 (cancel_at_period_end)
+                  LOAD_CONST              17 ('bool')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              18 ('cancel_at_period_end')
+                  STORE_SUBSCR
+    
+     41           LOAD_CONST              16 (False)
+                  STORE_NAME              14 (has_subscription)
+                  LOAD_CONST              17 ('bool')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              19 ('has_subscription')
+                  STORE_SUBSCR
+    
+     43           LOAD_CONST              20 ('from_attributes')
+                  LOAD_CONST              21 (True)
+                  BUILD_MAP                1
+                  STORE_NAME              15 (model_config)
+                  LOAD_CONST              22 (())
+                  STORE_NAME              16 (__static_attributes__)
+                  RETURN_CONST             2 (None)
+    
+# --- Nested code object: SetupIntentResponse ---
+    # DOCSTRING: """SetupIntentResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     46           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('SetupIntentResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (46)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     47           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('client_secret')
+                  STORE_SUBSCR
+    
+     48           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('customer_id')
+                  STORE_SUBSCR
+                  LOAD_CONST               5 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             6 (None)
+    
+# --- Nested code object: _validate_plan_code ---
+    # co_names: ('app.services.billing_config_service', 'get_billing_config', 'valid_plan_codes', 'ValueError', 'join')
+    # co_varnames: ('v', 'get_billing_config', 'config', 'valid')
+     51           RESUME                   0
+    
+     52           LOAD_CONST               1 (0)
+                  LOAD_CONST               2 (('get_billing_config',))
+                  IMPORT_NAME              0 (app.services.billing_config_service)
+                  IMPORT_FROM              1 (get_billing_config)
+                  STORE_FAST               1 (get_billing_config)
+                  POP_TOP
+    
+     54           LOAD_FAST                1 (get_billing_config)
+                  PUSH_NULL
+                  CALL                     0
+                  STORE_FAST               2 (config)
+    
+     55           LOAD_FAST                2 (config)
+                  LOAD_ATTR                5 (valid_plan_codes + NULL|self)
+                  CALL                     0
+                  STORE_FAST               3 (valid)
+    
+     56           LOAD_FAST_LOAD_FAST      3 (v, valid)
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_FALSE       29 (to L1)
+    
+     57           LOAD_GLOBAL              7 (ValueError + NULL)
+                  LOAD_CONST               3 ('Plan must be one of: ')
+                  LOAD_CONST               4 (', ')
+                  LOAD_ATTR                9 (join + NULL|self)
+                  LOAD_FAST                3 (valid)
+                  CALL                     1
+                  FORMAT_SIMPLE
+                  BUILD_STRING             2
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     58   L1:     LOAD_FAST                0 (v)
+                  RETURN_VALUE
+    
+# --- Nested code object: SubscribeRequest ---
+    # DOCSTRING: """SubscribeRequest"""
+    # --- Nested code object: SubscribeRequest.validate_plan ---
+        # co_names: ('_validate_plan_code',)
+        # co_varnames: ('cls', 'v')
+         65           RESUME                   0
+        
+         68           LOAD_GLOBAL              1 (_validate_plan_code + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'field_validator', 'classmethod', 'validate_plan', '__static_attributes__')
+    # co_varnames: ()
+     61           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('SubscribeRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (61)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     62           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('plan')
+                  STORE_SUBSCR
+    
+     63           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('payment_method_id')
+                  STORE_SUBSCR
+    
+     65           LOAD_NAME                5 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               3 ('plan')
+                  CALL                     1
+    
+     66           LOAD_NAME                6 (classmethod)
+    
+     67           LOAD_CONST               8 (('v', 'str', 'return', 'str'))
+                  LOAD_CONST               5 (<code object validate_plan at 0x0000024C0EF0F750, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 65>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     66           CALL                     0
+    
+     65           CALL                     0
+    
+     67           STORE_NAME               7 (validate_plan)
+                  LOAD_CONST               6 (())
+                  STORE_NAME               8 (__static_attributes__)
+                  RETURN_CONST             7 (None)
+    
+    Disassembly of <code object validate_plan at 0x0000024C0EF0F750, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 65>:
+     65           RESUME                   0
+    
+     68           LOAD_GLOBAL              1 (_validate_plan_code + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  RETURN_VALUE
+    
+# --- Nested code object: SubscribeResponse ---
+    # DOCSTRING: """SubscribeResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'current_period_end', '__static_attributes__')
+    # co_varnames: ()
+     71           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('SubscribeResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (71)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     72           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('plan')
+                  STORE_SUBSCR
+    
+     73           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('status')
+                  STORE_SUBSCR
+    
+     74           LOAD_CONST               5 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('minutes_included')
+                  STORE_SUBSCR
+    
+     75           LOAD_CONST               7 (None)
+                  STORE_NAME               5 (current_period_end)
+                  LOAD_CONST               8 ('datetime | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('current_period_end')
+                  STORE_SUBSCR
+                  LOAD_CONST              10 (())
+                  STORE_NAME               6 (__static_attributes__)
+                  RETURN_CONST             7 (None)
+    
+# --- Nested code object: ChangePlanRequest ---
+    # DOCSTRING: """ChangePlanRequest"""
+    # --- Nested code object: ChangePlanRequest.validate_plan ---
+        # co_names: ('_validate_plan_code',)
+        # co_varnames: ('cls', 'v')
+         81           RESUME                   0
+        
+         84           LOAD_GLOBAL              1 (_validate_plan_code + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'field_validator', 'classmethod', 'validate_plan', '__static_attributes__')
+    # co_varnames: ()
+     78           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('ChangePlanRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (78)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     79           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('new_plan')
+                  STORE_SUBSCR
+    
+     81           LOAD_NAME                5 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               3 ('new_plan')
+                  CALL                     1
+    
+     82           LOAD_NAME                6 (classmethod)
+    
+     83           LOAD_CONST               7 (('v', 'str', 'return', 'str'))
+                  LOAD_CONST               4 (<code object validate_plan at 0x0000024C0EF0FC90, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 81>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     82           CALL                     0
+    
+     81           CALL                     0
+    
+     83           STORE_NAME               7 (validate_plan)
+                  LOAD_CONST               5 (())
+                  STORE_NAME               8 (__static_attributes__)
+                  RETURN_CONST             6 (None)
+    
+    Disassembly of <code object validate_plan at 0x0000024C0EF0FC90, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 81>:
+     81           RESUME                   0
+    
+     84           LOAD_GLOBAL              1 (_validate_plan_code + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  RETURN_VALUE
+    
+# --- Nested code object: ChangePlanResponse ---
+    # DOCSTRING: """ChangePlanResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'minutes_carried_over', 'current_period_end', '__static_attributes__')
+    # co_varnames: ()
+     87           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('ChangePlanResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (87)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     88           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('plan')
+                  STORE_SUBSCR
+    
+     89           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('status')
+                  STORE_SUBSCR
+    
+     90           LOAD_CONST               5 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('minutes_included')
+                  STORE_SUBSCR
+    
+     91           LOAD_CONST               7 (0)
+                  STORE_NAME               5 (minutes_carried_over)
+                  LOAD_CONST               5 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('minutes_carried_over')
+                  STORE_SUBSCR
+    
+     92           LOAD_CONST               9 (None)
+                  STORE_NAME               6 (current_period_end)
+                  LOAD_CONST              10 ('datetime | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              11 ('current_period_end')
+                  STORE_SUBSCR
+                  LOAD_CONST              12 (())
+                  STORE_NAME               7 (__static_attributes__)
+                  RETURN_CONST             9 (None)
+    
+# --- Nested code object: CancelResponse ---
+    # DOCSTRING: """CancelResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'current_period_end', '__static_attributes__')
+    # co_varnames: ()
+     95           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CancelResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (95)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     96           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('status')
+                  STORE_SUBSCR
+    
+     97           LOAD_CONST               4 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('cancel_at_period_end')
+                  STORE_SUBSCR
+    
+     98           LOAD_CONST               6 (None)
+                  STORE_NAME               5 (current_period_end)
+                  LOAD_CONST               7 ('datetime | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('current_period_end')
+                  STORE_SUBSCR
+                  LOAD_CONST               9 (())
+                  STORE_NAME               6 (__static_attributes__)
+                  RETURN_CONST             6 (None)
+    
+# --- Nested code object: PaymentMethodResponse ---
+    # DOCSTRING: """PaymentMethodResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'brand', 'last4', 'exp_month', 'exp_year', 'is_default', 'created_at', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+    101           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('PaymentMethodResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (101)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    102           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('id')
+                  STORE_SUBSCR
+    
+    103           LOAD_CONST               4 (None)
+                  STORE_NAME               5 (brand)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('brand')
+                  STORE_SUBSCR
+    
+    104           LOAD_CONST               4 (None)
+                  STORE_NAME               6 (last4)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('last4')
+                  STORE_SUBSCR
+    
+    105           LOAD_CONST               4 (None)
+                  STORE_NAME               7 (exp_month)
+                  LOAD_CONST               8 ('int | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('exp_month')
+                  STORE_SUBSCR
+    
+    106           LOAD_CONST               4 (None)
+                  STORE_NAME               8 (exp_year)
+                  LOAD_CONST               8 ('int | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              10 ('exp_year')
+                  STORE_SUBSCR
+    
+    107           LOAD_CONST              11 (False)
+                  STORE_NAME               9 (is_default)
+                  LOAD_CONST              12 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              13 ('is_default')
+                  STORE_SUBSCR
+    
+    108           LOAD_CONST               4 (None)
+                  STORE_NAME              10 (created_at)
+                  LOAD_CONST              14 ('datetime | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              15 ('created_at')
+                  STORE_SUBSCR
+    
+    110           LOAD_CONST              16 ('from_attributes')
+                  LOAD_CONST              17 (True)
+                  BUILD_MAP                1
+                  STORE_NAME              11 (model_config)
+                  LOAD_CONST              18 (())
+                  STORE_NAME              12 (__static_attributes__)
+                  RETURN_CONST             4 (None)
+    
+# --- Nested code object: PaymentMethodsListResponse ---
+    # DOCSTRING: """PaymentMethodsListResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+    113           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('PaymentMethodsListResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (113)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    114           LOAD_CONST               2 ('list[PaymentMethodResponse]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('payment_methods')
+                  STORE_SUBSCR
+                  LOAD_CONST               4 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# --- Nested code object: AddPaymentMethodRequest ---
+    # DOCSTRING: """AddPaymentMethodRequest"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'set_as_default', '__static_attributes__')
+    # co_varnames: ()
+    117           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('AddPaymentMethodRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (117)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    118           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('payment_method_id')
+                  STORE_SUBSCR
+    
+    119           LOAD_CONST               4 (True)
+                  STORE_NAME               5 (set_as_default)
+                  LOAD_CONST               5 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('set_as_default')
+                  STORE_SUBSCR
+                  LOAD_CONST               7 (())
+                  STORE_NAME               6 (__static_attributes__)
+                  RETURN_CONST             8 (None)
+    
+# --- Nested code object: DevSetPlanRequest ---
+    # DOCSTRING: """DevSetPlanRequest"""
+    # --- Nested code object: DevSetPlanRequest.validate_plan ---
+        # co_names: ('_validate_plan_code',)
+        # co_varnames: ('cls', 'v')
+        126           RESUME                   0
+        
+        129           LOAD_GLOBAL              1 (_validate_plan_code + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      RETURN_VALUE
+        
+    # --- Nested code object: DevSetPlanRequest.validate_status ---
+        # co_names: ('ValueError', 'join')
+        # co_varnames: ('cls', 'v', 'valid')
+        131           RESUME                   0
+        
+        134           LOAD_CONST               1 (('active', 'past_due', 'canceled', 'incomplete', 'trialing'))
+                      STORE_FAST               2 (valid)
+        
+        135           LOAD_FAST_LOAD_FAST     18 (v, valid)
+                      CONTAINS_OP              1
+                      POP_JUMP_IF_FALSE       29 (to L1)
+        
+        136           LOAD_GLOBAL              1 (ValueError + NULL)
+                      LOAD_CONST               2 ('Status must be one of: ')
+                      LOAD_CONST               3 (', ')
+                      LOAD_ATTR                3 (join + NULL|self)
+                      LOAD_FAST                2 (valid)
+                      CALL                     1
+                      FORMAT_SIMPLE
+                      BUILD_STRING             2
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+        137   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'status', 'field_validator', 'classmethod', 'validate_plan', 'validate_status', '__static_attributes__')
+    # co_varnames: ()
+    122           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('DevSetPlanRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (122)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    123           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('plan')
+                  STORE_SUBSCR
+    
+    124           LOAD_CONST               4 ('active')
+                  STORE_NAME               5 (status)
+                  LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('status')
+                  STORE_SUBSCR
+    
+    126           LOAD_NAME                6 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               3 ('plan')
+                  CALL                     1
+    
+    127           LOAD_NAME                7 (classmethod)
+    
+    128           LOAD_CONST              10 (('v', 'str', 'return', 'str'))
+                  LOAD_CONST               6 (<code object validate_plan at 0x0000024C0EF0FD70, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 126>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+    127           CALL                     0
+    
+    126           CALL                     0
+    
+    128           STORE_NAME               8 (validate_plan)
+    
+    131           LOAD_NAME                6 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               5 ('status')
+                  CALL                     1
+    
+    132           LOAD_NAME                7 (classmethod)
+    
+    133           LOAD_CONST              10 (('v', 'str', 'return', 'str'))
+                  LOAD_CONST               7 (<code object validate_status at 0x0000024C114968B0, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 131>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+    132           CALL                     0
+    
+    131           CALL                     0
+    
+    133           STORE_NAME               9 (validate_status)
+                  LOAD_CONST               8 (())
+                  STORE_NAME              10 (__static_attributes__)
+                  RETURN_CONST             9 (None)
+    
+    Disassembly of <code object validate_plan at 0x0000024C0EF0FD70, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 126>:
+    126           RESUME                   0
+    
+    129           LOAD_GLOBAL              1 (_validate_plan_code + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_status at 0x0000024C114968B0, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 131>:
+    131           RESUME                   0
+    
+    134           LOAD_CONST               1 (('active', 'past_due', 'canceled', 'incomplete', 'trialing'))
+                  STORE_FAST               2 (valid)
+    
+    135           LOAD_FAST_LOAD_FAST     18 (v, valid)
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_FALSE       29 (to L1)
+    
+    136           LOAD_GLOBAL              1 (ValueError + NULL)
+                  LOAD_CONST               2 ('Status must be one of: ')
+                  LOAD_CONST               3 (', ')
+                  LOAD_ATTR                3 (join + NULL|self)
+                  LOAD_FAST                2 (valid)
+                  CALL                     1
+                  FORMAT_SIMPLE
+                  BUILD_STRING             2
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+    137   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+# --- Nested code object: DevSimulateUsageRequest ---
+    # DOCSTRING: """DevSimulateUsageRequest"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'Field', 'minutes', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+    140           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('DevSimulateUsageRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (140)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    141           LOAD_NAME                4 (Field)
+                  PUSH_NULL
+                  LOAD_CONST               2 (Ellipsis)
+                  LOAD_CONST               3 (0)
+                  LOAD_CONST               4 (('gt',))
+                  CALL_KW                  2
+                  STORE_NAME               5 (minutes)
+                  LOAD_CONST               5 ('int')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST               6 ('minutes')
+                  STORE_SUBSCR
+                  LOAD_CONST               7 (())
+                  STORE_NAME               7 (__static_attributes__)
+                  RETURN_CONST             8 (None)
+    
+# co_names: ('__future__', 'annotations', 'datetime', 'pydantic', 'BaseModel', 'Field', 'field_validator', 'BillingPlanResponse', 'BillingPlansListResponse', 'PaymentMethodInfo', 'BillingStatusResponse', 'SetupIntentResponse', '_validate_plan_code', 'SubscribeRequest', 'SubscribeResponse', 'ChangePlanRequest', 'ChangePlanResponse', 'CancelResponse', 'PaymentMethodResponse', 'PaymentMethodsListResponse', 'AddPaymentMethodRequest', 'DevSetPlanRequest', 'DevSimulateUsageRequest')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 (0)
+              LOAD_CONST               1 (('annotations',))
+              IMPORT_NAME              0 (__future__)
+              IMPORT_FROM              1 (annotations)
+              STORE_NAME               1 (annotations)
+              POP_TOP
+
+  3           LOAD_CONST               0 (0)
+              LOAD_CONST               2 (('datetime',))
+              IMPORT_NAME              2 (datetime)
+              IMPORT_FROM              2 (datetime)
+              STORE_NAME               2 (datetime)
+              POP_TOP
+
+  5           LOAD_CONST               0 (0)
+              LOAD_CONST               3 (('BaseModel', 'Field', 'field_validator'))
+              IMPORT_NAME              3 (pydantic)
+              IMPORT_FROM              4 (BaseModel)
+              STORE_NAME               4 (BaseModel)
+              IMPORT_FROM              5 (Field)
+              STORE_NAME               5 (Field)
+              IMPORT_FROM              6 (field_validator)
+              STORE_NAME               6 (field_validator)
+              POP_TOP
+
+  8           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               4 (<code object BillingPlanResponse at 0x0000024C0EEE3C90, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 8>)
+              MAKE_FUNCTION
+              LOAD_CONST               5 ('BillingPlanResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME               7 (BillingPlanResponse)
+
+ 20           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               6 (<code object BillingPlansListResponse at 0x0000024C0EF2A790, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 20>)
+              MAKE_FUNCTION
+              LOAD_CONST               7 ('BillingPlansListResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME               8 (BillingPlansListResponse)
+
+ 24           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               8 (<code object PaymentMethodInfo at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 24>)
+              MAKE_FUNCTION
+              LOAD_CONST               9 ('PaymentMethodInfo')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME               9 (PaymentMethodInfo)
+
+ 31           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              10 (<code object BillingStatusResponse at 0x0000024C0EC47330, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 31>)
+              MAKE_FUNCTION
+              LOAD_CONST              11 ('BillingStatusResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME              10 (BillingStatusResponse)
+
+ 46           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              12 (<code object SetupIntentResponse at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 46>)
+              MAKE_FUNCTION
+              LOAD_CONST              13 ('SetupIntentResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME              11 (SetupIntentResponse)
+
+ 51           LOAD_CONST              36 (('v', 'str', 'return', 'str'))
+              LOAD_CONST              14 (<code object _validate_plan_code at 0x0000024C11508030, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 51>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              12 (_validate_plan_code)
+
+ 61           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              15 (<code object SubscribeRequest at 0x0000024C114961F0, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 61>)
+              MAKE_FUNCTION
+              LOAD_CONST              16 ('SubscribeRequest')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME              13 (SubscribeRequest)
+
+ 71           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              17 (<code object SubscribeResponse at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 71>)
+              MAKE_FUNCTION
+              LOAD_CONST              18 ('SubscribeResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME              14 (SubscribeResponse)
+
+ 78           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              19 (<code object ChangePlanRequest at 0x0000024C11496310, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 78>)
+              MAKE_FUNCTION
+              LOAD_CONST              20 ('ChangePlanRequest')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME              15 (ChangePlanRequest)
+
+ 87           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              21 (<code object ChangePlanResponse at 0x0000024C11495E90, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 87>)
+              MAKE_FUNCTION
+              LOAD_CONST              22 ('ChangePlanResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME              16 (ChangePlanResponse)
+
+ 95           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              23 (<code object CancelResponse at 0x0000024C11423A30, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 95>)
+              MAKE_FUNCTION
+              LOAD_CONST              24 ('CancelResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME              17 (CancelResponse)
+
+101           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              25 (<code object PaymentMethodResponse at 0x0000024C11508180, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 101>)
+              MAKE_FUNCTION
+              LOAD_CONST              26 ('PaymentMethodResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME              18 (PaymentMethodResponse)
+
+113           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              27 (<code object PaymentMethodsListResponse at 0x0000024C0EF2A880, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 113>)
+              MAKE_FUNCTION
+              LOAD_CONST              28 ('PaymentMethodsListResponse')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME              19 (PaymentMethodsListResponse)
+
+117           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              29 (<code object AddPaymentMethodRequest at 0x0000024C11422F30, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 117>)
+              MAKE_FUNCTION
+              LOAD_CONST              30 ('AddPaymentMethodRequest')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME              20 (AddPaymentMethodRequest)
+
+122           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              31 (<code object DevSetPlanRequest at 0x0000024C115082D0, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 122>)
+              MAKE_FUNCTION
+              LOAD_CONST              32 ('DevSetPlanRequest')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME              21 (DevSetPlanRequest)
+
+140           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              33 (<code object DevSimulateUsageRequest at 0x0000024C11423E30, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 140>)
+              MAKE_FUNCTION
+              LOAD_CONST              34 ('DevSimulateUsageRequest')
+              LOAD_NAME                4 (BaseModel)
+              CALL                     3
+              STORE_NAME              22 (DevSimulateUsageRequest)
+              RETURN_CONST            35 (None)
+
+Disassembly of <code object BillingPlanResponse at 0x0000024C0EEE3C90, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 8>:
+  8           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('BillingPlanResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (8)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+  9           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('code')
+              STORE_SUBSCR
+
+ 10           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('name')
+              STORE_SUBSCR
+
+ 11           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('price_usd')
+              STORE_SUBSCR
+
+ 12           LOAD_CONST               6 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('included_minutes')
+              STORE_SUBSCR
+
+ 13           LOAD_CONST               8 (True)
+              STORE_NAME               5 (requires_credit_card)
+              LOAD_CONST               9 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('requires_credit_card')
+              STORE_SUBSCR
+
+ 14           LOAD_CONST              11 (False)
+              STORE_NAME               6 (limited)
+              LOAD_CONST               9 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              12 ('limited')
+              STORE_SUBSCR
+
+ 15           LOAD_CONST              13 (0)
+              STORE_NAME               7 (sort_order)
+              LOAD_CONST               6 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              14 ('sort_order')
+              STORE_SUBSCR
+
+ 16           LOAD_CONST              15 ('')
+              STORE_NAME               8 (description)
+              LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              16 ('description')
+              STORE_SUBSCR
+
+ 17           LOAD_CONST              15 ('')
+              STORE_NAME               9 (icon)
+              LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              17 ('icon')
+              STORE_SUBSCR
+              LOAD_CONST              18 (())
+              STORE_NAME              10 (__static_attributes__)
+              RETURN_CONST            19 (None)
+
+Disassembly of <code object BillingPlansListResponse at 0x0000024C0EF2A790, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 20>:
+ 20           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('BillingPlansListResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (20)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 21           LOAD_CONST               2 ('list[BillingPlanResponse]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('plans')
+              STORE_SUBSCR
+              LOAD_CONST               4 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object PaymentMethodInfo at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 24>:
+ 24           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('PaymentMethodInfo')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (24)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 25           LOAD_CONST               2 (None)
+              STORE_NAME               4 (brand)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               4 ('brand')
+              STORE_SUBSCR
+
+ 26           LOAD_CONST               2 (None)
+              STORE_NAME               6 (last4)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               5 ('last4')
+              STORE_SUBSCR
+
+ 27           LOAD_CONST               2 (None)
+              STORE_NAME               7 (exp_month)
+              LOAD_CONST               6 ('int | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               7 ('exp_month')
+              STORE_SUBSCR
+
+ 28           LOAD_CONST               2 (None)
+              STORE_NAME               8 (exp_year)
+              LOAD_CONST               6 ('int | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               8 ('exp_year')
+              STORE_SUBSCR
+              LOAD_CONST               9 (())
+              STORE_NAME               9 (__static_attributes__)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object BillingStatusResponse at 0x0000024C0EC47330, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 31>:
+ 31           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('BillingStatusResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (31)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 32           LOAD_CONST               2 (None)
+              STORE_NAME               4 (plan)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               4 ('plan')
+              STORE_SUBSCR
+
+ 33           LOAD_CONST               2 (None)
+              STORE_NAME               6 (status)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               5 ('status')
+              STORE_SUBSCR
+
+ 34           LOAD_CONST               6 (0)
+              STORE_NAME               7 (minutes_included)
+              LOAD_CONST               7 ('int')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               8 ('minutes_included')
+              STORE_SUBSCR
+
+ 35           LOAD_CONST               6 (0)
+              STORE_NAME               8 (minutes_used)
+              LOAD_CONST               7 ('int')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               9 ('minutes_used')
+              STORE_SUBSCR
+
+ 36           LOAD_CONST               6 (0)
+              STORE_NAME               9 (minutes_remaining)
+              LOAD_CONST               7 ('int')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              10 ('minutes_remaining')
+              STORE_SUBSCR
+
+ 37           LOAD_CONST               6 (0)
+              STORE_NAME              10 (minutes_carried_over)
+              LOAD_CONST               7 ('int')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              11 ('minutes_carried_over')
+              STORE_SUBSCR
+
+ 38           LOAD_CONST               2 (None)
+              STORE_NAME              11 (payment_method)
+              LOAD_CONST              12 ('PaymentMethodInfo | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              13 ('payment_method')
+              STORE_SUBSCR
+
+ 39           LOAD_CONST               2 (None)
+              STORE_NAME              12 (current_period_end)
+              LOAD_CONST              14 ('datetime | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              15 ('current_period_end')
+              STORE_SUBSCR
+
+ 40           LOAD_CONST              16 (False)
+              STORE_NAME              13 (cancel_at_period_end)
+              LOAD_CONST              17 ('bool')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              18 ('cancel_at_period_end')
+              STORE_SUBSCR
+
+ 41           LOAD_CONST              16 (False)
+              STORE_NAME              14 (has_subscription)
+              LOAD_CONST              17 ('bool')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              19 ('has_subscription')
+              STORE_SUBSCR
+
+ 43           LOAD_CONST              20 ('from_attributes')
+              LOAD_CONST              21 (True)
+              BUILD_MAP                1
+              STORE_NAME              15 (model_config)
+              LOAD_CONST              22 (())
+              STORE_NAME              16 (__static_attributes__)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object SetupIntentResponse at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 46>:
+ 46           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('SetupIntentResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (46)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 47           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('client_secret')
+              STORE_SUBSCR
+
+ 48           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('customer_id')
+              STORE_SUBSCR
+              LOAD_CONST               5 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             6 (None)
+
+Disassembly of <code object _validate_plan_code at 0x0000024C11508030, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 51>:
+ 51           RESUME                   0
+
+ 52           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('get_billing_config',))
+              IMPORT_NAME              0 (app.services.billing_config_service)
+              IMPORT_FROM              1 (get_billing_config)
+              STORE_FAST               1 (get_billing_config)
+              POP_TOP
+
+ 54           LOAD_FAST                1 (get_billing_config)
+              PUSH_NULL
+              CALL                     0
+              STORE_FAST               2 (config)
+
+ 55           LOAD_FAST                2 (config)
+              LOAD_ATTR                5 (valid_plan_codes + NULL|self)
+              CALL                     0
+              STORE_FAST               3 (valid)
+
+ 56           LOAD_FAST_LOAD_FAST      3 (v, valid)
+              CONTAINS_OP              1
+              POP_JUMP_IF_FALSE       29 (to L1)
+
+ 57           LOAD_GLOBAL              7 (ValueError + NULL)
+              LOAD_CONST               3 ('Plan must be one of: ')
+              LOAD_CONST               4 (', ')
+              LOAD_ATTR                9 (join + NULL|self)
+              LOAD_FAST                3 (valid)
+              CALL                     1
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 58   L1:     LOAD_FAST                0 (v)
+              RETURN_VALUE
+
+Disassembly of <code object SubscribeRequest at 0x0000024C114961F0, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 61>:
+ 61           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('SubscribeRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (61)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 62           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('plan')
+              STORE_SUBSCR
+
+ 63           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('payment_method_id')
+              STORE_SUBSCR
+
+ 65           LOAD_NAME                5 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               3 ('plan')
+              CALL                     1
+
+ 66           LOAD_NAME                6 (classmethod)
+
+ 67           LOAD_CONST               8 (('v', 'str', 'return', 'str'))
+              LOAD_CONST               5 (<code object validate_plan at 0x0000024C0EF0F750, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 65>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 66           CALL                     0
+
+ 65           CALL                     0
+
+ 67           STORE_NAME               7 (validate_plan)
+              LOAD_CONST               6 (())
+              STORE_NAME               8 (__static_attributes__)
+              RETURN_CONST             7 (None)
+
+Disassembly of <code object validate_plan at 0x0000024C0EF0F750, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 65>:
+ 65           RESUME                   0
+
+ 68           LOAD_GLOBAL              1 (_validate_plan_code + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              RETURN_VALUE
+
+Disassembly of <code object SubscribeResponse at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 71>:
+ 71           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('SubscribeResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (71)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 72           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('plan')
+              STORE_SUBSCR
+
+ 73           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('status')
+              STORE_SUBSCR
+
+ 74           LOAD_CONST               5 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('minutes_included')
+              STORE_SUBSCR
+
+ 75           LOAD_CONST               7 (None)
+              STORE_NAME               5 (current_period_end)
+              LOAD_CONST               8 ('datetime | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('current_period_end')
+              STORE_SUBSCR
+              LOAD_CONST              10 (())
+              STORE_NAME               6 (__static_attributes__)
+              RETURN_CONST             7 (None)
+
+Disassembly of <code object ChangePlanRequest at 0x0000024C11496310, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 78>:
+ 78           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('ChangePlanRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (78)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 79           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('new_plan')
+              STORE_SUBSCR
+
+ 81           LOAD_NAME                5 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               3 ('new_plan')
+              CALL                     1
+
+ 82           LOAD_NAME                6 (classmethod)
+
+ 83           LOAD_CONST               7 (('v', 'str', 'return', 'str'))
+              LOAD_CONST               4 (<code object validate_plan at 0x0000024C0EF0FC90, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 81>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 82           CALL                     0
+
+ 81           CALL                     0
+
+ 83           STORE_NAME               7 (validate_plan)
+              LOAD_CONST               5 (())
+              STORE_NAME               8 (__static_attributes__)
+              RETURN_CONST             6 (None)
+
+Disassembly of <code object validate_plan at 0x0000024C0EF0FC90, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 81>:
+ 81           RESUME                   0
+
+ 84           LOAD_GLOBAL              1 (_validate_plan_code + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              RETURN_VALUE
+
+Disassembly of <code object ChangePlanResponse at 0x0000024C11495E90, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 87>:
+ 87           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('ChangePlanResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (87)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 88           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('plan')
+              STORE_SUBSCR
+
+ 89           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('status')
+              STORE_SUBSCR
+
+ 90           LOAD_CONST               5 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('minutes_included')
+              STORE_SUBSCR
+
+ 91           LOAD_CONST               7 (0)
+              STORE_NAME               5 (minutes_carried_over)
+              LOAD_CONST               5 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('minutes_carried_over')
+              STORE_SUBSCR
+
+ 92           LOAD_CONST               9 (None)
+              STORE_NAME               6 (current_period_end)
+              LOAD_CONST              10 ('datetime | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('current_period_end')
+              STORE_SUBSCR
+              LOAD_CONST              12 (())
+              STORE_NAME               7 (__static_attributes__)
+              RETURN_CONST             9 (None)
+
+Disassembly of <code object CancelResponse at 0x0000024C11423A30, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 95>:
+ 95           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CancelResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (95)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 96           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('status')
+              STORE_SUBSCR
+
+ 97           LOAD_CONST               4 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('cancel_at_period_end')
+              STORE_SUBSCR
+
+ 98           LOAD_CONST               6 (None)
+              STORE_NAME               5 (current_period_end)
+              LOAD_CONST               7 ('datetime | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('current_period_end')
+              STORE_SUBSCR
+              LOAD_CONST               9 (())
+              STORE_NAME               6 (__static_attributes__)
+              RETURN_CONST             6 (None)
+
+Disassembly of <code object PaymentMethodResponse at 0x0000024C11508180, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 101>:
+101           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('PaymentMethodResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (101)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+102           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('id')
+              STORE_SUBSCR
+
+103           LOAD_CONST               4 (None)
+              STORE_NAME               5 (brand)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('brand')
+              STORE_SUBSCR
+
+104           LOAD_CONST               4 (None)
+              STORE_NAME               6 (last4)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('last4')
+              STORE_SUBSCR
+
+105           LOAD_CONST               4 (None)
+              STORE_NAME               7 (exp_month)
+              LOAD_CONST               8 ('int | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('exp_month')
+              STORE_SUBSCR
+
+106           LOAD_CONST               4 (None)
+              STORE_NAME               8 (exp_year)
+              LOAD_CONST               8 ('int | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('exp_year')
+              STORE_SUBSCR
+
+107           LOAD_CONST              11 (False)
+              STORE_NAME               9 (is_default)
+              LOAD_CONST              12 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              13 ('is_default')
+              STORE_SUBSCR
+
+108           LOAD_CONST               4 (None)
+              STORE_NAME              10 (created_at)
+              LOAD_CONST              14 ('datetime | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              15 ('created_at')
+              STORE_SUBSCR
+
+110           LOAD_CONST              16 ('from_attributes')
+              LOAD_CONST              17 (True)
+              BUILD_MAP                1
+              STORE_NAME              11 (model_config)
+              LOAD_CONST              18 (())
+              STORE_NAME              12 (__static_attributes__)
+              RETURN_CONST             4 (None)
+
+Disassembly of <code object PaymentMethodsListResponse at 0x0000024C0EF2A880, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 113>:
+113           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('PaymentMethodsListResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (113)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+114           LOAD_CONST               2 ('list[PaymentMethodResponse]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('payment_methods')
+              STORE_SUBSCR
+              LOAD_CONST               4 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object AddPaymentMethodRequest at 0x0000024C11422F30, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 117>:
+117           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('AddPaymentMethodRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (117)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+118           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('payment_method_id')
+              STORE_SUBSCR
+
+119           LOAD_CONST               4 (True)
+              STORE_NAME               5 (set_as_default)
+              LOAD_CONST               5 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('set_as_default')
+              STORE_SUBSCR
+              LOAD_CONST               7 (())
+              STORE_NAME               6 (__static_attributes__)
+              RETURN_CONST             8 (None)
+
+Disassembly of <code object DevSetPlanRequest at 0x0000024C115082D0, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 122>:
+122           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('DevSetPlanRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (122)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+123           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('plan')
+              STORE_SUBSCR
+
+124           LOAD_CONST               4 ('active')
+              STORE_NAME               5 (status)
+              LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('status')
+              STORE_SUBSCR
+
+126           LOAD_NAME                6 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               3 ('plan')
+              CALL                     1
+
+127           LOAD_NAME                7 (classmethod)
+
+128           LOAD_CONST              10 (('v', 'str', 'return', 'str'))
+              LOAD_CONST               6 (<code object validate_plan at 0x0000024C0EF0FD70, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 126>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+127           CALL                     0
+
+126           CALL                     0
+
+128           STORE_NAME               8 (validate_plan)
+
+131           LOAD_NAME                6 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               5 ('status')
+              CALL                     1
+
+132           LOAD_NAME                7 (classmethod)
+
+133           LOAD_CONST              10 (('v', 'str', 'return', 'str'))
+              LOAD_CONST               7 (<code object validate_status at 0x0000024C114968B0, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 131>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+132           CALL                     0
+
+131           CALL                     0
+
+133           STORE_NAME               9 (validate_status)
+              LOAD_CONST               8 (())
+              STORE_NAME              10 (__static_attributes__)
+              RETURN_CONST             9 (None)
+
+Disassembly of <code object validate_plan at 0x0000024C0EF0FD70, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 126>:
+126           RESUME                   0
+
+129           LOAD_GLOBAL              1 (_validate_plan_code + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              RETURN_VALUE
+
+Disassembly of <code object validate_status at 0x0000024C114968B0, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 131>:
+131           RESUME                   0
+
+134           LOAD_CONST               1 (('active', 'past_due', 'canceled', 'incomplete', 'trialing'))
+              STORE_FAST               2 (valid)
+
+135           LOAD_FAST_LOAD_FAST     18 (v, valid)
+              CONTAINS_OP              1
+              POP_JUMP_IF_FALSE       29 (to L1)
+
+136           LOAD_GLOBAL              1 (ValueError + NULL)
+              LOAD_CONST               2 ('Status must be one of: ')
+              LOAD_CONST               3 (', ')
+              LOAD_ATTR                3 (join + NULL|self)
+              LOAD_FAST                2 (valid)
+              CALL                     1
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+137   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object DevSimulateUsageRequest at 0x0000024C11423E30, file "D:\fluence\Github\mattbot\backend\app\schemas\billing.py", line 140>:
+140           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('DevSimulateUsageRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (140)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+141           LOAD_NAME                4 (Field)
+              PUSH_NULL
+              LOAD_CONST               2 (Ellipsis)
+              LOAD_CONST               3 (0)
+              LOAD_CONST               4 (('gt',))
+              CALL_KW                  2
+              STORE_NAME               5 (minutes)
+              LOAD_CONST               5 ('int')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST               6 ('minutes')
+              STORE_SUBSCR
+              LOAD_CONST               7 (())
+              STORE_NAME               7 (__static_attributes__)
+              RETURN_CONST             8 (None)

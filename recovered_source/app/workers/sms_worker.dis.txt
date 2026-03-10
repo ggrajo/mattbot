@@ -1,0 +1,920 @@
+# Bytecode dump of: sms_worker.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\workers\sms_worker.py
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'uuid', 'datetime', 'UTC', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'sqlalchemy.orm', 'selectinload', 'app.core.encryption', 'decrypt_field', 'app.models.outbound_message', 'OutboundMessage', 'app.models.text_send_attempt', 'TextSendAttempt', 'getLogger', '__name__', 'logger', '_BATCH_SIZE', 'process_pending_sms', '_send_single')
+# co_consts (strings): ['SMS send worker — polls approved outbound messages and dispatches via Twilio.\n\nCurrently a stub: logs the send intent and marks messages as sent.\nIn production this would be driven by an SQS queue (q-messaging).\n']
+
+# DOCSTRING: """SMS send worker — polls approved outbound messages and dispatches via Twilio.
+
+Currently a stub: logs the send intent and marks messages as sent.
+In production this would be driven by an SQS queue (q-messaging).
+"""
+# --- Nested code object: process_pending_sms ---
+    # DOCSTRING: """Pick up approved messages and attempt to send them.
+
+Returns the number of messages processed.
+"""
+    # co_names: ('select', 'OutboundMessage', 'where', 'status', 'options', 'selectinload', 'send_attempts', 'order_by', 'approved_at', 'asc', 'limit', '_BATCH_SIZE', 'execute', 'scalars', 'all', '_send_single', 'Exception', 'logger', 'exception', 'id', 'last_error_code', 'last_error_message_short')
+    # co_varnames: ('db', 'stmt', 'result', 'messages', 'processed', 'msg')
+      26            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      32            LOAD_GLOBAL              1 (select + NULL)
+                    LOAD_GLOBAL              2 (OutboundMessage)
+                    CALL                     1
+    
+      33            LOAD_ATTR                5 (where + NULL|self)
+                    LOAD_GLOBAL              2 (OutboundMessage)
+                    LOAD_ATTR                6 (status)
+                    LOAD_CONST               1 ('approved')
+                    COMPARE_OP              72 (==)
+                    CALL                     1
+    
+      34            LOAD_ATTR                9 (options + NULL|self)
+                    LOAD_GLOBAL             11 (selectinload + NULL)
+                    LOAD_GLOBAL              2 (OutboundMessage)
+                    LOAD_ATTR               12 (send_attempts)
+                    CALL                     1
+                    CALL                     1
+    
+      35            LOAD_ATTR               15 (order_by + NULL|self)
+                    LOAD_GLOBAL              2 (OutboundMessage)
+                    LOAD_ATTR               16 (approved_at)
+                    LOAD_ATTR               19 (asc + NULL|self)
+                    CALL                     0
+                    CALL                     1
+    
+      36            LOAD_ATTR               21 (limit + NULL|self)
+                    LOAD_GLOBAL             22 (_BATCH_SIZE)
+                    CALL                     1
+    
+      31            STORE_FAST               1 (stmt)
+    
+      38            LOAD_FAST                0 (db)
+                    LOAD_ATTR               25 (execute + NULL|self)
+                    LOAD_FAST                1 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               2 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               2 (result)
+    
+      39            LOAD_FAST                2 (result)
+                    LOAD_ATTR               27 (scalars + NULL|self)
+                    CALL                     0
+                    LOAD_ATTR               29 (all + NULL|self)
+                    CALL                     0
+                    STORE_FAST               3 (messages)
+    
+      41            LOAD_CONST               3 (0)
+                    STORE_FAST               4 (processed)
+    
+      42            LOAD_FAST                3 (messages)
+                    GET_ITER
+            L6:     FOR_ITER                28 (to L14)
+                    STORE_FAST               5 (msg)
+    
+      43    L7:     NOP
+    
+      44    L8:     LOAD_GLOBAL             31 (_send_single + NULL)
+                    LOAD_FAST_LOAD_FAST      5 (db, msg)
+                    CALL                     2
+                    GET_AWAITABLE            0
+                    LOAD_CONST               2 (None)
+            L9:     SEND                     3 (to L12)
+           L10:     YIELD_VALUE              1
+           L11:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+           L12:     END_SEND
+                    POP_TOP
+    
+      45            LOAD_FAST                4 (processed)
+                    LOAD_CONST               4 (1)
+                    BINARY_OP               13 (+=)
+                    STORE_FAST               4 (processed)
+           L13:     JUMP_BACKWARD           30 (to L6)
+    
+      42   L14:     END_FOR
+                    POP_TOP
+    
+      52            LOAD_FAST                4 (processed)
+                    RETURN_VALUE
+    
+      38   L15:     CLEANUP_THROW
+           L16:     JUMP_BACKWARD_NO_INTERRUPT 72 (to L5)
+    
+      44   L17:     CLEANUP_THROW
+           L18:     JUMP_BACKWARD_NO_INTERRUPT 17 (to L12)
+    
+      --   L19:     PUSH_EXC_INFO
+    
+      46            LOAD_GLOBAL             32 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       57 (to L21)
+                    POP_TOP
+    
+      47            LOAD_GLOBAL             34 (logger)
+                    LOAD_ATTR               37 (exception + NULL|self)
+                    LOAD_CONST               5 ('Failed to process message %s')
+                    LOAD_FAST                5 (msg)
+                    LOAD_ATTR               38 (id)
+                    CALL                     2
+                    POP_TOP
+    
+      48            LOAD_CONST               6 ('failed')
+                    LOAD_FAST                5 (msg)
+                    STORE_ATTR               3 (status)
+    
+      49            LOAD_CONST               7 ('WORKER_EXCEPTION')
+                    LOAD_FAST                5 (msg)
+                    STORE_ATTR              20 (last_error_code)
+    
+      50            LOAD_CONST               8 ('Unexpected error during send')
+                    LOAD_FAST                5 (msg)
+                    STORE_ATTR              21 (last_error_message_short)
+           L20:     POP_EXCEPT
+                    JUMP_BACKWARD          104 (to L6)
+    
+      46   L21:     RERAISE                  0
+    
+      --   L22:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L23:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L23 [0] lasti
+      L3 to L4 -> L15 [2]
+      L4 to L7 -> L23 [0] lasti
+      L8 to L10 -> L19 [1]
+      L10 to L11 -> L17 [3]
+      L11 to L13 -> L19 [1]
+      L13 to L16 -> L23 [0] lasti
+      L17 to L18 -> L19 [1]
+      L19 to L20 -> L22 [2] lasti
+      L20 to L21 -> L23 [0] lasti
+      L21 to L22 -> L22 [2] lasti
+      L22 to L23 -> L23 [0] lasti
+    
+# --- Nested code object: _send_single ---
+    # DOCSTRING: """Send a single outbound message (stub implementation)."""
+    # co_names: ('status', 'flush', 'final_body_ciphertext', 'final_body_nonce', 'final_body_key_version', 'decrypt_field', 'decode', 'draft_body_ciphertext', 'draft_body_nonce', 'draft_body_key_version', 'to_number_ciphertext', 'to_number_nonce', 'to_number_key_version', 'logger', 'info', 'len', 'send_attempts', 'id', 'TextSendAttempt', 'datetime', 'now', 'UTC', 'add', 'uuid', 'uuid4', 'hex', 'to_number_last4', 'from_number_e164', 'provider_message_sid', 'provider_status', 'finished_at')
+    # co_varnames: ('db', 'msg', 'body_plain', 'to_number', 'attempt_count', 'idempotency_key', 'attempt', 'stub_sid')
+      55            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      57            LOAD_CONST               1 ('sending')
+                    LOAD_FAST                1 (msg)
+                    STORE_ATTR               0 (status)
+    
+      58            LOAD_FAST                0 (db)
+                    LOAD_ATTR                3 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               2 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    POP_TOP
+    
+      61            LOAD_FAST                1 (msg)
+                    LOAD_ATTR                4 (final_body_ciphertext)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       93 (to L6)
+                    LOAD_FAST                1 (msg)
+                    LOAD_ATTR                6 (final_body_nonce)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       76 (to L6)
+                    LOAD_FAST                1 (msg)
+                    LOAD_ATTR                8 (final_body_key_version)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       59 (to L6)
+    
+      62            LOAD_GLOBAL             11 (decrypt_field + NULL)
+    
+      63            LOAD_FAST                1 (msg)
+                    LOAD_ATTR                4 (final_body_ciphertext)
+    
+      64            LOAD_FAST                1 (msg)
+                    LOAD_ATTR                6 (final_body_nonce)
+    
+      65            LOAD_FAST                1 (msg)
+                    LOAD_ATTR                8 (final_body_key_version)
+    
+      62            CALL                     3
+    
+      66            LOAD_ATTR               13 (decode + NULL|self)
+                    LOAD_CONST               3 ('utf-8')
+                    CALL                     1
+    
+      62            STORE_FAST               2 (body_plain)
+                    JUMP_FORWARD            58 (to L7)
+    
+      68    L6:     LOAD_GLOBAL             11 (decrypt_field + NULL)
+    
+      69            LOAD_FAST                1 (msg)
+                    LOAD_ATTR               14 (draft_body_ciphertext)
+    
+      70            LOAD_FAST                1 (msg)
+                    LOAD_ATTR               16 (draft_body_nonce)
+    
+      71            LOAD_FAST                1 (msg)
+                    LOAD_ATTR               18 (draft_body_key_version)
+    
+      68            CALL                     3
+    
+      72            LOAD_ATTR               13 (decode + NULL|self)
+                    LOAD_CONST               3 ('utf-8')
+                    CALL                     1
+    
+      68            STORE_FAST               2 (body_plain)
+    
+      74    L7:     LOAD_GLOBAL             11 (decrypt_field + NULL)
+    
+      75            LOAD_FAST                1 (msg)
+                    LOAD_ATTR               20 (to_number_ciphertext)
+    
+      76            LOAD_FAST                1 (msg)
+                    LOAD_ATTR               22 (to_number_nonce)
+    
+      77            LOAD_FAST                1 (msg)
+                    LOAD_ATTR               24 (to_number_key_version)
+    
+      74            CALL                     3
+    
+      78            LOAD_ATTR               13 (decode + NULL|self)
+                    LOAD_CONST               3 ('utf-8')
+                    CALL                     1
+    
+      74            STORE_FAST               3 (to_number)
+    
+      81            LOAD_GLOBAL             26 (logger)
+                    LOAD_ATTR               29 (info + NULL|self)
+                    LOAD_CONST               4 ('SMS target: %s, body length: %d')
+                    LOAD_FAST                3 (to_number)
+                    LOAD_CONST               2 (None)
+                    LOAD_CONST               5 (4)
+                    BINARY_SLICE
+                    LOAD_CONST               6 ('****')
+                    BINARY_OP                0 (+)
+                    LOAD_GLOBAL             31 (len + NULL)
+                    LOAD_FAST                2 (body_plain)
+                    CALL                     1
+                    CALL                     3
+                    POP_TOP
+    
+      83            LOAD_GLOBAL             31 (len + NULL)
+                    LOAD_FAST                1 (msg)
+                    LOAD_ATTR               32 (send_attempts)
+                    CALL                     1
+                    LOAD_CONST               7 (1)
+                    BINARY_OP                0 (+)
+                    STORE_FAST               4 (attempt_count)
+    
+      84            LOAD_FAST                1 (msg)
+                    LOAD_ATTR               34 (id)
+                    FORMAT_SIMPLE
+                    LOAD_CONST               8 (':')
+                    LOAD_FAST                4 (attempt_count)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             3
+                    STORE_FAST               5 (idempotency_key)
+    
+      86            LOAD_GLOBAL             37 (TextSendAttempt + NULL)
+    
+      87            LOAD_FAST                1 (msg)
+                    LOAD_ATTR               34 (id)
+    
+      88            LOAD_FAST                4 (attempt_count)
+    
+      89            LOAD_FAST                5 (idempotency_key)
+    
+      90            LOAD_CONST               9 ('twilio')
+    
+      91            LOAD_GLOBAL             38 (datetime)
+                    LOAD_ATTR               40 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL             42 (UTC)
+                    CALL                     1
+    
+      86            LOAD_CONST              10 (('message_id', 'attempt_number', 'idempotency_key', 'provider', 'started_at'))
+                    CALL_KW                  5
+                    STORE_FAST               6 (attempt)
+    
+      93            LOAD_FAST                0 (db)
+                    LOAD_ATTR               45 (add + NULL|self)
+                    LOAD_FAST                6 (attempt)
+                    CALL                     1
+                    POP_TOP
+    
+      94            LOAD_FAST                0 (db)
+                    LOAD_ATTR                3 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               2 (None)
+            L8:     SEND                     3 (to L11)
+            L9:     YIELD_VALUE              1
+           L10:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L8)
+           L11:     END_SEND
+                    POP_TOP
+    
+      97            LOAD_CONST              11 ('SM_stub_')
+                    LOAD_GLOBAL             46 (uuid)
+                    LOAD_ATTR               48 (uuid4)
+                    PUSH_NULL
+                    CALL                     0
+                    LOAD_ATTR               50 (hex)
+                    LOAD_CONST               2 (None)
+                    LOAD_CONST              12 (16)
+                    BINARY_SLICE
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+                    STORE_FAST               7 (stub_sid)
+    
+      98            LOAD_GLOBAL             26 (logger)
+                    LOAD_ATTR               29 (info + NULL|self)
+    
+      99            LOAD_CONST              13 ('STUB SMS send: to=%s body_len=%d from=%s sid=%s')
+    
+     100            LOAD_FAST                1 (msg)
+                    LOAD_ATTR               52 (to_number_last4)
+    
+     101            LOAD_GLOBAL             31 (len + NULL)
+                    LOAD_FAST                2 (body_plain)
+                    CALL                     1
+    
+     102            LOAD_FAST                1 (msg)
+                    LOAD_ATTR               54 (from_number_e164)
+                    COPY                     1
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L12)
+                    POP_TOP
+                    LOAD_CONST              14 ('(auto)')
+    
+     103   L12:     LOAD_FAST                7 (stub_sid)
+    
+      98            CALL                     5
+                    POP_TOP
+    
+     106            LOAD_FAST_LOAD_FAST    118 (stub_sid, attempt)
+                    STORE_ATTR              28 (provider_message_sid)
+    
+     107            LOAD_CONST              15 ('queued')
+                    LOAD_FAST                6 (attempt)
+                    STORE_ATTR              29 (provider_status)
+    
+     108            LOAD_GLOBAL             38 (datetime)
+                    LOAD_ATTR               40 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL             42 (UTC)
+                    CALL                     1
+                    LOAD_FAST                6 (attempt)
+                    STORE_ATTR              30 (finished_at)
+    
+     110            LOAD_CONST              16 ('sent')
+                    LOAD_FAST                1 (msg)
+                    STORE_ATTR               0 (status)
+    
+     111            LOAD_FAST                0 (db)
+                    LOAD_ATTR                3 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               2 (None)
+           L13:     SEND                     3 (to L16)
+           L14:     YIELD_VALUE              1
+           L15:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L13)
+           L16:     END_SEND
+                    POP_TOP
+                    RETURN_CONST             2 (None)
+    
+      58   L17:     CLEANUP_THROW
+           L18:     EXTENDED_ARG             2
+                    JUMP_BACKWARD_NO_INTERRUPT 574 (to L5)
+    
+      94   L19:     CLEANUP_THROW
+           L20:     JUMP_BACKWARD_NO_INTERRUPT 183 (to L11)
+    
+     111   L21:     CLEANUP_THROW
+           L22:     JUMP_BACKWARD_NO_INTERRUPT 10 (to L16)
+    
+      --   L23:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L23 [0] lasti
+      L3 to L4 -> L17 [2]
+      L4 to L9 -> L23 [0] lasti
+      L9 to L10 -> L19 [2]
+      L10 to L14 -> L23 [0] lasti
+      L14 to L15 -> L21 [2]
+      L15 to L18 -> L23 [0] lasti
+      L19 to L20 -> L23 [0] lasti
+      L21 to L22 -> L23 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'uuid', 'datetime', 'UTC', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'sqlalchemy.orm', 'selectinload', 'app.core.encryption', 'decrypt_field', 'app.models.outbound_message', 'OutboundMessage', 'app.models.text_send_attempt', 'TextSendAttempt', 'getLogger', '__name__', 'logger', '_BATCH_SIZE', 'process_pending_sms', '_send_single')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('SMS send worker — polls approved outbound messages and dispatches via Twilio.\n\nCurrently a stub: logs the send intent and marks messages as sent.\nIn production this would be driven by an SQS queue (q-messaging).\n')
+              STORE_NAME               0 (__doc__)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (logging)
+              STORE_NAME               3 (logging)
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              4 (uuid)
+              STORE_NAME               4 (uuid)
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('UTC', 'datetime'))
+              IMPORT_NAME              5 (datetime)
+              IMPORT_FROM              6 (UTC)
+              STORE_NAME               6 (UTC)
+              IMPORT_FROM              5 (datetime)
+              STORE_NAME               5 (datetime)
+              POP_TOP
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('select',))
+              IMPORT_NAME              7 (sqlalchemy)
+              IMPORT_FROM              8 (select)
+              STORE_NAME               8 (select)
+              POP_TOP
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('AsyncSession',))
+              IMPORT_NAME              9 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM             10 (AsyncSession)
+              STORE_NAME              10 (AsyncSession)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('selectinload',))
+              IMPORT_NAME             11 (sqlalchemy.orm)
+              IMPORT_FROM             12 (selectinload)
+              STORE_NAME              12 (selectinload)
+              POP_TOP
+
+ 17           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('decrypt_field',))
+              IMPORT_NAME             13 (app.core.encryption)
+              IMPORT_FROM             14 (decrypt_field)
+              STORE_NAME              14 (decrypt_field)
+              POP_TOP
+
+ 18           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('OutboundMessage',))
+              IMPORT_NAME             15 (app.models.outbound_message)
+              IMPORT_FROM             16 (OutboundMessage)
+              STORE_NAME              16 (OutboundMessage)
+              POP_TOP
+
+ 19           LOAD_CONST               1 (0)
+              LOAD_CONST              10 (('TextSendAttempt',))
+              IMPORT_NAME             17 (app.models.text_send_attempt)
+              IMPORT_FROM             18 (TextSendAttempt)
+              STORE_NAME              18 (TextSendAttempt)
+              POP_TOP
+
+ 21           LOAD_NAME                3 (logging)
+              LOAD_ATTR               38 (getLogger)
+              PUSH_NULL
+              LOAD_NAME               20 (__name__)
+              CALL                     1
+              STORE_NAME              21 (logger)
+
+ 23           LOAD_CONST              11 (10)
+              STORE_NAME              22 (_BATCH_SIZE)
+
+ 26           LOAD_CONST              14 (('db', 'AsyncSession', 'return', 'int'))
+              LOAD_CONST              12 (<code object process_pending_sms at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\workers\sms_worker.py", line 26>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              23 (process_pending_sms)
+
+ 55           LOAD_CONST              15 (('db', 'AsyncSession', 'msg', 'OutboundMessage', 'return', 'None'))
+              LOAD_CONST              13 (<code object _send_single at 0x0000024C0FA8A410, file "D:\fluence\Github\mattbot\backend\app\workers\sms_worker.py", line 55>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              24 (_send_single)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object process_pending_sms at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\workers\sms_worker.py", line 26>:
+  26            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  32            LOAD_GLOBAL              1 (select + NULL)
+                LOAD_GLOBAL              2 (OutboundMessage)
+                CALL                     1
+
+  33            LOAD_ATTR                5 (where + NULL|self)
+                LOAD_GLOBAL              2 (OutboundMessage)
+                LOAD_ATTR                6 (status)
+                LOAD_CONST               1 ('approved')
+                COMPARE_OP              72 (==)
+                CALL                     1
+
+  34            LOAD_ATTR                9 (options + NULL|self)
+                LOAD_GLOBAL             11 (selectinload + NULL)
+                LOAD_GLOBAL              2 (OutboundMessage)
+                LOAD_ATTR               12 (send_attempts)
+                CALL                     1
+                CALL                     1
+
+  35            LOAD_ATTR               15 (order_by + NULL|self)
+                LOAD_GLOBAL              2 (OutboundMessage)
+                LOAD_ATTR               16 (approved_at)
+                LOAD_ATTR               19 (asc + NULL|self)
+                CALL                     0
+                CALL                     1
+
+  36            LOAD_ATTR               21 (limit + NULL|self)
+                LOAD_GLOBAL             22 (_BATCH_SIZE)
+                CALL                     1
+
+  31            STORE_FAST               1 (stmt)
+
+  38            LOAD_FAST                0 (db)
+                LOAD_ATTR               25 (execute + NULL|self)
+                LOAD_FAST                1 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               2 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               2 (result)
+
+  39            LOAD_FAST                2 (result)
+                LOAD_ATTR               27 (scalars + NULL|self)
+                CALL                     0
+                LOAD_ATTR               29 (all + NULL|self)
+                CALL                     0
+                STORE_FAST               3 (messages)
+
+  41            LOAD_CONST               3 (0)
+                STORE_FAST               4 (processed)
+
+  42            LOAD_FAST                3 (messages)
+                GET_ITER
+        L6:     FOR_ITER                28 (to L14)
+                STORE_FAST               5 (msg)
+
+  43    L7:     NOP
+
+  44    L8:     LOAD_GLOBAL             31 (_send_single + NULL)
+                LOAD_FAST_LOAD_FAST      5 (db, msg)
+                CALL                     2
+                GET_AWAITABLE            0
+                LOAD_CONST               2 (None)
+        L9:     SEND                     3 (to L12)
+       L10:     YIELD_VALUE              1
+       L11:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+       L12:     END_SEND
+                POP_TOP
+
+  45            LOAD_FAST                4 (processed)
+                LOAD_CONST               4 (1)
+                BINARY_OP               13 (+=)
+                STORE_FAST               4 (processed)
+       L13:     JUMP_BACKWARD           30 (to L6)
+
+  42   L14:     END_FOR
+                POP_TOP
+
+  52            LOAD_FAST                4 (processed)
+                RETURN_VALUE
+
+  38   L15:     CLEANUP_THROW
+       L16:     JUMP_BACKWARD_NO_INTERRUPT 72 (to L5)
+
+  44   L17:     CLEANUP_THROW
+       L18:     JUMP_BACKWARD_NO_INTERRUPT 17 (to L12)
+
+  --   L19:     PUSH_EXC_INFO
+
+  46            LOAD_GLOBAL             32 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       57 (to L21)
+                POP_TOP
+
+  47            LOAD_GLOBAL             34 (logger)
+                LOAD_ATTR               37 (exception + NULL|self)
+                LOAD_CONST               5 ('Failed to process message %s')
+                LOAD_FAST                5 (msg)
+                LOAD_ATTR               38 (id)
+                CALL                     2
+                POP_TOP
+
+  48            LOAD_CONST               6 ('failed')
+                LOAD_FAST                5 (msg)
+                STORE_ATTR               3 (status)
+
+  49            LOAD_CONST               7 ('WORKER_EXCEPTION')
+                LOAD_FAST                5 (msg)
+                STORE_ATTR              20 (last_error_code)
+
+  50            LOAD_CONST               8 ('Unexpected error during send')
+                LOAD_FAST                5 (msg)
+                STORE_ATTR              21 (last_error_message_short)
+       L20:     POP_EXCEPT
+                JUMP_BACKWARD          104 (to L6)
+
+  46   L21:     RERAISE                  0
+
+  --   L22:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L23:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L23 [0] lasti
+  L3 to L4 -> L15 [2]
+  L4 to L7 -> L23 [0] lasti
+  L8 to L10 -> L19 [1]
+  L10 to L11 -> L17 [3]
+  L11 to L13 -> L19 [1]
+  L13 to L16 -> L23 [0] lasti
+  L17 to L18 -> L19 [1]
+  L19 to L20 -> L22 [2] lasti
+  L20 to L21 -> L23 [0] lasti
+  L21 to L22 -> L22 [2] lasti
+  L22 to L23 -> L23 [0] lasti
+
+Disassembly of <code object _send_single at 0x0000024C0FA8A410, file "D:\fluence\Github\mattbot\backend\app\workers\sms_worker.py", line 55>:
+  55            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  57            LOAD_CONST               1 ('sending')
+                LOAD_FAST                1 (msg)
+                STORE_ATTR               0 (status)
+
+  58            LOAD_FAST                0 (db)
+                LOAD_ATTR                3 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               2 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                POP_TOP
+
+  61            LOAD_FAST                1 (msg)
+                LOAD_ATTR                4 (final_body_ciphertext)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       93 (to L6)
+                LOAD_FAST                1 (msg)
+                LOAD_ATTR                6 (final_body_nonce)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       76 (to L6)
+                LOAD_FAST                1 (msg)
+                LOAD_ATTR                8 (final_body_key_version)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       59 (to L6)
+
+  62            LOAD_GLOBAL             11 (decrypt_field + NULL)
+
+  63            LOAD_FAST                1 (msg)
+                LOAD_ATTR                4 (final_body_ciphertext)
+
+  64            LOAD_FAST                1 (msg)
+                LOAD_ATTR                6 (final_body_nonce)
+
+  65            LOAD_FAST                1 (msg)
+                LOAD_ATTR                8 (final_body_key_version)
+
+  62            CALL                     3
+
+  66            LOAD_ATTR               13 (decode + NULL|self)
+                LOAD_CONST               3 ('utf-8')
+                CALL                     1
+
+  62            STORE_FAST               2 (body_plain)
+                JUMP_FORWARD            58 (to L7)
+
+  68    L6:     LOAD_GLOBAL             11 (decrypt_field + NULL)
+
+  69            LOAD_FAST                1 (msg)
+                LOAD_ATTR               14 (draft_body_ciphertext)
+
+  70            LOAD_FAST                1 (msg)
+                LOAD_ATTR               16 (draft_body_nonce)
+
+  71            LOAD_FAST                1 (msg)
+                LOAD_ATTR               18 (draft_body_key_version)
+
+  68            CALL                     3
+
+  72            LOAD_ATTR               13 (decode + NULL|self)
+                LOAD_CONST               3 ('utf-8')
+                CALL                     1
+
+  68            STORE_FAST               2 (body_plain)
+
+  74    L7:     LOAD_GLOBAL             11 (decrypt_field + NULL)
+
+  75            LOAD_FAST                1 (msg)
+                LOAD_ATTR               20 (to_number_ciphertext)
+
+  76            LOAD_FAST                1 (msg)
+                LOAD_ATTR               22 (to_number_nonce)
+
+  77            LOAD_FAST                1 (msg)
+                LOAD_ATTR               24 (to_number_key_version)
+
+  74            CALL                     3
+
+  78            LOAD_ATTR               13 (decode + NULL|self)
+                LOAD_CONST               3 ('utf-8')
+                CALL                     1
+
+  74            STORE_FAST               3 (to_number)
+
+  81            LOAD_GLOBAL             26 (logger)
+                LOAD_ATTR               29 (info + NULL|self)
+                LOAD_CONST               4 ('SMS target: %s, body length: %d')
+                LOAD_FAST                3 (to_number)
+                LOAD_CONST               2 (None)
+                LOAD_CONST               5 (4)
+                BINARY_SLICE
+                LOAD_CONST               6 ('****')
+                BINARY_OP                0 (+)
+                LOAD_GLOBAL             31 (len + NULL)
+                LOAD_FAST                2 (body_plain)
+                CALL                     1
+                CALL                     3
+                POP_TOP
+
+  83            LOAD_GLOBAL             31 (len + NULL)
+                LOAD_FAST                1 (msg)
+                LOAD_ATTR               32 (send_attempts)
+                CALL                     1
+                LOAD_CONST               7 (1)
+                BINARY_OP                0 (+)
+                STORE_FAST               4 (attempt_count)
+
+  84            LOAD_FAST                1 (msg)
+                LOAD_ATTR               34 (id)
+                FORMAT_SIMPLE
+                LOAD_CONST               8 (':')
+                LOAD_FAST                4 (attempt_count)
+                FORMAT_SIMPLE
+                BUILD_STRING             3
+                STORE_FAST               5 (idempotency_key)
+
+  86            LOAD_GLOBAL             37 (TextSendAttempt + NULL)
+
+  87            LOAD_FAST                1 (msg)
+                LOAD_ATTR               34 (id)
+
+  88            LOAD_FAST                4 (attempt_count)
+
+  89            LOAD_FAST                5 (idempotency_key)
+
+  90            LOAD_CONST               9 ('twilio')
+
+  91            LOAD_GLOBAL             38 (datetime)
+                LOAD_ATTR               40 (now)
+                PUSH_NULL
+                LOAD_GLOBAL             42 (UTC)
+                CALL                     1
+
+  86            LOAD_CONST              10 (('message_id', 'attempt_number', 'idempotency_key', 'provider', 'started_at'))
+                CALL_KW                  5
+                STORE_FAST               6 (attempt)
+
+  93            LOAD_FAST                0 (db)
+                LOAD_ATTR               45 (add + NULL|self)
+                LOAD_FAST                6 (attempt)
+                CALL                     1
+                POP_TOP
+
+  94            LOAD_FAST                0 (db)
+                LOAD_ATTR                3 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               2 (None)
+        L8:     SEND                     3 (to L11)
+        L9:     YIELD_VALUE              1
+       L10:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L8)
+       L11:     END_SEND
+                POP_TOP
+
+  97            LOAD_CONST              11 ('SM_stub_')
+                LOAD_GLOBAL             46 (uuid)
+                LOAD_ATTR               48 (uuid4)
+                PUSH_NULL
+                CALL                     0
+                LOAD_ATTR               50 (hex)
+                LOAD_CONST               2 (None)
+                LOAD_CONST              12 (16)
+                BINARY_SLICE
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                STORE_FAST               7 (stub_sid)
+
+  98            LOAD_GLOBAL             26 (logger)
+                LOAD_ATTR               29 (info + NULL|self)
+
+  99            LOAD_CONST              13 ('STUB SMS send: to=%s body_len=%d from=%s sid=%s')
+
+ 100            LOAD_FAST                1 (msg)
+                LOAD_ATTR               52 (to_number_last4)
+
+ 101            LOAD_GLOBAL             31 (len + NULL)
+                LOAD_FAST                2 (body_plain)
+                CALL                     1
+
+ 102            LOAD_FAST                1 (msg)
+                LOAD_ATTR               54 (from_number_e164)
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L12)
+                POP_TOP
+                LOAD_CONST              14 ('(auto)')
+
+ 103   L12:     LOAD_FAST                7 (stub_sid)
+
+  98            CALL                     5
+                POP_TOP
+
+ 106            LOAD_FAST_LOAD_FAST    118 (stub_sid, attempt)
+                STORE_ATTR              28 (provider_message_sid)
+
+ 107            LOAD_CONST              15 ('queued')
+                LOAD_FAST                6 (attempt)
+                STORE_ATTR              29 (provider_status)
+
+ 108            LOAD_GLOBAL             38 (datetime)
+                LOAD_ATTR               40 (now)
+                PUSH_NULL
+                LOAD_GLOBAL             42 (UTC)
+                CALL                     1
+                LOAD_FAST                6 (attempt)
+                STORE_ATTR              30 (finished_at)
+
+ 110            LOAD_CONST              16 ('sent')
+                LOAD_FAST                1 (msg)
+                STORE_ATTR               0 (status)
+
+ 111            LOAD_FAST                0 (db)
+                LOAD_ATTR                3 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               2 (None)
+       L13:     SEND                     3 (to L16)
+       L14:     YIELD_VALUE              1
+       L15:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L13)
+       L16:     END_SEND
+                POP_TOP
+                RETURN_CONST             2 (None)
+
+  58   L17:     CLEANUP_THROW
+       L18:     EXTENDED_ARG             2
+                JUMP_BACKWARD_NO_INTERRUPT 574 (to L5)
+
+  94   L19:     CLEANUP_THROW
+       L20:     JUMP_BACKWARD_NO_INTERRUPT 183 (to L11)
+
+ 111   L21:     CLEANUP_THROW
+       L22:     JUMP_BACKWARD_NO_INTERRUPT 10 (to L16)
+
+  --   L23:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L23 [0] lasti
+  L3 to L4 -> L17 [2]
+  L4 to L9 -> L23 [0] lasti
+  L9 to L10 -> L19 [2]
+  L10 to L14 -> L23 [0] lasti
+  L14 to L15 -> L21 [2]
+  L15 to L18 -> L23 [0] lasti
+  L19 to L20 -> L23 [0] lasti
+  L21 to L22 -> L23 [0] lasti

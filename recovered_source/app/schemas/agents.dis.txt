@@ -1,0 +1,1062 @@
+# Bytecode dump of: agents.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\schemas\agents.py
+# co_names: ('__doc__', '__future__', 'annotations', 'datetime', 'pydantic', 'BaseModel', 'Field', 'VoiceSelection', 'AgentResponse', 'AgentListResponse', 'CreateDefaultAgentRequest', 'UpdateAgentRequest', 'VoiceCatalogItem', 'VoiceCatalogResponse', 'PromptSuggestionItem', 'PromptSuggestionsResponse', 'AgentRuntimeResponse')
+# co_consts (strings): ['Pydantic schemas for agent endpoints.', 'VoiceSelection', 'AgentResponse', 'AgentListResponse', 'CreateDefaultAgentRequest', 'UpdateAgentRequest', 'VoiceCatalogItem', 'VoiceCatalogResponse', 'PromptSuggestionItem', 'PromptSuggestionsResponse', 'AgentRuntimeResponse']
+
+# DOCSTRING: """Pydantic schemas for agent endpoints."""
+# --- Nested code object: VoiceSelection ---
+    # DOCSTRING: """VoiceSelection"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'voice_id', '__annotations__', 'display_name', 'provider_voice_id', '__static_attributes__')
+    # co_varnames: ()
+     10           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('VoiceSelection')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (10)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     11           LOAD_CONST               2 (None)
+                  STORE_NAME               4 (voice_id)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               4 ('voice_id')
+                  STORE_SUBSCR
+    
+     12           LOAD_CONST               2 (None)
+                  STORE_NAME               6 (display_name)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               5 ('display_name')
+                  STORE_SUBSCR
+    
+     13           LOAD_CONST               2 (None)
+                  STORE_NAME               7 (provider_voice_id)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               6 ('provider_voice_id')
+                  STORE_SUBSCR
+                  LOAD_CONST               7 (())
+                  STORE_NAME               8 (__static_attributes__)
+                  RETURN_CONST             2 (None)
+    
+# --- Nested code object: AgentResponse ---
+    # DOCSTRING: """AgentResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'voice', 'user_instructions', 'greeting_instructions', 'revision', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+     16           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('AgentResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (16)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     17           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('id')
+                  STORE_SUBSCR
+    
+     18           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('display_name')
+                  STORE_SUBSCR
+    
+     19           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('function_type')
+                  STORE_SUBSCR
+    
+     20           LOAD_CONST               6 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('is_default')
+                  STORE_SUBSCR
+    
+     21           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('status')
+                  STORE_SUBSCR
+    
+     22           LOAD_CONST               9 (None)
+                  STORE_NAME               5 (voice)
+                  LOAD_CONST              10 ('VoiceSelection | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              11 ('voice')
+                  STORE_SUBSCR
+    
+     23           LOAD_CONST               9 (None)
+                  STORE_NAME               6 (user_instructions)
+                  LOAD_CONST              12 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              13 ('user_instructions')
+                  STORE_SUBSCR
+    
+     24           LOAD_CONST               9 (None)
+                  STORE_NAME               7 (greeting_instructions)
+                  LOAD_CONST              12 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              14 ('greeting_instructions')
+                  STORE_SUBSCR
+    
+     25           LOAD_CONST              15 (1)
+                  STORE_NAME               8 (revision)
+                  LOAD_CONST              16 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              17 ('revision')
+                  STORE_SUBSCR
+    
+     26           LOAD_CONST              18 ('datetime')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              19 ('created_at')
+                  STORE_SUBSCR
+    
+     28           LOAD_CONST              20 ('from_attributes')
+                  LOAD_CONST              21 (True)
+                  BUILD_MAP                1
+                  STORE_NAME               9 (model_config)
+                  LOAD_CONST              22 (())
+                  STORE_NAME              10 (__static_attributes__)
+                  RETURN_CONST             9 (None)
+    
+# --- Nested code object: AgentListResponse ---
+    # DOCSTRING: """AgentListResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     31           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('AgentListResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (31)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     32           LOAD_CONST               2 ('list[AgentResponse]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('items')
+                  STORE_SUBSCR
+                  LOAD_CONST               4 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# --- Nested code object: CreateDefaultAgentRequest ---
+    # DOCSTRING: """CreateDefaultAgentRequest"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'Field', 'display_name', '__annotations__', 'voice_id', 'user_instructions', '__static_attributes__')
+    # co_varnames: ()
+     35           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CreateDefaultAgentRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (35)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     36           LOAD_NAME                4 (Field)
+                  PUSH_NULL
+                  LOAD_CONST               2 (None)
+                  LOAD_CONST               3 (60)
+                  LOAD_CONST               4 (('max_length',))
+                  CALL_KW                  2
+                  STORE_NAME               5 (display_name)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST               6 ('display_name')
+                  STORE_SUBSCR
+    
+     37           LOAD_CONST               2 (None)
+                  STORE_NAME               7 (voice_id)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST               7 ('voice_id')
+                  STORE_SUBSCR
+    
+     38           LOAD_NAME                4 (Field)
+                  PUSH_NULL
+                  LOAD_CONST               2 (None)
+                  LOAD_CONST               8 (2000)
+                  LOAD_CONST               4 (('max_length',))
+                  CALL_KW                  2
+                  STORE_NAME               8 (user_instructions)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST               9 ('user_instructions')
+                  STORE_SUBSCR
+                  LOAD_CONST              10 (())
+                  STORE_NAME               9 (__static_attributes__)
+                  RETURN_CONST             2 (None)
+    
+# --- Nested code object: UpdateAgentRequest ---
+    # DOCSTRING: """UpdateAgentRequest"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'Field', 'display_name', '__annotations__', 'voice_id', 'user_instructions', 'greeting_instructions', 'expected_revision', '__static_attributes__')
+    # co_varnames: ()
+     41           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('UpdateAgentRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (41)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     42           LOAD_NAME                4 (Field)
+                  PUSH_NULL
+                  LOAD_CONST               2 (None)
+                  LOAD_CONST               3 (60)
+                  LOAD_CONST               4 (('max_length',))
+                  CALL_KW                  2
+                  STORE_NAME               5 (display_name)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST               6 ('display_name')
+                  STORE_SUBSCR
+    
+     43           LOAD_CONST               2 (None)
+                  STORE_NAME               7 (voice_id)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST               7 ('voice_id')
+                  STORE_SUBSCR
+    
+     44           LOAD_NAME                4 (Field)
+                  PUSH_NULL
+                  LOAD_CONST               2 (None)
+                  LOAD_CONST               8 (2000)
+                  LOAD_CONST               4 (('max_length',))
+                  CALL_KW                  2
+                  STORE_NAME               8 (user_instructions)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST               9 ('user_instructions')
+                  STORE_SUBSCR
+    
+     45           LOAD_NAME                4 (Field)
+                  PUSH_NULL
+                  LOAD_CONST               2 (None)
+                  LOAD_CONST              10 (500)
+                  LOAD_CONST               4 (('max_length',))
+                  CALL_KW                  2
+                  STORE_NAME               9 (greeting_instructions)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST              11 ('greeting_instructions')
+                  STORE_SUBSCR
+    
+     46           LOAD_CONST               2 (None)
+                  STORE_NAME              10 (expected_revision)
+                  LOAD_CONST              12 ('int | None')
+                  LOAD_NAME                6 (__annotations__)
+                  LOAD_CONST              13 ('expected_revision')
+                  STORE_SUBSCR
+                  LOAD_CONST              14 (())
+                  STORE_NAME              11 (__static_attributes__)
+                  RETURN_CONST             2 (None)
+    
+# --- Nested code object: VoiceCatalogItem ---
+    # DOCSTRING: """VoiceCatalogItem"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'gender_tag', 'preview_url', 'sort_order', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+     49           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('VoiceCatalogItem')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (49)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     50           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('id')
+                  STORE_SUBSCR
+    
+     51           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('provider_voice_id')
+                  STORE_SUBSCR
+    
+     52           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('display_name')
+                  STORE_SUBSCR
+    
+     53           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('locale')
+                  STORE_SUBSCR
+    
+     54           LOAD_CONST               7 (None)
+                  STORE_NAME               5 (gender_tag)
+                  LOAD_CONST               8 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('gender_tag')
+                  STORE_SUBSCR
+    
+     55           LOAD_CONST               7 (None)
+                  STORE_NAME               6 (preview_url)
+                  LOAD_CONST               8 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              10 ('preview_url')
+                  STORE_SUBSCR
+    
+     56           LOAD_CONST              11 (0)
+                  STORE_NAME               7 (sort_order)
+                  LOAD_CONST              12 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              13 ('sort_order')
+                  STORE_SUBSCR
+    
+     58           LOAD_CONST              14 ('from_attributes')
+                  LOAD_CONST              15 (True)
+                  BUILD_MAP                1
+                  STORE_NAME               8 (model_config)
+                  LOAD_CONST              16 (())
+                  STORE_NAME               9 (__static_attributes__)
+                  RETURN_CONST             7 (None)
+    
+# --- Nested code object: VoiceCatalogResponse ---
+    # DOCSTRING: """VoiceCatalogResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     61           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('VoiceCatalogResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (61)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     62           LOAD_CONST               2 ('list[VoiceCatalogItem]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('items')
+                  STORE_SUBSCR
+                  LOAD_CONST               4 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# --- Nested code object: PromptSuggestionItem ---
+    # DOCSTRING: """PromptSuggestionItem"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'sort_order', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+     65           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('PromptSuggestionItem')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (65)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     66           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('id')
+                  STORE_SUBSCR
+    
+     67           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('title')
+                  STORE_SUBSCR
+    
+     68           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('text')
+                  STORE_SUBSCR
+    
+     69           LOAD_CONST               6 (0)
+                  STORE_NAME               5 (sort_order)
+                  LOAD_CONST               7 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('sort_order')
+                  STORE_SUBSCR
+    
+     71           LOAD_CONST               9 ('from_attributes')
+                  LOAD_CONST              10 (True)
+                  BUILD_MAP                1
+                  STORE_NAME               6 (model_config)
+                  LOAD_CONST              11 (())
+                  STORE_NAME               7 (__static_attributes__)
+                  RETURN_CONST            12 (None)
+    
+# --- Nested code object: PromptSuggestionsResponse ---
+    # DOCSTRING: """PromptSuggestionsResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     74           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('PromptSuggestionsResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (74)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     75           LOAD_CONST               2 ('list[PromptSuggestionItem]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('items')
+                  STORE_SUBSCR
+                  LOAD_CONST               4 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# --- Nested code object: AgentRuntimeResponse ---
+    # DOCSTRING: """AgentRuntimeResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__doc__', '__annotations__', 'greeting_text', 'elevenlabs_agent_id', 'call_objective_mode', 'max_call_length_seconds', 'recording_enabled', 'memory_enabled', '__static_attributes__')
+    # co_varnames: ()
+     78           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('AgentRuntimeResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (78)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     79           LOAD_CONST               2 ('Internal-only response for Node bridge. Never exposed to mobile.')
+                  STORE_NAME               4 (__doc__)
+    
+     81           LOAD_CONST               3 ('str')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               4 ('agent_id')
+                  STORE_SUBSCR
+    
+     82           LOAD_CONST               3 ('str')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               5 ('agent_display_name')
+                  STORE_SUBSCR
+    
+     83           LOAD_CONST               3 ('str')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               6 ('agent_function_type')
+                  STORE_SUBSCR
+    
+     84           LOAD_CONST               3 ('str')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               7 ('provider_voice_id')
+                  STORE_SUBSCR
+    
+     85           LOAD_CONST               3 ('str')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               8 ('final_prompt')
+                  STORE_SUBSCR
+    
+     86           LOAD_CONST               9 ('')
+                  STORE_NAME               6 (greeting_text)
+                  LOAD_CONST               3 ('str')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              10 ('greeting_text')
+                  STORE_SUBSCR
+    
+     87           LOAD_CONST               9 ('')
+                  STORE_NAME               7 (elevenlabs_agent_id)
+                  LOAD_CONST               3 ('str')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              11 ('elevenlabs_agent_id')
+                  STORE_SUBSCR
+    
+     88           LOAD_CONST              12 ('screen_and_summarize')
+                  STORE_NAME               8 (call_objective_mode)
+                  LOAD_CONST               3 ('str')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              13 ('call_objective_mode')
+                  STORE_SUBSCR
+    
+     89           LOAD_CONST              14 (180)
+                  STORE_NAME               9 (max_call_length_seconds)
+                  LOAD_CONST              15 ('int')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              16 ('max_call_length_seconds')
+                  STORE_SUBSCR
+    
+     90           LOAD_CONST              17 (False)
+                  STORE_NAME              10 (recording_enabled)
+                  LOAD_CONST              18 ('bool')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              19 ('recording_enabled')
+                  STORE_SUBSCR
+    
+     91           LOAD_CONST              20 (True)
+                  STORE_NAME              11 (memory_enabled)
+                  LOAD_CONST              18 ('bool')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST              21 ('memory_enabled')
+                  STORE_SUBSCR
+                  LOAD_CONST              22 (())
+                  STORE_NAME              12 (__static_attributes__)
+                  RETURN_CONST            23 (None)
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'datetime', 'pydantic', 'BaseModel', 'Field', 'VoiceSelection', 'AgentResponse', 'AgentListResponse', 'CreateDefaultAgentRequest', 'UpdateAgentRequest', 'VoiceCatalogItem', 'VoiceCatalogResponse', 'PromptSuggestionItem', 'PromptSuggestionsResponse', 'AgentRuntimeResponse')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Pydantic schemas for agent endpoints.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('datetime',))
+              IMPORT_NAME              3 (datetime)
+              IMPORT_FROM              3 (datetime)
+              STORE_NAME               3 (datetime)
+              POP_TOP
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('BaseModel', 'Field'))
+              IMPORT_NAME              4 (pydantic)
+              IMPORT_FROM              5 (BaseModel)
+              STORE_NAME               5 (BaseModel)
+              IMPORT_FROM              6 (Field)
+              STORE_NAME               6 (Field)
+              POP_TOP
+
+ 10           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               5 (<code object VoiceSelection at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 10>)
+              MAKE_FUNCTION
+              LOAD_CONST               6 ('VoiceSelection')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME               7 (VoiceSelection)
+
+ 16           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               7 (<code object AgentResponse at 0x0000024C0EEFB1B0, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 16>)
+              MAKE_FUNCTION
+              LOAD_CONST               8 ('AgentResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME               8 (AgentResponse)
+
+ 31           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               9 (<code object AgentListResponse at 0x0000024C0EF2A790, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 31>)
+              MAKE_FUNCTION
+              LOAD_CONST              10 ('AgentListResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME               9 (AgentListResponse)
+
+ 35           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              11 (<code object CreateDefaultAgentRequest at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 35>)
+              MAKE_FUNCTION
+              LOAD_CONST              12 ('CreateDefaultAgentRequest')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              10 (CreateDefaultAgentRequest)
+
+ 41           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              13 (<code object UpdateAgentRequest at 0x0000024C0EEE3DE0, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 41>)
+              MAKE_FUNCTION
+              LOAD_CONST              14 ('UpdateAgentRequest')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              11 (UpdateAgentRequest)
+
+ 49           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              15 (<code object VoiceCatalogItem at 0x0000024C114988F0, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 49>)
+              MAKE_FUNCTION
+              LOAD_CONST              16 ('VoiceCatalogItem')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              12 (VoiceCatalogItem)
+
+ 61           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              17 (<code object VoiceCatalogResponse at 0x0000024C0EF2A880, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 61>)
+              MAKE_FUNCTION
+              LOAD_CONST              18 ('VoiceCatalogResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              13 (VoiceCatalogResponse)
+
+ 65           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              19 (<code object PromptSuggestionItem at 0x0000024C114961F0, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 65>)
+              MAKE_FUNCTION
+              LOAD_CONST              20 ('PromptSuggestionItem')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              14 (PromptSuggestionItem)
+
+ 74           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              21 (<code object PromptSuggestionsResponse at 0x0000024C0EF2B0F0, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 74>)
+              MAKE_FUNCTION
+              LOAD_CONST              22 ('PromptSuggestionsResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              15 (PromptSuggestionsResponse)
+
+ 78           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              23 (<code object AgentRuntimeResponse at 0x0000024C114352E0, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 78>)
+              MAKE_FUNCTION
+              LOAD_CONST              24 ('AgentRuntimeResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              16 (AgentRuntimeResponse)
+              RETURN_CONST            25 (None)
+
+Disassembly of <code object VoiceSelection at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 10>:
+ 10           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('VoiceSelection')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (10)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 11           LOAD_CONST               2 (None)
+              STORE_NAME               4 (voice_id)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               4 ('voice_id')
+              STORE_SUBSCR
+
+ 12           LOAD_CONST               2 (None)
+              STORE_NAME               6 (display_name)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               5 ('display_name')
+              STORE_SUBSCR
+
+ 13           LOAD_CONST               2 (None)
+              STORE_NAME               7 (provider_voice_id)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               6 ('provider_voice_id')
+              STORE_SUBSCR
+              LOAD_CONST               7 (())
+              STORE_NAME               8 (__static_attributes__)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object AgentResponse at 0x0000024C0EEFB1B0, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 16>:
+ 16           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('AgentResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (16)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 17           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('id')
+              STORE_SUBSCR
+
+ 18           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('display_name')
+              STORE_SUBSCR
+
+ 19           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('function_type')
+              STORE_SUBSCR
+
+ 20           LOAD_CONST               6 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('is_default')
+              STORE_SUBSCR
+
+ 21           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('status')
+              STORE_SUBSCR
+
+ 22           LOAD_CONST               9 (None)
+              STORE_NAME               5 (voice)
+              LOAD_CONST              10 ('VoiceSelection | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('voice')
+              STORE_SUBSCR
+
+ 23           LOAD_CONST               9 (None)
+              STORE_NAME               6 (user_instructions)
+              LOAD_CONST              12 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              13 ('user_instructions')
+              STORE_SUBSCR
+
+ 24           LOAD_CONST               9 (None)
+              STORE_NAME               7 (greeting_instructions)
+              LOAD_CONST              12 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              14 ('greeting_instructions')
+              STORE_SUBSCR
+
+ 25           LOAD_CONST              15 (1)
+              STORE_NAME               8 (revision)
+              LOAD_CONST              16 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              17 ('revision')
+              STORE_SUBSCR
+
+ 26           LOAD_CONST              18 ('datetime')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              19 ('created_at')
+              STORE_SUBSCR
+
+ 28           LOAD_CONST              20 ('from_attributes')
+              LOAD_CONST              21 (True)
+              BUILD_MAP                1
+              STORE_NAME               9 (model_config)
+              LOAD_CONST              22 (())
+              STORE_NAME              10 (__static_attributes__)
+              RETURN_CONST             9 (None)
+
+Disassembly of <code object AgentListResponse at 0x0000024C0EF2A790, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 31>:
+ 31           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('AgentListResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (31)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 32           LOAD_CONST               2 ('list[AgentResponse]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('items')
+              STORE_SUBSCR
+              LOAD_CONST               4 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object CreateDefaultAgentRequest at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 35>:
+ 35           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CreateDefaultAgentRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (35)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 36           LOAD_NAME                4 (Field)
+              PUSH_NULL
+              LOAD_CONST               2 (None)
+              LOAD_CONST               3 (60)
+              LOAD_CONST               4 (('max_length',))
+              CALL_KW                  2
+              STORE_NAME               5 (display_name)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST               6 ('display_name')
+              STORE_SUBSCR
+
+ 37           LOAD_CONST               2 (None)
+              STORE_NAME               7 (voice_id)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST               7 ('voice_id')
+              STORE_SUBSCR
+
+ 38           LOAD_NAME                4 (Field)
+              PUSH_NULL
+              LOAD_CONST               2 (None)
+              LOAD_CONST               8 (2000)
+              LOAD_CONST               4 (('max_length',))
+              CALL_KW                  2
+              STORE_NAME               8 (user_instructions)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST               9 ('user_instructions')
+              STORE_SUBSCR
+              LOAD_CONST              10 (())
+              STORE_NAME               9 (__static_attributes__)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object UpdateAgentRequest at 0x0000024C0EEE3DE0, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 41>:
+ 41           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('UpdateAgentRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (41)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 42           LOAD_NAME                4 (Field)
+              PUSH_NULL
+              LOAD_CONST               2 (None)
+              LOAD_CONST               3 (60)
+              LOAD_CONST               4 (('max_length',))
+              CALL_KW                  2
+              STORE_NAME               5 (display_name)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST               6 ('display_name')
+              STORE_SUBSCR
+
+ 43           LOAD_CONST               2 (None)
+              STORE_NAME               7 (voice_id)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST               7 ('voice_id')
+              STORE_SUBSCR
+
+ 44           LOAD_NAME                4 (Field)
+              PUSH_NULL
+              LOAD_CONST               2 (None)
+              LOAD_CONST               8 (2000)
+              LOAD_CONST               4 (('max_length',))
+              CALL_KW                  2
+              STORE_NAME               8 (user_instructions)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST               9 ('user_instructions')
+              STORE_SUBSCR
+
+ 45           LOAD_NAME                4 (Field)
+              PUSH_NULL
+              LOAD_CONST               2 (None)
+              LOAD_CONST              10 (500)
+              LOAD_CONST               4 (('max_length',))
+              CALL_KW                  2
+              STORE_NAME               9 (greeting_instructions)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST              11 ('greeting_instructions')
+              STORE_SUBSCR
+
+ 46           LOAD_CONST               2 (None)
+              STORE_NAME              10 (expected_revision)
+              LOAD_CONST              12 ('int | None')
+              LOAD_NAME                6 (__annotations__)
+              LOAD_CONST              13 ('expected_revision')
+              STORE_SUBSCR
+              LOAD_CONST              14 (())
+              STORE_NAME              11 (__static_attributes__)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object VoiceCatalogItem at 0x0000024C114988F0, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 49>:
+ 49           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('VoiceCatalogItem')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (49)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 50           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('id')
+              STORE_SUBSCR
+
+ 51           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('provider_voice_id')
+              STORE_SUBSCR
+
+ 52           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('display_name')
+              STORE_SUBSCR
+
+ 53           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('locale')
+              STORE_SUBSCR
+
+ 54           LOAD_CONST               7 (None)
+              STORE_NAME               5 (gender_tag)
+              LOAD_CONST               8 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('gender_tag')
+              STORE_SUBSCR
+
+ 55           LOAD_CONST               7 (None)
+              STORE_NAME               6 (preview_url)
+              LOAD_CONST               8 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('preview_url')
+              STORE_SUBSCR
+
+ 56           LOAD_CONST              11 (0)
+              STORE_NAME               7 (sort_order)
+              LOAD_CONST              12 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              13 ('sort_order')
+              STORE_SUBSCR
+
+ 58           LOAD_CONST              14 ('from_attributes')
+              LOAD_CONST              15 (True)
+              BUILD_MAP                1
+              STORE_NAME               8 (model_config)
+              LOAD_CONST              16 (())
+              STORE_NAME               9 (__static_attributes__)
+              RETURN_CONST             7 (None)
+
+Disassembly of <code object VoiceCatalogResponse at 0x0000024C0EF2A880, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 61>:
+ 61           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('VoiceCatalogResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (61)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 62           LOAD_CONST               2 ('list[VoiceCatalogItem]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('items')
+              STORE_SUBSCR
+              LOAD_CONST               4 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object PromptSuggestionItem at 0x0000024C114961F0, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 65>:
+ 65           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('PromptSuggestionItem')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (65)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 66           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('id')
+              STORE_SUBSCR
+
+ 67           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('title')
+              STORE_SUBSCR
+
+ 68           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('text')
+              STORE_SUBSCR
+
+ 69           LOAD_CONST               6 (0)
+              STORE_NAME               5 (sort_order)
+              LOAD_CONST               7 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('sort_order')
+              STORE_SUBSCR
+
+ 71           LOAD_CONST               9 ('from_attributes')
+              LOAD_CONST              10 (True)
+              BUILD_MAP                1
+              STORE_NAME               6 (model_config)
+              LOAD_CONST              11 (())
+              STORE_NAME               7 (__static_attributes__)
+              RETURN_CONST            12 (None)
+
+Disassembly of <code object PromptSuggestionsResponse at 0x0000024C0EF2B0F0, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 74>:
+ 74           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('PromptSuggestionsResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (74)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 75           LOAD_CONST               2 ('list[PromptSuggestionItem]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('items')
+              STORE_SUBSCR
+              LOAD_CONST               4 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object AgentRuntimeResponse at 0x0000024C114352E0, file "D:\fluence\Github\mattbot\backend\app\schemas\agents.py", line 78>:
+ 78           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('AgentRuntimeResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (78)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 79           LOAD_CONST               2 ('Internal-only response for Node bridge. Never exposed to mobile.')
+              STORE_NAME               4 (__doc__)
+
+ 81           LOAD_CONST               3 ('str')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               4 ('agent_id')
+              STORE_SUBSCR
+
+ 82           LOAD_CONST               3 ('str')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               5 ('agent_display_name')
+              STORE_SUBSCR
+
+ 83           LOAD_CONST               3 ('str')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               6 ('agent_function_type')
+              STORE_SUBSCR
+
+ 84           LOAD_CONST               3 ('str')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               7 ('provider_voice_id')
+              STORE_SUBSCR
+
+ 85           LOAD_CONST               3 ('str')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               8 ('final_prompt')
+              STORE_SUBSCR
+
+ 86           LOAD_CONST               9 ('')
+              STORE_NAME               6 (greeting_text)
+              LOAD_CONST               3 ('str')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              10 ('greeting_text')
+              STORE_SUBSCR
+
+ 87           LOAD_CONST               9 ('')
+              STORE_NAME               7 (elevenlabs_agent_id)
+              LOAD_CONST               3 ('str')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              11 ('elevenlabs_agent_id')
+              STORE_SUBSCR
+
+ 88           LOAD_CONST              12 ('screen_and_summarize')
+              STORE_NAME               8 (call_objective_mode)
+              LOAD_CONST               3 ('str')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              13 ('call_objective_mode')
+              STORE_SUBSCR
+
+ 89           LOAD_CONST              14 (180)
+              STORE_NAME               9 (max_call_length_seconds)
+              LOAD_CONST              15 ('int')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              16 ('max_call_length_seconds')
+              STORE_SUBSCR
+
+ 90           LOAD_CONST              17 (False)
+              STORE_NAME              10 (recording_enabled)
+              LOAD_CONST              18 ('bool')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              19 ('recording_enabled')
+              STORE_SUBSCR
+
+ 91           LOAD_CONST              20 (True)
+              STORE_NAME              11 (memory_enabled)
+              LOAD_CONST              18 ('bool')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST              21 ('memory_enabled')
+              STORE_SUBSCR
+              LOAD_CONST              22 (())
+              STORE_NAME              12 (__static_attributes__)
+              RETURN_CONST            23 (None)

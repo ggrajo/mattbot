@@ -1,0 +1,1079 @@
+# Bytecode dump of: blocks.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\schemas\blocks.py
+# co_names: ('__doc__', '__future__', 'annotations', 're', 'datetime', 'pydantic', 'BaseModel', 'field_validator', 'BlockCreateRequest', 'BlockEntryResponse', 'BlockListResponse')
+# co_consts (strings): ['Pydantic schemas for block list endpoints.', 'BlockCreateRequest', 'BlockEntryResponse', 'BlockListResponse']
+
+# DOCSTRING: """Pydantic schemas for block list endpoints."""
+# --- Nested code object: BlockCreateRequest ---
+    # DOCSTRING: """BlockCreateRequest"""
+    # --- Nested code object: BlockCreateRequest.validate_e164 ---
+        # co_names: ('re', 'sub', 'strip', 'match', 'ValueError')
+        # co_varnames: ('cls', 'v')
+         20           RESUME                   0
+        
+         23           LOAD_GLOBAL              0 (re)
+                      LOAD_ATTR                2 (sub)
+                      PUSH_NULL
+                      LOAD_CONST               1 ('[\\s\\-\\(\\)\\.]+')
+                      LOAD_CONST               2 ('')
+                      LOAD_FAST                1 (v)
+                      LOAD_ATTR                5 (strip + NULL|self)
+                      CALL                     0
+                      CALL                     3
+                      STORE_FAST               1 (v)
+        
+         24           LOAD_GLOBAL              0 (re)
+                      LOAD_ATTR                6 (match)
+                      PUSH_NULL
+                      LOAD_CONST               3 ('^\\+[1-9]\\d{1,14}$')
+                      LOAD_FAST                1 (v)
+                      CALL                     2
+                      TO_BOOL
+                      POP_JUMP_IF_TRUE        11 (to L1)
+        
+         25           LOAD_GLOBAL              9 (ValueError + NULL)
+        
+         26           LOAD_CONST               4 ('Phone number must be in E.164 format (e.g. +14155551234)')
+        
+         25           CALL                     1
+                      RAISE_VARARGS            1
+        
+         28   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: BlockCreateRequest.validate_display_name ---
+        # co_names: ('len', 'ValueError')
+        # co_varnames: ('cls', 'v')
+         30           RESUME                   0
+        
+         33           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        26 (to L1)
+                      LOAD_GLOBAL              1 (len + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      LOAD_CONST               1 (100)
+                      COMPARE_OP             148 (bool(>))
+                      POP_JUMP_IF_FALSE       11 (to L1)
+        
+         34           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               2 ('Display name must be 100 characters or fewer')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         35   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: BlockCreateRequest.validate_company ---
+        # co_names: ('len', 'ValueError')
+        # co_varnames: ('cls', 'v')
+         37           RESUME                   0
+        
+         40           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        26 (to L1)
+                      LOAD_GLOBAL              1 (len + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      LOAD_CONST               1 (200)
+                      COMPARE_OP             148 (bool(>))
+                      POP_JUMP_IF_FALSE       11 (to L1)
+        
+         41           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               2 ('Company must be 200 characters or fewer')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         42   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: BlockCreateRequest.validate_relationship ---
+        # co_names: ('len', 'ValueError')
+        # co_varnames: ('cls', 'v')
+         44           RESUME                   0
+        
+         47           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        26 (to L1)
+                      LOAD_GLOBAL              1 (len + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      LOAD_CONST               1 (100)
+                      COMPARE_OP             148 (bool(>))
+                      POP_JUMP_IF_FALSE       11 (to L1)
+        
+         48           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               2 ('Relationship must be 100 characters or fewer')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         49   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: BlockCreateRequest.validate_email ---
+        # co_names: ('strip', 'len', 'ValueError', 're', 'match')
+        # co_varnames: ('cls', 'v')
+         51           RESUME                   0
+        
+         54           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        88 (to L2)
+        
+         55           LOAD_FAST                1 (v)
+                      LOAD_ATTR                1 (strip + NULL|self)
+                      CALL                     0
+                      STORE_FAST               1 (v)
+        
+         56           LOAD_GLOBAL              3 (len + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      LOAD_CONST               1 (254)
+                      COMPARE_OP             148 (bool(>))
+                      POP_JUMP_IF_FALSE       11 (to L1)
+        
+         57           LOAD_GLOBAL              5 (ValueError + NULL)
+                      LOAD_CONST               2 ('Email must be 254 characters or fewer')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         58   L1:     LOAD_FAST                1 (v)
+                      TO_BOOL
+                      POP_JUMP_IF_FALSE       39 (to L2)
+                      LOAD_GLOBAL              6 (re)
+                      LOAD_ATTR                8 (match)
+                      PUSH_NULL
+                      LOAD_CONST               3 ('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+                      LOAD_FAST                1 (v)
+                      CALL                     2
+                      TO_BOOL
+                      POP_JUMP_IF_TRUE        11 (to L2)
+        
+         59           LOAD_GLOBAL              5 (ValueError + NULL)
+                      LOAD_CONST               4 ('Invalid email format')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         60   L2:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: BlockCreateRequest.validate_notes ---
+        # co_names: ('len', 'ValueError')
+        # co_varnames: ('cls', 'v')
+         62           RESUME                   0
+        
+         65           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        26 (to L1)
+                      LOAD_GLOBAL              1 (len + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      LOAD_CONST               1 (1000)
+                      COMPARE_OP             148 (bool(>))
+                      POP_JUMP_IF_FALSE       11 (to L1)
+        
+         66           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               2 ('Notes must be 1000 characters or fewer')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+         67   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'display_name', 'reason', 'company', 'relationship', 'email', 'notes', 'field_validator', 'classmethod', 'validate_e164', 'validate_display_name', 'validate_company', 'validate_relationship', 'validate_email', 'validate_notes', '__static_attributes__')
+    # co_varnames: ()
+     11           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('BlockCreateRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (11)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     12           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('phone_number')
+                  STORE_SUBSCR
+    
+     13           LOAD_CONST               4 (None)
+                  STORE_NAME               5 (display_name)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('display_name')
+                  STORE_SUBSCR
+    
+     14           LOAD_CONST               4 (None)
+                  STORE_NAME               6 (reason)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('reason')
+                  STORE_SUBSCR
+    
+     15           LOAD_CONST               4 (None)
+                  STORE_NAME               7 (company)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('company')
+                  STORE_SUBSCR
+    
+     16           LOAD_CONST               4 (None)
+                  STORE_NAME               8 (relationship)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('relationship')
+                  STORE_SUBSCR
+    
+     17           LOAD_CONST               4 (None)
+                  STORE_NAME               9 (email)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              10 ('email')
+                  STORE_SUBSCR
+    
+     18           LOAD_CONST               4 (None)
+                  STORE_NAME              10 (notes)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              11 ('notes')
+                  STORE_SUBSCR
+    
+     20           LOAD_NAME               11 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               3 ('phone_number')
+                  CALL                     1
+    
+     21           LOAD_NAME               12 (classmethod)
+    
+     22           LOAD_CONST              19 (('v', 'str', 'return', 'str'))
+                  LOAD_CONST              12 (<code object validate_e164 at 0x0000024C114355C0, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 20>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     21           CALL                     0
+    
+     20           CALL                     0
+    
+     22           STORE_NAME              13 (validate_e164)
+    
+     30           LOAD_NAME               11 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               6 ('display_name')
+                  CALL                     1
+    
+     31           LOAD_NAME               12 (classmethod)
+    
+     32           LOAD_CONST              20 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              13 (<code object validate_display_name at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 30>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     31           CALL                     0
+    
+     30           CALL                     0
+    
+     32           STORE_NAME              14 (validate_display_name)
+    
+     37           LOAD_NAME               11 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               8 ('company')
+                  CALL                     1
+    
+     38           LOAD_NAME               12 (classmethod)
+    
+     39           LOAD_CONST              20 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              14 (<code object validate_company at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 37>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     38           CALL                     0
+    
+     37           CALL                     0
+    
+     39           STORE_NAME              15 (validate_company)
+    
+     44           LOAD_NAME               11 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               9 ('relationship')
+                  CALL                     1
+    
+     45           LOAD_NAME               12 (classmethod)
+    
+     46           LOAD_CONST              20 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              15 (<code object validate_relationship at 0x0000024C1141B330, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 44>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     45           CALL                     0
+    
+     44           CALL                     0
+    
+     46           STORE_NAME              16 (validate_relationship)
+    
+     51           LOAD_NAME               11 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST              10 ('email')
+                  CALL                     1
+    
+     52           LOAD_NAME               12 (classmethod)
+    
+     53           LOAD_CONST              20 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              16 (<code object validate_email at 0x0000024C0EEBE420, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 51>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     52           CALL                     0
+    
+     51           CALL                     0
+    
+     53           STORE_NAME              17 (validate_email)
+    
+     62           LOAD_NAME               11 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST              11 ('notes')
+                  CALL                     1
+    
+     63           LOAD_NAME               12 (classmethod)
+    
+     64           LOAD_CONST              20 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              17 (<code object validate_notes at 0x0000024C1141B550, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 62>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+     63           CALL                     0
+    
+     62           CALL                     0
+    
+     64           STORE_NAME              18 (validate_notes)
+                  LOAD_CONST              18 (())
+                  STORE_NAME              19 (__static_attributes__)
+                  RETURN_CONST             4 (None)
+    
+    Disassembly of <code object validate_e164 at 0x0000024C114355C0, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 20>:
+     20           RESUME                   0
+    
+     23           LOAD_GLOBAL              0 (re)
+                  LOAD_ATTR                2 (sub)
+                  PUSH_NULL
+                  LOAD_CONST               1 ('[\\s\\-\\(\\)\\.]+')
+                  LOAD_CONST               2 ('')
+                  LOAD_FAST                1 (v)
+                  LOAD_ATTR                5 (strip + NULL|self)
+                  CALL                     0
+                  CALL                     3
+                  STORE_FAST               1 (v)
+    
+     24           LOAD_GLOBAL              0 (re)
+                  LOAD_ATTR                6 (match)
+                  PUSH_NULL
+                  LOAD_CONST               3 ('^\\+[1-9]\\d{1,14}$')
+                  LOAD_FAST                1 (v)
+                  CALL                     2
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE        11 (to L1)
+    
+     25           LOAD_GLOBAL              9 (ValueError + NULL)
+    
+     26           LOAD_CONST               4 ('Phone number must be in E.164 format (e.g. +14155551234)')
+    
+     25           CALL                     1
+                  RAISE_VARARGS            1
+    
+     28   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_display_name at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 30>:
+     30           RESUME                   0
+    
+     33           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        26 (to L1)
+                  LOAD_GLOBAL              1 (len + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  LOAD_CONST               1 (100)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       11 (to L1)
+    
+     34           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               2 ('Display name must be 100 characters or fewer')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     35   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_company at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 37>:
+     37           RESUME                   0
+    
+     40           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        26 (to L1)
+                  LOAD_GLOBAL              1 (len + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  LOAD_CONST               1 (200)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       11 (to L1)
+    
+     41           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               2 ('Company must be 200 characters or fewer')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     42   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_relationship at 0x0000024C1141B330, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 44>:
+     44           RESUME                   0
+    
+     47           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        26 (to L1)
+                  LOAD_GLOBAL              1 (len + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  LOAD_CONST               1 (100)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       11 (to L1)
+    
+     48           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               2 ('Relationship must be 100 characters or fewer')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     49   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_email at 0x0000024C0EEBE420, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 51>:
+     51           RESUME                   0
+    
+     54           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        88 (to L2)
+    
+     55           LOAD_FAST                1 (v)
+                  LOAD_ATTR                1 (strip + NULL|self)
+                  CALL                     0
+                  STORE_FAST               1 (v)
+    
+     56           LOAD_GLOBAL              3 (len + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  LOAD_CONST               1 (254)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       11 (to L1)
+    
+     57           LOAD_GLOBAL              5 (ValueError + NULL)
+                  LOAD_CONST               2 ('Email must be 254 characters or fewer')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     58   L1:     LOAD_FAST                1 (v)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       39 (to L2)
+                  LOAD_GLOBAL              6 (re)
+                  LOAD_ATTR                8 (match)
+                  PUSH_NULL
+                  LOAD_CONST               3 ('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+                  LOAD_FAST                1 (v)
+                  CALL                     2
+                  TO_BOOL
+                  POP_JUMP_IF_TRUE        11 (to L2)
+    
+     59           LOAD_GLOBAL              5 (ValueError + NULL)
+                  LOAD_CONST               4 ('Invalid email format')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     60   L2:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_notes at 0x0000024C1141B550, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 62>:
+     62           RESUME                   0
+    
+     65           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        26 (to L1)
+                  LOAD_GLOBAL              1 (len + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  LOAD_CONST               1 (1000)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       11 (to L1)
+    
+     66           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               2 ('Notes must be 1000 characters or fewer')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+     67   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+# --- Nested code object: BlockEntryResponse ---
+    # DOCSTRING: """BlockEntryResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'display_name', 'reason', 'company', 'relationship', 'email', 'notes', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+     70           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('BlockEntryResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (70)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     71           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('id')
+                  STORE_SUBSCR
+    
+     72           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('phone_last4')
+                  STORE_SUBSCR
+    
+     73           LOAD_CONST               5 (None)
+                  STORE_NAME               5 (display_name)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('display_name')
+                  STORE_SUBSCR
+    
+     74           LOAD_CONST               5 (None)
+                  STORE_NAME               6 (reason)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('reason')
+                  STORE_SUBSCR
+    
+     75           LOAD_CONST               5 (None)
+                  STORE_NAME               7 (company)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('company')
+                  STORE_SUBSCR
+    
+     76           LOAD_CONST               5 (None)
+                  STORE_NAME               8 (relationship)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              10 ('relationship')
+                  STORE_SUBSCR
+    
+     77           LOAD_CONST               5 (None)
+                  STORE_NAME               9 (email)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              11 ('email')
+                  STORE_SUBSCR
+    
+     78           LOAD_CONST               5 (None)
+                  STORE_NAME              10 (notes)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              12 ('notes')
+                  STORE_SUBSCR
+    
+     79           LOAD_CONST              13 ('datetime')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              14 ('created_at')
+                  STORE_SUBSCR
+    
+     81           LOAD_CONST              15 ('from_attributes')
+                  LOAD_CONST              16 (True)
+                  BUILD_MAP                1
+                  STORE_NAME              11 (model_config)
+                  LOAD_CONST              17 (())
+                  STORE_NAME              12 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# --- Nested code object: BlockListResponse ---
+    # DOCSTRING: """BlockListResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     84           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('BlockListResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (84)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     85           LOAD_CONST               2 ('list[BlockEntryResponse]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('items')
+                  STORE_SUBSCR
+                  LOAD_CONST               4 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# co_names: ('__doc__', '__future__', 'annotations', 're', 'datetime', 'pydantic', 'BaseModel', 'field_validator', 'BlockCreateRequest', 'BlockEntryResponse', 'BlockListResponse')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Pydantic schemas for block list endpoints.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (re)
+              STORE_NAME               3 (re)
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('datetime',))
+              IMPORT_NAME              4 (datetime)
+              IMPORT_FROM              4 (datetime)
+              STORE_NAME               4 (datetime)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('BaseModel', 'field_validator'))
+              IMPORT_NAME              5 (pydantic)
+              IMPORT_FROM              6 (BaseModel)
+              STORE_NAME               6 (BaseModel)
+              IMPORT_FROM              7 (field_validator)
+              STORE_NAME               7 (field_validator)
+              POP_TOP
+
+ 11           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               6 (<code object BlockCreateRequest at 0x0000024C0F1F1050, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 11>)
+              MAKE_FUNCTION
+              LOAD_CONST               7 ('BlockCreateRequest')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME               8 (BlockCreateRequest)
+
+ 70           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               8 (<code object BlockEntryResponse at 0x0000024C0EEFB1B0, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 70>)
+              MAKE_FUNCTION
+              LOAD_CONST               9 ('BlockEntryResponse')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME               9 (BlockEntryResponse)
+
+ 84           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              10 (<code object BlockListResponse at 0x0000024C0EF2B1E0, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 84>)
+              MAKE_FUNCTION
+              LOAD_CONST              11 ('BlockListResponse')
+              LOAD_NAME                6 (BaseModel)
+              CALL                     3
+              STORE_NAME              10 (BlockListResponse)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object BlockCreateRequest at 0x0000024C0F1F1050, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 11>:
+ 11           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('BlockCreateRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (11)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 12           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('phone_number')
+              STORE_SUBSCR
+
+ 13           LOAD_CONST               4 (None)
+              STORE_NAME               5 (display_name)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('display_name')
+              STORE_SUBSCR
+
+ 14           LOAD_CONST               4 (None)
+              STORE_NAME               6 (reason)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('reason')
+              STORE_SUBSCR
+
+ 15           LOAD_CONST               4 (None)
+              STORE_NAME               7 (company)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('company')
+              STORE_SUBSCR
+
+ 16           LOAD_CONST               4 (None)
+              STORE_NAME               8 (relationship)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('relationship')
+              STORE_SUBSCR
+
+ 17           LOAD_CONST               4 (None)
+              STORE_NAME               9 (email)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('email')
+              STORE_SUBSCR
+
+ 18           LOAD_CONST               4 (None)
+              STORE_NAME              10 (notes)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('notes')
+              STORE_SUBSCR
+
+ 20           LOAD_NAME               11 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               3 ('phone_number')
+              CALL                     1
+
+ 21           LOAD_NAME               12 (classmethod)
+
+ 22           LOAD_CONST              19 (('v', 'str', 'return', 'str'))
+              LOAD_CONST              12 (<code object validate_e164 at 0x0000024C114355C0, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 20>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 21           CALL                     0
+
+ 20           CALL                     0
+
+ 22           STORE_NAME              13 (validate_e164)
+
+ 30           LOAD_NAME               11 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               6 ('display_name')
+              CALL                     1
+
+ 31           LOAD_NAME               12 (classmethod)
+
+ 32           LOAD_CONST              20 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              13 (<code object validate_display_name at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 30>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 31           CALL                     0
+
+ 30           CALL                     0
+
+ 32           STORE_NAME              14 (validate_display_name)
+
+ 37           LOAD_NAME               11 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               8 ('company')
+              CALL                     1
+
+ 38           LOAD_NAME               12 (classmethod)
+
+ 39           LOAD_CONST              20 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              14 (<code object validate_company at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 37>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 38           CALL                     0
+
+ 37           CALL                     0
+
+ 39           STORE_NAME              15 (validate_company)
+
+ 44           LOAD_NAME               11 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               9 ('relationship')
+              CALL                     1
+
+ 45           LOAD_NAME               12 (classmethod)
+
+ 46           LOAD_CONST              20 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              15 (<code object validate_relationship at 0x0000024C1141B330, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 44>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 45           CALL                     0
+
+ 44           CALL                     0
+
+ 46           STORE_NAME              16 (validate_relationship)
+
+ 51           LOAD_NAME               11 (field_validator)
+              PUSH_NULL
+              LOAD_CONST              10 ('email')
+              CALL                     1
+
+ 52           LOAD_NAME               12 (classmethod)
+
+ 53           LOAD_CONST              20 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              16 (<code object validate_email at 0x0000024C0EEBE420, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 51>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 52           CALL                     0
+
+ 51           CALL                     0
+
+ 53           STORE_NAME              17 (validate_email)
+
+ 62           LOAD_NAME               11 (field_validator)
+              PUSH_NULL
+              LOAD_CONST              11 ('notes')
+              CALL                     1
+
+ 63           LOAD_NAME               12 (classmethod)
+
+ 64           LOAD_CONST              20 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              17 (<code object validate_notes at 0x0000024C1141B550, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 62>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+ 63           CALL                     0
+
+ 62           CALL                     0
+
+ 64           STORE_NAME              18 (validate_notes)
+              LOAD_CONST              18 (())
+              STORE_NAME              19 (__static_attributes__)
+              RETURN_CONST             4 (None)
+
+Disassembly of <code object validate_e164 at 0x0000024C114355C0, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 20>:
+ 20           RESUME                   0
+
+ 23           LOAD_GLOBAL              0 (re)
+              LOAD_ATTR                2 (sub)
+              PUSH_NULL
+              LOAD_CONST               1 ('[\\s\\-\\(\\)\\.]+')
+              LOAD_CONST               2 ('')
+              LOAD_FAST                1 (v)
+              LOAD_ATTR                5 (strip + NULL|self)
+              CALL                     0
+              CALL                     3
+              STORE_FAST               1 (v)
+
+ 24           LOAD_GLOBAL              0 (re)
+              LOAD_ATTR                6 (match)
+              PUSH_NULL
+              LOAD_CONST               3 ('^\\+[1-9]\\d{1,14}$')
+              LOAD_FAST                1 (v)
+              CALL                     2
+              TO_BOOL
+              POP_JUMP_IF_TRUE        11 (to L1)
+
+ 25           LOAD_GLOBAL              9 (ValueError + NULL)
+
+ 26           LOAD_CONST               4 ('Phone number must be in E.164 format (e.g. +14155551234)')
+
+ 25           CALL                     1
+              RAISE_VARARGS            1
+
+ 28   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_display_name at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 30>:
+ 30           RESUME                   0
+
+ 33           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        26 (to L1)
+              LOAD_GLOBAL              1 (len + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              LOAD_CONST               1 (100)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       11 (to L1)
+
+ 34           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               2 ('Display name must be 100 characters or fewer')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 35   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_company at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 37>:
+ 37           RESUME                   0
+
+ 40           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        26 (to L1)
+              LOAD_GLOBAL              1 (len + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              LOAD_CONST               1 (200)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       11 (to L1)
+
+ 41           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               2 ('Company must be 200 characters or fewer')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 42   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_relationship at 0x0000024C1141B330, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 44>:
+ 44           RESUME                   0
+
+ 47           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        26 (to L1)
+              LOAD_GLOBAL              1 (len + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              LOAD_CONST               1 (100)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       11 (to L1)
+
+ 48           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               2 ('Relationship must be 100 characters or fewer')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 49   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_email at 0x0000024C0EEBE420, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 51>:
+ 51           RESUME                   0
+
+ 54           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        88 (to L2)
+
+ 55           LOAD_FAST                1 (v)
+              LOAD_ATTR                1 (strip + NULL|self)
+              CALL                     0
+              STORE_FAST               1 (v)
+
+ 56           LOAD_GLOBAL              3 (len + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              LOAD_CONST               1 (254)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       11 (to L1)
+
+ 57           LOAD_GLOBAL              5 (ValueError + NULL)
+              LOAD_CONST               2 ('Email must be 254 characters or fewer')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 58   L1:     LOAD_FAST                1 (v)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       39 (to L2)
+              LOAD_GLOBAL              6 (re)
+              LOAD_ATTR                8 (match)
+              PUSH_NULL
+              LOAD_CONST               3 ('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+              LOAD_FAST                1 (v)
+              CALL                     2
+              TO_BOOL
+              POP_JUMP_IF_TRUE        11 (to L2)
+
+ 59           LOAD_GLOBAL              5 (ValueError + NULL)
+              LOAD_CONST               4 ('Invalid email format')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 60   L2:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_notes at 0x0000024C1141B550, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 62>:
+ 62           RESUME                   0
+
+ 65           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        26 (to L1)
+              LOAD_GLOBAL              1 (len + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              LOAD_CONST               1 (1000)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       11 (to L1)
+
+ 66           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               2 ('Notes must be 1000 characters or fewer')
+              CALL                     1
+              RAISE_VARARGS            1
+
+ 67   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object BlockEntryResponse at 0x0000024C0EEFB1B0, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 70>:
+ 70           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('BlockEntryResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (70)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 71           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('id')
+              STORE_SUBSCR
+
+ 72           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('phone_last4')
+              STORE_SUBSCR
+
+ 73           LOAD_CONST               5 (None)
+              STORE_NAME               5 (display_name)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('display_name')
+              STORE_SUBSCR
+
+ 74           LOAD_CONST               5 (None)
+              STORE_NAME               6 (reason)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('reason')
+              STORE_SUBSCR
+
+ 75           LOAD_CONST               5 (None)
+              STORE_NAME               7 (company)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('company')
+              STORE_SUBSCR
+
+ 76           LOAD_CONST               5 (None)
+              STORE_NAME               8 (relationship)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('relationship')
+              STORE_SUBSCR
+
+ 77           LOAD_CONST               5 (None)
+              STORE_NAME               9 (email)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('email')
+              STORE_SUBSCR
+
+ 78           LOAD_CONST               5 (None)
+              STORE_NAME              10 (notes)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              12 ('notes')
+              STORE_SUBSCR
+
+ 79           LOAD_CONST              13 ('datetime')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              14 ('created_at')
+              STORE_SUBSCR
+
+ 81           LOAD_CONST              15 ('from_attributes')
+              LOAD_CONST              16 (True)
+              BUILD_MAP                1
+              STORE_NAME              11 (model_config)
+              LOAD_CONST              17 (())
+              STORE_NAME              12 (__static_attributes__)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object BlockListResponse at 0x0000024C0EF2B1E0, file "D:\fluence\Github\mattbot\backend\app\schemas\blocks.py", line 84>:
+ 84           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('BlockListResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (84)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 85           LOAD_CONST               2 ('list[BlockEntryResponse]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('items')
+              STORE_SUBSCR
+              LOAD_CONST               4 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             5 (None)

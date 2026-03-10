@@ -1,0 +1,266 @@
+# Bytecode dump of: numbers.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\api\v1\numbers.py
+# co_names: ('__doc__', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.database', 'get_db', 'app.schemas.telephony', 'NumberListResponse', 'NumberProvisionResponse', 'app.services', 'telephony_service', 'router', 'post', 'provision_number', 'get', 'list_numbers')
+# co_consts (strings): ['Number provisioning and listing endpoints.', '/provision', 'current_user', 'db', 'return', '']
+
+# DOCSTRING: """Number provisioning and listing endpoints."""
+# --- Nested code object: provision_number ---
+    # co_names: ('telephony_service', 'provision_number', 'user_id')
+    # co_varnames: ('current_user', 'db')
+      14           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+      19           LOAD_GLOBAL              0 (telephony_service)
+                   LOAD_ATTR                2 (provision_number)
+                   PUSH_NULL
+                   LOAD_FAST_LOAD_FAST     16 (db, current_user)
+                   LOAD_ATTR                4 (user_id)
+                   CALL                     2
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   RETURN_VALUE
+           L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# --- Nested code object: list_numbers ---
+    # co_names: ('telephony_service', 'list_numbers', 'user_id')
+    # co_varnames: ('current_user', 'db')
+      22           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+      27           LOAD_GLOBAL              0 (telephony_service)
+                   LOAD_ATTR                2 (list_numbers)
+                   PUSH_NULL
+                   LOAD_FAST_LOAD_FAST     16 (db, current_user)
+                   LOAD_ATTR                4 (user_id)
+                   CALL                     2
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   RETURN_VALUE
+           L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# co_names: ('__doc__', 'fastapi', 'APIRouter', 'Depends', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.database', 'get_db', 'app.schemas.telephony', 'NumberListResponse', 'NumberProvisionResponse', 'app.services', 'telephony_service', 'router', 'post', 'provision_number', 'get', 'list_numbers')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Number provisioning and listing endpoints.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('APIRouter', 'Depends'))
+              IMPORT_NAME              1 (fastapi)
+              IMPORT_FROM              2 (APIRouter)
+              STORE_NAME               2 (APIRouter)
+              IMPORT_FROM              3 (Depends)
+              STORE_NAME               3 (Depends)
+              POP_TOP
+
+  4           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('AsyncSession',))
+              IMPORT_NAME              4 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM              5 (AsyncSession)
+              STORE_NAME               5 (AsyncSession)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('CurrentUser', 'get_current_user'))
+              IMPORT_NAME              6 (app.core.dependencies)
+              IMPORT_FROM              7 (CurrentUser)
+              STORE_NAME               7 (CurrentUser)
+              IMPORT_FROM              8 (get_current_user)
+              STORE_NAME               8 (get_current_user)
+              POP_TOP
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('get_db',))
+              IMPORT_NAME              9 (app.database)
+              IMPORT_FROM             10 (get_db)
+              STORE_NAME              10 (get_db)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('NumberListResponse', 'NumberProvisionResponse'))
+              IMPORT_NAME             11 (app.schemas.telephony)
+              IMPORT_FROM             12 (NumberListResponse)
+              STORE_NAME              12 (NumberListResponse)
+              IMPORT_FROM             13 (NumberProvisionResponse)
+              STORE_NAME              13 (NumberProvisionResponse)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('telephony_service',))
+              IMPORT_NAME             14 (app.services)
+              IMPORT_FROM             15 (telephony_service)
+              STORE_NAME              15 (telephony_service)
+              POP_TOP
+
+ 11           LOAD_NAME                2 (APIRouter)
+              PUSH_NULL
+              CALL                     0
+              STORE_NAME              16 (router)
+
+ 14           LOAD_NAME               16 (router)
+              LOAD_ATTR               35 (post + NULL|self)
+              LOAD_CONST               8 ('/provision')
+              LOAD_NAME               13 (NumberProvisionResponse)
+              LOAD_CONST               9 (('response_model',))
+              CALL_KW                  2
+
+ 16           LOAD_NAME                3 (Depends)
+              PUSH_NULL
+              LOAD_NAME                8 (get_current_user)
+              CALL                     1
+
+ 17           LOAD_NAME                3 (Depends)
+              PUSH_NULL
+              LOAD_NAME               10 (get_db)
+              CALL                     1
+
+ 15           BUILD_TUPLE              2
+              LOAD_CONST              10 ('current_user')
+
+ 16           LOAD_NAME                7 (CurrentUser)
+
+ 15           LOAD_CONST              11 ('db')
+
+ 17           LOAD_NAME                5 (AsyncSession)
+
+ 15           LOAD_CONST              12 ('return')
+
+ 18           LOAD_NAME               13 (NumberProvisionResponse)
+
+ 15           BUILD_TUPLE              6
+              LOAD_CONST              13 (<code object provision_number at 0x0000024C0EF13CC0, file "D:\fluence\Github\mattbot\backend\app\api\v1\numbers.py", line 14>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 14           CALL                     0
+
+ 15           STORE_NAME              18 (provision_number)
+
+ 22           LOAD_NAME               16 (router)
+              LOAD_ATTR               39 (get + NULL|self)
+              LOAD_CONST              14 ('')
+              LOAD_NAME               12 (NumberListResponse)
+              LOAD_CONST               9 (('response_model',))
+              CALL_KW                  2
+
+ 24           LOAD_NAME                3 (Depends)
+              PUSH_NULL
+              LOAD_NAME                8 (get_current_user)
+              CALL                     1
+
+ 25           LOAD_NAME                3 (Depends)
+              PUSH_NULL
+              LOAD_NAME               10 (get_db)
+              CALL                     1
+
+ 23           BUILD_TUPLE              2
+              LOAD_CONST              10 ('current_user')
+
+ 24           LOAD_NAME                7 (CurrentUser)
+
+ 23           LOAD_CONST              11 ('db')
+
+ 25           LOAD_NAME                5 (AsyncSession)
+
+ 23           LOAD_CONST              12 ('return')
+
+ 26           LOAD_NAME               12 (NumberListResponse)
+
+ 23           BUILD_TUPLE              6
+              LOAD_CONST              15 (<code object list_numbers at 0x0000024C0EF13B90, file "D:\fluence\Github\mattbot\backend\app\api\v1\numbers.py", line 22>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 22           CALL                     0
+
+ 23           STORE_NAME              20 (list_numbers)
+              RETURN_CONST            16 (None)
+
+Disassembly of <code object provision_number at 0x0000024C0EF13CC0, file "D:\fluence\Github\mattbot\backend\app\api\v1\numbers.py", line 14>:
+  14           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+  19           LOAD_GLOBAL              0 (telephony_service)
+               LOAD_ATTR                2 (provision_number)
+               PUSH_NULL
+               LOAD_FAST_LOAD_FAST     16 (db, current_user)
+               LOAD_ATTR                4 (user_id)
+               CALL                     2
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               RETURN_VALUE
+       L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti
+
+Disassembly of <code object list_numbers at 0x0000024C0EF13B90, file "D:\fluence\Github\mattbot\backend\app\api\v1\numbers.py", line 22>:
+  22           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+  27           LOAD_GLOBAL              0 (telephony_service)
+               LOAD_ATTR                2 (list_numbers)
+               PUSH_NULL
+               LOAD_FAST_LOAD_FAST     16 (db, current_user)
+               LOAD_ATTR                4 (user_id)
+               CALL                     2
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               RETURN_VALUE
+       L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti

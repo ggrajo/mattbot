@@ -1,0 +1,1867 @@
+# Bytecode dump of: callers.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\api\v1\callers.py
+# co_names: ('__doc__', '__future__', 'annotations', 'uuid', 'fastapi', 'APIRouter', 'Depends', 'pydantic', 'BaseModel', 'sqlalchemy', 'func', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.core.encryption', 'decrypt_field', 'app.core.rate_limiter', 'check_rate_limit', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.models.block_entry', 'BlockEntry', 'app.models.call', 'Call', 'app.models.call_artifact', 'CallArtifact', 'app.models.call_memory_item', 'CallMemoryItem', 'app.models.vip_entry', 'VipEntry', 'app.schemas.calls', 'MemoryItemResponse', 'router', 'CallerProfileResponse', 'get', 'get_caller_profile')
+# co_consts (strings): ['Caller profile API: aggregated caller data from calls, memory, and VIP/block lists.', 'CallerProfileResponse', '/{phone_hash}/profile']
+
+# DOCSTRING: """Caller profile API: aggregated caller data from calls, memory, and VIP/block lists."""
+# --- Nested code object: CallerProfileResponse ---
+    # DOCSTRING: """CallerProfileResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'call_count', 'last_call_date', 'last_call_id', 'last_reason', 'avg_duration_seconds', 'is_vip', 'vip_display_name', 'vip_company', 'vip_relationship', 'vip_notes', 'is_blocked', 'memory_items', 'urgency_distribution', '__static_attributes__')
+    # co_varnames: ()
+     28           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CallerProfileResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (28)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     29           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('caller_phone_hash')
+                  STORE_SUBSCR
+    
+     30           LOAD_CONST               4 (0)
+                  STORE_NAME               5 (call_count)
+                  LOAD_CONST               5 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('call_count')
+                  STORE_SUBSCR
+    
+     31           LOAD_CONST               7 (None)
+                  STORE_NAME               6 (last_call_date)
+                  LOAD_CONST               8 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('last_call_date')
+                  STORE_SUBSCR
+    
+     32           LOAD_CONST               7 (None)
+                  STORE_NAME               7 (last_call_id)
+                  LOAD_CONST               8 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              10 ('last_call_id')
+                  STORE_SUBSCR
+    
+     33           LOAD_CONST               7 (None)
+                  STORE_NAME               8 (last_reason)
+                  LOAD_CONST               8 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              11 ('last_reason')
+                  STORE_SUBSCR
+    
+     34           LOAD_CONST               7 (None)
+                  STORE_NAME               9 (avg_duration_seconds)
+                  LOAD_CONST              12 ('float | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              13 ('avg_duration_seconds')
+                  STORE_SUBSCR
+    
+     35           LOAD_CONST              14 (False)
+                  STORE_NAME              10 (is_vip)
+                  LOAD_CONST              15 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              16 ('is_vip')
+                  STORE_SUBSCR
+    
+     36           LOAD_CONST               7 (None)
+                  STORE_NAME              11 (vip_display_name)
+                  LOAD_CONST               8 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              17 ('vip_display_name')
+                  STORE_SUBSCR
+    
+     37           LOAD_CONST               7 (None)
+                  STORE_NAME              12 (vip_company)
+                  LOAD_CONST               8 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              18 ('vip_company')
+                  STORE_SUBSCR
+    
+     38           LOAD_CONST               7 (None)
+                  STORE_NAME              13 (vip_relationship)
+                  LOAD_CONST               8 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              19 ('vip_relationship')
+                  STORE_SUBSCR
+    
+     39           LOAD_CONST               7 (None)
+                  STORE_NAME              14 (vip_notes)
+                  LOAD_CONST               8 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              20 ('vip_notes')
+                  STORE_SUBSCR
+    
+     40           LOAD_CONST              14 (False)
+                  STORE_NAME              15 (is_blocked)
+                  LOAD_CONST              15 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              21 ('is_blocked')
+                  STORE_SUBSCR
+    
+     41           BUILD_LIST               0
+                  STORE_NAME              16 (memory_items)
+                  LOAD_CONST              22 ('list[MemoryItemResponse]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              23 ('memory_items')
+                  STORE_SUBSCR
+    
+     42           BUILD_MAP                0
+                  STORE_NAME              17 (urgency_distribution)
+                  LOAD_CONST              24 ('dict[str, int]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              25 ('urgency_distribution')
+                  STORE_SUBSCR
+                  LOAD_CONST              26 (())
+                  STORE_NAME              18 (__static_attributes__)
+                  RETURN_CONST             7 (None)
+    
+# --- Nested code object: get_caller_profile ---
+    # co_names: ('check_rate_limit', 'user', 'id', 'settings', 'RATE_LIMIT_API_STANDARD_MAX', 'RATE_LIMIT_API_STANDARD_WINDOW', 'AppError', 'select', 'func', 'count', 'Call', 'max', 'started_at', 'avg', 'duration_seconds', 'where', 'owner_user_id', 'caller_phone_hash', 'deleted_at', 'is_', 'execute', 'one', 'float', 'order_by', 'desc', 'limit', 'scalar_one_or_none', 'CallArtifact', 'call_id', 'structured_extraction', 'get', 'join', 'isnot', 'all', 'VipEntry', 'phone_hash', 'BlockEntry', 'CallMemoryItem', 'created_at', 'list', 'scalars', 'decrypt_field', 'value_ciphertext', 'value_nonce', 'value_key_version', 'decode', 'Exception', 'append', 'MemoryItemResponse', 'str', 'memory_type', 'subject', 'confidence', 'user_confirmed', 'source_call_id', 'CallerProfileResponse', 'isoformat', 'display_name', 'company', 'relationship', 'notes')
+    # co_varnames: ('phone_hash', 'current_user', 'db', 'allowed', '_', 'user_id', 'stats_stmt', 'stats_result', 'stats_row', 'call_count', 'last_call_date_dt', 'avg_duration', 'last_call_stmt', 'last_call_result', 'last_call', 'last_reason', 'artifact', 'urgency_dist', 'artifact_stmt', 'artifact_result', 'row', 'urgency', 'vip', 'block', 'mem_stmt', 'mem_result', 'memory_rows', 'memory_items_response', 'item', 'value')
+      45            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      51            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+      52            LOAD_CONST               1 ('caller:profile:')
+                    LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+      53            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_STANDARD_MAX)
+    
+      54            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR               10 (RATE_LIMIT_API_STANDARD_WINDOW)
+    
+      51            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   52 (allowed, _)
+    
+      56            LOAD_FAST                3 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+      57            LOAD_GLOBAL             13 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+      59    L6:     LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    STORE_FAST               5 (user_id)
+    
+      62            LOAD_GLOBAL             15 (select + NULL)
+    
+      63            LOAD_GLOBAL             16 (func)
+                    LOAD_ATTR               18 (count)
+                    PUSH_NULL
+                    LOAD_GLOBAL             20 (Call)
+                    LOAD_ATTR                4 (id)
+                    CALL                     1
+    
+      64            LOAD_GLOBAL             16 (func)
+                    LOAD_ATTR               22 (max)
+                    PUSH_NULL
+                    LOAD_GLOBAL             20 (Call)
+                    LOAD_ATTR               24 (started_at)
+                    CALL                     1
+    
+      65            LOAD_GLOBAL             16 (func)
+                    LOAD_ATTR               26 (avg)
+                    PUSH_NULL
+                    LOAD_GLOBAL             20 (Call)
+                    LOAD_ATTR               28 (duration_seconds)
+                    CALL                     1
+    
+      62            CALL                     3
+    
+      66            LOAD_ATTR               31 (where + NULL|self)
+    
+      67            LOAD_GLOBAL             20 (Call)
+                    LOAD_ATTR               32 (owner_user_id)
+                    LOAD_FAST                5 (user_id)
+                    COMPARE_OP              72 (==)
+    
+      68            LOAD_GLOBAL             20 (Call)
+                    LOAD_ATTR               34 (caller_phone_hash)
+                    LOAD_FAST                0 (phone_hash)
+                    COMPARE_OP              72 (==)
+    
+      69            LOAD_GLOBAL             20 (Call)
+                    LOAD_ATTR               36 (deleted_at)
+                    LOAD_ATTR               39 (is_ + NULL|self)
+                    LOAD_CONST               0 (None)
+                    CALL                     1
+    
+      66            CALL                     3
+    
+      62            STORE_FAST               6 (stats_stmt)
+    
+      71            LOAD_FAST                2 (db)
+                    LOAD_ATTR               41 (execute + NULL|self)
+                    LOAD_FAST                6 (stats_stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    STORE_FAST               7 (stats_result)
+    
+      72            LOAD_FAST                7 (stats_result)
+                    LOAD_ATTR               43 (one + NULL|self)
+                    CALL                     0
+                    STORE_FAST               8 (stats_row)
+    
+      73            LOAD_FAST                8 (stats_row)
+                    LOAD_CONST               7 (0)
+                    BINARY_SUBSCR
+                    COPY                     1
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L11)
+                    POP_TOP
+                    LOAD_CONST               7 (0)
+           L11:     STORE_FAST               9 (call_count)
+    
+      74            LOAD_FAST                8 (stats_row)
+                    LOAD_CONST               8 (1)
+                    BINARY_SUBSCR
+                    STORE_FAST              10 (last_call_date_dt)
+    
+      75            LOAD_FAST                8 (stats_row)
+                    LOAD_CONST               9 (2)
+                    BINARY_SUBSCR
+                    POP_JUMP_IF_NONE        14 (to L12)
+                    LOAD_GLOBAL             45 (float + NULL)
+                    LOAD_FAST                8 (stats_row)
+                    LOAD_CONST               9 (2)
+                    BINARY_SUBSCR
+                    CALL                     1
+                    JUMP_FORWARD             1 (to L13)
+           L12:     LOAD_CONST               0 (None)
+           L13:     STORE_FAST              11 (avg_duration)
+    
+      77            LOAD_FAST                9 (call_count)
+                    LOAD_CONST               7 (0)
+                    COMPARE_OP              88 (bool(==))
+                    POP_JUMP_IF_FALSE       11 (to L14)
+    
+      78            LOAD_GLOBAL             13 (AppError + NULL)
+    
+      79            LOAD_CONST              10 ('CALLER_NOT_FOUND')
+                    LOAD_CONST              11 ('No calls from this caller')
+                    LOAD_CONST              12 (404)
+    
+      78            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+      84   L14:     LOAD_GLOBAL             15 (select + NULL)
+                    LOAD_GLOBAL             20 (Call)
+                    CALL                     1
+    
+      85            LOAD_ATTR               31 (where + NULL|self)
+    
+      86            LOAD_GLOBAL             20 (Call)
+                    LOAD_ATTR               32 (owner_user_id)
+                    LOAD_FAST                5 (user_id)
+                    COMPARE_OP              72 (==)
+    
+      87            LOAD_GLOBAL             20 (Call)
+                    LOAD_ATTR               34 (caller_phone_hash)
+                    LOAD_FAST                0 (phone_hash)
+                    COMPARE_OP              72 (==)
+    
+      88            LOAD_GLOBAL             20 (Call)
+                    LOAD_ATTR               36 (deleted_at)
+                    LOAD_ATTR               39 (is_ + NULL|self)
+                    LOAD_CONST               0 (None)
+                    CALL                     1
+    
+      85            CALL                     3
+    
+      90            LOAD_ATTR               47 (order_by + NULL|self)
+                    LOAD_GLOBAL             20 (Call)
+                    LOAD_ATTR               24 (started_at)
+                    LOAD_ATTR               49 (desc + NULL|self)
+                    CALL                     0
+                    CALL                     1
+    
+      91            LOAD_ATTR               51 (limit + NULL|self)
+                    LOAD_CONST               8 (1)
+                    CALL                     1
+    
+      83            STORE_FAST              12 (last_call_stmt)
+    
+      93            LOAD_FAST                2 (db)
+                    LOAD_ATTR               41 (execute + NULL|self)
+                    LOAD_FAST               12 (last_call_stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L15:     SEND                     3 (to L18)
+           L16:     YIELD_VALUE              1
+           L17:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+           L18:     END_SEND
+                    STORE_FAST              13 (last_call_result)
+    
+      94            LOAD_FAST               13 (last_call_result)
+                    LOAD_ATTR               53 (scalar_one_or_none + NULL|self)
+                    CALL                     0
+                    STORE_FAST              14 (last_call)
+    
+      96            LOAD_CONST               0 (None)
+                    STORE_FAST              15 (last_reason)
+    
+      97            LOAD_FAST               14 (last_call)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE      145 (to L23)
+    
+      99            LOAD_FAST                2 (db)
+                    LOAD_ATTR               41 (execute + NULL|self)
+    
+     100            LOAD_GLOBAL             15 (select + NULL)
+                    LOAD_GLOBAL             54 (CallArtifact)
+                    CALL                     1
+                    LOAD_ATTR               31 (where + NULL|self)
+                    LOAD_GLOBAL             54 (CallArtifact)
+                    LOAD_ATTR               56 (call_id)
+                    LOAD_FAST               14 (last_call)
+                    LOAD_ATTR                4 (id)
+                    COMPARE_OP              72 (==)
+                    CALL                     1
+    
+      99            CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L19:     SEND                     3 (to L22)
+           L20:     YIELD_VALUE              1
+           L21:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+           L22:     END_SEND
+    
+     102            LOAD_ATTR               53 (scalar_one_or_none + NULL|self)
+                    CALL                     0
+    
+      98            STORE_FAST              16 (artifact)
+    
+     103            LOAD_FAST               16 (artifact)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       44 (to L23)
+                    LOAD_FAST               16 (artifact)
+                    LOAD_ATTR               58 (structured_extraction)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       27 (to L23)
+    
+     104            LOAD_FAST               16 (artifact)
+                    LOAD_ATTR               58 (structured_extraction)
+                    LOAD_ATTR               61 (get + NULL|self)
+                    LOAD_CONST              13 ('reason')
+                    CALL                     1
+                    STORE_FAST              15 (last_reason)
+    
+     107   L23:     BUILD_MAP                0
+                    STORE_FAST              17 (urgency_dist)
+    
+     109            LOAD_GLOBAL             15 (select + NULL)
+                    LOAD_GLOBAL             54 (CallArtifact)
+                    LOAD_ATTR               58 (structured_extraction)
+                    CALL                     1
+    
+     110            LOAD_ATTR               63 (join + NULL|self)
+                    LOAD_GLOBAL             20 (Call)
+                    LOAD_GLOBAL             54 (CallArtifact)
+                    LOAD_ATTR               56 (call_id)
+                    LOAD_GLOBAL             20 (Call)
+                    LOAD_ATTR                4 (id)
+                    COMPARE_OP              72 (==)
+                    CALL                     2
+    
+     111            LOAD_ATTR               31 (where + NULL|self)
+    
+     112            LOAD_GLOBAL             20 (Call)
+                    LOAD_ATTR               32 (owner_user_id)
+                    LOAD_FAST                5 (user_id)
+                    COMPARE_OP              72 (==)
+    
+     113            LOAD_GLOBAL             20 (Call)
+                    LOAD_ATTR               34 (caller_phone_hash)
+                    LOAD_FAST                0 (phone_hash)
+                    COMPARE_OP              72 (==)
+    
+     114            LOAD_GLOBAL             20 (Call)
+                    LOAD_ATTR               36 (deleted_at)
+                    LOAD_ATTR               39 (is_ + NULL|self)
+                    LOAD_CONST               0 (None)
+                    CALL                     1
+    
+     115            LOAD_GLOBAL             54 (CallArtifact)
+                    LOAD_ATTR               58 (structured_extraction)
+                    LOAD_ATTR               65 (isnot + NULL|self)
+                    LOAD_CONST               0 (None)
+                    CALL                     1
+    
+     111            CALL                     4
+    
+     108            STORE_FAST              18 (artifact_stmt)
+    
+     118            LOAD_FAST                2 (db)
+                    LOAD_ATTR               41 (execute + NULL|self)
+                    LOAD_FAST               18 (artifact_stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L24:     SEND                     3 (to L27)
+           L25:     YIELD_VALUE              1
+           L26:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+           L27:     END_SEND
+                    STORE_FAST              19 (artifact_result)
+    
+     119            LOAD_FAST               19 (artifact_result)
+                    LOAD_ATTR               67 (all + NULL|self)
+                    CALL                     0
+                    GET_ITER
+           L28:     FOR_ITER                60 (to L31)
+                    STORE_FAST              20 (row)
+    
+     120            LOAD_FAST               20 (row)
+                    LOAD_CONST               7 (0)
+                    BINARY_SUBSCR
+                    TO_BOOL
+           L29:     POP_JUMP_IF_TRUE         2 (to L30)
+                    JUMP_BACKWARD           15 (to L28)
+    
+     121   L30:     LOAD_FAST               20 (row)
+                    LOAD_CONST               7 (0)
+                    BINARY_SUBSCR
+                    LOAD_ATTR               61 (get + NULL|self)
+                    LOAD_CONST              14 ('urgency_level')
+                    LOAD_CONST              15 ('normal')
+                    CALL                     2
+                    STORE_FAST              21 (urgency)
+    
+     122            LOAD_FAST               17 (urgency_dist)
+                    LOAD_ATTR               61 (get + NULL|self)
+                    LOAD_FAST               21 (urgency)
+                    LOAD_CONST               7 (0)
+                    CALL                     2
+                    LOAD_CONST               8 (1)
+                    BINARY_OP                0 (+)
+                    LOAD_FAST               17 (urgency_dist)
+                    LOAD_FAST               21 (urgency)
+                    STORE_SUBSCR
+                    JUMP_BACKWARD           62 (to L28)
+    
+     119   L31:     END_FOR
+                    POP_TOP
+    
+     126            LOAD_FAST                2 (db)
+                    LOAD_ATTR               41 (execute + NULL|self)
+    
+     127            LOAD_GLOBAL             15 (select + NULL)
+                    LOAD_GLOBAL             68 (VipEntry)
+                    CALL                     1
+                    LOAD_ATTR               31 (where + NULL|self)
+    
+     128            LOAD_GLOBAL             68 (VipEntry)
+                    LOAD_ATTR               32 (owner_user_id)
+                    LOAD_FAST                5 (user_id)
+                    COMPARE_OP              72 (==)
+    
+     129            LOAD_GLOBAL             68 (VipEntry)
+                    LOAD_ATTR               70 (phone_hash)
+                    LOAD_FAST                0 (phone_hash)
+                    COMPARE_OP              72 (==)
+    
+     127            CALL                     2
+    
+     126            CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L32:     SEND                     3 (to L35)
+           L33:     YIELD_VALUE              1
+           L34:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L32)
+           L35:     END_SEND
+    
+     132            LOAD_ATTR               53 (scalar_one_or_none + NULL|self)
+                    CALL                     0
+    
+     125            STORE_FAST              22 (vip)
+    
+     136            LOAD_FAST                2 (db)
+                    LOAD_ATTR               41 (execute + NULL|self)
+    
+     137            LOAD_GLOBAL             15 (select + NULL)
+                    LOAD_GLOBAL             72 (BlockEntry)
+                    CALL                     1
+                    LOAD_ATTR               31 (where + NULL|self)
+    
+     138            LOAD_GLOBAL             72 (BlockEntry)
+                    LOAD_ATTR               32 (owner_user_id)
+                    LOAD_FAST                5 (user_id)
+                    COMPARE_OP              72 (==)
+    
+     139            LOAD_GLOBAL             72 (BlockEntry)
+                    LOAD_ATTR               70 (phone_hash)
+                    LOAD_FAST                0 (phone_hash)
+                    COMPARE_OP              72 (==)
+    
+     137            CALL                     2
+    
+     136            CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L36:     SEND                     3 (to L39)
+           L37:     YIELD_VALUE              1
+           L38:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L36)
+           L39:     END_SEND
+    
+     142            LOAD_ATTR               53 (scalar_one_or_none + NULL|self)
+                    CALL                     0
+    
+     135            STORE_FAST              23 (block)
+    
+     146            LOAD_GLOBAL             15 (select + NULL)
+                    LOAD_GLOBAL             74 (CallMemoryItem)
+                    CALL                     1
+    
+     147            LOAD_ATTR               31 (where + NULL|self)
+    
+     148            LOAD_GLOBAL             74 (CallMemoryItem)
+                    LOAD_ATTR               32 (owner_user_id)
+                    LOAD_FAST                5 (user_id)
+                    COMPARE_OP              72 (==)
+    
+     149            LOAD_GLOBAL             74 (CallMemoryItem)
+                    LOAD_ATTR               34 (caller_phone_hash)
+                    LOAD_FAST                0 (phone_hash)
+                    COMPARE_OP              72 (==)
+    
+     150            LOAD_GLOBAL             74 (CallMemoryItem)
+                    LOAD_ATTR               36 (deleted_at)
+                    LOAD_ATTR               39 (is_ + NULL|self)
+                    LOAD_CONST               0 (None)
+                    CALL                     1
+    
+     147            CALL                     3
+    
+     152            LOAD_ATTR               47 (order_by + NULL|self)
+                    LOAD_GLOBAL             74 (CallMemoryItem)
+                    LOAD_ATTR               76 (created_at)
+                    LOAD_ATTR               49 (desc + NULL|self)
+                    CALL                     0
+                    CALL                     1
+    
+     145            STORE_FAST              24 (mem_stmt)
+    
+     154            LOAD_FAST                2 (db)
+                    LOAD_ATTR               41 (execute + NULL|self)
+                    LOAD_FAST               24 (mem_stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L40:     SEND                     3 (to L43)
+           L41:     YIELD_VALUE              1
+           L42:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L40)
+           L43:     END_SEND
+                    STORE_FAST              25 (mem_result)
+    
+     155            LOAD_GLOBAL             79 (list + NULL)
+                    LOAD_FAST               25 (mem_result)
+                    LOAD_ATTR               81 (scalars + NULL|self)
+                    CALL                     0
+                    LOAD_ATTR               67 (all + NULL|self)
+                    CALL                     0
+                    CALL                     1
+                    STORE_FAST              26 (memory_rows)
+    
+     157            BUILD_LIST               0
+                    STORE_FAST              27 (memory_items_response)
+    
+     158            LOAD_FAST               26 (memory_rows)
+                    GET_ITER
+           L44:     FOR_ITER               213 (to L50)
+                    STORE_FAST              28 (item)
+    
+     159            LOAD_CONST               0 (None)
+                    STORE_FAST              29 (value)
+    
+     160   L45:     NOP
+    
+     161   L46:     LOAD_GLOBAL             83 (decrypt_field + NULL)
+    
+     162            LOAD_FAST               28 (item)
+                    LOAD_ATTR               84 (value_ciphertext)
+                    LOAD_FAST               28 (item)
+                    LOAD_ATTR               86 (value_nonce)
+                    LOAD_FAST               28 (item)
+                    LOAD_ATTR               88 (value_key_version)
+    
+     161            CALL                     3
+    
+     163            LOAD_ATTR               91 (decode + NULL|self)
+                    LOAD_CONST              16 ('utf-8')
+                    CALL                     1
+    
+     161            STORE_FAST              29 (value)
+    
+     166   L47:     LOAD_FAST               27 (memory_items_response)
+                    LOAD_ATTR               95 (append + NULL|self)
+                    LOAD_GLOBAL             97 (MemoryItemResponse + NULL)
+    
+     167            LOAD_GLOBAL             99 (str + NULL)
+                    LOAD_FAST               28 (item)
+                    LOAD_ATTR                4 (id)
+                    CALL                     1
+    
+     168            LOAD_FAST               28 (item)
+                    LOAD_ATTR              100 (memory_type)
+    
+     169            LOAD_FAST               28 (item)
+                    LOAD_ATTR              102 (subject)
+    
+     170            LOAD_FAST               29 (value)
+    
+     171            LOAD_FAST               28 (item)
+                    LOAD_ATTR              104 (confidence)
+    
+     172            LOAD_FAST               28 (item)
+                    LOAD_ATTR              106 (user_confirmed)
+    
+     173            LOAD_FAST               28 (item)
+                    LOAD_ATTR              108 (source_call_id)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       21 (to L48)
+                    LOAD_GLOBAL             99 (str + NULL)
+                    LOAD_FAST               28 (item)
+                    LOAD_ATTR              108 (source_call_id)
+                    CALL                     1
+                    JUMP_FORWARD             1 (to L49)
+           L48:     LOAD_CONST               0 (None)
+    
+     174   L49:     LOAD_FAST               28 (item)
+                    LOAD_ATTR               34 (caller_phone_hash)
+    
+     175            LOAD_FAST               28 (item)
+                    LOAD_ATTR               76 (created_at)
+    
+     166            LOAD_CONST              18 (('id', 'memory_type', 'subject', 'value', 'confidence', 'user_confirmed', 'source_call_id', 'caller_phone_hash', 'created_at'))
+                    CALL_KW                  9
+                    CALL                     1
+                    POP_TOP
+                    JUMP_BACKWARD          215 (to L44)
+    
+     158   L50:     END_FOR
+                    POP_TOP
+    
+     178            LOAD_GLOBAL            111 (CallerProfileResponse + NULL)
+    
+     179            LOAD_FAST                0 (phone_hash)
+    
+     180            LOAD_FAST                9 (call_count)
+    
+     181            LOAD_FAST               10 (last_call_date_dt)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       16 (to L51)
+                    LOAD_FAST               10 (last_call_date_dt)
+                    LOAD_ATTR              113 (isoformat + NULL|self)
+                    CALL                     0
+                    JUMP_FORWARD             1 (to L52)
+           L51:     LOAD_CONST               0 (None)
+    
+     182   L52:     LOAD_FAST               14 (last_call)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       21 (to L53)
+                    LOAD_GLOBAL             99 (str + NULL)
+                    LOAD_FAST               14 (last_call)
+                    LOAD_ATTR                4 (id)
+                    CALL                     1
+                    JUMP_FORWARD             1 (to L54)
+           L53:     LOAD_CONST               0 (None)
+    
+     183   L54:     LOAD_FAST               15 (last_reason)
+    
+     184            LOAD_FAST               11 (avg_duration)
+    
+     185            LOAD_FAST               22 (vip)
+                    LOAD_CONST               0 (None)
+                    IS_OP                    1
+    
+     186            LOAD_FAST               22 (vip)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       12 (to L55)
+                    LOAD_FAST               22 (vip)
+                    LOAD_ATTR              114 (display_name)
+                    JUMP_FORWARD             1 (to L56)
+           L55:     LOAD_CONST               0 (None)
+    
+     187   L56:     LOAD_FAST               22 (vip)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       12 (to L57)
+                    LOAD_FAST               22 (vip)
+                    LOAD_ATTR              116 (company)
+                    JUMP_FORWARD             1 (to L58)
+           L57:     LOAD_CONST               0 (None)
+    
+     188   L58:     LOAD_FAST               22 (vip)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       12 (to L59)
+                    LOAD_FAST               22 (vip)
+                    LOAD_ATTR              118 (relationship)
+                    JUMP_FORWARD             1 (to L60)
+           L59:     LOAD_CONST               0 (None)
+    
+     189   L60:     LOAD_FAST               22 (vip)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       12 (to L61)
+                    LOAD_FAST               22 (vip)
+                    LOAD_ATTR              120 (notes)
+                    JUMP_FORWARD             1 (to L62)
+           L61:     LOAD_CONST               0 (None)
+    
+     190   L62:     LOAD_FAST               23 (block)
+                    LOAD_CONST               0 (None)
+                    IS_OP                    1
+    
+     191            LOAD_FAST               27 (memory_items_response)
+    
+     192            LOAD_FAST               17 (urgency_dist)
+    
+     178            LOAD_CONST              19 (('caller_phone_hash', 'call_count', 'last_call_date', 'last_call_id', 'last_reason', 'avg_duration_seconds', 'is_vip', 'vip_display_name', 'vip_company', 'vip_relationship', 'vip_notes', 'is_blocked', 'memory_items', 'urgency_distribution'))
+                    CALL_KW                 14
+                    RETURN_VALUE
+    
+      51   L63:     CLEANUP_THROW
+           L64:     EXTENDED_ARG             6
+                    JUMP_BACKWARD_NO_INTERRUPT 1762 (to L5)
+    
+      71   L65:     CLEANUP_THROW
+           L66:     EXTENDED_ARG             5
+                    JUMP_BACKWARD_NO_INTERRUPT 1503 (to L10)
+    
+      93   L67:     CLEANUP_THROW
+           L68:     EXTENDED_ARG             4
+                    JUMP_BACKWARD_NO_INTERRUPT 1254 (to L18)
+    
+      99   L69:     CLEANUP_THROW
+           L70:     EXTENDED_ARG             4
+                    JUMP_BACKWARD_NO_INTERRUPT 1152 (to L22)
+    
+     118   L71:     CLEANUP_THROW
+           L72:     EXTENDED_ARG             3
+                    JUMP_BACKWARD_NO_INTERRUPT 877 (to L27)
+    
+     126   L73:     CLEANUP_THROW
+           L74:     EXTENDED_ARG             2
+                    JUMP_BACKWARD_NO_INTERRUPT 712 (to L35)
+    
+     136   L75:     CLEANUP_THROW
+           L76:     EXTENDED_ARG             2
+                    JUMP_BACKWARD_NO_INTERRUPT 613 (to L39)
+    
+     154   L77:     CLEANUP_THROW
+           L78:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 439 (to L43)
+    
+      --   L79:     PUSH_EXC_INFO
+    
+     164            LOAD_GLOBAL             92 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE        6 (to L81)
+                    POP_TOP
+    
+     165            LOAD_CONST              17 ('[unable to decrypt]')
+                    STORE_FAST              29 (value)
+           L80:     POP_EXCEPT
+                    EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 345 (to L47)
+    
+     164   L81:     RERAISE                  0
+    
+      --   L82:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L83:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L83 [0] lasti
+      L3 to L4 -> L63 [2]
+      L4 to L8 -> L83 [0] lasti
+      L8 to L9 -> L65 [2]
+      L9 to L16 -> L83 [0] lasti
+      L16 to L17 -> L67 [2]
+      L17 to L20 -> L83 [0] lasti
+      L20 to L21 -> L69 [2]
+      L21 to L25 -> L83 [0] lasti
+      L25 to L26 -> L71 [2]
+      L26 to L29 -> L83 [0] lasti
+      L30 to L33 -> L83 [0] lasti
+      L33 to L34 -> L73 [2]
+      L34 to L37 -> L83 [0] lasti
+      L37 to L38 -> L75 [2]
+      L38 to L41 -> L83 [0] lasti
+      L41 to L42 -> L77 [2]
+      L42 to L45 -> L83 [0] lasti
+      L46 to L47 -> L79 [1]
+      L47 to L64 -> L83 [0] lasti
+      L65 to L66 -> L83 [0] lasti
+      L67 to L68 -> L83 [0] lasti
+      L69 to L70 -> L83 [0] lasti
+      L71 to L72 -> L83 [0] lasti
+      L73 to L74 -> L83 [0] lasti
+      L75 to L76 -> L83 [0] lasti
+      L77 to L78 -> L83 [0] lasti
+      L79 to L80 -> L82 [2] lasti
+      L80 to L81 -> L83 [0] lasti
+      L81 to L82 -> L82 [2] lasti
+      L82 to L83 -> L83 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'uuid', 'fastapi', 'APIRouter', 'Depends', 'pydantic', 'BaseModel', 'sqlalchemy', 'func', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.core.encryption', 'decrypt_field', 'app.core.rate_limiter', 'check_rate_limit', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.models.block_entry', 'BlockEntry', 'app.models.call', 'Call', 'app.models.call_artifact', 'CallArtifact', 'app.models.call_memory_item', 'CallMemoryItem', 'app.models.vip_entry', 'VipEntry', 'app.schemas.calls', 'MemoryItemResponse', 'router', 'CallerProfileResponse', 'get', 'get_caller_profile')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Caller profile API: aggregated caller data from calls, memory, and VIP/block lists.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (uuid)
+              STORE_NAME               3 (uuid)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('APIRouter', 'Depends'))
+              IMPORT_NAME              4 (fastapi)
+              IMPORT_FROM              5 (APIRouter)
+              STORE_NAME               5 (APIRouter)
+              IMPORT_FROM              6 (Depends)
+              STORE_NAME               6 (Depends)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('BaseModel',))
+              IMPORT_NAME              7 (pydantic)
+              IMPORT_FROM              8 (BaseModel)
+              STORE_NAME               8 (BaseModel)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('func', 'select'))
+              IMPORT_NAME              9 (sqlalchemy)
+              IMPORT_FROM             10 (func)
+              STORE_NAME              10 (func)
+              IMPORT_FROM             11 (select)
+              STORE_NAME              11 (select)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('AsyncSession',))
+              IMPORT_NAME             12 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM             13 (AsyncSession)
+              STORE_NAME              13 (AsyncSession)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('settings',))
+              IMPORT_NAME             14 (app.config)
+              IMPORT_FROM             15 (settings)
+              STORE_NAME              15 (settings)
+              POP_TOP
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('CurrentUser', 'get_current_user'))
+              IMPORT_NAME             16 (app.core.dependencies)
+              IMPORT_FROM             17 (CurrentUser)
+              STORE_NAME              17 (CurrentUser)
+              IMPORT_FROM             18 (get_current_user)
+              STORE_NAME              18 (get_current_user)
+              POP_TOP
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST              10 (('decrypt_field',))
+              IMPORT_NAME             19 (app.core.encryption)
+              IMPORT_FROM             20 (decrypt_field)
+              STORE_NAME              20 (decrypt_field)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST              11 (('check_rate_limit',))
+              IMPORT_NAME             21 (app.core.rate_limiter)
+              IMPORT_FROM             22 (check_rate_limit)
+              STORE_NAME              22 (check_rate_limit)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST              12 (('get_db',))
+              IMPORT_NAME             23 (app.database)
+              IMPORT_FROM             24 (get_db)
+              STORE_NAME              24 (get_db)
+              POP_TOP
+
+ 17           LOAD_CONST               1 (0)
+              LOAD_CONST              13 (('AppError',))
+              IMPORT_NAME             25 (app.middleware.error_handler)
+              IMPORT_FROM             26 (AppError)
+              STORE_NAME              26 (AppError)
+              POP_TOP
+
+ 18           LOAD_CONST               1 (0)
+              LOAD_CONST              14 (('BlockEntry',))
+              IMPORT_NAME             27 (app.models.block_entry)
+              IMPORT_FROM             28 (BlockEntry)
+              STORE_NAME              28 (BlockEntry)
+              POP_TOP
+
+ 19           LOAD_CONST               1 (0)
+              LOAD_CONST              15 (('Call',))
+              IMPORT_NAME             29 (app.models.call)
+              IMPORT_FROM             30 (Call)
+              STORE_NAME              30 (Call)
+              POP_TOP
+
+ 20           LOAD_CONST               1 (0)
+              LOAD_CONST              16 (('CallArtifact',))
+              IMPORT_NAME             31 (app.models.call_artifact)
+              IMPORT_FROM             32 (CallArtifact)
+              STORE_NAME              32 (CallArtifact)
+              POP_TOP
+
+ 21           LOAD_CONST               1 (0)
+              LOAD_CONST              17 (('CallMemoryItem',))
+              IMPORT_NAME             33 (app.models.call_memory_item)
+              IMPORT_FROM             34 (CallMemoryItem)
+              STORE_NAME              34 (CallMemoryItem)
+              POP_TOP
+
+ 22           LOAD_CONST               1 (0)
+              LOAD_CONST              18 (('VipEntry',))
+              IMPORT_NAME             35 (app.models.vip_entry)
+              IMPORT_FROM             36 (VipEntry)
+              STORE_NAME              36 (VipEntry)
+              POP_TOP
+
+ 23           LOAD_CONST               1 (0)
+              LOAD_CONST              19 (('MemoryItemResponse',))
+              IMPORT_NAME             37 (app.schemas.calls)
+              IMPORT_FROM             38 (MemoryItemResponse)
+              STORE_NAME              38 (MemoryItemResponse)
+              POP_TOP
+
+ 25           LOAD_NAME                5 (APIRouter)
+              PUSH_NULL
+              CALL                     0
+              STORE_NAME              39 (router)
+
+ 28           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              20 (<code object CallerProfileResponse at 0x0000024C114A86B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\callers.py", line 28>)
+              MAKE_FUNCTION
+              LOAD_CONST              21 ('CallerProfileResponse')
+              LOAD_NAME                8 (BaseModel)
+              CALL                     3
+              STORE_NAME              40 (CallerProfileResponse)
+
+ 45           LOAD_NAME               39 (router)
+              LOAD_ATTR               83 (get + NULL|self)
+              LOAD_CONST              22 ('/{phone_hash}/profile')
+              LOAD_NAME               40 (CallerProfileResponse)
+              LOAD_CONST              23 (('response_model',))
+              CALL_KW                  2
+
+ 48           LOAD_NAME                6 (Depends)
+              PUSH_NULL
+              LOAD_NAME               18 (get_current_user)
+              CALL                     1
+
+ 49           LOAD_NAME                6 (Depends)
+              PUSH_NULL
+              LOAD_NAME               24 (get_db)
+              CALL                     1
+
+ 46           BUILD_TUPLE              2
+
+ 47           NOP
+
+ 46           NOP
+
+ 48           NOP
+
+ 46           NOP
+
+ 49           NOP
+
+ 46           NOP
+
+ 50           NOP
+
+ 46           LOAD_CONST              25 (('phone_hash', 'str', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'CallerProfileResponse'))
+              LOAD_CONST              24 (<code object get_caller_profile at 0x0000024C0FBD8A40, file "D:\fluence\Github\mattbot\backend\app\api\v1\callers.py", line 45>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 45           CALL                     0
+
+ 46           STORE_NAME              42 (get_caller_profile)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object CallerProfileResponse at 0x0000024C114A86B0, file "D:\fluence\Github\mattbot\backend\app\api\v1\callers.py", line 28>:
+ 28           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CallerProfileResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (28)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 29           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('caller_phone_hash')
+              STORE_SUBSCR
+
+ 30           LOAD_CONST               4 (0)
+              STORE_NAME               5 (call_count)
+              LOAD_CONST               5 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('call_count')
+              STORE_SUBSCR
+
+ 31           LOAD_CONST               7 (None)
+              STORE_NAME               6 (last_call_date)
+              LOAD_CONST               8 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('last_call_date')
+              STORE_SUBSCR
+
+ 32           LOAD_CONST               7 (None)
+              STORE_NAME               7 (last_call_id)
+              LOAD_CONST               8 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('last_call_id')
+              STORE_SUBSCR
+
+ 33           LOAD_CONST               7 (None)
+              STORE_NAME               8 (last_reason)
+              LOAD_CONST               8 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('last_reason')
+              STORE_SUBSCR
+
+ 34           LOAD_CONST               7 (None)
+              STORE_NAME               9 (avg_duration_seconds)
+              LOAD_CONST              12 ('float | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              13 ('avg_duration_seconds')
+              STORE_SUBSCR
+
+ 35           LOAD_CONST              14 (False)
+              STORE_NAME              10 (is_vip)
+              LOAD_CONST              15 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              16 ('is_vip')
+              STORE_SUBSCR
+
+ 36           LOAD_CONST               7 (None)
+              STORE_NAME              11 (vip_display_name)
+              LOAD_CONST               8 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              17 ('vip_display_name')
+              STORE_SUBSCR
+
+ 37           LOAD_CONST               7 (None)
+              STORE_NAME              12 (vip_company)
+              LOAD_CONST               8 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              18 ('vip_company')
+              STORE_SUBSCR
+
+ 38           LOAD_CONST               7 (None)
+              STORE_NAME              13 (vip_relationship)
+              LOAD_CONST               8 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              19 ('vip_relationship')
+              STORE_SUBSCR
+
+ 39           LOAD_CONST               7 (None)
+              STORE_NAME              14 (vip_notes)
+              LOAD_CONST               8 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              20 ('vip_notes')
+              STORE_SUBSCR
+
+ 40           LOAD_CONST              14 (False)
+              STORE_NAME              15 (is_blocked)
+              LOAD_CONST              15 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              21 ('is_blocked')
+              STORE_SUBSCR
+
+ 41           BUILD_LIST               0
+              STORE_NAME              16 (memory_items)
+              LOAD_CONST              22 ('list[MemoryItemResponse]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              23 ('memory_items')
+              STORE_SUBSCR
+
+ 42           BUILD_MAP                0
+              STORE_NAME              17 (urgency_distribution)
+              LOAD_CONST              24 ('dict[str, int]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              25 ('urgency_distribution')
+              STORE_SUBSCR
+              LOAD_CONST              26 (())
+              STORE_NAME              18 (__static_attributes__)
+              RETURN_CONST             7 (None)
+
+Disassembly of <code object get_caller_profile at 0x0000024C0FBD8A40, file "D:\fluence\Github\mattbot\backend\app\api\v1\callers.py", line 45>:
+  45            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  51            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+  52            LOAD_CONST               1 ('caller:profile:')
+                LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+  53            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_STANDARD_MAX)
+
+  54            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR               10 (RATE_LIMIT_API_STANDARD_WINDOW)
+
+  51            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   52 (allowed, _)
+
+  56            LOAD_FAST                3 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+  57            LOAD_GLOBAL             13 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+  59    L6:     LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                STORE_FAST               5 (user_id)
+
+  62            LOAD_GLOBAL             15 (select + NULL)
+
+  63            LOAD_GLOBAL             16 (func)
+                LOAD_ATTR               18 (count)
+                PUSH_NULL
+                LOAD_GLOBAL             20 (Call)
+                LOAD_ATTR                4 (id)
+                CALL                     1
+
+  64            LOAD_GLOBAL             16 (func)
+                LOAD_ATTR               22 (max)
+                PUSH_NULL
+                LOAD_GLOBAL             20 (Call)
+                LOAD_ATTR               24 (started_at)
+                CALL                     1
+
+  65            LOAD_GLOBAL             16 (func)
+                LOAD_ATTR               26 (avg)
+                PUSH_NULL
+                LOAD_GLOBAL             20 (Call)
+                LOAD_ATTR               28 (duration_seconds)
+                CALL                     1
+
+  62            CALL                     3
+
+  66            LOAD_ATTR               31 (where + NULL|self)
+
+  67            LOAD_GLOBAL             20 (Call)
+                LOAD_ATTR               32 (owner_user_id)
+                LOAD_FAST                5 (user_id)
+                COMPARE_OP              72 (==)
+
+  68            LOAD_GLOBAL             20 (Call)
+                LOAD_ATTR               34 (caller_phone_hash)
+                LOAD_FAST                0 (phone_hash)
+                COMPARE_OP              72 (==)
+
+  69            LOAD_GLOBAL             20 (Call)
+                LOAD_ATTR               36 (deleted_at)
+                LOAD_ATTR               39 (is_ + NULL|self)
+                LOAD_CONST               0 (None)
+                CALL                     1
+
+  66            CALL                     3
+
+  62            STORE_FAST               6 (stats_stmt)
+
+  71            LOAD_FAST                2 (db)
+                LOAD_ATTR               41 (execute + NULL|self)
+                LOAD_FAST                6 (stats_stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                STORE_FAST               7 (stats_result)
+
+  72            LOAD_FAST                7 (stats_result)
+                LOAD_ATTR               43 (one + NULL|self)
+                CALL                     0
+                STORE_FAST               8 (stats_row)
+
+  73            LOAD_FAST                8 (stats_row)
+                LOAD_CONST               7 (0)
+                BINARY_SUBSCR
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L11)
+                POP_TOP
+                LOAD_CONST               7 (0)
+       L11:     STORE_FAST               9 (call_count)
+
+  74            LOAD_FAST                8 (stats_row)
+                LOAD_CONST               8 (1)
+                BINARY_SUBSCR
+                STORE_FAST              10 (last_call_date_dt)
+
+  75            LOAD_FAST                8 (stats_row)
+                LOAD_CONST               9 (2)
+                BINARY_SUBSCR
+                POP_JUMP_IF_NONE        14 (to L12)
+                LOAD_GLOBAL             45 (float + NULL)
+                LOAD_FAST                8 (stats_row)
+                LOAD_CONST               9 (2)
+                BINARY_SUBSCR
+                CALL                     1
+                JUMP_FORWARD             1 (to L13)
+       L12:     LOAD_CONST               0 (None)
+       L13:     STORE_FAST              11 (avg_duration)
+
+  77            LOAD_FAST                9 (call_count)
+                LOAD_CONST               7 (0)
+                COMPARE_OP              88 (bool(==))
+                POP_JUMP_IF_FALSE       11 (to L14)
+
+  78            LOAD_GLOBAL             13 (AppError + NULL)
+
+  79            LOAD_CONST              10 ('CALLER_NOT_FOUND')
+                LOAD_CONST              11 ('No calls from this caller')
+                LOAD_CONST              12 (404)
+
+  78            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+  84   L14:     LOAD_GLOBAL             15 (select + NULL)
+                LOAD_GLOBAL             20 (Call)
+                CALL                     1
+
+  85            LOAD_ATTR               31 (where + NULL|self)
+
+  86            LOAD_GLOBAL             20 (Call)
+                LOAD_ATTR               32 (owner_user_id)
+                LOAD_FAST                5 (user_id)
+                COMPARE_OP              72 (==)
+
+  87            LOAD_GLOBAL             20 (Call)
+                LOAD_ATTR               34 (caller_phone_hash)
+                LOAD_FAST                0 (phone_hash)
+                COMPARE_OP              72 (==)
+
+  88            LOAD_GLOBAL             20 (Call)
+                LOAD_ATTR               36 (deleted_at)
+                LOAD_ATTR               39 (is_ + NULL|self)
+                LOAD_CONST               0 (None)
+                CALL                     1
+
+  85            CALL                     3
+
+  90            LOAD_ATTR               47 (order_by + NULL|self)
+                LOAD_GLOBAL             20 (Call)
+                LOAD_ATTR               24 (started_at)
+                LOAD_ATTR               49 (desc + NULL|self)
+                CALL                     0
+                CALL                     1
+
+  91            LOAD_ATTR               51 (limit + NULL|self)
+                LOAD_CONST               8 (1)
+                CALL                     1
+
+  83            STORE_FAST              12 (last_call_stmt)
+
+  93            LOAD_FAST                2 (db)
+                LOAD_ATTR               41 (execute + NULL|self)
+                LOAD_FAST               12 (last_call_stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L15:     SEND                     3 (to L18)
+       L16:     YIELD_VALUE              1
+       L17:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+       L18:     END_SEND
+                STORE_FAST              13 (last_call_result)
+
+  94            LOAD_FAST               13 (last_call_result)
+                LOAD_ATTR               53 (scalar_one_or_none + NULL|self)
+                CALL                     0
+                STORE_FAST              14 (last_call)
+
+  96            LOAD_CONST               0 (None)
+                STORE_FAST              15 (last_reason)
+
+  97            LOAD_FAST               14 (last_call)
+                TO_BOOL
+                POP_JUMP_IF_FALSE      145 (to L23)
+
+  99            LOAD_FAST                2 (db)
+                LOAD_ATTR               41 (execute + NULL|self)
+
+ 100            LOAD_GLOBAL             15 (select + NULL)
+                LOAD_GLOBAL             54 (CallArtifact)
+                CALL                     1
+                LOAD_ATTR               31 (where + NULL|self)
+                LOAD_GLOBAL             54 (CallArtifact)
+                LOAD_ATTR               56 (call_id)
+                LOAD_FAST               14 (last_call)
+                LOAD_ATTR                4 (id)
+                COMPARE_OP              72 (==)
+                CALL                     1
+
+  99            CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L19:     SEND                     3 (to L22)
+       L20:     YIELD_VALUE              1
+       L21:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+       L22:     END_SEND
+
+ 102            LOAD_ATTR               53 (scalar_one_or_none + NULL|self)
+                CALL                     0
+
+  98            STORE_FAST              16 (artifact)
+
+ 103            LOAD_FAST               16 (artifact)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       44 (to L23)
+                LOAD_FAST               16 (artifact)
+                LOAD_ATTR               58 (structured_extraction)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       27 (to L23)
+
+ 104            LOAD_FAST               16 (artifact)
+                LOAD_ATTR               58 (structured_extraction)
+                LOAD_ATTR               61 (get + NULL|self)
+                LOAD_CONST              13 ('reason')
+                CALL                     1
+                STORE_FAST              15 (last_reason)
+
+ 107   L23:     BUILD_MAP                0
+                STORE_FAST              17 (urgency_dist)
+
+ 109            LOAD_GLOBAL             15 (select + NULL)
+                LOAD_GLOBAL             54 (CallArtifact)
+                LOAD_ATTR               58 (structured_extraction)
+                CALL                     1
+
+ 110            LOAD_ATTR               63 (join + NULL|self)
+                LOAD_GLOBAL             20 (Call)
+                LOAD_GLOBAL             54 (CallArtifact)
+                LOAD_ATTR               56 (call_id)
+                LOAD_GLOBAL             20 (Call)
+                LOAD_ATTR                4 (id)
+                COMPARE_OP              72 (==)
+                CALL                     2
+
+ 111            LOAD_ATTR               31 (where + NULL|self)
+
+ 112            LOAD_GLOBAL             20 (Call)
+                LOAD_ATTR               32 (owner_user_id)
+                LOAD_FAST                5 (user_id)
+                COMPARE_OP              72 (==)
+
+ 113            LOAD_GLOBAL             20 (Call)
+                LOAD_ATTR               34 (caller_phone_hash)
+                LOAD_FAST                0 (phone_hash)
+                COMPARE_OP              72 (==)
+
+ 114            LOAD_GLOBAL             20 (Call)
+                LOAD_ATTR               36 (deleted_at)
+                LOAD_ATTR               39 (is_ + NULL|self)
+                LOAD_CONST               0 (None)
+                CALL                     1
+
+ 115            LOAD_GLOBAL             54 (CallArtifact)
+                LOAD_ATTR               58 (structured_extraction)
+                LOAD_ATTR               65 (isnot + NULL|self)
+                LOAD_CONST               0 (None)
+                CALL                     1
+
+ 111            CALL                     4
+
+ 108            STORE_FAST              18 (artifact_stmt)
+
+ 118            LOAD_FAST                2 (db)
+                LOAD_ATTR               41 (execute + NULL|self)
+                LOAD_FAST               18 (artifact_stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L24:     SEND                     3 (to L27)
+       L25:     YIELD_VALUE              1
+       L26:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+       L27:     END_SEND
+                STORE_FAST              19 (artifact_result)
+
+ 119            LOAD_FAST               19 (artifact_result)
+                LOAD_ATTR               67 (all + NULL|self)
+                CALL                     0
+                GET_ITER
+       L28:     FOR_ITER                60 (to L31)
+                STORE_FAST              20 (row)
+
+ 120            LOAD_FAST               20 (row)
+                LOAD_CONST               7 (0)
+                BINARY_SUBSCR
+                TO_BOOL
+       L29:     POP_JUMP_IF_TRUE         2 (to L30)
+                JUMP_BACKWARD           15 (to L28)
+
+ 121   L30:     LOAD_FAST               20 (row)
+                LOAD_CONST               7 (0)
+                BINARY_SUBSCR
+                LOAD_ATTR               61 (get + NULL|self)
+                LOAD_CONST              14 ('urgency_level')
+                LOAD_CONST              15 ('normal')
+                CALL                     2
+                STORE_FAST              21 (urgency)
+
+ 122            LOAD_FAST               17 (urgency_dist)
+                LOAD_ATTR               61 (get + NULL|self)
+                LOAD_FAST               21 (urgency)
+                LOAD_CONST               7 (0)
+                CALL                     2
+                LOAD_CONST               8 (1)
+                BINARY_OP                0 (+)
+                LOAD_FAST               17 (urgency_dist)
+                LOAD_FAST               21 (urgency)
+                STORE_SUBSCR
+                JUMP_BACKWARD           62 (to L28)
+
+ 119   L31:     END_FOR
+                POP_TOP
+
+ 126            LOAD_FAST                2 (db)
+                LOAD_ATTR               41 (execute + NULL|self)
+
+ 127            LOAD_GLOBAL             15 (select + NULL)
+                LOAD_GLOBAL             68 (VipEntry)
+                CALL                     1
+                LOAD_ATTR               31 (where + NULL|self)
+
+ 128            LOAD_GLOBAL             68 (VipEntry)
+                LOAD_ATTR               32 (owner_user_id)
+                LOAD_FAST                5 (user_id)
+                COMPARE_OP              72 (==)
+
+ 129            LOAD_GLOBAL             68 (VipEntry)
+                LOAD_ATTR               70 (phone_hash)
+                LOAD_FAST                0 (phone_hash)
+                COMPARE_OP              72 (==)
+
+ 127            CALL                     2
+
+ 126            CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L32:     SEND                     3 (to L35)
+       L33:     YIELD_VALUE              1
+       L34:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L32)
+       L35:     END_SEND
+
+ 132            LOAD_ATTR               53 (scalar_one_or_none + NULL|self)
+                CALL                     0
+
+ 125            STORE_FAST              22 (vip)
+
+ 136            LOAD_FAST                2 (db)
+                LOAD_ATTR               41 (execute + NULL|self)
+
+ 137            LOAD_GLOBAL             15 (select + NULL)
+                LOAD_GLOBAL             72 (BlockEntry)
+                CALL                     1
+                LOAD_ATTR               31 (where + NULL|self)
+
+ 138            LOAD_GLOBAL             72 (BlockEntry)
+                LOAD_ATTR               32 (owner_user_id)
+                LOAD_FAST                5 (user_id)
+                COMPARE_OP              72 (==)
+
+ 139            LOAD_GLOBAL             72 (BlockEntry)
+                LOAD_ATTR               70 (phone_hash)
+                LOAD_FAST                0 (phone_hash)
+                COMPARE_OP              72 (==)
+
+ 137            CALL                     2
+
+ 136            CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L36:     SEND                     3 (to L39)
+       L37:     YIELD_VALUE              1
+       L38:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L36)
+       L39:     END_SEND
+
+ 142            LOAD_ATTR               53 (scalar_one_or_none + NULL|self)
+                CALL                     0
+
+ 135            STORE_FAST              23 (block)
+
+ 146            LOAD_GLOBAL             15 (select + NULL)
+                LOAD_GLOBAL             74 (CallMemoryItem)
+                CALL                     1
+
+ 147            LOAD_ATTR               31 (where + NULL|self)
+
+ 148            LOAD_GLOBAL             74 (CallMemoryItem)
+                LOAD_ATTR               32 (owner_user_id)
+                LOAD_FAST                5 (user_id)
+                COMPARE_OP              72 (==)
+
+ 149            LOAD_GLOBAL             74 (CallMemoryItem)
+                LOAD_ATTR               34 (caller_phone_hash)
+                LOAD_FAST                0 (phone_hash)
+                COMPARE_OP              72 (==)
+
+ 150            LOAD_GLOBAL             74 (CallMemoryItem)
+                LOAD_ATTR               36 (deleted_at)
+                LOAD_ATTR               39 (is_ + NULL|self)
+                LOAD_CONST               0 (None)
+                CALL                     1
+
+ 147            CALL                     3
+
+ 152            LOAD_ATTR               47 (order_by + NULL|self)
+                LOAD_GLOBAL             74 (CallMemoryItem)
+                LOAD_ATTR               76 (created_at)
+                LOAD_ATTR               49 (desc + NULL|self)
+                CALL                     0
+                CALL                     1
+
+ 145            STORE_FAST              24 (mem_stmt)
+
+ 154            LOAD_FAST                2 (db)
+                LOAD_ATTR               41 (execute + NULL|self)
+                LOAD_FAST               24 (mem_stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L40:     SEND                     3 (to L43)
+       L41:     YIELD_VALUE              1
+       L42:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L40)
+       L43:     END_SEND
+                STORE_FAST              25 (mem_result)
+
+ 155            LOAD_GLOBAL             79 (list + NULL)
+                LOAD_FAST               25 (mem_result)
+                LOAD_ATTR               81 (scalars + NULL|self)
+                CALL                     0
+                LOAD_ATTR               67 (all + NULL|self)
+                CALL                     0
+                CALL                     1
+                STORE_FAST              26 (memory_rows)
+
+ 157            BUILD_LIST               0
+                STORE_FAST              27 (memory_items_response)
+
+ 158            LOAD_FAST               26 (memory_rows)
+                GET_ITER
+       L44:     FOR_ITER               213 (to L50)
+                STORE_FAST              28 (item)
+
+ 159            LOAD_CONST               0 (None)
+                STORE_FAST              29 (value)
+
+ 160   L45:     NOP
+
+ 161   L46:     LOAD_GLOBAL             83 (decrypt_field + NULL)
+
+ 162            LOAD_FAST               28 (item)
+                LOAD_ATTR               84 (value_ciphertext)
+                LOAD_FAST               28 (item)
+                LOAD_ATTR               86 (value_nonce)
+                LOAD_FAST               28 (item)
+                LOAD_ATTR               88 (value_key_version)
+
+ 161            CALL                     3
+
+ 163            LOAD_ATTR               91 (decode + NULL|self)
+                LOAD_CONST              16 ('utf-8')
+                CALL                     1
+
+ 161            STORE_FAST              29 (value)
+
+ 166   L47:     LOAD_FAST               27 (memory_items_response)
+                LOAD_ATTR               95 (append + NULL|self)
+                LOAD_GLOBAL             97 (MemoryItemResponse + NULL)
+
+ 167            LOAD_GLOBAL             99 (str + NULL)
+                LOAD_FAST               28 (item)
+                LOAD_ATTR                4 (id)
+                CALL                     1
+
+ 168            LOAD_FAST               28 (item)
+                LOAD_ATTR              100 (memory_type)
+
+ 169            LOAD_FAST               28 (item)
+                LOAD_ATTR              102 (subject)
+
+ 170            LOAD_FAST               29 (value)
+
+ 171            LOAD_FAST               28 (item)
+                LOAD_ATTR              104 (confidence)
+
+ 172            LOAD_FAST               28 (item)
+                LOAD_ATTR              106 (user_confirmed)
+
+ 173            LOAD_FAST               28 (item)
+                LOAD_ATTR              108 (source_call_id)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       21 (to L48)
+                LOAD_GLOBAL             99 (str + NULL)
+                LOAD_FAST               28 (item)
+                LOAD_ATTR              108 (source_call_id)
+                CALL                     1
+                JUMP_FORWARD             1 (to L49)
+       L48:     LOAD_CONST               0 (None)
+
+ 174   L49:     LOAD_FAST               28 (item)
+                LOAD_ATTR               34 (caller_phone_hash)
+
+ 175            LOAD_FAST               28 (item)
+                LOAD_ATTR               76 (created_at)
+
+ 166            LOAD_CONST              18 (('id', 'memory_type', 'subject', 'value', 'confidence', 'user_confirmed', 'source_call_id', 'caller_phone_hash', 'created_at'))
+                CALL_KW                  9
+                CALL                     1
+                POP_TOP
+                JUMP_BACKWARD          215 (to L44)
+
+ 158   L50:     END_FOR
+                POP_TOP
+
+ 178            LOAD_GLOBAL            111 (CallerProfileResponse + NULL)
+
+ 179            LOAD_FAST                0 (phone_hash)
+
+ 180            LOAD_FAST                9 (call_count)
+
+ 181            LOAD_FAST               10 (last_call_date_dt)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       16 (to L51)
+                LOAD_FAST               10 (last_call_date_dt)
+                LOAD_ATTR              113 (isoformat + NULL|self)
+                CALL                     0
+                JUMP_FORWARD             1 (to L52)
+       L51:     LOAD_CONST               0 (None)
+
+ 182   L52:     LOAD_FAST               14 (last_call)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       21 (to L53)
+                LOAD_GLOBAL             99 (str + NULL)
+                LOAD_FAST               14 (last_call)
+                LOAD_ATTR                4 (id)
+                CALL                     1
+                JUMP_FORWARD             1 (to L54)
+       L53:     LOAD_CONST               0 (None)
+
+ 183   L54:     LOAD_FAST               15 (last_reason)
+
+ 184            LOAD_FAST               11 (avg_duration)
+
+ 185            LOAD_FAST               22 (vip)
+                LOAD_CONST               0 (None)
+                IS_OP                    1
+
+ 186            LOAD_FAST               22 (vip)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       12 (to L55)
+                LOAD_FAST               22 (vip)
+                LOAD_ATTR              114 (display_name)
+                JUMP_FORWARD             1 (to L56)
+       L55:     LOAD_CONST               0 (None)
+
+ 187   L56:     LOAD_FAST               22 (vip)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       12 (to L57)
+                LOAD_FAST               22 (vip)
+                LOAD_ATTR              116 (company)
+                JUMP_FORWARD             1 (to L58)
+       L57:     LOAD_CONST               0 (None)
+
+ 188   L58:     LOAD_FAST               22 (vip)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       12 (to L59)
+                LOAD_FAST               22 (vip)
+                LOAD_ATTR              118 (relationship)
+                JUMP_FORWARD             1 (to L60)
+       L59:     LOAD_CONST               0 (None)
+
+ 189   L60:     LOAD_FAST               22 (vip)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       12 (to L61)
+                LOAD_FAST               22 (vip)
+                LOAD_ATTR              120 (notes)
+                JUMP_FORWARD             1 (to L62)
+       L61:     LOAD_CONST               0 (None)
+
+ 190   L62:     LOAD_FAST               23 (block)
+                LOAD_CONST               0 (None)
+                IS_OP                    1
+
+ 191            LOAD_FAST               27 (memory_items_response)
+
+ 192            LOAD_FAST               17 (urgency_dist)
+
+ 178            LOAD_CONST              19 (('caller_phone_hash', 'call_count', 'last_call_date', 'last_call_id', 'last_reason', 'avg_duration_seconds', 'is_vip', 'vip_display_name', 'vip_company', 'vip_relationship', 'vip_notes', 'is_blocked', 'memory_items', 'urgency_distribution'))
+                CALL_KW                 14
+                RETURN_VALUE
+
+  51   L63:     CLEANUP_THROW
+       L64:     EXTENDED_ARG             6
+                JUMP_BACKWARD_NO_INTERRUPT 1762 (to L5)
+
+  71   L65:     CLEANUP_THROW
+       L66:     EXTENDED_ARG             5
+                JUMP_BACKWARD_NO_INTERRUPT 1503 (to L10)
+
+  93   L67:     CLEANUP_THROW
+       L68:     EXTENDED_ARG             4
+                JUMP_BACKWARD_NO_INTERRUPT 1254 (to L18)
+
+  99   L69:     CLEANUP_THROW
+       L70:     EXTENDED_ARG             4
+                JUMP_BACKWARD_NO_INTERRUPT 1152 (to L22)
+
+ 118   L71:     CLEANUP_THROW
+       L72:     EXTENDED_ARG             3
+                JUMP_BACKWARD_NO_INTERRUPT 877 (to L27)
+
+ 126   L73:     CLEANUP_THROW
+       L74:     EXTENDED_ARG             2
+                JUMP_BACKWARD_NO_INTERRUPT 712 (to L35)
+
+ 136   L75:     CLEANUP_THROW
+       L76:     EXTENDED_ARG             2
+                JUMP_BACKWARD_NO_INTERRUPT 613 (to L39)
+
+ 154   L77:     CLEANUP_THROW
+       L78:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 439 (to L43)
+
+  --   L79:     PUSH_EXC_INFO
+
+ 164            LOAD_GLOBAL             92 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE        6 (to L81)
+                POP_TOP
+
+ 165            LOAD_CONST              17 ('[unable to decrypt]')
+                STORE_FAST              29 (value)
+       L80:     POP_EXCEPT
+                EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 345 (to L47)
+
+ 164   L81:     RERAISE                  0
+
+  --   L82:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L83:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L83 [0] lasti
+  L3 to L4 -> L63 [2]
+  L4 to L8 -> L83 [0] lasti
+  L8 to L9 -> L65 [2]
+  L9 to L16 -> L83 [0] lasti
+  L16 to L17 -> L67 [2]
+  L17 to L20 -> L83 [0] lasti
+  L20 to L21 -> L69 [2]
+  L21 to L25 -> L83 [0] lasti
+  L25 to L26 -> L71 [2]
+  L26 to L29 -> L83 [0] lasti
+  L30 to L33 -> L83 [0] lasti
+  L33 to L34 -> L73 [2]
+  L34 to L37 -> L83 [0] lasti
+  L37 to L38 -> L75 [2]
+  L38 to L41 -> L83 [0] lasti
+  L41 to L42 -> L77 [2]
+  L42 to L45 -> L83 [0] lasti
+  L46 to L47 -> L79 [1]
+  L47 to L64 -> L83 [0] lasti
+  L65 to L66 -> L83 [0] lasti
+  L67 to L68 -> L83 [0] lasti
+  L69 to L70 -> L83 [0] lasti
+  L71 to L72 -> L83 [0] lasti
+  L73 to L74 -> L83 [0] lasti
+  L75 to L76 -> L83 [0] lasti
+  L77 to L78 -> L83 [0] lasti
+  L79 to L80 -> L82 [2] lasti
+  L80 to L81 -> L83 [0] lasti
+  L81 to L82 -> L82 [2] lasti
+  L82 to L83 -> L83 [0] lasti

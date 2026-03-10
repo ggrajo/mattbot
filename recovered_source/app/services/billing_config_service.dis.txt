@@ -1,0 +1,2768 @@
+# Bytecode dump of: billing_config_service.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py
+# co_names: ('__doc__', '__future__', 'annotations', 'json', 'logging', 'time', 'dataclasses', 'dataclass', 'field', 'sqlalchemy', 'select', 'app.config', 'settings', 'app_settings', 'getLogger', '__name__', 'logger', '_cached_config', '__annotations__', '_cached_at', 'dumps', '_DEFAULT_PLANS_JSON', '_DEFAULT_RULES_JSON', 'PlanConfig', 'UpgradeRule', 'BillingConfig', '_parse_stripe_price_ids', '_load_from_env', '_load_from_db', 'get_billing_config', 'get_billing_config_async', 'invalidate_cache')
+# co_consts (strings): ['Dynamic billing plan configuration.\n\nResolution order:\n1. DB: billing_plan_configs with is_active=True (for future admin portal)\n2. Env: BILLING_PLANS_JSON, BILLING_UPGRADE_RULES_JSON, STRIPE_PRICE_IDS_JSON\n3. Built-in defaults (hardcoded fallback of last resort)\n', 'BillingConfig | None', '_cached_config', 'float', '_cached_at', 'free', 'Free', '0.00', 'Try MattBot with basic call handling', 'gift-outline', 'standard', 'Standard', '20.00', 'For everyday personal use with generous minutes', 'star-outline', 'pro', 'Pro', '50.00', 'High-volume coverage for busy professionals', 'rocket-launch-outline', 'minutes_exceeded', 'PlanConfig', 'UpgradeRule', 'BillingConfig']
+
+# DOCSTRING: """Dynamic billing plan configuration.
+
+Resolution order:
+1. DB: billing_plan_configs with is_active=True (for future admin portal)
+2. Env: BILLING_PLANS_JSON, BILLING_UPGRADE_RULES_JSON, STRIPE_PRICE_IDS_JSON
+3. Built-in defaults (hardcoded fallback of last resort)
+"""
+# --- Nested code object: PlanConfig ---
+    # DOCSTRING: """PlanConfig"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'stripe_price_id', 'requires_credit_card', 'limited', 'sort_order', 'description', 'icon', '__static_attributes__')
+    # co_varnames: ()
+     66           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('PlanConfig')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (66)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     68           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('code')
+                  STORE_SUBSCR
+    
+     69           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('name')
+                  STORE_SUBSCR
+    
+     70           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('price_usd')
+                  STORE_SUBSCR
+    
+     71           LOAD_CONST               6 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('included_minutes')
+                  STORE_SUBSCR
+    
+     72           LOAD_CONST               8 ('')
+                  STORE_NAME               5 (stripe_price_id)
+                  LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('stripe_price_id')
+                  STORE_SUBSCR
+    
+     73           LOAD_CONST              10 (True)
+                  STORE_NAME               6 (requires_credit_card)
+                  LOAD_CONST              11 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              12 ('requires_credit_card')
+                  STORE_SUBSCR
+    
+     74           LOAD_CONST              13 (False)
+                  STORE_NAME               7 (limited)
+                  LOAD_CONST              11 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              14 ('limited')
+                  STORE_SUBSCR
+    
+     75           LOAD_CONST              15 (0)
+                  STORE_NAME               8 (sort_order)
+                  LOAD_CONST               6 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              16 ('sort_order')
+                  STORE_SUBSCR
+    
+     76           LOAD_CONST               8 ('')
+                  STORE_NAME               9 (description)
+                  LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              17 ('description')
+                  STORE_SUBSCR
+    
+     77           LOAD_CONST               8 ('')
+                  STORE_NAME              10 (icon)
+                  LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              18 ('icon')
+                  STORE_SUBSCR
+                  LOAD_CONST              19 (())
+                  STORE_NAME              11 (__static_attributes__)
+                  RETURN_CONST            20 (None)
+    
+# --- Nested code object: UpgradeRule ---
+    # DOCSTRING: """UpgradeRule"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'trigger', '__static_attributes__')
+    # co_varnames: ()
+     80           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('UpgradeRule')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (80)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     82           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('from_plan')
+                  STORE_SUBSCR
+    
+     83           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('to_plan')
+                  STORE_SUBSCR
+    
+     84           LOAD_CONST               5 ('minutes_exceeded')
+                  STORE_NAME               5 (trigger)
+                  LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('trigger')
+                  STORE_SUBSCR
+                  LOAD_CONST               7 (())
+                  STORE_NAME               6 (__static_attributes__)
+                  RETURN_CONST             8 (None)
+    
+# --- Nested code object: BillingConfig ---
+    # DOCSTRING: """BillingConfig"""
+    # --- Nested code object: BillingConfig.get_plan ---
+        # co_names: ('plans', 'code', 'KeyError')
+        # co_varnames: ('self', 'code', 'p')
+         93           RESUME                   0
+        
+         94           LOAD_FAST                0 (self)
+                      LOAD_ATTR                0 (plans)
+                      GET_ITER
+              L1:     FOR_ITER                23 (to L3)
+                      STORE_FAST               2 (p)
+        
+         95           LOAD_FAST                2 (p)
+                      LOAD_ATTR                2 (code)
+                      LOAD_FAST                1 (code)
+                      COMPARE_OP              88 (bool(==))
+                      POP_JUMP_IF_TRUE         2 (to L2)
+                      JUMP_BACKWARD           21 (to L1)
+        
+         96   L2:     LOAD_FAST                2 (p)
+                      SWAP                     2
+                      POP_TOP
+                      RETURN_VALUE
+        
+         94   L3:     END_FOR
+                      POP_TOP
+        
+         97           LOAD_GLOBAL              5 (KeyError + NULL)
+                      LOAD_CONST               1 ('Unknown plan code: ')
+                      LOAD_FAST                1 (code)
+                      FORMAT_SIMPLE
+                      BUILD_STRING             2
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+    # --- Nested code object: BillingConfig.get_stripe_price_map ---
+        # co_names: ('plans', 'stripe_price_id', 'code')
+        # co_varnames: ('self', 'p')
+          99           RESUME                   0
+        
+         100           LOAD_FAST                0 (self)
+                       LOAD_ATTR                0 (plans)
+                       GET_ITER
+                       LOAD_FAST_AND_CLEAR      1 (p)
+                       SWAP                     2
+               L1:     BUILD_MAP                0
+                       SWAP                     2
+                       GET_ITER
+               L2:     FOR_ITER                44 (to L5)
+                       STORE_FAST_LOAD_FAST    17 (p, p)
+                       LOAD_ATTR                2 (stripe_price_id)
+                       TO_BOOL
+               L3:     POP_JUMP_IF_TRUE         2 (to L4)
+                       JUMP_BACKWARD           21 (to L2)
+               L4:     LOAD_FAST                1 (p)
+                       LOAD_ATTR                4 (code)
+                       LOAD_FAST                1 (p)
+                       LOAD_ATTR                2 (stripe_price_id)
+                       MAP_ADD                  2
+                       JUMP_BACKWARD           46 (to L2)
+               L5:     END_FOR
+                       POP_TOP
+               L6:     SWAP                     2
+                       STORE_FAST               1 (p)
+                       RETURN_VALUE
+        
+          --   L7:     SWAP                     2
+                       POP_TOP
+        
+         100           SWAP                     2
+                       STORE_FAST               1 (p)
+                       RERAISE                  0
+        ExceptionTable:
+          L1 to L3 -> L7 [2]
+          L4 to L6 -> L7 [2]
+        
+    # --- Nested code object: BillingConfig.valid_plan_codes ---
+        # co_names: ('plans', 'code')
+        # co_varnames: ('self', 'p')
+         102           RESUME                   0
+        
+         103           LOAD_FAST                0 (self)
+                       LOAD_ATTR                0 (plans)
+                       GET_ITER
+                       LOAD_FAST_AND_CLEAR      1 (p)
+                       SWAP                     2
+               L1:     BUILD_LIST               0
+                       SWAP                     2
+                       GET_ITER
+               L2:     FOR_ITER                14 (to L3)
+                       STORE_FAST_LOAD_FAST    17 (p, p)
+                       LOAD_ATTR                2 (code)
+                       LIST_APPEND              2
+                       JUMP_BACKWARD           16 (to L2)
+               L3:     END_FOR
+                       POP_TOP
+               L4:     SWAP                     2
+                       STORE_FAST               1 (p)
+                       RETURN_VALUE
+        
+          --   L5:     SWAP                     2
+                       POP_TOP
+        
+         103           SWAP                     2
+                       STORE_FAST               1 (p)
+                       RERAISE                  0
+        ExceptionTable:
+          L1 to L4 -> L5 [2]
+        
+    # --- Nested code object: BillingConfig.get_overage_upgrade ---
+        # co_names: ('upgrade_rules', 'from_plan', 'trigger')
+        # co_varnames: ('self', 'from_plan', 'r')
+        105           RESUME                   0
+        
+        106           LOAD_FAST                0 (self)
+                      LOAD_ATTR                0 (upgrade_rules)
+                      GET_ITER
+              L1:     FOR_ITER                41 (to L4)
+                      STORE_FAST               2 (r)
+        
+        107           LOAD_FAST                2 (r)
+                      LOAD_ATTR                2 (from_plan)
+                      LOAD_FAST                1 (from_plan)
+                      COMPARE_OP              88 (bool(==))
+                      POP_JUMP_IF_TRUE         2 (to L2)
+                      JUMP_BACKWARD           21 (to L1)
+              L2:     LOAD_FAST                2 (r)
+                      LOAD_ATTR                4 (trigger)
+                      LOAD_CONST               1 ('minutes_exceeded')
+                      COMPARE_OP              88 (bool(==))
+                      POP_JUMP_IF_TRUE         2 (to L3)
+                      JUMP_BACKWARD           39 (to L1)
+        
+        108   L3:     LOAD_FAST                2 (r)
+                      SWAP                     2
+                      POP_TOP
+                      RETURN_VALUE
+        
+        106   L4:     END_FOR
+                      POP_TOP
+        
+        109           RETURN_CONST             0 (None)
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'field', 'list', 'plans', '__annotations__', 'upgrade_rules', 'source', 'get_plan', 'get_stripe_price_map', 'valid_plan_codes', 'get_overage_upgrade', '__static_attributes__')
+    # co_varnames: ()
+     87           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('BillingConfig')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (87)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     89           LOAD_NAME                4 (field)
+                  PUSH_NULL
+                  LOAD_NAME                5 (list)
+                  LOAD_CONST               2 (('default_factory',))
+                  CALL_KW                  1
+                  STORE_NAME               6 (plans)
+                  LOAD_CONST               3 ('list[PlanConfig]')
+                  LOAD_NAME                7 (__annotations__)
+                  LOAD_CONST               4 ('plans')
+                  STORE_SUBSCR
+    
+     90           LOAD_NAME                4 (field)
+                  PUSH_NULL
+                  LOAD_NAME                5 (list)
+                  LOAD_CONST               2 (('default_factory',))
+                  CALL_KW                  1
+                  STORE_NAME               8 (upgrade_rules)
+                  LOAD_CONST               5 ('list[UpgradeRule]')
+                  LOAD_NAME                7 (__annotations__)
+                  LOAD_CONST               6 ('upgrade_rules')
+                  STORE_SUBSCR
+    
+     91           LOAD_CONST               7 ('env')
+                  STORE_NAME               9 (source)
+                  LOAD_CONST               8 ('str')
+                  LOAD_NAME                7 (__annotations__)
+                  LOAD_CONST               9 ('source')
+                  STORE_SUBSCR
+    
+     93           LOAD_CONST              16 (('code', 'str', 'return', 'PlanConfig'))
+                  LOAD_CONST              10 (<code object get_plan at 0x0000024C11498B70, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 93>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+                  STORE_NAME              10 (get_plan)
+    
+     99           LOAD_CONST              17 (('return', 'dict[str, str]'))
+                  LOAD_CONST              11 (<code object get_stripe_price_map at 0x0000024C0EEFB310, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 99>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+                  STORE_NAME              11 (get_stripe_price_map)
+    
+    102           LOAD_CONST              18 (('return', 'list[str]'))
+                  LOAD_CONST              12 (<code object valid_plan_codes at 0x0000024C11495A10, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 102>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+                  STORE_NAME              12 (valid_plan_codes)
+    
+    105           LOAD_CONST              19 (('from_plan', 'str', 'return', 'UpgradeRule | None'))
+                  LOAD_CONST              13 (<code object get_overage_upgrade at 0x0000024C11498A30, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 105>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+                  STORE_NAME              13 (get_overage_upgrade)
+                  LOAD_CONST              14 (())
+                  STORE_NAME              14 (__static_attributes__)
+                  RETURN_CONST            15 (None)
+    
+    Disassembly of <code object get_plan at 0x0000024C11498B70, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 93>:
+     93           RESUME                   0
+    
+     94           LOAD_FAST                0 (self)
+                  LOAD_ATTR                0 (plans)
+                  GET_ITER
+          L1:     FOR_ITER                23 (to L3)
+                  STORE_FAST               2 (p)
+    
+     95           LOAD_FAST                2 (p)
+                  LOAD_ATTR                2 (code)
+                  LOAD_FAST                1 (code)
+                  COMPARE_OP              88 (bool(==))
+                  POP_JUMP_IF_TRUE         2 (to L2)
+                  JUMP_BACKWARD           21 (to L1)
+    
+     96   L2:     LOAD_FAST                2 (p)
+                  SWAP                     2
+                  POP_TOP
+                  RETURN_VALUE
+    
+     94   L3:     END_FOR
+                  POP_TOP
+    
+     97           LOAD_GLOBAL              5 (KeyError + NULL)
+                  LOAD_CONST               1 ('Unknown plan code: ')
+                  LOAD_FAST                1 (code)
+                  FORMAT_SIMPLE
+                  BUILD_STRING             2
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+    Disassembly of <code object get_stripe_price_map at 0x0000024C0EEFB310, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 99>:
+      99           RESUME                   0
+    
+     100           LOAD_FAST                0 (self)
+                   LOAD_ATTR                0 (plans)
+                   GET_ITER
+                   LOAD_FAST_AND_CLEAR      1 (p)
+                   SWAP                     2
+           L1:     BUILD_MAP                0
+                   SWAP                     2
+                   GET_ITER
+           L2:     FOR_ITER                44 (to L5)
+                   STORE_FAST_LOAD_FAST    17 (p, p)
+                   LOAD_ATTR                2 (stripe_price_id)
+                   TO_BOOL
+           L3:     POP_JUMP_IF_TRUE         2 (to L4)
+                   JUMP_BACKWARD           21 (to L2)
+           L4:     LOAD_FAST                1 (p)
+                   LOAD_ATTR                4 (code)
+                   LOAD_FAST                1 (p)
+                   LOAD_ATTR                2 (stripe_price_id)
+                   MAP_ADD                  2
+                   JUMP_BACKWARD           46 (to L2)
+           L5:     END_FOR
+                   POP_TOP
+           L6:     SWAP                     2
+                   STORE_FAST               1 (p)
+                   RETURN_VALUE
+    
+      --   L7:     SWAP                     2
+                   POP_TOP
+    
+     100           SWAP                     2
+                   STORE_FAST               1 (p)
+                   RERAISE                  0
+    ExceptionTable:
+      L1 to L3 -> L7 [2]
+      L4 to L6 -> L7 [2]
+    
+    Disassembly of <code object valid_plan_codes at 0x0000024C11495A10, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 102>:
+     102           RESUME                   0
+    
+     103           LOAD_FAST                0 (self)
+                   LOAD_ATTR                0 (plans)
+                   GET_ITER
+                   LOAD_FAST_AND_CLEAR      1 (p)
+                   SWAP                     2
+           L1:     BUILD_LIST               0
+                   SWAP                     2
+                   GET_ITER
+           L2:     FOR_ITER                14 (to L3)
+                   STORE_FAST_LOAD_FAST    17 (p, p)
+                   LOAD_ATTR                2 (code)
+                   LIST_APPEND              2
+                   JUMP_BACKWARD           16 (to L2)
+           L3:     END_FOR
+                   POP_TOP
+           L4:     SWAP                     2
+                   STORE_FAST               1 (p)
+                   RETURN_VALUE
+    
+      --   L5:     SWAP                     2
+                   POP_TOP
+    
+     103           SWAP                     2
+                   STORE_FAST               1 (p)
+                   RERAISE                  0
+    ExceptionTable:
+      L1 to L4 -> L5 [2]
+    
+    Disassembly of <code object get_overage_upgrade at 0x0000024C11498A30, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 105>:
+    105           RESUME                   0
+    
+    106           LOAD_FAST                0 (self)
+                  LOAD_ATTR                0 (upgrade_rules)
+                  GET_ITER
+          L1:     FOR_ITER                41 (to L4)
+                  STORE_FAST               2 (r)
+    
+    107           LOAD_FAST                2 (r)
+                  LOAD_ATTR                2 (from_plan)
+                  LOAD_FAST                1 (from_plan)
+                  COMPARE_OP              88 (bool(==))
+                  POP_JUMP_IF_TRUE         2 (to L2)
+                  JUMP_BACKWARD           21 (to L1)
+          L2:     LOAD_FAST                2 (r)
+                  LOAD_ATTR                4 (trigger)
+                  LOAD_CONST               1 ('minutes_exceeded')
+                  COMPARE_OP              88 (bool(==))
+                  POP_JUMP_IF_TRUE         2 (to L3)
+                  JUMP_BACKWARD           39 (to L1)
+    
+    108   L3:     LOAD_FAST                2 (r)
+                  SWAP                     2
+                  POP_TOP
+                  RETURN_VALUE
+    
+    106   L4:     END_FOR
+                  POP_TOP
+    
+    109           RETURN_CONST             0 (None)
+    
+# --- Nested code object: _parse_stripe_price_ids ---
+    # DOCSTRING: """Parse STRIPE_PRICE_IDS_JSON or fall back to individual env vars."""
+    # co_names: ('app_settings', 'STRIPE_PRICE_IDS_JSON', 'json', 'loads', 'isinstance', 'dict', 'JSONDecodeError', 'logger', 'warning', 'STRIPE_PRICE_FREE', 'STRIPE_PRICE_STANDARD', 'STRIPE_PRICE_PRO')
+    # co_varnames: ('raw', 'parsed', 'result')
+     112            RESUME                   0
+    
+     114            LOAD_GLOBAL              0 (app_settings)
+                    LOAD_ATTR                2 (STRIPE_PRICE_IDS_JSON)
+                    STORE_FAST               0 (raw)
+    
+     115            LOAD_FAST                0 (raw)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       47 (to L4)
+    
+     116            NOP
+    
+     117    L1:     LOAD_GLOBAL              4 (json)
+                    LOAD_ATTR                6 (loads)
+                    PUSH_NULL
+                    LOAD_FAST                0 (raw)
+                    CALL                     1
+                    STORE_FAST               1 (parsed)
+    
+     118            LOAD_GLOBAL              9 (isinstance + NULL)
+                    LOAD_FAST                1 (parsed)
+                    LOAD_GLOBAL             10 (dict)
+                    CALL                     2
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE        2 (to L3)
+    
+     119            LOAD_FAST                1 (parsed)
+            L2:     RETURN_VALUE
+    
+     118    L3:     NOP
+    
+     123    L4:     BUILD_MAP                0
+                    STORE_FAST               2 (result)
+    
+     124            LOAD_GLOBAL              0 (app_settings)
+                    LOAD_ATTR               18 (STRIPE_PRICE_FREE)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       19 (to L5)
+    
+     125            LOAD_GLOBAL              0 (app_settings)
+                    LOAD_ATTR               18 (STRIPE_PRICE_FREE)
+                    LOAD_FAST                2 (result)
+                    LOAD_CONST               2 ('free')
+                    STORE_SUBSCR
+    
+     126    L5:     LOAD_GLOBAL              0 (app_settings)
+                    LOAD_ATTR               20 (STRIPE_PRICE_STANDARD)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       19 (to L6)
+    
+     127            LOAD_GLOBAL              0 (app_settings)
+                    LOAD_ATTR               20 (STRIPE_PRICE_STANDARD)
+                    LOAD_FAST                2 (result)
+                    LOAD_CONST               3 ('standard')
+                    STORE_SUBSCR
+    
+     128    L6:     LOAD_GLOBAL              0 (app_settings)
+                    LOAD_ATTR               22 (STRIPE_PRICE_PRO)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       19 (to L7)
+    
+     129            LOAD_GLOBAL              0 (app_settings)
+                    LOAD_ATTR               22 (STRIPE_PRICE_PRO)
+                    LOAD_FAST                2 (result)
+                    LOAD_CONST               4 ('pro')
+                    STORE_SUBSCR
+    
+     130    L7:     LOAD_FAST                2 (result)
+                    RETURN_VALUE
+    
+      --    L8:     PUSH_EXC_INFO
+    
+     120            LOAD_GLOBAL              4 (json)
+                    LOAD_ATTR               12 (JSONDecodeError)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       24 (to L10)
+                    POP_TOP
+    
+     121            LOAD_GLOBAL             14 (logger)
+                    LOAD_ATTR               17 (warning + NULL|self)
+                    LOAD_CONST               1 ('Invalid STRIPE_PRICE_IDS_JSON, falling back to individual vars')
+                    CALL                     1
+                    POP_TOP
+            L9:     POP_EXCEPT
+                    JUMP_BACKWARD_NO_INTERRUPT 167 (to L4)
+    
+     120   L10:     RERAISE                  0
+    
+      --   L11:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L2 -> L8 [0]
+      L8 to L9 -> L11 [1] lasti
+      L10 to L11 -> L11 [1] lasti
+    
+# --- Nested code object: _load_from_env ---
+    # co_names: ('app_settings', 'BILLING_PLANS_JSON', '_DEFAULT_PLANS_JSON', 'BILLING_UPGRADE_RULES_JSON', '_DEFAULT_RULES_JSON', 'json', 'loads', 'JSONDecodeError', 'logger', 'error', '_parse_stripe_price_ids', 'PlanConfig', 'get', 'UpgradeRule', 'BillingConfig')
+    # co_varnames: ('plans_raw', 'rules_raw', 'plans_data', 'rules_data', 'stripe_ids', 'p', 'plans', 'r', 'upgrade_rules')
+     133            RESUME                   0
+    
+     134            LOAD_GLOBAL              0 (app_settings)
+                    LOAD_ATTR                2 (BILLING_PLANS_JSON)
+                    COPY                     1
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         6 (to L1)
+                    POP_TOP
+                    LOAD_GLOBAL              4 (_DEFAULT_PLANS_JSON)
+            L1:     STORE_FAST               0 (plans_raw)
+    
+     135            LOAD_GLOBAL              0 (app_settings)
+                    LOAD_ATTR                6 (BILLING_UPGRADE_RULES_JSON)
+                    COPY                     1
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         6 (to L2)
+                    POP_TOP
+                    LOAD_GLOBAL              8 (_DEFAULT_RULES_JSON)
+            L2:     STORE_FAST               1 (rules_raw)
+    
+     137            NOP
+    
+     138    L3:     LOAD_GLOBAL             10 (json)
+                    LOAD_ATTR               12 (loads)
+                    PUSH_NULL
+                    LOAD_FAST                0 (plans_raw)
+                    CALL                     1
+                    STORE_FAST               2 (plans_data)
+    
+     143    L4:     NOP
+    
+     144    L5:     LOAD_GLOBAL             10 (json)
+                    LOAD_ATTR               12 (loads)
+                    PUSH_NULL
+                    LOAD_FAST                1 (rules_raw)
+                    CALL                     1
+                    STORE_FAST               3 (rules_data)
+    
+     149    L6:     LOAD_GLOBAL             21 (_parse_stripe_price_ids + NULL)
+                    CALL                     0
+                    STORE_FAST               4 (stripe_ids)
+    
+     164            LOAD_FAST                2 (plans_data)
+                    GET_ITER
+    
+     151            LOAD_FAST_AND_CLEAR      5 (p)
+                    SWAP                     2
+            L7:     BUILD_LIST               0
+                    SWAP                     2
+    
+     164            GET_ITER
+            L8:     FOR_ITER               158 (to L9)
+                    STORE_FAST               5 (p)
+    
+     152            LOAD_GLOBAL             23 (PlanConfig + NULL)
+    
+     153            LOAD_FAST                5 (p)
+                    LOAD_CONST               3 ('code')
+                    BINARY_SUBSCR
+    
+     154            LOAD_FAST                5 (p)
+                    LOAD_CONST               4 ('name')
+                    BINARY_SUBSCR
+    
+     155            LOAD_FAST                5 (p)
+                    LOAD_ATTR               25 (get + NULL|self)
+                    LOAD_CONST               5 ('price_usd')
+                    LOAD_CONST               6 ('0.00')
+                    CALL                     2
+    
+     156            LOAD_FAST                5 (p)
+                    LOAD_ATTR               25 (get + NULL|self)
+                    LOAD_CONST               7 ('included_minutes')
+                    LOAD_CONST               8 (0)
+                    CALL                     2
+    
+     157            LOAD_FAST                4 (stripe_ids)
+                    LOAD_ATTR               25 (get + NULL|self)
+                    LOAD_FAST                5 (p)
+                    LOAD_CONST               3 ('code')
+                    BINARY_SUBSCR
+                    LOAD_CONST               9 ('')
+                    CALL                     2
+    
+     158            LOAD_FAST                5 (p)
+                    LOAD_ATTR               25 (get + NULL|self)
+                    LOAD_CONST              10 ('requires_credit_card')
+                    LOAD_CONST              11 (True)
+                    CALL                     2
+    
+     159            LOAD_FAST                5 (p)
+                    LOAD_ATTR               25 (get + NULL|self)
+                    LOAD_CONST              12 ('limited')
+                    LOAD_CONST              13 (False)
+                    CALL                     2
+    
+     160            LOAD_FAST                5 (p)
+                    LOAD_ATTR               25 (get + NULL|self)
+                    LOAD_CONST              14 ('sort_order')
+                    LOAD_CONST               8 (0)
+                    CALL                     2
+    
+     161            LOAD_FAST                5 (p)
+                    LOAD_ATTR               25 (get + NULL|self)
+                    LOAD_CONST              15 ('description')
+                    LOAD_CONST               9 ('')
+                    CALL                     2
+    
+     162            LOAD_FAST                5 (p)
+                    LOAD_ATTR               25 (get + NULL|self)
+                    LOAD_CONST              16 ('icon')
+                    LOAD_CONST               9 ('')
+                    CALL                     2
+    
+     152            LOAD_CONST              17 (('code', 'name', 'price_usd', 'included_minutes', 'stripe_price_id', 'requires_credit_card', 'limited', 'sort_order', 'description', 'icon'))
+                    CALL_KW                 10
+                    LIST_APPEND              2
+                    JUMP_BACKWARD          160 (to L8)
+    
+     164    L9:     END_FOR
+                    POP_TOP
+    
+     151   L10:     STORE_FAST               6 (plans)
+                    STORE_FAST               5 (p)
+    
+     173            LOAD_FAST                3 (rules_data)
+                    GET_ITER
+    
+     167            LOAD_FAST_AND_CLEAR      7 (r)
+                    SWAP                     2
+           L11:     BUILD_LIST               0
+                    SWAP                     2
+    
+     173            GET_ITER
+           L12:     FOR_ITER                36 (to L13)
+                    STORE_FAST               7 (r)
+    
+     168            LOAD_GLOBAL             27 (UpgradeRule + NULL)
+    
+     169            LOAD_FAST                7 (r)
+                    LOAD_CONST              18 ('from_plan')
+                    BINARY_SUBSCR
+    
+     170            LOAD_FAST                7 (r)
+                    LOAD_CONST              19 ('to_plan')
+                    BINARY_SUBSCR
+    
+     171            LOAD_FAST                7 (r)
+                    LOAD_ATTR               25 (get + NULL|self)
+                    LOAD_CONST              20 ('trigger')
+                    LOAD_CONST              21 ('minutes_exceeded')
+                    CALL                     2
+    
+     168            LOAD_CONST              22 (('from_plan', 'to_plan', 'trigger'))
+                    CALL_KW                  3
+                    LIST_APPEND              2
+                    JUMP_BACKWARD           38 (to L12)
+    
+     173   L13:     END_FOR
+                    POP_TOP
+    
+     167   L14:     STORE_FAST               8 (upgrade_rules)
+                    STORE_FAST               7 (r)
+    
+     176            LOAD_GLOBAL             29 (BillingConfig + NULL)
+                    LOAD_FAST_LOAD_FAST    104 (plans, upgrade_rules)
+                    LOAD_CONST              23 ('env')
+                    LOAD_CONST              24 (('plans', 'upgrade_rules', 'source'))
+                    CALL_KW                  3
+                    RETURN_VALUE
+    
+      --   L15:     PUSH_EXC_INFO
+    
+     139            LOAD_GLOBAL             10 (json)
+                    LOAD_ATTR               14 (JSONDecodeError)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       51 (to L17)
+                    POP_TOP
+    
+     140            LOAD_GLOBAL             16 (logger)
+                    LOAD_ATTR               19 (error + NULL|self)
+                    LOAD_CONST               1 ('Invalid BILLING_PLANS_JSON, using defaults')
+                    CALL                     1
+                    POP_TOP
+    
+     141            LOAD_GLOBAL             10 (json)
+                    LOAD_ATTR               12 (loads)
+                    PUSH_NULL
+                    LOAD_GLOBAL              4 (_DEFAULT_PLANS_JSON)
+                    CALL                     1
+                    STORE_FAST               2 (plans_data)
+           L16:     POP_EXCEPT
+                    EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 333 (to L4)
+    
+     139   L17:     RERAISE                  0
+    
+      --   L18:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L19:     PUSH_EXC_INFO
+    
+     145            LOAD_GLOBAL             10 (json)
+                    LOAD_ATTR               14 (JSONDecodeError)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       51 (to L21)
+                    POP_TOP
+    
+     146            LOAD_GLOBAL             16 (logger)
+                    LOAD_ATTR               19 (error + NULL|self)
+                    LOAD_CONST               2 ('Invalid BILLING_UPGRADE_RULES_JSON, using defaults')
+                    CALL                     1
+                    POP_TOP
+    
+     147            LOAD_GLOBAL             10 (json)
+                    LOAD_ATTR               12 (loads)
+                    PUSH_NULL
+                    LOAD_GLOBAL              8 (_DEFAULT_RULES_JSON)
+                    CALL                     1
+                    STORE_FAST               3 (rules_data)
+           L20:     POP_EXCEPT
+                    EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 384 (to L6)
+    
+     145   L21:     RERAISE                  0
+    
+      --   L22:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L23:     SWAP                     2
+                    POP_TOP
+    
+     151            SWAP                     2
+                    STORE_FAST               5 (p)
+                    RERAISE                  0
+    
+      --   L24:     SWAP                     2
+                    POP_TOP
+    
+     167            SWAP                     2
+                    STORE_FAST               7 (r)
+                    RERAISE                  0
+    ExceptionTable:
+      L3 to L4 -> L15 [0]
+      L5 to L6 -> L19 [0]
+      L7 to L10 -> L23 [2]
+      L11 to L14 -> L24 [2]
+      L15 to L16 -> L18 [1] lasti
+      L17 to L18 -> L18 [1] lasti
+      L19 to L20 -> L22 [1] lasti
+      L21 to L22 -> L22 [1] lasti
+    
+# --- Nested code object: _load_from_db ---
+    # DOCSTRING: """Try to load active config from DB. Returns None if no active config."""
+    # co_names: ('app.database', 'async_session_factory', 'app.models.billing_plan_config', 'BillingPlanConfigPlan', 'BillingPlanConfigRow', 'BillingPlanConfigRule', 'select', 'where', 'is_active', 'is_', 'execute', 'scalar_one_or_none', 'config_id', 'id', 'order_by', 'sort_order', 'scalars', 'all', 'PlanConfig', 'code', 'name', 'price_usd', 'included_minutes', 'stripe_price_id', 'requires_credit_card', 'limited', 'description', 'icon', 'UpgradeRule', 'from_plan', 'to_plan', 'trigger', 'BillingConfig', 'Exception', 'logger', 'debug')
+    # co_varnames: ('async_session_factory', 'BillingPlanConfigPlan', 'BillingPlanConfigRow', 'BillingPlanConfigRule', 'db', 'stmt', 'result', 'config_row', 'plan_stmt', 'plan_result', 'db_plans', 'rule_stmt', 'rule_result', 'db_rules', 'p', 'plans', 'r', 'upgrade_rules')
+     179            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     181    L2:     NOP
+    
+     182    L3:     LOAD_CONST               1 (0)
+                    LOAD_CONST               2 (('async_session_factory',))
+                    IMPORT_NAME              0 (app.database)
+                    IMPORT_FROM              1 (async_session_factory)
+                    STORE_FAST               0 (async_session_factory)
+                    POP_TOP
+    
+     183            LOAD_CONST               1 (0)
+                    LOAD_CONST               3 (('BillingPlanConfigPlan', 'BillingPlanConfigRow', 'BillingPlanConfigRule'))
+                    IMPORT_NAME              2 (app.models.billing_plan_config)
+                    IMPORT_FROM              3 (BillingPlanConfigPlan)
+                    STORE_FAST               1 (BillingPlanConfigPlan)
+                    IMPORT_FROM              4 (BillingPlanConfigRow)
+                    STORE_FAST               2 (BillingPlanConfigRow)
+                    IMPORT_FROM              5 (BillingPlanConfigRule)
+                    STORE_FAST               3 (BillingPlanConfigRule)
+                    POP_TOP
+    
+     189            LOAD_FAST                0 (async_session_factory)
+                    PUSH_NULL
+                    CALL                     0
+                    BEFORE_ASYNC_WITH
+                    GET_AWAITABLE            1
+                    LOAD_CONST               4 (None)
+            L4:     SEND                     3 (to L7)
+            L5:     YIELD_VALUE              1
+            L6:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+            L7:     END_SEND
+            L8:     STORE_FAST               4 (db)
+    
+     190            LOAD_GLOBAL             13 (select + NULL)
+                    LOAD_FAST                2 (BillingPlanConfigRow)
+                    CALL                     1
+                    LOAD_ATTR               15 (where + NULL|self)
+    
+     191            LOAD_FAST                2 (BillingPlanConfigRow)
+                    LOAD_ATTR               16 (is_active)
+                    LOAD_ATTR               19 (is_ + NULL|self)
+                    LOAD_CONST               5 (True)
+                    CALL                     1
+    
+     190            CALL                     1
+                    STORE_FAST               5 (stmt)
+    
+     193            LOAD_FAST                4 (db)
+                    LOAD_ATTR               21 (execute + NULL|self)
+                    LOAD_FAST                5 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               4 (None)
+            L9:     SEND                     3 (to L12)
+           L10:     YIELD_VALUE              1
+           L11:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+           L12:     END_SEND
+                    STORE_FAST               6 (result)
+    
+     194            LOAD_FAST                6 (result)
+                    LOAD_ATTR               23 (scalar_one_or_none + NULL|self)
+                    CALL                     0
+                    STORE_FAST               7 (config_row)
+    
+     195            LOAD_FAST                7 (config_row)
+                    POP_JUMP_IF_NOT_NONE    18 (to L19)
+    
+     196            NOP
+    
+     189   L13:     LOAD_CONST               4 (None)
+                    LOAD_CONST               4 (None)
+                    LOAD_CONST               4 (None)
+                    CALL                     2
+                    GET_AWAITABLE            2
+                    LOAD_CONST               4 (None)
+           L14:     SEND                     3 (to L17)
+           L15:     YIELD_VALUE              1
+           L16:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+           L17:     END_SEND
+                    POP_TOP
+           L18:     RETURN_CONST             4 (None)
+    
+     198   L19:     LOAD_GLOBAL             13 (select + NULL)
+                    LOAD_FAST                1 (BillingPlanConfigPlan)
+                    CALL                     1
+                    LOAD_ATTR               15 (where + NULL|self)
+    
+     199            LOAD_FAST                1 (BillingPlanConfigPlan)
+                    LOAD_ATTR               24 (config_id)
+                    LOAD_FAST                7 (config_row)
+                    LOAD_ATTR               26 (id)
+                    COMPARE_OP              72 (==)
+    
+     198            CALL                     1
+    
+     200            LOAD_ATTR               29 (order_by + NULL|self)
+                    LOAD_FAST                1 (BillingPlanConfigPlan)
+                    LOAD_ATTR               30 (sort_order)
+                    CALL                     1
+    
+     198            STORE_FAST               8 (plan_stmt)
+    
+     201            LOAD_FAST                4 (db)
+                    LOAD_ATTR               21 (execute + NULL|self)
+                    LOAD_FAST                8 (plan_stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               4 (None)
+           L20:     SEND                     3 (to L23)
+           L21:     YIELD_VALUE              1
+           L22:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L20)
+           L23:     END_SEND
+                    STORE_FAST               9 (plan_result)
+    
+     202            LOAD_FAST                9 (plan_result)
+                    LOAD_ATTR               33 (scalars + NULL|self)
+                    CALL                     0
+                    LOAD_ATTR               35 (all + NULL|self)
+                    CALL                     0
+                    STORE_FAST              10 (db_plans)
+    
+     204            LOAD_GLOBAL             13 (select + NULL)
+                    LOAD_FAST                3 (BillingPlanConfigRule)
+                    CALL                     1
+                    LOAD_ATTR               15 (where + NULL|self)
+    
+     205            LOAD_FAST                3 (BillingPlanConfigRule)
+                    LOAD_ATTR               24 (config_id)
+                    LOAD_FAST                7 (config_row)
+                    LOAD_ATTR               26 (id)
+                    COMPARE_OP              72 (==)
+    
+     204            CALL                     1
+                    STORE_FAST              11 (rule_stmt)
+    
+     207            LOAD_FAST                4 (db)
+                    LOAD_ATTR               21 (execute + NULL|self)
+                    LOAD_FAST               11 (rule_stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               4 (None)
+           L24:     SEND                     3 (to L27)
+           L25:     YIELD_VALUE              1
+           L26:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+           L27:     END_SEND
+                    STORE_FAST              12 (rule_result)
+    
+     208            LOAD_FAST               12 (rule_result)
+                    LOAD_ATTR               33 (scalars + NULL|self)
+                    CALL                     0
+                    LOAD_ATTR               35 (all + NULL|self)
+                    CALL                     0
+                    STORE_FAST              13 (db_rules)
+    
+     189   L28:     LOAD_CONST               4 (None)
+                    LOAD_CONST               4 (None)
+                    LOAD_CONST               4 (None)
+                    CALL                     2
+                    GET_AWAITABLE            2
+                    LOAD_CONST               4 (None)
+           L29:     SEND                     3 (to L32)
+           L30:     YIELD_VALUE              1
+           L31:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L29)
+           L32:     END_SEND
+                    POP_TOP
+    
+     223   L33:     LOAD_FAST_CHECK         10 (db_plans)
+                    GET_ITER
+    
+     210            LOAD_FAST_AND_CLEAR     14 (p)
+                    SWAP                     2
+           L34:     BUILD_LIST               0
+                    SWAP                     2
+    
+     223            GET_ITER
+           L35:     FOR_ITER               130 (to L37)
+                    STORE_FAST              14 (p)
+    
+     211            LOAD_GLOBAL             37 (PlanConfig + NULL)
+    
+     212            LOAD_FAST               14 (p)
+                    LOAD_ATTR               38 (code)
+    
+     213            LOAD_FAST               14 (p)
+                    LOAD_ATTR               40 (name)
+    
+     214            LOAD_FAST               14 (p)
+                    LOAD_ATTR               42 (price_usd)
+    
+     215            LOAD_FAST               14 (p)
+                    LOAD_ATTR               44 (included_minutes)
+    
+     216            LOAD_FAST               14 (p)
+                    LOAD_ATTR               46 (stripe_price_id)
+                    COPY                     1
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L36)
+                    POP_TOP
+                    LOAD_CONST               6 ('')
+    
+     217   L36:     LOAD_FAST               14 (p)
+                    LOAD_ATTR               48 (requires_credit_card)
+    
+     218            LOAD_FAST               14 (p)
+                    LOAD_ATTR               50 (limited)
+    
+     219            LOAD_FAST               14 (p)
+                    LOAD_ATTR               30 (sort_order)
+    
+     220            LOAD_FAST               14 (p)
+                    LOAD_ATTR               52 (description)
+    
+     221            LOAD_FAST               14 (p)
+                    LOAD_ATTR               54 (icon)
+    
+     211            LOAD_CONST               7 (('code', 'name', 'price_usd', 'included_minutes', 'stripe_price_id', 'requires_credit_card', 'limited', 'sort_order', 'description', 'icon'))
+                    CALL_KW                 10
+                    LIST_APPEND              2
+                    JUMP_BACKWARD          132 (to L35)
+    
+     223   L37:     END_FOR
+                    POP_TOP
+    
+     210   L38:     STORE_FAST              15 (plans)
+                    STORE_FAST              14 (p)
+    
+     232            LOAD_FAST_CHECK         13 (db_rules)
+                    GET_ITER
+    
+     226            LOAD_FAST_AND_CLEAR     16 (r)
+                    SWAP                     2
+           L39:     BUILD_LIST               0
+                    SWAP                     2
+    
+     232            GET_ITER
+           L40:     FOR_ITER                44 (to L41)
+                    STORE_FAST              16 (r)
+    
+     227            LOAD_GLOBAL             57 (UpgradeRule + NULL)
+    
+     228            LOAD_FAST               16 (r)
+                    LOAD_ATTR               58 (from_plan)
+    
+     229            LOAD_FAST               16 (r)
+                    LOAD_ATTR               60 (to_plan)
+    
+     230            LOAD_FAST               16 (r)
+                    LOAD_ATTR               62 (trigger)
+    
+     227            LOAD_CONST               8 (('from_plan', 'to_plan', 'trigger'))
+                    CALL_KW                  3
+                    LIST_APPEND              2
+                    JUMP_BACKWARD           46 (to L40)
+    
+     232   L41:     END_FOR
+                    POP_TOP
+    
+     226   L42:     STORE_FAST              17 (upgrade_rules)
+                    STORE_FAST              16 (r)
+    
+     235            LOAD_GLOBAL             65 (BillingConfig + NULL)
+                    LOAD_FAST               15 (plans)
+                    LOAD_FAST               17 (upgrade_rules)
+                    LOAD_CONST               9 ('db')
+                    LOAD_CONST              10 (('plans', 'upgrade_rules', 'source'))
+                    CALL_KW                  3
+           L43:     RETURN_VALUE
+    
+     189   L44:     CLEANUP_THROW
+           L45:     EXTENDED_ARG             2
+                    JUMP_BACKWARD_NO_INTERRUPT 578 (to L7)
+    
+     193   L46:     CLEANUP_THROW
+           L47:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 505 (to L12)
+    
+     189   L48:     CLEANUP_THROW
+           L49:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 472 (to L17)
+    
+     201   L50:     CLEANUP_THROW
+           L51:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 375 (to L23)
+    
+     207   L52:     CLEANUP_THROW
+           L53:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 274 (to L27)
+    
+     189   L54:     CLEANUP_THROW
+           L55:     JUMP_BACKWARD_NO_INTERRUPT 230 (to L32)
+           L56:     PUSH_EXC_INFO
+                    WITH_EXCEPT_START
+                    GET_AWAITABLE            2
+                    LOAD_CONST               4 (None)
+           L57:     SEND                     4 (to L61)
+           L58:     YIELD_VALUE              1
+           L59:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L57)
+           L60:     CLEANUP_THROW
+           L61:     END_SEND
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L62)
+                    RERAISE                  2
+           L62:     POP_TOP
+           L63:     POP_EXCEPT
+                    POP_TOP
+                    POP_TOP
+                    JUMP_BACKWARD_NO_INTERRUPT 251 (to L33)
+    
+      --   L64:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L65:     SWAP                     2
+                    POP_TOP
+    
+     210            SWAP                     2
+                    STORE_FAST              14 (p)
+                    RERAISE                  0
+    
+      --   L66:     SWAP                     2
+                    POP_TOP
+    
+     226            SWAP                     2
+                    STORE_FAST              16 (r)
+                    RERAISE                  0
+    
+      --   L67:     PUSH_EXC_INFO
+    
+     236            LOAD_GLOBAL             66 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       23 (to L69)
+                    POP_TOP
+    
+     237            LOAD_GLOBAL             68 (logger)
+                    LOAD_ATTR               71 (debug + NULL|self)
+                    LOAD_CONST              11 ('DB billing config not available, using env')
+                    LOAD_CONST               5 (True)
+                    LOAD_CONST              12 (('exc_info',))
+                    CALL_KW                  2
+                    POP_TOP
+    
+     238   L68:     POP_EXCEPT
+                    RETURN_CONST             4 (None)
+    
+     236   L69:     RERAISE                  0
+    
+      --   L70:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L71:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L2 -> L71 [0] lasti
+      L3 to L5 -> L67 [0]
+      L5 to L6 -> L44 [3]
+      L6 to L8 -> L67 [0]
+      L8 to L10 -> L56 [1] lasti
+      L10 to L11 -> L46 [3]
+      L11 to L13 -> L56 [1] lasti
+      L13 to L15 -> L67 [0]
+      L15 to L16 -> L48 [2]
+      L16 to L18 -> L67 [0]
+      L18 to L19 -> L71 [0] lasti
+      L19 to L21 -> L56 [1] lasti
+      L21 to L22 -> L50 [3]
+      L22 to L25 -> L56 [1] lasti
+      L25 to L26 -> L52 [3]
+      L26 to L28 -> L56 [1] lasti
+      L28 to L30 -> L67 [0]
+      L30 to L31 -> L54 [2]
+      L31 to L34 -> L67 [0]
+      L34 to L38 -> L65 [2]
+      L38 to L39 -> L67 [0]
+      L39 to L42 -> L66 [2]
+      L42 to L43 -> L67 [0]
+      L43 to L44 -> L71 [0] lasti
+      L44 to L45 -> L67 [0]
+      L46 to L47 -> L56 [1] lasti
+      L48 to L49 -> L67 [0]
+      L50 to L51 -> L56 [1] lasti
+      L52 to L53 -> L56 [1] lasti
+      L54 to L55 -> L67 [0]
+      L56 to L58 -> L64 [3] lasti
+      L58 to L59 -> L60 [6]
+      L59 to L63 -> L64 [3] lasti
+      L63 to L67 -> L67 [0]
+      L67 to L68 -> L70 [1] lasti
+      L68 to L69 -> L71 [0] lasti
+      L69 to L70 -> L70 [1] lasti
+      L70 to L71 -> L71 [0] lasti
+    
+# --- Nested code object: get_billing_config ---
+    # DOCSTRING: """Synchronous config accessor. Uses cached value or loads from env.
+
+DB loading is async and handled by get_billing_config_async().
+For sync contexts (validators, startup), always returns env config.
+"""
+    # co_names: ('time', 'monotonic', '_cached_config', '_cached_at', 'app_settings', 'BILLING_CONFIG_CACHE_TTL', '_load_from_env')
+    # co_varnames: ('now', 'config')
+    241           RESUME                   0
+    
+    249           LOAD_GLOBAL              0 (time)
+                  LOAD_ATTR                2 (monotonic)
+                  PUSH_NULL
+                  CALL                     0
+                  STORE_FAST               0 (now)
+    
+    250           LOAD_GLOBAL              4 (_cached_config)
+                  POP_JUMP_IF_NONE        33 (to L1)
+                  LOAD_FAST                0 (now)
+                  LOAD_GLOBAL              6 (_cached_at)
+                  BINARY_OP               10 (-)
+                  LOAD_GLOBAL              8 (app_settings)
+                  LOAD_ATTR               10 (BILLING_CONFIG_CACHE_TTL)
+                  COMPARE_OP              18 (bool(<))
+                  POP_JUMP_IF_FALSE        6 (to L1)
+    
+    251           LOAD_GLOBAL              4 (_cached_config)
+                  RETURN_VALUE
+    
+    253   L1:     LOAD_GLOBAL             13 (_load_from_env + NULL)
+                  CALL                     0
+                  STORE_FAST               1 (config)
+    
+    254           LOAD_FAST                1 (config)
+                  STORE_GLOBAL             2 (_cached_config)
+    
+    255           LOAD_FAST                0 (now)
+                  STORE_GLOBAL             3 (_cached_at)
+    
+    256           LOAD_FAST                1 (config)
+                  RETURN_VALUE
+    
+# --- Nested code object: get_billing_config_async ---
+    # DOCSTRING: """Async config accessor. Tries DB first, falls back to env."""
+    # co_names: ('time', 'monotonic', '_cached_config', '_cached_at', 'app_settings', 'BILLING_CONFIG_CACHE_TTL', '_load_from_db', '_load_from_env')
+    # co_varnames: ('now', 'db_config', 'config')
+     259            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     263            LOAD_GLOBAL              0 (time)
+                    LOAD_ATTR                2 (monotonic)
+                    PUSH_NULL
+                    CALL                     0
+                    STORE_FAST               0 (now)
+    
+     264            LOAD_GLOBAL              4 (_cached_config)
+                    POP_JUMP_IF_NONE        33 (to L2)
+                    LOAD_FAST                0 (now)
+                    LOAD_GLOBAL              6 (_cached_at)
+                    BINARY_OP               10 (-)
+                    LOAD_GLOBAL              8 (app_settings)
+                    LOAD_ATTR               10 (BILLING_CONFIG_CACHE_TTL)
+                    COMPARE_OP              18 (bool(<))
+                    POP_JUMP_IF_FALSE        6 (to L2)
+    
+     265            LOAD_GLOBAL              4 (_cached_config)
+                    RETURN_VALUE
+    
+     267    L2:     LOAD_GLOBAL             13 (_load_from_db + NULL)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               1 (None)
+            L3:     SEND                     3 (to L6)
+            L4:     YIELD_VALUE              1
+            L5:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L3)
+            L6:     END_SEND
+                    STORE_FAST               1 (db_config)
+    
+     268            LOAD_FAST                1 (db_config)
+                    POP_JUMP_IF_NONE         6 (to L7)
+    
+     269            LOAD_FAST                1 (db_config)
+                    STORE_GLOBAL             2 (_cached_config)
+    
+     270            LOAD_FAST                0 (now)
+                    STORE_GLOBAL             3 (_cached_at)
+    
+     271            LOAD_FAST                1 (db_config)
+                    RETURN_VALUE
+    
+     273    L7:     LOAD_GLOBAL             15 (_load_from_env + NULL)
+                    CALL                     0
+                    STORE_FAST               2 (config)
+    
+     274            LOAD_FAST                2 (config)
+                    STORE_GLOBAL             2 (_cached_config)
+    
+     275            LOAD_FAST                0 (now)
+                    STORE_GLOBAL             3 (_cached_at)
+    
+     276            LOAD_FAST                2 (config)
+                    RETURN_VALUE
+    
+     267    L8:     CLEANUP_THROW
+            L9:     JUMP_BACKWARD_NO_INTERRUPT 29 (to L6)
+    
+      --   L10:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L4 -> L10 [0] lasti
+      L4 to L5 -> L8 [2]
+      L5 to L9 -> L10 [0] lasti
+    
+# --- Nested code object: invalidate_cache ---
+    # DOCSTRING: """Clear cached config (call after admin portal writes)."""
+    # co_names: ('_cached_config', '_cached_at')
+    # co_varnames: ()
+    279           RESUME                   0
+    
+    282           LOAD_CONST               1 (None)
+                  STORE_GLOBAL             0 (_cached_config)
+    
+    283           LOAD_CONST               2 (0.0)
+                  STORE_GLOBAL             1 (_cached_at)
+                  RETURN_CONST             1 (None)
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'json', 'logging', 'time', 'dataclasses', 'dataclass', 'field', 'sqlalchemy', 'select', 'app.config', 'settings', 'app_settings', 'getLogger', '__name__', 'logger', '_cached_config', '__annotations__', '_cached_at', 'dumps', '_DEFAULT_PLANS_JSON', '_DEFAULT_RULES_JSON', 'PlanConfig', 'UpgradeRule', 'BillingConfig', '_parse_stripe_price_ids', '_load_from_env', '_load_from_db', 'get_billing_config', 'get_billing_config_async', 'invalidate_cache')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           SETUP_ANNOTATIONS
+              LOAD_CONST               0 ('Dynamic billing plan configuration.\n\nResolution order:\n1. DB: billing_plan_configs with is_active=True (for future admin portal)\n2. Env: BILLING_PLANS_JSON, BILLING_UPGRADE_RULES_JSON, STRIPE_PRICE_IDS_JSON\n3. Built-in defaults (hardcoded fallback of last resort)\n')
+              STORE_NAME               0 (__doc__)
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (json)
+              STORE_NAME               3 (json)
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              4 (logging)
+              STORE_NAME               4 (logging)
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              5 (time)
+              STORE_NAME               5 (time)
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('dataclass', 'field'))
+              IMPORT_NAME              6 (dataclasses)
+              IMPORT_FROM              7 (dataclass)
+              STORE_NAME               7 (dataclass)
+              IMPORT_FROM              8 (field)
+              STORE_NAME               8 (field)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('select',))
+              IMPORT_NAME              9 (sqlalchemy)
+              IMPORT_FROM             10 (select)
+              STORE_NAME              10 (select)
+              POP_TOP
+
+ 18           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('settings',))
+              IMPORT_NAME             11 (app.config)
+              IMPORT_FROM             12 (settings)
+              STORE_NAME              13 (app_settings)
+              POP_TOP
+
+ 20           LOAD_NAME                4 (logging)
+              LOAD_ATTR               28 (getLogger)
+              PUSH_NULL
+              LOAD_NAME               15 (__name__)
+              CALL                     1
+              STORE_NAME              16 (logger)
+
+ 22           LOAD_CONST               3 (None)
+              STORE_GLOBAL            17 (_cached_config)
+              LOAD_CONST               7 ('BillingConfig | None')
+              LOAD_NAME               18 (__annotations__)
+              LOAD_CONST               8 ('_cached_config')
+              STORE_SUBSCR
+
+ 23           LOAD_CONST               9 (0.0)
+              STORE_GLOBAL            19 (_cached_at)
+              LOAD_CONST              10 ('float')
+              LOAD_NAME               18 (__annotations__)
+              LOAD_CONST              11 ('_cached_at')
+              STORE_SUBSCR
+
+ 25           LOAD_NAME                3 (json)
+              LOAD_ATTR               40 (dumps)
+              PUSH_NULL
+
+ 27           LOAD_CONST              12 ('free')
+
+ 28           LOAD_CONST              13 ('Free')
+
+ 29           LOAD_CONST              14 ('0.00')
+
+ 30           LOAD_CONST              15 (10)
+
+ 31           LOAD_CONST              16 (True)
+
+ 32           LOAD_CONST              16 (True)
+
+ 33           LOAD_CONST               1 (0)
+
+ 34           LOAD_CONST              17 ('Try MattBot with basic call handling')
+
+ 35           LOAD_CONST              18 ('gift-outline')
+
+ 26           LOAD_CONST              19 (('code', 'name', 'price_usd', 'included_minutes', 'requires_credit_card', 'limited', 'sort_order', 'description', 'icon'))
+              BUILD_CONST_KEY_MAP      9
+
+ 38           LOAD_CONST              20 ('standard')
+
+ 39           LOAD_CONST              21 ('Standard')
+
+ 40           LOAD_CONST              22 ('20.00')
+
+ 41           LOAD_CONST              23 (100)
+
+ 42           LOAD_CONST              16 (True)
+
+ 43           LOAD_CONST              24 (False)
+
+ 44           LOAD_CONST              25 (1)
+
+ 45           LOAD_CONST              26 ('For everyday personal use with generous minutes')
+
+ 46           LOAD_CONST              27 ('star-outline')
+
+ 37           LOAD_CONST              19 (('code', 'name', 'price_usd', 'included_minutes', 'requires_credit_card', 'limited', 'sort_order', 'description', 'icon'))
+              BUILD_CONST_KEY_MAP      9
+
+ 49           LOAD_CONST              28 ('pro')
+
+ 50           LOAD_CONST              29 ('Pro')
+
+ 51           LOAD_CONST              30 ('50.00')
+
+ 52           LOAD_CONST              31 (400)
+
+ 53           LOAD_CONST              16 (True)
+
+ 54           LOAD_CONST              24 (False)
+
+ 55           LOAD_CONST              32 (2)
+
+ 56           LOAD_CONST              33 ('High-volume coverage for busy professionals')
+
+ 57           LOAD_CONST              34 ('rocket-launch-outline')
+
+ 48           LOAD_CONST              19 (('code', 'name', 'price_usd', 'included_minutes', 'requires_credit_card', 'limited', 'sort_order', 'description', 'icon'))
+              BUILD_CONST_KEY_MAP      9
+
+ 25           BUILD_LIST               3
+              CALL                     1
+              STORE_NAME              21 (_DEFAULT_PLANS_JSON)
+
+ 61           LOAD_NAME                3 (json)
+              LOAD_ATTR               40 (dumps)
+              PUSH_NULL
+
+ 62           LOAD_CONST              12 ('free')
+              LOAD_CONST              20 ('standard')
+              LOAD_CONST              35 ('minutes_exceeded')
+              LOAD_CONST              36 (('from_plan', 'to_plan', 'trigger'))
+              BUILD_CONST_KEY_MAP      3
+
+ 61           BUILD_LIST               1
+              CALL                     1
+              STORE_NAME              22 (_DEFAULT_RULES_JSON)
+
+ 66           LOAD_NAME                7 (dataclass)
+              PUSH_NULL
+              LOAD_CONST              16 (True)
+              LOAD_CONST              37 (('frozen',))
+              CALL_KW                  1
+
+ 67           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              38 (<code object PlanConfig at 0x0000024C0EEFAD90, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 66>)
+              MAKE_FUNCTION
+              LOAD_CONST              39 ('PlanConfig')
+              CALL                     2
+
+ 66           CALL                     0
+
+ 67           STORE_NAME              23 (PlanConfig)
+
+ 80           LOAD_NAME                7 (dataclass)
+              PUSH_NULL
+              LOAD_CONST              16 (True)
+              LOAD_CONST              37 (('frozen',))
+              CALL_KW                  1
+
+ 81           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              40 (<code object UpgradeRule at 0x0000024C11423C30, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 80>)
+              MAKE_FUNCTION
+              LOAD_CONST              41 ('UpgradeRule')
+              CALL                     2
+
+ 80           CALL                     0
+
+ 81           STORE_NAME              24 (UpgradeRule)
+
+ 87           LOAD_NAME                7 (dataclass)
+
+ 88           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              42 (<code object BillingConfig at 0x0000024C114988F0, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 87>)
+              MAKE_FUNCTION
+              LOAD_CONST              43 ('BillingConfig')
+              CALL                     2
+
+ 87           CALL                     0
+
+ 88           STORE_NAME              25 (BillingConfig)
+
+112           LOAD_CONST              50 (('return', 'dict[str, str]'))
+              LOAD_CONST              44 (<code object _parse_stripe_price_ids at 0x0000024C0FC75B30, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 112>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              26 (_parse_stripe_price_ids)
+
+133           LOAD_CONST              51 (('return', 'BillingConfig'))
+              LOAD_CONST              45 (<code object _load_from_env at 0x0000024C0FB57E90, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 133>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              27 (_load_from_env)
+
+179           LOAD_CONST              52 (('return', 'BillingConfig | None'))
+              LOAD_CONST              46 (<code object _load_from_db at 0x0000024C0FCFD310, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 179>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              28 (_load_from_db)
+
+241           LOAD_CONST              51 (('return', 'BillingConfig'))
+              LOAD_CONST              47 (<code object get_billing_config at 0x0000024C114358A0, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 241>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              29 (get_billing_config)
+
+259           LOAD_CONST              51 (('return', 'BillingConfig'))
+              LOAD_CONST              48 (<code object get_billing_config_async at 0x0000024C0EC73CF0, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 259>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              30 (get_billing_config_async)
+
+279           LOAD_CONST              53 (('return', 'None'))
+              LOAD_CONST              49 (<code object invalidate_cache at 0x0000024C0EF0FD70, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 279>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              31 (invalidate_cache)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object PlanConfig at 0x0000024C0EEFAD90, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 66>:
+ 66           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('PlanConfig')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (66)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 68           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('code')
+              STORE_SUBSCR
+
+ 69           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('name')
+              STORE_SUBSCR
+
+ 70           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('price_usd')
+              STORE_SUBSCR
+
+ 71           LOAD_CONST               6 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('included_minutes')
+              STORE_SUBSCR
+
+ 72           LOAD_CONST               8 ('')
+              STORE_NAME               5 (stripe_price_id)
+              LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('stripe_price_id')
+              STORE_SUBSCR
+
+ 73           LOAD_CONST              10 (True)
+              STORE_NAME               6 (requires_credit_card)
+              LOAD_CONST              11 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              12 ('requires_credit_card')
+              STORE_SUBSCR
+
+ 74           LOAD_CONST              13 (False)
+              STORE_NAME               7 (limited)
+              LOAD_CONST              11 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              14 ('limited')
+              STORE_SUBSCR
+
+ 75           LOAD_CONST              15 (0)
+              STORE_NAME               8 (sort_order)
+              LOAD_CONST               6 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              16 ('sort_order')
+              STORE_SUBSCR
+
+ 76           LOAD_CONST               8 ('')
+              STORE_NAME               9 (description)
+              LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              17 ('description')
+              STORE_SUBSCR
+
+ 77           LOAD_CONST               8 ('')
+              STORE_NAME              10 (icon)
+              LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              18 ('icon')
+              STORE_SUBSCR
+              LOAD_CONST              19 (())
+              STORE_NAME              11 (__static_attributes__)
+              RETURN_CONST            20 (None)
+
+Disassembly of <code object UpgradeRule at 0x0000024C11423C30, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 80>:
+ 80           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('UpgradeRule')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (80)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 82           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('from_plan')
+              STORE_SUBSCR
+
+ 83           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('to_plan')
+              STORE_SUBSCR
+
+ 84           LOAD_CONST               5 ('minutes_exceeded')
+              STORE_NAME               5 (trigger)
+              LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('trigger')
+              STORE_SUBSCR
+              LOAD_CONST               7 (())
+              STORE_NAME               6 (__static_attributes__)
+              RETURN_CONST             8 (None)
+
+Disassembly of <code object BillingConfig at 0x0000024C114988F0, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 87>:
+ 87           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('BillingConfig')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (87)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 89           LOAD_NAME                4 (field)
+              PUSH_NULL
+              LOAD_NAME                5 (list)
+              LOAD_CONST               2 (('default_factory',))
+              CALL_KW                  1
+              STORE_NAME               6 (plans)
+              LOAD_CONST               3 ('list[PlanConfig]')
+              LOAD_NAME                7 (__annotations__)
+              LOAD_CONST               4 ('plans')
+              STORE_SUBSCR
+
+ 90           LOAD_NAME                4 (field)
+              PUSH_NULL
+              LOAD_NAME                5 (list)
+              LOAD_CONST               2 (('default_factory',))
+              CALL_KW                  1
+              STORE_NAME               8 (upgrade_rules)
+              LOAD_CONST               5 ('list[UpgradeRule]')
+              LOAD_NAME                7 (__annotations__)
+              LOAD_CONST               6 ('upgrade_rules')
+              STORE_SUBSCR
+
+ 91           LOAD_CONST               7 ('env')
+              STORE_NAME               9 (source)
+              LOAD_CONST               8 ('str')
+              LOAD_NAME                7 (__annotations__)
+              LOAD_CONST               9 ('source')
+              STORE_SUBSCR
+
+ 93           LOAD_CONST              16 (('code', 'str', 'return', 'PlanConfig'))
+              LOAD_CONST              10 (<code object get_plan at 0x0000024C11498B70, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 93>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              10 (get_plan)
+
+ 99           LOAD_CONST              17 (('return', 'dict[str, str]'))
+              LOAD_CONST              11 (<code object get_stripe_price_map at 0x0000024C0EEFB310, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 99>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              11 (get_stripe_price_map)
+
+102           LOAD_CONST              18 (('return', 'list[str]'))
+              LOAD_CONST              12 (<code object valid_plan_codes at 0x0000024C11495A10, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 102>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              12 (valid_plan_codes)
+
+105           LOAD_CONST              19 (('from_plan', 'str', 'return', 'UpgradeRule | None'))
+              LOAD_CONST              13 (<code object get_overage_upgrade at 0x0000024C11498A30, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 105>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              13 (get_overage_upgrade)
+              LOAD_CONST              14 (())
+              STORE_NAME              14 (__static_attributes__)
+              RETURN_CONST            15 (None)
+
+Disassembly of <code object get_plan at 0x0000024C11498B70, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 93>:
+ 93           RESUME                   0
+
+ 94           LOAD_FAST                0 (self)
+              LOAD_ATTR                0 (plans)
+              GET_ITER
+      L1:     FOR_ITER                23 (to L3)
+              STORE_FAST               2 (p)
+
+ 95           LOAD_FAST                2 (p)
+              LOAD_ATTR                2 (code)
+              LOAD_FAST                1 (code)
+              COMPARE_OP              88 (bool(==))
+              POP_JUMP_IF_TRUE         2 (to L2)
+              JUMP_BACKWARD           21 (to L1)
+
+ 96   L2:     LOAD_FAST                2 (p)
+              SWAP                     2
+              POP_TOP
+              RETURN_VALUE
+
+ 94   L3:     END_FOR
+              POP_TOP
+
+ 97           LOAD_GLOBAL              5 (KeyError + NULL)
+              LOAD_CONST               1 ('Unknown plan code: ')
+              LOAD_FAST                1 (code)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+Disassembly of <code object get_stripe_price_map at 0x0000024C0EEFB310, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 99>:
+  99           RESUME                   0
+
+ 100           LOAD_FAST                0 (self)
+               LOAD_ATTR                0 (plans)
+               GET_ITER
+               LOAD_FAST_AND_CLEAR      1 (p)
+               SWAP                     2
+       L1:     BUILD_MAP                0
+               SWAP                     2
+               GET_ITER
+       L2:     FOR_ITER                44 (to L5)
+               STORE_FAST_LOAD_FAST    17 (p, p)
+               LOAD_ATTR                2 (stripe_price_id)
+               TO_BOOL
+       L3:     POP_JUMP_IF_TRUE         2 (to L4)
+               JUMP_BACKWARD           21 (to L2)
+       L4:     LOAD_FAST                1 (p)
+               LOAD_ATTR                4 (code)
+               LOAD_FAST                1 (p)
+               LOAD_ATTR                2 (stripe_price_id)
+               MAP_ADD                  2
+               JUMP_BACKWARD           46 (to L2)
+       L5:     END_FOR
+               POP_TOP
+       L6:     SWAP                     2
+               STORE_FAST               1 (p)
+               RETURN_VALUE
+
+  --   L7:     SWAP                     2
+               POP_TOP
+
+ 100           SWAP                     2
+               STORE_FAST               1 (p)
+               RERAISE                  0
+ExceptionTable:
+  L1 to L3 -> L7 [2]
+  L4 to L6 -> L7 [2]
+
+Disassembly of <code object valid_plan_codes at 0x0000024C11495A10, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 102>:
+ 102           RESUME                   0
+
+ 103           LOAD_FAST                0 (self)
+               LOAD_ATTR                0 (plans)
+               GET_ITER
+               LOAD_FAST_AND_CLEAR      1 (p)
+               SWAP                     2
+       L1:     BUILD_LIST               0
+               SWAP                     2
+               GET_ITER
+       L2:     FOR_ITER                14 (to L3)
+               STORE_FAST_LOAD_FAST    17 (p, p)
+               LOAD_ATTR                2 (code)
+               LIST_APPEND              2
+               JUMP_BACKWARD           16 (to L2)
+       L3:     END_FOR
+               POP_TOP
+       L4:     SWAP                     2
+               STORE_FAST               1 (p)
+               RETURN_VALUE
+
+  --   L5:     SWAP                     2
+               POP_TOP
+
+ 103           SWAP                     2
+               STORE_FAST               1 (p)
+               RERAISE                  0
+ExceptionTable:
+  L1 to L4 -> L5 [2]
+
+Disassembly of <code object get_overage_upgrade at 0x0000024C11498A30, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 105>:
+105           RESUME                   0
+
+106           LOAD_FAST                0 (self)
+              LOAD_ATTR                0 (upgrade_rules)
+              GET_ITER
+      L1:     FOR_ITER                41 (to L4)
+              STORE_FAST               2 (r)
+
+107           LOAD_FAST                2 (r)
+              LOAD_ATTR                2 (from_plan)
+              LOAD_FAST                1 (from_plan)
+              COMPARE_OP              88 (bool(==))
+              POP_JUMP_IF_TRUE         2 (to L2)
+              JUMP_BACKWARD           21 (to L1)
+      L2:     LOAD_FAST                2 (r)
+              LOAD_ATTR                4 (trigger)
+              LOAD_CONST               1 ('minutes_exceeded')
+              COMPARE_OP              88 (bool(==))
+              POP_JUMP_IF_TRUE         2 (to L3)
+              JUMP_BACKWARD           39 (to L1)
+
+108   L3:     LOAD_FAST                2 (r)
+              SWAP                     2
+              POP_TOP
+              RETURN_VALUE
+
+106   L4:     END_FOR
+              POP_TOP
+
+109           RETURN_CONST             0 (None)
+
+Disassembly of <code object _parse_stripe_price_ids at 0x0000024C0FC75B30, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 112>:
+ 112            RESUME                   0
+
+ 114            LOAD_GLOBAL              0 (app_settings)
+                LOAD_ATTR                2 (STRIPE_PRICE_IDS_JSON)
+                STORE_FAST               0 (raw)
+
+ 115            LOAD_FAST                0 (raw)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       47 (to L4)
+
+ 116            NOP
+
+ 117    L1:     LOAD_GLOBAL              4 (json)
+                LOAD_ATTR                6 (loads)
+                PUSH_NULL
+                LOAD_FAST                0 (raw)
+                CALL                     1
+                STORE_FAST               1 (parsed)
+
+ 118            LOAD_GLOBAL              9 (isinstance + NULL)
+                LOAD_FAST                1 (parsed)
+                LOAD_GLOBAL             10 (dict)
+                CALL                     2
+                TO_BOOL
+                POP_JUMP_IF_FALSE        2 (to L3)
+
+ 119            LOAD_FAST                1 (parsed)
+        L2:     RETURN_VALUE
+
+ 118    L3:     NOP
+
+ 123    L4:     BUILD_MAP                0
+                STORE_FAST               2 (result)
+
+ 124            LOAD_GLOBAL              0 (app_settings)
+                LOAD_ATTR               18 (STRIPE_PRICE_FREE)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       19 (to L5)
+
+ 125            LOAD_GLOBAL              0 (app_settings)
+                LOAD_ATTR               18 (STRIPE_PRICE_FREE)
+                LOAD_FAST                2 (result)
+                LOAD_CONST               2 ('free')
+                STORE_SUBSCR
+
+ 126    L5:     LOAD_GLOBAL              0 (app_settings)
+                LOAD_ATTR               20 (STRIPE_PRICE_STANDARD)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       19 (to L6)
+
+ 127            LOAD_GLOBAL              0 (app_settings)
+                LOAD_ATTR               20 (STRIPE_PRICE_STANDARD)
+                LOAD_FAST                2 (result)
+                LOAD_CONST               3 ('standard')
+                STORE_SUBSCR
+
+ 128    L6:     LOAD_GLOBAL              0 (app_settings)
+                LOAD_ATTR               22 (STRIPE_PRICE_PRO)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       19 (to L7)
+
+ 129            LOAD_GLOBAL              0 (app_settings)
+                LOAD_ATTR               22 (STRIPE_PRICE_PRO)
+                LOAD_FAST                2 (result)
+                LOAD_CONST               4 ('pro')
+                STORE_SUBSCR
+
+ 130    L7:     LOAD_FAST                2 (result)
+                RETURN_VALUE
+
+  --    L8:     PUSH_EXC_INFO
+
+ 120            LOAD_GLOBAL              4 (json)
+                LOAD_ATTR               12 (JSONDecodeError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       24 (to L10)
+                POP_TOP
+
+ 121            LOAD_GLOBAL             14 (logger)
+                LOAD_ATTR               17 (warning + NULL|self)
+                LOAD_CONST               1 ('Invalid STRIPE_PRICE_IDS_JSON, falling back to individual vars')
+                CALL                     1
+                POP_TOP
+        L9:     POP_EXCEPT
+                JUMP_BACKWARD_NO_INTERRUPT 167 (to L4)
+
+ 120   L10:     RERAISE                  0
+
+  --   L11:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L8 [0]
+  L8 to L9 -> L11 [1] lasti
+  L10 to L11 -> L11 [1] lasti
+
+Disassembly of <code object _load_from_env at 0x0000024C0FB57E90, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 133>:
+ 133            RESUME                   0
+
+ 134            LOAD_GLOBAL              0 (app_settings)
+                LOAD_ATTR                2 (BILLING_PLANS_JSON)
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         6 (to L1)
+                POP_TOP
+                LOAD_GLOBAL              4 (_DEFAULT_PLANS_JSON)
+        L1:     STORE_FAST               0 (plans_raw)
+
+ 135            LOAD_GLOBAL              0 (app_settings)
+                LOAD_ATTR                6 (BILLING_UPGRADE_RULES_JSON)
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         6 (to L2)
+                POP_TOP
+                LOAD_GLOBAL              8 (_DEFAULT_RULES_JSON)
+        L2:     STORE_FAST               1 (rules_raw)
+
+ 137            NOP
+
+ 138    L3:     LOAD_GLOBAL             10 (json)
+                LOAD_ATTR               12 (loads)
+                PUSH_NULL
+                LOAD_FAST                0 (plans_raw)
+                CALL                     1
+                STORE_FAST               2 (plans_data)
+
+ 143    L4:     NOP
+
+ 144    L5:     LOAD_GLOBAL             10 (json)
+                LOAD_ATTR               12 (loads)
+                PUSH_NULL
+                LOAD_FAST                1 (rules_raw)
+                CALL                     1
+                STORE_FAST               3 (rules_data)
+
+ 149    L6:     LOAD_GLOBAL             21 (_parse_stripe_price_ids + NULL)
+                CALL                     0
+                STORE_FAST               4 (stripe_ids)
+
+ 164            LOAD_FAST                2 (plans_data)
+                GET_ITER
+
+ 151            LOAD_FAST_AND_CLEAR      5 (p)
+                SWAP                     2
+        L7:     BUILD_LIST               0
+                SWAP                     2
+
+ 164            GET_ITER
+        L8:     FOR_ITER               158 (to L9)
+                STORE_FAST               5 (p)
+
+ 152            LOAD_GLOBAL             23 (PlanConfig + NULL)
+
+ 153            LOAD_FAST                5 (p)
+                LOAD_CONST               3 ('code')
+                BINARY_SUBSCR
+
+ 154            LOAD_FAST                5 (p)
+                LOAD_CONST               4 ('name')
+                BINARY_SUBSCR
+
+ 155            LOAD_FAST                5 (p)
+                LOAD_ATTR               25 (get + NULL|self)
+                LOAD_CONST               5 ('price_usd')
+                LOAD_CONST               6 ('0.00')
+                CALL                     2
+
+ 156            LOAD_FAST                5 (p)
+                LOAD_ATTR               25 (get + NULL|self)
+                LOAD_CONST               7 ('included_minutes')
+                LOAD_CONST               8 (0)
+                CALL                     2
+
+ 157            LOAD_FAST                4 (stripe_ids)
+                LOAD_ATTR               25 (get + NULL|self)
+                LOAD_FAST                5 (p)
+                LOAD_CONST               3 ('code')
+                BINARY_SUBSCR
+                LOAD_CONST               9 ('')
+                CALL                     2
+
+ 158            LOAD_FAST                5 (p)
+                LOAD_ATTR               25 (get + NULL|self)
+                LOAD_CONST              10 ('requires_credit_card')
+                LOAD_CONST              11 (True)
+                CALL                     2
+
+ 159            LOAD_FAST                5 (p)
+                LOAD_ATTR               25 (get + NULL|self)
+                LOAD_CONST              12 ('limited')
+                LOAD_CONST              13 (False)
+                CALL                     2
+
+ 160            LOAD_FAST                5 (p)
+                LOAD_ATTR               25 (get + NULL|self)
+                LOAD_CONST              14 ('sort_order')
+                LOAD_CONST               8 (0)
+                CALL                     2
+
+ 161            LOAD_FAST                5 (p)
+                LOAD_ATTR               25 (get + NULL|self)
+                LOAD_CONST              15 ('description')
+                LOAD_CONST               9 ('')
+                CALL                     2
+
+ 162            LOAD_FAST                5 (p)
+                LOAD_ATTR               25 (get + NULL|self)
+                LOAD_CONST              16 ('icon')
+                LOAD_CONST               9 ('')
+                CALL                     2
+
+ 152            LOAD_CONST              17 (('code', 'name', 'price_usd', 'included_minutes', 'stripe_price_id', 'requires_credit_card', 'limited', 'sort_order', 'description', 'icon'))
+                CALL_KW                 10
+                LIST_APPEND              2
+                JUMP_BACKWARD          160 (to L8)
+
+ 164    L9:     END_FOR
+                POP_TOP
+
+ 151   L10:     STORE_FAST               6 (plans)
+                STORE_FAST               5 (p)
+
+ 173            LOAD_FAST                3 (rules_data)
+                GET_ITER
+
+ 167            LOAD_FAST_AND_CLEAR      7 (r)
+                SWAP                     2
+       L11:     BUILD_LIST               0
+                SWAP                     2
+
+ 173            GET_ITER
+       L12:     FOR_ITER                36 (to L13)
+                STORE_FAST               7 (r)
+
+ 168            LOAD_GLOBAL             27 (UpgradeRule + NULL)
+
+ 169            LOAD_FAST                7 (r)
+                LOAD_CONST              18 ('from_plan')
+                BINARY_SUBSCR
+
+ 170            LOAD_FAST                7 (r)
+                LOAD_CONST              19 ('to_plan')
+                BINARY_SUBSCR
+
+ 171            LOAD_FAST                7 (r)
+                LOAD_ATTR               25 (get + NULL|self)
+                LOAD_CONST              20 ('trigger')
+                LOAD_CONST              21 ('minutes_exceeded')
+                CALL                     2
+
+ 168            LOAD_CONST              22 (('from_plan', 'to_plan', 'trigger'))
+                CALL_KW                  3
+                LIST_APPEND              2
+                JUMP_BACKWARD           38 (to L12)
+
+ 173   L13:     END_FOR
+                POP_TOP
+
+ 167   L14:     STORE_FAST               8 (upgrade_rules)
+                STORE_FAST               7 (r)
+
+ 176            LOAD_GLOBAL             29 (BillingConfig + NULL)
+                LOAD_FAST_LOAD_FAST    104 (plans, upgrade_rules)
+                LOAD_CONST              23 ('env')
+                LOAD_CONST              24 (('plans', 'upgrade_rules', 'source'))
+                CALL_KW                  3
+                RETURN_VALUE
+
+  --   L15:     PUSH_EXC_INFO
+
+ 139            LOAD_GLOBAL             10 (json)
+                LOAD_ATTR               14 (JSONDecodeError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       51 (to L17)
+                POP_TOP
+
+ 140            LOAD_GLOBAL             16 (logger)
+                LOAD_ATTR               19 (error + NULL|self)
+                LOAD_CONST               1 ('Invalid BILLING_PLANS_JSON, using defaults')
+                CALL                     1
+                POP_TOP
+
+ 141            LOAD_GLOBAL             10 (json)
+                LOAD_ATTR               12 (loads)
+                PUSH_NULL
+                LOAD_GLOBAL              4 (_DEFAULT_PLANS_JSON)
+                CALL                     1
+                STORE_FAST               2 (plans_data)
+       L16:     POP_EXCEPT
+                EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 333 (to L4)
+
+ 139   L17:     RERAISE                  0
+
+  --   L18:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L19:     PUSH_EXC_INFO
+
+ 145            LOAD_GLOBAL             10 (json)
+                LOAD_ATTR               14 (JSONDecodeError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       51 (to L21)
+                POP_TOP
+
+ 146            LOAD_GLOBAL             16 (logger)
+                LOAD_ATTR               19 (error + NULL|self)
+                LOAD_CONST               2 ('Invalid BILLING_UPGRADE_RULES_JSON, using defaults')
+                CALL                     1
+                POP_TOP
+
+ 147            LOAD_GLOBAL             10 (json)
+                LOAD_ATTR               12 (loads)
+                PUSH_NULL
+                LOAD_GLOBAL              8 (_DEFAULT_RULES_JSON)
+                CALL                     1
+                STORE_FAST               3 (rules_data)
+       L20:     POP_EXCEPT
+                EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 384 (to L6)
+
+ 145   L21:     RERAISE                  0
+
+  --   L22:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L23:     SWAP                     2
+                POP_TOP
+
+ 151            SWAP                     2
+                STORE_FAST               5 (p)
+                RERAISE                  0
+
+  --   L24:     SWAP                     2
+                POP_TOP
+
+ 167            SWAP                     2
+                STORE_FAST               7 (r)
+                RERAISE                  0
+ExceptionTable:
+  L3 to L4 -> L15 [0]
+  L5 to L6 -> L19 [0]
+  L7 to L10 -> L23 [2]
+  L11 to L14 -> L24 [2]
+  L15 to L16 -> L18 [1] lasti
+  L17 to L18 -> L18 [1] lasti
+  L19 to L20 -> L22 [1] lasti
+  L21 to L22 -> L22 [1] lasti
+
+Disassembly of <code object _load_from_db at 0x0000024C0FCFD310, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 179>:
+ 179            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 181    L2:     NOP
+
+ 182    L3:     LOAD_CONST               1 (0)
+                LOAD_CONST               2 (('async_session_factory',))
+                IMPORT_NAME              0 (app.database)
+                IMPORT_FROM              1 (async_session_factory)
+                STORE_FAST               0 (async_session_factory)
+                POP_TOP
+
+ 183            LOAD_CONST               1 (0)
+                LOAD_CONST               3 (('BillingPlanConfigPlan', 'BillingPlanConfigRow', 'BillingPlanConfigRule'))
+                IMPORT_NAME              2 (app.models.billing_plan_config)
+                IMPORT_FROM              3 (BillingPlanConfigPlan)
+                STORE_FAST               1 (BillingPlanConfigPlan)
+                IMPORT_FROM              4 (BillingPlanConfigRow)
+                STORE_FAST               2 (BillingPlanConfigRow)
+                IMPORT_FROM              5 (BillingPlanConfigRule)
+                STORE_FAST               3 (BillingPlanConfigRule)
+                POP_TOP
+
+ 189            LOAD_FAST                0 (async_session_factory)
+                PUSH_NULL
+                CALL                     0
+                BEFORE_ASYNC_WITH
+                GET_AWAITABLE            1
+                LOAD_CONST               4 (None)
+        L4:     SEND                     3 (to L7)
+        L5:     YIELD_VALUE              1
+        L6:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+        L7:     END_SEND
+        L8:     STORE_FAST               4 (db)
+
+ 190            LOAD_GLOBAL             13 (select + NULL)
+                LOAD_FAST                2 (BillingPlanConfigRow)
+                CALL                     1
+                LOAD_ATTR               15 (where + NULL|self)
+
+ 191            LOAD_FAST                2 (BillingPlanConfigRow)
+                LOAD_ATTR               16 (is_active)
+                LOAD_ATTR               19 (is_ + NULL|self)
+                LOAD_CONST               5 (True)
+                CALL                     1
+
+ 190            CALL                     1
+                STORE_FAST               5 (stmt)
+
+ 193            LOAD_FAST                4 (db)
+                LOAD_ATTR               21 (execute + NULL|self)
+                LOAD_FAST                5 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               4 (None)
+        L9:     SEND                     3 (to L12)
+       L10:     YIELD_VALUE              1
+       L11:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+       L12:     END_SEND
+                STORE_FAST               6 (result)
+
+ 194            LOAD_FAST                6 (result)
+                LOAD_ATTR               23 (scalar_one_or_none + NULL|self)
+                CALL                     0
+                STORE_FAST               7 (config_row)
+
+ 195            LOAD_FAST                7 (config_row)
+                POP_JUMP_IF_NOT_NONE    18 (to L19)
+
+ 196            NOP
+
+ 189   L13:     LOAD_CONST               4 (None)
+                LOAD_CONST               4 (None)
+                LOAD_CONST               4 (None)
+                CALL                     2
+                GET_AWAITABLE            2
+                LOAD_CONST               4 (None)
+       L14:     SEND                     3 (to L17)
+       L15:     YIELD_VALUE              1
+       L16:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+       L17:     END_SEND
+                POP_TOP
+       L18:     RETURN_CONST             4 (None)
+
+ 198   L19:     LOAD_GLOBAL             13 (select + NULL)
+                LOAD_FAST                1 (BillingPlanConfigPlan)
+                CALL                     1
+                LOAD_ATTR               15 (where + NULL|self)
+
+ 199            LOAD_FAST                1 (BillingPlanConfigPlan)
+                LOAD_ATTR               24 (config_id)
+                LOAD_FAST                7 (config_row)
+                LOAD_ATTR               26 (id)
+                COMPARE_OP              72 (==)
+
+ 198            CALL                     1
+
+ 200            LOAD_ATTR               29 (order_by + NULL|self)
+                LOAD_FAST                1 (BillingPlanConfigPlan)
+                LOAD_ATTR               30 (sort_order)
+                CALL                     1
+
+ 198            STORE_FAST               8 (plan_stmt)
+
+ 201            LOAD_FAST                4 (db)
+                LOAD_ATTR               21 (execute + NULL|self)
+                LOAD_FAST                8 (plan_stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               4 (None)
+       L20:     SEND                     3 (to L23)
+       L21:     YIELD_VALUE              1
+       L22:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L20)
+       L23:     END_SEND
+                STORE_FAST               9 (plan_result)
+
+ 202            LOAD_FAST                9 (plan_result)
+                LOAD_ATTR               33 (scalars + NULL|self)
+                CALL                     0
+                LOAD_ATTR               35 (all + NULL|self)
+                CALL                     0
+                STORE_FAST              10 (db_plans)
+
+ 204            LOAD_GLOBAL             13 (select + NULL)
+                LOAD_FAST                3 (BillingPlanConfigRule)
+                CALL                     1
+                LOAD_ATTR               15 (where + NULL|self)
+
+ 205            LOAD_FAST                3 (BillingPlanConfigRule)
+                LOAD_ATTR               24 (config_id)
+                LOAD_FAST                7 (config_row)
+                LOAD_ATTR               26 (id)
+                COMPARE_OP              72 (==)
+
+ 204            CALL                     1
+                STORE_FAST              11 (rule_stmt)
+
+ 207            LOAD_FAST                4 (db)
+                LOAD_ATTR               21 (execute + NULL|self)
+                LOAD_FAST               11 (rule_stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               4 (None)
+       L24:     SEND                     3 (to L27)
+       L25:     YIELD_VALUE              1
+       L26:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+       L27:     END_SEND
+                STORE_FAST              12 (rule_result)
+
+ 208            LOAD_FAST               12 (rule_result)
+                LOAD_ATTR               33 (scalars + NULL|self)
+                CALL                     0
+                LOAD_ATTR               35 (all + NULL|self)
+                CALL                     0
+                STORE_FAST              13 (db_rules)
+
+ 189   L28:     LOAD_CONST               4 (None)
+                LOAD_CONST               4 (None)
+                LOAD_CONST               4 (None)
+                CALL                     2
+                GET_AWAITABLE            2
+                LOAD_CONST               4 (None)
+       L29:     SEND                     3 (to L32)
+       L30:     YIELD_VALUE              1
+       L31:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L29)
+       L32:     END_SEND
+                POP_TOP
+
+ 223   L33:     LOAD_FAST_CHECK         10 (db_plans)
+                GET_ITER
+
+ 210            LOAD_FAST_AND_CLEAR     14 (p)
+                SWAP                     2
+       L34:     BUILD_LIST               0
+                SWAP                     2
+
+ 223            GET_ITER
+       L35:     FOR_ITER               130 (to L37)
+                STORE_FAST              14 (p)
+
+ 211            LOAD_GLOBAL             37 (PlanConfig + NULL)
+
+ 212            LOAD_FAST               14 (p)
+                LOAD_ATTR               38 (code)
+
+ 213            LOAD_FAST               14 (p)
+                LOAD_ATTR               40 (name)
+
+ 214            LOAD_FAST               14 (p)
+                LOAD_ATTR               42 (price_usd)
+
+ 215            LOAD_FAST               14 (p)
+                LOAD_ATTR               44 (included_minutes)
+
+ 216            LOAD_FAST               14 (p)
+                LOAD_ATTR               46 (stripe_price_id)
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L36)
+                POP_TOP
+                LOAD_CONST               6 ('')
+
+ 217   L36:     LOAD_FAST               14 (p)
+                LOAD_ATTR               48 (requires_credit_card)
+
+ 218            LOAD_FAST               14 (p)
+                LOAD_ATTR               50 (limited)
+
+ 219            LOAD_FAST               14 (p)
+                LOAD_ATTR               30 (sort_order)
+
+ 220            LOAD_FAST               14 (p)
+                LOAD_ATTR               52 (description)
+
+ 221            LOAD_FAST               14 (p)
+                LOAD_ATTR               54 (icon)
+
+ 211            LOAD_CONST               7 (('code', 'name', 'price_usd', 'included_minutes', 'stripe_price_id', 'requires_credit_card', 'limited', 'sort_order', 'description', 'icon'))
+                CALL_KW                 10
+                LIST_APPEND              2
+                JUMP_BACKWARD          132 (to L35)
+
+ 223   L37:     END_FOR
+                POP_TOP
+
+ 210   L38:     STORE_FAST              15 (plans)
+                STORE_FAST              14 (p)
+
+ 232            LOAD_FAST_CHECK         13 (db_rules)
+                GET_ITER
+
+ 226            LOAD_FAST_AND_CLEAR     16 (r)
+                SWAP                     2
+       L39:     BUILD_LIST               0
+                SWAP                     2
+
+ 232            GET_ITER
+       L40:     FOR_ITER                44 (to L41)
+                STORE_FAST              16 (r)
+
+ 227            LOAD_GLOBAL             57 (UpgradeRule + NULL)
+
+ 228            LOAD_FAST               16 (r)
+                LOAD_ATTR               58 (from_plan)
+
+ 229            LOAD_FAST               16 (r)
+                LOAD_ATTR               60 (to_plan)
+
+ 230            LOAD_FAST               16 (r)
+                LOAD_ATTR               62 (trigger)
+
+ 227            LOAD_CONST               8 (('from_plan', 'to_plan', 'trigger'))
+                CALL_KW                  3
+                LIST_APPEND              2
+                JUMP_BACKWARD           46 (to L40)
+
+ 232   L41:     END_FOR
+                POP_TOP
+
+ 226   L42:     STORE_FAST              17 (upgrade_rules)
+                STORE_FAST              16 (r)
+
+ 235            LOAD_GLOBAL             65 (BillingConfig + NULL)
+                LOAD_FAST               15 (plans)
+                LOAD_FAST               17 (upgrade_rules)
+                LOAD_CONST               9 ('db')
+                LOAD_CONST              10 (('plans', 'upgrade_rules', 'source'))
+                CALL_KW                  3
+       L43:     RETURN_VALUE
+
+ 189   L44:     CLEANUP_THROW
+       L45:     EXTENDED_ARG             2
+                JUMP_BACKWARD_NO_INTERRUPT 578 (to L7)
+
+ 193   L46:     CLEANUP_THROW
+       L47:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 505 (to L12)
+
+ 189   L48:     CLEANUP_THROW
+       L49:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 472 (to L17)
+
+ 201   L50:     CLEANUP_THROW
+       L51:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 375 (to L23)
+
+ 207   L52:     CLEANUP_THROW
+       L53:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 274 (to L27)
+
+ 189   L54:     CLEANUP_THROW
+       L55:     JUMP_BACKWARD_NO_INTERRUPT 230 (to L32)
+       L56:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                GET_AWAITABLE            2
+                LOAD_CONST               4 (None)
+       L57:     SEND                     4 (to L61)
+       L58:     YIELD_VALUE              1
+       L59:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L57)
+       L60:     CLEANUP_THROW
+       L61:     END_SEND
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L62)
+                RERAISE                  2
+       L62:     POP_TOP
+       L63:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                JUMP_BACKWARD_NO_INTERRUPT 251 (to L33)
+
+  --   L64:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L65:     SWAP                     2
+                POP_TOP
+
+ 210            SWAP                     2
+                STORE_FAST              14 (p)
+                RERAISE                  0
+
+  --   L66:     SWAP                     2
+                POP_TOP
+
+ 226            SWAP                     2
+                STORE_FAST              16 (r)
+                RERAISE                  0
+
+  --   L67:     PUSH_EXC_INFO
+
+ 236            LOAD_GLOBAL             66 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       23 (to L69)
+                POP_TOP
+
+ 237            LOAD_GLOBAL             68 (logger)
+                LOAD_ATTR               71 (debug + NULL|self)
+                LOAD_CONST              11 ('DB billing config not available, using env')
+                LOAD_CONST               5 (True)
+                LOAD_CONST              12 (('exc_info',))
+                CALL_KW                  2
+                POP_TOP
+
+ 238   L68:     POP_EXCEPT
+                RETURN_CONST             4 (None)
+
+ 236   L69:     RERAISE                  0
+
+  --   L70:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L71:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L71 [0] lasti
+  L3 to L5 -> L67 [0]
+  L5 to L6 -> L44 [3]
+  L6 to L8 -> L67 [0]
+  L8 to L10 -> L56 [1] lasti
+  L10 to L11 -> L46 [3]
+  L11 to L13 -> L56 [1] lasti
+  L13 to L15 -> L67 [0]
+  L15 to L16 -> L48 [2]
+  L16 to L18 -> L67 [0]
+  L18 to L19 -> L71 [0] lasti
+  L19 to L21 -> L56 [1] lasti
+  L21 to L22 -> L50 [3]
+  L22 to L25 -> L56 [1] lasti
+  L25 to L26 -> L52 [3]
+  L26 to L28 -> L56 [1] lasti
+  L28 to L30 -> L67 [0]
+  L30 to L31 -> L54 [2]
+  L31 to L34 -> L67 [0]
+  L34 to L38 -> L65 [2]
+  L38 to L39 -> L67 [0]
+  L39 to L42 -> L66 [2]
+  L42 to L43 -> L67 [0]
+  L43 to L44 -> L71 [0] lasti
+  L44 to L45 -> L67 [0]
+  L46 to L47 -> L56 [1] lasti
+  L48 to L49 -> L67 [0]
+  L50 to L51 -> L56 [1] lasti
+  L52 to L53 -> L56 [1] lasti
+  L54 to L55 -> L67 [0]
+  L56 to L58 -> L64 [3] lasti
+  L58 to L59 -> L60 [6]
+  L59 to L63 -> L64 [3] lasti
+  L63 to L67 -> L67 [0]
+  L67 to L68 -> L70 [1] lasti
+  L68 to L69 -> L71 [0] lasti
+  L69 to L70 -> L70 [1] lasti
+  L70 to L71 -> L71 [0] lasti
+
+Disassembly of <code object get_billing_config at 0x0000024C114358A0, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 241>:
+241           RESUME                   0
+
+249           LOAD_GLOBAL              0 (time)
+              LOAD_ATTR                2 (monotonic)
+              PUSH_NULL
+              CALL                     0
+              STORE_FAST               0 (now)
+
+250           LOAD_GLOBAL              4 (_cached_config)
+              POP_JUMP_IF_NONE        33 (to L1)
+              LOAD_FAST                0 (now)
+              LOAD_GLOBAL              6 (_cached_at)
+              BINARY_OP               10 (-)
+              LOAD_GLOBAL              8 (app_settings)
+              LOAD_ATTR               10 (BILLING_CONFIG_CACHE_TTL)
+              COMPARE_OP              18 (bool(<))
+              POP_JUMP_IF_FALSE        6 (to L1)
+
+251           LOAD_GLOBAL              4 (_cached_config)
+              RETURN_VALUE
+
+253   L1:     LOAD_GLOBAL             13 (_load_from_env + NULL)
+              CALL                     0
+              STORE_FAST               1 (config)
+
+254           LOAD_FAST                1 (config)
+              STORE_GLOBAL             2 (_cached_config)
+
+255           LOAD_FAST                0 (now)
+              STORE_GLOBAL             3 (_cached_at)
+
+256           LOAD_FAST                1 (config)
+              RETURN_VALUE
+
+Disassembly of <code object get_billing_config_async at 0x0000024C0EC73CF0, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 259>:
+ 259            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 263            LOAD_GLOBAL              0 (time)
+                LOAD_ATTR                2 (monotonic)
+                PUSH_NULL
+                CALL                     0
+                STORE_FAST               0 (now)
+
+ 264            LOAD_GLOBAL              4 (_cached_config)
+                POP_JUMP_IF_NONE        33 (to L2)
+                LOAD_FAST                0 (now)
+                LOAD_GLOBAL              6 (_cached_at)
+                BINARY_OP               10 (-)
+                LOAD_GLOBAL              8 (app_settings)
+                LOAD_ATTR               10 (BILLING_CONFIG_CACHE_TTL)
+                COMPARE_OP              18 (bool(<))
+                POP_JUMP_IF_FALSE        6 (to L2)
+
+ 265            LOAD_GLOBAL              4 (_cached_config)
+                RETURN_VALUE
+
+ 267    L2:     LOAD_GLOBAL             13 (_load_from_db + NULL)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               1 (None)
+        L3:     SEND                     3 (to L6)
+        L4:     YIELD_VALUE              1
+        L5:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L3)
+        L6:     END_SEND
+                STORE_FAST               1 (db_config)
+
+ 268            LOAD_FAST                1 (db_config)
+                POP_JUMP_IF_NONE         6 (to L7)
+
+ 269            LOAD_FAST                1 (db_config)
+                STORE_GLOBAL             2 (_cached_config)
+
+ 270            LOAD_FAST                0 (now)
+                STORE_GLOBAL             3 (_cached_at)
+
+ 271            LOAD_FAST                1 (db_config)
+                RETURN_VALUE
+
+ 273    L7:     LOAD_GLOBAL             15 (_load_from_env + NULL)
+                CALL                     0
+                STORE_FAST               2 (config)
+
+ 274            LOAD_FAST                2 (config)
+                STORE_GLOBAL             2 (_cached_config)
+
+ 275            LOAD_FAST                0 (now)
+                STORE_GLOBAL             3 (_cached_at)
+
+ 276            LOAD_FAST                2 (config)
+                RETURN_VALUE
+
+ 267    L8:     CLEANUP_THROW
+        L9:     JUMP_BACKWARD_NO_INTERRUPT 29 (to L6)
+
+  --   L10:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L4 -> L10 [0] lasti
+  L4 to L5 -> L8 [2]
+  L5 to L9 -> L10 [0] lasti
+
+Disassembly of <code object invalidate_cache at 0x0000024C0EF0FD70, file "D:\fluence\Github\mattbot\backend\app\services\billing_config_service.py", line 279>:
+279           RESUME                   0
+
+282           LOAD_CONST               1 (None)
+              STORE_GLOBAL             0 (_cached_config)
+
+283           LOAD_CONST               2 (0.0)
+              STORE_GLOBAL             1 (_cached_at)
+              RETURN_CONST             1 (None)

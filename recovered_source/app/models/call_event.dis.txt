@@ -1,0 +1,580 @@
+# Bytecode dump of: call_event.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\models\call_event.py
+# co_names: ('__doc__', 'uuid', 'datetime', 'sqlalchemy', 'ForeignKey', 'Index', 'String', 'UniqueConstraint', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'relationship', 'app.database', 'Base', 'app.models._types', 'JsonbDict', 'tz_datetime', 'CallEvent')
+# co_consts (strings): ['Call event model. Append-only timeline for call state transitions.', 'CallEvent']
+
+# DOCSTRING: """Call event model. Append-only timeline for call state transitions."""
+# --- Nested code object: CallEvent ---
+    # DOCSTRING: """CallEvent"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__tablename__', 'mapped_column', 'UUID', 'uuid', 'uuid4', 'id', 'Mapped', '__annotations__', 'ForeignKey', 'call_id', 'owner_user_id', 'String', 'event_type', 'str', 'provider_status', 'tz_datetime', 'text', 'event_at', 'datetime', 'JsonbDict', 'details_redacted', 'dict', 'created_at', 'relationship', 'call', 'UniqueConstraint', 'Index', '__table_args__', '__static_attributes__')
+    # co_varnames: ()
+     20           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CallEvent')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (20)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     21           LOAD_CONST               2 ('call_events')
+                  STORE_NAME               4 (__tablename__)
+    
+     23           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     24           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               3 (True)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               16 (uuid4)
+    
+     23           LOAD_CONST               5 (('primary_key', 'default'))
+                  CALL_KW                  3
+                  STORE_NAME               9 (id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST               6 ('id')
+                  STORE_SUBSCR
+    
+     26           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     27           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     28           LOAD_NAME               12 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST               7 ('calls.id')
+                  LOAD_CONST               8 ('CASCADE')
+                  LOAD_CONST               9 (('ondelete',))
+                  CALL_KW                  2
+    
+     29           LOAD_CONST              10 (False)
+    
+     26           LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  3
+                  STORE_NAME              13 (call_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              12 ('call_id')
+                  STORE_SUBSCR
+    
+     31           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     32           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     33           LOAD_NAME               12 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST              13 ('users.id')
+                  LOAD_CONST               8 ('CASCADE')
+                  LOAD_CONST               9 (('ondelete',))
+                  CALL_KW                  2
+    
+     34           LOAD_CONST              10 (False)
+    
+     31           LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  3
+                  STORE_NAME              14 (owner_user_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              14 ('owner_user_id')
+                  STORE_SUBSCR
+    
+     36           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               15 (String)
+                  PUSH_NULL
+                  LOAD_CONST              15 (60)
+                  CALL                     1
+                  LOAD_CONST              10 (False)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              16 (event_type)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               17 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              16 ('event_type')
+                  STORE_SUBSCR
+    
+     37           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               15 (String)
+                  PUSH_NULL
+                  LOAD_CONST              17 (30)
+                  CALL                     1
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              18 (provider_status)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               17 (str)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              19 ('provider_status')
+                  STORE_SUBSCR
+    
+     38           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     39           LOAD_NAME               19 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST              10 (False)
+                  LOAD_NAME               20 (text)
+                  PUSH_NULL
+                  LOAD_CONST              20 ('now()')
+                  CALL                     1
+    
+     38           LOAD_CONST              21 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              21 (event_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               22 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              22 ('event_at')
+                  STORE_SUBSCR
+    
+     41           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     42           LOAD_NAME               23 (JsonbDict)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               3 (True)
+    
+     41           LOAD_CONST              11 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              24 (details_redacted)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               25 (dict)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              23 ('details_redacted')
+                  STORE_SUBSCR
+    
+     44           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     45           LOAD_NAME               19 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST              10 (False)
+                  LOAD_NAME               20 (text)
+                  PUSH_NULL
+                  LOAD_CONST              20 ('now()')
+                  CALL                     1
+    
+     44           LOAD_CONST              21 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              26 (created_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               22 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              24 ('created_at')
+                  STORE_SUBSCR
+    
+     48           LOAD_NAME               27 (relationship)
+                  PUSH_NULL
+                  LOAD_CONST              25 ('events')
+                  LOAD_CONST              26 (('back_populates',))
+                  CALL_KW                  1
+                  STORE_NAME              28 (call)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_CONST              27 ('Call')
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              28 ('call')
+                  STORE_SUBSCR
+    
+     51           LOAD_NAME               29 (UniqueConstraint)
+                  PUSH_NULL
+    
+     52           LOAD_CONST              12 ('call_id')
+    
+     53           LOAD_CONST              16 ('event_type')
+    
+     54           LOAD_CONST              19 ('provider_status')
+    
+     55           LOAD_CONST              29 ('uq_call_events_dedupe')
+    
+     51           LOAD_CONST              30 (('name',))
+                  CALL_KW                  4
+    
+     57           LOAD_NAME               30 (Index)
+                  PUSH_NULL
+                  LOAD_CONST              31 ('call_events_call_idx')
+                  LOAD_CONST              12 ('call_id')
+                  LOAD_NAME               20 (text)
+                  PUSH_NULL
+                  LOAD_CONST              32 ('event_at ASC')
+                  CALL                     1
+                  CALL                     3
+    
+     58           LOAD_NAME               30 (Index)
+                  PUSH_NULL
+                  LOAD_CONST              33 ('call_events_user_idx')
+                  LOAD_CONST              14 ('owner_user_id')
+                  LOAD_NAME               20 (text)
+                  PUSH_NULL
+                  LOAD_CONST              34 ('event_at DESC')
+                  CALL                     1
+                  CALL                     3
+    
+     50           BUILD_TUPLE              3
+                  STORE_NAME              31 (__table_args__)
+                  LOAD_CONST              35 (())
+                  STORE_NAME              32 (__static_attributes__)
+                  RETURN_CONST            18 (None)
+    
+# co_names: ('__doc__', 'uuid', 'datetime', 'sqlalchemy', 'ForeignKey', 'Index', 'String', 'UniqueConstraint', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'relationship', 'app.database', 'Base', 'app.models._types', 'JsonbDict', 'tz_datetime', 'CallEvent')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Call event model. Append-only timeline for call state transitions.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (uuid)
+              STORE_NAME               1 (uuid)
+
+  4           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('datetime',))
+              IMPORT_NAME              2 (datetime)
+              IMPORT_FROM              2 (datetime)
+              STORE_NAME               2 (datetime)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('ForeignKey', 'Index', 'String', 'UniqueConstraint', 'text'))
+              IMPORT_NAME              3 (sqlalchemy)
+              IMPORT_FROM              4 (ForeignKey)
+              STORE_NAME               4 (ForeignKey)
+              IMPORT_FROM              5 (Index)
+              STORE_NAME               5 (Index)
+              IMPORT_FROM              6 (String)
+              STORE_NAME               6 (String)
+              IMPORT_FROM              7 (UniqueConstraint)
+              STORE_NAME               7 (UniqueConstraint)
+              IMPORT_FROM              8 (text)
+              STORE_NAME               8 (text)
+              POP_TOP
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('UUID',))
+              IMPORT_NAME              9 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM             10 (UUID)
+              STORE_NAME              10 (UUID)
+              POP_TOP
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('Mapped', 'mapped_column', 'relationship'))
+              IMPORT_NAME             11 (sqlalchemy.orm)
+              IMPORT_FROM             12 (Mapped)
+              STORE_NAME              12 (Mapped)
+              IMPORT_FROM             13 (mapped_column)
+              STORE_NAME              13 (mapped_column)
+              IMPORT_FROM             14 (relationship)
+              STORE_NAME              14 (relationship)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('Base',))
+              IMPORT_NAME             15 (app.database)
+              IMPORT_FROM             16 (Base)
+              STORE_NAME              16 (Base)
+              POP_TOP
+
+ 17           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('JsonbDict', 'tz_datetime'))
+              IMPORT_NAME             17 (app.models._types)
+              IMPORT_FROM             18 (JsonbDict)
+              STORE_NAME              18 (JsonbDict)
+              IMPORT_FROM             19 (tz_datetime)
+              STORE_NAME              19 (tz_datetime)
+              POP_TOP
+
+ 20           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               9 (<code object CallEvent at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\models\call_event.py", line 20>)
+              MAKE_FUNCTION
+              LOAD_CONST              10 ('CallEvent')
+              LOAD_NAME               16 (Base)
+              CALL                     3
+              STORE_NAME              20 (CallEvent)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object CallEvent at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\models\call_event.py", line 20>:
+ 20           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CallEvent')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (20)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 21           LOAD_CONST               2 ('call_events')
+              STORE_NAME               4 (__tablename__)
+
+ 23           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 24           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               16 (uuid4)
+
+ 23           LOAD_CONST               5 (('primary_key', 'default'))
+              CALL_KW                  3
+              STORE_NAME               9 (id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               6 ('id')
+              STORE_SUBSCR
+
+ 26           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 27           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 28           LOAD_NAME               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               7 ('calls.id')
+              LOAD_CONST               8 ('CASCADE')
+              LOAD_CONST               9 (('ondelete',))
+              CALL_KW                  2
+
+ 29           LOAD_CONST              10 (False)
+
+ 26           LOAD_CONST              11 (('nullable',))
+              CALL_KW                  3
+              STORE_NAME              13 (call_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              12 ('call_id')
+              STORE_SUBSCR
+
+ 31           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 32           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 33           LOAD_NAME               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              13 ('users.id')
+              LOAD_CONST               8 ('CASCADE')
+              LOAD_CONST               9 (('ondelete',))
+              CALL_KW                  2
+
+ 34           LOAD_CONST              10 (False)
+
+ 31           LOAD_CONST              11 (('nullable',))
+              CALL_KW                  3
+              STORE_NAME              14 (owner_user_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              14 ('owner_user_id')
+              STORE_SUBSCR
+
+ 36           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               15 (String)
+              PUSH_NULL
+              LOAD_CONST              15 (60)
+              CALL                     1
+              LOAD_CONST              10 (False)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              16 (event_type)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               17 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              16 ('event_type')
+              STORE_SUBSCR
+
+ 37           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               15 (String)
+              PUSH_NULL
+              LOAD_CONST              17 (30)
+              CALL                     1
+              LOAD_CONST               3 (True)
+              LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              18 (provider_status)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               17 (str)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              19 ('provider_status')
+              STORE_SUBSCR
+
+ 38           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 39           LOAD_NAME               19 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              10 (False)
+              LOAD_NAME               20 (text)
+              PUSH_NULL
+              LOAD_CONST              20 ('now()')
+              CALL                     1
+
+ 38           LOAD_CONST              21 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              21 (event_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               22 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              22 ('event_at')
+              STORE_SUBSCR
+
+ 41           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 42           LOAD_NAME               23 (JsonbDict)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+
+ 41           LOAD_CONST              11 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              24 (details_redacted)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               25 (dict)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              23 ('details_redacted')
+              STORE_SUBSCR
+
+ 44           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 45           LOAD_NAME               19 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              10 (False)
+              LOAD_NAME               20 (text)
+              PUSH_NULL
+              LOAD_CONST              20 ('now()')
+              CALL                     1
+
+ 44           LOAD_CONST              21 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              26 (created_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               22 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              24 ('created_at')
+              STORE_SUBSCR
+
+ 48           LOAD_NAME               27 (relationship)
+              PUSH_NULL
+              LOAD_CONST              25 ('events')
+              LOAD_CONST              26 (('back_populates',))
+              CALL_KW                  1
+              STORE_NAME              28 (call)
+              LOAD_NAME               10 (Mapped)
+              LOAD_CONST              27 ('Call')
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              28 ('call')
+              STORE_SUBSCR
+
+ 51           LOAD_NAME               29 (UniqueConstraint)
+              PUSH_NULL
+
+ 52           LOAD_CONST              12 ('call_id')
+
+ 53           LOAD_CONST              16 ('event_type')
+
+ 54           LOAD_CONST              19 ('provider_status')
+
+ 55           LOAD_CONST              29 ('uq_call_events_dedupe')
+
+ 51           LOAD_CONST              30 (('name',))
+              CALL_KW                  4
+
+ 57           LOAD_NAME               30 (Index)
+              PUSH_NULL
+              LOAD_CONST              31 ('call_events_call_idx')
+              LOAD_CONST              12 ('call_id')
+              LOAD_NAME               20 (text)
+              PUSH_NULL
+              LOAD_CONST              32 ('event_at ASC')
+              CALL                     1
+              CALL                     3
+
+ 58           LOAD_NAME               30 (Index)
+              PUSH_NULL
+              LOAD_CONST              33 ('call_events_user_idx')
+              LOAD_CONST              14 ('owner_user_id')
+              LOAD_NAME               20 (text)
+              PUSH_NULL
+              LOAD_CONST              34 ('event_at DESC')
+              CALL                     1
+              CALL                     3
+
+ 50           BUILD_TUPLE              3
+              STORE_NAME              31 (__table_args__)
+              LOAD_CONST              35 (())
+              STORE_NAME              32 (__static_attributes__)
+              RETURN_CONST            18 (None)

@@ -1,0 +1,4155 @@
+# Bytecode dump of: run.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\workers\run.py
+# co_names: ('__doc__', '__future__', 'annotations', 'asyncio', 'logging', 'signal', 'sys', 'app.config', 'settings', 'basicConfig', 'INFO', 'getLogger', 'logger', '_shutdown', '_handle_signal', '_run_post_call_loop', '_run_reminder_loop', '_run_sms_loop', '_run_handoff_expiry_loop', '_run_lifecycle_loop', '_run_retention_loop', '_run_hard_deletion_loop', 'main', '__name__', 'SIGINT', 'SIGTERM', 'run', 'KeyboardInterrupt', 'exit')
+# co_consts (strings): ['Worker runner entry point.\n\nUsage: python -m app.workers.run\n\nRuns polling loops for:\n- Post-call artifact processing (every 15 seconds)\n- Reminder due-date poller (every 60 seconds)\n- SMS send worker (every 30 seconds)\n- Number lifecycle tasks (every 5 minutes)\n- Retention enforcement (every 30 minutes)\n- Hard deletion (every 1 hour)\n', '%(asctime)s [%(levelname)s] %(name)s: %(message)s', 'app.workers', '__main__']
+
+# DOCSTRING: """Worker runner entry point.
+
+Usage: python -m app.workers.run
+
+Runs polling loops for:
+- Post-call artifact processing (every 15 seconds)
+- Reminder due-date poller (every 60 seconds)
+- SMS send worker (every 30 seconds)
+- Number lifecycle tasks (every 5 minutes)
+- Retention enforcement (every 30 minutes)
+- Hard deletion (every 1 hour)
+"""
+# --- Nested code object: _handle_signal ---
+    # co_names: ('logger', 'info', '_shutdown')
+    # co_varnames: ('sig', '_frame')
+     32           RESUME                   0
+    
+     34           LOAD_GLOBAL              0 (logger)
+                  LOAD_ATTR                3 (info + NULL|self)
+                  LOAD_CONST               1 ('Received signal %s, shutting down workers...')
+                  LOAD_FAST                0 (sig)
+                  CALL                     2
+                  POP_TOP
+    
+     35           LOAD_CONST               2 (True)
+                  STORE_GLOBAL             2 (_shutdown)
+                  RETURN_CONST             0 (None)
+    
+# --- Nested code object: _run_post_call_loop ---
+    # co_names: ('app.database', 'async_session_factory', 'app.workers.post_call', 'process_pending_artifacts', '_shutdown', 'begin', 'logger', 'info', 'Exception', 'exception', 'asyncio', 'sleep', 'settings', 'WORKER_POST_CALL_INTERVAL')
+    # co_varnames: ('async_session_factory', 'process_pending_artifacts', 'db', 'count')
+      38            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      39            LOAD_CONST               1 (0)
+                    LOAD_CONST               2 (('async_session_factory',))
+                    IMPORT_NAME              0 (app.database)
+                    IMPORT_FROM              1 (async_session_factory)
+                    STORE_FAST               0 (async_session_factory)
+                    POP_TOP
+    
+      40            LOAD_CONST               1 (0)
+                    LOAD_CONST               3 (('process_pending_artifacts',))
+                    IMPORT_NAME              2 (app.workers.post_call)
+                    IMPORT_FROM              3 (process_pending_artifacts)
+                    STORE_FAST               1 (process_pending_artifacts)
+                    POP_TOP
+    
+      42            LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE       186 (to L36)
+    
+      43    L2:     NOP
+    
+      44    L3:     LOAD_FAST                0 (async_session_factory)
+                    PUSH_NULL
+                    CALL                     0
+                    BEFORE_ASYNC_WITH
+                    GET_AWAITABLE            1
+                    LOAD_CONST               0 (None)
+            L4:     SEND                     3 (to L7)
+            L5:     YIELD_VALUE              1
+            L6:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+            L7:     END_SEND
+            L8:     STORE_FAST_LOAD_FAST    34 (db, db)
+                    LOAD_ATTR               11 (begin + NULL|self)
+                    CALL                     0
+                    BEFORE_ASYNC_WITH
+                    GET_AWAITABLE            1
+                    LOAD_CONST               0 (None)
+            L9:     SEND                     3 (to L12)
+           L10:     YIELD_VALUE              1
+           L11:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+           L12:     END_SEND
+           L13:     POP_TOP
+    
+      45            LOAD_FAST                1 (process_pending_artifacts)
+                    PUSH_NULL
+                    LOAD_FAST                2 (db)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L14:     SEND                     3 (to L17)
+           L15:     YIELD_VALUE              1
+           L16:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+           L17:     END_SEND
+                    STORE_FAST               3 (count)
+    
+      46            LOAD_FAST                3 (count)
+                    LOAD_CONST               1 (0)
+                    COMPARE_OP             148 (bool(>))
+                    POP_JUMP_IF_FALSE       22 (to L18)
+    
+      47            LOAD_GLOBAL             12 (logger)
+                    LOAD_ATTR               15 (info + NULL|self)
+                    LOAD_CONST               4 ('Processed %d artifact(s)')
+                    LOAD_FAST                3 (count)
+                    CALL                     2
+                    POP_TOP
+    
+      44   L18:     LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    CALL                     2
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L19:     SEND                     3 (to L22)
+           L20:     YIELD_VALUE              1
+           L21:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+           L22:     END_SEND
+                    POP_TOP
+           L23:     LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    CALL                     2
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L24:     SEND                     3 (to L27)
+           L25:     YIELD_VALUE              1
+           L26:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+           L27:     END_SEND
+                    POP_TOP
+    
+      51   L28:     LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        44 (to L33)
+    
+      52            LOAD_GLOBAL             20 (asyncio)
+                    LOAD_ATTR               22 (sleep)
+                    PUSH_NULL
+                    LOAD_GLOBAL             24 (settings)
+                    LOAD_ATTR               26 (WORKER_POST_CALL_INTERVAL)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L29:     SEND                     3 (to L32)
+           L30:     YIELD_VALUE              1
+           L31:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L29)
+           L32:     END_SEND
+                    POP_TOP
+    
+      42   L33:     LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L35)
+           L34:     JUMP_BACKWARD          185 (to L2)
+           L35:     RETURN_CONST             0 (None)
+           L36:     RETURN_CONST             0 (None)
+    
+      44   L37:     CLEANUP_THROW
+           L38:     JUMP_BACKWARD_NO_INTERRUPT 174 (to L7)
+           L39:     CLEANUP_THROW
+           L40:     JUMP_BACKWARD_NO_INTERRUPT 152 (to L12)
+    
+      45   L41:     CLEANUP_THROW
+           L42:     JUMP_BACKWARD_NO_INTERRUPT 138 (to L17)
+    
+      44   L43:     CLEANUP_THROW
+           L44:     JUMP_BACKWARD_NO_INTERRUPT 96 (to L22)
+           L45:     PUSH_EXC_INFO
+                    WITH_EXCEPT_START
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L46:     SEND                     4 (to L50)
+           L47:     YIELD_VALUE              1
+           L48:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L46)
+           L49:     CLEANUP_THROW
+           L50:     END_SEND
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L51)
+                    RERAISE                  2
+           L51:     POP_TOP
+           L52:     POP_EXCEPT
+                    POP_TOP
+                    POP_TOP
+                    JUMP_BACKWARD_NO_INTERRUPT 117 (to L23)
+    
+      --   L53:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+      44   L54:     CLEANUP_THROW
+           L55:     JUMP_BACKWARD_NO_INTERRUPT 108 (to L27)
+           L56:     PUSH_EXC_INFO
+                    WITH_EXCEPT_START
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L57:     SEND                     4 (to L61)
+           L58:     YIELD_VALUE              1
+           L59:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L57)
+           L60:     CLEANUP_THROW
+           L61:     END_SEND
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L62)
+                    RERAISE                  2
+           L62:     POP_TOP
+           L63:     POP_EXCEPT
+                    POP_TOP
+                    POP_TOP
+           L64:     JUMP_BACKWARD_NO_INTERRUPT 129 (to L28)
+    
+      --   L65:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L66:     PUSH_EXC_INFO
+    
+      48            LOAD_GLOBAL             16 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       24 (to L68)
+                    POP_TOP
+    
+      49            LOAD_GLOBAL             12 (logger)
+                    LOAD_ATTR               19 (exception + NULL|self)
+                    LOAD_CONST               5 ('Post-call worker iteration failed')
+                    CALL                     1
+                    POP_TOP
+           L67:     POP_EXCEPT
+                    JUMP_BACKWARD_NO_INTERRUPT 165 (to L28)
+    
+      48   L68:     RERAISE                  0
+    
+      --   L69:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+      52   L70:     CLEANUP_THROW
+           L71:     JUMP_BACKWARD_NO_INTERRUPT 118 (to L32)
+    
+      --   L72:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L2 -> L72 [0] lasti
+      L3 to L5 -> L66 [0]
+      L5 to L6 -> L37 [3]
+      L6 to L8 -> L66 [0]
+      L8 to L10 -> L56 [1] lasti
+      L10 to L11 -> L39 [4]
+      L11 to L13 -> L56 [1] lasti
+      L13 to L15 -> L45 [2] lasti
+      L15 to L16 -> L41 [4]
+      L16 to L18 -> L45 [2] lasti
+      L18 to L20 -> L56 [1] lasti
+      L20 to L21 -> L43 [3]
+      L21 to L23 -> L56 [1] lasti
+      L23 to L25 -> L66 [0]
+      L25 to L26 -> L54 [2]
+      L26 to L28 -> L66 [0]
+      L28 to L30 -> L72 [0] lasti
+      L30 to L31 -> L70 [2]
+      L31 to L34 -> L72 [0] lasti
+      L35 to L37 -> L72 [0] lasti
+      L37 to L38 -> L66 [0]
+      L39 to L40 -> L56 [1] lasti
+      L41 to L42 -> L45 [2] lasti
+      L43 to L44 -> L56 [1] lasti
+      L45 to L47 -> L53 [4] lasti
+      L47 to L48 -> L49 [7]
+      L48 to L52 -> L53 [4] lasti
+      L52 to L54 -> L56 [1] lasti
+      L54 to L55 -> L66 [0]
+      L56 to L58 -> L65 [3] lasti
+      L58 to L59 -> L60 [6]
+      L59 to L63 -> L65 [3] lasti
+      L63 to L64 -> L66 [0]
+      L64 to L65 -> L72 [0] lasti
+      L65 to L66 -> L66 [0]
+      L66 to L67 -> L69 [1] lasti
+      L67 to L68 -> L72 [0] lasti
+      L68 to L69 -> L69 [1] lasti
+      L69 to L71 -> L72 [0] lasti
+    
+# --- Nested code object: _run_reminder_loop ---
+    # co_names: ('app.database', 'async_session_factory', 'app.workers.reminder_worker', 'process_due_reminders', '_shutdown', 'begin', 'logger', 'info', 'Exception', 'exception', 'asyncio', 'sleep', 'settings', 'WORKER_REMINDER_INTERVAL')
+    # co_varnames: ('async_session_factory', 'process_due_reminders', 'db', 'count')
+      55            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      56            LOAD_CONST               1 (0)
+                    LOAD_CONST               2 (('async_session_factory',))
+                    IMPORT_NAME              0 (app.database)
+                    IMPORT_FROM              1 (async_session_factory)
+                    STORE_FAST               0 (async_session_factory)
+                    POP_TOP
+    
+      57            LOAD_CONST               1 (0)
+                    LOAD_CONST               3 (('process_due_reminders',))
+                    IMPORT_NAME              2 (app.workers.reminder_worker)
+                    IMPORT_FROM              3 (process_due_reminders)
+                    STORE_FAST               1 (process_due_reminders)
+                    POP_TOP
+    
+      59            LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE       186 (to L36)
+    
+      60    L2:     NOP
+    
+      61    L3:     LOAD_FAST                0 (async_session_factory)
+                    PUSH_NULL
+                    CALL                     0
+                    BEFORE_ASYNC_WITH
+                    GET_AWAITABLE            1
+                    LOAD_CONST               0 (None)
+            L4:     SEND                     3 (to L7)
+            L5:     YIELD_VALUE              1
+            L6:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+            L7:     END_SEND
+            L8:     STORE_FAST_LOAD_FAST    34 (db, db)
+                    LOAD_ATTR               11 (begin + NULL|self)
+                    CALL                     0
+                    BEFORE_ASYNC_WITH
+                    GET_AWAITABLE            1
+                    LOAD_CONST               0 (None)
+            L9:     SEND                     3 (to L12)
+           L10:     YIELD_VALUE              1
+           L11:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+           L12:     END_SEND
+           L13:     POP_TOP
+    
+      62            LOAD_FAST                1 (process_due_reminders)
+                    PUSH_NULL
+                    LOAD_FAST                2 (db)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L14:     SEND                     3 (to L17)
+           L15:     YIELD_VALUE              1
+           L16:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+           L17:     END_SEND
+                    STORE_FAST               3 (count)
+    
+      63            LOAD_FAST                3 (count)
+                    LOAD_CONST               1 (0)
+                    COMPARE_OP             148 (bool(>))
+                    POP_JUMP_IF_FALSE       22 (to L18)
+    
+      64            LOAD_GLOBAL             12 (logger)
+                    LOAD_ATTR               15 (info + NULL|self)
+                    LOAD_CONST               4 ('Triggered %d reminder(s)')
+                    LOAD_FAST                3 (count)
+                    CALL                     2
+                    POP_TOP
+    
+      61   L18:     LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    CALL                     2
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L19:     SEND                     3 (to L22)
+           L20:     YIELD_VALUE              1
+           L21:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+           L22:     END_SEND
+                    POP_TOP
+           L23:     LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    CALL                     2
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L24:     SEND                     3 (to L27)
+           L25:     YIELD_VALUE              1
+           L26:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+           L27:     END_SEND
+                    POP_TOP
+    
+      68   L28:     LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        44 (to L33)
+    
+      69            LOAD_GLOBAL             20 (asyncio)
+                    LOAD_ATTR               22 (sleep)
+                    PUSH_NULL
+                    LOAD_GLOBAL             24 (settings)
+                    LOAD_ATTR               26 (WORKER_REMINDER_INTERVAL)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L29:     SEND                     3 (to L32)
+           L30:     YIELD_VALUE              1
+           L31:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L29)
+           L32:     END_SEND
+                    POP_TOP
+    
+      59   L33:     LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L35)
+           L34:     JUMP_BACKWARD          185 (to L2)
+           L35:     RETURN_CONST             0 (None)
+           L36:     RETURN_CONST             0 (None)
+    
+      61   L37:     CLEANUP_THROW
+           L38:     JUMP_BACKWARD_NO_INTERRUPT 174 (to L7)
+           L39:     CLEANUP_THROW
+           L40:     JUMP_BACKWARD_NO_INTERRUPT 152 (to L12)
+    
+      62   L41:     CLEANUP_THROW
+           L42:     JUMP_BACKWARD_NO_INTERRUPT 138 (to L17)
+    
+      61   L43:     CLEANUP_THROW
+           L44:     JUMP_BACKWARD_NO_INTERRUPT 96 (to L22)
+           L45:     PUSH_EXC_INFO
+                    WITH_EXCEPT_START
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L46:     SEND                     4 (to L50)
+           L47:     YIELD_VALUE              1
+           L48:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L46)
+           L49:     CLEANUP_THROW
+           L50:     END_SEND
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L51)
+                    RERAISE                  2
+           L51:     POP_TOP
+           L52:     POP_EXCEPT
+                    POP_TOP
+                    POP_TOP
+                    JUMP_BACKWARD_NO_INTERRUPT 117 (to L23)
+    
+      --   L53:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+      61   L54:     CLEANUP_THROW
+           L55:     JUMP_BACKWARD_NO_INTERRUPT 108 (to L27)
+           L56:     PUSH_EXC_INFO
+                    WITH_EXCEPT_START
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L57:     SEND                     4 (to L61)
+           L58:     YIELD_VALUE              1
+           L59:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L57)
+           L60:     CLEANUP_THROW
+           L61:     END_SEND
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L62)
+                    RERAISE                  2
+           L62:     POP_TOP
+           L63:     POP_EXCEPT
+                    POP_TOP
+                    POP_TOP
+           L64:     JUMP_BACKWARD_NO_INTERRUPT 129 (to L28)
+    
+      --   L65:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L66:     PUSH_EXC_INFO
+    
+      65            LOAD_GLOBAL             16 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       24 (to L68)
+                    POP_TOP
+    
+      66            LOAD_GLOBAL             12 (logger)
+                    LOAD_ATTR               19 (exception + NULL|self)
+                    LOAD_CONST               5 ('Reminder worker iteration failed')
+                    CALL                     1
+                    POP_TOP
+           L67:     POP_EXCEPT
+                    JUMP_BACKWARD_NO_INTERRUPT 165 (to L28)
+    
+      65   L68:     RERAISE                  0
+    
+      --   L69:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+      69   L70:     CLEANUP_THROW
+           L71:     JUMP_BACKWARD_NO_INTERRUPT 118 (to L32)
+    
+      --   L72:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L2 -> L72 [0] lasti
+      L3 to L5 -> L66 [0]
+      L5 to L6 -> L37 [3]
+      L6 to L8 -> L66 [0]
+      L8 to L10 -> L56 [1] lasti
+      L10 to L11 -> L39 [4]
+      L11 to L13 -> L56 [1] lasti
+      L13 to L15 -> L45 [2] lasti
+      L15 to L16 -> L41 [4]
+      L16 to L18 -> L45 [2] lasti
+      L18 to L20 -> L56 [1] lasti
+      L20 to L21 -> L43 [3]
+      L21 to L23 -> L56 [1] lasti
+      L23 to L25 -> L66 [0]
+      L25 to L26 -> L54 [2]
+      L26 to L28 -> L66 [0]
+      L28 to L30 -> L72 [0] lasti
+      L30 to L31 -> L70 [2]
+      L31 to L34 -> L72 [0] lasti
+      L35 to L37 -> L72 [0] lasti
+      L37 to L38 -> L66 [0]
+      L39 to L40 -> L56 [1] lasti
+      L41 to L42 -> L45 [2] lasti
+      L43 to L44 -> L56 [1] lasti
+      L45 to L47 -> L53 [4] lasti
+      L47 to L48 -> L49 [7]
+      L48 to L52 -> L53 [4] lasti
+      L52 to L54 -> L56 [1] lasti
+      L54 to L55 -> L66 [0]
+      L56 to L58 -> L65 [3] lasti
+      L58 to L59 -> L60 [6]
+      L59 to L63 -> L65 [3] lasti
+      L63 to L64 -> L66 [0]
+      L64 to L65 -> L72 [0] lasti
+      L65 to L66 -> L66 [0]
+      L66 to L67 -> L69 [1] lasti
+      L67 to L68 -> L72 [0] lasti
+      L68 to L69 -> L69 [1] lasti
+      L69 to L71 -> L72 [0] lasti
+    
+# --- Nested code object: _run_sms_loop ---
+    # co_names: ('app.database', 'async_session_factory', 'app.workers.sms_worker', 'process_pending_sms', '_shutdown', 'begin', 'logger', 'info', 'Exception', 'exception', 'asyncio', 'sleep', 'settings', 'WORKER_SMS_INTERVAL')
+    # co_varnames: ('async_session_factory', 'process_pending_sms', 'db', 'count')
+      72            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      73            LOAD_CONST               1 (0)
+                    LOAD_CONST               2 (('async_session_factory',))
+                    IMPORT_NAME              0 (app.database)
+                    IMPORT_FROM              1 (async_session_factory)
+                    STORE_FAST               0 (async_session_factory)
+                    POP_TOP
+    
+      74            LOAD_CONST               1 (0)
+                    LOAD_CONST               3 (('process_pending_sms',))
+                    IMPORT_NAME              2 (app.workers.sms_worker)
+                    IMPORT_FROM              3 (process_pending_sms)
+                    STORE_FAST               1 (process_pending_sms)
+                    POP_TOP
+    
+      76            LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE       186 (to L36)
+    
+      77    L2:     NOP
+    
+      78    L3:     LOAD_FAST                0 (async_session_factory)
+                    PUSH_NULL
+                    CALL                     0
+                    BEFORE_ASYNC_WITH
+                    GET_AWAITABLE            1
+                    LOAD_CONST               0 (None)
+            L4:     SEND                     3 (to L7)
+            L5:     YIELD_VALUE              1
+            L6:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+            L7:     END_SEND
+            L8:     STORE_FAST_LOAD_FAST    34 (db, db)
+                    LOAD_ATTR               11 (begin + NULL|self)
+                    CALL                     0
+                    BEFORE_ASYNC_WITH
+                    GET_AWAITABLE            1
+                    LOAD_CONST               0 (None)
+            L9:     SEND                     3 (to L12)
+           L10:     YIELD_VALUE              1
+           L11:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+           L12:     END_SEND
+           L13:     POP_TOP
+    
+      79            LOAD_FAST                1 (process_pending_sms)
+                    PUSH_NULL
+                    LOAD_FAST                2 (db)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L14:     SEND                     3 (to L17)
+           L15:     YIELD_VALUE              1
+           L16:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+           L17:     END_SEND
+                    STORE_FAST               3 (count)
+    
+      80            LOAD_FAST                3 (count)
+                    LOAD_CONST               1 (0)
+                    COMPARE_OP             148 (bool(>))
+                    POP_JUMP_IF_FALSE       22 (to L18)
+    
+      81            LOAD_GLOBAL             12 (logger)
+                    LOAD_ATTR               15 (info + NULL|self)
+                    LOAD_CONST               4 ('Sent %d SMS message(s)')
+                    LOAD_FAST                3 (count)
+                    CALL                     2
+                    POP_TOP
+    
+      78   L18:     LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    CALL                     2
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L19:     SEND                     3 (to L22)
+           L20:     YIELD_VALUE              1
+           L21:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+           L22:     END_SEND
+                    POP_TOP
+           L23:     LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    CALL                     2
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L24:     SEND                     3 (to L27)
+           L25:     YIELD_VALUE              1
+           L26:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+           L27:     END_SEND
+                    POP_TOP
+    
+      85   L28:     LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        44 (to L33)
+    
+      86            LOAD_GLOBAL             20 (asyncio)
+                    LOAD_ATTR               22 (sleep)
+                    PUSH_NULL
+                    LOAD_GLOBAL             24 (settings)
+                    LOAD_ATTR               26 (WORKER_SMS_INTERVAL)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L29:     SEND                     3 (to L32)
+           L30:     YIELD_VALUE              1
+           L31:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L29)
+           L32:     END_SEND
+                    POP_TOP
+    
+      76   L33:     LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L35)
+           L34:     JUMP_BACKWARD          185 (to L2)
+           L35:     RETURN_CONST             0 (None)
+           L36:     RETURN_CONST             0 (None)
+    
+      78   L37:     CLEANUP_THROW
+           L38:     JUMP_BACKWARD_NO_INTERRUPT 174 (to L7)
+           L39:     CLEANUP_THROW
+           L40:     JUMP_BACKWARD_NO_INTERRUPT 152 (to L12)
+    
+      79   L41:     CLEANUP_THROW
+           L42:     JUMP_BACKWARD_NO_INTERRUPT 138 (to L17)
+    
+      78   L43:     CLEANUP_THROW
+           L44:     JUMP_BACKWARD_NO_INTERRUPT 96 (to L22)
+           L45:     PUSH_EXC_INFO
+                    WITH_EXCEPT_START
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L46:     SEND                     4 (to L50)
+           L47:     YIELD_VALUE              1
+           L48:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L46)
+           L49:     CLEANUP_THROW
+           L50:     END_SEND
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L51)
+                    RERAISE                  2
+           L51:     POP_TOP
+           L52:     POP_EXCEPT
+                    POP_TOP
+                    POP_TOP
+                    JUMP_BACKWARD_NO_INTERRUPT 117 (to L23)
+    
+      --   L53:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+      78   L54:     CLEANUP_THROW
+           L55:     JUMP_BACKWARD_NO_INTERRUPT 108 (to L27)
+           L56:     PUSH_EXC_INFO
+                    WITH_EXCEPT_START
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L57:     SEND                     4 (to L61)
+           L58:     YIELD_VALUE              1
+           L59:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L57)
+           L60:     CLEANUP_THROW
+           L61:     END_SEND
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L62)
+                    RERAISE                  2
+           L62:     POP_TOP
+           L63:     POP_EXCEPT
+                    POP_TOP
+                    POP_TOP
+           L64:     JUMP_BACKWARD_NO_INTERRUPT 129 (to L28)
+    
+      --   L65:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L66:     PUSH_EXC_INFO
+    
+      82            LOAD_GLOBAL             16 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       24 (to L68)
+                    POP_TOP
+    
+      83            LOAD_GLOBAL             12 (logger)
+                    LOAD_ATTR               19 (exception + NULL|self)
+                    LOAD_CONST               5 ('SMS worker iteration failed')
+                    CALL                     1
+                    POP_TOP
+           L67:     POP_EXCEPT
+                    JUMP_BACKWARD_NO_INTERRUPT 165 (to L28)
+    
+      82   L68:     RERAISE                  0
+    
+      --   L69:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+      86   L70:     CLEANUP_THROW
+           L71:     JUMP_BACKWARD_NO_INTERRUPT 118 (to L32)
+    
+      --   L72:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L2 -> L72 [0] lasti
+      L3 to L5 -> L66 [0]
+      L5 to L6 -> L37 [3]
+      L6 to L8 -> L66 [0]
+      L8 to L10 -> L56 [1] lasti
+      L10 to L11 -> L39 [4]
+      L11 to L13 -> L56 [1] lasti
+      L13 to L15 -> L45 [2] lasti
+      L15 to L16 -> L41 [4]
+      L16 to L18 -> L45 [2] lasti
+      L18 to L20 -> L56 [1] lasti
+      L20 to L21 -> L43 [3]
+      L21 to L23 -> L56 [1] lasti
+      L23 to L25 -> L66 [0]
+      L25 to L26 -> L54 [2]
+      L26 to L28 -> L66 [0]
+      L28 to L30 -> L72 [0] lasti
+      L30 to L31 -> L70 [2]
+      L31 to L34 -> L72 [0] lasti
+      L35 to L37 -> L72 [0] lasti
+      L37 to L38 -> L66 [0]
+      L39 to L40 -> L56 [1] lasti
+      L41 to L42 -> L45 [2] lasti
+      L43 to L44 -> L56 [1] lasti
+      L45 to L47 -> L53 [4] lasti
+      L47 to L48 -> L49 [7]
+      L48 to L52 -> L53 [4] lasti
+      L52 to L54 -> L56 [1] lasti
+      L54 to L55 -> L66 [0]
+      L56 to L58 -> L65 [3] lasti
+      L58 to L59 -> L60 [6]
+      L59 to L63 -> L65 [3] lasti
+      L63 to L64 -> L66 [0]
+      L64 to L65 -> L72 [0] lasti
+      L65 to L66 -> L66 [0]
+      L66 to L67 -> L69 [1] lasti
+      L67 to L68 -> L72 [0] lasti
+      L68 to L69 -> L69 [1] lasti
+      L69 to L71 -> L72 [0] lasti
+    
+# --- Nested code object: _run_handoff_expiry_loop ---
+    # co_names: ('app.database', 'async_session_factory', 'app.services.handoff_service', 'expire_stale_offers', '_shutdown', 'begin', 'logger', 'info', 'Exception', 'exception', 'asyncio', 'sleep', 'settings', 'WORKER_HANDOFF_EXPIRY_INTERVAL')
+    # co_varnames: ('async_session_factory', 'expire_stale_offers', 'db', 'count')
+      89            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      90            LOAD_CONST               1 (0)
+                    LOAD_CONST               2 (('async_session_factory',))
+                    IMPORT_NAME              0 (app.database)
+                    IMPORT_FROM              1 (async_session_factory)
+                    STORE_FAST               0 (async_session_factory)
+                    POP_TOP
+    
+      91            LOAD_CONST               1 (0)
+                    LOAD_CONST               3 (('expire_stale_offers',))
+                    IMPORT_NAME              2 (app.services.handoff_service)
+                    IMPORT_FROM              3 (expire_stale_offers)
+                    STORE_FAST               1 (expire_stale_offers)
+                    POP_TOP
+    
+      93            LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE       186 (to L36)
+    
+      94    L2:     NOP
+    
+      95    L3:     LOAD_FAST                0 (async_session_factory)
+                    PUSH_NULL
+                    CALL                     0
+                    BEFORE_ASYNC_WITH
+                    GET_AWAITABLE            1
+                    LOAD_CONST               0 (None)
+            L4:     SEND                     3 (to L7)
+            L5:     YIELD_VALUE              1
+            L6:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+            L7:     END_SEND
+            L8:     STORE_FAST_LOAD_FAST    34 (db, db)
+                    LOAD_ATTR               11 (begin + NULL|self)
+                    CALL                     0
+                    BEFORE_ASYNC_WITH
+                    GET_AWAITABLE            1
+                    LOAD_CONST               0 (None)
+            L9:     SEND                     3 (to L12)
+           L10:     YIELD_VALUE              1
+           L11:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+           L12:     END_SEND
+           L13:     POP_TOP
+    
+      96            LOAD_FAST                1 (expire_stale_offers)
+                    PUSH_NULL
+                    LOAD_FAST                2 (db)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L14:     SEND                     3 (to L17)
+           L15:     YIELD_VALUE              1
+           L16:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+           L17:     END_SEND
+                    STORE_FAST               3 (count)
+    
+      97            LOAD_FAST                3 (count)
+                    LOAD_CONST               1 (0)
+                    COMPARE_OP             148 (bool(>))
+                    POP_JUMP_IF_FALSE       22 (to L18)
+    
+      98            LOAD_GLOBAL             12 (logger)
+                    LOAD_ATTR               15 (info + NULL|self)
+                    LOAD_CONST               4 ('Expired %d handoff offer(s)')
+                    LOAD_FAST                3 (count)
+                    CALL                     2
+                    POP_TOP
+    
+      95   L18:     LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    CALL                     2
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L19:     SEND                     3 (to L22)
+           L20:     YIELD_VALUE              1
+           L21:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+           L22:     END_SEND
+                    POP_TOP
+           L23:     LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    CALL                     2
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L24:     SEND                     3 (to L27)
+           L25:     YIELD_VALUE              1
+           L26:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+           L27:     END_SEND
+                    POP_TOP
+    
+     102   L28:     LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        44 (to L33)
+    
+     103            LOAD_GLOBAL             20 (asyncio)
+                    LOAD_ATTR               22 (sleep)
+                    PUSH_NULL
+                    LOAD_GLOBAL             24 (settings)
+                    LOAD_ATTR               26 (WORKER_HANDOFF_EXPIRY_INTERVAL)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L29:     SEND                     3 (to L32)
+           L30:     YIELD_VALUE              1
+           L31:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L29)
+           L32:     END_SEND
+                    POP_TOP
+    
+      93   L33:     LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L35)
+           L34:     JUMP_BACKWARD          185 (to L2)
+           L35:     RETURN_CONST             0 (None)
+           L36:     RETURN_CONST             0 (None)
+    
+      95   L37:     CLEANUP_THROW
+           L38:     JUMP_BACKWARD_NO_INTERRUPT 174 (to L7)
+           L39:     CLEANUP_THROW
+           L40:     JUMP_BACKWARD_NO_INTERRUPT 152 (to L12)
+    
+      96   L41:     CLEANUP_THROW
+           L42:     JUMP_BACKWARD_NO_INTERRUPT 138 (to L17)
+    
+      95   L43:     CLEANUP_THROW
+           L44:     JUMP_BACKWARD_NO_INTERRUPT 96 (to L22)
+           L45:     PUSH_EXC_INFO
+                    WITH_EXCEPT_START
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L46:     SEND                     4 (to L50)
+           L47:     YIELD_VALUE              1
+           L48:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L46)
+           L49:     CLEANUP_THROW
+           L50:     END_SEND
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L51)
+                    RERAISE                  2
+           L51:     POP_TOP
+           L52:     POP_EXCEPT
+                    POP_TOP
+                    POP_TOP
+                    JUMP_BACKWARD_NO_INTERRUPT 117 (to L23)
+    
+      --   L53:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+      95   L54:     CLEANUP_THROW
+           L55:     JUMP_BACKWARD_NO_INTERRUPT 108 (to L27)
+           L56:     PUSH_EXC_INFO
+                    WITH_EXCEPT_START
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L57:     SEND                     4 (to L61)
+           L58:     YIELD_VALUE              1
+           L59:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L57)
+           L60:     CLEANUP_THROW
+           L61:     END_SEND
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L62)
+                    RERAISE                  2
+           L62:     POP_TOP
+           L63:     POP_EXCEPT
+                    POP_TOP
+                    POP_TOP
+           L64:     JUMP_BACKWARD_NO_INTERRUPT 129 (to L28)
+    
+      --   L65:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L66:     PUSH_EXC_INFO
+    
+      99            LOAD_GLOBAL             16 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       24 (to L68)
+                    POP_TOP
+    
+     100            LOAD_GLOBAL             12 (logger)
+                    LOAD_ATTR               19 (exception + NULL|self)
+                    LOAD_CONST               5 ('Handoff expiry worker iteration failed')
+                    CALL                     1
+                    POP_TOP
+           L67:     POP_EXCEPT
+                    JUMP_BACKWARD_NO_INTERRUPT 165 (to L28)
+    
+      99   L68:     RERAISE                  0
+    
+      --   L69:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+     103   L70:     CLEANUP_THROW
+           L71:     JUMP_BACKWARD_NO_INTERRUPT 118 (to L32)
+    
+      --   L72:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L2 -> L72 [0] lasti
+      L3 to L5 -> L66 [0]
+      L5 to L6 -> L37 [3]
+      L6 to L8 -> L66 [0]
+      L8 to L10 -> L56 [1] lasti
+      L10 to L11 -> L39 [4]
+      L11 to L13 -> L56 [1] lasti
+      L13 to L15 -> L45 [2] lasti
+      L15 to L16 -> L41 [4]
+      L16 to L18 -> L45 [2] lasti
+      L18 to L20 -> L56 [1] lasti
+      L20 to L21 -> L43 [3]
+      L21 to L23 -> L56 [1] lasti
+      L23 to L25 -> L66 [0]
+      L25 to L26 -> L54 [2]
+      L26 to L28 -> L66 [0]
+      L28 to L30 -> L72 [0] lasti
+      L30 to L31 -> L70 [2]
+      L31 to L34 -> L72 [0] lasti
+      L35 to L37 -> L72 [0] lasti
+      L37 to L38 -> L66 [0]
+      L39 to L40 -> L56 [1] lasti
+      L41 to L42 -> L45 [2] lasti
+      L43 to L44 -> L56 [1] lasti
+      L45 to L47 -> L53 [4] lasti
+      L47 to L48 -> L49 [7]
+      L48 to L52 -> L53 [4] lasti
+      L52 to L54 -> L56 [1] lasti
+      L54 to L55 -> L66 [0]
+      L56 to L58 -> L65 [3] lasti
+      L58 to L59 -> L60 [6]
+      L59 to L63 -> L65 [3] lasti
+      L63 to L64 -> L66 [0]
+      L64 to L65 -> L72 [0] lasti
+      L65 to L66 -> L66 [0]
+      L66 to L67 -> L69 [1] lasti
+      L67 to L68 -> L72 [0] lasti
+      L68 to L69 -> L69 [1] lasti
+      L69 to L71 -> L72 [0] lasti
+    
+# --- Nested code object: _run_lifecycle_loop ---
+    # co_names: ('app.database', 'async_session_factory', 'app.workers.number_lifecycle', 'cleanup_stale_pending_numbers', 'release_numbers_after_grace', 'repair_pending_configurations', '_shutdown', 'asyncio', 'sleep', 'settings', 'WORKER_NUMBER_LIFECYCLE_INTERVAL', 'begin', 'logger', 'info', 'Exception', 'exception')
+    # co_varnames: ('async_session_factory', 'cleanup_stale_pending_numbers', 'release_numbers_after_grace', 'repair_pending_configurations', 'db', 'n1', 'n2', 'n3')
+     106            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     107            LOAD_CONST               1 (0)
+                    LOAD_CONST               2 (('async_session_factory',))
+                    IMPORT_NAME              0 (app.database)
+                    IMPORT_FROM              1 (async_session_factory)
+                    STORE_FAST               0 (async_session_factory)
+                    POP_TOP
+    
+     108            LOAD_CONST               1 (0)
+                    LOAD_CONST               3 (('cleanup_stale_pending_numbers', 'release_numbers_after_grace', 'repair_pending_configurations'))
+                    IMPORT_NAME              2 (app.workers.number_lifecycle)
+                    IMPORT_FROM              3 (cleanup_stale_pending_numbers)
+                    STORE_FAST               1 (cleanup_stale_pending_numbers)
+                    IMPORT_FROM              4 (release_numbers_after_grace)
+                    STORE_FAST               2 (release_numbers_after_grace)
+                    IMPORT_FROM              5 (repair_pending_configurations)
+                    STORE_FAST               3 (repair_pending_configurations)
+                    POP_TOP
+    
+     114            LOAD_GLOBAL             12 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE       235 (to L46)
+    
+     115    L2:     LOAD_GLOBAL             12 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE        1 (to L3)
+    
+     116            RETURN_CONST             0 (None)
+    
+     117    L3:     LOAD_GLOBAL             14 (asyncio)
+                    LOAD_ATTR               16 (sleep)
+                    PUSH_NULL
+                    LOAD_GLOBAL             18 (settings)
+                    LOAD_ATTR               20 (WORKER_NUMBER_LIFECYCLE_INTERVAL)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L4:     SEND                     3 (to L7)
+            L5:     YIELD_VALUE              1
+            L6:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+            L7:     END_SEND
+                    POP_TOP
+    
+     118    L8:     NOP
+    
+     119    L9:     LOAD_FAST                0 (async_session_factory)
+                    PUSH_NULL
+                    CALL                     0
+                    BEFORE_ASYNC_WITH
+                    GET_AWAITABLE            1
+                    LOAD_CONST               0 (None)
+           L10:     SEND                     3 (to L13)
+           L11:     YIELD_VALUE              1
+           L12:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L10)
+           L13:     END_SEND
+           L14:     STORE_FAST_LOAD_FAST    68 (db, db)
+                    LOAD_ATTR               23 (begin + NULL|self)
+                    CALL                     0
+                    BEFORE_ASYNC_WITH
+                    GET_AWAITABLE            1
+                    LOAD_CONST               0 (None)
+           L15:     SEND                     3 (to L18)
+           L16:     YIELD_VALUE              1
+           L17:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+           L18:     END_SEND
+           L19:     POP_TOP
+    
+     120            LOAD_FAST                1 (cleanup_stale_pending_numbers)
+                    PUSH_NULL
+                    LOAD_FAST                4 (db)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L20:     SEND                     3 (to L23)
+           L21:     YIELD_VALUE              1
+           L22:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L20)
+           L23:     END_SEND
+                    STORE_FAST               5 (n1)
+    
+     121            LOAD_FAST                2 (release_numbers_after_grace)
+                    PUSH_NULL
+                    LOAD_FAST                4 (db)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L24:     SEND                     3 (to L27)
+           L25:     YIELD_VALUE              1
+           L26:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+           L27:     END_SEND
+                    STORE_FAST               6 (n2)
+    
+     122            LOAD_FAST                3 (repair_pending_configurations)
+                    PUSH_NULL
+                    LOAD_FAST                4 (db)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L28:     SEND                     3 (to L31)
+           L29:     YIELD_VALUE              1
+           L30:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L28)
+           L31:     END_SEND
+                    STORE_FAST               7 (n3)
+    
+     123            LOAD_FAST                5 (n1)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        14 (to L32)
+                    LOAD_FAST                6 (n2)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         7 (to L32)
+                    LOAD_FAST                7 (n3)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       23 (to L33)
+    
+     124   L32:     LOAD_GLOBAL             24 (logger)
+                    LOAD_ATTR               27 (info + NULL|self)
+    
+     125            LOAD_CONST               4 ('Lifecycle: cleaned=%d released=%d repaired=%d')
+    
+     126            LOAD_FAST_LOAD_FAST     86 (n1, n2)
+                    LOAD_FAST                7 (n3)
+    
+     124            CALL                     4
+                    POP_TOP
+    
+     119   L33:     LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    CALL                     2
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L34:     SEND                     3 (to L37)
+           L35:     YIELD_VALUE              1
+           L36:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L34)
+           L37:     END_SEND
+                    POP_TOP
+           L38:     LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    CALL                     2
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L39:     SEND                     3 (to L42)
+           L40:     YIELD_VALUE              1
+           L41:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L39)
+           L42:     END_SEND
+                    POP_TOP
+    
+     114   L43:     LOAD_GLOBAL             12 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L45)
+           L44:     JUMP_BACKWARD          234 (to L2)
+           L45:     RETURN_CONST             0 (None)
+           L46:     RETURN_CONST             0 (None)
+    
+     117   L47:     CLEANUP_THROW
+           L48:     JUMP_BACKWARD_NO_INTERRUPT 184 (to L7)
+    
+     119   L49:     CLEANUP_THROW
+           L50:     JUMP_BACKWARD_NO_INTERRUPT 169 (to L13)
+           L51:     CLEANUP_THROW
+           L52:     JUMP_BACKWARD_NO_INTERRUPT 147 (to L18)
+    
+     120   L53:     CLEANUP_THROW
+           L54:     JUMP_BACKWARD_NO_INTERRUPT 133 (to L23)
+    
+     121   L55:     CLEANUP_THROW
+           L56:     JUMP_BACKWARD_NO_INTERRUPT 119 (to L27)
+    
+     122   L57:     CLEANUP_THROW
+           L58:     JUMP_BACKWARD_NO_INTERRUPT 105 (to L31)
+    
+     119   L59:     CLEANUP_THROW
+           L60:     JUMP_BACKWARD_NO_INTERRUPT 47 (to L37)
+           L61:     PUSH_EXC_INFO
+                    WITH_EXCEPT_START
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L62:     SEND                     4 (to L66)
+           L63:     YIELD_VALUE              1
+           L64:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L62)
+           L65:     CLEANUP_THROW
+           L66:     END_SEND
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L67)
+                    RERAISE                  2
+           L67:     POP_TOP
+           L68:     POP_EXCEPT
+                    POP_TOP
+                    POP_TOP
+                    JUMP_BACKWARD_NO_INTERRUPT 68 (to L38)
+    
+      --   L69:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+     119   L70:     CLEANUP_THROW
+           L71:     JUMP_BACKWARD_NO_INTERRUPT 59 (to L42)
+           L72:     PUSH_EXC_INFO
+                    WITH_EXCEPT_START
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L73:     SEND                     4 (to L77)
+           L74:     YIELD_VALUE              1
+           L75:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L73)
+           L76:     CLEANUP_THROW
+           L77:     END_SEND
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L78)
+                    RERAISE                  2
+           L78:     POP_TOP
+           L79:     POP_EXCEPT
+                    POP_TOP
+                    POP_TOP
+           L80:     JUMP_BACKWARD_NO_INTERRUPT 80 (to L43)
+    
+      --   L81:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L82:     PUSH_EXC_INFO
+    
+     128            LOAD_GLOBAL             28 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       24 (to L84)
+                    POP_TOP
+    
+     129            LOAD_GLOBAL             24 (logger)
+                    LOAD_ATTR               31 (exception + NULL|self)
+                    LOAD_CONST               5 ('Lifecycle worker iteration failed')
+                    CALL                     1
+                    POP_TOP
+           L83:     POP_EXCEPT
+                    JUMP_BACKWARD_NO_INTERRUPT 116 (to L43)
+    
+     128   L84:     RERAISE                  0
+    
+      --   L85:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L86:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L5 -> L86 [0] lasti
+      L5 to L6 -> L47 [2]
+      L6 to L8 -> L86 [0] lasti
+      L9 to L11 -> L82 [0]
+      L11 to L12 -> L49 [3]
+      L12 to L14 -> L82 [0]
+      L14 to L16 -> L72 [1] lasti
+      L16 to L17 -> L51 [4]
+      L17 to L19 -> L72 [1] lasti
+      L19 to L21 -> L61 [2] lasti
+      L21 to L22 -> L53 [4]
+      L22 to L25 -> L61 [2] lasti
+      L25 to L26 -> L55 [4]
+      L26 to L29 -> L61 [2] lasti
+      L29 to L30 -> L57 [4]
+      L30 to L33 -> L61 [2] lasti
+      L33 to L35 -> L72 [1] lasti
+      L35 to L36 -> L59 [3]
+      L36 to L38 -> L72 [1] lasti
+      L38 to L40 -> L82 [0]
+      L40 to L41 -> L70 [2]
+      L41 to L43 -> L82 [0]
+      L43 to L44 -> L86 [0] lasti
+      L45 to L48 -> L86 [0] lasti
+      L49 to L50 -> L82 [0]
+      L51 to L52 -> L72 [1] lasti
+      L53 to L54 -> L61 [2] lasti
+      L55 to L56 -> L61 [2] lasti
+      L57 to L58 -> L61 [2] lasti
+      L59 to L60 -> L72 [1] lasti
+      L61 to L63 -> L69 [4] lasti
+      L63 to L64 -> L65 [7]
+      L64 to L68 -> L69 [4] lasti
+      L68 to L70 -> L72 [1] lasti
+      L70 to L71 -> L82 [0]
+      L72 to L74 -> L81 [3] lasti
+      L74 to L75 -> L76 [6]
+      L75 to L79 -> L81 [3] lasti
+      L79 to L80 -> L82 [0]
+      L80 to L81 -> L86 [0] lasti
+      L81 to L82 -> L82 [0]
+      L82 to L83 -> L85 [1] lasti
+      L83 to L84 -> L86 [0] lasti
+      L84 to L85 -> L85 [1] lasti
+      L85 to L86 -> L86 [0] lasti
+    
+# --- Nested code object: _run_retention_loop ---
+    # co_names: ('app.database', 'async_session_factory', 'app.workers.retention_worker', 'process_retention_deletions', '_shutdown', 'begin', 'logger', 'info', 'Exception', 'exception', 'asyncio', 'sleep', 'settings', 'WORKER_RETENTION_INTERVAL')
+    # co_varnames: ('async_session_factory', 'process_retention_deletions', 'db', 'count')
+     132            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     133            LOAD_CONST               1 (0)
+                    LOAD_CONST               2 (('async_session_factory',))
+                    IMPORT_NAME              0 (app.database)
+                    IMPORT_FROM              1 (async_session_factory)
+                    STORE_FAST               0 (async_session_factory)
+                    POP_TOP
+    
+     134            LOAD_CONST               1 (0)
+                    LOAD_CONST               3 (('process_retention_deletions',))
+                    IMPORT_NAME              2 (app.workers.retention_worker)
+                    IMPORT_FROM              3 (process_retention_deletions)
+                    STORE_FAST               1 (process_retention_deletions)
+                    POP_TOP
+    
+     136            LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE       186 (to L36)
+    
+     137    L2:     NOP
+    
+     138    L3:     LOAD_FAST                0 (async_session_factory)
+                    PUSH_NULL
+                    CALL                     0
+                    BEFORE_ASYNC_WITH
+                    GET_AWAITABLE            1
+                    LOAD_CONST               0 (None)
+            L4:     SEND                     3 (to L7)
+            L5:     YIELD_VALUE              1
+            L6:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+            L7:     END_SEND
+            L8:     STORE_FAST_LOAD_FAST    34 (db, db)
+                    LOAD_ATTR               11 (begin + NULL|self)
+                    CALL                     0
+                    BEFORE_ASYNC_WITH
+                    GET_AWAITABLE            1
+                    LOAD_CONST               0 (None)
+            L9:     SEND                     3 (to L12)
+           L10:     YIELD_VALUE              1
+           L11:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+           L12:     END_SEND
+           L13:     POP_TOP
+    
+     139            LOAD_FAST                1 (process_retention_deletions)
+                    PUSH_NULL
+                    LOAD_FAST                2 (db)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L14:     SEND                     3 (to L17)
+           L15:     YIELD_VALUE              1
+           L16:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+           L17:     END_SEND
+                    STORE_FAST               3 (count)
+    
+     140            LOAD_FAST                3 (count)
+                    LOAD_CONST               1 (0)
+                    COMPARE_OP             148 (bool(>))
+                    POP_JUMP_IF_FALSE       22 (to L18)
+    
+     141            LOAD_GLOBAL             12 (logger)
+                    LOAD_ATTR               15 (info + NULL|self)
+                    LOAD_CONST               4 ('Retention-deleted %d call(s)')
+                    LOAD_FAST                3 (count)
+                    CALL                     2
+                    POP_TOP
+    
+     138   L18:     LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    CALL                     2
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L19:     SEND                     3 (to L22)
+           L20:     YIELD_VALUE              1
+           L21:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+           L22:     END_SEND
+                    POP_TOP
+           L23:     LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    CALL                     2
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L24:     SEND                     3 (to L27)
+           L25:     YIELD_VALUE              1
+           L26:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+           L27:     END_SEND
+                    POP_TOP
+    
+     145   L28:     LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        44 (to L33)
+    
+     146            LOAD_GLOBAL             20 (asyncio)
+                    LOAD_ATTR               22 (sleep)
+                    PUSH_NULL
+                    LOAD_GLOBAL             24 (settings)
+                    LOAD_ATTR               26 (WORKER_RETENTION_INTERVAL)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L29:     SEND                     3 (to L32)
+           L30:     YIELD_VALUE              1
+           L31:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L29)
+           L32:     END_SEND
+                    POP_TOP
+    
+     136   L33:     LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L35)
+           L34:     JUMP_BACKWARD          185 (to L2)
+           L35:     RETURN_CONST             0 (None)
+           L36:     RETURN_CONST             0 (None)
+    
+     138   L37:     CLEANUP_THROW
+           L38:     JUMP_BACKWARD_NO_INTERRUPT 174 (to L7)
+           L39:     CLEANUP_THROW
+           L40:     JUMP_BACKWARD_NO_INTERRUPT 152 (to L12)
+    
+     139   L41:     CLEANUP_THROW
+           L42:     JUMP_BACKWARD_NO_INTERRUPT 138 (to L17)
+    
+     138   L43:     CLEANUP_THROW
+           L44:     JUMP_BACKWARD_NO_INTERRUPT 96 (to L22)
+           L45:     PUSH_EXC_INFO
+                    WITH_EXCEPT_START
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L46:     SEND                     4 (to L50)
+           L47:     YIELD_VALUE              1
+           L48:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L46)
+           L49:     CLEANUP_THROW
+           L50:     END_SEND
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L51)
+                    RERAISE                  2
+           L51:     POP_TOP
+           L52:     POP_EXCEPT
+                    POP_TOP
+                    POP_TOP
+                    JUMP_BACKWARD_NO_INTERRUPT 117 (to L23)
+    
+      --   L53:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+     138   L54:     CLEANUP_THROW
+           L55:     JUMP_BACKWARD_NO_INTERRUPT 108 (to L27)
+           L56:     PUSH_EXC_INFO
+                    WITH_EXCEPT_START
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L57:     SEND                     4 (to L61)
+           L58:     YIELD_VALUE              1
+           L59:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L57)
+           L60:     CLEANUP_THROW
+           L61:     END_SEND
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L62)
+                    RERAISE                  2
+           L62:     POP_TOP
+           L63:     POP_EXCEPT
+                    POP_TOP
+                    POP_TOP
+           L64:     JUMP_BACKWARD_NO_INTERRUPT 129 (to L28)
+    
+      --   L65:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L66:     PUSH_EXC_INFO
+    
+     142            LOAD_GLOBAL             16 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       24 (to L68)
+                    POP_TOP
+    
+     143            LOAD_GLOBAL             12 (logger)
+                    LOAD_ATTR               19 (exception + NULL|self)
+                    LOAD_CONST               5 ('Retention worker iteration failed')
+                    CALL                     1
+                    POP_TOP
+           L67:     POP_EXCEPT
+                    JUMP_BACKWARD_NO_INTERRUPT 165 (to L28)
+    
+     142   L68:     RERAISE                  0
+    
+      --   L69:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+     146   L70:     CLEANUP_THROW
+           L71:     JUMP_BACKWARD_NO_INTERRUPT 118 (to L32)
+    
+      --   L72:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L2 -> L72 [0] lasti
+      L3 to L5 -> L66 [0]
+      L5 to L6 -> L37 [3]
+      L6 to L8 -> L66 [0]
+      L8 to L10 -> L56 [1] lasti
+      L10 to L11 -> L39 [4]
+      L11 to L13 -> L56 [1] lasti
+      L13 to L15 -> L45 [2] lasti
+      L15 to L16 -> L41 [4]
+      L16 to L18 -> L45 [2] lasti
+      L18 to L20 -> L56 [1] lasti
+      L20 to L21 -> L43 [3]
+      L21 to L23 -> L56 [1] lasti
+      L23 to L25 -> L66 [0]
+      L25 to L26 -> L54 [2]
+      L26 to L28 -> L66 [0]
+      L28 to L30 -> L72 [0] lasti
+      L30 to L31 -> L70 [2]
+      L31 to L34 -> L72 [0] lasti
+      L35 to L37 -> L72 [0] lasti
+      L37 to L38 -> L66 [0]
+      L39 to L40 -> L56 [1] lasti
+      L41 to L42 -> L45 [2] lasti
+      L43 to L44 -> L56 [1] lasti
+      L45 to L47 -> L53 [4] lasti
+      L47 to L48 -> L49 [7]
+      L48 to L52 -> L53 [4] lasti
+      L52 to L54 -> L56 [1] lasti
+      L54 to L55 -> L66 [0]
+      L56 to L58 -> L65 [3] lasti
+      L58 to L59 -> L60 [6]
+      L59 to L63 -> L65 [3] lasti
+      L63 to L64 -> L66 [0]
+      L64 to L65 -> L72 [0] lasti
+      L65 to L66 -> L66 [0]
+      L66 to L67 -> L69 [1] lasti
+      L67 to L68 -> L72 [0] lasti
+      L68 to L69 -> L69 [1] lasti
+      L69 to L71 -> L72 [0] lasti
+    
+# --- Nested code object: _run_hard_deletion_loop ---
+    # co_names: ('app.database', 'async_session_factory', 'app.workers.hard_deletion_worker', 'process_hard_deletions', '_shutdown', 'begin', 'logger', 'info', 'Exception', 'exception', 'asyncio', 'sleep', 'settings', 'WORKER_HARD_DELETION_INTERVAL')
+    # co_varnames: ('async_session_factory', 'process_hard_deletions', 'db', 'count')
+     149            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     150            LOAD_CONST               1 (0)
+                    LOAD_CONST               2 (('async_session_factory',))
+                    IMPORT_NAME              0 (app.database)
+                    IMPORT_FROM              1 (async_session_factory)
+                    STORE_FAST               0 (async_session_factory)
+                    POP_TOP
+    
+     151            LOAD_CONST               1 (0)
+                    LOAD_CONST               3 (('process_hard_deletions',))
+                    IMPORT_NAME              2 (app.workers.hard_deletion_worker)
+                    IMPORT_FROM              3 (process_hard_deletions)
+                    STORE_FAST               1 (process_hard_deletions)
+                    POP_TOP
+    
+     153            LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE       186 (to L36)
+    
+     154    L2:     NOP
+    
+     155    L3:     LOAD_FAST                0 (async_session_factory)
+                    PUSH_NULL
+                    CALL                     0
+                    BEFORE_ASYNC_WITH
+                    GET_AWAITABLE            1
+                    LOAD_CONST               0 (None)
+            L4:     SEND                     3 (to L7)
+            L5:     YIELD_VALUE              1
+            L6:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+            L7:     END_SEND
+            L8:     STORE_FAST_LOAD_FAST    34 (db, db)
+                    LOAD_ATTR               11 (begin + NULL|self)
+                    CALL                     0
+                    BEFORE_ASYNC_WITH
+                    GET_AWAITABLE            1
+                    LOAD_CONST               0 (None)
+            L9:     SEND                     3 (to L12)
+           L10:     YIELD_VALUE              1
+           L11:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+           L12:     END_SEND
+           L13:     POP_TOP
+    
+     156            LOAD_FAST                1 (process_hard_deletions)
+                    PUSH_NULL
+                    LOAD_FAST                2 (db)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L14:     SEND                     3 (to L17)
+           L15:     YIELD_VALUE              1
+           L16:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+           L17:     END_SEND
+                    STORE_FAST               3 (count)
+    
+     157            LOAD_FAST                3 (count)
+                    LOAD_CONST               1 (0)
+                    COMPARE_OP             148 (bool(>))
+                    POP_JUMP_IF_FALSE       22 (to L18)
+    
+     158            LOAD_GLOBAL             12 (logger)
+                    LOAD_ATTR               15 (info + NULL|self)
+                    LOAD_CONST               4 ('Hard-deleted %d call(s)')
+                    LOAD_FAST                3 (count)
+                    CALL                     2
+                    POP_TOP
+    
+     155   L18:     LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    CALL                     2
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L19:     SEND                     3 (to L22)
+           L20:     YIELD_VALUE              1
+           L21:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+           L22:     END_SEND
+                    POP_TOP
+           L23:     LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    LOAD_CONST               0 (None)
+                    CALL                     2
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L24:     SEND                     3 (to L27)
+           L25:     YIELD_VALUE              1
+           L26:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+           L27:     END_SEND
+                    POP_TOP
+    
+     162   L28:     LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        44 (to L33)
+    
+     163            LOAD_GLOBAL             20 (asyncio)
+                    LOAD_ATTR               22 (sleep)
+                    PUSH_NULL
+                    LOAD_GLOBAL             24 (settings)
+                    LOAD_ATTR               26 (WORKER_HARD_DELETION_INTERVAL)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L29:     SEND                     3 (to L32)
+           L30:     YIELD_VALUE              1
+           L31:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L29)
+           L32:     END_SEND
+                    POP_TOP
+    
+     153   L33:     LOAD_GLOBAL              8 (_shutdown)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L35)
+           L34:     JUMP_BACKWARD          185 (to L2)
+           L35:     RETURN_CONST             0 (None)
+           L36:     RETURN_CONST             0 (None)
+    
+     155   L37:     CLEANUP_THROW
+           L38:     JUMP_BACKWARD_NO_INTERRUPT 174 (to L7)
+           L39:     CLEANUP_THROW
+           L40:     JUMP_BACKWARD_NO_INTERRUPT 152 (to L12)
+    
+     156   L41:     CLEANUP_THROW
+           L42:     JUMP_BACKWARD_NO_INTERRUPT 138 (to L17)
+    
+     155   L43:     CLEANUP_THROW
+           L44:     JUMP_BACKWARD_NO_INTERRUPT 96 (to L22)
+           L45:     PUSH_EXC_INFO
+                    WITH_EXCEPT_START
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L46:     SEND                     4 (to L50)
+           L47:     YIELD_VALUE              1
+           L48:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L46)
+           L49:     CLEANUP_THROW
+           L50:     END_SEND
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L51)
+                    RERAISE                  2
+           L51:     POP_TOP
+           L52:     POP_EXCEPT
+                    POP_TOP
+                    POP_TOP
+                    JUMP_BACKWARD_NO_INTERRUPT 117 (to L23)
+    
+      --   L53:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+     155   L54:     CLEANUP_THROW
+           L55:     JUMP_BACKWARD_NO_INTERRUPT 108 (to L27)
+           L56:     PUSH_EXC_INFO
+                    WITH_EXCEPT_START
+                    GET_AWAITABLE            2
+                    LOAD_CONST               0 (None)
+           L57:     SEND                     4 (to L61)
+           L58:     YIELD_VALUE              1
+           L59:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L57)
+           L60:     CLEANUP_THROW
+           L61:     END_SEND
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L62)
+                    RERAISE                  2
+           L62:     POP_TOP
+           L63:     POP_EXCEPT
+                    POP_TOP
+                    POP_TOP
+           L64:     JUMP_BACKWARD_NO_INTERRUPT 129 (to L28)
+    
+      --   L65:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L66:     PUSH_EXC_INFO
+    
+     159            LOAD_GLOBAL             16 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       24 (to L68)
+                    POP_TOP
+    
+     160            LOAD_GLOBAL             12 (logger)
+                    LOAD_ATTR               19 (exception + NULL|self)
+                    LOAD_CONST               5 ('Hard-deletion worker iteration failed')
+                    CALL                     1
+                    POP_TOP
+           L67:     POP_EXCEPT
+                    JUMP_BACKWARD_NO_INTERRUPT 165 (to L28)
+    
+     159   L68:     RERAISE                  0
+    
+      --   L69:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+     163   L70:     CLEANUP_THROW
+           L71:     JUMP_BACKWARD_NO_INTERRUPT 118 (to L32)
+    
+      --   L72:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L2 -> L72 [0] lasti
+      L3 to L5 -> L66 [0]
+      L5 to L6 -> L37 [3]
+      L6 to L8 -> L66 [0]
+      L8 to L10 -> L56 [1] lasti
+      L10 to L11 -> L39 [4]
+      L11 to L13 -> L56 [1] lasti
+      L13 to L15 -> L45 [2] lasti
+      L15 to L16 -> L41 [4]
+      L16 to L18 -> L45 [2] lasti
+      L18 to L20 -> L56 [1] lasti
+      L20 to L21 -> L43 [3]
+      L21 to L23 -> L56 [1] lasti
+      L23 to L25 -> L66 [0]
+      L25 to L26 -> L54 [2]
+      L26 to L28 -> L66 [0]
+      L28 to L30 -> L72 [0] lasti
+      L30 to L31 -> L70 [2]
+      L31 to L34 -> L72 [0] lasti
+      L35 to L37 -> L72 [0] lasti
+      L37 to L38 -> L66 [0]
+      L39 to L40 -> L56 [1] lasti
+      L41 to L42 -> L45 [2] lasti
+      L43 to L44 -> L56 [1] lasti
+      L45 to L47 -> L53 [4] lasti
+      L47 to L48 -> L49 [7]
+      L48 to L52 -> L53 [4] lasti
+      L52 to L54 -> L56 [1] lasti
+      L54 to L55 -> L66 [0]
+      L56 to L58 -> L65 [3] lasti
+      L58 to L59 -> L60 [6]
+      L59 to L63 -> L65 [3] lasti
+      L63 to L64 -> L66 [0]
+      L64 to L65 -> L72 [0] lasti
+      L65 to L66 -> L66 [0]
+      L66 to L67 -> L69 [1] lasti
+      L67 to L68 -> L72 [0] lasti
+      L68 to L69 -> L69 [1] lasti
+      L69 to L71 -> L72 [0] lasti
+    
+# --- Nested code object: main ---
+    # co_names: ('logger', 'info', 'asyncio', 'create_task', '_run_post_call_loop', '_run_reminder_loop', '_run_sms_loop', '_run_lifecycle_loop', '_run_retention_loop', '_run_hard_deletion_loop', '_run_handoff_expiry_loop', 'gather', 'CancelledError', 'cancel')
+    # co_varnames: ('tasks', 't')
+     166            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     167            LOAD_GLOBAL              0 (logger)
+                    LOAD_ATTR                3 (info + NULL|self)
+                    LOAD_CONST               1 ('Starting MattBot workers...')
+                    CALL                     1
+                    POP_TOP
+    
+     170            LOAD_GLOBAL              4 (asyncio)
+                    LOAD_ATTR                6 (create_task)
+                    PUSH_NULL
+                    LOAD_GLOBAL              9 (_run_post_call_loop + NULL)
+                    CALL                     0
+                    CALL                     1
+    
+     171            LOAD_GLOBAL              4 (asyncio)
+                    LOAD_ATTR                6 (create_task)
+                    PUSH_NULL
+                    LOAD_GLOBAL             11 (_run_reminder_loop + NULL)
+                    CALL                     0
+                    CALL                     1
+    
+     172            LOAD_GLOBAL              4 (asyncio)
+                    LOAD_ATTR                6 (create_task)
+                    PUSH_NULL
+                    LOAD_GLOBAL             13 (_run_sms_loop + NULL)
+                    CALL                     0
+                    CALL                     1
+    
+     173            LOAD_GLOBAL              4 (asyncio)
+                    LOAD_ATTR                6 (create_task)
+                    PUSH_NULL
+                    LOAD_GLOBAL             15 (_run_lifecycle_loop + NULL)
+                    CALL                     0
+                    CALL                     1
+    
+     174            LOAD_GLOBAL              4 (asyncio)
+                    LOAD_ATTR                6 (create_task)
+                    PUSH_NULL
+                    LOAD_GLOBAL             17 (_run_retention_loop + NULL)
+                    CALL                     0
+                    CALL                     1
+    
+     175            LOAD_GLOBAL              4 (asyncio)
+                    LOAD_ATTR                6 (create_task)
+                    PUSH_NULL
+                    LOAD_GLOBAL             19 (_run_hard_deletion_loop + NULL)
+                    CALL                     0
+                    CALL                     1
+    
+     176            LOAD_GLOBAL              4 (asyncio)
+                    LOAD_ATTR                6 (create_task)
+                    PUSH_NULL
+                    LOAD_GLOBAL             21 (_run_handoff_expiry_loop + NULL)
+                    CALL                     0
+                    CALL                     1
+    
+     169            BUILD_LIST               7
+                    STORE_FAST               0 (tasks)
+    
+     179    L2:     NOP
+    
+     180    L3:     LOAD_GLOBAL              4 (asyncio)
+                    LOAD_ATTR               22 (gather)
+                    PUSH_NULL
+                    LOAD_FAST                0 (tasks)
+                    CALL_FUNCTION_EX         0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L4:     SEND                     3 (to L7)
+            L5:     YIELD_VALUE              1
+            L6:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+            L7:     END_SEND
+                    POP_TOP
+    
+     184    L8:     LOAD_FAST                0 (tasks)
+                    GET_ITER
+            L9:     FOR_ITER                19 (to L10)
+                    STORE_FAST               1 (t)
+    
+     185            LOAD_FAST                1 (t)
+                    LOAD_ATTR               27 (cancel + NULL|self)
+                    CALL                     0
+                    POP_TOP
+                    JUMP_BACKWARD           21 (to L9)
+    
+     184   L10:     END_FOR
+                    POP_TOP
+    
+     186            LOAD_GLOBAL              0 (logger)
+                    LOAD_ATTR                3 (info + NULL|self)
+                    LOAD_CONST               2 ('Workers stopped.')
+                    CALL                     1
+                    POP_TOP
+                    RETURN_CONST             0 (None)
+    
+     180   L11:     CLEANUP_THROW
+           L12:     JUMP_BACKWARD_NO_INTERRUPT 51 (to L7)
+    
+      --   L13:     PUSH_EXC_INFO
+    
+     181            LOAD_GLOBAL              4 (asyncio)
+                    LOAD_ATTR               24 (CancelledError)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE        3 (to L15)
+                    POP_TOP
+    
+     182   L14:     POP_EXCEPT
+                    JUMP_BACKWARD_NO_INTERRUPT 71 (to L8)
+    
+     181   L15:     RERAISE                  0
+    
+      --   L16:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L17:     PUSH_EXC_INFO
+    
+     184            LOAD_FAST                0 (tasks)
+                    GET_ITER
+           L18:     FOR_ITER                19 (to L19)
+                    STORE_FAST               1 (t)
+    
+     185            LOAD_FAST                1 (t)
+                    LOAD_ATTR               27 (cancel + NULL|self)
+                    CALL                     0
+                    POP_TOP
+                    JUMP_BACKWARD           21 (to L18)
+    
+     184   L19:     END_FOR
+                    POP_TOP
+    
+     186            LOAD_GLOBAL              0 (logger)
+                    LOAD_ATTR                3 (info + NULL|self)
+                    LOAD_CONST               2 ('Workers stopped.')
+                    CALL                     1
+                    POP_TOP
+                    RERAISE                  0
+    
+      --   L20:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L21:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L2 -> L21 [0] lasti
+      L3 to L5 -> L13 [0]
+      L5 to L6 -> L11 [2]
+      L6 to L8 -> L13 [0]
+      L8 to L11 -> L21 [0] lasti
+      L11 to L12 -> L13 [0]
+      L13 to L14 -> L16 [1] lasti
+      L14 to L15 -> L17 [0]
+      L15 to L16 -> L16 [1] lasti
+      L16 to L17 -> L17 [0]
+      L17 to L20 -> L20 [1] lasti
+      L20 to L21 -> L21 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'asyncio', 'logging', 'signal', 'sys', 'app.config', 'settings', 'basicConfig', 'INFO', 'getLogger', 'logger', '_shutdown', '_handle_signal', '_run_post_call_loop', '_run_reminder_loop', '_run_sms_loop', '_run_handoff_expiry_loop', '_run_lifecycle_loop', '_run_retention_loop', '_run_hard_deletion_loop', 'main', '__name__', 'SIGINT', 'SIGTERM', 'run', 'KeyboardInterrupt', 'exit')
+# co_varnames: ()
+   0           RESUME                   0
+
+   1           LOAD_CONST               0 ('Worker runner entry point.\n\nUsage: python -m app.workers.run\n\nRuns polling loops for:\n- Post-call artifact processing (every 15 seconds)\n- Reminder due-date poller (every 60 seconds)\n- SMS send worker (every 30 seconds)\n- Number lifecycle tasks (every 5 minutes)\n- Retention enforcement (every 30 minutes)\n- Hard deletion (every 1 hour)\n')
+               STORE_NAME               0 (__doc__)
+
+  14           LOAD_CONST               1 (0)
+               LOAD_CONST               2 (('annotations',))
+               IMPORT_NAME              1 (__future__)
+               IMPORT_FROM              2 (annotations)
+               STORE_NAME               2 (annotations)
+               POP_TOP
+
+  16           LOAD_CONST               1 (0)
+               LOAD_CONST               3 (None)
+               IMPORT_NAME              3 (asyncio)
+               STORE_NAME               3 (asyncio)
+
+  17           LOAD_CONST               1 (0)
+               LOAD_CONST               3 (None)
+               IMPORT_NAME              4 (logging)
+               STORE_NAME               4 (logging)
+
+  18           LOAD_CONST               1 (0)
+               LOAD_CONST               3 (None)
+               IMPORT_NAME              5 (signal)
+               STORE_NAME               5 (signal)
+
+  19           LOAD_CONST               1 (0)
+               LOAD_CONST               3 (None)
+               IMPORT_NAME              6 (sys)
+               STORE_NAME               6 (sys)
+
+  21           LOAD_CONST               1 (0)
+               LOAD_CONST               4 (('settings',))
+               IMPORT_NAME              7 (app.config)
+               IMPORT_FROM              8 (settings)
+               STORE_NAME               8 (settings)
+               POP_TOP
+
+  23           LOAD_NAME                4 (logging)
+               LOAD_ATTR               18 (basicConfig)
+               PUSH_NULL
+
+  24           LOAD_NAME                4 (logging)
+               LOAD_ATTR               20 (INFO)
+
+  25           LOAD_CONST               5 ('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
+
+  23           LOAD_CONST               6 (('level', 'format'))
+               CALL_KW                  2
+               POP_TOP
+
+  27           LOAD_NAME                4 (logging)
+               LOAD_ATTR               22 (getLogger)
+               PUSH_NULL
+               LOAD_CONST               7 ('app.workers')
+               CALL                     1
+               STORE_NAME              12 (logger)
+
+  29           LOAD_CONST               8 (False)
+               STORE_GLOBAL            13 (_shutdown)
+
+  32           LOAD_CONST              19 (('sig', 'int', '_frame', 'object', 'return', 'None'))
+               LOAD_CONST               9 (<code object _handle_signal at 0x0000024C11423D30, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 32>)
+               MAKE_FUNCTION
+               SET_FUNCTION_ATTRIBUTE   4 (annotations)
+               STORE_NAME              14 (_handle_signal)
+
+  38           LOAD_CONST              20 (('return', 'None'))
+               LOAD_CONST              10 (<code object _run_post_call_loop at 0x0000024C0FE4E710, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 38>)
+               MAKE_FUNCTION
+               SET_FUNCTION_ATTRIBUTE   4 (annotations)
+               STORE_NAME              15 (_run_post_call_loop)
+
+  55           LOAD_CONST              20 (('return', 'None'))
+               LOAD_CONST              11 (<code object _run_reminder_loop at 0x0000024C0FE4DA10, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 55>)
+               MAKE_FUNCTION
+               SET_FUNCTION_ATTRIBUTE   4 (annotations)
+               STORE_NAME              16 (_run_reminder_loop)
+
+  72           LOAD_CONST              20 (('return', 'None'))
+               LOAD_CONST              12 (<code object _run_sms_loop at 0x0000024C0FE4EA50, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 72>)
+               MAKE_FUNCTION
+               SET_FUNCTION_ATTRIBUTE   4 (annotations)
+               STORE_NAME              17 (_run_sms_loop)
+
+  89           LOAD_CONST              20 (('return', 'None'))
+               LOAD_CONST              13 (<code object _run_handoff_expiry_loop at 0x0000024C0FE4D6D0, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 89>)
+               MAKE_FUNCTION
+               SET_FUNCTION_ATTRIBUTE   4 (annotations)
+               STORE_NAME              18 (_run_handoff_expiry_loop)
+
+ 106           LOAD_CONST              20 (('return', 'None'))
+               LOAD_CONST              14 (<code object _run_lifecycle_loop at 0x0000024C0FEDDF50, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 106>)
+               MAKE_FUNCTION
+               SET_FUNCTION_ATTRIBUTE   4 (annotations)
+               STORE_NAME              19 (_run_lifecycle_loop)
+
+ 132           LOAD_CONST              20 (('return', 'None'))
+               LOAD_CONST              15 (<code object _run_retention_loop at 0x0000024C0FE4DD50, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 132>)
+               MAKE_FUNCTION
+               SET_FUNCTION_ATTRIBUTE   4 (annotations)
+               STORE_NAME              20 (_run_retention_loop)
+
+ 149           LOAD_CONST              20 (('return', 'None'))
+               LOAD_CONST              16 (<code object _run_hard_deletion_loop at 0x0000024C0FE4E090, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 149>)
+               MAKE_FUNCTION
+               SET_FUNCTION_ATTRIBUTE   4 (annotations)
+               STORE_NAME              21 (_run_hard_deletion_loop)
+
+ 166           LOAD_CONST              20 (('return', 'None'))
+               LOAD_CONST              17 (<code object main at 0x0000024C0FED5BC0, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 166>)
+               MAKE_FUNCTION
+               SET_FUNCTION_ATTRIBUTE   4 (annotations)
+               STORE_NAME              22 (main)
+
+ 189           LOAD_NAME               23 (__name__)
+               LOAD_CONST              18 ('__main__')
+               COMPARE_OP              88 (bool(==))
+               POP_JUMP_IF_FALSE       83 (to L3)
+
+ 190           LOAD_NAME                5 (signal)
+               LOAD_ATTR               10 (signal)
+               PUSH_NULL
+               LOAD_NAME                5 (signal)
+               LOAD_ATTR               48 (SIGINT)
+               LOAD_NAME               14 (_handle_signal)
+               CALL                     2
+               POP_TOP
+
+ 191           LOAD_NAME                5 (signal)
+               LOAD_ATTR               10 (signal)
+               PUSH_NULL
+               LOAD_NAME                5 (signal)
+               LOAD_ATTR               50 (SIGTERM)
+               LOAD_NAME               14 (_handle_signal)
+               CALL                     2
+               POP_TOP
+
+ 192           NOP
+
+ 193   L1:     LOAD_NAME                3 (asyncio)
+               LOAD_ATTR               52 (run)
+               PUSH_NULL
+               LOAD_NAME               22 (main)
+               PUSH_NULL
+               CALL                     0
+               CALL                     1
+               POP_TOP
+       L2:     RETURN_CONST             3 (None)
+
+ 189   L3:     RETURN_CONST             3 (None)
+
+  --   L4:     PUSH_EXC_INFO
+
+ 194           LOAD_NAME               27 (KeyboardInterrupt)
+               CHECK_EXC_MATCH
+               POP_JUMP_IF_FALSE       21 (to L6)
+               POP_TOP
+
+ 195           LOAD_NAME                6 (sys)
+               LOAD_ATTR               56 (exit)
+               PUSH_NULL
+               LOAD_CONST               1 (0)
+               CALL                     1
+               POP_TOP
+       L5:     POP_EXCEPT
+               RETURN_CONST             3 (None)
+
+ 194   L6:     RERAISE                  0
+
+  --   L7:     COPY                     3
+               POP_EXCEPT
+               RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L4 [0]
+  L4 to L5 -> L7 [1] lasti
+  L6 to L7 -> L7 [1] lasti
+
+Disassembly of <code object _handle_signal at 0x0000024C11423D30, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 32>:
+ 32           RESUME                   0
+
+ 34           LOAD_GLOBAL              0 (logger)
+              LOAD_ATTR                3 (info + NULL|self)
+              LOAD_CONST               1 ('Received signal %s, shutting down workers...')
+              LOAD_FAST                0 (sig)
+              CALL                     2
+              POP_TOP
+
+ 35           LOAD_CONST               2 (True)
+              STORE_GLOBAL             2 (_shutdown)
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object _run_post_call_loop at 0x0000024C0FE4E710, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 38>:
+  38            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  39            LOAD_CONST               1 (0)
+                LOAD_CONST               2 (('async_session_factory',))
+                IMPORT_NAME              0 (app.database)
+                IMPORT_FROM              1 (async_session_factory)
+                STORE_FAST               0 (async_session_factory)
+                POP_TOP
+
+  40            LOAD_CONST               1 (0)
+                LOAD_CONST               3 (('process_pending_artifacts',))
+                IMPORT_NAME              2 (app.workers.post_call)
+                IMPORT_FROM              3 (process_pending_artifacts)
+                STORE_FAST               1 (process_pending_artifacts)
+                POP_TOP
+
+  42            LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE       186 (to L36)
+
+  43    L2:     NOP
+
+  44    L3:     LOAD_FAST                0 (async_session_factory)
+                PUSH_NULL
+                CALL                     0
+                BEFORE_ASYNC_WITH
+                GET_AWAITABLE            1
+                LOAD_CONST               0 (None)
+        L4:     SEND                     3 (to L7)
+        L5:     YIELD_VALUE              1
+        L6:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+        L7:     END_SEND
+        L8:     STORE_FAST_LOAD_FAST    34 (db, db)
+                LOAD_ATTR               11 (begin + NULL|self)
+                CALL                     0
+                BEFORE_ASYNC_WITH
+                GET_AWAITABLE            1
+                LOAD_CONST               0 (None)
+        L9:     SEND                     3 (to L12)
+       L10:     YIELD_VALUE              1
+       L11:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+       L12:     END_SEND
+       L13:     POP_TOP
+
+  45            LOAD_FAST                1 (process_pending_artifacts)
+                PUSH_NULL
+                LOAD_FAST                2 (db)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L14:     SEND                     3 (to L17)
+       L15:     YIELD_VALUE              1
+       L16:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+       L17:     END_SEND
+                STORE_FAST               3 (count)
+
+  46            LOAD_FAST                3 (count)
+                LOAD_CONST               1 (0)
+                COMPARE_OP             148 (bool(>))
+                POP_JUMP_IF_FALSE       22 (to L18)
+
+  47            LOAD_GLOBAL             12 (logger)
+                LOAD_ATTR               15 (info + NULL|self)
+                LOAD_CONST               4 ('Processed %d artifact(s)')
+                LOAD_FAST                3 (count)
+                CALL                     2
+                POP_TOP
+
+  44   L18:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     2
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L19:     SEND                     3 (to L22)
+       L20:     YIELD_VALUE              1
+       L21:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+       L22:     END_SEND
+                POP_TOP
+       L23:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     2
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L24:     SEND                     3 (to L27)
+       L25:     YIELD_VALUE              1
+       L26:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+       L27:     END_SEND
+                POP_TOP
+
+  51   L28:     LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        44 (to L33)
+
+  52            LOAD_GLOBAL             20 (asyncio)
+                LOAD_ATTR               22 (sleep)
+                PUSH_NULL
+                LOAD_GLOBAL             24 (settings)
+                LOAD_ATTR               26 (WORKER_POST_CALL_INTERVAL)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L29:     SEND                     3 (to L32)
+       L30:     YIELD_VALUE              1
+       L31:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L29)
+       L32:     END_SEND
+                POP_TOP
+
+  42   L33:     LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L35)
+       L34:     JUMP_BACKWARD          185 (to L2)
+       L35:     RETURN_CONST             0 (None)
+       L36:     RETURN_CONST             0 (None)
+
+  44   L37:     CLEANUP_THROW
+       L38:     JUMP_BACKWARD_NO_INTERRUPT 174 (to L7)
+       L39:     CLEANUP_THROW
+       L40:     JUMP_BACKWARD_NO_INTERRUPT 152 (to L12)
+
+  45   L41:     CLEANUP_THROW
+       L42:     JUMP_BACKWARD_NO_INTERRUPT 138 (to L17)
+
+  44   L43:     CLEANUP_THROW
+       L44:     JUMP_BACKWARD_NO_INTERRUPT 96 (to L22)
+       L45:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L46:     SEND                     4 (to L50)
+       L47:     YIELD_VALUE              1
+       L48:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L46)
+       L49:     CLEANUP_THROW
+       L50:     END_SEND
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L51)
+                RERAISE                  2
+       L51:     POP_TOP
+       L52:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                JUMP_BACKWARD_NO_INTERRUPT 117 (to L23)
+
+  --   L53:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+  44   L54:     CLEANUP_THROW
+       L55:     JUMP_BACKWARD_NO_INTERRUPT 108 (to L27)
+       L56:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L57:     SEND                     4 (to L61)
+       L58:     YIELD_VALUE              1
+       L59:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L57)
+       L60:     CLEANUP_THROW
+       L61:     END_SEND
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L62)
+                RERAISE                  2
+       L62:     POP_TOP
+       L63:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+       L64:     JUMP_BACKWARD_NO_INTERRUPT 129 (to L28)
+
+  --   L65:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L66:     PUSH_EXC_INFO
+
+  48            LOAD_GLOBAL             16 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       24 (to L68)
+                POP_TOP
+
+  49            LOAD_GLOBAL             12 (logger)
+                LOAD_ATTR               19 (exception + NULL|self)
+                LOAD_CONST               5 ('Post-call worker iteration failed')
+                CALL                     1
+                POP_TOP
+       L67:     POP_EXCEPT
+                JUMP_BACKWARD_NO_INTERRUPT 165 (to L28)
+
+  48   L68:     RERAISE                  0
+
+  --   L69:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+  52   L70:     CLEANUP_THROW
+       L71:     JUMP_BACKWARD_NO_INTERRUPT 118 (to L32)
+
+  --   L72:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L72 [0] lasti
+  L3 to L5 -> L66 [0]
+  L5 to L6 -> L37 [3]
+  L6 to L8 -> L66 [0]
+  L8 to L10 -> L56 [1] lasti
+  L10 to L11 -> L39 [4]
+  L11 to L13 -> L56 [1] lasti
+  L13 to L15 -> L45 [2] lasti
+  L15 to L16 -> L41 [4]
+  L16 to L18 -> L45 [2] lasti
+  L18 to L20 -> L56 [1] lasti
+  L20 to L21 -> L43 [3]
+  L21 to L23 -> L56 [1] lasti
+  L23 to L25 -> L66 [0]
+  L25 to L26 -> L54 [2]
+  L26 to L28 -> L66 [0]
+  L28 to L30 -> L72 [0] lasti
+  L30 to L31 -> L70 [2]
+  L31 to L34 -> L72 [0] lasti
+  L35 to L37 -> L72 [0] lasti
+  L37 to L38 -> L66 [0]
+  L39 to L40 -> L56 [1] lasti
+  L41 to L42 -> L45 [2] lasti
+  L43 to L44 -> L56 [1] lasti
+  L45 to L47 -> L53 [4] lasti
+  L47 to L48 -> L49 [7]
+  L48 to L52 -> L53 [4] lasti
+  L52 to L54 -> L56 [1] lasti
+  L54 to L55 -> L66 [0]
+  L56 to L58 -> L65 [3] lasti
+  L58 to L59 -> L60 [6]
+  L59 to L63 -> L65 [3] lasti
+  L63 to L64 -> L66 [0]
+  L64 to L65 -> L72 [0] lasti
+  L65 to L66 -> L66 [0]
+  L66 to L67 -> L69 [1] lasti
+  L67 to L68 -> L72 [0] lasti
+  L68 to L69 -> L69 [1] lasti
+  L69 to L71 -> L72 [0] lasti
+
+Disassembly of <code object _run_reminder_loop at 0x0000024C0FE4DA10, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 55>:
+  55            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  56            LOAD_CONST               1 (0)
+                LOAD_CONST               2 (('async_session_factory',))
+                IMPORT_NAME              0 (app.database)
+                IMPORT_FROM              1 (async_session_factory)
+                STORE_FAST               0 (async_session_factory)
+                POP_TOP
+
+  57            LOAD_CONST               1 (0)
+                LOAD_CONST               3 (('process_due_reminders',))
+                IMPORT_NAME              2 (app.workers.reminder_worker)
+                IMPORT_FROM              3 (process_due_reminders)
+                STORE_FAST               1 (process_due_reminders)
+                POP_TOP
+
+  59            LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE       186 (to L36)
+
+  60    L2:     NOP
+
+  61    L3:     LOAD_FAST                0 (async_session_factory)
+                PUSH_NULL
+                CALL                     0
+                BEFORE_ASYNC_WITH
+                GET_AWAITABLE            1
+                LOAD_CONST               0 (None)
+        L4:     SEND                     3 (to L7)
+        L5:     YIELD_VALUE              1
+        L6:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+        L7:     END_SEND
+        L8:     STORE_FAST_LOAD_FAST    34 (db, db)
+                LOAD_ATTR               11 (begin + NULL|self)
+                CALL                     0
+                BEFORE_ASYNC_WITH
+                GET_AWAITABLE            1
+                LOAD_CONST               0 (None)
+        L9:     SEND                     3 (to L12)
+       L10:     YIELD_VALUE              1
+       L11:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+       L12:     END_SEND
+       L13:     POP_TOP
+
+  62            LOAD_FAST                1 (process_due_reminders)
+                PUSH_NULL
+                LOAD_FAST                2 (db)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L14:     SEND                     3 (to L17)
+       L15:     YIELD_VALUE              1
+       L16:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+       L17:     END_SEND
+                STORE_FAST               3 (count)
+
+  63            LOAD_FAST                3 (count)
+                LOAD_CONST               1 (0)
+                COMPARE_OP             148 (bool(>))
+                POP_JUMP_IF_FALSE       22 (to L18)
+
+  64            LOAD_GLOBAL             12 (logger)
+                LOAD_ATTR               15 (info + NULL|self)
+                LOAD_CONST               4 ('Triggered %d reminder(s)')
+                LOAD_FAST                3 (count)
+                CALL                     2
+                POP_TOP
+
+  61   L18:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     2
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L19:     SEND                     3 (to L22)
+       L20:     YIELD_VALUE              1
+       L21:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+       L22:     END_SEND
+                POP_TOP
+       L23:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     2
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L24:     SEND                     3 (to L27)
+       L25:     YIELD_VALUE              1
+       L26:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+       L27:     END_SEND
+                POP_TOP
+
+  68   L28:     LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        44 (to L33)
+
+  69            LOAD_GLOBAL             20 (asyncio)
+                LOAD_ATTR               22 (sleep)
+                PUSH_NULL
+                LOAD_GLOBAL             24 (settings)
+                LOAD_ATTR               26 (WORKER_REMINDER_INTERVAL)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L29:     SEND                     3 (to L32)
+       L30:     YIELD_VALUE              1
+       L31:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L29)
+       L32:     END_SEND
+                POP_TOP
+
+  59   L33:     LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L35)
+       L34:     JUMP_BACKWARD          185 (to L2)
+       L35:     RETURN_CONST             0 (None)
+       L36:     RETURN_CONST             0 (None)
+
+  61   L37:     CLEANUP_THROW
+       L38:     JUMP_BACKWARD_NO_INTERRUPT 174 (to L7)
+       L39:     CLEANUP_THROW
+       L40:     JUMP_BACKWARD_NO_INTERRUPT 152 (to L12)
+
+  62   L41:     CLEANUP_THROW
+       L42:     JUMP_BACKWARD_NO_INTERRUPT 138 (to L17)
+
+  61   L43:     CLEANUP_THROW
+       L44:     JUMP_BACKWARD_NO_INTERRUPT 96 (to L22)
+       L45:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L46:     SEND                     4 (to L50)
+       L47:     YIELD_VALUE              1
+       L48:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L46)
+       L49:     CLEANUP_THROW
+       L50:     END_SEND
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L51)
+                RERAISE                  2
+       L51:     POP_TOP
+       L52:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                JUMP_BACKWARD_NO_INTERRUPT 117 (to L23)
+
+  --   L53:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+  61   L54:     CLEANUP_THROW
+       L55:     JUMP_BACKWARD_NO_INTERRUPT 108 (to L27)
+       L56:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L57:     SEND                     4 (to L61)
+       L58:     YIELD_VALUE              1
+       L59:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L57)
+       L60:     CLEANUP_THROW
+       L61:     END_SEND
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L62)
+                RERAISE                  2
+       L62:     POP_TOP
+       L63:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+       L64:     JUMP_BACKWARD_NO_INTERRUPT 129 (to L28)
+
+  --   L65:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L66:     PUSH_EXC_INFO
+
+  65            LOAD_GLOBAL             16 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       24 (to L68)
+                POP_TOP
+
+  66            LOAD_GLOBAL             12 (logger)
+                LOAD_ATTR               19 (exception + NULL|self)
+                LOAD_CONST               5 ('Reminder worker iteration failed')
+                CALL                     1
+                POP_TOP
+       L67:     POP_EXCEPT
+                JUMP_BACKWARD_NO_INTERRUPT 165 (to L28)
+
+  65   L68:     RERAISE                  0
+
+  --   L69:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+  69   L70:     CLEANUP_THROW
+       L71:     JUMP_BACKWARD_NO_INTERRUPT 118 (to L32)
+
+  --   L72:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L72 [0] lasti
+  L3 to L5 -> L66 [0]
+  L5 to L6 -> L37 [3]
+  L6 to L8 -> L66 [0]
+  L8 to L10 -> L56 [1] lasti
+  L10 to L11 -> L39 [4]
+  L11 to L13 -> L56 [1] lasti
+  L13 to L15 -> L45 [2] lasti
+  L15 to L16 -> L41 [4]
+  L16 to L18 -> L45 [2] lasti
+  L18 to L20 -> L56 [1] lasti
+  L20 to L21 -> L43 [3]
+  L21 to L23 -> L56 [1] lasti
+  L23 to L25 -> L66 [0]
+  L25 to L26 -> L54 [2]
+  L26 to L28 -> L66 [0]
+  L28 to L30 -> L72 [0] lasti
+  L30 to L31 -> L70 [2]
+  L31 to L34 -> L72 [0] lasti
+  L35 to L37 -> L72 [0] lasti
+  L37 to L38 -> L66 [0]
+  L39 to L40 -> L56 [1] lasti
+  L41 to L42 -> L45 [2] lasti
+  L43 to L44 -> L56 [1] lasti
+  L45 to L47 -> L53 [4] lasti
+  L47 to L48 -> L49 [7]
+  L48 to L52 -> L53 [4] lasti
+  L52 to L54 -> L56 [1] lasti
+  L54 to L55 -> L66 [0]
+  L56 to L58 -> L65 [3] lasti
+  L58 to L59 -> L60 [6]
+  L59 to L63 -> L65 [3] lasti
+  L63 to L64 -> L66 [0]
+  L64 to L65 -> L72 [0] lasti
+  L65 to L66 -> L66 [0]
+  L66 to L67 -> L69 [1] lasti
+  L67 to L68 -> L72 [0] lasti
+  L68 to L69 -> L69 [1] lasti
+  L69 to L71 -> L72 [0] lasti
+
+Disassembly of <code object _run_sms_loop at 0x0000024C0FE4EA50, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 72>:
+  72            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  73            LOAD_CONST               1 (0)
+                LOAD_CONST               2 (('async_session_factory',))
+                IMPORT_NAME              0 (app.database)
+                IMPORT_FROM              1 (async_session_factory)
+                STORE_FAST               0 (async_session_factory)
+                POP_TOP
+
+  74            LOAD_CONST               1 (0)
+                LOAD_CONST               3 (('process_pending_sms',))
+                IMPORT_NAME              2 (app.workers.sms_worker)
+                IMPORT_FROM              3 (process_pending_sms)
+                STORE_FAST               1 (process_pending_sms)
+                POP_TOP
+
+  76            LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE       186 (to L36)
+
+  77    L2:     NOP
+
+  78    L3:     LOAD_FAST                0 (async_session_factory)
+                PUSH_NULL
+                CALL                     0
+                BEFORE_ASYNC_WITH
+                GET_AWAITABLE            1
+                LOAD_CONST               0 (None)
+        L4:     SEND                     3 (to L7)
+        L5:     YIELD_VALUE              1
+        L6:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+        L7:     END_SEND
+        L8:     STORE_FAST_LOAD_FAST    34 (db, db)
+                LOAD_ATTR               11 (begin + NULL|self)
+                CALL                     0
+                BEFORE_ASYNC_WITH
+                GET_AWAITABLE            1
+                LOAD_CONST               0 (None)
+        L9:     SEND                     3 (to L12)
+       L10:     YIELD_VALUE              1
+       L11:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+       L12:     END_SEND
+       L13:     POP_TOP
+
+  79            LOAD_FAST                1 (process_pending_sms)
+                PUSH_NULL
+                LOAD_FAST                2 (db)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L14:     SEND                     3 (to L17)
+       L15:     YIELD_VALUE              1
+       L16:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+       L17:     END_SEND
+                STORE_FAST               3 (count)
+
+  80            LOAD_FAST                3 (count)
+                LOAD_CONST               1 (0)
+                COMPARE_OP             148 (bool(>))
+                POP_JUMP_IF_FALSE       22 (to L18)
+
+  81            LOAD_GLOBAL             12 (logger)
+                LOAD_ATTR               15 (info + NULL|self)
+                LOAD_CONST               4 ('Sent %d SMS message(s)')
+                LOAD_FAST                3 (count)
+                CALL                     2
+                POP_TOP
+
+  78   L18:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     2
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L19:     SEND                     3 (to L22)
+       L20:     YIELD_VALUE              1
+       L21:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+       L22:     END_SEND
+                POP_TOP
+       L23:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     2
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L24:     SEND                     3 (to L27)
+       L25:     YIELD_VALUE              1
+       L26:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+       L27:     END_SEND
+                POP_TOP
+
+  85   L28:     LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        44 (to L33)
+
+  86            LOAD_GLOBAL             20 (asyncio)
+                LOAD_ATTR               22 (sleep)
+                PUSH_NULL
+                LOAD_GLOBAL             24 (settings)
+                LOAD_ATTR               26 (WORKER_SMS_INTERVAL)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L29:     SEND                     3 (to L32)
+       L30:     YIELD_VALUE              1
+       L31:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L29)
+       L32:     END_SEND
+                POP_TOP
+
+  76   L33:     LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L35)
+       L34:     JUMP_BACKWARD          185 (to L2)
+       L35:     RETURN_CONST             0 (None)
+       L36:     RETURN_CONST             0 (None)
+
+  78   L37:     CLEANUP_THROW
+       L38:     JUMP_BACKWARD_NO_INTERRUPT 174 (to L7)
+       L39:     CLEANUP_THROW
+       L40:     JUMP_BACKWARD_NO_INTERRUPT 152 (to L12)
+
+  79   L41:     CLEANUP_THROW
+       L42:     JUMP_BACKWARD_NO_INTERRUPT 138 (to L17)
+
+  78   L43:     CLEANUP_THROW
+       L44:     JUMP_BACKWARD_NO_INTERRUPT 96 (to L22)
+       L45:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L46:     SEND                     4 (to L50)
+       L47:     YIELD_VALUE              1
+       L48:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L46)
+       L49:     CLEANUP_THROW
+       L50:     END_SEND
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L51)
+                RERAISE                  2
+       L51:     POP_TOP
+       L52:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                JUMP_BACKWARD_NO_INTERRUPT 117 (to L23)
+
+  --   L53:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+  78   L54:     CLEANUP_THROW
+       L55:     JUMP_BACKWARD_NO_INTERRUPT 108 (to L27)
+       L56:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L57:     SEND                     4 (to L61)
+       L58:     YIELD_VALUE              1
+       L59:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L57)
+       L60:     CLEANUP_THROW
+       L61:     END_SEND
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L62)
+                RERAISE                  2
+       L62:     POP_TOP
+       L63:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+       L64:     JUMP_BACKWARD_NO_INTERRUPT 129 (to L28)
+
+  --   L65:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L66:     PUSH_EXC_INFO
+
+  82            LOAD_GLOBAL             16 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       24 (to L68)
+                POP_TOP
+
+  83            LOAD_GLOBAL             12 (logger)
+                LOAD_ATTR               19 (exception + NULL|self)
+                LOAD_CONST               5 ('SMS worker iteration failed')
+                CALL                     1
+                POP_TOP
+       L67:     POP_EXCEPT
+                JUMP_BACKWARD_NO_INTERRUPT 165 (to L28)
+
+  82   L68:     RERAISE                  0
+
+  --   L69:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+  86   L70:     CLEANUP_THROW
+       L71:     JUMP_BACKWARD_NO_INTERRUPT 118 (to L32)
+
+  --   L72:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L72 [0] lasti
+  L3 to L5 -> L66 [0]
+  L5 to L6 -> L37 [3]
+  L6 to L8 -> L66 [0]
+  L8 to L10 -> L56 [1] lasti
+  L10 to L11 -> L39 [4]
+  L11 to L13 -> L56 [1] lasti
+  L13 to L15 -> L45 [2] lasti
+  L15 to L16 -> L41 [4]
+  L16 to L18 -> L45 [2] lasti
+  L18 to L20 -> L56 [1] lasti
+  L20 to L21 -> L43 [3]
+  L21 to L23 -> L56 [1] lasti
+  L23 to L25 -> L66 [0]
+  L25 to L26 -> L54 [2]
+  L26 to L28 -> L66 [0]
+  L28 to L30 -> L72 [0] lasti
+  L30 to L31 -> L70 [2]
+  L31 to L34 -> L72 [0] lasti
+  L35 to L37 -> L72 [0] lasti
+  L37 to L38 -> L66 [0]
+  L39 to L40 -> L56 [1] lasti
+  L41 to L42 -> L45 [2] lasti
+  L43 to L44 -> L56 [1] lasti
+  L45 to L47 -> L53 [4] lasti
+  L47 to L48 -> L49 [7]
+  L48 to L52 -> L53 [4] lasti
+  L52 to L54 -> L56 [1] lasti
+  L54 to L55 -> L66 [0]
+  L56 to L58 -> L65 [3] lasti
+  L58 to L59 -> L60 [6]
+  L59 to L63 -> L65 [3] lasti
+  L63 to L64 -> L66 [0]
+  L64 to L65 -> L72 [0] lasti
+  L65 to L66 -> L66 [0]
+  L66 to L67 -> L69 [1] lasti
+  L67 to L68 -> L72 [0] lasti
+  L68 to L69 -> L69 [1] lasti
+  L69 to L71 -> L72 [0] lasti
+
+Disassembly of <code object _run_handoff_expiry_loop at 0x0000024C0FE4D6D0, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 89>:
+  89            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  90            LOAD_CONST               1 (0)
+                LOAD_CONST               2 (('async_session_factory',))
+                IMPORT_NAME              0 (app.database)
+                IMPORT_FROM              1 (async_session_factory)
+                STORE_FAST               0 (async_session_factory)
+                POP_TOP
+
+  91            LOAD_CONST               1 (0)
+                LOAD_CONST               3 (('expire_stale_offers',))
+                IMPORT_NAME              2 (app.services.handoff_service)
+                IMPORT_FROM              3 (expire_stale_offers)
+                STORE_FAST               1 (expire_stale_offers)
+                POP_TOP
+
+  93            LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE       186 (to L36)
+
+  94    L2:     NOP
+
+  95    L3:     LOAD_FAST                0 (async_session_factory)
+                PUSH_NULL
+                CALL                     0
+                BEFORE_ASYNC_WITH
+                GET_AWAITABLE            1
+                LOAD_CONST               0 (None)
+        L4:     SEND                     3 (to L7)
+        L5:     YIELD_VALUE              1
+        L6:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+        L7:     END_SEND
+        L8:     STORE_FAST_LOAD_FAST    34 (db, db)
+                LOAD_ATTR               11 (begin + NULL|self)
+                CALL                     0
+                BEFORE_ASYNC_WITH
+                GET_AWAITABLE            1
+                LOAD_CONST               0 (None)
+        L9:     SEND                     3 (to L12)
+       L10:     YIELD_VALUE              1
+       L11:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+       L12:     END_SEND
+       L13:     POP_TOP
+
+  96            LOAD_FAST                1 (expire_stale_offers)
+                PUSH_NULL
+                LOAD_FAST                2 (db)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L14:     SEND                     3 (to L17)
+       L15:     YIELD_VALUE              1
+       L16:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+       L17:     END_SEND
+                STORE_FAST               3 (count)
+
+  97            LOAD_FAST                3 (count)
+                LOAD_CONST               1 (0)
+                COMPARE_OP             148 (bool(>))
+                POP_JUMP_IF_FALSE       22 (to L18)
+
+  98            LOAD_GLOBAL             12 (logger)
+                LOAD_ATTR               15 (info + NULL|self)
+                LOAD_CONST               4 ('Expired %d handoff offer(s)')
+                LOAD_FAST                3 (count)
+                CALL                     2
+                POP_TOP
+
+  95   L18:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     2
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L19:     SEND                     3 (to L22)
+       L20:     YIELD_VALUE              1
+       L21:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+       L22:     END_SEND
+                POP_TOP
+       L23:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     2
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L24:     SEND                     3 (to L27)
+       L25:     YIELD_VALUE              1
+       L26:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+       L27:     END_SEND
+                POP_TOP
+
+ 102   L28:     LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        44 (to L33)
+
+ 103            LOAD_GLOBAL             20 (asyncio)
+                LOAD_ATTR               22 (sleep)
+                PUSH_NULL
+                LOAD_GLOBAL             24 (settings)
+                LOAD_ATTR               26 (WORKER_HANDOFF_EXPIRY_INTERVAL)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L29:     SEND                     3 (to L32)
+       L30:     YIELD_VALUE              1
+       L31:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L29)
+       L32:     END_SEND
+                POP_TOP
+
+  93   L33:     LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L35)
+       L34:     JUMP_BACKWARD          185 (to L2)
+       L35:     RETURN_CONST             0 (None)
+       L36:     RETURN_CONST             0 (None)
+
+  95   L37:     CLEANUP_THROW
+       L38:     JUMP_BACKWARD_NO_INTERRUPT 174 (to L7)
+       L39:     CLEANUP_THROW
+       L40:     JUMP_BACKWARD_NO_INTERRUPT 152 (to L12)
+
+  96   L41:     CLEANUP_THROW
+       L42:     JUMP_BACKWARD_NO_INTERRUPT 138 (to L17)
+
+  95   L43:     CLEANUP_THROW
+       L44:     JUMP_BACKWARD_NO_INTERRUPT 96 (to L22)
+       L45:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L46:     SEND                     4 (to L50)
+       L47:     YIELD_VALUE              1
+       L48:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L46)
+       L49:     CLEANUP_THROW
+       L50:     END_SEND
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L51)
+                RERAISE                  2
+       L51:     POP_TOP
+       L52:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                JUMP_BACKWARD_NO_INTERRUPT 117 (to L23)
+
+  --   L53:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+  95   L54:     CLEANUP_THROW
+       L55:     JUMP_BACKWARD_NO_INTERRUPT 108 (to L27)
+       L56:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L57:     SEND                     4 (to L61)
+       L58:     YIELD_VALUE              1
+       L59:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L57)
+       L60:     CLEANUP_THROW
+       L61:     END_SEND
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L62)
+                RERAISE                  2
+       L62:     POP_TOP
+       L63:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+       L64:     JUMP_BACKWARD_NO_INTERRUPT 129 (to L28)
+
+  --   L65:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L66:     PUSH_EXC_INFO
+
+  99            LOAD_GLOBAL             16 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       24 (to L68)
+                POP_TOP
+
+ 100            LOAD_GLOBAL             12 (logger)
+                LOAD_ATTR               19 (exception + NULL|self)
+                LOAD_CONST               5 ('Handoff expiry worker iteration failed')
+                CALL                     1
+                POP_TOP
+       L67:     POP_EXCEPT
+                JUMP_BACKWARD_NO_INTERRUPT 165 (to L28)
+
+  99   L68:     RERAISE                  0
+
+  --   L69:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+ 103   L70:     CLEANUP_THROW
+       L71:     JUMP_BACKWARD_NO_INTERRUPT 118 (to L32)
+
+  --   L72:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L72 [0] lasti
+  L3 to L5 -> L66 [0]
+  L5 to L6 -> L37 [3]
+  L6 to L8 -> L66 [0]
+  L8 to L10 -> L56 [1] lasti
+  L10 to L11 -> L39 [4]
+  L11 to L13 -> L56 [1] lasti
+  L13 to L15 -> L45 [2] lasti
+  L15 to L16 -> L41 [4]
+  L16 to L18 -> L45 [2] lasti
+  L18 to L20 -> L56 [1] lasti
+  L20 to L21 -> L43 [3]
+  L21 to L23 -> L56 [1] lasti
+  L23 to L25 -> L66 [0]
+  L25 to L26 -> L54 [2]
+  L26 to L28 -> L66 [0]
+  L28 to L30 -> L72 [0] lasti
+  L30 to L31 -> L70 [2]
+  L31 to L34 -> L72 [0] lasti
+  L35 to L37 -> L72 [0] lasti
+  L37 to L38 -> L66 [0]
+  L39 to L40 -> L56 [1] lasti
+  L41 to L42 -> L45 [2] lasti
+  L43 to L44 -> L56 [1] lasti
+  L45 to L47 -> L53 [4] lasti
+  L47 to L48 -> L49 [7]
+  L48 to L52 -> L53 [4] lasti
+  L52 to L54 -> L56 [1] lasti
+  L54 to L55 -> L66 [0]
+  L56 to L58 -> L65 [3] lasti
+  L58 to L59 -> L60 [6]
+  L59 to L63 -> L65 [3] lasti
+  L63 to L64 -> L66 [0]
+  L64 to L65 -> L72 [0] lasti
+  L65 to L66 -> L66 [0]
+  L66 to L67 -> L69 [1] lasti
+  L67 to L68 -> L72 [0] lasti
+  L68 to L69 -> L69 [1] lasti
+  L69 to L71 -> L72 [0] lasti
+
+Disassembly of <code object _run_lifecycle_loop at 0x0000024C0FEDDF50, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 106>:
+ 106            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 107            LOAD_CONST               1 (0)
+                LOAD_CONST               2 (('async_session_factory',))
+                IMPORT_NAME              0 (app.database)
+                IMPORT_FROM              1 (async_session_factory)
+                STORE_FAST               0 (async_session_factory)
+                POP_TOP
+
+ 108            LOAD_CONST               1 (0)
+                LOAD_CONST               3 (('cleanup_stale_pending_numbers', 'release_numbers_after_grace', 'repair_pending_configurations'))
+                IMPORT_NAME              2 (app.workers.number_lifecycle)
+                IMPORT_FROM              3 (cleanup_stale_pending_numbers)
+                STORE_FAST               1 (cleanup_stale_pending_numbers)
+                IMPORT_FROM              4 (release_numbers_after_grace)
+                STORE_FAST               2 (release_numbers_after_grace)
+                IMPORT_FROM              5 (repair_pending_configurations)
+                STORE_FAST               3 (repair_pending_configurations)
+                POP_TOP
+
+ 114            LOAD_GLOBAL             12 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE       235 (to L46)
+
+ 115    L2:     LOAD_GLOBAL             12 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_FALSE        1 (to L3)
+
+ 116            RETURN_CONST             0 (None)
+
+ 117    L3:     LOAD_GLOBAL             14 (asyncio)
+                LOAD_ATTR               16 (sleep)
+                PUSH_NULL
+                LOAD_GLOBAL             18 (settings)
+                LOAD_ATTR               20 (WORKER_NUMBER_LIFECYCLE_INTERVAL)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L4:     SEND                     3 (to L7)
+        L5:     YIELD_VALUE              1
+        L6:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+        L7:     END_SEND
+                POP_TOP
+
+ 118    L8:     NOP
+
+ 119    L9:     LOAD_FAST                0 (async_session_factory)
+                PUSH_NULL
+                CALL                     0
+                BEFORE_ASYNC_WITH
+                GET_AWAITABLE            1
+                LOAD_CONST               0 (None)
+       L10:     SEND                     3 (to L13)
+       L11:     YIELD_VALUE              1
+       L12:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L10)
+       L13:     END_SEND
+       L14:     STORE_FAST_LOAD_FAST    68 (db, db)
+                LOAD_ATTR               23 (begin + NULL|self)
+                CALL                     0
+                BEFORE_ASYNC_WITH
+                GET_AWAITABLE            1
+                LOAD_CONST               0 (None)
+       L15:     SEND                     3 (to L18)
+       L16:     YIELD_VALUE              1
+       L17:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+       L18:     END_SEND
+       L19:     POP_TOP
+
+ 120            LOAD_FAST                1 (cleanup_stale_pending_numbers)
+                PUSH_NULL
+                LOAD_FAST                4 (db)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L20:     SEND                     3 (to L23)
+       L21:     YIELD_VALUE              1
+       L22:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L20)
+       L23:     END_SEND
+                STORE_FAST               5 (n1)
+
+ 121            LOAD_FAST                2 (release_numbers_after_grace)
+                PUSH_NULL
+                LOAD_FAST                4 (db)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L24:     SEND                     3 (to L27)
+       L25:     YIELD_VALUE              1
+       L26:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+       L27:     END_SEND
+                STORE_FAST               6 (n2)
+
+ 122            LOAD_FAST                3 (repair_pending_configurations)
+                PUSH_NULL
+                LOAD_FAST                4 (db)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L28:     SEND                     3 (to L31)
+       L29:     YIELD_VALUE              1
+       L30:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L28)
+       L31:     END_SEND
+                STORE_FAST               7 (n3)
+
+ 123            LOAD_FAST                5 (n1)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        14 (to L32)
+                LOAD_FAST                6 (n2)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         7 (to L32)
+                LOAD_FAST                7 (n3)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       23 (to L33)
+
+ 124   L32:     LOAD_GLOBAL             24 (logger)
+                LOAD_ATTR               27 (info + NULL|self)
+
+ 125            LOAD_CONST               4 ('Lifecycle: cleaned=%d released=%d repaired=%d')
+
+ 126            LOAD_FAST_LOAD_FAST     86 (n1, n2)
+                LOAD_FAST                7 (n3)
+
+ 124            CALL                     4
+                POP_TOP
+
+ 119   L33:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     2
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L34:     SEND                     3 (to L37)
+       L35:     YIELD_VALUE              1
+       L36:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L34)
+       L37:     END_SEND
+                POP_TOP
+       L38:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     2
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L39:     SEND                     3 (to L42)
+       L40:     YIELD_VALUE              1
+       L41:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L39)
+       L42:     END_SEND
+                POP_TOP
+
+ 114   L43:     LOAD_GLOBAL             12 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L45)
+       L44:     JUMP_BACKWARD          234 (to L2)
+       L45:     RETURN_CONST             0 (None)
+       L46:     RETURN_CONST             0 (None)
+
+ 117   L47:     CLEANUP_THROW
+       L48:     JUMP_BACKWARD_NO_INTERRUPT 184 (to L7)
+
+ 119   L49:     CLEANUP_THROW
+       L50:     JUMP_BACKWARD_NO_INTERRUPT 169 (to L13)
+       L51:     CLEANUP_THROW
+       L52:     JUMP_BACKWARD_NO_INTERRUPT 147 (to L18)
+
+ 120   L53:     CLEANUP_THROW
+       L54:     JUMP_BACKWARD_NO_INTERRUPT 133 (to L23)
+
+ 121   L55:     CLEANUP_THROW
+       L56:     JUMP_BACKWARD_NO_INTERRUPT 119 (to L27)
+
+ 122   L57:     CLEANUP_THROW
+       L58:     JUMP_BACKWARD_NO_INTERRUPT 105 (to L31)
+
+ 119   L59:     CLEANUP_THROW
+       L60:     JUMP_BACKWARD_NO_INTERRUPT 47 (to L37)
+       L61:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L62:     SEND                     4 (to L66)
+       L63:     YIELD_VALUE              1
+       L64:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L62)
+       L65:     CLEANUP_THROW
+       L66:     END_SEND
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L67)
+                RERAISE                  2
+       L67:     POP_TOP
+       L68:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                JUMP_BACKWARD_NO_INTERRUPT 68 (to L38)
+
+  --   L69:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+ 119   L70:     CLEANUP_THROW
+       L71:     JUMP_BACKWARD_NO_INTERRUPT 59 (to L42)
+       L72:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L73:     SEND                     4 (to L77)
+       L74:     YIELD_VALUE              1
+       L75:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L73)
+       L76:     CLEANUP_THROW
+       L77:     END_SEND
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L78)
+                RERAISE                  2
+       L78:     POP_TOP
+       L79:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+       L80:     JUMP_BACKWARD_NO_INTERRUPT 80 (to L43)
+
+  --   L81:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L82:     PUSH_EXC_INFO
+
+ 128            LOAD_GLOBAL             28 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       24 (to L84)
+                POP_TOP
+
+ 129            LOAD_GLOBAL             24 (logger)
+                LOAD_ATTR               31 (exception + NULL|self)
+                LOAD_CONST               5 ('Lifecycle worker iteration failed')
+                CALL                     1
+                POP_TOP
+       L83:     POP_EXCEPT
+                JUMP_BACKWARD_NO_INTERRUPT 116 (to L43)
+
+ 128   L84:     RERAISE                  0
+
+  --   L85:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L86:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L5 -> L86 [0] lasti
+  L5 to L6 -> L47 [2]
+  L6 to L8 -> L86 [0] lasti
+  L9 to L11 -> L82 [0]
+  L11 to L12 -> L49 [3]
+  L12 to L14 -> L82 [0]
+  L14 to L16 -> L72 [1] lasti
+  L16 to L17 -> L51 [4]
+  L17 to L19 -> L72 [1] lasti
+  L19 to L21 -> L61 [2] lasti
+  L21 to L22 -> L53 [4]
+  L22 to L25 -> L61 [2] lasti
+  L25 to L26 -> L55 [4]
+  L26 to L29 -> L61 [2] lasti
+  L29 to L30 -> L57 [4]
+  L30 to L33 -> L61 [2] lasti
+  L33 to L35 -> L72 [1] lasti
+  L35 to L36 -> L59 [3]
+  L36 to L38 -> L72 [1] lasti
+  L38 to L40 -> L82 [0]
+  L40 to L41 -> L70 [2]
+  L41 to L43 -> L82 [0]
+  L43 to L44 -> L86 [0] lasti
+  L45 to L48 -> L86 [0] lasti
+  L49 to L50 -> L82 [0]
+  L51 to L52 -> L72 [1] lasti
+  L53 to L54 -> L61 [2] lasti
+  L55 to L56 -> L61 [2] lasti
+  L57 to L58 -> L61 [2] lasti
+  L59 to L60 -> L72 [1] lasti
+  L61 to L63 -> L69 [4] lasti
+  L63 to L64 -> L65 [7]
+  L64 to L68 -> L69 [4] lasti
+  L68 to L70 -> L72 [1] lasti
+  L70 to L71 -> L82 [0]
+  L72 to L74 -> L81 [3] lasti
+  L74 to L75 -> L76 [6]
+  L75 to L79 -> L81 [3] lasti
+  L79 to L80 -> L82 [0]
+  L80 to L81 -> L86 [0] lasti
+  L81 to L82 -> L82 [0]
+  L82 to L83 -> L85 [1] lasti
+  L83 to L84 -> L86 [0] lasti
+  L84 to L85 -> L85 [1] lasti
+  L85 to L86 -> L86 [0] lasti
+
+Disassembly of <code object _run_retention_loop at 0x0000024C0FE4DD50, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 132>:
+ 132            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 133            LOAD_CONST               1 (0)
+                LOAD_CONST               2 (('async_session_factory',))
+                IMPORT_NAME              0 (app.database)
+                IMPORT_FROM              1 (async_session_factory)
+                STORE_FAST               0 (async_session_factory)
+                POP_TOP
+
+ 134            LOAD_CONST               1 (0)
+                LOAD_CONST               3 (('process_retention_deletions',))
+                IMPORT_NAME              2 (app.workers.retention_worker)
+                IMPORT_FROM              3 (process_retention_deletions)
+                STORE_FAST               1 (process_retention_deletions)
+                POP_TOP
+
+ 136            LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE       186 (to L36)
+
+ 137    L2:     NOP
+
+ 138    L3:     LOAD_FAST                0 (async_session_factory)
+                PUSH_NULL
+                CALL                     0
+                BEFORE_ASYNC_WITH
+                GET_AWAITABLE            1
+                LOAD_CONST               0 (None)
+        L4:     SEND                     3 (to L7)
+        L5:     YIELD_VALUE              1
+        L6:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+        L7:     END_SEND
+        L8:     STORE_FAST_LOAD_FAST    34 (db, db)
+                LOAD_ATTR               11 (begin + NULL|self)
+                CALL                     0
+                BEFORE_ASYNC_WITH
+                GET_AWAITABLE            1
+                LOAD_CONST               0 (None)
+        L9:     SEND                     3 (to L12)
+       L10:     YIELD_VALUE              1
+       L11:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+       L12:     END_SEND
+       L13:     POP_TOP
+
+ 139            LOAD_FAST                1 (process_retention_deletions)
+                PUSH_NULL
+                LOAD_FAST                2 (db)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L14:     SEND                     3 (to L17)
+       L15:     YIELD_VALUE              1
+       L16:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+       L17:     END_SEND
+                STORE_FAST               3 (count)
+
+ 140            LOAD_FAST                3 (count)
+                LOAD_CONST               1 (0)
+                COMPARE_OP             148 (bool(>))
+                POP_JUMP_IF_FALSE       22 (to L18)
+
+ 141            LOAD_GLOBAL             12 (logger)
+                LOAD_ATTR               15 (info + NULL|self)
+                LOAD_CONST               4 ('Retention-deleted %d call(s)')
+                LOAD_FAST                3 (count)
+                CALL                     2
+                POP_TOP
+
+ 138   L18:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     2
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L19:     SEND                     3 (to L22)
+       L20:     YIELD_VALUE              1
+       L21:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+       L22:     END_SEND
+                POP_TOP
+       L23:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     2
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L24:     SEND                     3 (to L27)
+       L25:     YIELD_VALUE              1
+       L26:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+       L27:     END_SEND
+                POP_TOP
+
+ 145   L28:     LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        44 (to L33)
+
+ 146            LOAD_GLOBAL             20 (asyncio)
+                LOAD_ATTR               22 (sleep)
+                PUSH_NULL
+                LOAD_GLOBAL             24 (settings)
+                LOAD_ATTR               26 (WORKER_RETENTION_INTERVAL)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L29:     SEND                     3 (to L32)
+       L30:     YIELD_VALUE              1
+       L31:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L29)
+       L32:     END_SEND
+                POP_TOP
+
+ 136   L33:     LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L35)
+       L34:     JUMP_BACKWARD          185 (to L2)
+       L35:     RETURN_CONST             0 (None)
+       L36:     RETURN_CONST             0 (None)
+
+ 138   L37:     CLEANUP_THROW
+       L38:     JUMP_BACKWARD_NO_INTERRUPT 174 (to L7)
+       L39:     CLEANUP_THROW
+       L40:     JUMP_BACKWARD_NO_INTERRUPT 152 (to L12)
+
+ 139   L41:     CLEANUP_THROW
+       L42:     JUMP_BACKWARD_NO_INTERRUPT 138 (to L17)
+
+ 138   L43:     CLEANUP_THROW
+       L44:     JUMP_BACKWARD_NO_INTERRUPT 96 (to L22)
+       L45:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L46:     SEND                     4 (to L50)
+       L47:     YIELD_VALUE              1
+       L48:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L46)
+       L49:     CLEANUP_THROW
+       L50:     END_SEND
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L51)
+                RERAISE                  2
+       L51:     POP_TOP
+       L52:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                JUMP_BACKWARD_NO_INTERRUPT 117 (to L23)
+
+  --   L53:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+ 138   L54:     CLEANUP_THROW
+       L55:     JUMP_BACKWARD_NO_INTERRUPT 108 (to L27)
+       L56:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L57:     SEND                     4 (to L61)
+       L58:     YIELD_VALUE              1
+       L59:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L57)
+       L60:     CLEANUP_THROW
+       L61:     END_SEND
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L62)
+                RERAISE                  2
+       L62:     POP_TOP
+       L63:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+       L64:     JUMP_BACKWARD_NO_INTERRUPT 129 (to L28)
+
+  --   L65:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L66:     PUSH_EXC_INFO
+
+ 142            LOAD_GLOBAL             16 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       24 (to L68)
+                POP_TOP
+
+ 143            LOAD_GLOBAL             12 (logger)
+                LOAD_ATTR               19 (exception + NULL|self)
+                LOAD_CONST               5 ('Retention worker iteration failed')
+                CALL                     1
+                POP_TOP
+       L67:     POP_EXCEPT
+                JUMP_BACKWARD_NO_INTERRUPT 165 (to L28)
+
+ 142   L68:     RERAISE                  0
+
+  --   L69:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+ 146   L70:     CLEANUP_THROW
+       L71:     JUMP_BACKWARD_NO_INTERRUPT 118 (to L32)
+
+  --   L72:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L72 [0] lasti
+  L3 to L5 -> L66 [0]
+  L5 to L6 -> L37 [3]
+  L6 to L8 -> L66 [0]
+  L8 to L10 -> L56 [1] lasti
+  L10 to L11 -> L39 [4]
+  L11 to L13 -> L56 [1] lasti
+  L13 to L15 -> L45 [2] lasti
+  L15 to L16 -> L41 [4]
+  L16 to L18 -> L45 [2] lasti
+  L18 to L20 -> L56 [1] lasti
+  L20 to L21 -> L43 [3]
+  L21 to L23 -> L56 [1] lasti
+  L23 to L25 -> L66 [0]
+  L25 to L26 -> L54 [2]
+  L26 to L28 -> L66 [0]
+  L28 to L30 -> L72 [0] lasti
+  L30 to L31 -> L70 [2]
+  L31 to L34 -> L72 [0] lasti
+  L35 to L37 -> L72 [0] lasti
+  L37 to L38 -> L66 [0]
+  L39 to L40 -> L56 [1] lasti
+  L41 to L42 -> L45 [2] lasti
+  L43 to L44 -> L56 [1] lasti
+  L45 to L47 -> L53 [4] lasti
+  L47 to L48 -> L49 [7]
+  L48 to L52 -> L53 [4] lasti
+  L52 to L54 -> L56 [1] lasti
+  L54 to L55 -> L66 [0]
+  L56 to L58 -> L65 [3] lasti
+  L58 to L59 -> L60 [6]
+  L59 to L63 -> L65 [3] lasti
+  L63 to L64 -> L66 [0]
+  L64 to L65 -> L72 [0] lasti
+  L65 to L66 -> L66 [0]
+  L66 to L67 -> L69 [1] lasti
+  L67 to L68 -> L72 [0] lasti
+  L68 to L69 -> L69 [1] lasti
+  L69 to L71 -> L72 [0] lasti
+
+Disassembly of <code object _run_hard_deletion_loop at 0x0000024C0FE4E090, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 149>:
+ 149            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 150            LOAD_CONST               1 (0)
+                LOAD_CONST               2 (('async_session_factory',))
+                IMPORT_NAME              0 (app.database)
+                IMPORT_FROM              1 (async_session_factory)
+                STORE_FAST               0 (async_session_factory)
+                POP_TOP
+
+ 151            LOAD_CONST               1 (0)
+                LOAD_CONST               3 (('process_hard_deletions',))
+                IMPORT_NAME              2 (app.workers.hard_deletion_worker)
+                IMPORT_FROM              3 (process_hard_deletions)
+                STORE_FAST               1 (process_hard_deletions)
+                POP_TOP
+
+ 153            LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE       186 (to L36)
+
+ 154    L2:     NOP
+
+ 155    L3:     LOAD_FAST                0 (async_session_factory)
+                PUSH_NULL
+                CALL                     0
+                BEFORE_ASYNC_WITH
+                GET_AWAITABLE            1
+                LOAD_CONST               0 (None)
+        L4:     SEND                     3 (to L7)
+        L5:     YIELD_VALUE              1
+        L6:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+        L7:     END_SEND
+        L8:     STORE_FAST_LOAD_FAST    34 (db, db)
+                LOAD_ATTR               11 (begin + NULL|self)
+                CALL                     0
+                BEFORE_ASYNC_WITH
+                GET_AWAITABLE            1
+                LOAD_CONST               0 (None)
+        L9:     SEND                     3 (to L12)
+       L10:     YIELD_VALUE              1
+       L11:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+       L12:     END_SEND
+       L13:     POP_TOP
+
+ 156            LOAD_FAST                1 (process_hard_deletions)
+                PUSH_NULL
+                LOAD_FAST                2 (db)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L14:     SEND                     3 (to L17)
+       L15:     YIELD_VALUE              1
+       L16:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+       L17:     END_SEND
+                STORE_FAST               3 (count)
+
+ 157            LOAD_FAST                3 (count)
+                LOAD_CONST               1 (0)
+                COMPARE_OP             148 (bool(>))
+                POP_JUMP_IF_FALSE       22 (to L18)
+
+ 158            LOAD_GLOBAL             12 (logger)
+                LOAD_ATTR               15 (info + NULL|self)
+                LOAD_CONST               4 ('Hard-deleted %d call(s)')
+                LOAD_FAST                3 (count)
+                CALL                     2
+                POP_TOP
+
+ 155   L18:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     2
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L19:     SEND                     3 (to L22)
+       L20:     YIELD_VALUE              1
+       L21:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+       L22:     END_SEND
+                POP_TOP
+       L23:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     2
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L24:     SEND                     3 (to L27)
+       L25:     YIELD_VALUE              1
+       L26:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L24)
+       L27:     END_SEND
+                POP_TOP
+
+ 162   L28:     LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        44 (to L33)
+
+ 163            LOAD_GLOBAL             20 (asyncio)
+                LOAD_ATTR               22 (sleep)
+                PUSH_NULL
+                LOAD_GLOBAL             24 (settings)
+                LOAD_ATTR               26 (WORKER_HARD_DELETION_INTERVAL)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L29:     SEND                     3 (to L32)
+       L30:     YIELD_VALUE              1
+       L31:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L29)
+       L32:     END_SEND
+                POP_TOP
+
+ 153   L33:     LOAD_GLOBAL              8 (_shutdown)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L35)
+       L34:     JUMP_BACKWARD          185 (to L2)
+       L35:     RETURN_CONST             0 (None)
+       L36:     RETURN_CONST             0 (None)
+
+ 155   L37:     CLEANUP_THROW
+       L38:     JUMP_BACKWARD_NO_INTERRUPT 174 (to L7)
+       L39:     CLEANUP_THROW
+       L40:     JUMP_BACKWARD_NO_INTERRUPT 152 (to L12)
+
+ 156   L41:     CLEANUP_THROW
+       L42:     JUMP_BACKWARD_NO_INTERRUPT 138 (to L17)
+
+ 155   L43:     CLEANUP_THROW
+       L44:     JUMP_BACKWARD_NO_INTERRUPT 96 (to L22)
+       L45:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L46:     SEND                     4 (to L50)
+       L47:     YIELD_VALUE              1
+       L48:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L46)
+       L49:     CLEANUP_THROW
+       L50:     END_SEND
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L51)
+                RERAISE                  2
+       L51:     POP_TOP
+       L52:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                JUMP_BACKWARD_NO_INTERRUPT 117 (to L23)
+
+  --   L53:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+ 155   L54:     CLEANUP_THROW
+       L55:     JUMP_BACKWARD_NO_INTERRUPT 108 (to L27)
+       L56:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                GET_AWAITABLE            2
+                LOAD_CONST               0 (None)
+       L57:     SEND                     4 (to L61)
+       L58:     YIELD_VALUE              1
+       L59:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L57)
+       L60:     CLEANUP_THROW
+       L61:     END_SEND
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L62)
+                RERAISE                  2
+       L62:     POP_TOP
+       L63:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+       L64:     JUMP_BACKWARD_NO_INTERRUPT 129 (to L28)
+
+  --   L65:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L66:     PUSH_EXC_INFO
+
+ 159            LOAD_GLOBAL             16 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       24 (to L68)
+                POP_TOP
+
+ 160            LOAD_GLOBAL             12 (logger)
+                LOAD_ATTR               19 (exception + NULL|self)
+                LOAD_CONST               5 ('Hard-deletion worker iteration failed')
+                CALL                     1
+                POP_TOP
+       L67:     POP_EXCEPT
+                JUMP_BACKWARD_NO_INTERRUPT 165 (to L28)
+
+ 159   L68:     RERAISE                  0
+
+  --   L69:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+ 163   L70:     CLEANUP_THROW
+       L71:     JUMP_BACKWARD_NO_INTERRUPT 118 (to L32)
+
+  --   L72:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L72 [0] lasti
+  L3 to L5 -> L66 [0]
+  L5 to L6 -> L37 [3]
+  L6 to L8 -> L66 [0]
+  L8 to L10 -> L56 [1] lasti
+  L10 to L11 -> L39 [4]
+  L11 to L13 -> L56 [1] lasti
+  L13 to L15 -> L45 [2] lasti
+  L15 to L16 -> L41 [4]
+  L16 to L18 -> L45 [2] lasti
+  L18 to L20 -> L56 [1] lasti
+  L20 to L21 -> L43 [3]
+  L21 to L23 -> L56 [1] lasti
+  L23 to L25 -> L66 [0]
+  L25 to L26 -> L54 [2]
+  L26 to L28 -> L66 [0]
+  L28 to L30 -> L72 [0] lasti
+  L30 to L31 -> L70 [2]
+  L31 to L34 -> L72 [0] lasti
+  L35 to L37 -> L72 [0] lasti
+  L37 to L38 -> L66 [0]
+  L39 to L40 -> L56 [1] lasti
+  L41 to L42 -> L45 [2] lasti
+  L43 to L44 -> L56 [1] lasti
+  L45 to L47 -> L53 [4] lasti
+  L47 to L48 -> L49 [7]
+  L48 to L52 -> L53 [4] lasti
+  L52 to L54 -> L56 [1] lasti
+  L54 to L55 -> L66 [0]
+  L56 to L58 -> L65 [3] lasti
+  L58 to L59 -> L60 [6]
+  L59 to L63 -> L65 [3] lasti
+  L63 to L64 -> L66 [0]
+  L64 to L65 -> L72 [0] lasti
+  L65 to L66 -> L66 [0]
+  L66 to L67 -> L69 [1] lasti
+  L67 to L68 -> L72 [0] lasti
+  L68 to L69 -> L69 [1] lasti
+  L69 to L71 -> L72 [0] lasti
+
+Disassembly of <code object main at 0x0000024C0FED5BC0, file "D:\fluence\Github\mattbot\backend\app\workers\run.py", line 166>:
+ 166            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 167            LOAD_GLOBAL              0 (logger)
+                LOAD_ATTR                3 (info + NULL|self)
+                LOAD_CONST               1 ('Starting MattBot workers...')
+                CALL                     1
+                POP_TOP
+
+ 170            LOAD_GLOBAL              4 (asyncio)
+                LOAD_ATTR                6 (create_task)
+                PUSH_NULL
+                LOAD_GLOBAL              9 (_run_post_call_loop + NULL)
+                CALL                     0
+                CALL                     1
+
+ 171            LOAD_GLOBAL              4 (asyncio)
+                LOAD_ATTR                6 (create_task)
+                PUSH_NULL
+                LOAD_GLOBAL             11 (_run_reminder_loop + NULL)
+                CALL                     0
+                CALL                     1
+
+ 172            LOAD_GLOBAL              4 (asyncio)
+                LOAD_ATTR                6 (create_task)
+                PUSH_NULL
+                LOAD_GLOBAL             13 (_run_sms_loop + NULL)
+                CALL                     0
+                CALL                     1
+
+ 173            LOAD_GLOBAL              4 (asyncio)
+                LOAD_ATTR                6 (create_task)
+                PUSH_NULL
+                LOAD_GLOBAL             15 (_run_lifecycle_loop + NULL)
+                CALL                     0
+                CALL                     1
+
+ 174            LOAD_GLOBAL              4 (asyncio)
+                LOAD_ATTR                6 (create_task)
+                PUSH_NULL
+                LOAD_GLOBAL             17 (_run_retention_loop + NULL)
+                CALL                     0
+                CALL                     1
+
+ 175            LOAD_GLOBAL              4 (asyncio)
+                LOAD_ATTR                6 (create_task)
+                PUSH_NULL
+                LOAD_GLOBAL             19 (_run_hard_deletion_loop + NULL)
+                CALL                     0
+                CALL                     1
+
+ 176            LOAD_GLOBAL              4 (asyncio)
+                LOAD_ATTR                6 (create_task)
+                PUSH_NULL
+                LOAD_GLOBAL             21 (_run_handoff_expiry_loop + NULL)
+                CALL                     0
+                CALL                     1
+
+ 169            BUILD_LIST               7
+                STORE_FAST               0 (tasks)
+
+ 179    L2:     NOP
+
+ 180    L3:     LOAD_GLOBAL              4 (asyncio)
+                LOAD_ATTR               22 (gather)
+                PUSH_NULL
+                LOAD_FAST                0 (tasks)
+                CALL_FUNCTION_EX         0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L4:     SEND                     3 (to L7)
+        L5:     YIELD_VALUE              1
+        L6:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+        L7:     END_SEND
+                POP_TOP
+
+ 184    L8:     LOAD_FAST                0 (tasks)
+                GET_ITER
+        L9:     FOR_ITER                19 (to L10)
+                STORE_FAST               1 (t)
+
+ 185            LOAD_FAST                1 (t)
+                LOAD_ATTR               27 (cancel + NULL|self)
+                CALL                     0
+                POP_TOP
+                JUMP_BACKWARD           21 (to L9)
+
+ 184   L10:     END_FOR
+                POP_TOP
+
+ 186            LOAD_GLOBAL              0 (logger)
+                LOAD_ATTR                3 (info + NULL|self)
+                LOAD_CONST               2 ('Workers stopped.')
+                CALL                     1
+                POP_TOP
+                RETURN_CONST             0 (None)
+
+ 180   L11:     CLEANUP_THROW
+       L12:     JUMP_BACKWARD_NO_INTERRUPT 51 (to L7)
+
+  --   L13:     PUSH_EXC_INFO
+
+ 181            LOAD_GLOBAL              4 (asyncio)
+                LOAD_ATTR               24 (CancelledError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE        3 (to L15)
+                POP_TOP
+
+ 182   L14:     POP_EXCEPT
+                JUMP_BACKWARD_NO_INTERRUPT 71 (to L8)
+
+ 181   L15:     RERAISE                  0
+
+  --   L16:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L17:     PUSH_EXC_INFO
+
+ 184            LOAD_FAST                0 (tasks)
+                GET_ITER
+       L18:     FOR_ITER                19 (to L19)
+                STORE_FAST               1 (t)
+
+ 185            LOAD_FAST                1 (t)
+                LOAD_ATTR               27 (cancel + NULL|self)
+                CALL                     0
+                POP_TOP
+                JUMP_BACKWARD           21 (to L18)
+
+ 184   L19:     END_FOR
+                POP_TOP
+
+ 186            LOAD_GLOBAL              0 (logger)
+                LOAD_ATTR                3 (info + NULL|self)
+                LOAD_CONST               2 ('Workers stopped.')
+                CALL                     1
+                POP_TOP
+                RERAISE                  0
+
+  --   L20:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L21:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L21 [0] lasti
+  L3 to L5 -> L13 [0]
+  L5 to L6 -> L11 [2]
+  L6 to L8 -> L13 [0]
+  L8 to L11 -> L21 [0] lasti
+  L11 to L12 -> L13 [0]
+  L13 to L14 -> L16 [1] lasti
+  L14 to L15 -> L17 [0]
+  L15 to L16 -> L16 [1] lasti
+  L16 to L17 -> L17 [0]
+  L17 to L20 -> L20 [1] lasti
+  L20 to L21 -> L21 [0] lasti

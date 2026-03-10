@@ -1,0 +1,599 @@
+# Bytecode dump of: hard_deletion_worker.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\workers\hard_deletion_worker.py
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'datetime', 'UTC', 'timedelta', 'sqlalchemy', 'delete', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.models.call', 'Call', 'app.models.call_artifact', 'CallArtifact', 'app.models.call_event', 'CallEvent', 'app.models.call_memory_item', 'CallMemoryItem', 'getLogger', '__name__', 'logger', 'HARD_DELETE_GRACE_DAYS', 'process_hard_deletions')
+# co_consts (strings): ['Hard deletion worker.\n\nPermanently removes call rows (and cascaded children) that have been\nsoft-deleted for more than 7 days.\n']
+
+# DOCSTRING: """Hard deletion worker.
+
+Permanently removes call rows (and cascaded children) that have been
+soft-deleted for more than 7 days.
+"""
+# --- Nested code object: process_hard_deletions ---
+    # DOCSTRING: """Hard-delete calls soft-deleted more than 7 days ago. Returns count."""
+    # co_names: ('datetime', 'now', 'UTC', 'timedelta', 'HARD_DELETE_GRACE_DAYS', 'select', 'Call', 'where', 'deleted_at', 'is_not', 'limit', 'execute', 'list', 'scalars', 'all', 'id', 'delete', 'CallEvent', 'call_id', 'CallArtifact', 'CallMemoryItem', 'source_call_id', 'logger', 'info', 'str', 'flush', 'len')
+    # co_varnames: ('db', 'cutoff', 'stmt', 'result', 'calls', 'call', 'cid')
+      25            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      27            LOAD_GLOBAL              0 (datetime)
+                    LOAD_ATTR                2 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL              4 (UTC)
+                    CALL                     1
+                    LOAD_GLOBAL              7 (timedelta + NULL)
+                    LOAD_GLOBAL              8 (HARD_DELETE_GRACE_DAYS)
+                    LOAD_CONST               1 (('days',))
+                    CALL_KW                  1
+                    BINARY_OP               10 (-)
+                    STORE_FAST               1 (cutoff)
+    
+      30            LOAD_GLOBAL             11 (select + NULL)
+                    LOAD_GLOBAL             12 (Call)
+                    CALL                     1
+    
+      31            LOAD_ATTR               15 (where + NULL|self)
+    
+      32            LOAD_GLOBAL             12 (Call)
+                    LOAD_ATTR               16 (deleted_at)
+                    LOAD_ATTR               19 (is_not + NULL|self)
+                    LOAD_CONST               2 (None)
+                    CALL                     1
+    
+      33            LOAD_GLOBAL             12 (Call)
+                    LOAD_ATTR               16 (deleted_at)
+                    LOAD_FAST                1 (cutoff)
+                    COMPARE_OP               2 (<)
+    
+      31            CALL                     2
+    
+      35            LOAD_ATTR               21 (limit + NULL|self)
+                    LOAD_CONST               3 (50)
+                    CALL                     1
+    
+      29            STORE_FAST               2 (stmt)
+    
+      37            LOAD_FAST                0 (db)
+                    LOAD_ATTR               23 (execute + NULL|self)
+                    LOAD_FAST                2 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               2 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               3 (result)
+    
+      38            LOAD_GLOBAL             25 (list + NULL)
+                    LOAD_FAST                3 (result)
+                    LOAD_ATTR               27 (scalars + NULL|self)
+                    CALL                     0
+                    LOAD_ATTR               29 (all + NULL|self)
+                    CALL                     0
+                    CALL                     1
+                    STORE_FAST               4 (calls)
+    
+      40            LOAD_FAST                4 (calls)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         1 (to L6)
+    
+      41            RETURN_CONST             4 (0)
+    
+      43    L6:     LOAD_FAST                4 (calls)
+                    GET_ITER
+            L7:     EXTENDED_ARG             1
+                    FOR_ITER               330 (to L24)
+                    STORE_FAST               5 (call)
+    
+      44            LOAD_FAST                5 (call)
+                    LOAD_ATTR               30 (id)
+                    STORE_FAST               6 (cid)
+    
+      46            LOAD_FAST                0 (db)
+                    LOAD_ATTR               23 (execute + NULL|self)
+    
+      47            LOAD_GLOBAL             33 (delete + NULL)
+                    LOAD_GLOBAL             34 (CallEvent)
+                    CALL                     1
+                    LOAD_ATTR               15 (where + NULL|self)
+                    LOAD_GLOBAL             34 (CallEvent)
+                    LOAD_ATTR               36 (call_id)
+                    LOAD_FAST                6 (cid)
+                    COMPARE_OP              72 (==)
+                    CALL                     1
+    
+      46            CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               2 (None)
+            L8:     SEND                     3 (to L11)
+            L9:     YIELD_VALUE              1
+           L10:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L8)
+           L11:     END_SEND
+                    POP_TOP
+    
+      49            LOAD_FAST                0 (db)
+                    LOAD_ATTR               23 (execute + NULL|self)
+    
+      50            LOAD_GLOBAL             33 (delete + NULL)
+                    LOAD_GLOBAL             38 (CallArtifact)
+                    CALL                     1
+                    LOAD_ATTR               15 (where + NULL|self)
+                    LOAD_GLOBAL             38 (CallArtifact)
+                    LOAD_ATTR               36 (call_id)
+                    LOAD_FAST                6 (cid)
+                    COMPARE_OP              72 (==)
+                    CALL                     1
+    
+      49            CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               2 (None)
+           L12:     SEND                     3 (to L15)
+           L13:     YIELD_VALUE              1
+           L14:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L12)
+           L15:     END_SEND
+                    POP_TOP
+    
+      52            LOAD_FAST                0 (db)
+                    LOAD_ATTR               23 (execute + NULL|self)
+    
+      53            LOAD_GLOBAL             33 (delete + NULL)
+                    LOAD_GLOBAL             40 (CallMemoryItem)
+                    CALL                     1
+                    LOAD_ATTR               15 (where + NULL|self)
+                    LOAD_GLOBAL             40 (CallMemoryItem)
+                    LOAD_ATTR               42 (source_call_id)
+                    LOAD_FAST                6 (cid)
+                    COMPARE_OP              72 (==)
+                    CALL                     1
+    
+      52            CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               2 (None)
+           L16:     SEND                     3 (to L19)
+           L17:     YIELD_VALUE              1
+           L18:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L16)
+           L19:     END_SEND
+                    POP_TOP
+    
+      55            LOAD_FAST                0 (db)
+                    LOAD_ATTR               23 (execute + NULL|self)
+    
+      56            LOAD_GLOBAL             33 (delete + NULL)
+                    LOAD_GLOBAL             12 (Call)
+                    CALL                     1
+                    LOAD_ATTR               15 (where + NULL|self)
+                    LOAD_GLOBAL             12 (Call)
+                    LOAD_ATTR               30 (id)
+                    LOAD_FAST                6 (cid)
+                    COMPARE_OP              72 (==)
+                    CALL                     1
+    
+      55            CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               2 (None)
+           L20:     SEND                     3 (to L23)
+           L21:     YIELD_VALUE              1
+           L22:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L20)
+           L23:     END_SEND
+                    POP_TOP
+    
+      59            LOAD_GLOBAL             44 (logger)
+                    LOAD_ATTR               47 (info + NULL|self)
+                    LOAD_CONST               5 ('Hard-deleted call %s')
+                    LOAD_GLOBAL             49 (str + NULL)
+                    LOAD_FAST                6 (cid)
+                    CALL                     1
+                    LOAD_CONST               2 (None)
+                    LOAD_CONST               6 (8)
+                    BINARY_SLICE
+                    CALL                     2
+                    POP_TOP
+                    EXTENDED_ARG             1
+                    JUMP_BACKWARD          333 (to L7)
+    
+      43   L24:     END_FOR
+                    POP_TOP
+    
+      61            LOAD_FAST                0 (db)
+                    LOAD_ATTR               51 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               2 (None)
+           L25:     SEND                     3 (to L28)
+           L26:     YIELD_VALUE              1
+           L27:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L25)
+           L28:     END_SEND
+                    POP_TOP
+    
+      62            LOAD_GLOBAL             53 (len + NULL)
+                    LOAD_FAST                4 (calls)
+                    CALL                     1
+                    RETURN_VALUE
+    
+      37   L29:     CLEANUP_THROW
+           L30:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 424 (to L5)
+    
+      46   L31:     CLEANUP_THROW
+           L32:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 292 (to L11)
+    
+      49   L33:     CLEANUP_THROW
+           L34:     JUMP_BACKWARD_NO_INTERRUPT 224 (to L15)
+    
+      52   L35:     CLEANUP_THROW
+           L36:     JUMP_BACKWARD_NO_INTERRUPT 156 (to L19)
+    
+      55   L37:     CLEANUP_THROW
+           L38:     JUMP_BACKWARD_NO_INTERRUPT 88 (to L23)
+    
+      61   L39:     CLEANUP_THROW
+           L40:     JUMP_BACKWARD_NO_INTERRUPT 27 (to L28)
+    
+      --   L41:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L41 [0] lasti
+      L3 to L4 -> L29 [2]
+      L4 to L9 -> L41 [0] lasti
+      L9 to L10 -> L31 [3]
+      L10 to L13 -> L41 [0] lasti
+      L13 to L14 -> L33 [3]
+      L14 to L17 -> L41 [0] lasti
+      L17 to L18 -> L35 [3]
+      L18 to L21 -> L41 [0] lasti
+      L21 to L22 -> L37 [3]
+      L22 to L26 -> L41 [0] lasti
+      L26 to L27 -> L39 [2]
+      L27 to L30 -> L41 [0] lasti
+      L31 to L32 -> L41 [0] lasti
+      L33 to L34 -> L41 [0] lasti
+      L35 to L36 -> L41 [0] lasti
+      L37 to L38 -> L41 [0] lasti
+      L39 to L40 -> L41 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'datetime', 'UTC', 'timedelta', 'sqlalchemy', 'delete', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.models.call', 'Call', 'app.models.call_artifact', 'CallArtifact', 'app.models.call_event', 'CallEvent', 'app.models.call_memory_item', 'CallMemoryItem', 'getLogger', '__name__', 'logger', 'HARD_DELETE_GRACE_DAYS', 'process_hard_deletions')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Hard deletion worker.\n\nPermanently removes call rows (and cascaded children) that have been\nsoft-deleted for more than 7 days.\n')
+              STORE_NAME               0 (__doc__)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (logging)
+              STORE_NAME               3 (logging)
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('UTC', 'datetime', 'timedelta'))
+              IMPORT_NAME              4 (datetime)
+              IMPORT_FROM              5 (UTC)
+              STORE_NAME               5 (UTC)
+              IMPORT_FROM              4 (datetime)
+              STORE_NAME               4 (datetime)
+              IMPORT_FROM              6 (timedelta)
+              STORE_NAME               6 (timedelta)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('delete', 'select'))
+              IMPORT_NAME              7 (sqlalchemy)
+              IMPORT_FROM              8 (delete)
+              STORE_NAME               8 (delete)
+              IMPORT_FROM              9 (select)
+              STORE_NAME               9 (select)
+              POP_TOP
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('AsyncSession',))
+              IMPORT_NAME             10 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM             11 (AsyncSession)
+              STORE_NAME              11 (AsyncSession)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('Call',))
+              IMPORT_NAME             12 (app.models.call)
+              IMPORT_FROM             13 (Call)
+              STORE_NAME              13 (Call)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('CallArtifact',))
+              IMPORT_NAME             14 (app.models.call_artifact)
+              IMPORT_FROM             15 (CallArtifact)
+              STORE_NAME              15 (CallArtifact)
+              POP_TOP
+
+ 17           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('CallEvent',))
+              IMPORT_NAME             16 (app.models.call_event)
+              IMPORT_FROM             17 (CallEvent)
+              STORE_NAME              17 (CallEvent)
+              POP_TOP
+
+ 18           LOAD_CONST               1 (0)
+              LOAD_CONST              10 (('CallMemoryItem',))
+              IMPORT_NAME             18 (app.models.call_memory_item)
+              IMPORT_FROM             19 (CallMemoryItem)
+              STORE_NAME              19 (CallMemoryItem)
+              POP_TOP
+
+ 20           LOAD_NAME                3 (logging)
+              LOAD_ATTR               40 (getLogger)
+              PUSH_NULL
+              LOAD_NAME               21 (__name__)
+              CALL                     1
+              STORE_NAME              22 (logger)
+
+ 22           LOAD_CONST              11 (7)
+              STORE_NAME              23 (HARD_DELETE_GRACE_DAYS)
+
+ 25           LOAD_CONST              13 (('db', 'AsyncSession', 'return', 'int'))
+              LOAD_CONST              12 (<code object process_hard_deletions at 0x0000024C0FB5B5D0, file "D:\fluence\Github\mattbot\backend\app\workers\hard_deletion_worker.py", line 25>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              24 (process_hard_deletions)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object process_hard_deletions at 0x0000024C0FB5B5D0, file "D:\fluence\Github\mattbot\backend\app\workers\hard_deletion_worker.py", line 25>:
+  25            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  27            LOAD_GLOBAL              0 (datetime)
+                LOAD_ATTR                2 (now)
+                PUSH_NULL
+                LOAD_GLOBAL              4 (UTC)
+                CALL                     1
+                LOAD_GLOBAL              7 (timedelta + NULL)
+                LOAD_GLOBAL              8 (HARD_DELETE_GRACE_DAYS)
+                LOAD_CONST               1 (('days',))
+                CALL_KW                  1
+                BINARY_OP               10 (-)
+                STORE_FAST               1 (cutoff)
+
+  30            LOAD_GLOBAL             11 (select + NULL)
+                LOAD_GLOBAL             12 (Call)
+                CALL                     1
+
+  31            LOAD_ATTR               15 (where + NULL|self)
+
+  32            LOAD_GLOBAL             12 (Call)
+                LOAD_ATTR               16 (deleted_at)
+                LOAD_ATTR               19 (is_not + NULL|self)
+                LOAD_CONST               2 (None)
+                CALL                     1
+
+  33            LOAD_GLOBAL             12 (Call)
+                LOAD_ATTR               16 (deleted_at)
+                LOAD_FAST                1 (cutoff)
+                COMPARE_OP               2 (<)
+
+  31            CALL                     2
+
+  35            LOAD_ATTR               21 (limit + NULL|self)
+                LOAD_CONST               3 (50)
+                CALL                     1
+
+  29            STORE_FAST               2 (stmt)
+
+  37            LOAD_FAST                0 (db)
+                LOAD_ATTR               23 (execute + NULL|self)
+                LOAD_FAST                2 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               2 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               3 (result)
+
+  38            LOAD_GLOBAL             25 (list + NULL)
+                LOAD_FAST                3 (result)
+                LOAD_ATTR               27 (scalars + NULL|self)
+                CALL                     0
+                LOAD_ATTR               29 (all + NULL|self)
+                CALL                     0
+                CALL                     1
+                STORE_FAST               4 (calls)
+
+  40            LOAD_FAST                4 (calls)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         1 (to L6)
+
+  41            RETURN_CONST             4 (0)
+
+  43    L6:     LOAD_FAST                4 (calls)
+                GET_ITER
+        L7:     EXTENDED_ARG             1
+                FOR_ITER               330 (to L24)
+                STORE_FAST               5 (call)
+
+  44            LOAD_FAST                5 (call)
+                LOAD_ATTR               30 (id)
+                STORE_FAST               6 (cid)
+
+  46            LOAD_FAST                0 (db)
+                LOAD_ATTR               23 (execute + NULL|self)
+
+  47            LOAD_GLOBAL             33 (delete + NULL)
+                LOAD_GLOBAL             34 (CallEvent)
+                CALL                     1
+                LOAD_ATTR               15 (where + NULL|self)
+                LOAD_GLOBAL             34 (CallEvent)
+                LOAD_ATTR               36 (call_id)
+                LOAD_FAST                6 (cid)
+                COMPARE_OP              72 (==)
+                CALL                     1
+
+  46            CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               2 (None)
+        L8:     SEND                     3 (to L11)
+        L9:     YIELD_VALUE              1
+       L10:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L8)
+       L11:     END_SEND
+                POP_TOP
+
+  49            LOAD_FAST                0 (db)
+                LOAD_ATTR               23 (execute + NULL|self)
+
+  50            LOAD_GLOBAL             33 (delete + NULL)
+                LOAD_GLOBAL             38 (CallArtifact)
+                CALL                     1
+                LOAD_ATTR               15 (where + NULL|self)
+                LOAD_GLOBAL             38 (CallArtifact)
+                LOAD_ATTR               36 (call_id)
+                LOAD_FAST                6 (cid)
+                COMPARE_OP              72 (==)
+                CALL                     1
+
+  49            CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               2 (None)
+       L12:     SEND                     3 (to L15)
+       L13:     YIELD_VALUE              1
+       L14:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L12)
+       L15:     END_SEND
+                POP_TOP
+
+  52            LOAD_FAST                0 (db)
+                LOAD_ATTR               23 (execute + NULL|self)
+
+  53            LOAD_GLOBAL             33 (delete + NULL)
+                LOAD_GLOBAL             40 (CallMemoryItem)
+                CALL                     1
+                LOAD_ATTR               15 (where + NULL|self)
+                LOAD_GLOBAL             40 (CallMemoryItem)
+                LOAD_ATTR               42 (source_call_id)
+                LOAD_FAST                6 (cid)
+                COMPARE_OP              72 (==)
+                CALL                     1
+
+  52            CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               2 (None)
+       L16:     SEND                     3 (to L19)
+       L17:     YIELD_VALUE              1
+       L18:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L16)
+       L19:     END_SEND
+                POP_TOP
+
+  55            LOAD_FAST                0 (db)
+                LOAD_ATTR               23 (execute + NULL|self)
+
+  56            LOAD_GLOBAL             33 (delete + NULL)
+                LOAD_GLOBAL             12 (Call)
+                CALL                     1
+                LOAD_ATTR               15 (where + NULL|self)
+                LOAD_GLOBAL             12 (Call)
+                LOAD_ATTR               30 (id)
+                LOAD_FAST                6 (cid)
+                COMPARE_OP              72 (==)
+                CALL                     1
+
+  55            CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               2 (None)
+       L20:     SEND                     3 (to L23)
+       L21:     YIELD_VALUE              1
+       L22:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L20)
+       L23:     END_SEND
+                POP_TOP
+
+  59            LOAD_GLOBAL             44 (logger)
+                LOAD_ATTR               47 (info + NULL|self)
+                LOAD_CONST               5 ('Hard-deleted call %s')
+                LOAD_GLOBAL             49 (str + NULL)
+                LOAD_FAST                6 (cid)
+                CALL                     1
+                LOAD_CONST               2 (None)
+                LOAD_CONST               6 (8)
+                BINARY_SLICE
+                CALL                     2
+                POP_TOP
+                EXTENDED_ARG             1
+                JUMP_BACKWARD          333 (to L7)
+
+  43   L24:     END_FOR
+                POP_TOP
+
+  61            LOAD_FAST                0 (db)
+                LOAD_ATTR               51 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               2 (None)
+       L25:     SEND                     3 (to L28)
+       L26:     YIELD_VALUE              1
+       L27:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L25)
+       L28:     END_SEND
+                POP_TOP
+
+  62            LOAD_GLOBAL             53 (len + NULL)
+                LOAD_FAST                4 (calls)
+                CALL                     1
+                RETURN_VALUE
+
+  37   L29:     CLEANUP_THROW
+       L30:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 424 (to L5)
+
+  46   L31:     CLEANUP_THROW
+       L32:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 292 (to L11)
+
+  49   L33:     CLEANUP_THROW
+       L34:     JUMP_BACKWARD_NO_INTERRUPT 224 (to L15)
+
+  52   L35:     CLEANUP_THROW
+       L36:     JUMP_BACKWARD_NO_INTERRUPT 156 (to L19)
+
+  55   L37:     CLEANUP_THROW
+       L38:     JUMP_BACKWARD_NO_INTERRUPT 88 (to L23)
+
+  61   L39:     CLEANUP_THROW
+       L40:     JUMP_BACKWARD_NO_INTERRUPT 27 (to L28)
+
+  --   L41:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L41 [0] lasti
+  L3 to L4 -> L29 [2]
+  L4 to L9 -> L41 [0] lasti
+  L9 to L10 -> L31 [3]
+  L10 to L13 -> L41 [0] lasti
+  L13 to L14 -> L33 [3]
+  L14 to L17 -> L41 [0] lasti
+  L17 to L18 -> L35 [3]
+  L18 to L21 -> L41 [0] lasti
+  L21 to L22 -> L37 [3]
+  L22 to L26 -> L41 [0] lasti
+  L26 to L27 -> L39 [2]
+  L27 to L30 -> L41 [0] lasti
+  L31 to L32 -> L41 [0] lasti
+  L33 to L34 -> L41 [0] lasti
+  L35 to L36 -> L41 [0] lasti
+  L37 to L38 -> L41 [0] lasti
+  L39 to L40 -> L41 [0] lasti

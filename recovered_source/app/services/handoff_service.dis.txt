@@ -1,0 +1,2025 @@
+# Bytecode dump of: handoff_service.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\services\handoff_service.py
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'uuid', 'datetime', 'UTC', 'timedelta', 'sqlalchemy', 'select', 'update', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.models.call', 'Call', 'app.models.call_event', 'CallEvent', 'app.models.handoff_offer', 'HandoffOffer', 'app.models.user_settings', 'UserSettings', 'app.models.vip_entry', 'VipEntry', 'getLogger', '__name__', 'logger', 'evaluate_eligibility', 'check_minimum_screening', 'create_offer', 'accept_offer', 'decline_offer', 'expire_stale_offers', '_sync_call_handoff_status')
+# co_consts (strings): ['Handoff service: eligibility evaluation, offer lifecycle, expiry sweeper.']
+
+# DOCSTRING: """Handoff service: eligibility evaluation, offer lifecycle, expiry sweeper."""
+# --- Nested code object: evaluate_eligibility ---
+    # co_names: ('handoff_enabled', 'scalar', 'select', 'VipEntry', 'where', 'owner_user_id', 'phone_hash', 'handoff_trigger', 'handoff_status', 'getattr')
+    # co_varnames: ('db', 'call', 'user_settings', 'caller_phone_hash', 'vip_row', 'is_vip', 'trigger', 'is_urgent', 'reason')
+      27            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      33            LOAD_FAST                2 (user_settings)
+                    LOAD_ATTR                0 (handoff_enabled)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         6 (to L2)
+    
+      34            LOAD_CONST               1 (False)
+                    LOAD_CONST               2 ('handoff_disabled')
+                    LOAD_CONST               1 (False)
+                    LOAD_CONST               3 (('eligible', 'reason', 'is_vip'))
+                    BUILD_CONST_KEY_MAP      3
+                    RETURN_VALUE
+    
+      36    L2:     LOAD_FAST                0 (db)
+                    LOAD_ATTR                3 (scalar + NULL|self)
+    
+      37            LOAD_GLOBAL              5 (select + NULL)
+                    LOAD_GLOBAL              6 (VipEntry)
+                    CALL                     1
+                    LOAD_ATTR                9 (where + NULL|self)
+    
+      38            LOAD_GLOBAL              6 (VipEntry)
+                    LOAD_ATTR               10 (owner_user_id)
+                    LOAD_FAST                1 (call)
+                    LOAD_ATTR               10 (owner_user_id)
+                    COMPARE_OP              72 (==)
+    
+      39            LOAD_GLOBAL              6 (VipEntry)
+                    LOAD_ATTR               12 (phone_hash)
+                    LOAD_FAST                3 (caller_phone_hash)
+                    COMPARE_OP              72 (==)
+    
+      37            CALL                     2
+    
+      36            CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L3:     SEND                     3 (to L6)
+            L4:     YIELD_VALUE              1
+            L5:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L3)
+            L6:     END_SEND
+                    STORE_FAST               4 (vip_row)
+    
+      42            LOAD_FAST                4 (vip_row)
+                    LOAD_CONST               0 (None)
+                    IS_OP                    1
+                    STORE_FAST               5 (is_vip)
+    
+      44            LOAD_FAST                2 (user_settings)
+                    LOAD_ATTR               14 (handoff_trigger)
+                    STORE_FAST               6 (trigger)
+    
+      46            LOAD_FAST                6 (trigger)
+                    LOAD_CONST               4 ('never')
+                    COMPARE_OP              88 (bool(==))
+                    POP_JUMP_IF_FALSE        6 (to L7)
+    
+      47            LOAD_CONST               1 (False)
+                    LOAD_CONST               5 ('trigger_never')
+                    LOAD_FAST                5 (is_vip)
+                    LOAD_CONST               3 (('eligible', 'reason', 'is_vip'))
+                    BUILD_CONST_KEY_MAP      3
+                    RETURN_VALUE
+    
+      49    L7:     LOAD_FAST                6 (trigger)
+                    LOAD_CONST               6 ('vip_only')
+                    COMPARE_OP              88 (bool(==))
+                    POP_JUMP_IF_FALSE       13 (to L8)
+                    LOAD_FAST                5 (is_vip)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         6 (to L8)
+    
+      50            LOAD_CONST               1 (False)
+                    LOAD_CONST               7 ('not_vip')
+                    LOAD_CONST               1 (False)
+                    LOAD_CONST               3 (('eligible', 'reason', 'is_vip'))
+                    BUILD_CONST_KEY_MAP      3
+                    RETURN_VALUE
+    
+      53    L8:     LOAD_FAST                1 (call)
+                    LOAD_ATTR               16 (handoff_status)
+                    LOAD_CONST               8 ('urgent_candidate')
+                    COMPARE_OP              72 (==)
+                    COPY                     1
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        16 (to L9)
+                    POP_TOP
+    
+      54            LOAD_GLOBAL             19 (getattr + NULL)
+                    LOAD_FAST                1 (call)
+                    LOAD_CONST               9 ('urgency_level')
+                    LOAD_CONST               0 (None)
+                    CALL                     3
+                    LOAD_CONST              10 ('urgent')
+                    COMPARE_OP              72 (==)
+    
+      52    L9:     STORE_FAST               7 (is_urgent)
+    
+      57            LOAD_FAST                6 (trigger)
+                    LOAD_CONST              11 ('urgent_only')
+                    COMPARE_OP              88 (bool(==))
+                    POP_JUMP_IF_FALSE       13 (to L10)
+                    LOAD_FAST                7 (is_urgent)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         6 (to L10)
+    
+      58            LOAD_CONST               1 (False)
+                    LOAD_CONST              12 ('not_urgent')
+                    LOAD_FAST                5 (is_vip)
+                    LOAD_CONST               3 (('eligible', 'reason', 'is_vip'))
+                    BUILD_CONST_KEY_MAP      3
+                    RETURN_VALUE
+    
+      60   L10:     LOAD_FAST                6 (trigger)
+                    LOAD_CONST              13 ('vip_and_urgent')
+                    COMPARE_OP              88 (bool(==))
+                    POP_JUMP_IF_FALSE       20 (to L11)
+                    LOAD_FAST                5 (is_vip)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        13 (to L11)
+                    LOAD_FAST                7 (is_urgent)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         6 (to L11)
+    
+      61            LOAD_CONST               1 (False)
+                    LOAD_CONST              14 ('not_vip_or_urgent')
+                    LOAD_FAST                5 (is_vip)
+                    LOAD_CONST               3 (('eligible', 'reason', 'is_vip'))
+                    BUILD_CONST_KEY_MAP      3
+                    RETURN_VALUE
+    
+      63   L11:     LOAD_FAST                5 (is_vip)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE        2 (to L12)
+                    LOAD_CONST              15 ('vip')
+                    JUMP_FORWARD            10 (to L14)
+           L12:     LOAD_FAST                7 (is_urgent)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE        2 (to L13)
+                    LOAD_CONST              10 ('urgent')
+                    JUMP_FORWARD             1 (to L14)
+           L13:     LOAD_CONST              16 ('always')
+           L14:     STORE_FAST               8 (reason)
+    
+      65            LOAD_CONST              17 (True)
+                    LOAD_FAST_LOAD_FAST    133 (reason, is_vip)
+                    LOAD_CONST               3 (('eligible', 'reason', 'is_vip'))
+                    BUILD_CONST_KEY_MAP      3
+                    RETURN_VALUE
+    
+      36   L15:     CLEANUP_THROW
+           L16:     JUMP_BACKWARD_NO_INTERRUPT 159 (to L6)
+    
+      --   L17:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L4 -> L17 [0] lasti
+      L4 to L5 -> L15 [2]
+      L5 to L16 -> L17 [0] lasti
+    
+# --- Nested code object: check_minimum_screening ---
+    # co_names: ('scalars', 'select', 'CallEvent', 'where', 'call_id', 'event_type', 'all', 'set', 'details_redacted', 'get', 'add')
+    # co_varnames: ('db', 'call_id', 'rows', 'captured_fields', 'event', 'details', 'field_name')
+      73            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      75            LOAD_FAST                0 (db)
+                    LOAD_ATTR                1 (scalars + NULL|self)
+    
+      76            LOAD_GLOBAL              3 (select + NULL)
+                    LOAD_GLOBAL              4 (CallEvent)
+                    CALL                     1
+                    LOAD_ATTR                7 (where + NULL|self)
+    
+      77            LOAD_GLOBAL              4 (CallEvent)
+                    LOAD_ATTR                8 (call_id)
+                    LOAD_FAST                1 (call_id)
+                    COMPARE_OP              72 (==)
+    
+      78            LOAD_GLOBAL              4 (CallEvent)
+                    LOAD_ATTR               10 (event_type)
+                    LOAD_CONST               1 ('screening_field_captured')
+                    COMPARE_OP              72 (==)
+    
+      76            CALL                     2
+    
+      75            CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+    
+      81            LOAD_ATTR               13 (all + NULL|self)
+                    CALL                     0
+    
+      74            STORE_FAST               2 (rows)
+    
+      83            LOAD_GLOBAL             15 (set + NULL)
+                    CALL                     0
+                    STORE_FAST               3 (captured_fields)
+    
+      84            LOAD_FAST                2 (rows)
+                    GET_ITER
+            L6:     FOR_ITER                67 (to L10)
+                    STORE_FAST               4 (event)
+    
+      85            LOAD_FAST                4 (event)
+                    LOAD_ATTR               16 (details_redacted)
+                    COPY                     1
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L7)
+                    POP_TOP
+                    BUILD_MAP                0
+            L7:     STORE_FAST               5 (details)
+    
+      86            LOAD_FAST                5 (details)
+                    LOAD_ATTR               19 (get + NULL|self)
+                    LOAD_CONST               2 ('field_name')
+                    CALL                     1
+                    STORE_FAST               6 (field_name)
+    
+      87            LOAD_FAST                6 (field_name)
+                    TO_BOOL
+            L8:     POP_JUMP_IF_TRUE         2 (to L9)
+                    JUMP_BACKWARD           50 (to L6)
+    
+      88    L9:     LOAD_FAST                3 (captured_fields)
+                    LOAD_ATTR               21 (add + NULL|self)
+                    LOAD_FAST                6 (field_name)
+                    CALL                     1
+                    POP_TOP
+                    JUMP_BACKWARD           69 (to L6)
+    
+      84   L10:     END_FOR
+                    POP_TOP
+    
+      90            LOAD_CONST               3 ('caller_name')
+                    LOAD_FAST                3 (captured_fields)
+                    CONTAINS_OP              0
+                    COPY                     1
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE        5 (to L11)
+                    POP_TOP
+                    LOAD_CONST               4 ('reason')
+                    LOAD_FAST                3 (captured_fields)
+                    CONTAINS_OP              0
+           L11:     RETURN_VALUE
+    
+      75   L12:     CLEANUP_THROW
+           L13:     JUMP_BACKWARD_NO_INTERRUPT 118 (to L5)
+    
+      --   L14:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L14 [0] lasti
+      L3 to L4 -> L12 [2]
+      L4 to L8 -> L14 [0] lasti
+      L9 to L13 -> L14 [0] lasti
+    
+# --- Nested code object: create_offer ---
+    # co_names: ('settings', 'HANDOFF_OFFER_DEFAULT_TIMEOUT', 'datetime', 'now', 'UTC', 'timedelta', 'HandoffOffer', 'id', 'add', 'handoff_status', 'handoff_offered_at', 'handoff_offer_expires_at', 'CallEvent', 'flush')
+    # co_varnames: ('db', 'call', 'user_id', 'reason', 'preview_payload', 'timeout_seconds', 'now', 'expires_at', 'offer', 'event')
+      98           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+     106           LOAD_FAST                5 (timeout_seconds)
+                   POP_JUMP_IF_NOT_NONE    16 (to L2)
+    
+     107           LOAD_GLOBAL              0 (settings)
+                   LOAD_ATTR                2 (HANDOFF_OFFER_DEFAULT_TIMEOUT)
+                   STORE_FAST               5 (timeout_seconds)
+    
+     108   L2:     LOAD_GLOBAL              4 (datetime)
+                   LOAD_ATTR                6 (now)
+                   PUSH_NULL
+                   LOAD_GLOBAL              8 (UTC)
+                   CALL                     1
+                   STORE_FAST               6 (now)
+    
+     109           LOAD_FAST                6 (now)
+                   LOAD_GLOBAL             11 (timedelta + NULL)
+                   LOAD_FAST                5 (timeout_seconds)
+                   LOAD_CONST               1 (('seconds',))
+                   CALL_KW                  1
+                   BINARY_OP                0 (+)
+                   STORE_FAST               7 (expires_at)
+    
+     111           LOAD_GLOBAL             13 (HandoffOffer + NULL)
+    
+     112           LOAD_FAST                1 (call)
+                   LOAD_ATTR               14 (id)
+    
+     113           LOAD_FAST                2 (user_id)
+    
+     114           LOAD_CONST               2 ('offered')
+    
+     115           LOAD_FAST                3 (reason)
+    
+     116           LOAD_FAST                7 (expires_at)
+    
+     117           LOAD_FAST                4 (preview_payload)
+    
+     111           LOAD_CONST               3 (('call_id', 'owner_user_id', 'status', 'offer_reason', 'expires_at', 'preview_payload'))
+                   CALL_KW                  6
+                   STORE_FAST               8 (offer)
+    
+     119           LOAD_FAST                0 (db)
+                   LOAD_ATTR               17 (add + NULL|self)
+                   LOAD_FAST                8 (offer)
+                   CALL                     1
+                   POP_TOP
+    
+     121           LOAD_CONST               2 ('offered')
+                   LOAD_FAST                1 (call)
+                   STORE_ATTR               9 (handoff_status)
+    
+     122           LOAD_FAST_LOAD_FAST     97 (now, call)
+                   STORE_ATTR              10 (handoff_offered_at)
+    
+     123           LOAD_FAST_LOAD_FAST    113 (expires_at, call)
+                   STORE_ATTR              11 (handoff_offer_expires_at)
+    
+     125           LOAD_GLOBAL             25 (CallEvent + NULL)
+    
+     126           LOAD_FAST                1 (call)
+                   LOAD_ATTR               14 (id)
+    
+     127           LOAD_FAST                2 (user_id)
+    
+     128           LOAD_CONST               4 ('handoff_offer_created')
+    
+     129           LOAD_FAST                6 (now)
+    
+     130           LOAD_FAST_LOAD_FAST     53 (reason, timeout_seconds)
+                   LOAD_CONST               5 (('offer_reason', 'timeout_seconds'))
+                   BUILD_CONST_KEY_MAP      2
+    
+     125           LOAD_CONST               6 (('call_id', 'owner_user_id', 'event_type', 'event_at', 'details_redacted'))
+                   CALL_KW                  5
+                   STORE_FAST               9 (event)
+    
+     132           LOAD_FAST                0 (db)
+                   LOAD_ATTR               17 (add + NULL|self)
+                   LOAD_FAST                9 (event)
+                   CALL                     1
+                   POP_TOP
+    
+     134           LOAD_FAST                0 (db)
+                   LOAD_ATTR               27 (flush + NULL|self)
+                   CALL                     0
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L3:     SEND                     3 (to L6)
+           L4:     YIELD_VALUE              1
+           L5:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L3)
+           L6:     END_SEND
+                   POP_TOP
+    
+     135           LOAD_FAST                8 (offer)
+                   RETURN_VALUE
+    
+     134   L7:     CLEANUP_THROW
+           L8:     JUMP_BACKWARD_NO_INTERRUPT 6 (to L6)
+    
+      --   L9:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L4 -> L9 [0] lasti
+      L4 to L5 -> L7 [2]
+      L5 to L8 -> L9 [0] lasti
+    
+# --- Nested code object: accept_offer ---
+    # co_names: ('execute', 'select', 'HandoffOffer', 'where', 'id', 'with_for_update', 'scalar_one_or_none', 'datetime', 'now', 'UTC', 'status', 'expires_at', 'tzinfo', 'replace', '_sync_call_handoff_status', 'call_id', 'flush', 'selected_device_id', 'accepted_at')
+    # co_varnames: ('db', 'offer_id', 'device_id', 'idempotency_key', 'result', 'offer', 'now', 'exp')
+     143            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     149            LOAD_FAST                0 (db)
+                    LOAD_ATTR                1 (execute + NULL|self)
+    
+     150            LOAD_GLOBAL              3 (select + NULL)
+                    LOAD_GLOBAL              4 (HandoffOffer)
+                    CALL                     1
+    
+     151            LOAD_ATTR                7 (where + NULL|self)
+                    LOAD_GLOBAL              4 (HandoffOffer)
+                    LOAD_ATTR                8 (id)
+                    LOAD_FAST                1 (offer_id)
+                    COMPARE_OP              72 (==)
+                    CALL                     1
+    
+     152            LOAD_ATTR               11 (with_for_update + NULL|self)
+                    CALL                     0
+    
+     149            CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               4 (result)
+    
+     154            LOAD_FAST                4 (result)
+                    LOAD_ATTR               13 (scalar_one_or_none + NULL|self)
+                    CALL                     0
+                    STORE_FAST               5 (offer)
+    
+     156            LOAD_FAST                5 (offer)
+                    POP_JUMP_IF_NOT_NONE     4 (to L6)
+    
+     157            LOAD_CONST               1 ('result')
+                    LOAD_CONST               2 ('not_found')
+                    BUILD_MAP                1
+                    RETURN_VALUE
+    
+     159    L6:     LOAD_GLOBAL             14 (datetime)
+                    LOAD_ATTR               16 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL             18 (UTC)
+                    CALL                     1
+                    STORE_FAST               6 (now)
+    
+     161            LOAD_FAST                5 (offer)
+                    LOAD_ATTR               20 (status)
+                    LOAD_CONST               3 ('offered')
+                    COMPARE_OP             119 (bool(!=))
+                    POP_JUMP_IF_FALSE       15 (to L7)
+    
+     162            LOAD_CONST               4 ('lost')
+                    LOAD_FAST                5 (offer)
+                    LOAD_ATTR               20 (status)
+                    LOAD_CONST               5 (('result', 'current_status'))
+                    BUILD_CONST_KEY_MAP      2
+                    RETURN_VALUE
+    
+     164    L7:     LOAD_FAST                5 (offer)
+                    LOAD_ATTR               22 (expires_at)
+                    LOAD_ATTR               24 (tzinfo)
+                    POP_JUMP_IF_NOT_NONE    30 (to L8)
+    
+     165            LOAD_FAST                5 (offer)
+                    LOAD_ATTR               22 (expires_at)
+                    LOAD_ATTR               27 (replace + NULL|self)
+                    LOAD_GLOBAL             18 (UTC)
+                    LOAD_CONST               6 (('tzinfo',))
+                    CALL_KW                  1
+                    STORE_FAST               7 (exp)
+                    JUMP_FORWARD            12 (to L9)
+    
+     167    L8:     LOAD_FAST                5 (offer)
+                    LOAD_ATTR               22 (expires_at)
+                    STORE_FAST               7 (exp)
+    
+     169    L9:     LOAD_FAST_LOAD_FAST    118 (exp, now)
+                    COMPARE_OP              18 (bool(<))
+                    POP_JUMP_IF_FALSE       65 (to L18)
+    
+     170            LOAD_CONST               7 ('expired')
+                    LOAD_FAST                5 (offer)
+                    STORE_ATTR              10 (status)
+    
+     171            LOAD_GLOBAL             29 (_sync_call_handoff_status + NULL)
+                    LOAD_FAST_LOAD_FAST      5 (db, offer)
+                    LOAD_ATTR               30 (call_id)
+                    LOAD_CONST               7 ('expired')
+                    CALL                     3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L10:     SEND                     3 (to L13)
+           L11:     YIELD_VALUE              1
+           L12:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L10)
+           L13:     END_SEND
+                    POP_TOP
+    
+     172            LOAD_FAST                0 (db)
+                    LOAD_ATTR               33 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L14:     SEND                     3 (to L17)
+           L15:     YIELD_VALUE              1
+           L16:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+           L17:     END_SEND
+                    POP_TOP
+    
+     173            LOAD_CONST               1 ('result')
+                    LOAD_CONST               7 ('expired')
+                    BUILD_MAP                1
+                    RETURN_VALUE
+    
+     175   L18:     LOAD_CONST               8 ('accepted')
+                    LOAD_FAST                5 (offer)
+                    STORE_ATTR              10 (status)
+    
+     176            LOAD_FAST_LOAD_FAST     37 (device_id, offer)
+                    STORE_ATTR              17 (selected_device_id)
+    
+     177            LOAD_FAST_LOAD_FAST    101 (now, offer)
+                    STORE_ATTR              18 (accepted_at)
+    
+     179            LOAD_GLOBAL             29 (_sync_call_handoff_status + NULL)
+    
+     180            LOAD_FAST                0 (db)
+    
+     181            LOAD_FAST                5 (offer)
+                    LOAD_ATTR               30 (call_id)
+    
+     182            LOAD_CONST               8 ('accepted')
+    
+     183            LOAD_FAST                6 (now)
+    
+     184            LOAD_FAST                2 (device_id)
+    
+     179            LOAD_CONST               9 (('accepted_at', 'selected_device_id'))
+                    CALL_KW                  5
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L19:     SEND                     3 (to L22)
+           L20:     YIELD_VALUE              1
+           L21:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+           L22:     END_SEND
+                    POP_TOP
+    
+     186            LOAD_FAST                0 (db)
+                    LOAD_ATTR               33 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L23:     SEND                     3 (to L26)
+           L24:     YIELD_VALUE              1
+           L25:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L23)
+           L26:     END_SEND
+                    POP_TOP
+    
+     187            LOAD_CONST               1 ('result')
+                    LOAD_CONST              10 ('won')
+                    BUILD_MAP                1
+                    RETURN_VALUE
+    
+     149   L27:     CLEANUP_THROW
+           L28:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 298 (to L5)
+    
+     171   L29:     CLEANUP_THROW
+           L30:     JUMP_BACKWARD_NO_INTERRUPT 113 (to L13)
+    
+     172   L31:     CLEANUP_THROW
+           L32:     JUMP_BACKWARD_NO_INTERRUPT 91 (to L17)
+    
+     179   L33:     CLEANUP_THROW
+           L34:     JUMP_BACKWARD_NO_INTERRUPT 39 (to L22)
+    
+     186   L35:     CLEANUP_THROW
+           L36:     JUMP_BACKWARD_NO_INTERRUPT 17 (to L26)
+    
+      --   L37:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L37 [0] lasti
+      L3 to L4 -> L27 [2]
+      L4 to L11 -> L37 [0] lasti
+      L11 to L12 -> L29 [2]
+      L12 to L15 -> L37 [0] lasti
+      L15 to L16 -> L31 [2]
+      L16 to L20 -> L37 [0] lasti
+      L20 to L21 -> L33 [2]
+      L21 to L24 -> L37 [0] lasti
+      L24 to L25 -> L35 [2]
+      L25 to L28 -> L37 [0] lasti
+      L29 to L30 -> L37 [0] lasti
+      L31 to L32 -> L37 [0] lasti
+      L33 to L34 -> L37 [0] lasti
+      L35 to L36 -> L37 [0] lasti
+    
+# --- Nested code object: decline_offer ---
+    # co_names: ('get', 'HandoffOffer', 'status', 'datetime', 'now', 'UTC', 'declined_at', '_sync_call_handoff_status', 'call_id', 'flush')
+    # co_varnames: ('db', 'offer_id', 'device_id', 'offer', 'now')
+     195            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     200            LOAD_FAST                0 (db)
+                    LOAD_ATTR                1 (get + NULL|self)
+                    LOAD_GLOBAL              2 (HandoffOffer)
+                    LOAD_FAST                1 (offer_id)
+                    CALL                     2
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    STORE_FAST               3 (offer)
+    
+     201            LOAD_FAST                3 (offer)
+                    POP_JUMP_IF_NOT_NONE     4 (to L6)
+    
+     202            LOAD_CONST               1 ('result')
+                    LOAD_CONST               2 ('not_found')
+                    BUILD_MAP                1
+                    RETURN_VALUE
+    
+     204    L6:     LOAD_FAST                3 (offer)
+                    LOAD_ATTR                4 (status)
+                    LOAD_CONST               3 ('offered')
+                    COMPARE_OP             119 (bool(!=))
+                    POP_JUMP_IF_FALSE       15 (to L7)
+    
+     205            LOAD_CONST               4 ('already_resolved')
+                    LOAD_FAST                3 (offer)
+                    LOAD_ATTR                4 (status)
+                    LOAD_CONST               5 (('result', 'current_status'))
+                    BUILD_CONST_KEY_MAP      2
+                    RETURN_VALUE
+    
+     207    L7:     LOAD_GLOBAL              6 (datetime)
+                    LOAD_ATTR                8 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL             10 (UTC)
+                    CALL                     1
+                    STORE_FAST               4 (now)
+    
+     208            LOAD_CONST               6 ('declined')
+                    LOAD_FAST                3 (offer)
+                    STORE_ATTR               2 (status)
+    
+     209            LOAD_FAST_LOAD_FAST     67 (now, offer)
+                    STORE_ATTR               6 (declined_at)
+    
+     211            LOAD_GLOBAL             15 (_sync_call_handoff_status + NULL)
+                    LOAD_FAST_LOAD_FAST      3 (db, offer)
+                    LOAD_ATTR               16 (call_id)
+                    LOAD_CONST               6 ('declined')
+                    CALL                     3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L8:     SEND                     3 (to L11)
+            L9:     YIELD_VALUE              1
+           L10:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L8)
+           L11:     END_SEND
+                    POP_TOP
+    
+     212            LOAD_FAST                0 (db)
+                    LOAD_ATTR               19 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L12:     SEND                     3 (to L15)
+           L13:     YIELD_VALUE              1
+           L14:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L12)
+           L15:     END_SEND
+                    POP_TOP
+    
+     213            LOAD_CONST               1 ('result')
+                    LOAD_CONST               6 ('declined')
+                    BUILD_MAP                1
+                    RETURN_VALUE
+    
+     200   L16:     CLEANUP_THROW
+           L17:     JUMP_BACKWARD_NO_INTERRUPT 139 (to L5)
+    
+     211   L18:     CLEANUP_THROW
+           L19:     JUMP_BACKWARD_NO_INTERRUPT 34 (to L11)
+    
+     212   L20:     CLEANUP_THROW
+           L21:     JUMP_BACKWARD_NO_INTERRUPT 12 (to L15)
+    
+      --   L22:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L22 [0] lasti
+      L3 to L4 -> L16 [2]
+      L4 to L9 -> L22 [0] lasti
+      L9 to L10 -> L18 [2]
+      L10 to L13 -> L22 [0] lasti
+      L13 to L14 -> L20 [2]
+      L14 to L17 -> L22 [0] lasti
+      L18 to L19 -> L22 [0] lasti
+      L20 to L21 -> L22 [0] lasti
+    
+# --- Nested code object: expire_stale_offers ---
+    # co_names: ('datetime', 'now', 'UTC', 'scalars', 'select', 'HandoffOffer', 'where', 'status', 'expires_at', 'all', '_sync_call_handoff_status', 'call_id', 'flush', 'len')
+    # co_varnames: ('db', 'now', 'stale', 'offer')
+     221            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     222            LOAD_GLOBAL              0 (datetime)
+                    LOAD_ATTR                2 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL              4 (UTC)
+                    CALL                     1
+                    STORE_FAST               1 (now)
+    
+     225            LOAD_FAST                0 (db)
+                    LOAD_ATTR                7 (scalars + NULL|self)
+    
+     226            LOAD_GLOBAL              9 (select + NULL)
+                    LOAD_GLOBAL             10 (HandoffOffer)
+                    CALL                     1
+                    LOAD_ATTR               13 (where + NULL|self)
+    
+     227            LOAD_GLOBAL             10 (HandoffOffer)
+                    LOAD_ATTR               14 (status)
+                    LOAD_CONST               1 ('offered')
+                    COMPARE_OP              72 (==)
+    
+     228            LOAD_GLOBAL             10 (HandoffOffer)
+                    LOAD_ATTR               16 (expires_at)
+                    LOAD_FAST                1 (now)
+                    COMPARE_OP               2 (<)
+    
+     226            CALL                     2
+    
+     225            CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+    
+     231            LOAD_ATTR               19 (all + NULL|self)
+                    CALL                     0
+    
+     224            STORE_FAST               2 (stale)
+    
+     233            LOAD_FAST                2 (stale)
+                    GET_ITER
+            L6:     FOR_ITER                40 (to L11)
+                    STORE_FAST               3 (offer)
+    
+     234            LOAD_CONST               2 ('expired')
+                    LOAD_FAST                3 (offer)
+                    STORE_ATTR               7 (status)
+    
+     235            LOAD_GLOBAL             21 (_sync_call_handoff_status + NULL)
+                    LOAD_FAST_LOAD_FAST      3 (db, offer)
+                    LOAD_ATTR               22 (call_id)
+                    LOAD_CONST               2 ('expired')
+                    CALL                     3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L7:     SEND                     3 (to L10)
+            L8:     YIELD_VALUE              1
+            L9:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+           L10:     END_SEND
+                    POP_TOP
+                    JUMP_BACKWARD           42 (to L6)
+    
+     233   L11:     END_FOR
+                    POP_TOP
+    
+     237            LOAD_FAST                2 (stale)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       24 (to L16)
+    
+     238            LOAD_FAST                0 (db)
+                    LOAD_ATTR               25 (flush + NULL|self)
+                    CALL                     0
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L12:     SEND                     3 (to L15)
+           L13:     YIELD_VALUE              1
+           L14:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L12)
+           L15:     END_SEND
+                    POP_TOP
+    
+     240   L16:     LOAD_GLOBAL             27 (len + NULL)
+                    LOAD_FAST                2 (stale)
+                    CALL                     1
+                    RETURN_VALUE
+    
+     225   L17:     CLEANUP_THROW
+           L18:     JUMP_BACKWARD_NO_INTERRUPT 106 (to L5)
+    
+     235   L19:     CLEANUP_THROW
+           L20:     JUMP_BACKWARD_NO_INTERRUPT 52 (to L10)
+    
+     238   L21:     CLEANUP_THROW
+           L22:     JUMP_BACKWARD_NO_INTERRUPT 19 (to L15)
+    
+      --   L23:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L23 [0] lasti
+      L3 to L4 -> L17 [2]
+      L4 to L8 -> L23 [0] lasti
+      L8 to L9 -> L19 [3]
+      L9 to L13 -> L23 [0] lasti
+      L13 to L14 -> L21 [2]
+      L14 to L18 -> L23 [0] lasti
+      L19 to L20 -> L23 [0] lasti
+      L21 to L22 -> L23 [0] lasti
+    
+# --- Nested code object: _sync_call_handoff_status ---
+    # co_names: ('execute', 'update', 'Call', 'where', 'id', 'values')
+    # co_varnames: ('db', 'call_id', 'status', 'accepted_at', 'selected_device_id', 'values')
+     248            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     256            LOAD_CONST               1 ('handoff_status')
+                    LOAD_FAST                2 (status)
+                    BUILD_MAP                1
+                    STORE_FAST               5 (values)
+    
+     257            LOAD_FAST                3 (accepted_at)
+                    POP_JUMP_IF_NONE         4 (to L2)
+    
+     258            LOAD_FAST_LOAD_FAST     53 (accepted_at, values)
+                    LOAD_CONST               2 ('handoff_accepted_at')
+                    STORE_SUBSCR
+    
+     259    L2:     LOAD_FAST                4 (selected_device_id)
+                    POP_JUMP_IF_NONE         4 (to L3)
+    
+     260            LOAD_FAST_LOAD_FAST     69 (selected_device_id, values)
+                    LOAD_CONST               3 ('handoff_selected_device_id')
+                    STORE_SUBSCR
+    
+     262    L3:     LOAD_FAST                0 (db)
+                    LOAD_ATTR                1 (execute + NULL|self)
+    
+     263            LOAD_GLOBAL              3 (update + NULL)
+                    LOAD_GLOBAL              4 (Call)
+                    CALL                     1
+                    LOAD_ATTR                7 (where + NULL|self)
+                    LOAD_GLOBAL              4 (Call)
+                    LOAD_ATTR                8 (id)
+                    LOAD_FAST                1 (call_id)
+                    COMPARE_OP              72 (==)
+                    CALL                     1
+                    LOAD_ATTR               10 (values)
+                    PUSH_NULL
+                    LOAD_CONST               4 (())
+                    BUILD_MAP                0
+                    LOAD_FAST                5 (values)
+                    DICT_MERGE               1
+                    CALL_FUNCTION_EX         1
+    
+     262            CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L4:     SEND                     3 (to L7)
+            L5:     YIELD_VALUE              1
+            L6:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+            L7:     END_SEND
+                    POP_TOP
+                    RETURN_CONST             0 (None)
+            L8:     CLEANUP_THROW
+            L9:     JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+    
+      --   L10:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L5 -> L10 [0] lasti
+      L5 to L6 -> L8 [2]
+      L6 to L9 -> L10 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'uuid', 'datetime', 'UTC', 'timedelta', 'sqlalchemy', 'select', 'update', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.models.call', 'Call', 'app.models.call_event', 'CallEvent', 'app.models.handoff_offer', 'HandoffOffer', 'app.models.user_settings', 'UserSettings', 'app.models.vip_entry', 'VipEntry', 'getLogger', '__name__', 'logger', 'evaluate_eligibility', 'check_minimum_screening', 'create_offer', 'accept_offer', 'decline_offer', 'expire_stale_offers', '_sync_call_handoff_status')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Handoff service: eligibility evaluation, offer lifecycle, expiry sweeper.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (logging)
+              STORE_NAME               3 (logging)
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              4 (uuid)
+              STORE_NAME               4 (uuid)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('UTC', 'datetime', 'timedelta'))
+              IMPORT_NAME              5 (datetime)
+              IMPORT_FROM              6 (UTC)
+              STORE_NAME               6 (UTC)
+              IMPORT_FROM              5 (datetime)
+              STORE_NAME               5 (datetime)
+              IMPORT_FROM              7 (timedelta)
+              STORE_NAME               7 (timedelta)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('select', 'update'))
+              IMPORT_NAME              8 (sqlalchemy)
+              IMPORT_FROM              9 (select)
+              STORE_NAME               9 (select)
+              IMPORT_FROM             10 (update)
+              STORE_NAME              10 (update)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('AsyncSession',))
+              IMPORT_NAME             11 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM             12 (AsyncSession)
+              STORE_NAME              12 (AsyncSession)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('settings',))
+              IMPORT_NAME             13 (app.config)
+              IMPORT_FROM             14 (settings)
+              STORE_NAME              14 (settings)
+              POP_TOP
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('Call',))
+              IMPORT_NAME             15 (app.models.call)
+              IMPORT_FROM             16 (Call)
+              STORE_NAME              16 (Call)
+              POP_TOP
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('CallEvent',))
+              IMPORT_NAME             17 (app.models.call_event)
+              IMPORT_FROM             18 (CallEvent)
+              STORE_NAME              18 (CallEvent)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST              10 (('HandoffOffer',))
+              IMPORT_NAME             19 (app.models.handoff_offer)
+              IMPORT_FROM             20 (HandoffOffer)
+              STORE_NAME              20 (HandoffOffer)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST              11 (('UserSettings',))
+              IMPORT_NAME             21 (app.models.user_settings)
+              IMPORT_FROM             22 (UserSettings)
+              STORE_NAME              22 (UserSettings)
+              POP_TOP
+
+ 17           LOAD_CONST               1 (0)
+              LOAD_CONST              12 (('VipEntry',))
+              IMPORT_NAME             23 (app.models.vip_entry)
+              IMPORT_FROM             24 (VipEntry)
+              STORE_NAME              24 (VipEntry)
+              POP_TOP
+
+ 19           LOAD_NAME                3 (logging)
+              LOAD_ATTR               50 (getLogger)
+              PUSH_NULL
+              LOAD_NAME               26 (__name__)
+              CALL                     1
+              STORE_NAME              27 (logger)
+
+ 27           NOP
+
+ 28           NOP
+
+ 27           NOP
+
+ 29           NOP
+
+ 27           NOP
+
+ 30           NOP
+
+ 27           NOP
+
+ 31           NOP
+
+ 27           NOP
+
+ 32           NOP
+
+ 27           LOAD_CONST              21 (('db', 'AsyncSession', 'call', 'Call', 'user_settings', 'UserSettings', 'caller_phone_hash', 'str', 'return', 'dict'))
+              LOAD_CONST              13 (<code object evaluate_eligibility at 0x0000024C0FA8BF50, file "D:\fluence\Github\mattbot\backend\app\services\handoff_service.py", line 27>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              28 (evaluate_eligibility)
+
+ 73           LOAD_CONST              22 (('db', 'AsyncSession', 'call_id', 'uuid.UUID', 'return', 'bool'))
+              LOAD_CONST              14 (<code object check_minimum_screening at 0x0000024C0FCD8530, file "D:\fluence\Github\mattbot\backend\app\services\handoff_service.py", line 73>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              29 (check_minimum_screening)
+
+104           NOP
+
+ 98           LOAD_CONST              23 ((None,))
+
+ 99           NOP
+
+ 98           NOP
+
+100           NOP
+
+ 98           NOP
+
+101           NOP
+
+ 98           NOP
+
+102           NOP
+
+ 98           NOP
+
+103           NOP
+
+ 98           NOP
+
+104           NOP
+
+ 98           NOP
+
+105           NOP
+
+ 98           LOAD_CONST              24 (('db', 'AsyncSession', 'call', 'Call', 'user_id', 'uuid.UUID', 'reason', 'str', 'preview_payload', 'dict | None', 'timeout_seconds', 'int | None', 'return', 'HandoffOffer'))
+              LOAD_CONST              15 (<code object create_offer at 0x0000024C0FB664F0, file "D:\fluence\Github\mattbot\backend\app\services\handoff_service.py", line 98>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME              30 (create_offer)
+
+143           NOP
+
+144           NOP
+
+143           NOP
+
+145           NOP
+
+143           NOP
+
+146           NOP
+
+143           NOP
+
+147           NOP
+
+143           NOP
+
+148           NOP
+
+143           LOAD_CONST              25 (('db', 'AsyncSession', 'offer_id', 'uuid.UUID', 'device_id', 'uuid.UUID', 'idempotency_key', 'str', 'return', 'dict'))
+              LOAD_CONST              16 (<code object accept_offer at 0x0000024C0FB531C0, file "D:\fluence\Github\mattbot\backend\app\services\handoff_service.py", line 143>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              31 (accept_offer)
+
+195           NOP
+
+196           NOP
+
+195           NOP
+
+197           NOP
+
+195           NOP
+
+198           NOP
+
+195           NOP
+
+199           NOP
+
+195           LOAD_CONST              26 (('db', 'AsyncSession', 'offer_id', 'uuid.UUID', 'device_id', 'uuid.UUID', 'return', 'dict'))
+              LOAD_CONST              17 (<code object decline_offer at 0x0000024C0FEDCA90, file "D:\fluence\Github\mattbot\backend\app\services\handoff_service.py", line 195>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              32 (decline_offer)
+
+221           LOAD_CONST              27 (('db', 'AsyncSession', 'return', 'int'))
+              LOAD_CONST              18 (<code object expire_stale_offers at 0x0000024C0FC6F240, file "D:\fluence\Github\mattbot\backend\app\services\handoff_service.py", line 221>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              33 (expire_stale_offers)
+
+253           LOAD_CONST               3 (None)
+
+254           LOAD_CONST               3 (None)
+
+248           LOAD_CONST              19 (('accepted_at', 'selected_device_id'))
+              BUILD_CONST_KEY_MAP      2
+
+249           NOP
+
+248           NOP
+
+250           NOP
+
+248           NOP
+
+251           NOP
+
+248           NOP
+
+253           NOP
+
+248           NOP
+
+254           NOP
+
+248           NOP
+
+255           NOP
+
+248           LOAD_CONST              28 (('db', 'AsyncSession', 'call_id', 'uuid.UUID', 'status', 'str', 'accepted_at', 'datetime | None', 'selected_device_id', 'uuid.UUID | None', 'return', 'None'))
+              LOAD_CONST              20 (<code object _sync_call_handoff_status at 0x0000024C0EC73CF0, file "D:\fluence\Github\mattbot\backend\app\services\handoff_service.py", line 248>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   2 (kwdefaults)
+              STORE_NAME              34 (_sync_call_handoff_status)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object evaluate_eligibility at 0x0000024C0FA8BF50, file "D:\fluence\Github\mattbot\backend\app\services\handoff_service.py", line 27>:
+  27            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  33            LOAD_FAST                2 (user_settings)
+                LOAD_ATTR                0 (handoff_enabled)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         6 (to L2)
+
+  34            LOAD_CONST               1 (False)
+                LOAD_CONST               2 ('handoff_disabled')
+                LOAD_CONST               1 (False)
+                LOAD_CONST               3 (('eligible', 'reason', 'is_vip'))
+                BUILD_CONST_KEY_MAP      3
+                RETURN_VALUE
+
+  36    L2:     LOAD_FAST                0 (db)
+                LOAD_ATTR                3 (scalar + NULL|self)
+
+  37            LOAD_GLOBAL              5 (select + NULL)
+                LOAD_GLOBAL              6 (VipEntry)
+                CALL                     1
+                LOAD_ATTR                9 (where + NULL|self)
+
+  38            LOAD_GLOBAL              6 (VipEntry)
+                LOAD_ATTR               10 (owner_user_id)
+                LOAD_FAST                1 (call)
+                LOAD_ATTR               10 (owner_user_id)
+                COMPARE_OP              72 (==)
+
+  39            LOAD_GLOBAL              6 (VipEntry)
+                LOAD_ATTR               12 (phone_hash)
+                LOAD_FAST                3 (caller_phone_hash)
+                COMPARE_OP              72 (==)
+
+  37            CALL                     2
+
+  36            CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L3:     SEND                     3 (to L6)
+        L4:     YIELD_VALUE              1
+        L5:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L3)
+        L6:     END_SEND
+                STORE_FAST               4 (vip_row)
+
+  42            LOAD_FAST                4 (vip_row)
+                LOAD_CONST               0 (None)
+                IS_OP                    1
+                STORE_FAST               5 (is_vip)
+
+  44            LOAD_FAST                2 (user_settings)
+                LOAD_ATTR               14 (handoff_trigger)
+                STORE_FAST               6 (trigger)
+
+  46            LOAD_FAST                6 (trigger)
+                LOAD_CONST               4 ('never')
+                COMPARE_OP              88 (bool(==))
+                POP_JUMP_IF_FALSE        6 (to L7)
+
+  47            LOAD_CONST               1 (False)
+                LOAD_CONST               5 ('trigger_never')
+                LOAD_FAST                5 (is_vip)
+                LOAD_CONST               3 (('eligible', 'reason', 'is_vip'))
+                BUILD_CONST_KEY_MAP      3
+                RETURN_VALUE
+
+  49    L7:     LOAD_FAST                6 (trigger)
+                LOAD_CONST               6 ('vip_only')
+                COMPARE_OP              88 (bool(==))
+                POP_JUMP_IF_FALSE       13 (to L8)
+                LOAD_FAST                5 (is_vip)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         6 (to L8)
+
+  50            LOAD_CONST               1 (False)
+                LOAD_CONST               7 ('not_vip')
+                LOAD_CONST               1 (False)
+                LOAD_CONST               3 (('eligible', 'reason', 'is_vip'))
+                BUILD_CONST_KEY_MAP      3
+                RETURN_VALUE
+
+  53    L8:     LOAD_FAST                1 (call)
+                LOAD_ATTR               16 (handoff_status)
+                LOAD_CONST               8 ('urgent_candidate')
+                COMPARE_OP              72 (==)
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE        16 (to L9)
+                POP_TOP
+
+  54            LOAD_GLOBAL             19 (getattr + NULL)
+                LOAD_FAST                1 (call)
+                LOAD_CONST               9 ('urgency_level')
+                LOAD_CONST               0 (None)
+                CALL                     3
+                LOAD_CONST              10 ('urgent')
+                COMPARE_OP              72 (==)
+
+  52    L9:     STORE_FAST               7 (is_urgent)
+
+  57            LOAD_FAST                6 (trigger)
+                LOAD_CONST              11 ('urgent_only')
+                COMPARE_OP              88 (bool(==))
+                POP_JUMP_IF_FALSE       13 (to L10)
+                LOAD_FAST                7 (is_urgent)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         6 (to L10)
+
+  58            LOAD_CONST               1 (False)
+                LOAD_CONST              12 ('not_urgent')
+                LOAD_FAST                5 (is_vip)
+                LOAD_CONST               3 (('eligible', 'reason', 'is_vip'))
+                BUILD_CONST_KEY_MAP      3
+                RETURN_VALUE
+
+  60   L10:     LOAD_FAST                6 (trigger)
+                LOAD_CONST              13 ('vip_and_urgent')
+                COMPARE_OP              88 (bool(==))
+                POP_JUMP_IF_FALSE       20 (to L11)
+                LOAD_FAST                5 (is_vip)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        13 (to L11)
+                LOAD_FAST                7 (is_urgent)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         6 (to L11)
+
+  61            LOAD_CONST               1 (False)
+                LOAD_CONST              14 ('not_vip_or_urgent')
+                LOAD_FAST                5 (is_vip)
+                LOAD_CONST               3 (('eligible', 'reason', 'is_vip'))
+                BUILD_CONST_KEY_MAP      3
+                RETURN_VALUE
+
+  63   L11:     LOAD_FAST                5 (is_vip)
+                TO_BOOL
+                POP_JUMP_IF_FALSE        2 (to L12)
+                LOAD_CONST              15 ('vip')
+                JUMP_FORWARD            10 (to L14)
+       L12:     LOAD_FAST                7 (is_urgent)
+                TO_BOOL
+                POP_JUMP_IF_FALSE        2 (to L13)
+                LOAD_CONST              10 ('urgent')
+                JUMP_FORWARD             1 (to L14)
+       L13:     LOAD_CONST              16 ('always')
+       L14:     STORE_FAST               8 (reason)
+
+  65            LOAD_CONST              17 (True)
+                LOAD_FAST_LOAD_FAST    133 (reason, is_vip)
+                LOAD_CONST               3 (('eligible', 'reason', 'is_vip'))
+                BUILD_CONST_KEY_MAP      3
+                RETURN_VALUE
+
+  36   L15:     CLEANUP_THROW
+       L16:     JUMP_BACKWARD_NO_INTERRUPT 159 (to L6)
+
+  --   L17:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L4 -> L17 [0] lasti
+  L4 to L5 -> L15 [2]
+  L5 to L16 -> L17 [0] lasti
+
+Disassembly of <code object check_minimum_screening at 0x0000024C0FCD8530, file "D:\fluence\Github\mattbot\backend\app\services\handoff_service.py", line 73>:
+  73            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  75            LOAD_FAST                0 (db)
+                LOAD_ATTR                1 (scalars + NULL|self)
+
+  76            LOAD_GLOBAL              3 (select + NULL)
+                LOAD_GLOBAL              4 (CallEvent)
+                CALL                     1
+                LOAD_ATTR                7 (where + NULL|self)
+
+  77            LOAD_GLOBAL              4 (CallEvent)
+                LOAD_ATTR                8 (call_id)
+                LOAD_FAST                1 (call_id)
+                COMPARE_OP              72 (==)
+
+  78            LOAD_GLOBAL              4 (CallEvent)
+                LOAD_ATTR               10 (event_type)
+                LOAD_CONST               1 ('screening_field_captured')
+                COMPARE_OP              72 (==)
+
+  76            CALL                     2
+
+  75            CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+
+  81            LOAD_ATTR               13 (all + NULL|self)
+                CALL                     0
+
+  74            STORE_FAST               2 (rows)
+
+  83            LOAD_GLOBAL             15 (set + NULL)
+                CALL                     0
+                STORE_FAST               3 (captured_fields)
+
+  84            LOAD_FAST                2 (rows)
+                GET_ITER
+        L6:     FOR_ITER                67 (to L10)
+                STORE_FAST               4 (event)
+
+  85            LOAD_FAST                4 (event)
+                LOAD_ATTR               16 (details_redacted)
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L7)
+                POP_TOP
+                BUILD_MAP                0
+        L7:     STORE_FAST               5 (details)
+
+  86            LOAD_FAST                5 (details)
+                LOAD_ATTR               19 (get + NULL|self)
+                LOAD_CONST               2 ('field_name')
+                CALL                     1
+                STORE_FAST               6 (field_name)
+
+  87            LOAD_FAST                6 (field_name)
+                TO_BOOL
+        L8:     POP_JUMP_IF_TRUE         2 (to L9)
+                JUMP_BACKWARD           50 (to L6)
+
+  88    L9:     LOAD_FAST                3 (captured_fields)
+                LOAD_ATTR               21 (add + NULL|self)
+                LOAD_FAST                6 (field_name)
+                CALL                     1
+                POP_TOP
+                JUMP_BACKWARD           69 (to L6)
+
+  84   L10:     END_FOR
+                POP_TOP
+
+  90            LOAD_CONST               3 ('caller_name')
+                LOAD_FAST                3 (captured_fields)
+                CONTAINS_OP              0
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_FALSE        5 (to L11)
+                POP_TOP
+                LOAD_CONST               4 ('reason')
+                LOAD_FAST                3 (captured_fields)
+                CONTAINS_OP              0
+       L11:     RETURN_VALUE
+
+  75   L12:     CLEANUP_THROW
+       L13:     JUMP_BACKWARD_NO_INTERRUPT 118 (to L5)
+
+  --   L14:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L14 [0] lasti
+  L3 to L4 -> L12 [2]
+  L4 to L8 -> L14 [0] lasti
+  L9 to L13 -> L14 [0] lasti
+
+Disassembly of <code object create_offer at 0x0000024C0FB664F0, file "D:\fluence\Github\mattbot\backend\app\services\handoff_service.py", line 98>:
+  98           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+ 106           LOAD_FAST                5 (timeout_seconds)
+               POP_JUMP_IF_NOT_NONE    16 (to L2)
+
+ 107           LOAD_GLOBAL              0 (settings)
+               LOAD_ATTR                2 (HANDOFF_OFFER_DEFAULT_TIMEOUT)
+               STORE_FAST               5 (timeout_seconds)
+
+ 108   L2:     LOAD_GLOBAL              4 (datetime)
+               LOAD_ATTR                6 (now)
+               PUSH_NULL
+               LOAD_GLOBAL              8 (UTC)
+               CALL                     1
+               STORE_FAST               6 (now)
+
+ 109           LOAD_FAST                6 (now)
+               LOAD_GLOBAL             11 (timedelta + NULL)
+               LOAD_FAST                5 (timeout_seconds)
+               LOAD_CONST               1 (('seconds',))
+               CALL_KW                  1
+               BINARY_OP                0 (+)
+               STORE_FAST               7 (expires_at)
+
+ 111           LOAD_GLOBAL             13 (HandoffOffer + NULL)
+
+ 112           LOAD_FAST                1 (call)
+               LOAD_ATTR               14 (id)
+
+ 113           LOAD_FAST                2 (user_id)
+
+ 114           LOAD_CONST               2 ('offered')
+
+ 115           LOAD_FAST                3 (reason)
+
+ 116           LOAD_FAST                7 (expires_at)
+
+ 117           LOAD_FAST                4 (preview_payload)
+
+ 111           LOAD_CONST               3 (('call_id', 'owner_user_id', 'status', 'offer_reason', 'expires_at', 'preview_payload'))
+               CALL_KW                  6
+               STORE_FAST               8 (offer)
+
+ 119           LOAD_FAST                0 (db)
+               LOAD_ATTR               17 (add + NULL|self)
+               LOAD_FAST                8 (offer)
+               CALL                     1
+               POP_TOP
+
+ 121           LOAD_CONST               2 ('offered')
+               LOAD_FAST                1 (call)
+               STORE_ATTR               9 (handoff_status)
+
+ 122           LOAD_FAST_LOAD_FAST     97 (now, call)
+               STORE_ATTR              10 (handoff_offered_at)
+
+ 123           LOAD_FAST_LOAD_FAST    113 (expires_at, call)
+               STORE_ATTR              11 (handoff_offer_expires_at)
+
+ 125           LOAD_GLOBAL             25 (CallEvent + NULL)
+
+ 126           LOAD_FAST                1 (call)
+               LOAD_ATTR               14 (id)
+
+ 127           LOAD_FAST                2 (user_id)
+
+ 128           LOAD_CONST               4 ('handoff_offer_created')
+
+ 129           LOAD_FAST                6 (now)
+
+ 130           LOAD_FAST_LOAD_FAST     53 (reason, timeout_seconds)
+               LOAD_CONST               5 (('offer_reason', 'timeout_seconds'))
+               BUILD_CONST_KEY_MAP      2
+
+ 125           LOAD_CONST               6 (('call_id', 'owner_user_id', 'event_type', 'event_at', 'details_redacted'))
+               CALL_KW                  5
+               STORE_FAST               9 (event)
+
+ 132           LOAD_FAST                0 (db)
+               LOAD_ATTR               17 (add + NULL|self)
+               LOAD_FAST                9 (event)
+               CALL                     1
+               POP_TOP
+
+ 134           LOAD_FAST                0 (db)
+               LOAD_ATTR               27 (flush + NULL|self)
+               CALL                     0
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L3:     SEND                     3 (to L6)
+       L4:     YIELD_VALUE              1
+       L5:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L3)
+       L6:     END_SEND
+               POP_TOP
+
+ 135           LOAD_FAST                8 (offer)
+               RETURN_VALUE
+
+ 134   L7:     CLEANUP_THROW
+       L8:     JUMP_BACKWARD_NO_INTERRUPT 6 (to L6)
+
+  --   L9:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L4 -> L9 [0] lasti
+  L4 to L5 -> L7 [2]
+  L5 to L8 -> L9 [0] lasti
+
+Disassembly of <code object accept_offer at 0x0000024C0FB531C0, file "D:\fluence\Github\mattbot\backend\app\services\handoff_service.py", line 143>:
+ 143            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 149            LOAD_FAST                0 (db)
+                LOAD_ATTR                1 (execute + NULL|self)
+
+ 150            LOAD_GLOBAL              3 (select + NULL)
+                LOAD_GLOBAL              4 (HandoffOffer)
+                CALL                     1
+
+ 151            LOAD_ATTR                7 (where + NULL|self)
+                LOAD_GLOBAL              4 (HandoffOffer)
+                LOAD_ATTR                8 (id)
+                LOAD_FAST                1 (offer_id)
+                COMPARE_OP              72 (==)
+                CALL                     1
+
+ 152            LOAD_ATTR               11 (with_for_update + NULL|self)
+                CALL                     0
+
+ 149            CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               4 (result)
+
+ 154            LOAD_FAST                4 (result)
+                LOAD_ATTR               13 (scalar_one_or_none + NULL|self)
+                CALL                     0
+                STORE_FAST               5 (offer)
+
+ 156            LOAD_FAST                5 (offer)
+                POP_JUMP_IF_NOT_NONE     4 (to L6)
+
+ 157            LOAD_CONST               1 ('result')
+                LOAD_CONST               2 ('not_found')
+                BUILD_MAP                1
+                RETURN_VALUE
+
+ 159    L6:     LOAD_GLOBAL             14 (datetime)
+                LOAD_ATTR               16 (now)
+                PUSH_NULL
+                LOAD_GLOBAL             18 (UTC)
+                CALL                     1
+                STORE_FAST               6 (now)
+
+ 161            LOAD_FAST                5 (offer)
+                LOAD_ATTR               20 (status)
+                LOAD_CONST               3 ('offered')
+                COMPARE_OP             119 (bool(!=))
+                POP_JUMP_IF_FALSE       15 (to L7)
+
+ 162            LOAD_CONST               4 ('lost')
+                LOAD_FAST                5 (offer)
+                LOAD_ATTR               20 (status)
+                LOAD_CONST               5 (('result', 'current_status'))
+                BUILD_CONST_KEY_MAP      2
+                RETURN_VALUE
+
+ 164    L7:     LOAD_FAST                5 (offer)
+                LOAD_ATTR               22 (expires_at)
+                LOAD_ATTR               24 (tzinfo)
+                POP_JUMP_IF_NOT_NONE    30 (to L8)
+
+ 165            LOAD_FAST                5 (offer)
+                LOAD_ATTR               22 (expires_at)
+                LOAD_ATTR               27 (replace + NULL|self)
+                LOAD_GLOBAL             18 (UTC)
+                LOAD_CONST               6 (('tzinfo',))
+                CALL_KW                  1
+                STORE_FAST               7 (exp)
+                JUMP_FORWARD            12 (to L9)
+
+ 167    L8:     LOAD_FAST                5 (offer)
+                LOAD_ATTR               22 (expires_at)
+                STORE_FAST               7 (exp)
+
+ 169    L9:     LOAD_FAST_LOAD_FAST    118 (exp, now)
+                COMPARE_OP              18 (bool(<))
+                POP_JUMP_IF_FALSE       65 (to L18)
+
+ 170            LOAD_CONST               7 ('expired')
+                LOAD_FAST                5 (offer)
+                STORE_ATTR              10 (status)
+
+ 171            LOAD_GLOBAL             29 (_sync_call_handoff_status + NULL)
+                LOAD_FAST_LOAD_FAST      5 (db, offer)
+                LOAD_ATTR               30 (call_id)
+                LOAD_CONST               7 ('expired')
+                CALL                     3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L10:     SEND                     3 (to L13)
+       L11:     YIELD_VALUE              1
+       L12:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L10)
+       L13:     END_SEND
+                POP_TOP
+
+ 172            LOAD_FAST                0 (db)
+                LOAD_ATTR               33 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L14:     SEND                     3 (to L17)
+       L15:     YIELD_VALUE              1
+       L16:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L14)
+       L17:     END_SEND
+                POP_TOP
+
+ 173            LOAD_CONST               1 ('result')
+                LOAD_CONST               7 ('expired')
+                BUILD_MAP                1
+                RETURN_VALUE
+
+ 175   L18:     LOAD_CONST               8 ('accepted')
+                LOAD_FAST                5 (offer)
+                STORE_ATTR              10 (status)
+
+ 176            LOAD_FAST_LOAD_FAST     37 (device_id, offer)
+                STORE_ATTR              17 (selected_device_id)
+
+ 177            LOAD_FAST_LOAD_FAST    101 (now, offer)
+                STORE_ATTR              18 (accepted_at)
+
+ 179            LOAD_GLOBAL             29 (_sync_call_handoff_status + NULL)
+
+ 180            LOAD_FAST                0 (db)
+
+ 181            LOAD_FAST                5 (offer)
+                LOAD_ATTR               30 (call_id)
+
+ 182            LOAD_CONST               8 ('accepted')
+
+ 183            LOAD_FAST                6 (now)
+
+ 184            LOAD_FAST                2 (device_id)
+
+ 179            LOAD_CONST               9 (('accepted_at', 'selected_device_id'))
+                CALL_KW                  5
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L19:     SEND                     3 (to L22)
+       L20:     YIELD_VALUE              1
+       L21:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L19)
+       L22:     END_SEND
+                POP_TOP
+
+ 186            LOAD_FAST                0 (db)
+                LOAD_ATTR               33 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L23:     SEND                     3 (to L26)
+       L24:     YIELD_VALUE              1
+       L25:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L23)
+       L26:     END_SEND
+                POP_TOP
+
+ 187            LOAD_CONST               1 ('result')
+                LOAD_CONST              10 ('won')
+                BUILD_MAP                1
+                RETURN_VALUE
+
+ 149   L27:     CLEANUP_THROW
+       L28:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 298 (to L5)
+
+ 171   L29:     CLEANUP_THROW
+       L30:     JUMP_BACKWARD_NO_INTERRUPT 113 (to L13)
+
+ 172   L31:     CLEANUP_THROW
+       L32:     JUMP_BACKWARD_NO_INTERRUPT 91 (to L17)
+
+ 179   L33:     CLEANUP_THROW
+       L34:     JUMP_BACKWARD_NO_INTERRUPT 39 (to L22)
+
+ 186   L35:     CLEANUP_THROW
+       L36:     JUMP_BACKWARD_NO_INTERRUPT 17 (to L26)
+
+  --   L37:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L37 [0] lasti
+  L3 to L4 -> L27 [2]
+  L4 to L11 -> L37 [0] lasti
+  L11 to L12 -> L29 [2]
+  L12 to L15 -> L37 [0] lasti
+  L15 to L16 -> L31 [2]
+  L16 to L20 -> L37 [0] lasti
+  L20 to L21 -> L33 [2]
+  L21 to L24 -> L37 [0] lasti
+  L24 to L25 -> L35 [2]
+  L25 to L28 -> L37 [0] lasti
+  L29 to L30 -> L37 [0] lasti
+  L31 to L32 -> L37 [0] lasti
+  L33 to L34 -> L37 [0] lasti
+  L35 to L36 -> L37 [0] lasti
+
+Disassembly of <code object decline_offer at 0x0000024C0FEDCA90, file "D:\fluence\Github\mattbot\backend\app\services\handoff_service.py", line 195>:
+ 195            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 200            LOAD_FAST                0 (db)
+                LOAD_ATTR                1 (get + NULL|self)
+                LOAD_GLOBAL              2 (HandoffOffer)
+                LOAD_FAST                1 (offer_id)
+                CALL                     2
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                STORE_FAST               3 (offer)
+
+ 201            LOAD_FAST                3 (offer)
+                POP_JUMP_IF_NOT_NONE     4 (to L6)
+
+ 202            LOAD_CONST               1 ('result')
+                LOAD_CONST               2 ('not_found')
+                BUILD_MAP                1
+                RETURN_VALUE
+
+ 204    L6:     LOAD_FAST                3 (offer)
+                LOAD_ATTR                4 (status)
+                LOAD_CONST               3 ('offered')
+                COMPARE_OP             119 (bool(!=))
+                POP_JUMP_IF_FALSE       15 (to L7)
+
+ 205            LOAD_CONST               4 ('already_resolved')
+                LOAD_FAST                3 (offer)
+                LOAD_ATTR                4 (status)
+                LOAD_CONST               5 (('result', 'current_status'))
+                BUILD_CONST_KEY_MAP      2
+                RETURN_VALUE
+
+ 207    L7:     LOAD_GLOBAL              6 (datetime)
+                LOAD_ATTR                8 (now)
+                PUSH_NULL
+                LOAD_GLOBAL             10 (UTC)
+                CALL                     1
+                STORE_FAST               4 (now)
+
+ 208            LOAD_CONST               6 ('declined')
+                LOAD_FAST                3 (offer)
+                STORE_ATTR               2 (status)
+
+ 209            LOAD_FAST_LOAD_FAST     67 (now, offer)
+                STORE_ATTR               6 (declined_at)
+
+ 211            LOAD_GLOBAL             15 (_sync_call_handoff_status + NULL)
+                LOAD_FAST_LOAD_FAST      3 (db, offer)
+                LOAD_ATTR               16 (call_id)
+                LOAD_CONST               6 ('declined')
+                CALL                     3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L8:     SEND                     3 (to L11)
+        L9:     YIELD_VALUE              1
+       L10:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L8)
+       L11:     END_SEND
+                POP_TOP
+
+ 212            LOAD_FAST                0 (db)
+                LOAD_ATTR               19 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L12:     SEND                     3 (to L15)
+       L13:     YIELD_VALUE              1
+       L14:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L12)
+       L15:     END_SEND
+                POP_TOP
+
+ 213            LOAD_CONST               1 ('result')
+                LOAD_CONST               6 ('declined')
+                BUILD_MAP                1
+                RETURN_VALUE
+
+ 200   L16:     CLEANUP_THROW
+       L17:     JUMP_BACKWARD_NO_INTERRUPT 139 (to L5)
+
+ 211   L18:     CLEANUP_THROW
+       L19:     JUMP_BACKWARD_NO_INTERRUPT 34 (to L11)
+
+ 212   L20:     CLEANUP_THROW
+       L21:     JUMP_BACKWARD_NO_INTERRUPT 12 (to L15)
+
+  --   L22:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L22 [0] lasti
+  L3 to L4 -> L16 [2]
+  L4 to L9 -> L22 [0] lasti
+  L9 to L10 -> L18 [2]
+  L10 to L13 -> L22 [0] lasti
+  L13 to L14 -> L20 [2]
+  L14 to L17 -> L22 [0] lasti
+  L18 to L19 -> L22 [0] lasti
+  L20 to L21 -> L22 [0] lasti
+
+Disassembly of <code object expire_stale_offers at 0x0000024C0FC6F240, file "D:\fluence\Github\mattbot\backend\app\services\handoff_service.py", line 221>:
+ 221            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 222            LOAD_GLOBAL              0 (datetime)
+                LOAD_ATTR                2 (now)
+                PUSH_NULL
+                LOAD_GLOBAL              4 (UTC)
+                CALL                     1
+                STORE_FAST               1 (now)
+
+ 225            LOAD_FAST                0 (db)
+                LOAD_ATTR                7 (scalars + NULL|self)
+
+ 226            LOAD_GLOBAL              9 (select + NULL)
+                LOAD_GLOBAL             10 (HandoffOffer)
+                CALL                     1
+                LOAD_ATTR               13 (where + NULL|self)
+
+ 227            LOAD_GLOBAL             10 (HandoffOffer)
+                LOAD_ATTR               14 (status)
+                LOAD_CONST               1 ('offered')
+                COMPARE_OP              72 (==)
+
+ 228            LOAD_GLOBAL             10 (HandoffOffer)
+                LOAD_ATTR               16 (expires_at)
+                LOAD_FAST                1 (now)
+                COMPARE_OP               2 (<)
+
+ 226            CALL                     2
+
+ 225            CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+
+ 231            LOAD_ATTR               19 (all + NULL|self)
+                CALL                     0
+
+ 224            STORE_FAST               2 (stale)
+
+ 233            LOAD_FAST                2 (stale)
+                GET_ITER
+        L6:     FOR_ITER                40 (to L11)
+                STORE_FAST               3 (offer)
+
+ 234            LOAD_CONST               2 ('expired')
+                LOAD_FAST                3 (offer)
+                STORE_ATTR               7 (status)
+
+ 235            LOAD_GLOBAL             21 (_sync_call_handoff_status + NULL)
+                LOAD_FAST_LOAD_FAST      3 (db, offer)
+                LOAD_ATTR               22 (call_id)
+                LOAD_CONST               2 ('expired')
+                CALL                     3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L7:     SEND                     3 (to L10)
+        L8:     YIELD_VALUE              1
+        L9:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+       L10:     END_SEND
+                POP_TOP
+                JUMP_BACKWARD           42 (to L6)
+
+ 233   L11:     END_FOR
+                POP_TOP
+
+ 237            LOAD_FAST                2 (stale)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       24 (to L16)
+
+ 238            LOAD_FAST                0 (db)
+                LOAD_ATTR               25 (flush + NULL|self)
+                CALL                     0
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L12:     SEND                     3 (to L15)
+       L13:     YIELD_VALUE              1
+       L14:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L12)
+       L15:     END_SEND
+                POP_TOP
+
+ 240   L16:     LOAD_GLOBAL             27 (len + NULL)
+                LOAD_FAST                2 (stale)
+                CALL                     1
+                RETURN_VALUE
+
+ 225   L17:     CLEANUP_THROW
+       L18:     JUMP_BACKWARD_NO_INTERRUPT 106 (to L5)
+
+ 235   L19:     CLEANUP_THROW
+       L20:     JUMP_BACKWARD_NO_INTERRUPT 52 (to L10)
+
+ 238   L21:     CLEANUP_THROW
+       L22:     JUMP_BACKWARD_NO_INTERRUPT 19 (to L15)
+
+  --   L23:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L23 [0] lasti
+  L3 to L4 -> L17 [2]
+  L4 to L8 -> L23 [0] lasti
+  L8 to L9 -> L19 [3]
+  L9 to L13 -> L23 [0] lasti
+  L13 to L14 -> L21 [2]
+  L14 to L18 -> L23 [0] lasti
+  L19 to L20 -> L23 [0] lasti
+  L21 to L22 -> L23 [0] lasti
+
+Disassembly of <code object _sync_call_handoff_status at 0x0000024C0EC73CF0, file "D:\fluence\Github\mattbot\backend\app\services\handoff_service.py", line 248>:
+ 248            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 256            LOAD_CONST               1 ('handoff_status')
+                LOAD_FAST                2 (status)
+                BUILD_MAP                1
+                STORE_FAST               5 (values)
+
+ 257            LOAD_FAST                3 (accepted_at)
+                POP_JUMP_IF_NONE         4 (to L2)
+
+ 258            LOAD_FAST_LOAD_FAST     53 (accepted_at, values)
+                LOAD_CONST               2 ('handoff_accepted_at')
+                STORE_SUBSCR
+
+ 259    L2:     LOAD_FAST                4 (selected_device_id)
+                POP_JUMP_IF_NONE         4 (to L3)
+
+ 260            LOAD_FAST_LOAD_FAST     69 (selected_device_id, values)
+                LOAD_CONST               3 ('handoff_selected_device_id')
+                STORE_SUBSCR
+
+ 262    L3:     LOAD_FAST                0 (db)
+                LOAD_ATTR                1 (execute + NULL|self)
+
+ 263            LOAD_GLOBAL              3 (update + NULL)
+                LOAD_GLOBAL              4 (Call)
+                CALL                     1
+                LOAD_ATTR                7 (where + NULL|self)
+                LOAD_GLOBAL              4 (Call)
+                LOAD_ATTR                8 (id)
+                LOAD_FAST                1 (call_id)
+                COMPARE_OP              72 (==)
+                CALL                     1
+                LOAD_ATTR               10 (values)
+                PUSH_NULL
+                LOAD_CONST               4 (())
+                BUILD_MAP                0
+                LOAD_FAST                5 (values)
+                DICT_MERGE               1
+                CALL_FUNCTION_EX         1
+
+ 262            CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L4:     SEND                     3 (to L7)
+        L5:     YIELD_VALUE              1
+        L6:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+        L7:     END_SEND
+                POP_TOP
+                RETURN_CONST             0 (None)
+        L8:     CLEANUP_THROW
+        L9:     JUMP_BACKWARD_NO_INTERRUPT 5 (to L7)
+
+  --   L10:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L5 -> L10 [0] lasti
+  L5 to L6 -> L8 [2]
+  L6 to L9 -> L10 [0] lasti

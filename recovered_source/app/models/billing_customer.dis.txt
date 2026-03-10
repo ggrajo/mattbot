@@ -1,0 +1,382 @@
+# Bytecode dump of: billing_customer.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\models\billing_customer.py
+# co_names: ('uuid', 'datetime', 'UTC', 'sqlalchemy', 'DateTime', 'ForeignKey', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'relationship', 'app.database', 'Base', '_tz', 'BillingCustomer')
+# co_consts (strings): ['return', 'BillingCustomer']
+
+# --- Nested code object: _tz ---
+    # co_names: ('DateTime',)
+    # co_varnames: ()
+     11           RESUME                   0
+    
+     12           LOAD_GLOBAL              1 (DateTime + NULL)
+                  LOAD_CONST               1 (True)
+                  LOAD_CONST               2 (('timezone',))
+                  CALL_KW                  1
+                  RETURN_VALUE
+    
+# --- Nested code object: BillingCustomer ---
+    # DOCSTRING: """BillingCustomer"""
+    # --- Nested code object: BillingCustomer.<lambda> ---
+        # co_names: ('datetime', 'now', 'UTC')
+        # co_varnames: ()
+         33           RESUME                   0
+                      LOAD_GLOBAL              0 (datetime)
+                      LOAD_ATTR                2 (now)
+                      PUSH_NULL
+                      LOAD_GLOBAL              4 (UTC)
+                      CALL                     1
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__tablename__', 'mapped_column', 'UUID', 'ForeignKey', 'owner_user_id', 'Mapped', 'uuid', '__annotations__', 'Text', 'stripe_customer_id', 'str', '_tz', 'text', 'created_at', 'datetime', 'updated_at', 'relationship', 'user', '__static_attributes__')
+    # co_varnames: ()
+     15           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('BillingCustomer')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (15)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     16           LOAD_CONST               2 ('billing_customers')
+                  STORE_NAME               4 (__tablename__)
+    
+     18           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     19           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     20           LOAD_NAME                7 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST               5 ('users.id')
+                  LOAD_CONST               6 ('CASCADE')
+                  LOAD_CONST               7 (('ondelete',))
+                  CALL_KW                  2
+    
+     21           LOAD_CONST               3 (True)
+    
+     18           LOAD_CONST               8 (('primary_key',))
+                  CALL_KW                  3
+                  STORE_NAME               8 (owner_user_id)
+                  LOAD_NAME                9 (Mapped)
+                  LOAD_NAME               10 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST               9 ('owner_user_id')
+                  STORE_SUBSCR
+    
+     23           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     24           LOAD_NAME               12 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               3 (True)
+    
+     23           LOAD_CONST              10 (('unique', 'nullable'))
+                  CALL_KW                  3
+                  STORE_NAME              13 (stripe_customer_id)
+                  LOAD_NAME                9 (Mapped)
+                  LOAD_NAME               14 (str)
+                  LOAD_CONST              11 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              12 ('stripe_customer_id')
+                  STORE_SUBSCR
+    
+     26           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     27           LOAD_NAME               15 (_tz)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST              13 (False)
+                  LOAD_NAME               16 (text)
+                  PUSH_NULL
+                  LOAD_CONST              14 ('now()')
+                  CALL                     1
+    
+     26           LOAD_CONST              15 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              17 (created_at)
+                  LOAD_NAME                9 (Mapped)
+                  LOAD_NAME               18 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              16 ('created_at')
+                  STORE_SUBSCR
+    
+     29           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     30           LOAD_NAME               15 (_tz)
+                  PUSH_NULL
+                  CALL                     0
+    
+     31           LOAD_CONST              13 (False)
+    
+     32           LOAD_NAME               16 (text)
+                  PUSH_NULL
+                  LOAD_CONST              14 ('now()')
+                  CALL                     1
+    
+     33           LOAD_CONST              17 (<code object <lambda> at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\billing_customer.py", line 33>)
+                  MAKE_FUNCTION
+    
+     29           LOAD_CONST              18 (('nullable', 'server_default', 'onupdate'))
+                  CALL_KW                  4
+                  STORE_NAME              19 (updated_at)
+                  LOAD_NAME                9 (Mapped)
+                  LOAD_NAME               18 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              19 ('updated_at')
+                  STORE_SUBSCR
+    
+     36           LOAD_NAME               20 (relationship)
+                  PUSH_NULL
+                  LOAD_CONST              20 ('billing_customer')
+                  LOAD_CONST              21 (('back_populates',))
+                  CALL_KW                  1
+                  STORE_NAME              21 (user)
+                  LOAD_NAME                9 (Mapped)
+                  LOAD_CONST              22 ('User')
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              23 ('user')
+                  STORE_SUBSCR
+                  LOAD_CONST              24 (())
+                  STORE_NAME              22 (__static_attributes__)
+                  RETURN_CONST            11 (None)
+    
+    Disassembly of <code object <lambda> at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\billing_customer.py", line 33>:
+     33           RESUME                   0
+                  LOAD_GLOBAL              0 (datetime)
+                  LOAD_ATTR                2 (now)
+                  PUSH_NULL
+                  LOAD_GLOBAL              4 (UTC)
+                  CALL                     1
+                  RETURN_VALUE
+    
+# co_names: ('uuid', 'datetime', 'UTC', 'sqlalchemy', 'DateTime', 'ForeignKey', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'relationship', 'app.database', 'Base', '_tz', 'BillingCustomer')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 (0)
+              LOAD_CONST               1 (None)
+              IMPORT_NAME              0 (uuid)
+              STORE_NAME               0 (uuid)
+
+  2           LOAD_CONST               0 (0)
+              LOAD_CONST               2 (('UTC', 'datetime'))
+              IMPORT_NAME              1 (datetime)
+              IMPORT_FROM              2 (UTC)
+              STORE_NAME               2 (UTC)
+              IMPORT_FROM              1 (datetime)
+              STORE_NAME               1 (datetime)
+              POP_TOP
+
+  4           LOAD_CONST               0 (0)
+              LOAD_CONST               3 (('DateTime', 'ForeignKey', 'Text', 'text'))
+              IMPORT_NAME              3 (sqlalchemy)
+              IMPORT_FROM              4 (DateTime)
+              STORE_NAME               4 (DateTime)
+              IMPORT_FROM              5 (ForeignKey)
+              STORE_NAME               5 (ForeignKey)
+              IMPORT_FROM              6 (Text)
+              STORE_NAME               6 (Text)
+              IMPORT_FROM              7 (text)
+              STORE_NAME               7 (text)
+              POP_TOP
+
+  5           LOAD_CONST               0 (0)
+              LOAD_CONST               4 (('UUID',))
+              IMPORT_NAME              8 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM              9 (UUID)
+              STORE_NAME               9 (UUID)
+              POP_TOP
+
+  6           LOAD_CONST               0 (0)
+              LOAD_CONST               5 (('Mapped', 'mapped_column', 'relationship'))
+              IMPORT_NAME             10 (sqlalchemy.orm)
+              IMPORT_FROM             11 (Mapped)
+              STORE_NAME              11 (Mapped)
+              IMPORT_FROM             12 (mapped_column)
+              STORE_NAME              12 (mapped_column)
+              IMPORT_FROM             13 (relationship)
+              STORE_NAME              13 (relationship)
+              POP_TOP
+
+  8           LOAD_CONST               0 (0)
+              LOAD_CONST               6 (('Base',))
+              IMPORT_NAME             14 (app.database)
+              IMPORT_FROM             15 (Base)
+              STORE_NAME              15 (Base)
+              POP_TOP
+
+ 11           LOAD_CONST               7 ('return')
+              LOAD_NAME                4 (DateTime)
+              BUILD_TUPLE              2
+              LOAD_CONST               8 (<code object _tz at 0x0000024C0EF0FD70, file "D:\fluence\Github\mattbot\backend\app\models\billing_customer.py", line 11>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              16 (_tz)
+
+ 15           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               9 (<code object BillingCustomer at 0x0000024C0EC4BE10, file "D:\fluence\Github\mattbot\backend\app\models\billing_customer.py", line 15>)
+              MAKE_FUNCTION
+              LOAD_CONST              10 ('BillingCustomer')
+              LOAD_NAME               15 (Base)
+              CALL                     3
+              STORE_NAME              17 (BillingCustomer)
+              RETURN_CONST             1 (None)
+
+Disassembly of <code object _tz at 0x0000024C0EF0FD70, file "D:\fluence\Github\mattbot\backend\app\models\billing_customer.py", line 11>:
+ 11           RESUME                   0
+
+ 12           LOAD_GLOBAL              1 (DateTime + NULL)
+              LOAD_CONST               1 (True)
+              LOAD_CONST               2 (('timezone',))
+              CALL_KW                  1
+              RETURN_VALUE
+
+Disassembly of <code object BillingCustomer at 0x0000024C0EC4BE10, file "D:\fluence\Github\mattbot\backend\app\models\billing_customer.py", line 15>:
+ 15           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('BillingCustomer')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (15)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 16           LOAD_CONST               2 ('billing_customers')
+              STORE_NAME               4 (__tablename__)
+
+ 18           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 19           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 20           LOAD_NAME                7 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               5 ('users.id')
+              LOAD_CONST               6 ('CASCADE')
+              LOAD_CONST               7 (('ondelete',))
+              CALL_KW                  2
+
+ 21           LOAD_CONST               3 (True)
+
+ 18           LOAD_CONST               8 (('primary_key',))
+              CALL_KW                  3
+              STORE_NAME               8 (owner_user_id)
+              LOAD_NAME                9 (Mapped)
+              LOAD_NAME               10 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               9 ('owner_user_id')
+              STORE_SUBSCR
+
+ 23           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 24           LOAD_NAME               12 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               3 (True)
+
+ 23           LOAD_CONST              10 (('unique', 'nullable'))
+              CALL_KW                  3
+              STORE_NAME              13 (stripe_customer_id)
+              LOAD_NAME                9 (Mapped)
+              LOAD_NAME               14 (str)
+              LOAD_CONST              11 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              12 ('stripe_customer_id')
+              STORE_SUBSCR
+
+ 26           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 27           LOAD_NAME               15 (_tz)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              13 (False)
+              LOAD_NAME               16 (text)
+              PUSH_NULL
+              LOAD_CONST              14 ('now()')
+              CALL                     1
+
+ 26           LOAD_CONST              15 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              17 (created_at)
+              LOAD_NAME                9 (Mapped)
+              LOAD_NAME               18 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              16 ('created_at')
+              STORE_SUBSCR
+
+ 29           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 30           LOAD_NAME               15 (_tz)
+              PUSH_NULL
+              CALL                     0
+
+ 31           LOAD_CONST              13 (False)
+
+ 32           LOAD_NAME               16 (text)
+              PUSH_NULL
+              LOAD_CONST              14 ('now()')
+              CALL                     1
+
+ 33           LOAD_CONST              17 (<code object <lambda> at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\billing_customer.py", line 33>)
+              MAKE_FUNCTION
+
+ 29           LOAD_CONST              18 (('nullable', 'server_default', 'onupdate'))
+              CALL_KW                  4
+              STORE_NAME              19 (updated_at)
+              LOAD_NAME                9 (Mapped)
+              LOAD_NAME               18 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              19 ('updated_at')
+              STORE_SUBSCR
+
+ 36           LOAD_NAME               20 (relationship)
+              PUSH_NULL
+              LOAD_CONST              20 ('billing_customer')
+              LOAD_CONST              21 (('back_populates',))
+              CALL_KW                  1
+              STORE_NAME              21 (user)
+              LOAD_NAME                9 (Mapped)
+              LOAD_CONST              22 ('User')
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              23 ('user')
+              STORE_SUBSCR
+              LOAD_CONST              24 (())
+              STORE_NAME              22 (__static_attributes__)
+              RETURN_CONST            11 (None)
+
+Disassembly of <code object <lambda> at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\billing_customer.py", line 33>:
+ 33           RESUME                   0
+              LOAD_GLOBAL              0 (datetime)
+              LOAD_ATTR                2 (now)
+              PUSH_NULL
+              LOAD_GLOBAL              4 (UTC)
+              CALL                     1
+              RETURN_VALUE

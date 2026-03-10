@@ -1,0 +1,594 @@
+# Bytecode dump of: event_emitter.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\services\event_emitter.py
+# co_names: ('__doc__', '__future__', 'annotations', 'hashlib', 'hmac', 'json', 'logging', 'uuid', 'datetime', 'UTC', 'httpx', 'app.config', 'settings', 'getLogger', '__name__', 'logger', '_client', '__annotations__', '_get_client', '_sign', 'emit_event')
+# co_consts (strings): ['Emit realtime events to the Node.js bridge for WebSocket fan-out to mobile clients.', 'httpx.AsyncClient | None', '_client']
+
+# DOCSTRING: """Emit realtime events to the Node.js bridge for WebSocket fan-out to mobile clients."""
+# --- Nested code object: _get_client ---
+    # co_names: ('_client', 'is_closed', 'httpx', 'AsyncClient', 'settings', 'EVENT_EMITTER_TIMEOUT')
+    # co_varnames: ()
+     21           RESUME                   0
+    
+     23           LOAD_GLOBAL              0 (_client)
+                  POP_JUMP_IF_NONE        21 (to L1)
+                  LOAD_GLOBAL              0 (_client)
+                  LOAD_ATTR                2 (is_closed)
+                  TO_BOOL
+                  POP_JUMP_IF_FALSE       34 (to L2)
+    
+     24   L1:     LOAD_GLOBAL              4 (httpx)
+                  LOAD_ATTR                6 (AsyncClient)
+                  PUSH_NULL
+                  LOAD_GLOBAL              8 (settings)
+                  LOAD_ATTR               10 (EVENT_EMITTER_TIMEOUT)
+                  LOAD_CONST               1 (('timeout',))
+                  CALL_KW                  1
+                  STORE_GLOBAL             0 (_client)
+    
+     25   L2:     LOAD_GLOBAL              0 (_client)
+                  RETURN_VALUE
+    
+# --- Nested code object: _sign ---
+    # co_names: ('hmac', 'HMAC', 'settings', 'INTERNAL_EVENT_SECRET', 'encode', 'hashlib', 'sha256', 'hexdigest')
+    # co_varnames: ('body',)
+     28           RESUME                   0
+    
+     29           LOAD_GLOBAL              0 (hmac)
+                  LOAD_ATTR                2 (HMAC)
+                  PUSH_NULL
+    
+     30           LOAD_GLOBAL              4 (settings)
+                  LOAD_ATTR                6 (INTERNAL_EVENT_SECRET)
+                  LOAD_ATTR                9 (encode + NULL|self)
+                  CALL                     0
+    
+     31           LOAD_FAST                0 (body)
+    
+     32           LOAD_GLOBAL             10 (hashlib)
+                  LOAD_ATTR               12 (sha256)
+    
+     29           CALL                     3
+    
+     33           LOAD_ATTR               15 (hexdigest + NULL|self)
+                  CALL                     0
+    
+     29           RETURN_VALUE
+    
+# --- Nested code object: emit_event ---
+    # DOCSTRING: """Emit event to Node.js realtime service for WebSocket fan-out.
+
+The Node service exposes POST /internal/push-event which accepts
+``{ user_id, envelope }`` and pushes the envelope to all of the
+user's connected WebSocket clients.
+"""
+    # co_names: ('str', 'uuid', 'uuid4', 'datetime', 'now', 'UTC', 'isoformat', 'settings', 'NODE_BRIDGE_INTERNAL_URL', 'json', 'dumps', 'encode', '_sign', '_get_client', 'post', 'status_code', 'logger', 'warning', 'Exception', 'exception', 'info')
+    # co_varnames: ('user_id', 'event_type', 'call_id', 'seq', 'payload', 'privacy_level', 'envelope', 'url', 'body', 'signature', 'resp')
+      36            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      51            LOAD_GLOBAL              1 (str + NULL)
+                    LOAD_GLOBAL              2 (uuid)
+                    LOAD_ATTR                4 (uuid4)
+                    PUSH_NULL
+                    CALL                     0
+                    CALL                     1
+    
+      52            LOAD_FAST                1 (event_type)
+    
+      53            LOAD_CONST               1 (1)
+    
+      54            LOAD_FAST                2 (call_id)
+    
+      55            LOAD_GLOBAL              6 (datetime)
+                    LOAD_ATTR                8 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL             10 (UTC)
+                    CALL                     1
+                    LOAD_ATTR               13 (isoformat + NULL|self)
+                    CALL                     0
+    
+      56            LOAD_FAST                3 (seq)
+    
+      57            LOAD_FAST                5 (privacy_level)
+    
+      58            LOAD_FAST                4 (payload)
+    
+      50            LOAD_CONST               2 (('event_id', 'event_type', 'event_version', 'call_id', 'ts', 'seq', 'privacy_level', 'payload'))
+                    BUILD_CONST_KEY_MAP      8
+                    STORE_FAST               6 (envelope)
+    
+      61            LOAD_GLOBAL             14 (settings)
+                    LOAD_ATTR               16 (NODE_BRIDGE_INTERNAL_URL)
+                    FORMAT_SIMPLE
+                    LOAD_CONST               3 ('/internal/push-event')
+                    BUILD_STRING             2
+                    STORE_FAST               7 (url)
+    
+      62            LOAD_GLOBAL             18 (json)
+                    LOAD_ATTR               20 (dumps)
+                    PUSH_NULL
+                    LOAD_FAST_LOAD_FAST      6 (user_id, envelope)
+                    LOAD_CONST               4 (('user_id', 'envelope'))
+                    BUILD_CONST_KEY_MAP      2
+                    CALL                     1
+                    LOAD_ATTR               23 (encode + NULL|self)
+                    CALL                     0
+                    STORE_FAST               8 (body)
+    
+      63            LOAD_GLOBAL             25 (_sign + NULL)
+                    LOAD_FAST                8 (body)
+                    CALL                     1
+                    STORE_FAST               9 (signature)
+    
+      65    L2:     NOP
+    
+      66    L3:     LOAD_GLOBAL             27 (_get_client + NULL)
+                    CALL                     0
+                    LOAD_ATTR               29 (post + NULL|self)
+    
+      67            LOAD_FAST                7 (url)
+    
+      68            LOAD_FAST                8 (body)
+    
+      70            LOAD_CONST               5 ('application/json')
+    
+      71            LOAD_FAST                9 (signature)
+    
+      69            LOAD_CONST               6 (('Content-Type', 'X-Internal-Signature'))
+                    BUILD_CONST_KEY_MAP      2
+    
+      66            LOAD_CONST               7 (('content', 'headers'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               8 (None)
+            L4:     SEND                     3 (to L7)
+            L5:     YIELD_VALUE              1
+            L6:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+            L7:     END_SEND
+                    STORE_FAST              10 (resp)
+    
+      74            LOAD_FAST               10 (resp)
+                    LOAD_ATTR               30 (status_code)
+                    LOAD_CONST               9 (200)
+                    COMPARE_OP             119 (bool(!=))
+                    POP_JUMP_IF_FALSE       37 (to L8)
+    
+      75            LOAD_GLOBAL             32 (logger)
+                    LOAD_ATTR               35 (warning + NULL|self)
+    
+      76            LOAD_CONST              10 ('Push-event failed: status=%d type=%s call=%s')
+    
+      77            LOAD_FAST               10 (resp)
+                    LOAD_ATTR               30 (status_code)
+    
+      78            LOAD_FAST                1 (event_type)
+    
+      79            LOAD_FAST                2 (call_id)
+                    LOAD_CONST               8 (None)
+                    LOAD_CONST              11 (8)
+                    BINARY_SLICE
+    
+      75            CALL                     4
+                    POP_TOP
+    
+      88    L8:     LOAD_GLOBAL             32 (logger)
+                    LOAD_ATTR               41 (info + NULL|self)
+    
+      89            LOAD_CONST              13 ('Event emitted: type=%s call_id=%s user=%s seq=%d')
+    
+      90            LOAD_FAST                1 (event_type)
+    
+      91            LOAD_FAST                2 (call_id)
+                    LOAD_CONST               8 (None)
+                    LOAD_CONST              11 (8)
+                    BINARY_SLICE
+    
+      92            LOAD_FAST                0 (user_id)
+                    LOAD_CONST               8 (None)
+                    LOAD_CONST              11 (8)
+                    BINARY_SLICE
+    
+      93            LOAD_FAST                3 (seq)
+    
+      88            CALL                     5
+                    POP_TOP
+                    RETURN_CONST             8 (None)
+    
+      66    L9:     CLEANUP_THROW
+           L10:     JUMP_BACKWARD_NO_INTERRUPT 89 (to L7)
+    
+      --   L11:     PUSH_EXC_INFO
+    
+      81            LOAD_GLOBAL             36 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       29 (to L13)
+                    POP_TOP
+    
+      82            LOAD_GLOBAL             32 (logger)
+                    LOAD_ATTR               39 (exception + NULL|self)
+    
+      83            LOAD_CONST              12 ('Failed to push event to Node bridge: type=%s call=%s')
+    
+      84            LOAD_FAST                1 (event_type)
+    
+      85            LOAD_FAST                2 (call_id)
+                    LOAD_CONST               8 (None)
+                    LOAD_CONST              11 (8)
+                    BINARY_SLICE
+    
+      82            CALL                     3
+                    POP_TOP
+           L12:     POP_EXCEPT
+                    JUMP_BACKWARD_NO_INTERRUPT 72 (to L8)
+    
+      81   L13:     RERAISE                  0
+    
+      --   L14:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L15:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L2 -> L15 [0] lasti
+      L3 to L5 -> L11 [0]
+      L5 to L6 -> L9 [2]
+      L6 to L8 -> L11 [0]
+      L8 to L9 -> L15 [0] lasti
+      L9 to L10 -> L11 [0]
+      L11 to L12 -> L14 [1] lasti
+      L12 to L13 -> L15 [0] lasti
+      L13 to L14 -> L14 [1] lasti
+      L14 to L15 -> L15 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'hashlib', 'hmac', 'json', 'logging', 'uuid', 'datetime', 'UTC', 'httpx', 'app.config', 'settings', 'getLogger', '__name__', 'logger', '_client', '__annotations__', '_get_client', '_sign', 'emit_event')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           SETUP_ANNOTATIONS
+              LOAD_CONST               0 ('Emit realtime events to the Node.js bridge for WebSocket fan-out to mobile clients.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (hashlib)
+              STORE_NAME               3 (hashlib)
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              4 (hmac)
+              STORE_NAME               4 (hmac)
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              5 (json)
+              STORE_NAME               5 (json)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              6 (logging)
+              STORE_NAME               6 (logging)
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              7 (uuid)
+              STORE_NAME               7 (uuid)
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('UTC', 'datetime'))
+              IMPORT_NAME              8 (datetime)
+              IMPORT_FROM              9 (UTC)
+              STORE_NAME               9 (UTC)
+              IMPORT_FROM              8 (datetime)
+              STORE_NAME               8 (datetime)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME             10 (httpx)
+              STORE_NAME              10 (httpx)
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('settings',))
+              IMPORT_NAME             11 (app.config)
+              IMPORT_FROM             12 (settings)
+              STORE_NAME              12 (settings)
+              POP_TOP
+
+ 16           LOAD_NAME                6 (logging)
+              LOAD_ATTR               26 (getLogger)
+              PUSH_NULL
+              LOAD_NAME               14 (__name__)
+              CALL                     1
+              STORE_NAME              15 (logger)
+
+ 18           LOAD_CONST               3 (None)
+              STORE_GLOBAL            16 (_client)
+              LOAD_CONST               6 ('httpx.AsyncClient | None')
+              LOAD_NAME               17 (__annotations__)
+              LOAD_CONST               7 ('_client')
+              STORE_SUBSCR
+
+ 21           LOAD_CONST              11 (('return', 'httpx.AsyncClient'))
+              LOAD_CONST               8 (<code object _get_client at 0x0000024C0EEFB1B0, file "D:\fluence\Github\mattbot\backend\app\services\event_emitter.py", line 21>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              18 (_get_client)
+
+ 28           LOAD_CONST              12 (('body', 'bytes', 'return', 'str'))
+              LOAD_CONST               9 (<code object _sign at 0x0000024C11435B80, file "D:\fluence\Github\mattbot\backend\app\services\event_emitter.py", line 28>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              19 (_sign)
+
+ 42           NOP
+
+ 36           LOAD_CONST              13 (('public',))
+
+ 37           NOP
+
+ 36           NOP
+
+ 38           NOP
+
+ 36           NOP
+
+ 39           NOP
+
+ 36           NOP
+
+ 40           NOP
+
+ 36           NOP
+
+ 41           NOP
+
+ 36           NOP
+
+ 42           NOP
+
+ 36           NOP
+
+ 43           NOP
+
+ 36           LOAD_CONST              14 (('user_id', 'str', 'event_type', 'str', 'call_id', 'str', 'seq', 'int', 'payload', 'dict', 'privacy_level', 'str', 'return', 'None'))
+              LOAD_CONST              10 (<code object emit_event at 0x0000024C0FE4E090, file "D:\fluence\Github\mattbot\backend\app\services\event_emitter.py", line 36>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+              STORE_NAME              20 (emit_event)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object _get_client at 0x0000024C0EEFB1B0, file "D:\fluence\Github\mattbot\backend\app\services\event_emitter.py", line 21>:
+ 21           RESUME                   0
+
+ 23           LOAD_GLOBAL              0 (_client)
+              POP_JUMP_IF_NONE        21 (to L1)
+              LOAD_GLOBAL              0 (_client)
+              LOAD_ATTR                2 (is_closed)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       34 (to L2)
+
+ 24   L1:     LOAD_GLOBAL              4 (httpx)
+              LOAD_ATTR                6 (AsyncClient)
+              PUSH_NULL
+              LOAD_GLOBAL              8 (settings)
+              LOAD_ATTR               10 (EVENT_EMITTER_TIMEOUT)
+              LOAD_CONST               1 (('timeout',))
+              CALL_KW                  1
+              STORE_GLOBAL             0 (_client)
+
+ 25   L2:     LOAD_GLOBAL              0 (_client)
+              RETURN_VALUE
+
+Disassembly of <code object _sign at 0x0000024C11435B80, file "D:\fluence\Github\mattbot\backend\app\services\event_emitter.py", line 28>:
+ 28           RESUME                   0
+
+ 29           LOAD_GLOBAL              0 (hmac)
+              LOAD_ATTR                2 (HMAC)
+              PUSH_NULL
+
+ 30           LOAD_GLOBAL              4 (settings)
+              LOAD_ATTR                6 (INTERNAL_EVENT_SECRET)
+              LOAD_ATTR                9 (encode + NULL|self)
+              CALL                     0
+
+ 31           LOAD_FAST                0 (body)
+
+ 32           LOAD_GLOBAL             10 (hashlib)
+              LOAD_ATTR               12 (sha256)
+
+ 29           CALL                     3
+
+ 33           LOAD_ATTR               15 (hexdigest + NULL|self)
+              CALL                     0
+
+ 29           RETURN_VALUE
+
+Disassembly of <code object emit_event at 0x0000024C0FE4E090, file "D:\fluence\Github\mattbot\backend\app\services\event_emitter.py", line 36>:
+  36            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  51            LOAD_GLOBAL              1 (str + NULL)
+                LOAD_GLOBAL              2 (uuid)
+                LOAD_ATTR                4 (uuid4)
+                PUSH_NULL
+                CALL                     0
+                CALL                     1
+
+  52            LOAD_FAST                1 (event_type)
+
+  53            LOAD_CONST               1 (1)
+
+  54            LOAD_FAST                2 (call_id)
+
+  55            LOAD_GLOBAL              6 (datetime)
+                LOAD_ATTR                8 (now)
+                PUSH_NULL
+                LOAD_GLOBAL             10 (UTC)
+                CALL                     1
+                LOAD_ATTR               13 (isoformat + NULL|self)
+                CALL                     0
+
+  56            LOAD_FAST                3 (seq)
+
+  57            LOAD_FAST                5 (privacy_level)
+
+  58            LOAD_FAST                4 (payload)
+
+  50            LOAD_CONST               2 (('event_id', 'event_type', 'event_version', 'call_id', 'ts', 'seq', 'privacy_level', 'payload'))
+                BUILD_CONST_KEY_MAP      8
+                STORE_FAST               6 (envelope)
+
+  61            LOAD_GLOBAL             14 (settings)
+                LOAD_ATTR               16 (NODE_BRIDGE_INTERNAL_URL)
+                FORMAT_SIMPLE
+                LOAD_CONST               3 ('/internal/push-event')
+                BUILD_STRING             2
+                STORE_FAST               7 (url)
+
+  62            LOAD_GLOBAL             18 (json)
+                LOAD_ATTR               20 (dumps)
+                PUSH_NULL
+                LOAD_FAST_LOAD_FAST      6 (user_id, envelope)
+                LOAD_CONST               4 (('user_id', 'envelope'))
+                BUILD_CONST_KEY_MAP      2
+                CALL                     1
+                LOAD_ATTR               23 (encode + NULL|self)
+                CALL                     0
+                STORE_FAST               8 (body)
+
+  63            LOAD_GLOBAL             25 (_sign + NULL)
+                LOAD_FAST                8 (body)
+                CALL                     1
+                STORE_FAST               9 (signature)
+
+  65    L2:     NOP
+
+  66    L3:     LOAD_GLOBAL             27 (_get_client + NULL)
+                CALL                     0
+                LOAD_ATTR               29 (post + NULL|self)
+
+  67            LOAD_FAST                7 (url)
+
+  68            LOAD_FAST                8 (body)
+
+  70            LOAD_CONST               5 ('application/json')
+
+  71            LOAD_FAST                9 (signature)
+
+  69            LOAD_CONST               6 (('Content-Type', 'X-Internal-Signature'))
+                BUILD_CONST_KEY_MAP      2
+
+  66            LOAD_CONST               7 (('content', 'headers'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               8 (None)
+        L4:     SEND                     3 (to L7)
+        L5:     YIELD_VALUE              1
+        L6:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L4)
+        L7:     END_SEND
+                STORE_FAST              10 (resp)
+
+  74            LOAD_FAST               10 (resp)
+                LOAD_ATTR               30 (status_code)
+                LOAD_CONST               9 (200)
+                COMPARE_OP             119 (bool(!=))
+                POP_JUMP_IF_FALSE       37 (to L8)
+
+  75            LOAD_GLOBAL             32 (logger)
+                LOAD_ATTR               35 (warning + NULL|self)
+
+  76            LOAD_CONST              10 ('Push-event failed: status=%d type=%s call=%s')
+
+  77            LOAD_FAST               10 (resp)
+                LOAD_ATTR               30 (status_code)
+
+  78            LOAD_FAST                1 (event_type)
+
+  79            LOAD_FAST                2 (call_id)
+                LOAD_CONST               8 (None)
+                LOAD_CONST              11 (8)
+                BINARY_SLICE
+
+  75            CALL                     4
+                POP_TOP
+
+  88    L8:     LOAD_GLOBAL             32 (logger)
+                LOAD_ATTR               41 (info + NULL|self)
+
+  89            LOAD_CONST              13 ('Event emitted: type=%s call_id=%s user=%s seq=%d')
+
+  90            LOAD_FAST                1 (event_type)
+
+  91            LOAD_FAST                2 (call_id)
+                LOAD_CONST               8 (None)
+                LOAD_CONST              11 (8)
+                BINARY_SLICE
+
+  92            LOAD_FAST                0 (user_id)
+                LOAD_CONST               8 (None)
+                LOAD_CONST              11 (8)
+                BINARY_SLICE
+
+  93            LOAD_FAST                3 (seq)
+
+  88            CALL                     5
+                POP_TOP
+                RETURN_CONST             8 (None)
+
+  66    L9:     CLEANUP_THROW
+       L10:     JUMP_BACKWARD_NO_INTERRUPT 89 (to L7)
+
+  --   L11:     PUSH_EXC_INFO
+
+  81            LOAD_GLOBAL             36 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       29 (to L13)
+                POP_TOP
+
+  82            LOAD_GLOBAL             32 (logger)
+                LOAD_ATTR               39 (exception + NULL|self)
+
+  83            LOAD_CONST              12 ('Failed to push event to Node bridge: type=%s call=%s')
+
+  84            LOAD_FAST                1 (event_type)
+
+  85            LOAD_FAST                2 (call_id)
+                LOAD_CONST               8 (None)
+                LOAD_CONST              11 (8)
+                BINARY_SLICE
+
+  82            CALL                     3
+                POP_TOP
+       L12:     POP_EXCEPT
+                JUMP_BACKWARD_NO_INTERRUPT 72 (to L8)
+
+  81   L13:     RERAISE                  0
+
+  --   L14:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L15:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L15 [0] lasti
+  L3 to L5 -> L11 [0]
+  L5 to L6 -> L9 [2]
+  L6 to L8 -> L11 [0]
+  L8 to L9 -> L15 [0] lasti
+  L9 to L10 -> L11 [0]
+  L11 to L12 -> L14 [1] lasti
+  L12 to L13 -> L15 [0] lasti
+  L13 to L14 -> L14 [1] lasti
+  L14 to L15 -> L15 [0] lasti

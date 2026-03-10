@@ -1,0 +1,604 @@
+# Bytecode dump of: billing_payment_method.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\models\billing_payment_method.py
+# co_names: ('uuid', 'datetime', 'UTC', 'sqlalchemy', 'Boolean', 'DateTime', 'ForeignKey', 'Integer', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'relationship', 'app.database', 'Base', '_tz', 'BillingPaymentMethod')
+# co_consts (strings): ['return', 'BillingPaymentMethod']
+
+# --- Nested code object: _tz ---
+    # co_names: ('DateTime',)
+    # co_varnames: ()
+     11           RESUME                   0
+    
+     12           LOAD_GLOBAL              1 (DateTime + NULL)
+                  LOAD_CONST               1 (True)
+                  LOAD_CONST               2 (('timezone',))
+                  CALL_KW                  1
+                  RETURN_VALUE
+    
+# --- Nested code object: BillingPaymentMethod ---
+    # DOCSTRING: """BillingPaymentMethod"""
+    # --- Nested code object: BillingPaymentMethod.<lambda> ---
+        # co_names: ('datetime', 'now', 'UTC')
+        # co_varnames: ()
+         44           RESUME                   0
+                      LOAD_GLOBAL              0 (datetime)
+                      LOAD_ATTR                2 (now)
+                      PUSH_NULL
+                      LOAD_GLOBAL              4 (UTC)
+                      CALL                     1
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__tablename__', 'mapped_column', 'UUID', 'uuid', 'uuid4', 'id', 'Mapped', '__annotations__', 'ForeignKey', 'owner_user_id', 'Text', 'stripe_payment_method_id', 'str', 'brand', 'last4', 'Integer', 'exp_month', 'int', 'exp_year', 'Boolean', 'text', 'is_default', 'bool', '_tz', 'created_at', 'datetime', 'updated_at', 'relationship', 'user', '__static_attributes__')
+    # co_varnames: ()
+     15           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('BillingPaymentMethod')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (15)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     16           LOAD_CONST               2 ('billing_payment_methods')
+                  STORE_NAME               4 (__tablename__)
+    
+     18           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     19           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               3 (True)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               16 (uuid4)
+    
+     18           LOAD_CONST               5 (('primary_key', 'default'))
+                  CALL_KW                  3
+                  STORE_NAME               9 (id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST               6 ('id')
+                  STORE_SUBSCR
+    
+     21           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     22           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     23           LOAD_NAME               12 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST               7 ('users.id')
+                  LOAD_CONST               8 ('CASCADE')
+                  LOAD_CONST               9 (('ondelete',))
+                  CALL_KW                  2
+    
+     24           LOAD_CONST              10 (False)
+    
+     25           LOAD_CONST               3 (True)
+    
+     21           LOAD_CONST              11 (('nullable', 'index'))
+                  CALL_KW                  4
+                  STORE_NAME              13 (owner_user_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              12 ('owner_user_id')
+                  STORE_SUBSCR
+    
+     27           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     28           LOAD_NAME               14 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               3 (True)
+    
+     27           LOAD_CONST              13 (('unique', 'nullable'))
+                  CALL_KW                  3
+                  STORE_NAME              15 (stripe_payment_method_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               16 (str)
+                  LOAD_CONST              14 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              15 ('stripe_payment_method_id')
+                  STORE_SUBSCR
+    
+     30           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               14 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              16 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              17 (brand)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               16 (str)
+                  LOAD_CONST              14 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              17 ('brand')
+                  STORE_SUBSCR
+    
+     31           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               14 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              16 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              18 (last4)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               16 (str)
+                  LOAD_CONST              14 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              18 ('last4')
+                  STORE_SUBSCR
+    
+     32           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               19 (Integer)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              16 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              20 (exp_month)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               21 (int)
+                  LOAD_CONST              14 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              19 ('exp_month')
+                  STORE_SUBSCR
+    
+     33           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               19 (Integer)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              16 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              22 (exp_year)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               21 (int)
+                  LOAD_CONST              14 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              20 ('exp_year')
+                  STORE_SUBSCR
+    
+     34           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     35           LOAD_NAME               23 (Boolean)
+                  LOAD_CONST              10 (False)
+                  LOAD_NAME               24 (text)
+                  PUSH_NULL
+                  LOAD_CONST              21 ('true')
+                  CALL                     1
+    
+     34           LOAD_CONST              22 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              25 (is_default)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               26 (bool)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              23 ('is_default')
+                  STORE_SUBSCR
+    
+     37           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     38           LOAD_NAME               27 (_tz)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST              10 (False)
+                  LOAD_NAME               24 (text)
+                  PUSH_NULL
+                  LOAD_CONST              24 ('now()')
+                  CALL                     1
+    
+     37           LOAD_CONST              22 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              28 (created_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               29 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              25 ('created_at')
+                  STORE_SUBSCR
+    
+     40           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     41           LOAD_NAME               27 (_tz)
+                  PUSH_NULL
+                  CALL                     0
+    
+     42           LOAD_CONST              10 (False)
+    
+     43           LOAD_NAME               24 (text)
+                  PUSH_NULL
+                  LOAD_CONST              24 ('now()')
+                  CALL                     1
+    
+     44           LOAD_CONST              26 (<code object <lambda> at 0x0000024C11422F30, file "D:\fluence\Github\mattbot\backend\app\models\billing_payment_method.py", line 44>)
+                  MAKE_FUNCTION
+    
+     40           LOAD_CONST              27 (('nullable', 'server_default', 'onupdate'))
+                  CALL_KW                  4
+                  STORE_NAME              30 (updated_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               29 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              28 ('updated_at')
+                  STORE_SUBSCR
+    
+     47           LOAD_NAME               31 (relationship)
+                  PUSH_NULL
+                  LOAD_CONST               2 ('billing_payment_methods')
+                  LOAD_CONST              29 (('back_populates',))
+                  CALL_KW                  1
+                  STORE_NAME              32 (user)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_CONST              30 ('User')
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              31 ('user')
+                  STORE_SUBSCR
+                  LOAD_CONST              32 (())
+                  STORE_NAME              33 (__static_attributes__)
+                  RETURN_CONST            14 (None)
+    
+    Disassembly of <code object <lambda> at 0x0000024C11422F30, file "D:\fluence\Github\mattbot\backend\app\models\billing_payment_method.py", line 44>:
+     44           RESUME                   0
+                  LOAD_GLOBAL              0 (datetime)
+                  LOAD_ATTR                2 (now)
+                  PUSH_NULL
+                  LOAD_GLOBAL              4 (UTC)
+                  CALL                     1
+                  RETURN_VALUE
+    
+# co_names: ('uuid', 'datetime', 'UTC', 'sqlalchemy', 'Boolean', 'DateTime', 'ForeignKey', 'Integer', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'relationship', 'app.database', 'Base', '_tz', 'BillingPaymentMethod')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 (0)
+              LOAD_CONST               1 (None)
+              IMPORT_NAME              0 (uuid)
+              STORE_NAME               0 (uuid)
+
+  2           LOAD_CONST               0 (0)
+              LOAD_CONST               2 (('UTC', 'datetime'))
+              IMPORT_NAME              1 (datetime)
+              IMPORT_FROM              2 (UTC)
+              STORE_NAME               2 (UTC)
+              IMPORT_FROM              1 (datetime)
+              STORE_NAME               1 (datetime)
+              POP_TOP
+
+  4           LOAD_CONST               0 (0)
+              LOAD_CONST               3 (('Boolean', 'DateTime', 'ForeignKey', 'Integer', 'Text', 'text'))
+              IMPORT_NAME              3 (sqlalchemy)
+              IMPORT_FROM              4 (Boolean)
+              STORE_NAME               4 (Boolean)
+              IMPORT_FROM              5 (DateTime)
+              STORE_NAME               5 (DateTime)
+              IMPORT_FROM              6 (ForeignKey)
+              STORE_NAME               6 (ForeignKey)
+              IMPORT_FROM              7 (Integer)
+              STORE_NAME               7 (Integer)
+              IMPORT_FROM              8 (Text)
+              STORE_NAME               8 (Text)
+              IMPORT_FROM              9 (text)
+              STORE_NAME               9 (text)
+              POP_TOP
+
+  5           LOAD_CONST               0 (0)
+              LOAD_CONST               4 (('UUID',))
+              IMPORT_NAME             10 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM             11 (UUID)
+              STORE_NAME              11 (UUID)
+              POP_TOP
+
+  6           LOAD_CONST               0 (0)
+              LOAD_CONST               5 (('Mapped', 'mapped_column', 'relationship'))
+              IMPORT_NAME             12 (sqlalchemy.orm)
+              IMPORT_FROM             13 (Mapped)
+              STORE_NAME              13 (Mapped)
+              IMPORT_FROM             14 (mapped_column)
+              STORE_NAME              14 (mapped_column)
+              IMPORT_FROM             15 (relationship)
+              STORE_NAME              15 (relationship)
+              POP_TOP
+
+  8           LOAD_CONST               0 (0)
+              LOAD_CONST               6 (('Base',))
+              IMPORT_NAME             16 (app.database)
+              IMPORT_FROM             17 (Base)
+              STORE_NAME              17 (Base)
+              POP_TOP
+
+ 11           LOAD_CONST               7 ('return')
+              LOAD_NAME                5 (DateTime)
+              BUILD_TUPLE              2
+              LOAD_CONST               8 (<code object _tz at 0x0000024C0EF0FD70, file "D:\fluence\Github\mattbot\backend\app\models\billing_payment_method.py", line 11>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              18 (_tz)
+
+ 15           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               9 (<code object BillingPaymentMethod at 0x0000024C0F1FE4E0, file "D:\fluence\Github\mattbot\backend\app\models\billing_payment_method.py", line 15>)
+              MAKE_FUNCTION
+              LOAD_CONST              10 ('BillingPaymentMethod')
+              LOAD_NAME               17 (Base)
+              CALL                     3
+              STORE_NAME              19 (BillingPaymentMethod)
+              RETURN_CONST             1 (None)
+
+Disassembly of <code object _tz at 0x0000024C0EF0FD70, file "D:\fluence\Github\mattbot\backend\app\models\billing_payment_method.py", line 11>:
+ 11           RESUME                   0
+
+ 12           LOAD_GLOBAL              1 (DateTime + NULL)
+              LOAD_CONST               1 (True)
+              LOAD_CONST               2 (('timezone',))
+              CALL_KW                  1
+              RETURN_VALUE
+
+Disassembly of <code object BillingPaymentMethod at 0x0000024C0F1FE4E0, file "D:\fluence\Github\mattbot\backend\app\models\billing_payment_method.py", line 15>:
+ 15           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('BillingPaymentMethod')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (15)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 16           LOAD_CONST               2 ('billing_payment_methods')
+              STORE_NAME               4 (__tablename__)
+
+ 18           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 19           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               16 (uuid4)
+
+ 18           LOAD_CONST               5 (('primary_key', 'default'))
+              CALL_KW                  3
+              STORE_NAME               9 (id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               6 ('id')
+              STORE_SUBSCR
+
+ 21           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 22           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 23           LOAD_NAME               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               7 ('users.id')
+              LOAD_CONST               8 ('CASCADE')
+              LOAD_CONST               9 (('ondelete',))
+              CALL_KW                  2
+
+ 24           LOAD_CONST              10 (False)
+
+ 25           LOAD_CONST               3 (True)
+
+ 21           LOAD_CONST              11 (('nullable', 'index'))
+              CALL_KW                  4
+              STORE_NAME              13 (owner_user_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              12 ('owner_user_id')
+              STORE_SUBSCR
+
+ 27           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 28           LOAD_NAME               14 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               3 (True)
+
+ 27           LOAD_CONST              13 (('unique', 'nullable'))
+              CALL_KW                  3
+              STORE_NAME              15 (stripe_payment_method_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               16 (str)
+              LOAD_CONST              14 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              15 ('stripe_payment_method_id')
+              STORE_SUBSCR
+
+ 30           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               14 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              16 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              17 (brand)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               16 (str)
+              LOAD_CONST              14 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              17 ('brand')
+              STORE_SUBSCR
+
+ 31           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               14 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              16 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              18 (last4)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               16 (str)
+              LOAD_CONST              14 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              18 ('last4')
+              STORE_SUBSCR
+
+ 32           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               19 (Integer)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              16 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              20 (exp_month)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               21 (int)
+              LOAD_CONST              14 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              19 ('exp_month')
+              STORE_SUBSCR
+
+ 33           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               19 (Integer)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              16 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              22 (exp_year)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               21 (int)
+              LOAD_CONST              14 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              20 ('exp_year')
+              STORE_SUBSCR
+
+ 34           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 35           LOAD_NAME               23 (Boolean)
+              LOAD_CONST              10 (False)
+              LOAD_NAME               24 (text)
+              PUSH_NULL
+              LOAD_CONST              21 ('true')
+              CALL                     1
+
+ 34           LOAD_CONST              22 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              25 (is_default)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               26 (bool)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              23 ('is_default')
+              STORE_SUBSCR
+
+ 37           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 38           LOAD_NAME               27 (_tz)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              10 (False)
+              LOAD_NAME               24 (text)
+              PUSH_NULL
+              LOAD_CONST              24 ('now()')
+              CALL                     1
+
+ 37           LOAD_CONST              22 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              28 (created_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               29 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              25 ('created_at')
+              STORE_SUBSCR
+
+ 40           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 41           LOAD_NAME               27 (_tz)
+              PUSH_NULL
+              CALL                     0
+
+ 42           LOAD_CONST              10 (False)
+
+ 43           LOAD_NAME               24 (text)
+              PUSH_NULL
+              LOAD_CONST              24 ('now()')
+              CALL                     1
+
+ 44           LOAD_CONST              26 (<code object <lambda> at 0x0000024C11422F30, file "D:\fluence\Github\mattbot\backend\app\models\billing_payment_method.py", line 44>)
+              MAKE_FUNCTION
+
+ 40           LOAD_CONST              27 (('nullable', 'server_default', 'onupdate'))
+              CALL_KW                  4
+              STORE_NAME              30 (updated_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               29 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              28 ('updated_at')
+              STORE_SUBSCR
+
+ 47           LOAD_NAME               31 (relationship)
+              PUSH_NULL
+              LOAD_CONST               2 ('billing_payment_methods')
+              LOAD_CONST              29 (('back_populates',))
+              CALL_KW                  1
+              STORE_NAME              32 (user)
+              LOAD_NAME               10 (Mapped)
+              LOAD_CONST              30 ('User')
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              31 ('user')
+              STORE_SUBSCR
+              LOAD_CONST              32 (())
+              STORE_NAME              33 (__static_attributes__)
+              RETURN_CONST            14 (None)
+
+Disassembly of <code object <lambda> at 0x0000024C11422F30, file "D:\fluence\Github\mattbot\backend\app\models\billing_payment_method.py", line 44>:
+ 44           RESUME                   0
+              LOAD_GLOBAL              0 (datetime)
+              LOAD_ATTR                2 (now)
+              PUSH_NULL
+              LOAD_GLOBAL              4 (UTC)
+              CALL                     1
+              RETURN_VALUE

@@ -1,0 +1,986 @@
+# Bytecode dump of: stats.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\api\v1\stats.py
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'uuid', 'fastapi', 'APIRouter', 'Depends', 'pydantic', 'BaseModel', 'sqlalchemy', 'case', 'distinct', 'func', 'select', 'text', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.database', 'get_db', 'app.models.call', 'Call', 'app.models.call_artifact', 'CallArtifact', 'app.models.vip_entry', 'VipEntry', 'getLogger', '__name__', 'logger', 'router', 'DashboardStatsResponse', '_get_dashboard_stats', 'get', 'get_stats')
+# co_consts (strings): ['Dashboard KPI stats endpoint.', 'DashboardStatsResponse', '']
+
+# DOCSTRING: """Dashboard KPI stats endpoint."""
+# --- Nested code object: DashboardStatsResponse ---
+    # DOCSTRING: """DashboardStatsResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     24           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('DashboardStatsResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (24)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     25           LOAD_CONST               2 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('total_calls')
+                  STORE_SUBSCR
+    
+     26           LOAD_CONST               2 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('completed_calls')
+                  STORE_SUBSCR
+    
+     27           LOAD_CONST               2 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('unique_callers')
+                  STORE_SUBSCR
+    
+     28           LOAD_CONST               2 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('spam_blocked')
+                  STORE_SUBSCR
+    
+     29           LOAD_CONST               7 ('float | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('avg_duration_seconds')
+                  STORE_SUBSCR
+    
+     30           LOAD_CONST               2 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('vip_calls')
+                  STORE_SUBSCR
+                  LOAD_CONST              10 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST            11 (None)
+    
+# --- Nested code object: _get_dashboard_stats ---
+    # co_names: ('select', 'func', 'count', 'Call', 'id', 'label', 'case', 'status', 'in_', 'distinct', 'caller_phone_hash', 'avg', 'duration_seconds', 'where', 'owner_user_id', 'deleted_at', 'is_', 'execute', 'one', 'VipEntry', 'phone_hash', 'scalar_subquery', 'scalar', 'CallArtifact', 'call_id', 'labels_json', 'isnot', 'text', 'Exception', 'logger', 'warning', 'avg_duration_seconds', 'round', 'float', 'DashboardStatsResponse', 'total_calls', 'completed_calls', 'unique_callers')
+    # co_varnames: ('db', 'user_id', 'base', 'row', 'vip_hashes', 'vip_q', 'vip_calls', 'spam_q', 'spam_blocked', 'avg_dur')
+      33            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      36            LOAD_GLOBAL              1 (select + NULL)
+    
+      37            LOAD_GLOBAL              2 (func)
+                    LOAD_ATTR                4 (count)
+                    PUSH_NULL
+                    LOAD_GLOBAL              6 (Call)
+                    LOAD_ATTR                8 (id)
+                    CALL                     1
+                    LOAD_ATTR               11 (label + NULL|self)
+                    LOAD_CONST               1 ('total_calls')
+                    CALL                     1
+    
+      38            LOAD_GLOBAL              2 (func)
+                    LOAD_ATTR                4 (count)
+                    PUSH_NULL
+    
+      39            LOAD_GLOBAL             13 (case + NULL)
+                    LOAD_GLOBAL              6 (Call)
+                    LOAD_ATTR               14 (status)
+                    LOAD_ATTR               17 (in_ + NULL|self)
+                    LOAD_CONST               2 ('completed')
+                    LOAD_CONST               3 ('partial')
+                    BUILD_LIST               2
+                    CALL                     1
+                    LOAD_GLOBAL              6 (Call)
+                    LOAD_ATTR                8 (id)
+                    BUILD_TUPLE              2
+                    CALL                     1
+    
+      38            CALL                     1
+    
+      40            LOAD_ATTR               11 (label + NULL|self)
+                    LOAD_CONST               4 ('completed_calls')
+                    CALL                     1
+    
+      41            LOAD_GLOBAL              2 (func)
+                    LOAD_ATTR                4 (count)
+                    PUSH_NULL
+                    LOAD_GLOBAL             19 (distinct + NULL)
+                    LOAD_GLOBAL              6 (Call)
+                    LOAD_ATTR               20 (caller_phone_hash)
+                    CALL                     1
+                    CALL                     1
+                    LOAD_ATTR               11 (label + NULL|self)
+                    LOAD_CONST               5 ('unique_callers')
+                    CALL                     1
+    
+      42            LOAD_GLOBAL              2 (func)
+                    LOAD_ATTR               22 (avg)
+                    PUSH_NULL
+    
+      43            LOAD_GLOBAL             13 (case + NULL)
+                    LOAD_GLOBAL              6 (Call)
+                    LOAD_ATTR               14 (status)
+                    LOAD_ATTR               17 (in_ + NULL|self)
+                    LOAD_CONST               2 ('completed')
+                    LOAD_CONST               3 ('partial')
+                    BUILD_LIST               2
+                    CALL                     1
+                    LOAD_GLOBAL              6 (Call)
+                    LOAD_ATTR               24 (duration_seconds)
+                    BUILD_TUPLE              2
+                    CALL                     1
+    
+      42            CALL                     1
+    
+      44            LOAD_ATTR               11 (label + NULL|self)
+                    LOAD_CONST               6 ('avg_duration_seconds')
+                    CALL                     1
+    
+      36            CALL                     4
+    
+      45            LOAD_ATTR               27 (where + NULL|self)
+    
+      46            LOAD_GLOBAL              6 (Call)
+                    LOAD_ATTR               28 (owner_user_id)
+                    LOAD_FAST                1 (user_id)
+                    COMPARE_OP              72 (==)
+    
+      47            LOAD_GLOBAL              6 (Call)
+                    LOAD_ATTR               30 (deleted_at)
+                    LOAD_ATTR               33 (is_ + NULL|self)
+                    LOAD_CONST               0 (None)
+                    CALL                     1
+    
+      45            CALL                     2
+    
+      36            STORE_FAST               2 (base)
+    
+      49            LOAD_FAST                0 (db)
+                    LOAD_ATTR               35 (execute + NULL|self)
+                    LOAD_FAST                2 (base)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    LOAD_ATTR               37 (one + NULL|self)
+                    CALL                     0
+                    STORE_FAST               3 (row)
+    
+      51            LOAD_GLOBAL              1 (select + NULL)
+                    LOAD_GLOBAL             38 (VipEntry)
+                    LOAD_ATTR               40 (phone_hash)
+                    CALL                     1
+                    LOAD_ATTR               27 (where + NULL|self)
+    
+      52            LOAD_GLOBAL             38 (VipEntry)
+                    LOAD_ATTR               28 (owner_user_id)
+                    LOAD_FAST                1 (user_id)
+                    COMPARE_OP              72 (==)
+    
+      51            CALL                     1
+    
+      53            LOAD_ATTR               43 (scalar_subquery + NULL|self)
+                    CALL                     0
+    
+      51            STORE_FAST               4 (vip_hashes)
+    
+      55            LOAD_GLOBAL              1 (select + NULL)
+                    LOAD_GLOBAL              2 (func)
+                    LOAD_ATTR                4 (count)
+                    PUSH_NULL
+                    LOAD_GLOBAL             19 (distinct + NULL)
+                    LOAD_GLOBAL              6 (Call)
+                    LOAD_ATTR                8 (id)
+                    CALL                     1
+                    CALL                     1
+                    CALL                     1
+                    LOAD_ATTR               27 (where + NULL|self)
+    
+      56            LOAD_GLOBAL              6 (Call)
+                    LOAD_ATTR               28 (owner_user_id)
+                    LOAD_FAST                1 (user_id)
+                    COMPARE_OP              72 (==)
+    
+      57            LOAD_GLOBAL              6 (Call)
+                    LOAD_ATTR               30 (deleted_at)
+                    LOAD_ATTR               33 (is_ + NULL|self)
+                    LOAD_CONST               0 (None)
+                    CALL                     1
+    
+      58            LOAD_GLOBAL              6 (Call)
+                    LOAD_ATTR               20 (caller_phone_hash)
+                    LOAD_ATTR               17 (in_ + NULL|self)
+                    LOAD_FAST                4 (vip_hashes)
+                    CALL                     1
+    
+      55            CALL                     3
+                    STORE_FAST               5 (vip_q)
+    
+      60            LOAD_FAST                0 (db)
+                    LOAD_ATTR               35 (execute + NULL|self)
+                    LOAD_FAST                5 (vip_q)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L6:     SEND                     3 (to L9)
+            L7:     YIELD_VALUE              1
+            L8:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L6)
+            L9:     END_SEND
+                    LOAD_ATTR               45 (scalar + NULL|self)
+                    CALL                     0
+                    COPY                     1
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L10)
+                    POP_TOP
+                    LOAD_CONST               7 (0)
+           L10:     STORE_FAST               6 (vip_calls)
+    
+      62   L11:     NOP
+    
+      63   L12:     LOAD_GLOBAL              1 (select + NULL)
+                    LOAD_GLOBAL              2 (func)
+                    LOAD_ATTR                4 (count)
+                    PUSH_NULL
+                    LOAD_GLOBAL             19 (distinct + NULL)
+                    LOAD_GLOBAL             46 (CallArtifact)
+                    LOAD_ATTR               48 (call_id)
+                    CALL                     1
+                    CALL                     1
+                    CALL                     1
+                    LOAD_ATTR               27 (where + NULL|self)
+    
+      64            LOAD_GLOBAL             46 (CallArtifact)
+                    LOAD_ATTR               28 (owner_user_id)
+                    LOAD_FAST                1 (user_id)
+                    COMPARE_OP              72 (==)
+    
+      65            LOAD_GLOBAL             46 (CallArtifact)
+                    LOAD_ATTR               50 (labels_json)
+                    LOAD_ATTR               53 (isnot + NULL|self)
+                    LOAD_CONST               0 (None)
+                    CALL                     1
+    
+      66            LOAD_GLOBAL             55 (text + NULL)
+                    LOAD_CONST               8 ("jsonb_typeof(call_artifacts.labels_json::jsonb) = 'array'")
+                    CALL                     1
+    
+      67            LOAD_GLOBAL             55 (text + NULL)
+    
+      68            LOAD_CONST               9 ("EXISTS (  SELECT 1 FROM jsonb_array_elements(call_artifacts.labels_json::jsonb) AS lbl  WHERE lbl->>'label_name' IN ('spam', 'sales'))")
+    
+      67            CALL                     1
+    
+      63            CALL                     4
+                    STORE_FAST               7 (spam_q)
+    
+      74            LOAD_FAST                0 (db)
+                    LOAD_ATTR               35 (execute + NULL|self)
+                    LOAD_FAST                7 (spam_q)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L13:     SEND                     3 (to L16)
+           L14:     YIELD_VALUE              1
+           L15:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L13)
+           L16:     END_SEND
+                    LOAD_ATTR               45 (scalar + NULL|self)
+                    CALL                     0
+                    COPY                     1
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE         2 (to L17)
+                    POP_TOP
+                    LOAD_CONST               7 (0)
+           L17:     STORE_FAST               8 (spam_blocked)
+    
+      79   L18:     LOAD_FAST                3 (row)
+                    LOAD_ATTR               62 (avg_duration_seconds)
+                    STORE_FAST               9 (avg_dur)
+    
+      80            LOAD_FAST                9 (avg_dur)
+                    POP_JUMP_IF_NONE        21 (to L19)
+    
+      81            LOAD_GLOBAL             65 (round + NULL)
+                    LOAD_GLOBAL             67 (float + NULL)
+                    LOAD_FAST                9 (avg_dur)
+                    CALL                     1
+                    LOAD_CONST              13 (1)
+                    CALL                     2
+                    STORE_FAST               9 (avg_dur)
+    
+      83   L19:     LOAD_GLOBAL             69 (DashboardStatsResponse + NULL)
+    
+      84            LOAD_FAST                3 (row)
+                    LOAD_ATTR               70 (total_calls)
+    
+      85            LOAD_FAST                3 (row)
+                    LOAD_ATTR               72 (completed_calls)
+    
+      86            LOAD_FAST                3 (row)
+                    LOAD_ATTR               74 (unique_callers)
+    
+      87            LOAD_FAST                8 (spam_blocked)
+    
+      88            LOAD_FAST                9 (avg_dur)
+    
+      89            LOAD_FAST                6 (vip_calls)
+    
+      83            LOAD_CONST              14 (('total_calls', 'completed_calls', 'unique_callers', 'spam_blocked', 'avg_duration_seconds', 'vip_calls'))
+                    CALL_KW                  6
+                    RETURN_VALUE
+    
+      49   L20:     CLEANUP_THROW
+           L21:     EXTENDED_ARG             2
+                    JUMP_BACKWARD_NO_INTERRUPT 549 (to L5)
+    
+      60   L22:     CLEANUP_THROW
+           L23:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 296 (to L9)
+    
+      74   L24:     CLEANUP_THROW
+           L25:     JUMP_BACKWARD_NO_INTERRUPT 113 (to L16)
+    
+      --   L26:     PUSH_EXC_INFO
+    
+      75            LOAD_GLOBAL             56 (Exception)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       25 (to L28)
+                    POP_TOP
+    
+      76            LOAD_GLOBAL             58 (logger)
+                    LOAD_ATTR               61 (warning + NULL|self)
+                    LOAD_CONST              10 ('spam_blocked query failed, defaulting to 0')
+                    LOAD_CONST              11 (True)
+                    LOAD_CONST              12 (('exc_info',))
+                    CALL_KW                  2
+                    POP_TOP
+    
+      77            LOAD_CONST               7 (0)
+                    STORE_FAST               8 (spam_blocked)
+           L27:     POP_EXCEPT
+                    JUMP_BACKWARD_NO_INTERRUPT 122 (to L18)
+    
+      75   L28:     RERAISE                  0
+    
+      --   L29:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+           L30:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L30 [0] lasti
+      L3 to L4 -> L20 [2]
+      L4 to L7 -> L30 [0] lasti
+      L7 to L8 -> L22 [2]
+      L8 to L11 -> L30 [0] lasti
+      L12 to L14 -> L26 [0]
+      L14 to L15 -> L24 [2]
+      L15 to L18 -> L26 [0]
+      L18 to L21 -> L30 [0] lasti
+      L22 to L23 -> L30 [0] lasti
+      L24 to L25 -> L26 [0]
+      L26 to L27 -> L29 [1] lasti
+      L27 to L28 -> L30 [0] lasti
+      L28 to L29 -> L29 [1] lasti
+      L29 to L30 -> L30 [0] lasti
+    
+# --- Nested code object: get_stats ---
+    # co_names: ('_get_dashboard_stats', 'user_id')
+    # co_varnames: ('current_user', 'db')
+      93           RETURN_GENERATOR
+                   POP_TOP
+           L1:     RESUME                   0
+    
+      98           LOAD_GLOBAL              1 (_get_dashboard_stats + NULL)
+                   LOAD_FAST_LOAD_FAST     16 (db, current_user)
+                   LOAD_ATTR                2 (user_id)
+                   CALL                     2
+                   GET_AWAITABLE            0
+                   LOAD_CONST               0 (None)
+           L2:     SEND                     3 (to L5)
+           L3:     YIELD_VALUE              1
+           L4:     RESUME                   3
+                   JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+           L5:     END_SEND
+                   RETURN_VALUE
+           L6:     CLEANUP_THROW
+           L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+    
+      --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                   RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L8 [0] lasti
+      L3 to L4 -> L6 [2]
+      L4 to L7 -> L8 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'logging', 'uuid', 'fastapi', 'APIRouter', 'Depends', 'pydantic', 'BaseModel', 'sqlalchemy', 'case', 'distinct', 'func', 'select', 'text', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.database', 'get_db', 'app.models.call', 'Call', 'app.models.call_artifact', 'CallArtifact', 'app.models.vip_entry', 'VipEntry', 'getLogger', '__name__', 'logger', 'router', 'DashboardStatsResponse', '_get_dashboard_stats', 'get', 'get_stats')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Dashboard KPI stats endpoint.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (logging)
+              STORE_NAME               3 (logging)
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              4 (uuid)
+              STORE_NAME               4 (uuid)
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('APIRouter', 'Depends'))
+              IMPORT_NAME              5 (fastapi)
+              IMPORT_FROM              6 (APIRouter)
+              STORE_NAME               6 (APIRouter)
+              IMPORT_FROM              7 (Depends)
+              STORE_NAME               7 (Depends)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('BaseModel',))
+              IMPORT_NAME              8 (pydantic)
+              IMPORT_FROM              9 (BaseModel)
+              STORE_NAME               9 (BaseModel)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('case', 'distinct', 'func', 'select', 'text'))
+              IMPORT_NAME             10 (sqlalchemy)
+              IMPORT_FROM             11 (case)
+              STORE_NAME              11 (case)
+              IMPORT_FROM             12 (distinct)
+              STORE_NAME              12 (distinct)
+              IMPORT_FROM             13 (func)
+              STORE_NAME              13 (func)
+              IMPORT_FROM             14 (select)
+              STORE_NAME              14 (select)
+              IMPORT_FROM             15 (text)
+              STORE_NAME              15 (text)
+              POP_TOP
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('AsyncSession',))
+              IMPORT_NAME             16 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM             17 (AsyncSession)
+              STORE_NAME              17 (AsyncSession)
+              POP_TOP
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('CurrentUser', 'get_current_user'))
+              IMPORT_NAME             18 (app.core.dependencies)
+              IMPORT_FROM             19 (CurrentUser)
+              STORE_NAME              19 (CurrentUser)
+              IMPORT_FROM             20 (get_current_user)
+              STORE_NAME              20 (get_current_user)
+              POP_TOP
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('get_db',))
+              IMPORT_NAME             21 (app.database)
+              IMPORT_FROM             22 (get_db)
+              STORE_NAME              22 (get_db)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST              10 (('Call',))
+              IMPORT_NAME             23 (app.models.call)
+              IMPORT_FROM             24 (Call)
+              STORE_NAME              24 (Call)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST              11 (('CallArtifact',))
+              IMPORT_NAME             25 (app.models.call_artifact)
+              IMPORT_FROM             26 (CallArtifact)
+              STORE_NAME              26 (CallArtifact)
+              POP_TOP
+
+ 17           LOAD_CONST               1 (0)
+              LOAD_CONST              12 (('VipEntry',))
+              IMPORT_NAME             27 (app.models.vip_entry)
+              IMPORT_FROM             28 (VipEntry)
+              STORE_NAME              28 (VipEntry)
+              POP_TOP
+
+ 19           LOAD_NAME                3 (logging)
+              LOAD_ATTR               58 (getLogger)
+              PUSH_NULL
+              LOAD_NAME               30 (__name__)
+              CALL                     1
+              STORE_NAME              31 (logger)
+
+ 21           LOAD_NAME                6 (APIRouter)
+              PUSH_NULL
+              CALL                     0
+              STORE_NAME              32 (router)
+
+ 24           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              13 (<code object DashboardStatsResponse at 0x0000024C11496310, file "D:\fluence\Github\mattbot\backend\app\api\v1\stats.py", line 24>)
+              MAKE_FUNCTION
+              LOAD_CONST              14 ('DashboardStatsResponse')
+              LOAD_NAME                9 (BaseModel)
+              CALL                     3
+              STORE_NAME              33 (DashboardStatsResponse)
+
+ 33           NOP
+
+ 34           NOP
+
+ 33           NOP
+
+ 34           NOP
+
+ 33           NOP
+
+ 35           NOP
+
+ 33           LOAD_CONST              19 (('db', 'AsyncSession', 'user_id', 'uuid.UUID', 'return', 'DashboardStatsResponse'))
+              LOAD_CONST              15 (<code object _get_dashboard_stats at 0x0000024C0FAE4250, file "D:\fluence\Github\mattbot\backend\app\api\v1\stats.py", line 33>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              34 (_get_dashboard_stats)
+
+ 93           LOAD_NAME               32 (router)
+              LOAD_ATTR               71 (get + NULL|self)
+              LOAD_CONST              16 ('')
+              LOAD_NAME               33 (DashboardStatsResponse)
+              LOAD_CONST              17 (('response_model',))
+              CALL_KW                  2
+
+ 95           LOAD_NAME                7 (Depends)
+              PUSH_NULL
+              LOAD_NAME               20 (get_current_user)
+              CALL                     1
+
+ 96           LOAD_NAME                7 (Depends)
+              PUSH_NULL
+              LOAD_NAME               22 (get_db)
+              CALL                     1
+
+ 94           BUILD_TUPLE              2
+
+ 95           NOP
+
+ 94           NOP
+
+ 96           NOP
+
+ 94           NOP
+
+ 97           NOP
+
+ 94           LOAD_CONST              20 (('current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'DashboardStatsResponse'))
+              LOAD_CONST              18 (<code object get_stats at 0x0000024C1141B330, file "D:\fluence\Github\mattbot\backend\app\api\v1\stats.py", line 93>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 93           CALL                     0
+
+ 94           STORE_NAME              36 (get_stats)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object DashboardStatsResponse at 0x0000024C11496310, file "D:\fluence\Github\mattbot\backend\app\api\v1\stats.py", line 24>:
+ 24           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('DashboardStatsResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (24)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 25           LOAD_CONST               2 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('total_calls')
+              STORE_SUBSCR
+
+ 26           LOAD_CONST               2 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('completed_calls')
+              STORE_SUBSCR
+
+ 27           LOAD_CONST               2 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('unique_callers')
+              STORE_SUBSCR
+
+ 28           LOAD_CONST               2 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('spam_blocked')
+              STORE_SUBSCR
+
+ 29           LOAD_CONST               7 ('float | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('avg_duration_seconds')
+              STORE_SUBSCR
+
+ 30           LOAD_CONST               2 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('vip_calls')
+              STORE_SUBSCR
+              LOAD_CONST              10 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST            11 (None)
+
+Disassembly of <code object _get_dashboard_stats at 0x0000024C0FAE4250, file "D:\fluence\Github\mattbot\backend\app\api\v1\stats.py", line 33>:
+  33            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  36            LOAD_GLOBAL              1 (select + NULL)
+
+  37            LOAD_GLOBAL              2 (func)
+                LOAD_ATTR                4 (count)
+                PUSH_NULL
+                LOAD_GLOBAL              6 (Call)
+                LOAD_ATTR                8 (id)
+                CALL                     1
+                LOAD_ATTR               11 (label + NULL|self)
+                LOAD_CONST               1 ('total_calls')
+                CALL                     1
+
+  38            LOAD_GLOBAL              2 (func)
+                LOAD_ATTR                4 (count)
+                PUSH_NULL
+
+  39            LOAD_GLOBAL             13 (case + NULL)
+                LOAD_GLOBAL              6 (Call)
+                LOAD_ATTR               14 (status)
+                LOAD_ATTR               17 (in_ + NULL|self)
+                LOAD_CONST               2 ('completed')
+                LOAD_CONST               3 ('partial')
+                BUILD_LIST               2
+                CALL                     1
+                LOAD_GLOBAL              6 (Call)
+                LOAD_ATTR                8 (id)
+                BUILD_TUPLE              2
+                CALL                     1
+
+  38            CALL                     1
+
+  40            LOAD_ATTR               11 (label + NULL|self)
+                LOAD_CONST               4 ('completed_calls')
+                CALL                     1
+
+  41            LOAD_GLOBAL              2 (func)
+                LOAD_ATTR                4 (count)
+                PUSH_NULL
+                LOAD_GLOBAL             19 (distinct + NULL)
+                LOAD_GLOBAL              6 (Call)
+                LOAD_ATTR               20 (caller_phone_hash)
+                CALL                     1
+                CALL                     1
+                LOAD_ATTR               11 (label + NULL|self)
+                LOAD_CONST               5 ('unique_callers')
+                CALL                     1
+
+  42            LOAD_GLOBAL              2 (func)
+                LOAD_ATTR               22 (avg)
+                PUSH_NULL
+
+  43            LOAD_GLOBAL             13 (case + NULL)
+                LOAD_GLOBAL              6 (Call)
+                LOAD_ATTR               14 (status)
+                LOAD_ATTR               17 (in_ + NULL|self)
+                LOAD_CONST               2 ('completed')
+                LOAD_CONST               3 ('partial')
+                BUILD_LIST               2
+                CALL                     1
+                LOAD_GLOBAL              6 (Call)
+                LOAD_ATTR               24 (duration_seconds)
+                BUILD_TUPLE              2
+                CALL                     1
+
+  42            CALL                     1
+
+  44            LOAD_ATTR               11 (label + NULL|self)
+                LOAD_CONST               6 ('avg_duration_seconds')
+                CALL                     1
+
+  36            CALL                     4
+
+  45            LOAD_ATTR               27 (where + NULL|self)
+
+  46            LOAD_GLOBAL              6 (Call)
+                LOAD_ATTR               28 (owner_user_id)
+                LOAD_FAST                1 (user_id)
+                COMPARE_OP              72 (==)
+
+  47            LOAD_GLOBAL              6 (Call)
+                LOAD_ATTR               30 (deleted_at)
+                LOAD_ATTR               33 (is_ + NULL|self)
+                LOAD_CONST               0 (None)
+                CALL                     1
+
+  45            CALL                     2
+
+  36            STORE_FAST               2 (base)
+
+  49            LOAD_FAST                0 (db)
+                LOAD_ATTR               35 (execute + NULL|self)
+                LOAD_FAST                2 (base)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                LOAD_ATTR               37 (one + NULL|self)
+                CALL                     0
+                STORE_FAST               3 (row)
+
+  51            LOAD_GLOBAL              1 (select + NULL)
+                LOAD_GLOBAL             38 (VipEntry)
+                LOAD_ATTR               40 (phone_hash)
+                CALL                     1
+                LOAD_ATTR               27 (where + NULL|self)
+
+  52            LOAD_GLOBAL             38 (VipEntry)
+                LOAD_ATTR               28 (owner_user_id)
+                LOAD_FAST                1 (user_id)
+                COMPARE_OP              72 (==)
+
+  51            CALL                     1
+
+  53            LOAD_ATTR               43 (scalar_subquery + NULL|self)
+                CALL                     0
+
+  51            STORE_FAST               4 (vip_hashes)
+
+  55            LOAD_GLOBAL              1 (select + NULL)
+                LOAD_GLOBAL              2 (func)
+                LOAD_ATTR                4 (count)
+                PUSH_NULL
+                LOAD_GLOBAL             19 (distinct + NULL)
+                LOAD_GLOBAL              6 (Call)
+                LOAD_ATTR                8 (id)
+                CALL                     1
+                CALL                     1
+                CALL                     1
+                LOAD_ATTR               27 (where + NULL|self)
+
+  56            LOAD_GLOBAL              6 (Call)
+                LOAD_ATTR               28 (owner_user_id)
+                LOAD_FAST                1 (user_id)
+                COMPARE_OP              72 (==)
+
+  57            LOAD_GLOBAL              6 (Call)
+                LOAD_ATTR               30 (deleted_at)
+                LOAD_ATTR               33 (is_ + NULL|self)
+                LOAD_CONST               0 (None)
+                CALL                     1
+
+  58            LOAD_GLOBAL              6 (Call)
+                LOAD_ATTR               20 (caller_phone_hash)
+                LOAD_ATTR               17 (in_ + NULL|self)
+                LOAD_FAST                4 (vip_hashes)
+                CALL                     1
+
+  55            CALL                     3
+                STORE_FAST               5 (vip_q)
+
+  60            LOAD_FAST                0 (db)
+                LOAD_ATTR               35 (execute + NULL|self)
+                LOAD_FAST                5 (vip_q)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L6:     SEND                     3 (to L9)
+        L7:     YIELD_VALUE              1
+        L8:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L6)
+        L9:     END_SEND
+                LOAD_ATTR               45 (scalar + NULL|self)
+                CALL                     0
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L10)
+                POP_TOP
+                LOAD_CONST               7 (0)
+       L10:     STORE_FAST               6 (vip_calls)
+
+  62   L11:     NOP
+
+  63   L12:     LOAD_GLOBAL              1 (select + NULL)
+                LOAD_GLOBAL              2 (func)
+                LOAD_ATTR                4 (count)
+                PUSH_NULL
+                LOAD_GLOBAL             19 (distinct + NULL)
+                LOAD_GLOBAL             46 (CallArtifact)
+                LOAD_ATTR               48 (call_id)
+                CALL                     1
+                CALL                     1
+                CALL                     1
+                LOAD_ATTR               27 (where + NULL|self)
+
+  64            LOAD_GLOBAL             46 (CallArtifact)
+                LOAD_ATTR               28 (owner_user_id)
+                LOAD_FAST                1 (user_id)
+                COMPARE_OP              72 (==)
+
+  65            LOAD_GLOBAL             46 (CallArtifact)
+                LOAD_ATTR               50 (labels_json)
+                LOAD_ATTR               53 (isnot + NULL|self)
+                LOAD_CONST               0 (None)
+                CALL                     1
+
+  66            LOAD_GLOBAL             55 (text + NULL)
+                LOAD_CONST               8 ("jsonb_typeof(call_artifacts.labels_json::jsonb) = 'array'")
+                CALL                     1
+
+  67            LOAD_GLOBAL             55 (text + NULL)
+
+  68            LOAD_CONST               9 ("EXISTS (  SELECT 1 FROM jsonb_array_elements(call_artifacts.labels_json::jsonb) AS lbl  WHERE lbl->>'label_name' IN ('spam', 'sales'))")
+
+  67            CALL                     1
+
+  63            CALL                     4
+                STORE_FAST               7 (spam_q)
+
+  74            LOAD_FAST                0 (db)
+                LOAD_ATTR               35 (execute + NULL|self)
+                LOAD_FAST                7 (spam_q)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L13:     SEND                     3 (to L16)
+       L14:     YIELD_VALUE              1
+       L15:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L13)
+       L16:     END_SEND
+                LOAD_ATTR               45 (scalar + NULL|self)
+                CALL                     0
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L17)
+                POP_TOP
+                LOAD_CONST               7 (0)
+       L17:     STORE_FAST               8 (spam_blocked)
+
+  79   L18:     LOAD_FAST                3 (row)
+                LOAD_ATTR               62 (avg_duration_seconds)
+                STORE_FAST               9 (avg_dur)
+
+  80            LOAD_FAST                9 (avg_dur)
+                POP_JUMP_IF_NONE        21 (to L19)
+
+  81            LOAD_GLOBAL             65 (round + NULL)
+                LOAD_GLOBAL             67 (float + NULL)
+                LOAD_FAST                9 (avg_dur)
+                CALL                     1
+                LOAD_CONST              13 (1)
+                CALL                     2
+                STORE_FAST               9 (avg_dur)
+
+  83   L19:     LOAD_GLOBAL             69 (DashboardStatsResponse + NULL)
+
+  84            LOAD_FAST                3 (row)
+                LOAD_ATTR               70 (total_calls)
+
+  85            LOAD_FAST                3 (row)
+                LOAD_ATTR               72 (completed_calls)
+
+  86            LOAD_FAST                3 (row)
+                LOAD_ATTR               74 (unique_callers)
+
+  87            LOAD_FAST                8 (spam_blocked)
+
+  88            LOAD_FAST                9 (avg_dur)
+
+  89            LOAD_FAST                6 (vip_calls)
+
+  83            LOAD_CONST              14 (('total_calls', 'completed_calls', 'unique_callers', 'spam_blocked', 'avg_duration_seconds', 'vip_calls'))
+                CALL_KW                  6
+                RETURN_VALUE
+
+  49   L20:     CLEANUP_THROW
+       L21:     EXTENDED_ARG             2
+                JUMP_BACKWARD_NO_INTERRUPT 549 (to L5)
+
+  60   L22:     CLEANUP_THROW
+       L23:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 296 (to L9)
+
+  74   L24:     CLEANUP_THROW
+       L25:     JUMP_BACKWARD_NO_INTERRUPT 113 (to L16)
+
+  --   L26:     PUSH_EXC_INFO
+
+  75            LOAD_GLOBAL             56 (Exception)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       25 (to L28)
+                POP_TOP
+
+  76            LOAD_GLOBAL             58 (logger)
+                LOAD_ATTR               61 (warning + NULL|self)
+                LOAD_CONST              10 ('spam_blocked query failed, defaulting to 0')
+                LOAD_CONST              11 (True)
+                LOAD_CONST              12 (('exc_info',))
+                CALL_KW                  2
+                POP_TOP
+
+  77            LOAD_CONST               7 (0)
+                STORE_FAST               8 (spam_blocked)
+       L27:     POP_EXCEPT
+                JUMP_BACKWARD_NO_INTERRUPT 122 (to L18)
+
+  75   L28:     RERAISE                  0
+
+  --   L29:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L30:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L30 [0] lasti
+  L3 to L4 -> L20 [2]
+  L4 to L7 -> L30 [0] lasti
+  L7 to L8 -> L22 [2]
+  L8 to L11 -> L30 [0] lasti
+  L12 to L14 -> L26 [0]
+  L14 to L15 -> L24 [2]
+  L15 to L18 -> L26 [0]
+  L18 to L21 -> L30 [0] lasti
+  L22 to L23 -> L30 [0] lasti
+  L24 to L25 -> L26 [0]
+  L26 to L27 -> L29 [1] lasti
+  L27 to L28 -> L30 [0] lasti
+  L28 to L29 -> L29 [1] lasti
+  L29 to L30 -> L30 [0] lasti
+
+Disassembly of <code object get_stats at 0x0000024C1141B330, file "D:\fluence\Github\mattbot\backend\app\api\v1\stats.py", line 93>:
+  93           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+
+  98           LOAD_GLOBAL              1 (_get_dashboard_stats + NULL)
+               LOAD_FAST_LOAD_FAST     16 (db, current_user)
+               LOAD_ATTR                2 (user_id)
+               CALL                     2
+               GET_AWAITABLE            0
+               LOAD_CONST               0 (None)
+       L2:     SEND                     3 (to L5)
+       L3:     YIELD_VALUE              1
+       L4:     RESUME                   3
+               JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+       L5:     END_SEND
+               RETURN_VALUE
+       L6:     CLEANUP_THROW
+       L7:     JUMP_BACKWARD_NO_INTERRUPT 4 (to L5)
+
+  --   L8:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L8 [0] lasti
+  L3 to L4 -> L6 [2]
+  L4 to L7 -> L8 [0] lasti

@@ -1,0 +1,490 @@
+# Bytecode dump of: voice_catalog.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\models\voice_catalog.py
+# co_names: ('__doc__', 'uuid', 'datetime', 'sqlalchemy', 'Boolean', 'Index', 'Integer', 'String', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'app.database', 'Base', 'app.models._types', 'tz_datetime', 'VoiceCatalog')
+# co_consts (strings): ['Voice catalog — backend-managed list of available voices.', 'VoiceCatalog']
+
+# DOCSTRING: """Voice catalog — backend-managed list of available voices."""
+# --- Nested code object: VoiceCatalog ---
+    # DOCSTRING: """VoiceCatalog"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__tablename__', 'mapped_column', 'UUID', 'uuid', 'uuid4', 'id', 'Mapped', '__annotations__', 'String', 'provider_voice_id', 'str', 'display_name', 'text', 'locale', 'gender_tag', 'Text', 'preview_url', 'Boolean', 'is_active', 'bool', 'Integer', 'sort_order', 'int', 'tz_datetime', 'created_at', 'datetime', 'Index', '__table_args__', '__static_attributes__')
+    # co_varnames: ()
+     14           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('VoiceCatalog')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (14)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     15           LOAD_CONST               2 ('voice_catalog')
+                  STORE_NAME               4 (__tablename__)
+    
+     17           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     18           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               3 (True)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               16 (uuid4)
+    
+     17           LOAD_CONST               5 (('primary_key', 'default'))
+                  CALL_KW                  3
+                  STORE_NAME               9 (id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST               6 ('id')
+                  STORE_SUBSCR
+    
+     20           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               12 (String)
+                  PUSH_NULL
+                  LOAD_CONST               7 (100)
+                  CALL                     1
+                  LOAD_CONST               8 (False)
+                  LOAD_CONST               9 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              13 (provider_voice_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               14 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              10 ('provider_voice_id')
+                  STORE_SUBSCR
+    
+     21           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               12 (String)
+                  PUSH_NULL
+                  LOAD_CONST               7 (100)
+                  CALL                     1
+                  LOAD_CONST               8 (False)
+                  LOAD_CONST               9 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              15 (display_name)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               14 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              11 ('display_name')
+                  STORE_SUBSCR
+    
+     22           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     23           LOAD_NAME               12 (String)
+                  PUSH_NULL
+                  LOAD_CONST              12 (50)
+                  CALL                     1
+                  LOAD_CONST               8 (False)
+                  LOAD_NAME               16 (text)
+                  PUSH_NULL
+                  LOAD_CONST              13 ("'en'")
+                  CALL                     1
+    
+     22           LOAD_CONST              14 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              17 (locale)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               14 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              15 ('locale')
+                  STORE_SUBSCR
+    
+     25           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               12 (String)
+                  PUSH_NULL
+                  LOAD_CONST              16 (20)
+                  CALL                     1
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               9 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              18 (gender_tag)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               14 (str)
+                  LOAD_CONST              17 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              18 ('gender_tag')
+                  STORE_SUBSCR
+    
+     26           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               19 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               9 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              20 (preview_url)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               14 (str)
+                  LOAD_CONST              17 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              19 ('preview_url')
+                  STORE_SUBSCR
+    
+     27           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     28           LOAD_NAME               21 (Boolean)
+                  LOAD_CONST               8 (False)
+                  LOAD_NAME               16 (text)
+                  PUSH_NULL
+                  LOAD_CONST              20 ('true')
+                  CALL                     1
+    
+     27           LOAD_CONST              14 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              22 (is_active)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               23 (bool)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              21 ('is_active')
+                  STORE_SUBSCR
+    
+     30           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     31           LOAD_NAME               24 (Integer)
+                  LOAD_CONST               8 (False)
+                  LOAD_NAME               16 (text)
+                  PUSH_NULL
+                  LOAD_CONST              22 ('0')
+                  CALL                     1
+    
+     30           LOAD_CONST              14 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              25 (sort_order)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               26 (int)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              23 ('sort_order')
+                  STORE_SUBSCR
+    
+     34           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     35           LOAD_NAME               27 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               8 (False)
+                  LOAD_NAME               16 (text)
+                  PUSH_NULL
+                  LOAD_CONST              24 ('now()')
+                  CALL                     1
+    
+     34           LOAD_CONST              14 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              28 (created_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               29 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              25 ('created_at')
+                  STORE_SUBSCR
+    
+     39           LOAD_NAME               30 (Index)
+                  PUSH_NULL
+                  LOAD_CONST              26 ('voice_catalog_active_idx')
+                  LOAD_CONST              21 ('is_active')
+                  LOAD_CONST              23 ('sort_order')
+                  CALL                     3
+    
+     38           BUILD_TUPLE              1
+                  STORE_NAME              31 (__table_args__)
+                  LOAD_CONST              27 (())
+                  STORE_NAME              32 (__static_attributes__)
+                  RETURN_CONST            17 (None)
+    
+# co_names: ('__doc__', 'uuid', 'datetime', 'sqlalchemy', 'Boolean', 'Index', 'Integer', 'String', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'app.database', 'Base', 'app.models._types', 'tz_datetime', 'VoiceCatalog')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Voice catalog — backend-managed list of available voices.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (uuid)
+              STORE_NAME               1 (uuid)
+
+  4           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('datetime',))
+              IMPORT_NAME              2 (datetime)
+              IMPORT_FROM              2 (datetime)
+              STORE_NAME               2 (datetime)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('Boolean', 'Index', 'Integer', 'String', 'Text', 'text'))
+              IMPORT_NAME              3 (sqlalchemy)
+              IMPORT_FROM              4 (Boolean)
+              STORE_NAME               4 (Boolean)
+              IMPORT_FROM              5 (Index)
+              STORE_NAME               5 (Index)
+              IMPORT_FROM              6 (Integer)
+              STORE_NAME               6 (Integer)
+              IMPORT_FROM              7 (String)
+              STORE_NAME               7 (String)
+              IMPORT_FROM              8 (Text)
+              STORE_NAME               8 (Text)
+              IMPORT_FROM              9 (text)
+              STORE_NAME               9 (text)
+              POP_TOP
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('UUID',))
+              IMPORT_NAME             10 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM             11 (UUID)
+              STORE_NAME              11 (UUID)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('Mapped', 'mapped_column'))
+              IMPORT_NAME             12 (sqlalchemy.orm)
+              IMPORT_FROM             13 (Mapped)
+              STORE_NAME              13 (Mapped)
+              IMPORT_FROM             14 (mapped_column)
+              STORE_NAME              14 (mapped_column)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('Base',))
+              IMPORT_NAME             15 (app.database)
+              IMPORT_FROM             16 (Base)
+              STORE_NAME              16 (Base)
+              POP_TOP
+
+ 11           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('tz_datetime',))
+              IMPORT_NAME             17 (app.models._types)
+              IMPORT_FROM             18 (tz_datetime)
+              STORE_NAME              18 (tz_datetime)
+              POP_TOP
+
+ 14           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               9 (<code object VoiceCatalog at 0x0000024C0FBA9050, file "D:\fluence\Github\mattbot\backend\app\models\voice_catalog.py", line 14>)
+              MAKE_FUNCTION
+              LOAD_CONST              10 ('VoiceCatalog')
+              LOAD_NAME               16 (Base)
+              CALL                     3
+              STORE_NAME              19 (VoiceCatalog)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object VoiceCatalog at 0x0000024C0FBA9050, file "D:\fluence\Github\mattbot\backend\app\models\voice_catalog.py", line 14>:
+ 14           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('VoiceCatalog')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (14)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 15           LOAD_CONST               2 ('voice_catalog')
+              STORE_NAME               4 (__tablename__)
+
+ 17           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 18           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               16 (uuid4)
+
+ 17           LOAD_CONST               5 (('primary_key', 'default'))
+              CALL_KW                  3
+              STORE_NAME               9 (id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               6 ('id')
+              STORE_SUBSCR
+
+ 20           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               12 (String)
+              PUSH_NULL
+              LOAD_CONST               7 (100)
+              CALL                     1
+              LOAD_CONST               8 (False)
+              LOAD_CONST               9 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              13 (provider_voice_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               14 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              10 ('provider_voice_id')
+              STORE_SUBSCR
+
+ 21           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               12 (String)
+              PUSH_NULL
+              LOAD_CONST               7 (100)
+              CALL                     1
+              LOAD_CONST               8 (False)
+              LOAD_CONST               9 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              15 (display_name)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               14 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              11 ('display_name')
+              STORE_SUBSCR
+
+ 22           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 23           LOAD_NAME               12 (String)
+              PUSH_NULL
+              LOAD_CONST              12 (50)
+              CALL                     1
+              LOAD_CONST               8 (False)
+              LOAD_NAME               16 (text)
+              PUSH_NULL
+              LOAD_CONST              13 ("'en'")
+              CALL                     1
+
+ 22           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              17 (locale)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               14 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              15 ('locale')
+              STORE_SUBSCR
+
+ 25           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               12 (String)
+              PUSH_NULL
+              LOAD_CONST              16 (20)
+              CALL                     1
+              LOAD_CONST               3 (True)
+              LOAD_CONST               9 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              18 (gender_tag)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               14 (str)
+              LOAD_CONST              17 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              18 ('gender_tag')
+              STORE_SUBSCR
+
+ 26           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               19 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST               9 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              20 (preview_url)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               14 (str)
+              LOAD_CONST              17 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              19 ('preview_url')
+              STORE_SUBSCR
+
+ 27           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 28           LOAD_NAME               21 (Boolean)
+              LOAD_CONST               8 (False)
+              LOAD_NAME               16 (text)
+              PUSH_NULL
+              LOAD_CONST              20 ('true')
+              CALL                     1
+
+ 27           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              22 (is_active)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               23 (bool)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              21 ('is_active')
+              STORE_SUBSCR
+
+ 30           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 31           LOAD_NAME               24 (Integer)
+              LOAD_CONST               8 (False)
+              LOAD_NAME               16 (text)
+              PUSH_NULL
+              LOAD_CONST              22 ('0')
+              CALL                     1
+
+ 30           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              25 (sort_order)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               26 (int)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              23 ('sort_order')
+              STORE_SUBSCR
+
+ 34           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 35           LOAD_NAME               27 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               8 (False)
+              LOAD_NAME               16 (text)
+              PUSH_NULL
+              LOAD_CONST              24 ('now()')
+              CALL                     1
+
+ 34           LOAD_CONST              14 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              28 (created_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               29 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              25 ('created_at')
+              STORE_SUBSCR
+
+ 39           LOAD_NAME               30 (Index)
+              PUSH_NULL
+              LOAD_CONST              26 ('voice_catalog_active_idx')
+              LOAD_CONST              21 ('is_active')
+              LOAD_CONST              23 ('sort_order')
+              CALL                     3
+
+ 38           BUILD_TUPLE              1
+              STORE_NAME              31 (__table_args__)
+              LOAD_CONST              27 (())
+              STORE_NAME              32 (__static_attributes__)
+              RETURN_CONST            17 (None)

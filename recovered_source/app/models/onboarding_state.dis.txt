@@ -1,0 +1,535 @@
+# Bytecode dump of: onboarding_state.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\models\onboarding_state.py
+# co_names: ('uuid', 'datetime', 'UTC', 'sqlalchemy', 'DateTime', 'ForeignKey', 'String', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'relationship', 'app.database', 'Base', 'app.models._types', 'JsonbDict', '_tz', 'OnboardingState')
+# co_consts (strings): ['return', 'OnboardingState']
+
+# --- Nested code object: _tz ---
+    # co_names: ('DateTime',)
+    # co_varnames: ()
+     12           RESUME                   0
+    
+     13           LOAD_GLOBAL              1 (DateTime + NULL)
+                  LOAD_CONST               1 (True)
+                  LOAD_CONST               2 (('timezone',))
+                  CALL_KW                  1
+                  RETURN_VALUE
+    
+# --- Nested code object: OnboardingState ---
+    # DOCSTRING: """OnboardingState"""
+    # --- Nested code object: OnboardingState.<lambda> ---
+        # co_names: ('datetime', 'now', 'UTC')
+        # co_varnames: ()
+         41           RESUME                   0
+                      LOAD_GLOBAL              0 (datetime)
+                      LOAD_ATTR                2 (now)
+                      PUSH_NULL
+                      LOAD_GLOBAL              4 (UTC)
+                      CALL                     1
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__tablename__', 'mapped_column', 'UUID', 'ForeignKey', 'owner_user_id', 'Mapped', 'uuid', '__annotations__', 'String', 'text', 'current_step', 'str', 'JsonbDict', 'steps_completed', 'list', '_tz', 'completed_at', 'datetime', 'updated_by_device_id', 'created_at', 'updated_at', 'relationship', 'user', '__static_attributes__')
+    # co_varnames: ()
+     16           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('OnboardingState')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (16)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     17           LOAD_CONST               2 ('onboarding_state')
+                  STORE_NAME               4 (__tablename__)
+    
+     19           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     20           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     21           LOAD_NAME                7 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST               5 ('users.id')
+                  LOAD_CONST               6 ('CASCADE')
+                  LOAD_CONST               7 (('ondelete',))
+                  CALL_KW                  2
+    
+     22           LOAD_CONST               3 (True)
+    
+     19           LOAD_CONST               8 (('primary_key',))
+                  CALL_KW                  3
+                  STORE_NAME               8 (owner_user_id)
+                  LOAD_NAME                9 (Mapped)
+                  LOAD_NAME               10 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST               9 ('owner_user_id')
+                  STORE_SUBSCR
+    
+     24           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     25           LOAD_NAME               12 (String)
+                  PUSH_NULL
+                  LOAD_CONST              10 (40)
+                  CALL                     1
+                  LOAD_CONST              11 (False)
+                  LOAD_NAME               13 (text)
+                  PUSH_NULL
+                  LOAD_CONST              12 ("'privacy_review'")
+                  CALL                     1
+    
+     24           LOAD_CONST              13 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              14 (current_step)
+                  LOAD_NAME                9 (Mapped)
+                  LOAD_NAME               15 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              14 ('current_step')
+                  STORE_SUBSCR
+    
+     27           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     28           LOAD_NAME               16 (JsonbDict)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST              11 (False)
+                  LOAD_NAME               13 (text)
+                  PUSH_NULL
+                  LOAD_CONST              15 ("'[]'")
+                  CALL                     1
+    
+     27           LOAD_CONST              13 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              17 (steps_completed)
+                  LOAD_NAME                9 (Mapped)
+                  LOAD_NAME               18 (list)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              16 ('steps_completed')
+                  STORE_SUBSCR
+    
+     30           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               19 (_tz)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              17 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              20 (completed_at)
+                  LOAD_NAME                9 (Mapped)
+                  LOAD_NAME               21 (datetime)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              19 ('completed_at')
+                  STORE_SUBSCR
+    
+     31           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     32           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     33           LOAD_NAME                7 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST              20 ('devices.id')
+                  LOAD_CONST              21 ('SET NULL')
+                  LOAD_CONST               7 (('ondelete',))
+                  CALL_KW                  2
+    
+     34           LOAD_CONST               3 (True)
+    
+     31           LOAD_CONST              17 (('nullable',))
+                  CALL_KW                  3
+                  STORE_NAME              22 (updated_by_device_id)
+                  LOAD_NAME                9 (Mapped)
+                  LOAD_NAME               10 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  LOAD_CONST              18 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              22 ('updated_by_device_id')
+                  STORE_SUBSCR
+    
+     36           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     37           LOAD_NAME               19 (_tz)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST              11 (False)
+                  LOAD_NAME               13 (text)
+                  PUSH_NULL
+                  LOAD_CONST              23 ('now()')
+                  CALL                     1
+    
+     36           LOAD_CONST              13 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              23 (created_at)
+                  LOAD_NAME                9 (Mapped)
+                  LOAD_NAME               21 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              24 ('created_at')
+                  STORE_SUBSCR
+    
+     39           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     40           LOAD_NAME               19 (_tz)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST              11 (False)
+                  LOAD_NAME               13 (text)
+                  PUSH_NULL
+                  LOAD_CONST              23 ('now()')
+                  CALL                     1
+    
+     41           LOAD_CONST              25 (<code object <lambda> at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\onboarding_state.py", line 41>)
+                  MAKE_FUNCTION
+    
+     39           LOAD_CONST              26 (('nullable', 'server_default', 'onupdate'))
+                  CALL_KW                  4
+                  STORE_NAME              24 (updated_at)
+                  LOAD_NAME                9 (Mapped)
+                  LOAD_NAME               21 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              27 ('updated_at')
+                  STORE_SUBSCR
+    
+     44           LOAD_NAME               25 (relationship)
+                  PUSH_NULL
+                  LOAD_CONST              28 ('onboarding')
+                  LOAD_CONST              29 (('back_populates',))
+                  CALL_KW                  1
+                  STORE_NAME              26 (user)
+                  LOAD_NAME                9 (Mapped)
+                  LOAD_CONST              30 ('User')
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              31 ('user')
+                  STORE_SUBSCR
+                  LOAD_CONST              32 (())
+                  STORE_NAME              27 (__static_attributes__)
+                  RETURN_CONST            18 (None)
+    
+    Disassembly of <code object <lambda> at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\onboarding_state.py", line 41>:
+     41           RESUME                   0
+                  LOAD_GLOBAL              0 (datetime)
+                  LOAD_ATTR                2 (now)
+                  PUSH_NULL
+                  LOAD_GLOBAL              4 (UTC)
+                  CALL                     1
+                  RETURN_VALUE
+    
+# co_names: ('uuid', 'datetime', 'UTC', 'sqlalchemy', 'DateTime', 'ForeignKey', 'String', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'relationship', 'app.database', 'Base', 'app.models._types', 'JsonbDict', '_tz', 'OnboardingState')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 (0)
+              LOAD_CONST               1 (None)
+              IMPORT_NAME              0 (uuid)
+              STORE_NAME               0 (uuid)
+
+  2           LOAD_CONST               0 (0)
+              LOAD_CONST               2 (('UTC', 'datetime'))
+              IMPORT_NAME              1 (datetime)
+              IMPORT_FROM              2 (UTC)
+              STORE_NAME               2 (UTC)
+              IMPORT_FROM              1 (datetime)
+              STORE_NAME               1 (datetime)
+              POP_TOP
+
+  4           LOAD_CONST               0 (0)
+              LOAD_CONST               3 (('DateTime', 'ForeignKey', 'String', 'text'))
+              IMPORT_NAME              3 (sqlalchemy)
+              IMPORT_FROM              4 (DateTime)
+              STORE_NAME               4 (DateTime)
+              IMPORT_FROM              5 (ForeignKey)
+              STORE_NAME               5 (ForeignKey)
+              IMPORT_FROM              6 (String)
+              STORE_NAME               6 (String)
+              IMPORT_FROM              7 (text)
+              STORE_NAME               7 (text)
+              POP_TOP
+
+  5           LOAD_CONST               0 (0)
+              LOAD_CONST               4 (('UUID',))
+              IMPORT_NAME              8 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM              9 (UUID)
+              STORE_NAME               9 (UUID)
+              POP_TOP
+
+  6           LOAD_CONST               0 (0)
+              LOAD_CONST               5 (('Mapped', 'mapped_column', 'relationship'))
+              IMPORT_NAME             10 (sqlalchemy.orm)
+              IMPORT_FROM             11 (Mapped)
+              STORE_NAME              11 (Mapped)
+              IMPORT_FROM             12 (mapped_column)
+              STORE_NAME              12 (mapped_column)
+              IMPORT_FROM             13 (relationship)
+              STORE_NAME              13 (relationship)
+              POP_TOP
+
+  8           LOAD_CONST               0 (0)
+              LOAD_CONST               6 (('Base',))
+              IMPORT_NAME             14 (app.database)
+              IMPORT_FROM             15 (Base)
+              STORE_NAME              15 (Base)
+              POP_TOP
+
+  9           LOAD_CONST               0 (0)
+              LOAD_CONST               7 (('JsonbDict',))
+              IMPORT_NAME             16 (app.models._types)
+              IMPORT_FROM             17 (JsonbDict)
+              STORE_NAME              17 (JsonbDict)
+              POP_TOP
+
+ 12           LOAD_CONST               8 ('return')
+              LOAD_NAME                4 (DateTime)
+              BUILD_TUPLE              2
+              LOAD_CONST               9 (<code object _tz at 0x0000024C0EF0F750, file "D:\fluence\Github\mattbot\backend\app\models\onboarding_state.py", line 12>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              18 (_tz)
+
+ 16           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              10 (<code object OnboardingState at 0x0000024C0FBE0410, file "D:\fluence\Github\mattbot\backend\app\models\onboarding_state.py", line 16>)
+              MAKE_FUNCTION
+              LOAD_CONST              11 ('OnboardingState')
+              LOAD_NAME               15 (Base)
+              CALL                     3
+              STORE_NAME              19 (OnboardingState)
+              RETURN_CONST             1 (None)
+
+Disassembly of <code object _tz at 0x0000024C0EF0F750, file "D:\fluence\Github\mattbot\backend\app\models\onboarding_state.py", line 12>:
+ 12           RESUME                   0
+
+ 13           LOAD_GLOBAL              1 (DateTime + NULL)
+              LOAD_CONST               1 (True)
+              LOAD_CONST               2 (('timezone',))
+              CALL_KW                  1
+              RETURN_VALUE
+
+Disassembly of <code object OnboardingState at 0x0000024C0FBE0410, file "D:\fluence\Github\mattbot\backend\app\models\onboarding_state.py", line 16>:
+ 16           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('OnboardingState')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (16)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 17           LOAD_CONST               2 ('onboarding_state')
+              STORE_NAME               4 (__tablename__)
+
+ 19           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 20           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 21           LOAD_NAME                7 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               5 ('users.id')
+              LOAD_CONST               6 ('CASCADE')
+              LOAD_CONST               7 (('ondelete',))
+              CALL_KW                  2
+
+ 22           LOAD_CONST               3 (True)
+
+ 19           LOAD_CONST               8 (('primary_key',))
+              CALL_KW                  3
+              STORE_NAME               8 (owner_user_id)
+              LOAD_NAME                9 (Mapped)
+              LOAD_NAME               10 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               9 ('owner_user_id')
+              STORE_SUBSCR
+
+ 24           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 25           LOAD_NAME               12 (String)
+              PUSH_NULL
+              LOAD_CONST              10 (40)
+              CALL                     1
+              LOAD_CONST              11 (False)
+              LOAD_NAME               13 (text)
+              PUSH_NULL
+              LOAD_CONST              12 ("'privacy_review'")
+              CALL                     1
+
+ 24           LOAD_CONST              13 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              14 (current_step)
+              LOAD_NAME                9 (Mapped)
+              LOAD_NAME               15 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              14 ('current_step')
+              STORE_SUBSCR
+
+ 27           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 28           LOAD_NAME               16 (JsonbDict)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              11 (False)
+              LOAD_NAME               13 (text)
+              PUSH_NULL
+              LOAD_CONST              15 ("'[]'")
+              CALL                     1
+
+ 27           LOAD_CONST              13 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              17 (steps_completed)
+              LOAD_NAME                9 (Mapped)
+              LOAD_NAME               18 (list)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              16 ('steps_completed')
+              STORE_SUBSCR
+
+ 30           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               19 (_tz)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              17 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              20 (completed_at)
+              LOAD_NAME                9 (Mapped)
+              LOAD_NAME               21 (datetime)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              19 ('completed_at')
+              STORE_SUBSCR
+
+ 31           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 32           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 33           LOAD_NAME                7 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              20 ('devices.id')
+              LOAD_CONST              21 ('SET NULL')
+              LOAD_CONST               7 (('ondelete',))
+              CALL_KW                  2
+
+ 34           LOAD_CONST               3 (True)
+
+ 31           LOAD_CONST              17 (('nullable',))
+              CALL_KW                  3
+              STORE_NAME              22 (updated_by_device_id)
+              LOAD_NAME                9 (Mapped)
+              LOAD_NAME               10 (uuid)
+              LOAD_ATTR               12 (UUID)
+              LOAD_CONST              18 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              22 ('updated_by_device_id')
+              STORE_SUBSCR
+
+ 36           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 37           LOAD_NAME               19 (_tz)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              11 (False)
+              LOAD_NAME               13 (text)
+              PUSH_NULL
+              LOAD_CONST              23 ('now()')
+              CALL                     1
+
+ 36           LOAD_CONST              13 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              23 (created_at)
+              LOAD_NAME                9 (Mapped)
+              LOAD_NAME               21 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              24 ('created_at')
+              STORE_SUBSCR
+
+ 39           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 40           LOAD_NAME               19 (_tz)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              11 (False)
+              LOAD_NAME               13 (text)
+              PUSH_NULL
+              LOAD_CONST              23 ('now()')
+              CALL                     1
+
+ 41           LOAD_CONST              25 (<code object <lambda> at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\onboarding_state.py", line 41>)
+              MAKE_FUNCTION
+
+ 39           LOAD_CONST              26 (('nullable', 'server_default', 'onupdate'))
+              CALL_KW                  4
+              STORE_NAME              24 (updated_at)
+              LOAD_NAME                9 (Mapped)
+              LOAD_NAME               21 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              27 ('updated_at')
+              STORE_SUBSCR
+
+ 44           LOAD_NAME               25 (relationship)
+              PUSH_NULL
+              LOAD_CONST              28 ('onboarding')
+              LOAD_CONST              29 (('back_populates',))
+              CALL_KW                  1
+              STORE_NAME              26 (user)
+              LOAD_NAME                9 (Mapped)
+              LOAD_CONST              30 ('User')
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              31 ('user')
+              STORE_SUBSCR
+              LOAD_CONST              32 (())
+              STORE_NAME              27 (__static_attributes__)
+              RETURN_CONST            18 (None)
+
+Disassembly of <code object <lambda> at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\onboarding_state.py", line 41>:
+ 41           RESUME                   0
+              LOAD_GLOBAL              0 (datetime)
+              LOAD_ATTR                2 (now)
+              PUSH_NULL
+              LOAD_GLOBAL              4 (UTC)
+              CALL                     1
+              RETURN_VALUE

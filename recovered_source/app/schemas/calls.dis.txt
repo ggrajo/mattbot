@@ -1,0 +1,2868 @@
+# Bytecode dump of: calls.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\schemas\calls.py
+# co_names: ('__doc__', '__future__', 'annotations', 'datetime', 'pydantic', 'BaseModel', 'field_validator', 'CallEventResponse', 'CallListItem', 'CallListResponse', 'CallDetailResponse', 'MarkBlockedRequest', 'MarkStatusResponse', 'LabelResponse', 'ArtifactResponse', 'TranscriptTurn', 'TranscriptResponse', '_URGENCY_VALUES', '_SPAM_LABEL_VALUES', 'CallPatchRequest', 'SummaryRegenerateResponse', 'RecordingResponse', 'MemoryItemResponse', 'MemoryListResponse', '_ALLOWED_MEMORY_TYPES', 'CreateMemoryItemRequest', 'UpdateMemoryItemRequest')
+# co_consts (strings): ['Pydantic schemas for call log and artifact endpoints.', 'CallEventResponse', 'CallListItem', 'CallListResponse', 'CallDetailResponse', 'MarkBlockedRequest', 'MarkStatusResponse', 'LabelResponse', 'ArtifactResponse', 'TranscriptTurn', 'TranscriptResponse', 'CallPatchRequest', 'SummaryRegenerateResponse', 'RecordingResponse', 'MemoryItemResponse', 'MemoryListResponse', 'CreateMemoryItemRequest', 'UpdateMemoryItemRequest']
+
+# DOCSTRING: """Pydantic schemas for call log and artifact endpoints."""
+# --- Nested code object: CallEventResponse ---
+    # DOCSTRING: """CallEventResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'provider_status', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+     10           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CallEventResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (10)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     11           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('id')
+                  STORE_SUBSCR
+    
+     12           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('event_type')
+                  STORE_SUBSCR
+    
+     13           LOAD_CONST               5 (None)
+                  STORE_NAME               5 (provider_status)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('provider_status')
+                  STORE_SUBSCR
+    
+     14           LOAD_CONST               8 ('datetime')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('event_at')
+                  STORE_SUBSCR
+    
+     16           LOAD_CONST              10 ('from_attributes')
+                  LOAD_CONST              11 (True)
+                  BUILD_MAP                1
+                  STORE_NAME               6 (model_config)
+                  LOAD_CONST              12 (())
+                  STORE_NAME               7 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# --- Nested code object: CallListItem ---
+    # DOCSTRING: """CallListItem"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'duration_seconds', 'artifact_status', 'agent_id', 'voice_id', 'booked_calendar_event_id', 'booked_calendar_event_summary', 'caller_display_name', 'caller_relationship', 'is_vip', 'is_blocked', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+     19           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CallListItem')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (19)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     20           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('id')
+                  STORE_SUBSCR
+    
+     21           LOAD_CONST               4 ('datetime')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('created_at')
+                  STORE_SUBSCR
+    
+     22           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('direction')
+                  STORE_SUBSCR
+    
+     23           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('from_masked')
+                  STORE_SUBSCR
+    
+     24           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('to_masked')
+                  STORE_SUBSCR
+    
+     25           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('status')
+                  STORE_SUBSCR
+    
+     26           LOAD_CONST              10 (None)
+                  STORE_NAME               5 (duration_seconds)
+                  LOAD_CONST              11 ('int | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              12 ('duration_seconds')
+                  STORE_SUBSCR
+    
+     27           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              13 ('source_type')
+                  STORE_SUBSCR
+    
+     28           LOAD_CONST              14 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              15 ('missing_summary')
+                  STORE_SUBSCR
+    
+     29           LOAD_CONST              14 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              16 ('missing_transcript')
+                  STORE_SUBSCR
+    
+     30           LOAD_CONST              14 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              17 ('missing_labels')
+                  STORE_SUBSCR
+    
+     31           LOAD_CONST               4 ('datetime')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              18 ('started_at')
+                  STORE_SUBSCR
+    
+     32           LOAD_CONST              10 (None)
+                  STORE_NAME               6 (artifact_status)
+                  LOAD_CONST              19 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              20 ('artifact_status')
+                  STORE_SUBSCR
+    
+     33           LOAD_CONST              10 (None)
+                  STORE_NAME               7 (agent_id)
+                  LOAD_CONST              19 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              21 ('agent_id')
+                  STORE_SUBSCR
+    
+     34           LOAD_CONST              10 (None)
+                  STORE_NAME               8 (voice_id)
+                  LOAD_CONST              19 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              22 ('voice_id')
+                  STORE_SUBSCR
+    
+     35           LOAD_CONST              10 (None)
+                  STORE_NAME               9 (booked_calendar_event_id)
+                  LOAD_CONST              19 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              23 ('booked_calendar_event_id')
+                  STORE_SUBSCR
+    
+     36           LOAD_CONST              10 (None)
+                  STORE_NAME              10 (booked_calendar_event_summary)
+                  LOAD_CONST              19 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              24 ('booked_calendar_event_summary')
+                  STORE_SUBSCR
+    
+     37           LOAD_CONST              10 (None)
+                  STORE_NAME              11 (caller_display_name)
+                  LOAD_CONST              19 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              25 ('caller_display_name')
+                  STORE_SUBSCR
+    
+     38           LOAD_CONST              10 (None)
+                  STORE_NAME              12 (caller_relationship)
+                  LOAD_CONST              19 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              26 ('caller_relationship')
+                  STORE_SUBSCR
+    
+     39           LOAD_CONST              27 (False)
+                  STORE_NAME              13 (is_vip)
+                  LOAD_CONST              14 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              28 ('is_vip')
+                  STORE_SUBSCR
+    
+     40           LOAD_CONST              27 (False)
+                  STORE_NAME              14 (is_blocked)
+                  LOAD_CONST              14 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              29 ('is_blocked')
+                  STORE_SUBSCR
+    
+     42           LOAD_CONST              30 ('from_attributes')
+                  LOAD_CONST              31 (True)
+                  BUILD_MAP                1
+                  STORE_NAME              15 (model_config)
+                  LOAD_CONST              32 (())
+                  STORE_NAME              16 (__static_attributes__)
+                  RETURN_CONST            10 (None)
+    
+# --- Nested code object: CallListResponse ---
+    # DOCSTRING: """CallListResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'next_cursor', 'has_more', '__static_attributes__')
+    # co_varnames: ()
+     45           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CallListResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (45)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     46           LOAD_CONST               2 ('list[CallListItem]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('items')
+                  STORE_SUBSCR
+    
+     47           LOAD_CONST               4 (None)
+                  STORE_NAME               5 (next_cursor)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('next_cursor')
+                  STORE_SUBSCR
+    
+     48           LOAD_CONST               7 (False)
+                  STORE_NAME               6 (has_more)
+                  LOAD_CONST               8 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('has_more')
+                  STORE_SUBSCR
+                  LOAD_CONST              10 (())
+                  STORE_NAME               7 (__static_attributes__)
+                  RETURN_CONST             4 (None)
+    
+# --- Nested code object: CallDetailResponse ---
+    # DOCSTRING: """CallDetailResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'ended_at', 'duration_seconds', 'events', 'summary', 'summary_status', 'labels', 'labels_status', 'transcript_status', 'notes', 'recording_available', 'is_vip', 'is_blocked', 'caller_display_name', 'caller_relationship', 'agent_id', 'voice_id', 'booked_calendar_event_id', 'booked_calendar_event_summary', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+     51           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CallDetailResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (51)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     52           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('id')
+                  STORE_SUBSCR
+    
+     53           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('direction')
+                  STORE_SUBSCR
+    
+     54           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('source_type')
+                  STORE_SUBSCR
+    
+     55           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('from_masked')
+                  STORE_SUBSCR
+    
+     56           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('to_masked')
+                  STORE_SUBSCR
+    
+     57           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('status')
+                  STORE_SUBSCR
+    
+     58           LOAD_CONST               9 ('datetime')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              10 ('started_at')
+                  STORE_SUBSCR
+    
+     59           LOAD_CONST              11 (None)
+                  STORE_NAME               5 (ended_at)
+                  LOAD_CONST              12 ('datetime | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              13 ('ended_at')
+                  STORE_SUBSCR
+    
+     60           LOAD_CONST              11 (None)
+                  STORE_NAME               6 (duration_seconds)
+                  LOAD_CONST              14 ('int | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              15 ('duration_seconds')
+                  STORE_SUBSCR
+    
+     61           LOAD_CONST              16 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              17 ('forwarding_detected')
+                  STORE_SUBSCR
+    
+     62           LOAD_CONST              16 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              18 ('missing_summary')
+                  STORE_SUBSCR
+    
+     63           LOAD_CONST              16 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              19 ('missing_transcript')
+                  STORE_SUBSCR
+    
+     64           LOAD_CONST              16 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              20 ('missing_labels')
+                  STORE_SUBSCR
+    
+     65           BUILD_LIST               0
+                  STORE_NAME               7 (events)
+                  LOAD_CONST              21 ('list[CallEventResponse]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              22 ('events')
+                  STORE_SUBSCR
+    
+     66           LOAD_CONST               9 ('datetime')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              23 ('created_at')
+                  STORE_SUBSCR
+    
+     67           LOAD_CONST              11 (None)
+                  STORE_NAME               8 (summary)
+                  LOAD_CONST              24 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              25 ('summary')
+                  STORE_SUBSCR
+    
+     68           LOAD_CONST              11 (None)
+                  STORE_NAME               9 (summary_status)
+                  LOAD_CONST              24 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              26 ('summary_status')
+                  STORE_SUBSCR
+    
+     69           LOAD_CONST              11 (None)
+                  STORE_NAME              10 (labels)
+                  LOAD_CONST              27 ('list[LabelResponse] | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              28 ('labels')
+                  STORE_SUBSCR
+    
+     70           LOAD_CONST              11 (None)
+                  STORE_NAME              11 (labels_status)
+                  LOAD_CONST              24 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              29 ('labels_status')
+                  STORE_SUBSCR
+    
+     71           LOAD_CONST              11 (None)
+                  STORE_NAME              12 (transcript_status)
+                  LOAD_CONST              24 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              30 ('transcript_status')
+                  STORE_SUBSCR
+    
+     72           LOAD_CONST              11 (None)
+                  STORE_NAME              13 (notes)
+                  LOAD_CONST              24 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              31 ('notes')
+                  STORE_SUBSCR
+    
+     73           LOAD_CONST              32 (False)
+                  STORE_NAME              14 (recording_available)
+                  LOAD_CONST              16 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              33 ('recording_available')
+                  STORE_SUBSCR
+    
+     74           LOAD_CONST              32 (False)
+                  STORE_NAME              15 (is_vip)
+                  LOAD_CONST              16 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              34 ('is_vip')
+                  STORE_SUBSCR
+    
+     75           LOAD_CONST              32 (False)
+                  STORE_NAME              16 (is_blocked)
+                  LOAD_CONST              16 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              35 ('is_blocked')
+                  STORE_SUBSCR
+    
+     76           LOAD_CONST              11 (None)
+                  STORE_NAME              17 (caller_display_name)
+                  LOAD_CONST              24 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              36 ('caller_display_name')
+                  STORE_SUBSCR
+    
+     77           LOAD_CONST              11 (None)
+                  STORE_NAME              18 (caller_relationship)
+                  LOAD_CONST              24 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              37 ('caller_relationship')
+                  STORE_SUBSCR
+    
+     78           LOAD_CONST              11 (None)
+                  STORE_NAME              19 (agent_id)
+                  LOAD_CONST              24 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              38 ('agent_id')
+                  STORE_SUBSCR
+    
+     79           LOAD_CONST              11 (None)
+                  STORE_NAME              20 (voice_id)
+                  LOAD_CONST              24 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              39 ('voice_id')
+                  STORE_SUBSCR
+    
+     80           LOAD_CONST              11 (None)
+                  STORE_NAME              21 (booked_calendar_event_id)
+                  LOAD_CONST              24 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              40 ('booked_calendar_event_id')
+                  STORE_SUBSCR
+    
+     81           LOAD_CONST              11 (None)
+                  STORE_NAME              22 (booked_calendar_event_summary)
+                  LOAD_CONST              24 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              41 ('booked_calendar_event_summary')
+                  STORE_SUBSCR
+    
+     83           LOAD_CONST              42 ('from_attributes')
+                  LOAD_CONST              43 (True)
+                  BUILD_MAP                1
+                  STORE_NAME              23 (model_config)
+                  LOAD_CONST              44 (())
+                  STORE_NAME              24 (__static_attributes__)
+                  RETURN_CONST            11 (None)
+    
+# --- Nested code object: MarkBlockedRequest ---
+    # DOCSTRING: """MarkBlockedRequest"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'reason', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+     86           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('MarkBlockedRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (86)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     87           LOAD_CONST               2 (None)
+                  STORE_NAME               4 (reason)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               4 ('reason')
+                  STORE_SUBSCR
+                  LOAD_CONST               5 (())
+                  STORE_NAME               6 (__static_attributes__)
+                  RETURN_CONST             2 (None)
+    
+# --- Nested code object: MarkStatusResponse ---
+    # DOCSTRING: """MarkStatusResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'is_vip', '__annotations__', 'is_blocked', '__static_attributes__')
+    # co_varnames: ()
+     90           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('MarkStatusResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (90)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     91           LOAD_CONST               2 (False)
+                  STORE_NAME               4 (is_vip)
+                  LOAD_CONST               3 ('bool')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               4 ('is_vip')
+                  STORE_SUBSCR
+    
+     92           LOAD_CONST               2 (False)
+                  STORE_NAME               6 (is_blocked)
+                  LOAD_CONST               3 ('bool')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               5 ('is_blocked')
+                  STORE_SUBSCR
+                  LOAD_CONST               6 (())
+                  STORE_NAME               7 (__static_attributes__)
+                  RETURN_CONST             7 (None)
+    
+# --- Nested code object: LabelResponse ---
+    # DOCSTRING: """LabelResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'evidence_snippets', 'confidence', 'produced_by', '__static_attributes__')
+    # co_varnames: ()
+     95           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('LabelResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (95)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     96           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('label_name')
+                  STORE_SUBSCR
+    
+     97           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('reason_text')
+                  STORE_SUBSCR
+    
+     98           BUILD_LIST               0
+                  STORE_NAME               5 (evidence_snippets)
+                  LOAD_CONST               5 ('list[str]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('evidence_snippets')
+                  STORE_SUBSCR
+    
+     99           LOAD_CONST               7 (0.0)
+                  STORE_NAME               6 (confidence)
+                  LOAD_CONST               8 ('float')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('confidence')
+                  STORE_SUBSCR
+    
+    100           LOAD_CONST              10 ('deterministic')
+                  STORE_NAME               7 (produced_by)
+                  LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              11 ('produced_by')
+                  STORE_SUBSCR
+                  LOAD_CONST              12 (())
+                  STORE_NAME               8 (__static_attributes__)
+                  RETURN_CONST            13 (None)
+    
+# --- Nested code object: ArtifactResponse ---
+    # DOCSTRING: """ArtifactResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'summary', 'labels', 'structured_extraction', '__static_attributes__')
+    # co_varnames: ()
+    103           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('ArtifactResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (103)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    104           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('call_id')
+                  STORE_SUBSCR
+    
+    105           LOAD_CONST               4 (None)
+                  STORE_NAME               5 (summary)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('summary')
+                  STORE_SUBSCR
+    
+    106           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('summary_status')
+                  STORE_SUBSCR
+    
+    107           BUILD_LIST               0
+                  STORE_NAME               6 (labels)
+                  LOAD_CONST               8 ('list[LabelResponse]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('labels')
+                  STORE_SUBSCR
+    
+    108           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              10 ('labels_status')
+                  STORE_SUBSCR
+    
+    109           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              11 ('transcript_status')
+                  STORE_SUBSCR
+    
+    110           LOAD_CONST               4 (None)
+                  STORE_NAME               7 (structured_extraction)
+                  LOAD_CONST              12 ('dict | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              13 ('structured_extraction')
+                  STORE_SUBSCR
+                  LOAD_CONST              14 (())
+                  STORE_NAME               8 (__static_attributes__)
+                  RETURN_CONST             4 (None)
+    
+# --- Nested code object: TranscriptTurn ---
+    # DOCSTRING: """TranscriptTurn"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'time_seconds', '__static_attributes__')
+    # co_varnames: ()
+    113           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('TranscriptTurn')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (113)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    114           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('role')
+                  STORE_SUBSCR
+    
+    115           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('text')
+                  STORE_SUBSCR
+    
+    116           LOAD_CONST               5 (0.0)
+                  STORE_NAME               5 (time_seconds)
+                  LOAD_CONST               6 ('float')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('time_seconds')
+                  STORE_SUBSCR
+                  LOAD_CONST               8 (())
+                  STORE_NAME               6 (__static_attributes__)
+                  RETURN_CONST             9 (None)
+    
+# --- Nested code object: TranscriptResponse ---
+    # DOCSTRING: """TranscriptResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'conversation_id', 'turns', 'turn_count', 'status', '__static_attributes__')
+    # co_varnames: ()
+    119           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('TranscriptResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (119)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    120           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('call_id')
+                  STORE_SUBSCR
+    
+    121           LOAD_CONST               4 (None)
+                  STORE_NAME               5 (conversation_id)
+                  LOAD_CONST               5 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('conversation_id')
+                  STORE_SUBSCR
+    
+    122           BUILD_LIST               0
+                  STORE_NAME               6 (turns)
+                  LOAD_CONST               7 ('list[TranscriptTurn]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('turns')
+                  STORE_SUBSCR
+    
+    123           LOAD_CONST               9 (0)
+                  STORE_NAME               7 (turn_count)
+                  LOAD_CONST              10 ('int')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              11 ('turn_count')
+                  STORE_SUBSCR
+    
+    124           LOAD_CONST              12 ('ready')
+                  STORE_NAME               8 (status)
+                  LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              13 ('status')
+                  STORE_SUBSCR
+                  LOAD_CONST              14 (())
+                  STORE_NAME               9 (__static_attributes__)
+                  RETURN_CONST             4 (None)
+    
+# --- Nested code object: CallPatchRequest ---
+    # DOCSTRING: """CallPatchRequest"""
+    # --- Nested code object: CallPatchRequest.validate_urgency ---
+        # co_names: ('_URGENCY_VALUES', 'ValueError', 'sorted')
+        # co_varnames: ('cls', 'v')
+        137           RESUME                   0
+        
+        140           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        37 (to L1)
+                      LOAD_FAST                1 (v)
+                      LOAD_GLOBAL              0 (_URGENCY_VALUES)
+                      CONTAINS_OP              1
+                      POP_JUMP_IF_FALSE       27 (to L1)
+        
+        141           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               1 ('urgency_level must be one of ')
+                      LOAD_GLOBAL              5 (sorted + NULL)
+                      LOAD_GLOBAL              0 (_URGENCY_VALUES)
+                      CALL                     1
+                      FORMAT_SIMPLE
+                      BUILD_STRING             2
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+        142   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: CallPatchRequest.validate_spam_label ---
+        # co_names: ('_SPAM_LABEL_VALUES', 'ValueError', 'sorted')
+        # co_varnames: ('cls', 'v')
+        144           RESUME                   0
+        
+        147           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        37 (to L1)
+                      LOAD_FAST                1 (v)
+                      LOAD_GLOBAL              0 (_SPAM_LABEL_VALUES)
+                      CONTAINS_OP              1
+                      POP_JUMP_IF_FALSE       27 (to L1)
+        
+        148           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               1 ('spam_label must be one of ')
+                      LOAD_GLOBAL              5 (sorted + NULL)
+                      LOAD_GLOBAL              0 (_SPAM_LABEL_VALUES)
+                      CALL                     1
+                      FORMAT_SIMPLE
+                      BUILD_STRING             2
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+        149   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: CallPatchRequest.validate_notes_length ---
+        # co_names: ('len', 'ValueError')
+        # co_varnames: ('cls', 'v')
+        151           RESUME                   0
+        
+        154           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        26 (to L1)
+                      LOAD_GLOBAL              1 (len + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      LOAD_CONST               1 (5000)
+                      COMPARE_OP             148 (bool(>))
+                      POP_JUMP_IF_FALSE       11 (to L1)
+        
+        155           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               2 ('notes must be at most 5000 characters')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+        156   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'urgency_level', '__annotations__', 'spam_label', 'is_vip_override', 'notes', 'field_validator', 'classmethod', 'validate_urgency', 'validate_spam_label', 'validate_notes_length', '__static_attributes__')
+    # co_varnames: ()
+    131           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CallPatchRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (131)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    132           LOAD_CONST               2 (None)
+                  STORE_NAME               4 (urgency_level)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               4 ('urgency_level')
+                  STORE_SUBSCR
+    
+    133           LOAD_CONST               2 (None)
+                  STORE_NAME               6 (spam_label)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               5 ('spam_label')
+                  STORE_SUBSCR
+    
+    134           LOAD_CONST               2 (None)
+                  STORE_NAME               7 (is_vip_override)
+                  LOAD_CONST               6 ('bool | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               7 ('is_vip_override')
+                  STORE_SUBSCR
+    
+    135           LOAD_CONST               2 (None)
+                  STORE_NAME               8 (notes)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               8 ('notes')
+                  STORE_SUBSCR
+    
+    137           LOAD_NAME                9 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               4 ('urgency_level')
+                  CALL                     1
+    
+    138           LOAD_NAME               10 (classmethod)
+    
+    139           LOAD_CONST              13 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST               9 (<code object validate_urgency at 0x0000024C11495E90, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 137>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+    138           CALL                     0
+    
+    137           CALL                     0
+    
+    139           STORE_NAME              11 (validate_urgency)
+    
+    144           LOAD_NAME                9 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               5 ('spam_label')
+                  CALL                     1
+    
+    145           LOAD_NAME               10 (classmethod)
+    
+    146           LOAD_CONST              13 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              10 (<code object validate_spam_label at 0x0000024C114968B0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 144>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+    145           CALL                     0
+    
+    144           CALL                     0
+    
+    146           STORE_NAME              12 (validate_spam_label)
+    
+    151           LOAD_NAME                9 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               8 ('notes')
+                  CALL                     1
+    
+    152           LOAD_NAME               10 (classmethod)
+    
+    153           LOAD_CONST              13 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST              11 (<code object validate_notes_length at 0x0000024C1141B330, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 151>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+    152           CALL                     0
+    
+    151           CALL                     0
+    
+    153           STORE_NAME              13 (validate_notes_length)
+                  LOAD_CONST              12 (())
+                  STORE_NAME              14 (__static_attributes__)
+                  RETURN_CONST             2 (None)
+    
+    Disassembly of <code object validate_urgency at 0x0000024C11495E90, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 137>:
+    137           RESUME                   0
+    
+    140           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        37 (to L1)
+                  LOAD_FAST                1 (v)
+                  LOAD_GLOBAL              0 (_URGENCY_VALUES)
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_FALSE       27 (to L1)
+    
+    141           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               1 ('urgency_level must be one of ')
+                  LOAD_GLOBAL              5 (sorted + NULL)
+                  LOAD_GLOBAL              0 (_URGENCY_VALUES)
+                  CALL                     1
+                  FORMAT_SIMPLE
+                  BUILD_STRING             2
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+    142   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_spam_label at 0x0000024C114968B0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 144>:
+    144           RESUME                   0
+    
+    147           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        37 (to L1)
+                  LOAD_FAST                1 (v)
+                  LOAD_GLOBAL              0 (_SPAM_LABEL_VALUES)
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_FALSE       27 (to L1)
+    
+    148           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               1 ('spam_label must be one of ')
+                  LOAD_GLOBAL              5 (sorted + NULL)
+                  LOAD_GLOBAL              0 (_SPAM_LABEL_VALUES)
+                  CALL                     1
+                  FORMAT_SIMPLE
+                  BUILD_STRING             2
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+    149   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_notes_length at 0x0000024C1141B330, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 151>:
+    151           RESUME                   0
+    
+    154           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        26 (to L1)
+                  LOAD_GLOBAL              1 (len + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  LOAD_CONST               1 (5000)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       11 (to L1)
+    
+    155           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               2 ('notes must be at most 5000 characters')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+    156   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+# --- Nested code object: SummaryRegenerateResponse ---
+    # DOCSTRING: """SummaryRegenerateResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+    159           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('SummaryRegenerateResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (159)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    160           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('call_id')
+                  STORE_SUBSCR
+    
+    161           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('summary_status')
+                  STORE_SUBSCR
+    
+    162           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('message')
+                  STORE_SUBSCR
+                  LOAD_CONST               6 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             7 (None)
+    
+# --- Nested code object: RecordingResponse ---
+    # DOCSTRING: """RecordingResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'recording_available', 'recording_url', 'duration_seconds', '__static_attributes__')
+    # co_varnames: ()
+    165           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('RecordingResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (165)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    166           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('call_id')
+                  STORE_SUBSCR
+    
+    167           LOAD_CONST               4 (False)
+                  STORE_NAME               5 (recording_available)
+                  LOAD_CONST               5 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               6 ('recording_available')
+                  STORE_SUBSCR
+    
+    168           LOAD_CONST               7 (None)
+                  STORE_NAME               6 (recording_url)
+                  LOAD_CONST               8 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               9 ('recording_url')
+                  STORE_SUBSCR
+    
+    169           LOAD_CONST               7 (None)
+                  STORE_NAME               7 (duration_seconds)
+                  LOAD_CONST              10 ('int | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              11 ('duration_seconds')
+                  STORE_SUBSCR
+                  LOAD_CONST              12 (())
+                  STORE_NAME               8 (__static_attributes__)
+                  RETURN_CONST             7 (None)
+    
+# --- Nested code object: MemoryItemResponse ---
+    # DOCSTRING: """MemoryItemResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'subject', 'value', 'confidence', 'user_confirmed', 'source_call_id', 'caller_phone_hash', 'model_config', '__static_attributes__')
+    # co_varnames: ()
+    172           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('MemoryItemResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (172)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    173           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('id')
+                  STORE_SUBSCR
+    
+    174           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('memory_type')
+                  STORE_SUBSCR
+    
+    175           LOAD_CONST               5 (None)
+                  STORE_NAME               5 (subject)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               7 ('subject')
+                  STORE_SUBSCR
+    
+    176           LOAD_CONST               5 (None)
+                  STORE_NAME               6 (value)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('value')
+                  STORE_SUBSCR
+    
+    177           LOAD_CONST               5 (None)
+                  STORE_NAME               7 (confidence)
+                  LOAD_CONST               9 ('float | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              10 ('confidence')
+                  STORE_SUBSCR
+    
+    178           LOAD_CONST              11 (False)
+                  STORE_NAME               8 (user_confirmed)
+                  LOAD_CONST              12 ('bool')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              13 ('user_confirmed')
+                  STORE_SUBSCR
+    
+    179           LOAD_CONST               5 (None)
+                  STORE_NAME               9 (source_call_id)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              14 ('source_call_id')
+                  STORE_SUBSCR
+    
+    180           LOAD_CONST               5 (None)
+                  STORE_NAME              10 (caller_phone_hash)
+                  LOAD_CONST               6 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              15 ('caller_phone_hash')
+                  STORE_SUBSCR
+    
+    181           LOAD_CONST              16 ('datetime')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST              17 ('created_at')
+                  STORE_SUBSCR
+    
+    183           LOAD_CONST              18 ('from_attributes')
+                  LOAD_CONST              19 (True)
+                  BUILD_MAP                1
+                  STORE_NAME              11 (model_config)
+                  LOAD_CONST              20 (())
+                  STORE_NAME              12 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# --- Nested code object: MemoryListResponse ---
+    # DOCSTRING: """MemoryListResponse"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', '__static_attributes__')
+    # co_varnames: ()
+    186           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('MemoryListResponse')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (186)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    187           LOAD_CONST               2 ('list[MemoryItemResponse]')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('items')
+                  STORE_SUBSCR
+                  LOAD_CONST               4 (())
+                  STORE_NAME               5 (__static_attributes__)
+                  RETURN_CONST             5 (None)
+    
+# --- Nested code object: CreateMemoryItemRequest ---
+    # DOCSTRING: """CreateMemoryItemRequest"""
+    # --- Nested code object: CreateMemoryItemRequest.validate_memory_type ---
+        # co_names: ('_ALLOWED_MEMORY_TYPES', 'ValueError', 'sorted')
+        # co_varnames: ('cls', 'v')
+        205           RESUME                   0
+        
+        208           LOAD_FAST                1 (v)
+                      LOAD_GLOBAL              0 (_ALLOWED_MEMORY_TYPES)
+                      CONTAINS_OP              1
+                      POP_JUMP_IF_FALSE       27 (to L1)
+        
+        209           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               1 ('memory_type must be one of ')
+                      LOAD_GLOBAL              5 (sorted + NULL)
+                      LOAD_GLOBAL              0 (_ALLOWED_MEMORY_TYPES)
+                      CALL                     1
+                      FORMAT_SIMPLE
+                      BUILD_STRING             2
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+        210   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: CreateMemoryItemRequest.validate_subject ---
+        # co_names: ('len', 'ValueError')
+        # co_varnames: ('cls', 'v')
+        212           RESUME                   0
+        
+        215           LOAD_GLOBAL              1 (len + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      LOAD_CONST               1 (100)
+                      COMPARE_OP             148 (bool(>))
+                      POP_JUMP_IF_FALSE       11 (to L1)
+        
+        216           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               2 ('subject must be at most 100 characters')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+        217   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: CreateMemoryItemRequest.validate_value ---
+        # co_names: ('len', 'ValueError')
+        # co_varnames: ('cls', 'v')
+        219           RESUME                   0
+        
+        222           LOAD_GLOBAL              1 (len + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      LOAD_CONST               1 (2000)
+                      COMPARE_OP             148 (bool(>))
+                      POP_JUMP_IF_FALSE       11 (to L1)
+        
+        223           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               2 ('value must be at most 2000 characters')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+        224   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__annotations__', 'caller_phone_hash', 'field_validator', 'classmethod', 'validate_memory_type', 'validate_subject', 'validate_value', '__static_attributes__')
+    # co_varnames: ()
+    199           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CreateMemoryItemRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (199)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    200           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               3 ('memory_type')
+                  STORE_SUBSCR
+    
+    201           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               4 ('subject')
+                  STORE_SUBSCR
+    
+    202           LOAD_CONST               2 ('str')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               5 ('value')
+                  STORE_SUBSCR
+    
+    203           LOAD_CONST               6 (None)
+                  STORE_NAME               5 (caller_phone_hash)
+                  LOAD_CONST               7 ('str | None')
+                  LOAD_NAME                4 (__annotations__)
+                  LOAD_CONST               8 ('caller_phone_hash')
+                  STORE_SUBSCR
+    
+    205           LOAD_NAME                6 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               3 ('memory_type')
+                  CALL                     1
+    
+    206           LOAD_NAME                7 (classmethod)
+    
+    207           LOAD_CONST              13 (('v', 'str', 'return', 'str'))
+                  LOAD_CONST               9 (<code object validate_memory_type at 0x0000024C114969D0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 205>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+    206           CALL                     0
+    
+    205           CALL                     0
+    
+    207           STORE_NAME               8 (validate_memory_type)
+    
+    212           LOAD_NAME                6 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               4 ('subject')
+                  CALL                     1
+    
+    213           LOAD_NAME                7 (classmethod)
+    
+    214           LOAD_CONST              13 (('v', 'str', 'return', 'str'))
+                  LOAD_CONST              10 (<code object validate_subject at 0x0000024C1141B550, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 212>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+    213           CALL                     0
+    
+    212           CALL                     0
+    
+    214           STORE_NAME               9 (validate_subject)
+    
+    219           LOAD_NAME                6 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               5 ('value')
+                  CALL                     1
+    
+    220           LOAD_NAME                7 (classmethod)
+    
+    221           LOAD_CONST              13 (('v', 'str', 'return', 'str'))
+                  LOAD_CONST              11 (<code object validate_value at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 219>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+    220           CALL                     0
+    
+    219           CALL                     0
+    
+    221           STORE_NAME              10 (validate_value)
+                  LOAD_CONST              12 (())
+                  STORE_NAME              11 (__static_attributes__)
+                  RETURN_CONST             6 (None)
+    
+    Disassembly of <code object validate_memory_type at 0x0000024C114969D0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 205>:
+    205           RESUME                   0
+    
+    208           LOAD_FAST                1 (v)
+                  LOAD_GLOBAL              0 (_ALLOWED_MEMORY_TYPES)
+                  CONTAINS_OP              1
+                  POP_JUMP_IF_FALSE       27 (to L1)
+    
+    209           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               1 ('memory_type must be one of ')
+                  LOAD_GLOBAL              5 (sorted + NULL)
+                  LOAD_GLOBAL              0 (_ALLOWED_MEMORY_TYPES)
+                  CALL                     1
+                  FORMAT_SIMPLE
+                  BUILD_STRING             2
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+    210   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_subject at 0x0000024C1141B550, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 212>:
+    212           RESUME                   0
+    
+    215           LOAD_GLOBAL              1 (len + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  LOAD_CONST               1 (100)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       11 (to L1)
+    
+    216           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               2 ('subject must be at most 100 characters')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+    217   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_value at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 219>:
+    219           RESUME                   0
+    
+    222           LOAD_GLOBAL              1 (len + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  LOAD_CONST               1 (2000)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       11 (to L1)
+    
+    223           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               2 ('value must be at most 2000 characters')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+    224   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+# --- Nested code object: UpdateMemoryItemRequest ---
+    # DOCSTRING: """UpdateMemoryItemRequest"""
+    # --- Nested code object: UpdateMemoryItemRequest.validate_subject ---
+        # co_names: ('len', 'ValueError')
+        # co_varnames: ('cls', 'v')
+        232           RESUME                   0
+        
+        235           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        26 (to L1)
+                      LOAD_GLOBAL              1 (len + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      LOAD_CONST               1 (100)
+                      COMPARE_OP             148 (bool(>))
+                      POP_JUMP_IF_FALSE       11 (to L1)
+        
+        236           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               2 ('subject must be at most 100 characters')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+        237   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # --- Nested code object: UpdateMemoryItemRequest.validate_value ---
+        # co_names: ('len', 'ValueError')
+        # co_varnames: ('cls', 'v')
+        239           RESUME                   0
+        
+        242           LOAD_FAST                1 (v)
+                      POP_JUMP_IF_NONE        26 (to L1)
+                      LOAD_GLOBAL              1 (len + NULL)
+                      LOAD_FAST                1 (v)
+                      CALL                     1
+                      LOAD_CONST               1 (2000)
+                      COMPARE_OP             148 (bool(>))
+                      POP_JUMP_IF_FALSE       11 (to L1)
+        
+        243           LOAD_GLOBAL              3 (ValueError + NULL)
+                      LOAD_CONST               2 ('value must be at most 2000 characters')
+                      CALL                     1
+                      RAISE_VARARGS            1
+        
+        244   L1:     LOAD_FAST                1 (v)
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', 'subject', '__annotations__', 'value', 'user_confirmed', 'field_validator', 'classmethod', 'validate_subject', 'validate_value', '__static_attributes__')
+    # co_varnames: ()
+    227           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('UpdateMemoryItemRequest')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (227)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+    228           LOAD_CONST               2 (None)
+                  STORE_NAME               4 (subject)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               4 ('subject')
+                  STORE_SUBSCR
+    
+    229           LOAD_CONST               2 (None)
+                  STORE_NAME               6 (value)
+                  LOAD_CONST               3 ('str | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               5 ('value')
+                  STORE_SUBSCR
+    
+    230           LOAD_CONST               2 (None)
+                  STORE_NAME               7 (user_confirmed)
+                  LOAD_CONST               6 ('bool | None')
+                  LOAD_NAME                5 (__annotations__)
+                  LOAD_CONST               7 ('user_confirmed')
+                  STORE_SUBSCR
+    
+    232           LOAD_NAME                8 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               4 ('subject')
+                  CALL                     1
+    
+    233           LOAD_NAME                9 (classmethod)
+    
+    234           LOAD_CONST              11 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST               8 (<code object validate_subject at 0x0000024C1141B220, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 232>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+    233           CALL                     0
+    
+    232           CALL                     0
+    
+    234           STORE_NAME              10 (validate_subject)
+    
+    239           LOAD_NAME                8 (field_validator)
+                  PUSH_NULL
+                  LOAD_CONST               5 ('value')
+                  CALL                     1
+    
+    240           LOAD_NAME                9 (classmethod)
+    
+    241           LOAD_CONST              11 (('v', 'str | None', 'return', 'str | None'))
+                  LOAD_CONST               9 (<code object validate_value at 0x0000024C1141B660, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 239>)
+                  MAKE_FUNCTION
+                  SET_FUNCTION_ATTRIBUTE   4 (annotations)
+    
+    240           CALL                     0
+    
+    239           CALL                     0
+    
+    241           STORE_NAME              11 (validate_value)
+                  LOAD_CONST              10 (())
+                  STORE_NAME              12 (__static_attributes__)
+                  RETURN_CONST             2 (None)
+    
+    Disassembly of <code object validate_subject at 0x0000024C1141B220, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 232>:
+    232           RESUME                   0
+    
+    235           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        26 (to L1)
+                  LOAD_GLOBAL              1 (len + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  LOAD_CONST               1 (100)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       11 (to L1)
+    
+    236           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               2 ('subject must be at most 100 characters')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+    237   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+    Disassembly of <code object validate_value at 0x0000024C1141B660, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 239>:
+    239           RESUME                   0
+    
+    242           LOAD_FAST                1 (v)
+                  POP_JUMP_IF_NONE        26 (to L1)
+                  LOAD_GLOBAL              1 (len + NULL)
+                  LOAD_FAST                1 (v)
+                  CALL                     1
+                  LOAD_CONST               1 (2000)
+                  COMPARE_OP             148 (bool(>))
+                  POP_JUMP_IF_FALSE       11 (to L1)
+    
+    243           LOAD_GLOBAL              3 (ValueError + NULL)
+                  LOAD_CONST               2 ('value must be at most 2000 characters')
+                  CALL                     1
+                  RAISE_VARARGS            1
+    
+    244   L1:     LOAD_FAST                1 (v)
+                  RETURN_VALUE
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'datetime', 'pydantic', 'BaseModel', 'field_validator', 'CallEventResponse', 'CallListItem', 'CallListResponse', 'CallDetailResponse', 'MarkBlockedRequest', 'MarkStatusResponse', 'LabelResponse', 'ArtifactResponse', 'TranscriptTurn', 'TranscriptResponse', '_URGENCY_VALUES', '_SPAM_LABEL_VALUES', 'CallPatchRequest', 'SummaryRegenerateResponse', 'RecordingResponse', 'MemoryItemResponse', 'MemoryListResponse', '_ALLOWED_MEMORY_TYPES', 'CreateMemoryItemRequest', 'UpdateMemoryItemRequest')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Pydantic schemas for call log and artifact endpoints.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('datetime',))
+              IMPORT_NAME              3 (datetime)
+              IMPORT_FROM              3 (datetime)
+              STORE_NAME               3 (datetime)
+              POP_TOP
+
+  7           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('BaseModel', 'field_validator'))
+              IMPORT_NAME              4 (pydantic)
+              IMPORT_FROM              5 (BaseModel)
+              STORE_NAME               5 (BaseModel)
+              IMPORT_FROM              6 (field_validator)
+              STORE_NAME               6 (field_validator)
+              POP_TOP
+
+ 10           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               5 (<code object CallEventResponse at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 10>)
+              MAKE_FUNCTION
+              LOAD_CONST               6 ('CallEventResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME               7 (CallEventResponse)
+
+ 19           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               7 (<code object CallListItem at 0x0000024C114F8030, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 19>)
+              MAKE_FUNCTION
+              LOAD_CONST               8 ('CallListItem')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME               8 (CallListItem)
+
+ 45           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               9 (<code object CallListResponse at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 45>)
+              MAKE_FUNCTION
+              LOAD_CONST              10 ('CallListResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME               9 (CallListResponse)
+
+ 51           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              11 (<code object CallDetailResponse at 0x0000024C0FAD9CD0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 51>)
+              MAKE_FUNCTION
+              LOAD_CONST              12 ('CallDetailResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              10 (CallDetailResponse)
+
+ 86           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              13 (<code object MarkBlockedRequest at 0x0000024C0EF2B0F0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 86>)
+              MAKE_FUNCTION
+              LOAD_CONST              14 ('MarkBlockedRequest')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              11 (MarkBlockedRequest)
+
+ 90           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              15 (<code object MarkStatusResponse at 0x0000024C11423C30, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 90>)
+              MAKE_FUNCTION
+              LOAD_CONST              16 ('MarkStatusResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              12 (MarkStatusResponse)
+
+ 95           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              17 (<code object LabelResponse at 0x0000024C114961F0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 95>)
+              MAKE_FUNCTION
+              LOAD_CONST              18 ('LabelResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              13 (LabelResponse)
+
+103           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              19 (<code object ArtifactResponse at 0x0000024C0EF13B90, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 103>)
+              MAKE_FUNCTION
+              LOAD_CONST              20 ('ArtifactResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              14 (ArtifactResponse)
+
+113           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              21 (<code object TranscriptTurn at 0x0000024C11423B30, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 113>)
+              MAKE_FUNCTION
+              LOAD_CONST              22 ('TranscriptTurn')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              15 (TranscriptTurn)
+
+119           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              23 (<code object TranscriptResponse at 0x0000024C11496310, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 119>)
+              MAKE_FUNCTION
+              LOAD_CONST              24 ('TranscriptResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              16 (TranscriptResponse)
+
+127           BUILD_SET                0
+              LOAD_CONST              25 (frozenset({'normal', 'urgent', 'low'}))
+              SET_UPDATE               1
+              STORE_NAME              17 (_URGENCY_VALUES)
+
+128           BUILD_SET                0
+              LOAD_CONST              26 (frozenset({'unknown', 'sales', 'normal_call', 'possible_spam'}))
+              SET_UPDATE               1
+              STORE_NAME              18 (_SPAM_LABEL_VALUES)
+
+131           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              27 (<code object CallPatchRequest at 0x0000024C0EBFFC50, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 131>)
+              MAKE_FUNCTION
+              LOAD_CONST              28 ('CallPatchRequest')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              19 (CallPatchRequest)
+
+159           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              29 (<code object SummaryRegenerateResponse at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 159>)
+              MAKE_FUNCTION
+              LOAD_CONST              30 ('SummaryRegenerateResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              20 (SummaryRegenerateResponse)
+
+165           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              31 (<code object RecordingResponse at 0x0000024C114958F0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 165>)
+              MAKE_FUNCTION
+              LOAD_CONST              32 ('RecordingResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              21 (RecordingResponse)
+
+172           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              33 (<code object MemoryItemResponse at 0x0000024C0EEFB1B0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 172>)
+              MAKE_FUNCTION
+              LOAD_CONST              34 ('MemoryItemResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              22 (MemoryItemResponse)
+
+186           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              35 (<code object MemoryListResponse at 0x0000024C0EF2A880, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 186>)
+              MAKE_FUNCTION
+              LOAD_CONST              36 ('MemoryListResponse')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              23 (MemoryListResponse)
+
+190           BUILD_SET                0
+              LOAD_CONST              37 (frozenset({'callback_window_preference', 'relationship_tag', 'repeated_reason_pattern', 'caller_display_name', 'communication_preference'}))
+              SET_UPDATE               1
+              STORE_NAME              24 (_ALLOWED_MEMORY_TYPES)
+
+199           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              38 (<code object CreateMemoryItemRequest at 0x0000024C11467A00, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 199>)
+              MAKE_FUNCTION
+              LOAD_CONST              39 ('CreateMemoryItemRequest')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              25 (CreateMemoryItemRequest)
+
+227           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              40 (<code object UpdateMemoryItemRequest at 0x0000024C0EEFB050, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 227>)
+              MAKE_FUNCTION
+              LOAD_CONST              41 ('UpdateMemoryItemRequest')
+              LOAD_NAME                5 (BaseModel)
+              CALL                     3
+              STORE_NAME              26 (UpdateMemoryItemRequest)
+              RETURN_CONST            42 (None)
+
+Disassembly of <code object CallEventResponse at 0x0000024C11496670, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 10>:
+ 10           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CallEventResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (10)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 11           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('id')
+              STORE_SUBSCR
+
+ 12           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('event_type')
+              STORE_SUBSCR
+
+ 13           LOAD_CONST               5 (None)
+              STORE_NAME               5 (provider_status)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('provider_status')
+              STORE_SUBSCR
+
+ 14           LOAD_CONST               8 ('datetime')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('event_at')
+              STORE_SUBSCR
+
+ 16           LOAD_CONST              10 ('from_attributes')
+              LOAD_CONST              11 (True)
+              BUILD_MAP                1
+              STORE_NAME               6 (model_config)
+              LOAD_CONST              12 (())
+              STORE_NAME               7 (__static_attributes__)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object CallListItem at 0x0000024C114F8030, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 19>:
+ 19           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CallListItem')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (19)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 20           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('id')
+              STORE_SUBSCR
+
+ 21           LOAD_CONST               4 ('datetime')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('created_at')
+              STORE_SUBSCR
+
+ 22           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('direction')
+              STORE_SUBSCR
+
+ 23           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('from_masked')
+              STORE_SUBSCR
+
+ 24           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('to_masked')
+              STORE_SUBSCR
+
+ 25           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('status')
+              STORE_SUBSCR
+
+ 26           LOAD_CONST              10 (None)
+              STORE_NAME               5 (duration_seconds)
+              LOAD_CONST              11 ('int | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              12 ('duration_seconds')
+              STORE_SUBSCR
+
+ 27           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              13 ('source_type')
+              STORE_SUBSCR
+
+ 28           LOAD_CONST              14 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              15 ('missing_summary')
+              STORE_SUBSCR
+
+ 29           LOAD_CONST              14 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              16 ('missing_transcript')
+              STORE_SUBSCR
+
+ 30           LOAD_CONST              14 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              17 ('missing_labels')
+              STORE_SUBSCR
+
+ 31           LOAD_CONST               4 ('datetime')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              18 ('started_at')
+              STORE_SUBSCR
+
+ 32           LOAD_CONST              10 (None)
+              STORE_NAME               6 (artifact_status)
+              LOAD_CONST              19 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              20 ('artifact_status')
+              STORE_SUBSCR
+
+ 33           LOAD_CONST              10 (None)
+              STORE_NAME               7 (agent_id)
+              LOAD_CONST              19 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              21 ('agent_id')
+              STORE_SUBSCR
+
+ 34           LOAD_CONST              10 (None)
+              STORE_NAME               8 (voice_id)
+              LOAD_CONST              19 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              22 ('voice_id')
+              STORE_SUBSCR
+
+ 35           LOAD_CONST              10 (None)
+              STORE_NAME               9 (booked_calendar_event_id)
+              LOAD_CONST              19 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              23 ('booked_calendar_event_id')
+              STORE_SUBSCR
+
+ 36           LOAD_CONST              10 (None)
+              STORE_NAME              10 (booked_calendar_event_summary)
+              LOAD_CONST              19 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              24 ('booked_calendar_event_summary')
+              STORE_SUBSCR
+
+ 37           LOAD_CONST              10 (None)
+              STORE_NAME              11 (caller_display_name)
+              LOAD_CONST              19 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              25 ('caller_display_name')
+              STORE_SUBSCR
+
+ 38           LOAD_CONST              10 (None)
+              STORE_NAME              12 (caller_relationship)
+              LOAD_CONST              19 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              26 ('caller_relationship')
+              STORE_SUBSCR
+
+ 39           LOAD_CONST              27 (False)
+              STORE_NAME              13 (is_vip)
+              LOAD_CONST              14 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              28 ('is_vip')
+              STORE_SUBSCR
+
+ 40           LOAD_CONST              27 (False)
+              STORE_NAME              14 (is_blocked)
+              LOAD_CONST              14 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              29 ('is_blocked')
+              STORE_SUBSCR
+
+ 42           LOAD_CONST              30 ('from_attributes')
+              LOAD_CONST              31 (True)
+              BUILD_MAP                1
+              STORE_NAME              15 (model_config)
+              LOAD_CONST              32 (())
+              STORE_NAME              16 (__static_attributes__)
+              RETURN_CONST            10 (None)
+
+Disassembly of <code object CallListResponse at 0x0000024C1141B440, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 45>:
+ 45           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CallListResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (45)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 46           LOAD_CONST               2 ('list[CallListItem]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('items')
+              STORE_SUBSCR
+
+ 47           LOAD_CONST               4 (None)
+              STORE_NAME               5 (next_cursor)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('next_cursor')
+              STORE_SUBSCR
+
+ 48           LOAD_CONST               7 (False)
+              STORE_NAME               6 (has_more)
+              LOAD_CONST               8 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('has_more')
+              STORE_SUBSCR
+              LOAD_CONST              10 (())
+              STORE_NAME               7 (__static_attributes__)
+              RETURN_CONST             4 (None)
+
+Disassembly of <code object CallDetailResponse at 0x0000024C0FAD9CD0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 51>:
+ 51           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CallDetailResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (51)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 52           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('id')
+              STORE_SUBSCR
+
+ 53           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('direction')
+              STORE_SUBSCR
+
+ 54           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('source_type')
+              STORE_SUBSCR
+
+ 55           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('from_masked')
+              STORE_SUBSCR
+
+ 56           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('to_masked')
+              STORE_SUBSCR
+
+ 57           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('status')
+              STORE_SUBSCR
+
+ 58           LOAD_CONST               9 ('datetime')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('started_at')
+              STORE_SUBSCR
+
+ 59           LOAD_CONST              11 (None)
+              STORE_NAME               5 (ended_at)
+              LOAD_CONST              12 ('datetime | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              13 ('ended_at')
+              STORE_SUBSCR
+
+ 60           LOAD_CONST              11 (None)
+              STORE_NAME               6 (duration_seconds)
+              LOAD_CONST              14 ('int | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              15 ('duration_seconds')
+              STORE_SUBSCR
+
+ 61           LOAD_CONST              16 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              17 ('forwarding_detected')
+              STORE_SUBSCR
+
+ 62           LOAD_CONST              16 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              18 ('missing_summary')
+              STORE_SUBSCR
+
+ 63           LOAD_CONST              16 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              19 ('missing_transcript')
+              STORE_SUBSCR
+
+ 64           LOAD_CONST              16 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              20 ('missing_labels')
+              STORE_SUBSCR
+
+ 65           BUILD_LIST               0
+              STORE_NAME               7 (events)
+              LOAD_CONST              21 ('list[CallEventResponse]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              22 ('events')
+              STORE_SUBSCR
+
+ 66           LOAD_CONST               9 ('datetime')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              23 ('created_at')
+              STORE_SUBSCR
+
+ 67           LOAD_CONST              11 (None)
+              STORE_NAME               8 (summary)
+              LOAD_CONST              24 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              25 ('summary')
+              STORE_SUBSCR
+
+ 68           LOAD_CONST              11 (None)
+              STORE_NAME               9 (summary_status)
+              LOAD_CONST              24 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              26 ('summary_status')
+              STORE_SUBSCR
+
+ 69           LOAD_CONST              11 (None)
+              STORE_NAME              10 (labels)
+              LOAD_CONST              27 ('list[LabelResponse] | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              28 ('labels')
+              STORE_SUBSCR
+
+ 70           LOAD_CONST              11 (None)
+              STORE_NAME              11 (labels_status)
+              LOAD_CONST              24 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              29 ('labels_status')
+              STORE_SUBSCR
+
+ 71           LOAD_CONST              11 (None)
+              STORE_NAME              12 (transcript_status)
+              LOAD_CONST              24 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              30 ('transcript_status')
+              STORE_SUBSCR
+
+ 72           LOAD_CONST              11 (None)
+              STORE_NAME              13 (notes)
+              LOAD_CONST              24 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              31 ('notes')
+              STORE_SUBSCR
+
+ 73           LOAD_CONST              32 (False)
+              STORE_NAME              14 (recording_available)
+              LOAD_CONST              16 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              33 ('recording_available')
+              STORE_SUBSCR
+
+ 74           LOAD_CONST              32 (False)
+              STORE_NAME              15 (is_vip)
+              LOAD_CONST              16 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              34 ('is_vip')
+              STORE_SUBSCR
+
+ 75           LOAD_CONST              32 (False)
+              STORE_NAME              16 (is_blocked)
+              LOAD_CONST              16 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              35 ('is_blocked')
+              STORE_SUBSCR
+
+ 76           LOAD_CONST              11 (None)
+              STORE_NAME              17 (caller_display_name)
+              LOAD_CONST              24 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              36 ('caller_display_name')
+              STORE_SUBSCR
+
+ 77           LOAD_CONST              11 (None)
+              STORE_NAME              18 (caller_relationship)
+              LOAD_CONST              24 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              37 ('caller_relationship')
+              STORE_SUBSCR
+
+ 78           LOAD_CONST              11 (None)
+              STORE_NAME              19 (agent_id)
+              LOAD_CONST              24 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              38 ('agent_id')
+              STORE_SUBSCR
+
+ 79           LOAD_CONST              11 (None)
+              STORE_NAME              20 (voice_id)
+              LOAD_CONST              24 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              39 ('voice_id')
+              STORE_SUBSCR
+
+ 80           LOAD_CONST              11 (None)
+              STORE_NAME              21 (booked_calendar_event_id)
+              LOAD_CONST              24 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              40 ('booked_calendar_event_id')
+              STORE_SUBSCR
+
+ 81           LOAD_CONST              11 (None)
+              STORE_NAME              22 (booked_calendar_event_summary)
+              LOAD_CONST              24 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              41 ('booked_calendar_event_summary')
+              STORE_SUBSCR
+
+ 83           LOAD_CONST              42 ('from_attributes')
+              LOAD_CONST              43 (True)
+              BUILD_MAP                1
+              STORE_NAME              23 (model_config)
+              LOAD_CONST              44 (())
+              STORE_NAME              24 (__static_attributes__)
+              RETURN_CONST            11 (None)
+
+Disassembly of <code object MarkBlockedRequest at 0x0000024C0EF2B0F0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 86>:
+ 86           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('MarkBlockedRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (86)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 87           LOAD_CONST               2 (None)
+              STORE_NAME               4 (reason)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               4 ('reason')
+              STORE_SUBSCR
+              LOAD_CONST               5 (())
+              STORE_NAME               6 (__static_attributes__)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object MarkStatusResponse at 0x0000024C11423C30, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 90>:
+ 90           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('MarkStatusResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (90)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 91           LOAD_CONST               2 (False)
+              STORE_NAME               4 (is_vip)
+              LOAD_CONST               3 ('bool')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               4 ('is_vip')
+              STORE_SUBSCR
+
+ 92           LOAD_CONST               2 (False)
+              STORE_NAME               6 (is_blocked)
+              LOAD_CONST               3 ('bool')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               5 ('is_blocked')
+              STORE_SUBSCR
+              LOAD_CONST               6 (())
+              STORE_NAME               7 (__static_attributes__)
+              RETURN_CONST             7 (None)
+
+Disassembly of <code object LabelResponse at 0x0000024C114961F0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 95>:
+ 95           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('LabelResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (95)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 96           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('label_name')
+              STORE_SUBSCR
+
+ 97           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('reason_text')
+              STORE_SUBSCR
+
+ 98           BUILD_LIST               0
+              STORE_NAME               5 (evidence_snippets)
+              LOAD_CONST               5 ('list[str]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('evidence_snippets')
+              STORE_SUBSCR
+
+ 99           LOAD_CONST               7 (0.0)
+              STORE_NAME               6 (confidence)
+              LOAD_CONST               8 ('float')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('confidence')
+              STORE_SUBSCR
+
+100           LOAD_CONST              10 ('deterministic')
+              STORE_NAME               7 (produced_by)
+              LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('produced_by')
+              STORE_SUBSCR
+              LOAD_CONST              12 (())
+              STORE_NAME               8 (__static_attributes__)
+              RETURN_CONST            13 (None)
+
+Disassembly of <code object ArtifactResponse at 0x0000024C0EF13B90, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 103>:
+103           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('ArtifactResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (103)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+104           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('call_id')
+              STORE_SUBSCR
+
+105           LOAD_CONST               4 (None)
+              STORE_NAME               5 (summary)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('summary')
+              STORE_SUBSCR
+
+106           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('summary_status')
+              STORE_SUBSCR
+
+107           BUILD_LIST               0
+              STORE_NAME               6 (labels)
+              LOAD_CONST               8 ('list[LabelResponse]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('labels')
+              STORE_SUBSCR
+
+108           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('labels_status')
+              STORE_SUBSCR
+
+109           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('transcript_status')
+              STORE_SUBSCR
+
+110           LOAD_CONST               4 (None)
+              STORE_NAME               7 (structured_extraction)
+              LOAD_CONST              12 ('dict | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              13 ('structured_extraction')
+              STORE_SUBSCR
+              LOAD_CONST              14 (())
+              STORE_NAME               8 (__static_attributes__)
+              RETURN_CONST             4 (None)
+
+Disassembly of <code object TranscriptTurn at 0x0000024C11423B30, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 113>:
+113           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('TranscriptTurn')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (113)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+114           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('role')
+              STORE_SUBSCR
+
+115           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('text')
+              STORE_SUBSCR
+
+116           LOAD_CONST               5 (0.0)
+              STORE_NAME               5 (time_seconds)
+              LOAD_CONST               6 ('float')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('time_seconds')
+              STORE_SUBSCR
+              LOAD_CONST               8 (())
+              STORE_NAME               6 (__static_attributes__)
+              RETURN_CONST             9 (None)
+
+Disassembly of <code object TranscriptResponse at 0x0000024C11496310, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 119>:
+119           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('TranscriptResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (119)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+120           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('call_id')
+              STORE_SUBSCR
+
+121           LOAD_CONST               4 (None)
+              STORE_NAME               5 (conversation_id)
+              LOAD_CONST               5 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('conversation_id')
+              STORE_SUBSCR
+
+122           BUILD_LIST               0
+              STORE_NAME               6 (turns)
+              LOAD_CONST               7 ('list[TranscriptTurn]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('turns')
+              STORE_SUBSCR
+
+123           LOAD_CONST               9 (0)
+              STORE_NAME               7 (turn_count)
+              LOAD_CONST              10 ('int')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('turn_count')
+              STORE_SUBSCR
+
+124           LOAD_CONST              12 ('ready')
+              STORE_NAME               8 (status)
+              LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              13 ('status')
+              STORE_SUBSCR
+              LOAD_CONST              14 (())
+              STORE_NAME               9 (__static_attributes__)
+              RETURN_CONST             4 (None)
+
+Disassembly of <code object CallPatchRequest at 0x0000024C0EBFFC50, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 131>:
+131           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CallPatchRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (131)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+132           LOAD_CONST               2 (None)
+              STORE_NAME               4 (urgency_level)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               4 ('urgency_level')
+              STORE_SUBSCR
+
+133           LOAD_CONST               2 (None)
+              STORE_NAME               6 (spam_label)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               5 ('spam_label')
+              STORE_SUBSCR
+
+134           LOAD_CONST               2 (None)
+              STORE_NAME               7 (is_vip_override)
+              LOAD_CONST               6 ('bool | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               7 ('is_vip_override')
+              STORE_SUBSCR
+
+135           LOAD_CONST               2 (None)
+              STORE_NAME               8 (notes)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               8 ('notes')
+              STORE_SUBSCR
+
+137           LOAD_NAME                9 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               4 ('urgency_level')
+              CALL                     1
+
+138           LOAD_NAME               10 (classmethod)
+
+139           LOAD_CONST              13 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST               9 (<code object validate_urgency at 0x0000024C11495E90, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 137>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+138           CALL                     0
+
+137           CALL                     0
+
+139           STORE_NAME              11 (validate_urgency)
+
+144           LOAD_NAME                9 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               5 ('spam_label')
+              CALL                     1
+
+145           LOAD_NAME               10 (classmethod)
+
+146           LOAD_CONST              13 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              10 (<code object validate_spam_label at 0x0000024C114968B0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 144>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+145           CALL                     0
+
+144           CALL                     0
+
+146           STORE_NAME              12 (validate_spam_label)
+
+151           LOAD_NAME                9 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               8 ('notes')
+              CALL                     1
+
+152           LOAD_NAME               10 (classmethod)
+
+153           LOAD_CONST              13 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST              11 (<code object validate_notes_length at 0x0000024C1141B330, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 151>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+152           CALL                     0
+
+151           CALL                     0
+
+153           STORE_NAME              13 (validate_notes_length)
+              LOAD_CONST              12 (())
+              STORE_NAME              14 (__static_attributes__)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object validate_urgency at 0x0000024C11495E90, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 137>:
+137           RESUME                   0
+
+140           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        37 (to L1)
+              LOAD_FAST                1 (v)
+              LOAD_GLOBAL              0 (_URGENCY_VALUES)
+              CONTAINS_OP              1
+              POP_JUMP_IF_FALSE       27 (to L1)
+
+141           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               1 ('urgency_level must be one of ')
+              LOAD_GLOBAL              5 (sorted + NULL)
+              LOAD_GLOBAL              0 (_URGENCY_VALUES)
+              CALL                     1
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+142   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_spam_label at 0x0000024C114968B0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 144>:
+144           RESUME                   0
+
+147           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        37 (to L1)
+              LOAD_FAST                1 (v)
+              LOAD_GLOBAL              0 (_SPAM_LABEL_VALUES)
+              CONTAINS_OP              1
+              POP_JUMP_IF_FALSE       27 (to L1)
+
+148           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               1 ('spam_label must be one of ')
+              LOAD_GLOBAL              5 (sorted + NULL)
+              LOAD_GLOBAL              0 (_SPAM_LABEL_VALUES)
+              CALL                     1
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+149   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_notes_length at 0x0000024C1141B330, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 151>:
+151           RESUME                   0
+
+154           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        26 (to L1)
+              LOAD_GLOBAL              1 (len + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              LOAD_CONST               1 (5000)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       11 (to L1)
+
+155           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               2 ('notes must be at most 5000 characters')
+              CALL                     1
+              RAISE_VARARGS            1
+
+156   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object SummaryRegenerateResponse at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 159>:
+159           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('SummaryRegenerateResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (159)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+160           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('call_id')
+              STORE_SUBSCR
+
+161           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('summary_status')
+              STORE_SUBSCR
+
+162           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('message')
+              STORE_SUBSCR
+              LOAD_CONST               6 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             7 (None)
+
+Disassembly of <code object RecordingResponse at 0x0000024C114958F0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 165>:
+165           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('RecordingResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (165)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+166           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('call_id')
+              STORE_SUBSCR
+
+167           LOAD_CONST               4 (False)
+              STORE_NAME               5 (recording_available)
+              LOAD_CONST               5 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               6 ('recording_available')
+              STORE_SUBSCR
+
+168           LOAD_CONST               7 (None)
+              STORE_NAME               6 (recording_url)
+              LOAD_CONST               8 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               9 ('recording_url')
+              STORE_SUBSCR
+
+169           LOAD_CONST               7 (None)
+              STORE_NAME               7 (duration_seconds)
+              LOAD_CONST              10 ('int | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              11 ('duration_seconds')
+              STORE_SUBSCR
+              LOAD_CONST              12 (())
+              STORE_NAME               8 (__static_attributes__)
+              RETURN_CONST             7 (None)
+
+Disassembly of <code object MemoryItemResponse at 0x0000024C0EEFB1B0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 172>:
+172           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('MemoryItemResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (172)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+173           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('id')
+              STORE_SUBSCR
+
+174           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('memory_type')
+              STORE_SUBSCR
+
+175           LOAD_CONST               5 (None)
+              STORE_NAME               5 (subject)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               7 ('subject')
+              STORE_SUBSCR
+
+176           LOAD_CONST               5 (None)
+              STORE_NAME               6 (value)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('value')
+              STORE_SUBSCR
+
+177           LOAD_CONST               5 (None)
+              STORE_NAME               7 (confidence)
+              LOAD_CONST               9 ('float | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              10 ('confidence')
+              STORE_SUBSCR
+
+178           LOAD_CONST              11 (False)
+              STORE_NAME               8 (user_confirmed)
+              LOAD_CONST              12 ('bool')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              13 ('user_confirmed')
+              STORE_SUBSCR
+
+179           LOAD_CONST               5 (None)
+              STORE_NAME               9 (source_call_id)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              14 ('source_call_id')
+              STORE_SUBSCR
+
+180           LOAD_CONST               5 (None)
+              STORE_NAME              10 (caller_phone_hash)
+              LOAD_CONST               6 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              15 ('caller_phone_hash')
+              STORE_SUBSCR
+
+181           LOAD_CONST              16 ('datetime')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST              17 ('created_at')
+              STORE_SUBSCR
+
+183           LOAD_CONST              18 ('from_attributes')
+              LOAD_CONST              19 (True)
+              BUILD_MAP                1
+              STORE_NAME              11 (model_config)
+              LOAD_CONST              20 (())
+              STORE_NAME              12 (__static_attributes__)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object MemoryListResponse at 0x0000024C0EF2A880, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 186>:
+186           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('MemoryListResponse')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (186)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+187           LOAD_CONST               2 ('list[MemoryItemResponse]')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('items')
+              STORE_SUBSCR
+              LOAD_CONST               4 (())
+              STORE_NAME               5 (__static_attributes__)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object CreateMemoryItemRequest at 0x0000024C11467A00, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 199>:
+199           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CreateMemoryItemRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (199)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+200           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               3 ('memory_type')
+              STORE_SUBSCR
+
+201           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               4 ('subject')
+              STORE_SUBSCR
+
+202           LOAD_CONST               2 ('str')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               5 ('value')
+              STORE_SUBSCR
+
+203           LOAD_CONST               6 (None)
+              STORE_NAME               5 (caller_phone_hash)
+              LOAD_CONST               7 ('str | None')
+              LOAD_NAME                4 (__annotations__)
+              LOAD_CONST               8 ('caller_phone_hash')
+              STORE_SUBSCR
+
+205           LOAD_NAME                6 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               3 ('memory_type')
+              CALL                     1
+
+206           LOAD_NAME                7 (classmethod)
+
+207           LOAD_CONST              13 (('v', 'str', 'return', 'str'))
+              LOAD_CONST               9 (<code object validate_memory_type at 0x0000024C114969D0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 205>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+206           CALL                     0
+
+205           CALL                     0
+
+207           STORE_NAME               8 (validate_memory_type)
+
+212           LOAD_NAME                6 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               4 ('subject')
+              CALL                     1
+
+213           LOAD_NAME                7 (classmethod)
+
+214           LOAD_CONST              13 (('v', 'str', 'return', 'str'))
+              LOAD_CONST              10 (<code object validate_subject at 0x0000024C1141B550, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 212>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+213           CALL                     0
+
+212           CALL                     0
+
+214           STORE_NAME               9 (validate_subject)
+
+219           LOAD_NAME                6 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               5 ('value')
+              CALL                     1
+
+220           LOAD_NAME                7 (classmethod)
+
+221           LOAD_CONST              13 (('v', 'str', 'return', 'str'))
+              LOAD_CONST              11 (<code object validate_value at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 219>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+220           CALL                     0
+
+219           CALL                     0
+
+221           STORE_NAME              10 (validate_value)
+              LOAD_CONST              12 (())
+              STORE_NAME              11 (__static_attributes__)
+              RETURN_CONST             6 (None)
+
+Disassembly of <code object validate_memory_type at 0x0000024C114969D0, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 205>:
+205           RESUME                   0
+
+208           LOAD_FAST                1 (v)
+              LOAD_GLOBAL              0 (_ALLOWED_MEMORY_TYPES)
+              CONTAINS_OP              1
+              POP_JUMP_IF_FALSE       27 (to L1)
+
+209           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               1 ('memory_type must be one of ')
+              LOAD_GLOBAL              5 (sorted + NULL)
+              LOAD_GLOBAL              0 (_ALLOWED_MEMORY_TYPES)
+              CALL                     1
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+210   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_subject at 0x0000024C1141B550, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 212>:
+212           RESUME                   0
+
+215           LOAD_GLOBAL              1 (len + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              LOAD_CONST               1 (100)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       11 (to L1)
+
+216           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               2 ('subject must be at most 100 characters')
+              CALL                     1
+              RAISE_VARARGS            1
+
+217   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_value at 0x0000024C1141B110, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 219>:
+219           RESUME                   0
+
+222           LOAD_GLOBAL              1 (len + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              LOAD_CONST               1 (2000)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       11 (to L1)
+
+223           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               2 ('value must be at most 2000 characters')
+              CALL                     1
+              RAISE_VARARGS            1
+
+224   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object UpdateMemoryItemRequest at 0x0000024C0EEFB050, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 227>:
+227           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('UpdateMemoryItemRequest')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (227)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+228           LOAD_CONST               2 (None)
+              STORE_NAME               4 (subject)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               4 ('subject')
+              STORE_SUBSCR
+
+229           LOAD_CONST               2 (None)
+              STORE_NAME               6 (value)
+              LOAD_CONST               3 ('str | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               5 ('value')
+              STORE_SUBSCR
+
+230           LOAD_CONST               2 (None)
+              STORE_NAME               7 (user_confirmed)
+              LOAD_CONST               6 ('bool | None')
+              LOAD_NAME                5 (__annotations__)
+              LOAD_CONST               7 ('user_confirmed')
+              STORE_SUBSCR
+
+232           LOAD_NAME                8 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               4 ('subject')
+              CALL                     1
+
+233           LOAD_NAME                9 (classmethod)
+
+234           LOAD_CONST              11 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST               8 (<code object validate_subject at 0x0000024C1141B220, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 232>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+233           CALL                     0
+
+232           CALL                     0
+
+234           STORE_NAME              10 (validate_subject)
+
+239           LOAD_NAME                8 (field_validator)
+              PUSH_NULL
+              LOAD_CONST               5 ('value')
+              CALL                     1
+
+240           LOAD_NAME                9 (classmethod)
+
+241           LOAD_CONST              11 (('v', 'str | None', 'return', 'str | None'))
+              LOAD_CONST               9 (<code object validate_value at 0x0000024C1141B660, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 239>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+
+240           CALL                     0
+
+239           CALL                     0
+
+241           STORE_NAME              11 (validate_value)
+              LOAD_CONST              10 (())
+              STORE_NAME              12 (__static_attributes__)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object validate_subject at 0x0000024C1141B220, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 232>:
+232           RESUME                   0
+
+235           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        26 (to L1)
+              LOAD_GLOBAL              1 (len + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              LOAD_CONST               1 (100)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       11 (to L1)
+
+236           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               2 ('subject must be at most 100 characters')
+              CALL                     1
+              RAISE_VARARGS            1
+
+237   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE
+
+Disassembly of <code object validate_value at 0x0000024C1141B660, file "D:\fluence\Github\mattbot\backend\app\schemas\calls.py", line 239>:
+239           RESUME                   0
+
+242           LOAD_FAST                1 (v)
+              POP_JUMP_IF_NONE        26 (to L1)
+              LOAD_GLOBAL              1 (len + NULL)
+              LOAD_FAST                1 (v)
+              CALL                     1
+              LOAD_CONST               1 (2000)
+              COMPARE_OP             148 (bool(>))
+              POP_JUMP_IF_FALSE       11 (to L1)
+
+243           LOAD_GLOBAL              3 (ValueError + NULL)
+              LOAD_CONST               2 ('value must be at most 2000 characters')
+              CALL                     1
+              RAISE_VARARGS            1
+
+244   L1:     LOAD_FAST                1 (v)
+              RETURN_VALUE

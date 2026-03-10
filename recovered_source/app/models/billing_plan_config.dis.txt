@@ -1,0 +1,1227 @@
+# Bytecode dump of: billing_plan_config.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\models\billing_plan_config.py
+# co_names: ('uuid', 'datetime', 'sqlalchemy', 'Boolean', 'DateTime', 'ForeignKey', 'Index', 'Integer', 'String', 'Text', 'UniqueConstraint', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'app.database', 'Base', '_tz', 'BillingPlanConfigRow', 'BillingPlanConfigPlan', 'BillingPlanConfigRule')
+# co_consts (strings): ['return', 'BillingPlanConfigRow', 'BillingPlanConfigPlan', 'BillingPlanConfigRule']
+
+# --- Nested code object: _tz ---
+    # co_names: ('DateTime',)
+    # co_varnames: ()
+     21           RESUME                   0
+    
+     22           LOAD_GLOBAL              1 (DateTime + NULL)
+                  LOAD_CONST               1 (True)
+                  LOAD_CONST               2 (('timezone',))
+                  CALL_KW                  1
+                  RETURN_VALUE
+    
+# --- Nested code object: BillingPlanConfigRow ---
+    # DOCSTRING: """BillingPlanConfigRow"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__doc__', '__tablename__', 'mapped_column', 'UUID', 'uuid', 'uuid4', 'id', 'Mapped', '__annotations__', 'Boolean', 'text', 'is_active', 'bool', '_tz', 'created_at', 'datetime', 'created_by_admin_id', 'Text', 'notes', 'str', 'Index', '__table_args__', '__static_attributes__')
+    # co_varnames: ()
+     25           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('BillingPlanConfigRow')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (25)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     26           LOAD_CONST               2 ('A versioned billing plan configuration.\n\nOnly one row may have is_active=True at a time (enforced by partial\nunique index). When the admin portal exists, creating a new active\nconfig automatically deactivates the previous one.\n')
+                  STORE_NAME               4 (__doc__)
+    
+     33           LOAD_CONST               3 ('billing_plan_configs')
+                  STORE_NAME               5 (__tablename__)
+    
+     35           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+    
+     36           LOAD_NAME                7 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               4 (True)
+                  LOAD_CONST               5 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               4 (True)
+                  LOAD_NAME                8 (uuid)
+                  LOAD_ATTR               18 (uuid4)
+    
+     35           LOAD_CONST               6 (('primary_key', 'default'))
+                  CALL_KW                  3
+                  STORE_NAME              10 (id)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME                8 (uuid)
+                  LOAD_ATTR               14 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST               7 ('id')
+                  STORE_SUBSCR
+    
+     38           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+    
+     39           LOAD_NAME               13 (Boolean)
+                  LOAD_CONST               8 (False)
+                  LOAD_NAME               14 (text)
+                  PUSH_NULL
+                  LOAD_CONST               9 ('false')
+                  CALL                     1
+    
+     38           LOAD_CONST              10 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              15 (is_active)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME               16 (bool)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              11 ('is_active')
+                  STORE_SUBSCR
+    
+     41           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+    
+     42           LOAD_NAME               17 (_tz)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               8 (False)
+                  LOAD_NAME               14 (text)
+                  PUSH_NULL
+                  LOAD_CONST              12 ('now()')
+                  CALL                     1
+    
+     41           LOAD_CONST              10 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              18 (created_at)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME               19 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              13 ('created_at')
+                  STORE_SUBSCR
+    
+     44           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+    
+     45           LOAD_NAME                7 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               4 (True)
+                  LOAD_CONST               5 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               4 (True)
+    
+     44           LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              20 (created_by_admin_id)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME                8 (uuid)
+                  LOAD_ATTR               14 (UUID)
+                  LOAD_CONST              15 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              16 ('created_by_admin_id')
+                  STORE_SUBSCR
+    
+     47           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               21 (Text)
+                  LOAD_CONST               4 (True)
+                  LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              22 (notes)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME               23 (str)
+                  LOAD_CONST              15 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              17 ('notes')
+                  STORE_SUBSCR
+    
+     50           LOAD_NAME               24 (Index)
+                  PUSH_NULL
+    
+     51           LOAD_CONST              18 ('uq_billing_plan_configs_active')
+    
+     52           LOAD_CONST              11 ('is_active')
+    
+     53           LOAD_CONST               4 (True)
+    
+     54           LOAD_NAME               14 (text)
+                  PUSH_NULL
+                  LOAD_CONST              19 ('is_active = true')
+                  CALL                     1
+    
+     50           LOAD_CONST              20 (('unique', 'postgresql_where'))
+                  CALL_KW                  4
+    
+     49           BUILD_TUPLE              1
+                  STORE_NAME              25 (__table_args__)
+                  LOAD_CONST              21 (())
+                  STORE_NAME              26 (__static_attributes__)
+                  RETURN_CONST            15 (None)
+    
+# --- Nested code object: BillingPlanConfigPlan ---
+    # DOCSTRING: """BillingPlanConfigPlan"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__doc__', '__tablename__', 'mapped_column', 'UUID', 'uuid', 'uuid4', 'id', 'Mapped', '__annotations__', 'ForeignKey', 'config_id', 'String', 'code', 'str', 'name', 'price_usd', 'Integer', 'included_minutes', 'int', 'Text', 'stripe_price_id', 'Boolean', 'text', 'requires_credit_card', 'bool', 'limited', 'sort_order', 'description', 'icon', 'UniqueConstraint', '__table_args__', '__static_attributes__')
+    # co_varnames: ()
+     59           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('BillingPlanConfigPlan')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (59)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     60           LOAD_CONST               2 ('Individual plan within a config version.')
+                  STORE_NAME               4 (__doc__)
+    
+     62           LOAD_CONST               3 ('billing_plan_config_plans')
+                  STORE_NAME               5 (__tablename__)
+    
+     64           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+    
+     65           LOAD_NAME                7 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               4 (True)
+                  LOAD_CONST               5 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               4 (True)
+                  LOAD_NAME                8 (uuid)
+                  LOAD_ATTR               18 (uuid4)
+    
+     64           LOAD_CONST               6 (('primary_key', 'default'))
+                  CALL_KW                  3
+                  STORE_NAME              10 (id)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME                8 (uuid)
+                  LOAD_ATTR               14 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST               7 ('id')
+                  STORE_SUBSCR
+    
+     67           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+    
+     68           LOAD_NAME                7 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               4 (True)
+                  LOAD_CONST               5 (('as_uuid',))
+                  CALL_KW                  1
+    
+     69           LOAD_NAME               13 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST               8 ('billing_plan_configs.id')
+                  LOAD_CONST               9 ('CASCADE')
+                  LOAD_CONST              10 (('ondelete',))
+                  CALL_KW                  2
+    
+     70           LOAD_CONST              11 (False)
+    
+     67           LOAD_CONST              12 (('nullable',))
+                  CALL_KW                  3
+                  STORE_NAME              14 (config_id)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME                8 (uuid)
+                  LOAD_ATTR               14 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              13 ('config_id')
+                  STORE_SUBSCR
+    
+     72           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               15 (String)
+                  PUSH_NULL
+                  LOAD_CONST              14 (30)
+                  CALL                     1
+                  LOAD_CONST              11 (False)
+                  LOAD_CONST              12 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              16 (code)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME               17 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              15 ('code')
+                  STORE_SUBSCR
+    
+     73           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               15 (String)
+                  PUSH_NULL
+                  LOAD_CONST              16 (60)
+                  CALL                     1
+                  LOAD_CONST              11 (False)
+                  LOAD_CONST              12 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              18 (name)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME               17 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              17 ('name')
+                  STORE_SUBSCR
+    
+     74           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               15 (String)
+                  PUSH_NULL
+                  LOAD_CONST              18 (10)
+                  CALL                     1
+                  LOAD_CONST              11 (False)
+                  LOAD_CONST              12 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              19 (price_usd)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME               17 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              19 ('price_usd')
+                  STORE_SUBSCR
+    
+     75           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               20 (Integer)
+                  LOAD_CONST              11 (False)
+                  LOAD_CONST              12 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              21 (included_minutes)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME               22 (int)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              20 ('included_minutes')
+                  STORE_SUBSCR
+    
+     76           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               23 (Text)
+                  LOAD_CONST               4 (True)
+                  LOAD_CONST              12 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              24 (stripe_price_id)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME               17 (str)
+                  LOAD_CONST              21 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              22 ('stripe_price_id')
+                  STORE_SUBSCR
+    
+     77           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+    
+     78           LOAD_NAME               25 (Boolean)
+                  LOAD_CONST              11 (False)
+                  LOAD_NAME               26 (text)
+                  PUSH_NULL
+                  LOAD_CONST              23 ('true')
+                  CALL                     1
+    
+     77           LOAD_CONST              24 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              27 (requires_credit_card)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME               28 (bool)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              25 ('requires_credit_card')
+                  STORE_SUBSCR
+    
+     80           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+    
+     81           LOAD_NAME               25 (Boolean)
+                  LOAD_CONST              11 (False)
+                  LOAD_NAME               26 (text)
+                  PUSH_NULL
+                  LOAD_CONST              26 ('false')
+                  CALL                     1
+    
+     80           LOAD_CONST              24 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              29 (limited)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME               28 (bool)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              27 ('limited')
+                  STORE_SUBSCR
+    
+     83           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+    
+     84           LOAD_NAME               20 (Integer)
+                  LOAD_CONST              11 (False)
+                  LOAD_NAME               26 (text)
+                  PUSH_NULL
+                  LOAD_CONST              28 ('0')
+                  CALL                     1
+    
+     83           LOAD_CONST              24 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              30 (sort_order)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME               22 (int)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              29 ('sort_order')
+                  STORE_SUBSCR
+    
+     86           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+    
+     87           LOAD_NAME               23 (Text)
+                  LOAD_CONST              11 (False)
+                  LOAD_NAME               26 (text)
+                  PUSH_NULL
+                  LOAD_CONST              30 ("''")
+                  CALL                     1
+    
+     86           LOAD_CONST              24 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              31 (description)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME               17 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              31 ('description')
+                  STORE_SUBSCR
+    
+     89           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+    
+     90           LOAD_NAME               23 (Text)
+                  LOAD_CONST              11 (False)
+                  LOAD_NAME               26 (text)
+                  PUSH_NULL
+                  LOAD_CONST              30 ("''")
+                  CALL                     1
+    
+     89           LOAD_CONST              24 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              32 (icon)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME               17 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              32 ('icon')
+                  STORE_SUBSCR
+    
+     94           LOAD_NAME               33 (UniqueConstraint)
+                  PUSH_NULL
+                  LOAD_CONST              13 ('config_id')
+                  LOAD_CONST              15 ('code')
+                  LOAD_CONST              33 ('uq_billing_plan_config_plans_code')
+                  LOAD_CONST              34 (('name',))
+                  CALL_KW                  3
+    
+     93           BUILD_TUPLE              1
+                  STORE_NAME              34 (__table_args__)
+                  LOAD_CONST              35 (())
+                  STORE_NAME              35 (__static_attributes__)
+                  RETURN_CONST            21 (None)
+    
+# --- Nested code object: BillingPlanConfigRule ---
+    # DOCSTRING: """BillingPlanConfigRule"""
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__doc__', '__tablename__', 'mapped_column', 'UUID', 'uuid', 'uuid4', 'id', 'Mapped', '__annotations__', 'ForeignKey', 'config_id', 'String', 'from_plan', 'str', 'to_plan', 'text', 'trigger', 'UniqueConstraint', '__table_args__', '__static_attributes__')
+    # co_varnames: ()
+     98           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('BillingPlanConfigRule')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (98)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     99           LOAD_CONST               2 ('Upgrade rule within a config version.')
+                  STORE_NAME               4 (__doc__)
+    
+    101           LOAD_CONST               3 ('billing_plan_config_rules')
+                  STORE_NAME               5 (__tablename__)
+    
+    103           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+    
+    104           LOAD_NAME                7 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               4 (True)
+                  LOAD_CONST               5 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               4 (True)
+                  LOAD_NAME                8 (uuid)
+                  LOAD_ATTR               18 (uuid4)
+    
+    103           LOAD_CONST               6 (('primary_key', 'default'))
+                  CALL_KW                  3
+                  STORE_NAME              10 (id)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME                8 (uuid)
+                  LOAD_ATTR               14 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST               7 ('id')
+                  STORE_SUBSCR
+    
+    106           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+    
+    107           LOAD_NAME                7 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               4 (True)
+                  LOAD_CONST               5 (('as_uuid',))
+                  CALL_KW                  1
+    
+    108           LOAD_NAME               13 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST               8 ('billing_plan_configs.id')
+                  LOAD_CONST               9 ('CASCADE')
+                  LOAD_CONST              10 (('ondelete',))
+                  CALL_KW                  2
+    
+    109           LOAD_CONST              11 (False)
+    
+    106           LOAD_CONST              12 (('nullable',))
+                  CALL_KW                  3
+                  STORE_NAME              14 (config_id)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME                8 (uuid)
+                  LOAD_ATTR               14 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              13 ('config_id')
+                  STORE_SUBSCR
+    
+    111           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               15 (String)
+                  PUSH_NULL
+                  LOAD_CONST              14 (30)
+                  CALL                     1
+                  LOAD_CONST              11 (False)
+                  LOAD_CONST              12 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              16 (from_plan)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME               17 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              15 ('from_plan')
+                  STORE_SUBSCR
+    
+    112           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               15 (String)
+                  PUSH_NULL
+                  LOAD_CONST              14 (30)
+                  CALL                     1
+                  LOAD_CONST              11 (False)
+                  LOAD_CONST              12 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              18 (to_plan)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME               17 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              16 ('to_plan')
+                  STORE_SUBSCR
+    
+    113           LOAD_NAME                6 (mapped_column)
+                  PUSH_NULL
+    
+    114           LOAD_NAME               15 (String)
+                  PUSH_NULL
+                  LOAD_CONST              14 (30)
+                  CALL                     1
+                  LOAD_CONST              11 (False)
+                  LOAD_NAME               19 (text)
+                  PUSH_NULL
+                  LOAD_CONST              17 ("'minutes_exceeded'")
+                  CALL                     1
+    
+    113           LOAD_CONST              18 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              20 (trigger)
+                  LOAD_NAME               11 (Mapped)
+                  LOAD_NAME               17 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               12 (__annotations__)
+                  LOAD_CONST              19 ('trigger')
+                  STORE_SUBSCR
+    
+    118           LOAD_NAME               21 (UniqueConstraint)
+                  PUSH_NULL
+    
+    119           LOAD_CONST              13 ('config_id')
+                  LOAD_CONST              15 ('from_plan')
+    
+    120           LOAD_CONST              20 ('uq_billing_plan_config_rules_from')
+    
+    118           LOAD_CONST              21 (('name',))
+                  CALL_KW                  3
+    
+    117           BUILD_TUPLE              1
+                  STORE_NAME              22 (__table_args__)
+                  LOAD_CONST              22 (())
+                  STORE_NAME              23 (__static_attributes__)
+                  RETURN_CONST            23 (None)
+    
+# co_names: ('uuid', 'datetime', 'sqlalchemy', 'Boolean', 'DateTime', 'ForeignKey', 'Index', 'Integer', 'String', 'Text', 'UniqueConstraint', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'app.database', 'Base', '_tz', 'BillingPlanConfigRow', 'BillingPlanConfigPlan', 'BillingPlanConfigRule')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 (0)
+              LOAD_CONST               1 (None)
+              IMPORT_NAME              0 (uuid)
+              STORE_NAME               0 (uuid)
+
+  2           LOAD_CONST               0 (0)
+              LOAD_CONST               2 (('datetime',))
+              IMPORT_NAME              1 (datetime)
+              IMPORT_FROM              1 (datetime)
+              STORE_NAME               1 (datetime)
+              POP_TOP
+
+  4           LOAD_CONST               0 (0)
+              LOAD_CONST               3 (('Boolean', 'DateTime', 'ForeignKey', 'Index', 'Integer', 'String', 'Text', 'UniqueConstraint', 'text'))
+              IMPORT_NAME              2 (sqlalchemy)
+              IMPORT_FROM              3 (Boolean)
+              STORE_NAME               3 (Boolean)
+              IMPORT_FROM              4 (DateTime)
+              STORE_NAME               4 (DateTime)
+              IMPORT_FROM              5 (ForeignKey)
+              STORE_NAME               5 (ForeignKey)
+              IMPORT_FROM              6 (Index)
+              STORE_NAME               6 (Index)
+              IMPORT_FROM              7 (Integer)
+              STORE_NAME               7 (Integer)
+              IMPORT_FROM              8 (String)
+              STORE_NAME               8 (String)
+              IMPORT_FROM              9 (Text)
+              STORE_NAME               9 (Text)
+              IMPORT_FROM             10 (UniqueConstraint)
+              STORE_NAME              10 (UniqueConstraint)
+              IMPORT_FROM             11 (text)
+              STORE_NAME              11 (text)
+              POP_TOP
+
+ 15           LOAD_CONST               0 (0)
+              LOAD_CONST               4 (('UUID',))
+              IMPORT_NAME             12 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM             13 (UUID)
+              STORE_NAME              13 (UUID)
+              POP_TOP
+
+ 16           LOAD_CONST               0 (0)
+              LOAD_CONST               5 (('Mapped', 'mapped_column'))
+              IMPORT_NAME             14 (sqlalchemy.orm)
+              IMPORT_FROM             15 (Mapped)
+              STORE_NAME              15 (Mapped)
+              IMPORT_FROM             16 (mapped_column)
+              STORE_NAME              16 (mapped_column)
+              POP_TOP
+
+ 18           LOAD_CONST               0 (0)
+              LOAD_CONST               6 (('Base',))
+              IMPORT_NAME             17 (app.database)
+              IMPORT_FROM             18 (Base)
+              STORE_NAME              18 (Base)
+              POP_TOP
+
+ 21           LOAD_CONST               7 ('return')
+              LOAD_NAME                4 (DateTime)
+              BUILD_TUPLE              2
+              LOAD_CONST               8 (<code object _tz at 0x0000024C0EF0F750, file "D:\fluence\Github\mattbot\backend\app\models\billing_plan_config.py", line 21>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              19 (_tz)
+
+ 25           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               9 (<code object BillingPlanConfigRow at 0x0000024C0FBEC370, file "D:\fluence\Github\mattbot\backend\app\models\billing_plan_config.py", line 25>)
+              MAKE_FUNCTION
+              LOAD_CONST              10 ('BillingPlanConfigRow')
+              LOAD_NAME               18 (Base)
+              CALL                     3
+              STORE_NAME              20 (BillingPlanConfigRow)
+
+ 59           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              11 (<code object BillingPlanConfigPlan at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\models\billing_plan_config.py", line 59>)
+              MAKE_FUNCTION
+              LOAD_CONST              12 ('BillingPlanConfigPlan')
+              LOAD_NAME               18 (Base)
+              CALL                     3
+              STORE_NAME              21 (BillingPlanConfigPlan)
+
+ 98           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST              13 (<code object BillingPlanConfigRule at 0x0000024C0FBEC150, file "D:\fluence\Github\mattbot\backend\app\models\billing_plan_config.py", line 98>)
+              MAKE_FUNCTION
+              LOAD_CONST              14 ('BillingPlanConfigRule')
+              LOAD_NAME               18 (Base)
+              CALL                     3
+              STORE_NAME              22 (BillingPlanConfigRule)
+              RETURN_CONST             1 (None)
+
+Disassembly of <code object _tz at 0x0000024C0EF0F750, file "D:\fluence\Github\mattbot\backend\app\models\billing_plan_config.py", line 21>:
+ 21           RESUME                   0
+
+ 22           LOAD_GLOBAL              1 (DateTime + NULL)
+              LOAD_CONST               1 (True)
+              LOAD_CONST               2 (('timezone',))
+              CALL_KW                  1
+              RETURN_VALUE
+
+Disassembly of <code object BillingPlanConfigRow at 0x0000024C0FBEC370, file "D:\fluence\Github\mattbot\backend\app\models\billing_plan_config.py", line 25>:
+ 25           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('BillingPlanConfigRow')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (25)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 26           LOAD_CONST               2 ('A versioned billing plan configuration.\n\nOnly one row may have is_active=True at a time (enforced by partial\nunique index). When the admin portal exists, creating a new active\nconfig automatically deactivates the previous one.\n')
+              STORE_NAME               4 (__doc__)
+
+ 33           LOAD_CONST               3 ('billing_plan_configs')
+              STORE_NAME               5 (__tablename__)
+
+ 35           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+
+ 36           LOAD_NAME                7 (UUID)
+              PUSH_NULL
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               4 (True)
+              LOAD_NAME                8 (uuid)
+              LOAD_ATTR               18 (uuid4)
+
+ 35           LOAD_CONST               6 (('primary_key', 'default'))
+              CALL_KW                  3
+              STORE_NAME              10 (id)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME                8 (uuid)
+              LOAD_ATTR               14 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST               7 ('id')
+              STORE_SUBSCR
+
+ 38           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+
+ 39           LOAD_NAME               13 (Boolean)
+              LOAD_CONST               8 (False)
+              LOAD_NAME               14 (text)
+              PUSH_NULL
+              LOAD_CONST               9 ('false')
+              CALL                     1
+
+ 38           LOAD_CONST              10 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              15 (is_active)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME               16 (bool)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              11 ('is_active')
+              STORE_SUBSCR
+
+ 41           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+
+ 42           LOAD_NAME               17 (_tz)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               8 (False)
+              LOAD_NAME               14 (text)
+              PUSH_NULL
+              LOAD_CONST              12 ('now()')
+              CALL                     1
+
+ 41           LOAD_CONST              10 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              18 (created_at)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME               19 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              13 ('created_at')
+              STORE_SUBSCR
+
+ 44           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+
+ 45           LOAD_NAME                7 (UUID)
+              PUSH_NULL
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               4 (True)
+
+ 44           LOAD_CONST              14 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              20 (created_by_admin_id)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME                8 (uuid)
+              LOAD_ATTR               14 (UUID)
+              LOAD_CONST              15 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              16 ('created_by_admin_id')
+              STORE_SUBSCR
+
+ 47           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               21 (Text)
+              LOAD_CONST               4 (True)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              22 (notes)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME               23 (str)
+              LOAD_CONST              15 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              17 ('notes')
+              STORE_SUBSCR
+
+ 50           LOAD_NAME               24 (Index)
+              PUSH_NULL
+
+ 51           LOAD_CONST              18 ('uq_billing_plan_configs_active')
+
+ 52           LOAD_CONST              11 ('is_active')
+
+ 53           LOAD_CONST               4 (True)
+
+ 54           LOAD_NAME               14 (text)
+              PUSH_NULL
+              LOAD_CONST              19 ('is_active = true')
+              CALL                     1
+
+ 50           LOAD_CONST              20 (('unique', 'postgresql_where'))
+              CALL_KW                  4
+
+ 49           BUILD_TUPLE              1
+              STORE_NAME              25 (__table_args__)
+              LOAD_CONST              21 (())
+              STORE_NAME              26 (__static_attributes__)
+              RETURN_CONST            15 (None)
+
+Disassembly of <code object BillingPlanConfigPlan at 0x0000024C0FBE4020, file "D:\fluence\Github\mattbot\backend\app\models\billing_plan_config.py", line 59>:
+ 59           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('BillingPlanConfigPlan')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (59)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 60           LOAD_CONST               2 ('Individual plan within a config version.')
+              STORE_NAME               4 (__doc__)
+
+ 62           LOAD_CONST               3 ('billing_plan_config_plans')
+              STORE_NAME               5 (__tablename__)
+
+ 64           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+
+ 65           LOAD_NAME                7 (UUID)
+              PUSH_NULL
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               4 (True)
+              LOAD_NAME                8 (uuid)
+              LOAD_ATTR               18 (uuid4)
+
+ 64           LOAD_CONST               6 (('primary_key', 'default'))
+              CALL_KW                  3
+              STORE_NAME              10 (id)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME                8 (uuid)
+              LOAD_ATTR               14 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST               7 ('id')
+              STORE_SUBSCR
+
+ 67           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+
+ 68           LOAD_NAME                7 (UUID)
+              PUSH_NULL
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('as_uuid',))
+              CALL_KW                  1
+
+ 69           LOAD_NAME               13 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               8 ('billing_plan_configs.id')
+              LOAD_CONST               9 ('CASCADE')
+              LOAD_CONST              10 (('ondelete',))
+              CALL_KW                  2
+
+ 70           LOAD_CONST              11 (False)
+
+ 67           LOAD_CONST              12 (('nullable',))
+              CALL_KW                  3
+              STORE_NAME              14 (config_id)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME                8 (uuid)
+              LOAD_ATTR               14 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              13 ('config_id')
+              STORE_SUBSCR
+
+ 72           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               15 (String)
+              PUSH_NULL
+              LOAD_CONST              14 (30)
+              CALL                     1
+              LOAD_CONST              11 (False)
+              LOAD_CONST              12 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              16 (code)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME               17 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              15 ('code')
+              STORE_SUBSCR
+
+ 73           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               15 (String)
+              PUSH_NULL
+              LOAD_CONST              16 (60)
+              CALL                     1
+              LOAD_CONST              11 (False)
+              LOAD_CONST              12 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              18 (name)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME               17 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              17 ('name')
+              STORE_SUBSCR
+
+ 74           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               15 (String)
+              PUSH_NULL
+              LOAD_CONST              18 (10)
+              CALL                     1
+              LOAD_CONST              11 (False)
+              LOAD_CONST              12 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              19 (price_usd)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME               17 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              19 ('price_usd')
+              STORE_SUBSCR
+
+ 75           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               20 (Integer)
+              LOAD_CONST              11 (False)
+              LOAD_CONST              12 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              21 (included_minutes)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME               22 (int)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              20 ('included_minutes')
+              STORE_SUBSCR
+
+ 76           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               23 (Text)
+              LOAD_CONST               4 (True)
+              LOAD_CONST              12 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              24 (stripe_price_id)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME               17 (str)
+              LOAD_CONST              21 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              22 ('stripe_price_id')
+              STORE_SUBSCR
+
+ 77           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+
+ 78           LOAD_NAME               25 (Boolean)
+              LOAD_CONST              11 (False)
+              LOAD_NAME               26 (text)
+              PUSH_NULL
+              LOAD_CONST              23 ('true')
+              CALL                     1
+
+ 77           LOAD_CONST              24 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              27 (requires_credit_card)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME               28 (bool)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              25 ('requires_credit_card')
+              STORE_SUBSCR
+
+ 80           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+
+ 81           LOAD_NAME               25 (Boolean)
+              LOAD_CONST              11 (False)
+              LOAD_NAME               26 (text)
+              PUSH_NULL
+              LOAD_CONST              26 ('false')
+              CALL                     1
+
+ 80           LOAD_CONST              24 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              29 (limited)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME               28 (bool)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              27 ('limited')
+              STORE_SUBSCR
+
+ 83           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+
+ 84           LOAD_NAME               20 (Integer)
+              LOAD_CONST              11 (False)
+              LOAD_NAME               26 (text)
+              PUSH_NULL
+              LOAD_CONST              28 ('0')
+              CALL                     1
+
+ 83           LOAD_CONST              24 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              30 (sort_order)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME               22 (int)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              29 ('sort_order')
+              STORE_SUBSCR
+
+ 86           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+
+ 87           LOAD_NAME               23 (Text)
+              LOAD_CONST              11 (False)
+              LOAD_NAME               26 (text)
+              PUSH_NULL
+              LOAD_CONST              30 ("''")
+              CALL                     1
+
+ 86           LOAD_CONST              24 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              31 (description)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME               17 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              31 ('description')
+              STORE_SUBSCR
+
+ 89           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+
+ 90           LOAD_NAME               23 (Text)
+              LOAD_CONST              11 (False)
+              LOAD_NAME               26 (text)
+              PUSH_NULL
+              LOAD_CONST              30 ("''")
+              CALL                     1
+
+ 89           LOAD_CONST              24 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              32 (icon)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME               17 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              32 ('icon')
+              STORE_SUBSCR
+
+ 94           LOAD_NAME               33 (UniqueConstraint)
+              PUSH_NULL
+              LOAD_CONST              13 ('config_id')
+              LOAD_CONST              15 ('code')
+              LOAD_CONST              33 ('uq_billing_plan_config_plans_code')
+              LOAD_CONST              34 (('name',))
+              CALL_KW                  3
+
+ 93           BUILD_TUPLE              1
+              STORE_NAME              34 (__table_args__)
+              LOAD_CONST              35 (())
+              STORE_NAME              35 (__static_attributes__)
+              RETURN_CONST            21 (None)
+
+Disassembly of <code object BillingPlanConfigRule at 0x0000024C0FBEC150, file "D:\fluence\Github\mattbot\backend\app\models\billing_plan_config.py", line 98>:
+ 98           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('BillingPlanConfigRule')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (98)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 99           LOAD_CONST               2 ('Upgrade rule within a config version.')
+              STORE_NAME               4 (__doc__)
+
+101           LOAD_CONST               3 ('billing_plan_config_rules')
+              STORE_NAME               5 (__tablename__)
+
+103           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+
+104           LOAD_NAME                7 (UUID)
+              PUSH_NULL
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               4 (True)
+              LOAD_NAME                8 (uuid)
+              LOAD_ATTR               18 (uuid4)
+
+103           LOAD_CONST               6 (('primary_key', 'default'))
+              CALL_KW                  3
+              STORE_NAME              10 (id)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME                8 (uuid)
+              LOAD_ATTR               14 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST               7 ('id')
+              STORE_SUBSCR
+
+106           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+
+107           LOAD_NAME                7 (UUID)
+              PUSH_NULL
+              LOAD_CONST               4 (True)
+              LOAD_CONST               5 (('as_uuid',))
+              CALL_KW                  1
+
+108           LOAD_NAME               13 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               8 ('billing_plan_configs.id')
+              LOAD_CONST               9 ('CASCADE')
+              LOAD_CONST              10 (('ondelete',))
+              CALL_KW                  2
+
+109           LOAD_CONST              11 (False)
+
+106           LOAD_CONST              12 (('nullable',))
+              CALL_KW                  3
+              STORE_NAME              14 (config_id)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME                8 (uuid)
+              LOAD_ATTR               14 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              13 ('config_id')
+              STORE_SUBSCR
+
+111           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               15 (String)
+              PUSH_NULL
+              LOAD_CONST              14 (30)
+              CALL                     1
+              LOAD_CONST              11 (False)
+              LOAD_CONST              12 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              16 (from_plan)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME               17 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              15 ('from_plan')
+              STORE_SUBSCR
+
+112           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               15 (String)
+              PUSH_NULL
+              LOAD_CONST              14 (30)
+              CALL                     1
+              LOAD_CONST              11 (False)
+              LOAD_CONST              12 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              18 (to_plan)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME               17 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              16 ('to_plan')
+              STORE_SUBSCR
+
+113           LOAD_NAME                6 (mapped_column)
+              PUSH_NULL
+
+114           LOAD_NAME               15 (String)
+              PUSH_NULL
+              LOAD_CONST              14 (30)
+              CALL                     1
+              LOAD_CONST              11 (False)
+              LOAD_NAME               19 (text)
+              PUSH_NULL
+              LOAD_CONST              17 ("'minutes_exceeded'")
+              CALL                     1
+
+113           LOAD_CONST              18 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              20 (trigger)
+              LOAD_NAME               11 (Mapped)
+              LOAD_NAME               17 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               12 (__annotations__)
+              LOAD_CONST              19 ('trigger')
+              STORE_SUBSCR
+
+118           LOAD_NAME               21 (UniqueConstraint)
+              PUSH_NULL
+
+119           LOAD_CONST              13 ('config_id')
+              LOAD_CONST              15 ('from_plan')
+
+120           LOAD_CONST              20 ('uq_billing_plan_config_rules_from')
+
+118           LOAD_CONST              21 (('name',))
+              CALL_KW                  3
+
+117           BUILD_TUPLE              1
+              STORE_NAME              22 (__table_args__)
+              LOAD_CONST              22 (())
+              STORE_NAME              23 (__static_attributes__)
+              RETURN_CONST            23 (None)

@@ -1,0 +1,1565 @@
+# Bytecode dump of: notifications.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\api\v1\notifications.py
+# co_names: ('__doc__', '__future__', 'annotations', 'uuid', 'datetime', 'UTC', 'fastapi', 'APIRouter', 'Depends', 'Query', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.core.rate_limiter', 'check_rate_limit', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.models.notification', 'Notification', 'app.models.notification_delivery', 'NotificationDelivery', 'app.schemas.notifications', 'NotificationListResponse', 'NotificationReceiptRequest', 'NotificationResponse', 'app.services.audit_service', 'log_event', 'router', 'post', 'record_delivery_receipt', 'record_notification_opened', 'get', 'list_notifications')
+# co_consts (strings): ['Notification delivery tracking and receipt endpoints.', '/{notification_id}/receipt', '/{notification_id}/opened', '', 'Opaque pagination cursor (created_at ISO)']
+
+# DOCSTRING: """Notification delivery tracking and receipt endpoints."""
+# --- Nested code object: record_delivery_receipt ---
+    # co_names: ('check_rate_limit', 'user_id', 'settings', 'RATE_LIMIT_API_STANDARD_MAX', 'RATE_LIMIT_API_STANDARD_WINDOW', 'AppError', 'uuid', 'UUID', 'device_id', 'ValueError', 'get', 'Notification', 'owner_user_id', 'execute', 'select', 'NotificationDelivery', 'where', 'notification_id', 'scalar_one_or_none', 'status', 'datetime', 'now', 'UTC', 'last_attempt_at')
+    # co_varnames: ('notification_id', 'body', 'current_user', 'db', 'allowed', '_', 'device_uuid', 'notification', 'delivery')
+      29            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      36            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+      37            LOAD_CONST               1 ('notif:receipt:')
+                    LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user_id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+      38            LOAD_GLOBAL              4 (settings)
+                    LOAD_ATTR                6 (RATE_LIMIT_API_STANDARD_MAX)
+    
+      39            LOAD_GLOBAL              4 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_STANDARD_WINDOW)
+    
+      36            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   69 (allowed, _)
+    
+      41            LOAD_FAST                4 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+      42            LOAD_GLOBAL             11 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+      44    L6:     NOP
+    
+      45    L7:     LOAD_GLOBAL             12 (uuid)
+                    LOAD_ATTR               14 (UUID)
+                    PUSH_NULL
+                    LOAD_FAST                1 (body)
+                    LOAD_ATTR               16 (device_id)
+                    CALL                     1
+                    STORE_FAST               6 (device_uuid)
+    
+      51    L8:     LOAD_FAST                3 (db)
+                    LOAD_ATTR               21 (get + NULL|self)
+                    LOAD_GLOBAL             22 (Notification)
+                    LOAD_FAST                0 (notification_id)
+                    CALL                     2
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L9:     SEND                     3 (to L12)
+           L10:     YIELD_VALUE              1
+           L11:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+           L12:     END_SEND
+                    STORE_FAST               7 (notification)
+    
+      52            LOAD_FAST                7 (notification)
+                    POP_JUMP_IF_NONE        26 (to L13)
+                    LOAD_FAST                7 (notification)
+                    LOAD_ATTR               24 (owner_user_id)
+                    LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user_id)
+                    COMPARE_OP             119 (bool(!=))
+                    POP_JUMP_IF_FALSE       11 (to L14)
+    
+      53   L13:     LOAD_GLOBAL             11 (AppError + NULL)
+    
+      54            LOAD_CONST              10 ('NOTIFICATION_NOT_FOUND')
+                    LOAD_CONST              11 ('Notification not found')
+                    LOAD_CONST              12 (404)
+    
+      53            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+      58   L14:     LOAD_FAST                3 (db)
+                    LOAD_ATTR               27 (execute + NULL|self)
+    
+      59            LOAD_GLOBAL             29 (select + NULL)
+                    LOAD_GLOBAL             30 (NotificationDelivery)
+                    CALL                     1
+                    LOAD_ATTR               33 (where + NULL|self)
+    
+      60            LOAD_GLOBAL             30 (NotificationDelivery)
+                    LOAD_ATTR               34 (notification_id)
+                    LOAD_FAST                0 (notification_id)
+                    COMPARE_OP              72 (==)
+    
+      61            LOAD_GLOBAL             30 (NotificationDelivery)
+                    LOAD_ATTR               16 (device_id)
+                    LOAD_FAST                6 (device_uuid)
+                    COMPARE_OP              72 (==)
+    
+      59            CALL                     2
+    
+      58            CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L15:     SEND                     3 (to L18)
+           L16:     YIELD_VALUE              1
+           L17:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+           L18:     END_SEND
+    
+      64            LOAD_ATTR               37 (scalar_one_or_none + NULL|self)
+                    CALL                     0
+    
+      57            STORE_FAST               8 (delivery)
+    
+      66            LOAD_FAST                8 (delivery)
+                    POP_JUMP_IF_NOT_NONE    11 (to L19)
+    
+      67            LOAD_GLOBAL             11 (AppError + NULL)
+    
+      68            LOAD_CONST              13 ('DELIVERY_NOT_FOUND')
+    
+      69            LOAD_CONST              14 ('No delivery record for this device')
+    
+      70            LOAD_CONST              12 (404)
+    
+      67            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+      73   L19:     LOAD_CONST              15 ('delivered_ack')
+                    LOAD_FAST                8 (delivery)
+                    STORE_ATTR              19 (status)
+    
+      74            LOAD_GLOBAL             40 (datetime)
+                    LOAD_ATTR               42 (now)
+                    PUSH_NULL
+                    LOAD_GLOBAL             44 (UTC)
+                    CALL                     1
+                    LOAD_FAST                8 (delivery)
+                    STORE_ATTR              23 (last_attempt_at)
+                    RETURN_CONST             0 (None)
+    
+      36   L20:     CLEANUP_THROW
+           L21:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 283 (to L5)
+    
+      --   L22:     PUSH_EXC_INFO
+    
+      46            LOAD_GLOBAL             18 (ValueError)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       13 (to L23)
+                    POP_TOP
+    
+      47            LOAD_GLOBAL             11 (AppError + NULL)
+    
+      48            LOAD_CONST               7 ('INVALID_DEVICE_ID')
+                    LOAD_CONST               8 ('device_id must be a valid UUID')
+                    LOAD_CONST               9 (400)
+    
+      47            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+    
+      49            LOAD_CONST               0 (None)
+    
+      47            RAISE_VARARGS            2
+    
+      46   L23:     RERAISE                  0
+    
+      --   L24:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+      51   L25:     CLEANUP_THROW
+           L26:     JUMP_BACKWARD_NO_INTERRUPT 228 (to L12)
+    
+      58   L27:     CLEANUP_THROW
+           L28:     JUMP_BACKWARD_NO_INTERRUPT 102 (to L18)
+    
+      --   L29:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L29 [0] lasti
+      L3 to L4 -> L20 [2]
+      L4 to L6 -> L29 [0] lasti
+      L7 to L8 -> L22 [0]
+      L8 to L10 -> L29 [0] lasti
+      L10 to L11 -> L25 [2]
+      L11 to L16 -> L29 [0] lasti
+      L16 to L17 -> L27 [2]
+      L17 to L21 -> L29 [0] lasti
+      L22 to L24 -> L24 [1] lasti
+      L24 to L26 -> L29 [0] lasti
+      L27 to L28 -> L29 [0] lasti
+    
+# --- Nested code object: record_notification_opened ---
+    # co_names: ('check_rate_limit', 'user_id', 'settings', 'RATE_LIMIT_API_STANDARD_MAX', 'RATE_LIMIT_API_STANDARD_WINDOW', 'AppError', 'uuid', 'UUID', 'device_id', 'ValueError', 'get', 'Notification', 'owner_user_id', 'log_event', 'str')
+    # co_varnames: ('notification_id', 'body', 'current_user', 'db', 'allowed', '_', 'device_uuid', 'notification')
+      77            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      84            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+      85            LOAD_CONST               1 ('notif:opened:')
+                    LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user_id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+      86            LOAD_GLOBAL              4 (settings)
+                    LOAD_ATTR                6 (RATE_LIMIT_API_STANDARD_MAX)
+    
+      87            LOAD_GLOBAL              4 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_STANDARD_WINDOW)
+    
+      84            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   69 (allowed, _)
+    
+      89            LOAD_FAST                4 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+      90            LOAD_GLOBAL             11 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+      92    L6:     NOP
+    
+      93    L7:     LOAD_GLOBAL             12 (uuid)
+                    LOAD_ATTR               14 (UUID)
+                    PUSH_NULL
+                    LOAD_FAST                1 (body)
+                    LOAD_ATTR               16 (device_id)
+                    CALL                     1
+                    STORE_FAST               6 (device_uuid)
+    
+      99    L8:     LOAD_FAST                3 (db)
+                    LOAD_ATTR               21 (get + NULL|self)
+                    LOAD_GLOBAL             22 (Notification)
+                    LOAD_FAST                0 (notification_id)
+                    CALL                     2
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L9:     SEND                     3 (to L12)
+           L10:     YIELD_VALUE              1
+           L11:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+           L12:     END_SEND
+                    STORE_FAST               7 (notification)
+    
+     100            LOAD_FAST                7 (notification)
+                    POP_JUMP_IF_NONE        26 (to L13)
+                    LOAD_FAST                7 (notification)
+                    LOAD_ATTR               24 (owner_user_id)
+                    LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user_id)
+                    COMPARE_OP             119 (bool(!=))
+                    POP_JUMP_IF_FALSE       11 (to L14)
+    
+     101   L13:     LOAD_GLOBAL             11 (AppError + NULL)
+    
+     102            LOAD_CONST              10 ('NOTIFICATION_NOT_FOUND')
+                    LOAD_CONST              11 ('Notification not found')
+                    LOAD_CONST              12 (404)
+    
+     101            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     105   L14:     LOAD_GLOBAL             27 (log_event + NULL)
+    
+     106            LOAD_FAST                3 (db)
+    
+     107            LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user_id)
+    
+     108            LOAD_CONST              13 ('NOTIFICATION_OPENED')
+    
+     109            LOAD_CONST              14 ('user')
+    
+     110            LOAD_FAST                2 (current_user)
+                    LOAD_ATTR                2 (user_id)
+    
+     111            LOAD_CONST              15 ('notification')
+    
+     112            LOAD_FAST                0 (notification_id)
+    
+     113            LOAD_CONST              16 ('device_id')
+                    LOAD_GLOBAL             29 (str + NULL)
+                    LOAD_FAST                6 (device_uuid)
+                    CALL                     1
+                    BUILD_MAP                1
+    
+     105            LOAD_CONST              17 (('owner_user_id', 'event_type', 'actor_type', 'actor_id', 'target_type', 'target_id', 'details'))
+                    CALL_KW                  8
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L15:     SEND                     3 (to L18)
+           L16:     YIELD_VALUE              1
+           L17:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+           L18:     END_SEND
+                    POP_TOP
+                    RETURN_CONST             0 (None)
+    
+      84   L19:     CLEANUP_THROW
+           L20:     JUMP_BACKWARD_NO_INTERRUPT 183 (to L5)
+    
+      --   L21:     PUSH_EXC_INFO
+    
+      94            LOAD_GLOBAL             18 (ValueError)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       13 (to L22)
+                    POP_TOP
+    
+      95            LOAD_GLOBAL             11 (AppError + NULL)
+    
+      96            LOAD_CONST               7 ('INVALID_DEVICE_ID')
+                    LOAD_CONST               8 ('device_id must be a valid UUID')
+                    LOAD_CONST               9 (400)
+    
+      95            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+    
+      97            LOAD_CONST               0 (None)
+    
+      95            RAISE_VARARGS            2
+    
+      94   L22:     RERAISE                  0
+    
+      --   L23:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+      99   L24:     CLEANUP_THROW
+           L25:     JUMP_BACKWARD_NO_INTERRUPT 128 (to L12)
+    
+     105   L26:     CLEANUP_THROW
+           L27:     JUMP_BACKWARD_NO_INTERRUPT 35 (to L18)
+    
+      --   L28:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L28 [0] lasti
+      L3 to L4 -> L19 [2]
+      L4 to L6 -> L28 [0] lasti
+      L7 to L8 -> L21 [0]
+      L8 to L10 -> L28 [0] lasti
+      L10 to L11 -> L24 [2]
+      L11 to L16 -> L28 [0] lasti
+      L16 to L17 -> L26 [2]
+      L17 to L20 -> L28 [0] lasti
+      L21 to L23 -> L23 [1] lasti
+      L23 to L25 -> L28 [0] lasti
+      L26 to L27 -> L28 [0] lasti
+    
+# --- Nested code object: list_notifications ---
+    # co_names: ('check_rate_limit', 'user_id', 'settings', 'RATE_LIMIT_API_STANDARD_MAX', 'RATE_LIMIT_API_STANDARD_WINDOW', 'AppError', 'select', 'Notification', 'where', 'owner_user_id', 'order_by', 'created_at', 'desc', 'limit', 'DEFAULT_PAGE_SIZE', 'datetime', 'fromisoformat', 'ValueError', 'execute', 'list', 'scalars', 'all', 'len', 'isoformat', 'NotificationListResponse', 'NotificationResponse', 'str', 'id', 'type', 'priority', 'source_entity_type', 'source_entity_id')
+    # co_varnames: ('cursor', 'current_user', 'db', 'allowed', '_', 'stmt', 'cursor_dt', 'result', 'rows', 'has_more', 'items', 'next_cursor', 'n')
+     117            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+     123            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+     124            LOAD_CONST               1 ('notif:list:')
+                    LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user_id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+     125            LOAD_GLOBAL              4 (settings)
+                    LOAD_ATTR                6 (RATE_LIMIT_API_STANDARD_MAX)
+    
+     126            LOAD_GLOBAL              4 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_STANDARD_WINDOW)
+    
+     123            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST   52 (allowed, _)
+    
+     128            LOAD_FAST                3 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+     129            LOAD_GLOBAL             11 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+     132    L6:     LOAD_GLOBAL             13 (select + NULL)
+                    LOAD_GLOBAL             14 (Notification)
+                    CALL                     1
+    
+     133            LOAD_ATTR               17 (where + NULL|self)
+                    LOAD_GLOBAL             14 (Notification)
+                    LOAD_ATTR               18 (owner_user_id)
+                    LOAD_FAST                1 (current_user)
+                    LOAD_ATTR                2 (user_id)
+                    COMPARE_OP              72 (==)
+                    CALL                     1
+    
+     134            LOAD_ATTR               21 (order_by + NULL|self)
+                    LOAD_GLOBAL             14 (Notification)
+                    LOAD_ATTR               22 (created_at)
+                    LOAD_ATTR               25 (desc + NULL|self)
+                    CALL                     0
+                    CALL                     1
+    
+     135            LOAD_ATTR               27 (limit + NULL|self)
+                    LOAD_GLOBAL              4 (settings)
+                    LOAD_ATTR               28 (DEFAULT_PAGE_SIZE)
+                    LOAD_CONST               7 (1)
+                    BINARY_OP                0 (+)
+                    CALL                     1
+    
+     131            STORE_FAST               5 (stmt)
+    
+     138            LOAD_FAST                0 (cursor)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       57 (to L10)
+    
+     139    L7:     NOP
+    
+     140    L8:     LOAD_GLOBAL             30 (datetime)
+                    LOAD_ATTR               32 (fromisoformat)
+                    PUSH_NULL
+                    LOAD_FAST                0 (cursor)
+                    CALL                     1
+                    STORE_FAST               6 (cursor_dt)
+    
+     145    L9:     LOAD_FAST                5 (stmt)
+                    LOAD_ATTR               17 (where + NULL|self)
+                    LOAD_GLOBAL             14 (Notification)
+                    LOAD_ATTR               22 (created_at)
+                    LOAD_FAST                6 (cursor_dt)
+                    COMPARE_OP               2 (<)
+                    CALL                     1
+                    STORE_FAST               5 (stmt)
+    
+     147   L10:     LOAD_FAST                2 (db)
+                    LOAD_ATTR               37 (execute + NULL|self)
+                    LOAD_FAST                5 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L11:     SEND                     3 (to L14)
+           L12:     YIELD_VALUE              1
+           L13:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+           L14:     END_SEND
+                    STORE_FAST               7 (result)
+    
+     148            LOAD_GLOBAL             39 (list + NULL)
+                    LOAD_FAST                7 (result)
+                    LOAD_ATTR               41 (scalars + NULL|self)
+                    CALL                     0
+                    LOAD_ATTR               43 (all + NULL|self)
+                    CALL                     0
+                    CALL                     1
+                    STORE_FAST               8 (rows)
+    
+     150            LOAD_GLOBAL             45 (len + NULL)
+                    LOAD_FAST                8 (rows)
+                    CALL                     1
+                    LOAD_GLOBAL              4 (settings)
+                    LOAD_ATTR               28 (DEFAULT_PAGE_SIZE)
+                    COMPARE_OP             132 (>)
+                    STORE_FAST               9 (has_more)
+    
+     151            LOAD_FAST                8 (rows)
+                    LOAD_CONST               0 (None)
+                    LOAD_GLOBAL              4 (settings)
+                    LOAD_ATTR               28 (DEFAULT_PAGE_SIZE)
+                    BINARY_SLICE
+                    STORE_FAST              10 (items)
+    
+     153            LOAD_CONST               0 (None)
+                    STORE_FAST              11 (next_cursor)
+    
+     154            LOAD_FAST                9 (has_more)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       36 (to L15)
+                    LOAD_FAST               10 (items)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       29 (to L15)
+    
+     155            LOAD_FAST               10 (items)
+                    LOAD_CONST              11 (-1)
+                    BINARY_SUBSCR
+                    LOAD_ATTR               22 (created_at)
+                    LOAD_ATTR               47 (isoformat + NULL|self)
+                    CALL                     0
+                    STORE_FAST              11 (next_cursor)
+    
+     157   L15:     LOAD_GLOBAL             49 (NotificationListResponse + NULL)
+    
+     167            LOAD_FAST               10 (items)
+                    GET_ITER
+    
+     158            LOAD_FAST_AND_CLEAR     12 (n)
+                    SWAP                     2
+           L16:     BUILD_LIST               0
+                    SWAP                     2
+    
+     167            GET_ITER
+           L17:     FOR_ITER               114 (to L20)
+                    STORE_FAST              12 (n)
+    
+     159            LOAD_GLOBAL             51 (NotificationResponse + NULL)
+    
+     160            LOAD_GLOBAL             53 (str + NULL)
+                    LOAD_FAST               12 (n)
+                    LOAD_ATTR               54 (id)
+                    CALL                     1
+    
+     161            LOAD_FAST               12 (n)
+                    LOAD_ATTR               56 (type)
+    
+     162            LOAD_FAST               12 (n)
+                    LOAD_ATTR               58 (priority)
+    
+     163            LOAD_FAST               12 (n)
+                    LOAD_ATTR               60 (source_entity_type)
+    
+     164            LOAD_FAST               12 (n)
+                    LOAD_ATTR               62 (source_entity_id)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       21 (to L18)
+                    LOAD_GLOBAL             53 (str + NULL)
+                    LOAD_FAST               12 (n)
+                    LOAD_ATTR               62 (source_entity_id)
+                    CALL                     1
+                    JUMP_FORWARD             1 (to L19)
+           L18:     LOAD_CONST               0 (None)
+    
+     165   L19:     LOAD_FAST               12 (n)
+                    LOAD_ATTR               22 (created_at)
+    
+     159            LOAD_CONST              12 (('id', 'type', 'priority', 'source_entity_type', 'source_entity_id', 'created_at'))
+                    CALL_KW                  6
+                    LIST_APPEND              2
+                    JUMP_BACKWARD          116 (to L17)
+    
+     167   L20:     END_FOR
+                    POP_TOP
+    
+     158   L21:     SWAP                     2
+                    STORE_FAST              12 (n)
+    
+     169            LOAD_FAST               11 (next_cursor)
+    
+     170            LOAD_FAST                9 (has_more)
+    
+     157            LOAD_CONST              13 (('items', 'next_cursor', 'has_more'))
+                    CALL_KW                  3
+                    RETURN_VALUE
+    
+     123   L22:     CLEANUP_THROW
+           L23:     EXTENDED_ARG             2
+                    JUMP_BACKWARD_NO_INTERRUPT 514 (to L5)
+    
+      --   L24:     PUSH_EXC_INFO
+    
+     141            LOAD_GLOBAL             34 (ValueError)
+                    CHECK_EXC_MATCH
+                    POP_JUMP_IF_FALSE       13 (to L25)
+                    POP_TOP
+    
+     142            LOAD_GLOBAL             11 (AppError + NULL)
+    
+     143            LOAD_CONST               8 ('INVALID_CURSOR')
+                    LOAD_CONST               9 ('Invalid cursor value')
+                    LOAD_CONST              10 (400)
+    
+     142            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+    
+     144            LOAD_CONST               0 (None)
+    
+     142            RAISE_VARARGS            2
+    
+     141   L25:     RERAISE                  0
+    
+      --   L26:     COPY                     3
+                    POP_EXCEPT
+                    RERAISE                  1
+    
+     147   L27:     CLEANUP_THROW
+           L28:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 302 (to L14)
+    
+      --   L29:     SWAP                     2
+                    POP_TOP
+    
+     158            SWAP                     2
+                    STORE_FAST              12 (n)
+                    RERAISE                  0
+    
+      --   L30:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L30 [0] lasti
+      L3 to L4 -> L22 [2]
+      L4 to L7 -> L30 [0] lasti
+      L8 to L9 -> L24 [0]
+      L9 to L12 -> L30 [0] lasti
+      L12 to L13 -> L27 [2]
+      L13 to L16 -> L30 [0] lasti
+      L16 to L21 -> L29 [4]
+      L21 to L23 -> L30 [0] lasti
+      L24 to L26 -> L26 [1] lasti
+      L26 to L28 -> L30 [0] lasti
+      L29 to L30 -> L30 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'uuid', 'datetime', 'UTC', 'fastapi', 'APIRouter', 'Depends', 'Query', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.core.rate_limiter', 'check_rate_limit', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.models.notification', 'Notification', 'app.models.notification_delivery', 'NotificationDelivery', 'app.schemas.notifications', 'NotificationListResponse', 'NotificationReceiptRequest', 'NotificationResponse', 'app.services.audit_service', 'log_event', 'router', 'post', 'record_delivery_receipt', 'record_notification_opened', 'get', 'list_notifications')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Notification delivery tracking and receipt endpoints.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (uuid)
+              STORE_NAME               3 (uuid)
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('UTC', 'datetime'))
+              IMPORT_NAME              4 (datetime)
+              IMPORT_FROM              5 (UTC)
+              STORE_NAME               5 (UTC)
+              IMPORT_FROM              4 (datetime)
+              STORE_NAME               4 (datetime)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('APIRouter', 'Depends', 'Query'))
+              IMPORT_NAME              6 (fastapi)
+              IMPORT_FROM              7 (APIRouter)
+              STORE_NAME               7 (APIRouter)
+              IMPORT_FROM              8 (Depends)
+              STORE_NAME               8 (Depends)
+              IMPORT_FROM              9 (Query)
+              STORE_NAME               9 (Query)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('select',))
+              IMPORT_NAME             10 (sqlalchemy)
+              IMPORT_FROM             11 (select)
+              STORE_NAME              11 (select)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('AsyncSession',))
+              IMPORT_NAME             12 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM             13 (AsyncSession)
+              STORE_NAME              13 (AsyncSession)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('settings',))
+              IMPORT_NAME             14 (app.config)
+              IMPORT_FROM             15 (settings)
+              STORE_NAME              15 (settings)
+              POP_TOP
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('CurrentUser', 'get_current_user'))
+              IMPORT_NAME             16 (app.core.dependencies)
+              IMPORT_FROM             17 (CurrentUser)
+              STORE_NAME              17 (CurrentUser)
+              IMPORT_FROM             18 (get_current_user)
+              STORE_NAME              18 (get_current_user)
+              POP_TOP
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST              10 (('check_rate_limit',))
+              IMPORT_NAME             19 (app.core.rate_limiter)
+              IMPORT_FROM             20 (check_rate_limit)
+              STORE_NAME              20 (check_rate_limit)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST              11 (('get_db',))
+              IMPORT_NAME             21 (app.database)
+              IMPORT_FROM             22 (get_db)
+              STORE_NAME              22 (get_db)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST              12 (('AppError',))
+              IMPORT_NAME             23 (app.middleware.error_handler)
+              IMPORT_FROM             24 (AppError)
+              STORE_NAME              24 (AppError)
+              POP_TOP
+
+ 17           LOAD_CONST               1 (0)
+              LOAD_CONST              13 (('Notification',))
+              IMPORT_NAME             25 (app.models.notification)
+              IMPORT_FROM             26 (Notification)
+              STORE_NAME              26 (Notification)
+              POP_TOP
+
+ 18           LOAD_CONST               1 (0)
+              LOAD_CONST              14 (('NotificationDelivery',))
+              IMPORT_NAME             27 (app.models.notification_delivery)
+              IMPORT_FROM             28 (NotificationDelivery)
+              STORE_NAME              28 (NotificationDelivery)
+              POP_TOP
+
+ 19           LOAD_CONST               1 (0)
+              LOAD_CONST              15 (('NotificationListResponse', 'NotificationReceiptRequest', 'NotificationResponse'))
+              IMPORT_NAME             29 (app.schemas.notifications)
+              IMPORT_FROM             30 (NotificationListResponse)
+              STORE_NAME              30 (NotificationListResponse)
+              IMPORT_FROM             31 (NotificationReceiptRequest)
+              STORE_NAME              31 (NotificationReceiptRequest)
+              IMPORT_FROM             32 (NotificationResponse)
+              STORE_NAME              32 (NotificationResponse)
+              POP_TOP
+
+ 24           LOAD_CONST               1 (0)
+              LOAD_CONST              16 (('log_event',))
+              IMPORT_NAME             33 (app.services.audit_service)
+              IMPORT_FROM             34 (log_event)
+              STORE_NAME              34 (log_event)
+              POP_TOP
+
+ 26           LOAD_NAME                7 (APIRouter)
+              PUSH_NULL
+              CALL                     0
+              STORE_NAME              35 (router)
+
+ 29           LOAD_NAME               35 (router)
+              LOAD_ATTR               73 (post + NULL|self)
+              LOAD_CONST              17 ('/{notification_id}/receipt')
+              LOAD_CONST              18 (204)
+              LOAD_CONST              19 (('status_code',))
+              CALL_KW                  2
+
+ 33           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               18 (get_current_user)
+              CALL                     1
+
+ 34           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               22 (get_db)
+              CALL                     1
+
+ 30           BUILD_TUPLE              2
+
+ 31           NOP
+
+ 30           NOP
+
+ 32           NOP
+
+ 30           NOP
+
+ 33           NOP
+
+ 30           NOP
+
+ 34           NOP
+
+ 30           NOP
+
+ 35           NOP
+
+ 30           LOAD_CONST              28 (('notification_id', 'uuid.UUID', 'body', 'NotificationReceiptRequest', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'None'))
+              LOAD_CONST              20 (<code object record_delivery_receipt at 0x0000024C0FBE2570, file "D:\fluence\Github\mattbot\backend\app\api\v1\notifications.py", line 29>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 29           CALL                     0
+
+ 30           STORE_NAME              37 (record_delivery_receipt)
+
+ 77           LOAD_NAME               35 (router)
+              LOAD_ATTR               73 (post + NULL|self)
+              LOAD_CONST              21 ('/{notification_id}/opened')
+              LOAD_CONST              18 (204)
+              LOAD_CONST              19 (('status_code',))
+              CALL_KW                  2
+
+ 81           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               18 (get_current_user)
+              CALL                     1
+
+ 82           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               22 (get_db)
+              CALL                     1
+
+ 78           BUILD_TUPLE              2
+
+ 79           NOP
+
+ 78           NOP
+
+ 80           NOP
+
+ 78           NOP
+
+ 81           NOP
+
+ 78           NOP
+
+ 82           NOP
+
+ 78           NOP
+
+ 83           NOP
+
+ 78           LOAD_CONST              28 (('notification_id', 'uuid.UUID', 'body', 'NotificationReceiptRequest', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'None'))
+              LOAD_CONST              22 (<code object record_notification_opened at 0x0000024C0F1FE4E0, file "D:\fluence\Github\mattbot\backend\app\api\v1\notifications.py", line 77>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 77           CALL                     0
+
+ 78           STORE_NAME              38 (record_notification_opened)
+
+117           LOAD_NAME               35 (router)
+              LOAD_ATTR               79 (get + NULL|self)
+              LOAD_CONST              23 ('')
+              LOAD_NAME               30 (NotificationListResponse)
+              LOAD_CONST              24 (('response_model',))
+              CALL_KW                  2
+
+119           LOAD_NAME                9 (Query)
+              PUSH_NULL
+              LOAD_CONST               3 (None)
+              LOAD_CONST              25 ('Opaque pagination cursor (created_at ISO)')
+              LOAD_CONST              26 (('description',))
+              CALL_KW                  2
+
+120           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               18 (get_current_user)
+              CALL                     1
+
+121           LOAD_NAME                8 (Depends)
+              PUSH_NULL
+              LOAD_NAME               22 (get_db)
+              CALL                     1
+
+118           BUILD_TUPLE              3
+
+119           NOP
+
+118           NOP
+
+120           NOP
+
+118           NOP
+
+121           NOP
+
+118           NOP
+
+122           NOP
+
+118           LOAD_CONST              29 (('cursor', 'str | None', 'current_user', 'CurrentUser', 'db', 'AsyncSession', 'return', 'NotificationListResponse'))
+              LOAD_CONST              27 (<code object list_notifications at 0x0000024C0FBE2E40, file "D:\fluence\Github\mattbot\backend\app\api\v1\notifications.py", line 117>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+117           CALL                     0
+
+118           STORE_NAME              40 (list_notifications)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object record_delivery_receipt at 0x0000024C0FBE2570, file "D:\fluence\Github\mattbot\backend\app\api\v1\notifications.py", line 29>:
+  29            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  36            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+  37            LOAD_CONST               1 ('notif:receipt:')
+                LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user_id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+  38            LOAD_GLOBAL              4 (settings)
+                LOAD_ATTR                6 (RATE_LIMIT_API_STANDARD_MAX)
+
+  39            LOAD_GLOBAL              4 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_STANDARD_WINDOW)
+
+  36            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   69 (allowed, _)
+
+  41            LOAD_FAST                4 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+  42            LOAD_GLOBAL             11 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+  44    L6:     NOP
+
+  45    L7:     LOAD_GLOBAL             12 (uuid)
+                LOAD_ATTR               14 (UUID)
+                PUSH_NULL
+                LOAD_FAST                1 (body)
+                LOAD_ATTR               16 (device_id)
+                CALL                     1
+                STORE_FAST               6 (device_uuid)
+
+  51    L8:     LOAD_FAST                3 (db)
+                LOAD_ATTR               21 (get + NULL|self)
+                LOAD_GLOBAL             22 (Notification)
+                LOAD_FAST                0 (notification_id)
+                CALL                     2
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L9:     SEND                     3 (to L12)
+       L10:     YIELD_VALUE              1
+       L11:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+       L12:     END_SEND
+                STORE_FAST               7 (notification)
+
+  52            LOAD_FAST                7 (notification)
+                POP_JUMP_IF_NONE        26 (to L13)
+                LOAD_FAST                7 (notification)
+                LOAD_ATTR               24 (owner_user_id)
+                LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user_id)
+                COMPARE_OP             119 (bool(!=))
+                POP_JUMP_IF_FALSE       11 (to L14)
+
+  53   L13:     LOAD_GLOBAL             11 (AppError + NULL)
+
+  54            LOAD_CONST              10 ('NOTIFICATION_NOT_FOUND')
+                LOAD_CONST              11 ('Notification not found')
+                LOAD_CONST              12 (404)
+
+  53            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+  58   L14:     LOAD_FAST                3 (db)
+                LOAD_ATTR               27 (execute + NULL|self)
+
+  59            LOAD_GLOBAL             29 (select + NULL)
+                LOAD_GLOBAL             30 (NotificationDelivery)
+                CALL                     1
+                LOAD_ATTR               33 (where + NULL|self)
+
+  60            LOAD_GLOBAL             30 (NotificationDelivery)
+                LOAD_ATTR               34 (notification_id)
+                LOAD_FAST                0 (notification_id)
+                COMPARE_OP              72 (==)
+
+  61            LOAD_GLOBAL             30 (NotificationDelivery)
+                LOAD_ATTR               16 (device_id)
+                LOAD_FAST                6 (device_uuid)
+                COMPARE_OP              72 (==)
+
+  59            CALL                     2
+
+  58            CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L15:     SEND                     3 (to L18)
+       L16:     YIELD_VALUE              1
+       L17:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+       L18:     END_SEND
+
+  64            LOAD_ATTR               37 (scalar_one_or_none + NULL|self)
+                CALL                     0
+
+  57            STORE_FAST               8 (delivery)
+
+  66            LOAD_FAST                8 (delivery)
+                POP_JUMP_IF_NOT_NONE    11 (to L19)
+
+  67            LOAD_GLOBAL             11 (AppError + NULL)
+
+  68            LOAD_CONST              13 ('DELIVERY_NOT_FOUND')
+
+  69            LOAD_CONST              14 ('No delivery record for this device')
+
+  70            LOAD_CONST              12 (404)
+
+  67            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+  73   L19:     LOAD_CONST              15 ('delivered_ack')
+                LOAD_FAST                8 (delivery)
+                STORE_ATTR              19 (status)
+
+  74            LOAD_GLOBAL             40 (datetime)
+                LOAD_ATTR               42 (now)
+                PUSH_NULL
+                LOAD_GLOBAL             44 (UTC)
+                CALL                     1
+                LOAD_FAST                8 (delivery)
+                STORE_ATTR              23 (last_attempt_at)
+                RETURN_CONST             0 (None)
+
+  36   L20:     CLEANUP_THROW
+       L21:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 283 (to L5)
+
+  --   L22:     PUSH_EXC_INFO
+
+  46            LOAD_GLOBAL             18 (ValueError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       13 (to L23)
+                POP_TOP
+
+  47            LOAD_GLOBAL             11 (AppError + NULL)
+
+  48            LOAD_CONST               7 ('INVALID_DEVICE_ID')
+                LOAD_CONST               8 ('device_id must be a valid UUID')
+                LOAD_CONST               9 (400)
+
+  47            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+
+  49            LOAD_CONST               0 (None)
+
+  47            RAISE_VARARGS            2
+
+  46   L23:     RERAISE                  0
+
+  --   L24:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+  51   L25:     CLEANUP_THROW
+       L26:     JUMP_BACKWARD_NO_INTERRUPT 228 (to L12)
+
+  58   L27:     CLEANUP_THROW
+       L28:     JUMP_BACKWARD_NO_INTERRUPT 102 (to L18)
+
+  --   L29:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L29 [0] lasti
+  L3 to L4 -> L20 [2]
+  L4 to L6 -> L29 [0] lasti
+  L7 to L8 -> L22 [0]
+  L8 to L10 -> L29 [0] lasti
+  L10 to L11 -> L25 [2]
+  L11 to L16 -> L29 [0] lasti
+  L16 to L17 -> L27 [2]
+  L17 to L21 -> L29 [0] lasti
+  L22 to L24 -> L24 [1] lasti
+  L24 to L26 -> L29 [0] lasti
+  L27 to L28 -> L29 [0] lasti
+
+Disassembly of <code object record_notification_opened at 0x0000024C0F1FE4E0, file "D:\fluence\Github\mattbot\backend\app\api\v1\notifications.py", line 77>:
+  77            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  84            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+  85            LOAD_CONST               1 ('notif:opened:')
+                LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user_id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+  86            LOAD_GLOBAL              4 (settings)
+                LOAD_ATTR                6 (RATE_LIMIT_API_STANDARD_MAX)
+
+  87            LOAD_GLOBAL              4 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_STANDARD_WINDOW)
+
+  84            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   69 (allowed, _)
+
+  89            LOAD_FAST                4 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+  90            LOAD_GLOBAL             11 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+  92    L6:     NOP
+
+  93    L7:     LOAD_GLOBAL             12 (uuid)
+                LOAD_ATTR               14 (UUID)
+                PUSH_NULL
+                LOAD_FAST                1 (body)
+                LOAD_ATTR               16 (device_id)
+                CALL                     1
+                STORE_FAST               6 (device_uuid)
+
+  99    L8:     LOAD_FAST                3 (db)
+                LOAD_ATTR               21 (get + NULL|self)
+                LOAD_GLOBAL             22 (Notification)
+                LOAD_FAST                0 (notification_id)
+                CALL                     2
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L9:     SEND                     3 (to L12)
+       L10:     YIELD_VALUE              1
+       L11:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L9)
+       L12:     END_SEND
+                STORE_FAST               7 (notification)
+
+ 100            LOAD_FAST                7 (notification)
+                POP_JUMP_IF_NONE        26 (to L13)
+                LOAD_FAST                7 (notification)
+                LOAD_ATTR               24 (owner_user_id)
+                LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user_id)
+                COMPARE_OP             119 (bool(!=))
+                POP_JUMP_IF_FALSE       11 (to L14)
+
+ 101   L13:     LOAD_GLOBAL             11 (AppError + NULL)
+
+ 102            LOAD_CONST              10 ('NOTIFICATION_NOT_FOUND')
+                LOAD_CONST              11 ('Notification not found')
+                LOAD_CONST              12 (404)
+
+ 101            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 105   L14:     LOAD_GLOBAL             27 (log_event + NULL)
+
+ 106            LOAD_FAST                3 (db)
+
+ 107            LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user_id)
+
+ 108            LOAD_CONST              13 ('NOTIFICATION_OPENED')
+
+ 109            LOAD_CONST              14 ('user')
+
+ 110            LOAD_FAST                2 (current_user)
+                LOAD_ATTR                2 (user_id)
+
+ 111            LOAD_CONST              15 ('notification')
+
+ 112            LOAD_FAST                0 (notification_id)
+
+ 113            LOAD_CONST              16 ('device_id')
+                LOAD_GLOBAL             29 (str + NULL)
+                LOAD_FAST                6 (device_uuid)
+                CALL                     1
+                BUILD_MAP                1
+
+ 105            LOAD_CONST              17 (('owner_user_id', 'event_type', 'actor_type', 'actor_id', 'target_type', 'target_id', 'details'))
+                CALL_KW                  8
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L15:     SEND                     3 (to L18)
+       L16:     YIELD_VALUE              1
+       L17:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+       L18:     END_SEND
+                POP_TOP
+                RETURN_CONST             0 (None)
+
+  84   L19:     CLEANUP_THROW
+       L20:     JUMP_BACKWARD_NO_INTERRUPT 183 (to L5)
+
+  --   L21:     PUSH_EXC_INFO
+
+  94            LOAD_GLOBAL             18 (ValueError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       13 (to L22)
+                POP_TOP
+
+  95            LOAD_GLOBAL             11 (AppError + NULL)
+
+  96            LOAD_CONST               7 ('INVALID_DEVICE_ID')
+                LOAD_CONST               8 ('device_id must be a valid UUID')
+                LOAD_CONST               9 (400)
+
+  95            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+
+  97            LOAD_CONST               0 (None)
+
+  95            RAISE_VARARGS            2
+
+  94   L22:     RERAISE                  0
+
+  --   L23:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+  99   L24:     CLEANUP_THROW
+       L25:     JUMP_BACKWARD_NO_INTERRUPT 128 (to L12)
+
+ 105   L26:     CLEANUP_THROW
+       L27:     JUMP_BACKWARD_NO_INTERRUPT 35 (to L18)
+
+  --   L28:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L28 [0] lasti
+  L3 to L4 -> L19 [2]
+  L4 to L6 -> L28 [0] lasti
+  L7 to L8 -> L21 [0]
+  L8 to L10 -> L28 [0] lasti
+  L10 to L11 -> L24 [2]
+  L11 to L16 -> L28 [0] lasti
+  L16 to L17 -> L26 [2]
+  L17 to L20 -> L28 [0] lasti
+  L21 to L23 -> L23 [1] lasti
+  L23 to L25 -> L28 [0] lasti
+  L26 to L27 -> L28 [0] lasti
+
+Disassembly of <code object list_notifications at 0x0000024C0FBE2E40, file "D:\fluence\Github\mattbot\backend\app\api\v1\notifications.py", line 117>:
+ 117            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 123            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+ 124            LOAD_CONST               1 ('notif:list:')
+                LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user_id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 125            LOAD_GLOBAL              4 (settings)
+                LOAD_ATTR                6 (RATE_LIMIT_API_STANDARD_MAX)
+
+ 126            LOAD_GLOBAL              4 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_STANDARD_WINDOW)
+
+ 123            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST   52 (allowed, _)
+
+ 128            LOAD_FAST                3 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+ 129            LOAD_GLOBAL             11 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+ 132    L6:     LOAD_GLOBAL             13 (select + NULL)
+                LOAD_GLOBAL             14 (Notification)
+                CALL                     1
+
+ 133            LOAD_ATTR               17 (where + NULL|self)
+                LOAD_GLOBAL             14 (Notification)
+                LOAD_ATTR               18 (owner_user_id)
+                LOAD_FAST                1 (current_user)
+                LOAD_ATTR                2 (user_id)
+                COMPARE_OP              72 (==)
+                CALL                     1
+
+ 134            LOAD_ATTR               21 (order_by + NULL|self)
+                LOAD_GLOBAL             14 (Notification)
+                LOAD_ATTR               22 (created_at)
+                LOAD_ATTR               25 (desc + NULL|self)
+                CALL                     0
+                CALL                     1
+
+ 135            LOAD_ATTR               27 (limit + NULL|self)
+                LOAD_GLOBAL              4 (settings)
+                LOAD_ATTR               28 (DEFAULT_PAGE_SIZE)
+                LOAD_CONST               7 (1)
+                BINARY_OP                0 (+)
+                CALL                     1
+
+ 131            STORE_FAST               5 (stmt)
+
+ 138            LOAD_FAST                0 (cursor)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       57 (to L10)
+
+ 139    L7:     NOP
+
+ 140    L8:     LOAD_GLOBAL             30 (datetime)
+                LOAD_ATTR               32 (fromisoformat)
+                PUSH_NULL
+                LOAD_FAST                0 (cursor)
+                CALL                     1
+                STORE_FAST               6 (cursor_dt)
+
+ 145    L9:     LOAD_FAST                5 (stmt)
+                LOAD_ATTR               17 (where + NULL|self)
+                LOAD_GLOBAL             14 (Notification)
+                LOAD_ATTR               22 (created_at)
+                LOAD_FAST                6 (cursor_dt)
+                COMPARE_OP               2 (<)
+                CALL                     1
+                STORE_FAST               5 (stmt)
+
+ 147   L10:     LOAD_FAST                2 (db)
+                LOAD_ATTR               37 (execute + NULL|self)
+                LOAD_FAST                5 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L11:     SEND                     3 (to L14)
+       L12:     YIELD_VALUE              1
+       L13:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L11)
+       L14:     END_SEND
+                STORE_FAST               7 (result)
+
+ 148            LOAD_GLOBAL             39 (list + NULL)
+                LOAD_FAST                7 (result)
+                LOAD_ATTR               41 (scalars + NULL|self)
+                CALL                     0
+                LOAD_ATTR               43 (all + NULL|self)
+                CALL                     0
+                CALL                     1
+                STORE_FAST               8 (rows)
+
+ 150            LOAD_GLOBAL             45 (len + NULL)
+                LOAD_FAST                8 (rows)
+                CALL                     1
+                LOAD_GLOBAL              4 (settings)
+                LOAD_ATTR               28 (DEFAULT_PAGE_SIZE)
+                COMPARE_OP             132 (>)
+                STORE_FAST               9 (has_more)
+
+ 151            LOAD_FAST                8 (rows)
+                LOAD_CONST               0 (None)
+                LOAD_GLOBAL              4 (settings)
+                LOAD_ATTR               28 (DEFAULT_PAGE_SIZE)
+                BINARY_SLICE
+                STORE_FAST              10 (items)
+
+ 153            LOAD_CONST               0 (None)
+                STORE_FAST              11 (next_cursor)
+
+ 154            LOAD_FAST                9 (has_more)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       36 (to L15)
+                LOAD_FAST               10 (items)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       29 (to L15)
+
+ 155            LOAD_FAST               10 (items)
+                LOAD_CONST              11 (-1)
+                BINARY_SUBSCR
+                LOAD_ATTR               22 (created_at)
+                LOAD_ATTR               47 (isoformat + NULL|self)
+                CALL                     0
+                STORE_FAST              11 (next_cursor)
+
+ 157   L15:     LOAD_GLOBAL             49 (NotificationListResponse + NULL)
+
+ 167            LOAD_FAST               10 (items)
+                GET_ITER
+
+ 158            LOAD_FAST_AND_CLEAR     12 (n)
+                SWAP                     2
+       L16:     BUILD_LIST               0
+                SWAP                     2
+
+ 167            GET_ITER
+       L17:     FOR_ITER               114 (to L20)
+                STORE_FAST              12 (n)
+
+ 159            LOAD_GLOBAL             51 (NotificationResponse + NULL)
+
+ 160            LOAD_GLOBAL             53 (str + NULL)
+                LOAD_FAST               12 (n)
+                LOAD_ATTR               54 (id)
+                CALL                     1
+
+ 161            LOAD_FAST               12 (n)
+                LOAD_ATTR               56 (type)
+
+ 162            LOAD_FAST               12 (n)
+                LOAD_ATTR               58 (priority)
+
+ 163            LOAD_FAST               12 (n)
+                LOAD_ATTR               60 (source_entity_type)
+
+ 164            LOAD_FAST               12 (n)
+                LOAD_ATTR               62 (source_entity_id)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       21 (to L18)
+                LOAD_GLOBAL             53 (str + NULL)
+                LOAD_FAST               12 (n)
+                LOAD_ATTR               62 (source_entity_id)
+                CALL                     1
+                JUMP_FORWARD             1 (to L19)
+       L18:     LOAD_CONST               0 (None)
+
+ 165   L19:     LOAD_FAST               12 (n)
+                LOAD_ATTR               22 (created_at)
+
+ 159            LOAD_CONST              12 (('id', 'type', 'priority', 'source_entity_type', 'source_entity_id', 'created_at'))
+                CALL_KW                  6
+                LIST_APPEND              2
+                JUMP_BACKWARD          116 (to L17)
+
+ 167   L20:     END_FOR
+                POP_TOP
+
+ 158   L21:     SWAP                     2
+                STORE_FAST              12 (n)
+
+ 169            LOAD_FAST               11 (next_cursor)
+
+ 170            LOAD_FAST                9 (has_more)
+
+ 157            LOAD_CONST              13 (('items', 'next_cursor', 'has_more'))
+                CALL_KW                  3
+                RETURN_VALUE
+
+ 123   L22:     CLEANUP_THROW
+       L23:     EXTENDED_ARG             2
+                JUMP_BACKWARD_NO_INTERRUPT 514 (to L5)
+
+  --   L24:     PUSH_EXC_INFO
+
+ 141            LOAD_GLOBAL             34 (ValueError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       13 (to L25)
+                POP_TOP
+
+ 142            LOAD_GLOBAL             11 (AppError + NULL)
+
+ 143            LOAD_CONST               8 ('INVALID_CURSOR')
+                LOAD_CONST               9 ('Invalid cursor value')
+                LOAD_CONST              10 (400)
+
+ 142            LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+
+ 144            LOAD_CONST               0 (None)
+
+ 142            RAISE_VARARGS            2
+
+ 141   L25:     RERAISE                  0
+
+  --   L26:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+ 147   L27:     CLEANUP_THROW
+       L28:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 302 (to L14)
+
+  --   L29:     SWAP                     2
+                POP_TOP
+
+ 158            SWAP                     2
+                STORE_FAST              12 (n)
+                RERAISE                  0
+
+  --   L30:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L30 [0] lasti
+  L3 to L4 -> L22 [2]
+  L4 to L7 -> L30 [0] lasti
+  L8 to L9 -> L24 [0]
+  L9 to L12 -> L30 [0] lasti
+  L12 to L13 -> L27 [2]
+  L13 to L16 -> L30 [0] lasti
+  L16 to L21 -> L29 [4]
+  L21 to L23 -> L30 [0] lasti
+  L24 to L26 -> L26 [1] lasti
+  L26 to L28 -> L30 [0] lasti
+  L29 to L30 -> L30 [0] lasti

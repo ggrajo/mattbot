@@ -1,0 +1,956 @@
+# Bytecode dump of: audit_events.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\api\v1\audit_events.py
+# co_names: ('__doc__', '__future__', 'annotations', 'uuid', 'datetime', 'fastapi', 'APIRouter', 'Depends', 'Query', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.core.rate_limiter', 'check_rate_limit', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.models.audit_event', 'AuditEvent', 'app.schemas.audit', 'AuditEventListResponse', 'AuditEventResponse', 'router', 'frozenset', '_SENSITIVE_DETAIL_KEYS', '_strip_sensitive', 'get', 'list_audit_events')
+# co_consts (strings): ['Audit events API: paginated list of user audit trail.', '']
+
+# DOCSTRING: """Audit events API: paginated list of user audit trail."""
+# --- Nested code object: _strip_sensitive ---
+    # co_names: ('items', '_SENSITIVE_DETAIL_KEYS')
+    # co_varnames: ('details', 'k', 'v')
+      28           RESUME                   0
+    
+      29           LOAD_FAST                0 (details)
+                   TO_BOOL
+                   POP_JUMP_IF_TRUE         2 (to L1)
+    
+      30           LOAD_FAST                0 (details)
+                   RETURN_VALUE
+    
+      31   L1:     LOAD_FAST                0 (details)
+                   LOAD_ATTR                1 (items + NULL|self)
+                   CALL                     0
+                   GET_ITER
+                   LOAD_FAST_AND_CLEAR      1 (k)
+                   LOAD_FAST_AND_CLEAR      2 (v)
+                   SWAP                     3
+           L2:     BUILD_MAP                0
+                   SWAP                     2
+                   GET_ITER
+           L3:     FOR_ITER                19 (to L6)
+                   UNPACK_SEQUENCE          2
+                   STORE_FAST_STORE_FAST   18 (k, v)
+                   LOAD_FAST                1 (k)
+                   LOAD_GLOBAL              2 (_SENSITIVE_DETAIL_KEYS)
+                   CONTAINS_OP              1
+           L4:     POP_JUMP_IF_TRUE         2 (to L5)
+                   JUMP_BACKWARD           17 (to L3)
+           L5:     LOAD_FAST_LOAD_FAST     18 (k, v)
+                   MAP_ADD                  2
+                   JUMP_BACKWARD           21 (to L3)
+           L6:     END_FOR
+                   POP_TOP
+           L7:     SWAP                     3
+                   STORE_FAST               2 (v)
+                   STORE_FAST               1 (k)
+                   RETURN_VALUE
+    
+      --   L8:     SWAP                     2
+                   POP_TOP
+    
+      31           SWAP                     3
+                   STORE_FAST               2 (v)
+                   STORE_FAST               1 (k)
+                   RERAISE                  0
+    ExceptionTable:
+      L2 to L4 -> L8 [3]
+      L5 to L7 -> L8 [3]
+    
+# --- Nested code object: list_audit_events ---
+    # co_names: ('check_rate_limit', 'user', 'id', 'settings', 'RATE_LIMIT_API_WRITE_MAX', 'RATE_LIMIT_API_WRITE_WINDOW', 'AppError', 'select', 'AuditEvent', 'where', 'owner_user_id', 'order_by', 'created_at', 'desc', 'event_type', 'startswith', 'event_at', 'get', 'limit', 'execute', 'list', 'scalars', 'all', 'len', 'AuditEventResponse', 'str', 'actor_type', 'target_type', 'target_id', '_strip_sensitive', 'details', 'AuditEventListResponse')
+    # co_varnames: ('current_user', 'db', 'category', 'date_from', 'date_to', 'cursor', 'limit', 'allowed', '_', 'stmt', 'cursor_row', 'result', 'rows', 'has_more', 'items', 'row', 'response_items', 'next_cursor')
+      34            RETURN_GENERATOR
+                    POP_TOP
+            L1:     RESUME                   0
+    
+      44            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+    
+      45            LOAD_CONST               1 ('audit:list:')
+                    LOAD_FAST                0 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    FORMAT_SIMPLE
+                    BUILD_STRING             2
+    
+      46            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+    
+      47            LOAD_GLOBAL              6 (settings)
+                    LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+    
+      44            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                    CALL_KW                  3
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+            L2:     SEND                     3 (to L5)
+            L3:     YIELD_VALUE              1
+            L4:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+            L5:     END_SEND
+                    UNPACK_SEQUENCE          2
+                    STORE_FAST_STORE_FAST  120 (allowed, _)
+    
+      49            LOAD_FAST                7 (allowed)
+                    TO_BOOL
+                    POP_JUMP_IF_TRUE        11 (to L6)
+    
+      50            LOAD_GLOBAL             13 (AppError + NULL)
+                    LOAD_CONST               3 ('RATE_LIMITED')
+                    LOAD_CONST               4 ('Too many requests')
+                    LOAD_CONST               5 (429)
+                    LOAD_CONST               6 (('code', 'message', 'status_code'))
+                    CALL_KW                  3
+                    RAISE_VARARGS            1
+    
+      53    L6:     LOAD_GLOBAL             15 (select + NULL)
+                    LOAD_GLOBAL             16 (AuditEvent)
+                    CALL                     1
+    
+      54            LOAD_ATTR               19 (where + NULL|self)
+                    LOAD_GLOBAL             16 (AuditEvent)
+                    LOAD_ATTR               20 (owner_user_id)
+                    LOAD_FAST                0 (current_user)
+                    LOAD_ATTR                2 (user)
+                    LOAD_ATTR                4 (id)
+                    COMPARE_OP              72 (==)
+                    CALL                     1
+    
+      55            LOAD_ATTR               23 (order_by + NULL|self)
+                    LOAD_GLOBAL             16 (AuditEvent)
+                    LOAD_ATTR               24 (created_at)
+                    LOAD_ATTR               27 (desc + NULL|self)
+                    CALL                     0
+                    LOAD_GLOBAL             16 (AuditEvent)
+                    LOAD_ATTR                4 (id)
+                    LOAD_ATTR               27 (desc + NULL|self)
+                    CALL                     0
+                    CALL                     2
+    
+      52            STORE_FAST               9 (stmt)
+    
+      58            LOAD_FAST                2 (category)
+                    POP_JUMP_IF_NONE        46 (to L7)
+    
+      59            LOAD_FAST                9 (stmt)
+                    LOAD_ATTR               19 (where + NULL|self)
+                    LOAD_GLOBAL             16 (AuditEvent)
+                    LOAD_ATTR               28 (event_type)
+                    LOAD_ATTR               31 (startswith + NULL|self)
+                    LOAD_FAST                2 (category)
+                    CALL                     1
+                    CALL                     1
+                    STORE_FAST               9 (stmt)
+    
+      61    L7:     LOAD_FAST                3 (date_from)
+                    POP_JUMP_IF_NONE        34 (to L8)
+    
+      62            LOAD_FAST                9 (stmt)
+                    LOAD_ATTR               19 (where + NULL|self)
+                    LOAD_GLOBAL             16 (AuditEvent)
+                    LOAD_ATTR               32 (event_at)
+                    LOAD_FAST                3 (date_from)
+                    COMPARE_OP             172 (>=)
+                    CALL                     1
+                    STORE_FAST               9 (stmt)
+    
+      64    L8:     LOAD_FAST                4 (date_to)
+                    POP_JUMP_IF_NONE        34 (to L9)
+    
+      65            LOAD_FAST                9 (stmt)
+                    LOAD_ATTR               19 (where + NULL|self)
+                    LOAD_GLOBAL             16 (AuditEvent)
+                    LOAD_ATTR               32 (event_at)
+                    LOAD_FAST                4 (date_to)
+                    COMPARE_OP              42 (<=)
+                    CALL                     1
+                    STORE_FAST               9 (stmt)
+    
+      67    L9:     LOAD_FAST                5 (cursor)
+                    POP_JUMP_IF_NONE       137 (to L14)
+    
+      68            LOAD_FAST                1 (db)
+                    LOAD_ATTR               35 (get + NULL|self)
+                    LOAD_GLOBAL             16 (AuditEvent)
+                    LOAD_FAST                5 (cursor)
+                    CALL                     2
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L10:     SEND                     3 (to L13)
+           L11:     YIELD_VALUE              1
+           L12:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L10)
+           L13:     END_SEND
+                    STORE_FAST              10 (cursor_row)
+    
+      69            LOAD_FAST               10 (cursor_row)
+                    POP_JUMP_IF_NONE       104 (to L14)
+    
+      70            LOAD_FAST                9 (stmt)
+                    LOAD_ATTR               19 (where + NULL|self)
+    
+      71            LOAD_GLOBAL             16 (AuditEvent)
+                    LOAD_ATTR               24 (created_at)
+                    LOAD_FAST               10 (cursor_row)
+                    LOAD_ATTR               24 (created_at)
+                    COMPARE_OP               2 (<)
+    
+      73            LOAD_GLOBAL             16 (AuditEvent)
+                    LOAD_ATTR               24 (created_at)
+                    LOAD_FAST               10 (cursor_row)
+                    LOAD_ATTR               24 (created_at)
+                    COMPARE_OP              72 (==)
+    
+      74            LOAD_GLOBAL             16 (AuditEvent)
+                    LOAD_ATTR                4 (id)
+                    LOAD_FAST               10 (cursor_row)
+                    LOAD_ATTR                4 (id)
+                    COMPARE_OP               2 (<)
+    
+      73            BINARY_OP                1 (&)
+    
+      71            BINARY_OP                7 (|)
+    
+      70            CALL                     1
+                    STORE_FAST               9 (stmt)
+    
+      78   L14:     LOAD_FAST                9 (stmt)
+                    LOAD_ATTR               37 (limit + NULL|self)
+                    LOAD_FAST                6 (limit)
+                    LOAD_CONST               7 (1)
+                    BINARY_OP                0 (+)
+                    CALL                     1
+                    STORE_FAST               9 (stmt)
+    
+      80            LOAD_FAST                1 (db)
+                    LOAD_ATTR               39 (execute + NULL|self)
+                    LOAD_FAST                9 (stmt)
+                    CALL                     1
+                    GET_AWAITABLE            0
+                    LOAD_CONST               0 (None)
+           L15:     SEND                     3 (to L18)
+           L16:     YIELD_VALUE              1
+           L17:     RESUME                   3
+                    JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+           L18:     END_SEND
+                    STORE_FAST              11 (result)
+    
+      81            LOAD_GLOBAL             41 (list + NULL)
+                    LOAD_FAST               11 (result)
+                    LOAD_ATTR               43 (scalars + NULL|self)
+                    CALL                     0
+                    LOAD_ATTR               45 (all + NULL|self)
+                    CALL                     0
+                    CALL                     1
+                    STORE_FAST              12 (rows)
+    
+      83            LOAD_GLOBAL             47 (len + NULL)
+                    LOAD_FAST               12 (rows)
+                    CALL                     1
+                    LOAD_FAST                6 (limit)
+                    COMPARE_OP             132 (>)
+                    STORE_FAST              13 (has_more)
+    
+      84            LOAD_FAST               12 (rows)
+                    LOAD_CONST               0 (None)
+                    LOAD_FAST                6 (limit)
+                    BINARY_SLICE
+                    STORE_FAST              14 (items)
+    
+      96            LOAD_FAST               14 (items)
+                    GET_ITER
+    
+      86            LOAD_FAST_AND_CLEAR     15 (row)
+                    SWAP                     2
+           L19:     BUILD_LIST               0
+                    SWAP                     2
+    
+      96            GET_ITER
+           L20:     FOR_ITER               134 (to L23)
+                    STORE_FAST              15 (row)
+    
+      87            LOAD_GLOBAL             49 (AuditEventResponse + NULL)
+    
+      88            LOAD_GLOBAL             51 (str + NULL)
+                    LOAD_FAST               15 (row)
+                    LOAD_ATTR                4 (id)
+                    CALL                     1
+    
+      89            LOAD_FAST               15 (row)
+                    LOAD_ATTR               28 (event_type)
+    
+      90            LOAD_FAST               15 (row)
+                    LOAD_ATTR               52 (actor_type)
+    
+      91            LOAD_FAST               15 (row)
+                    LOAD_ATTR               54 (target_type)
+    
+      92            LOAD_FAST               15 (row)
+                    LOAD_ATTR               56 (target_id)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       21 (to L21)
+                    LOAD_GLOBAL             51 (str + NULL)
+                    LOAD_FAST               15 (row)
+                    LOAD_ATTR               56 (target_id)
+                    CALL                     1
+                    JUMP_FORWARD             1 (to L22)
+           L21:     LOAD_CONST               0 (None)
+    
+      93   L22:     LOAD_FAST               15 (row)
+                    LOAD_ATTR               24 (created_at)
+    
+      94            LOAD_GLOBAL             59 (_strip_sensitive + NULL)
+                    LOAD_FAST               15 (row)
+                    LOAD_ATTR               60 (details)
+                    CALL                     1
+    
+      87            LOAD_CONST               8 (('id', 'event_type', 'actor_type', 'target_type', 'target_id', 'created_at', 'details'))
+                    CALL_KW                  7
+                    LIST_APPEND              2
+                    JUMP_BACKWARD          136 (to L20)
+    
+      96   L23:     END_FOR
+                    POP_TOP
+    
+      86   L24:     STORE_FAST              16 (response_items)
+                    STORE_FAST              15 (row)
+    
+      99            LOAD_FAST               13 (has_more)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       31 (to L25)
+                    LOAD_FAST               14 (items)
+                    TO_BOOL
+                    POP_JUMP_IF_FALSE       24 (to L25)
+                    LOAD_GLOBAL             51 (str + NULL)
+                    LOAD_FAST               14 (items)
+                    LOAD_CONST               9 (-1)
+                    BINARY_SUBSCR
+                    LOAD_ATTR                4 (id)
+                    CALL                     1
+                    JUMP_FORWARD             1 (to L26)
+           L25:     LOAD_CONST               0 (None)
+           L26:     STORE_FAST              17 (next_cursor)
+    
+     101            LOAD_GLOBAL             63 (AuditEventListResponse + NULL)
+    
+     102            LOAD_FAST               16 (response_items)
+    
+     103            LOAD_FAST               17 (next_cursor)
+    
+     104            LOAD_FAST               13 (has_more)
+    
+     101            LOAD_CONST              10 (('items', 'next_cursor', 'has_more'))
+                    CALL_KW                  3
+                    RETURN_VALUE
+    
+      44   L27:     CLEANUP_THROW
+           L28:     EXTENDED_ARG             2
+                    JUMP_BACKWARD_NO_INTERRUPT 728 (to L5)
+    
+      68   L29:     CLEANUP_THROW
+           L30:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 416 (to L13)
+    
+      80   L31:     CLEANUP_THROW
+           L32:     EXTENDED_ARG             1
+                    JUMP_BACKWARD_NO_INTERRUPT 267 (to L18)
+    
+      --   L33:     SWAP                     2
+                    POP_TOP
+    
+      86            SWAP                     2
+                    STORE_FAST              15 (row)
+                    RERAISE                  0
+    
+      --   L34:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                    RERAISE                  1
+    ExceptionTable:
+      L1 to L3 -> L34 [0] lasti
+      L3 to L4 -> L27 [2]
+      L4 to L11 -> L34 [0] lasti
+      L11 to L12 -> L29 [2]
+      L12 to L16 -> L34 [0] lasti
+      L16 to L17 -> L31 [2]
+      L17 to L19 -> L34 [0] lasti
+      L19 to L24 -> L33 [2]
+      L24 to L28 -> L34 [0] lasti
+      L29 to L30 -> L34 [0] lasti
+      L31 to L32 -> L34 [0] lasti
+      L33 to L34 -> L34 [0] lasti
+    
+# co_names: ('__doc__', '__future__', 'annotations', 'uuid', 'datetime', 'fastapi', 'APIRouter', 'Depends', 'Query', 'sqlalchemy', 'select', 'sqlalchemy.ext.asyncio', 'AsyncSession', 'app.config', 'settings', 'app.core.dependencies', 'CurrentUser', 'get_current_user', 'app.core.rate_limiter', 'check_rate_limit', 'app.database', 'get_db', 'app.middleware.error_handler', 'AppError', 'app.models.audit_event', 'AuditEvent', 'app.schemas.audit', 'AuditEventListResponse', 'AuditEventResponse', 'router', 'frozenset', '_SENSITIVE_DETAIL_KEYS', '_strip_sensitive', 'get', 'list_audit_events')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('Audit events API: paginated list of user audit trail.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (('annotations',))
+              IMPORT_NAME              1 (__future__)
+              IMPORT_FROM              2 (annotations)
+              STORE_NAME               2 (annotations)
+              POP_TOP
+
+  5           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (None)
+              IMPORT_NAME              3 (uuid)
+              STORE_NAME               3 (uuid)
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('datetime',))
+              IMPORT_NAME              4 (datetime)
+              IMPORT_FROM              4 (datetime)
+              STORE_NAME               4 (datetime)
+              POP_TOP
+
+  8           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('APIRouter', 'Depends', 'Query'))
+              IMPORT_NAME              5 (fastapi)
+              IMPORT_FROM              6 (APIRouter)
+              STORE_NAME               6 (APIRouter)
+              IMPORT_FROM              7 (Depends)
+              STORE_NAME               7 (Depends)
+              IMPORT_FROM              8 (Query)
+              STORE_NAME               8 (Query)
+              POP_TOP
+
+  9           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('select',))
+              IMPORT_NAME              9 (sqlalchemy)
+              IMPORT_FROM             10 (select)
+              STORE_NAME              10 (select)
+              POP_TOP
+
+ 10           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('AsyncSession',))
+              IMPORT_NAME             11 (sqlalchemy.ext.asyncio)
+              IMPORT_FROM             12 (AsyncSession)
+              STORE_NAME              12 (AsyncSession)
+              POP_TOP
+
+ 12           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('settings',))
+              IMPORT_NAME             13 (app.config)
+              IMPORT_FROM             14 (settings)
+              STORE_NAME              14 (settings)
+              POP_TOP
+
+ 13           LOAD_CONST               1 (0)
+              LOAD_CONST               9 (('CurrentUser', 'get_current_user'))
+              IMPORT_NAME             15 (app.core.dependencies)
+              IMPORT_FROM             16 (CurrentUser)
+              STORE_NAME              16 (CurrentUser)
+              IMPORT_FROM             17 (get_current_user)
+              STORE_NAME              17 (get_current_user)
+              POP_TOP
+
+ 14           LOAD_CONST               1 (0)
+              LOAD_CONST              10 (('check_rate_limit',))
+              IMPORT_NAME             18 (app.core.rate_limiter)
+              IMPORT_FROM             19 (check_rate_limit)
+              STORE_NAME              19 (check_rate_limit)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST              11 (('get_db',))
+              IMPORT_NAME             20 (app.database)
+              IMPORT_FROM             21 (get_db)
+              STORE_NAME              21 (get_db)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST              12 (('AppError',))
+              IMPORT_NAME             22 (app.middleware.error_handler)
+              IMPORT_FROM             23 (AppError)
+              STORE_NAME              23 (AppError)
+              POP_TOP
+
+ 17           LOAD_CONST               1 (0)
+              LOAD_CONST              13 (('AuditEvent',))
+              IMPORT_NAME             24 (app.models.audit_event)
+              IMPORT_FROM             25 (AuditEvent)
+              STORE_NAME              25 (AuditEvent)
+              POP_TOP
+
+ 18           LOAD_CONST               1 (0)
+              LOAD_CONST              14 (('AuditEventListResponse', 'AuditEventResponse'))
+              IMPORT_NAME             26 (app.schemas.audit)
+              IMPORT_FROM             27 (AuditEventListResponse)
+              STORE_NAME              27 (AuditEventListResponse)
+              IMPORT_FROM             28 (AuditEventResponse)
+              STORE_NAME              28 (AuditEventResponse)
+              POP_TOP
+
+ 20           LOAD_NAME                6 (APIRouter)
+              PUSH_NULL
+              CALL                     0
+              STORE_NAME              29 (router)
+
+ 22           LOAD_NAME               30 (frozenset)
+              PUSH_NULL
+              BUILD_SET                0
+              LOAD_CONST              15 (frozenset({'call_transcript', 'recording_url', 'summary', 'otp', 'voicemail_text', 'transcript', 'otp_code'}))
+              SET_UPDATE               1
+              CALL                     1
+              STORE_NAME              31 (_SENSITIVE_DETAIL_KEYS)
+
+ 28           LOAD_CONST              24 (('details', 'dict | None', 'return', 'dict | None'))
+              LOAD_CONST              16 (<code object _strip_sensitive at 0x0000024C0EEE3C90, file "D:\fluence\Github\mattbot\backend\app\api\v1\audit_events.py", line 28>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              STORE_NAME              32 (_strip_sensitive)
+
+ 34           LOAD_NAME               29 (router)
+              LOAD_ATTR               67 (get + NULL|self)
+              LOAD_CONST              17 ('')
+              LOAD_NAME               27 (AuditEventListResponse)
+              LOAD_CONST              18 (('response_model',))
+              CALL_KW                  2
+
+ 36           LOAD_NAME                7 (Depends)
+              PUSH_NULL
+              LOAD_NAME               17 (get_current_user)
+              CALL                     1
+
+ 37           LOAD_NAME                7 (Depends)
+              PUSH_NULL
+              LOAD_NAME               21 (get_db)
+              CALL                     1
+
+ 38           LOAD_NAME                8 (Query)
+              PUSH_NULL
+              LOAD_CONST               3 (None)
+              CALL                     1
+
+ 39           LOAD_NAME                8 (Query)
+              PUSH_NULL
+              LOAD_CONST               3 (None)
+              CALL                     1
+
+ 40           LOAD_NAME                8 (Query)
+              PUSH_NULL
+              LOAD_CONST               3 (None)
+              CALL                     1
+
+ 41           LOAD_NAME                8 (Query)
+              PUSH_NULL
+              LOAD_CONST               3 (None)
+              CALL                     1
+
+ 42           LOAD_NAME                8 (Query)
+              PUSH_NULL
+              LOAD_CONST              19 (20)
+              LOAD_CONST              20 (1)
+              LOAD_CONST              21 (50)
+              LOAD_CONST              22 (('ge', 'le'))
+              CALL_KW                  3
+
+ 35           BUILD_TUPLE              7
+
+ 36           NOP
+
+ 35           NOP
+
+ 37           NOP
+
+ 35           NOP
+
+ 38           NOP
+
+ 35           NOP
+
+ 39           NOP
+
+ 35           NOP
+
+ 40           NOP
+
+ 35           NOP
+
+ 41           NOP
+
+ 35           NOP
+
+ 42           NOP
+
+ 35           NOP
+
+ 43           NOP
+
+ 35           LOAD_CONST              25 (('current_user', 'CurrentUser', 'db', 'AsyncSession', 'category', 'str | None', 'date_from', 'datetime | None', 'date_to', 'datetime | None', 'cursor', 'uuid.UUID | None', 'limit', 'int', 'return', 'AuditEventListResponse'))
+              LOAD_CONST              23 (<code object list_audit_events at 0x0000024C0FBD6C30, file "D:\fluence\Github\mattbot\backend\app\api\v1\audit_events.py", line 34>)
+              MAKE_FUNCTION
+              SET_FUNCTION_ATTRIBUTE   4 (annotations)
+              SET_FUNCTION_ATTRIBUTE   1 (defaults)
+
+ 34           CALL                     0
+
+ 35           STORE_NAME              34 (list_audit_events)
+              RETURN_CONST             3 (None)
+
+Disassembly of <code object _strip_sensitive at 0x0000024C0EEE3C90, file "D:\fluence\Github\mattbot\backend\app\api\v1\audit_events.py", line 28>:
+  28           RESUME                   0
+
+  29           LOAD_FAST                0 (details)
+               TO_BOOL
+               POP_JUMP_IF_TRUE         2 (to L1)
+
+  30           LOAD_FAST                0 (details)
+               RETURN_VALUE
+
+  31   L1:     LOAD_FAST                0 (details)
+               LOAD_ATTR                1 (items + NULL|self)
+               CALL                     0
+               GET_ITER
+               LOAD_FAST_AND_CLEAR      1 (k)
+               LOAD_FAST_AND_CLEAR      2 (v)
+               SWAP                     3
+       L2:     BUILD_MAP                0
+               SWAP                     2
+               GET_ITER
+       L3:     FOR_ITER                19 (to L6)
+               UNPACK_SEQUENCE          2
+               STORE_FAST_STORE_FAST   18 (k, v)
+               LOAD_FAST                1 (k)
+               LOAD_GLOBAL              2 (_SENSITIVE_DETAIL_KEYS)
+               CONTAINS_OP              1
+       L4:     POP_JUMP_IF_TRUE         2 (to L5)
+               JUMP_BACKWARD           17 (to L3)
+       L5:     LOAD_FAST_LOAD_FAST     18 (k, v)
+               MAP_ADD                  2
+               JUMP_BACKWARD           21 (to L3)
+       L6:     END_FOR
+               POP_TOP
+       L7:     SWAP                     3
+               STORE_FAST               2 (v)
+               STORE_FAST               1 (k)
+               RETURN_VALUE
+
+  --   L8:     SWAP                     2
+               POP_TOP
+
+  31           SWAP                     3
+               STORE_FAST               2 (v)
+               STORE_FAST               1 (k)
+               RERAISE                  0
+ExceptionTable:
+  L2 to L4 -> L8 [3]
+  L5 to L7 -> L8 [3]
+
+Disassembly of <code object list_audit_events at 0x0000024C0FBD6C30, file "D:\fluence\Github\mattbot\backend\app\api\v1\audit_events.py", line 34>:
+  34            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+  44            LOAD_GLOBAL              1 (check_rate_limit + NULL)
+
+  45            LOAD_CONST               1 ('audit:list:')
+                LOAD_FAST                0 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+  46            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR                8 (RATE_LIMIT_API_WRITE_MAX)
+
+  47            LOAD_GLOBAL              6 (settings)
+                LOAD_ATTR               10 (RATE_LIMIT_API_WRITE_WINDOW)
+
+  44            LOAD_CONST               2 (('max_requests', 'window_seconds'))
+                CALL_KW                  3
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+        L2:     SEND                     3 (to L5)
+        L3:     YIELD_VALUE              1
+        L4:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L2)
+        L5:     END_SEND
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST  120 (allowed, _)
+
+  49            LOAD_FAST                7 (allowed)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        11 (to L6)
+
+  50            LOAD_GLOBAL             13 (AppError + NULL)
+                LOAD_CONST               3 ('RATE_LIMITED')
+                LOAD_CONST               4 ('Too many requests')
+                LOAD_CONST               5 (429)
+                LOAD_CONST               6 (('code', 'message', 'status_code'))
+                CALL_KW                  3
+                RAISE_VARARGS            1
+
+  53    L6:     LOAD_GLOBAL             15 (select + NULL)
+                LOAD_GLOBAL             16 (AuditEvent)
+                CALL                     1
+
+  54            LOAD_ATTR               19 (where + NULL|self)
+                LOAD_GLOBAL             16 (AuditEvent)
+                LOAD_ATTR               20 (owner_user_id)
+                LOAD_FAST                0 (current_user)
+                LOAD_ATTR                2 (user)
+                LOAD_ATTR                4 (id)
+                COMPARE_OP              72 (==)
+                CALL                     1
+
+  55            LOAD_ATTR               23 (order_by + NULL|self)
+                LOAD_GLOBAL             16 (AuditEvent)
+                LOAD_ATTR               24 (created_at)
+                LOAD_ATTR               27 (desc + NULL|self)
+                CALL                     0
+                LOAD_GLOBAL             16 (AuditEvent)
+                LOAD_ATTR                4 (id)
+                LOAD_ATTR               27 (desc + NULL|self)
+                CALL                     0
+                CALL                     2
+
+  52            STORE_FAST               9 (stmt)
+
+  58            LOAD_FAST                2 (category)
+                POP_JUMP_IF_NONE        46 (to L7)
+
+  59            LOAD_FAST                9 (stmt)
+                LOAD_ATTR               19 (where + NULL|self)
+                LOAD_GLOBAL             16 (AuditEvent)
+                LOAD_ATTR               28 (event_type)
+                LOAD_ATTR               31 (startswith + NULL|self)
+                LOAD_FAST                2 (category)
+                CALL                     1
+                CALL                     1
+                STORE_FAST               9 (stmt)
+
+  61    L7:     LOAD_FAST                3 (date_from)
+                POP_JUMP_IF_NONE        34 (to L8)
+
+  62            LOAD_FAST                9 (stmt)
+                LOAD_ATTR               19 (where + NULL|self)
+                LOAD_GLOBAL             16 (AuditEvent)
+                LOAD_ATTR               32 (event_at)
+                LOAD_FAST                3 (date_from)
+                COMPARE_OP             172 (>=)
+                CALL                     1
+                STORE_FAST               9 (stmt)
+
+  64    L8:     LOAD_FAST                4 (date_to)
+                POP_JUMP_IF_NONE        34 (to L9)
+
+  65            LOAD_FAST                9 (stmt)
+                LOAD_ATTR               19 (where + NULL|self)
+                LOAD_GLOBAL             16 (AuditEvent)
+                LOAD_ATTR               32 (event_at)
+                LOAD_FAST                4 (date_to)
+                COMPARE_OP              42 (<=)
+                CALL                     1
+                STORE_FAST               9 (stmt)
+
+  67    L9:     LOAD_FAST                5 (cursor)
+                POP_JUMP_IF_NONE       137 (to L14)
+
+  68            LOAD_FAST                1 (db)
+                LOAD_ATTR               35 (get + NULL|self)
+                LOAD_GLOBAL             16 (AuditEvent)
+                LOAD_FAST                5 (cursor)
+                CALL                     2
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L10:     SEND                     3 (to L13)
+       L11:     YIELD_VALUE              1
+       L12:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L10)
+       L13:     END_SEND
+                STORE_FAST              10 (cursor_row)
+
+  69            LOAD_FAST               10 (cursor_row)
+                POP_JUMP_IF_NONE       104 (to L14)
+
+  70            LOAD_FAST                9 (stmt)
+                LOAD_ATTR               19 (where + NULL|self)
+
+  71            LOAD_GLOBAL             16 (AuditEvent)
+                LOAD_ATTR               24 (created_at)
+                LOAD_FAST               10 (cursor_row)
+                LOAD_ATTR               24 (created_at)
+                COMPARE_OP               2 (<)
+
+  73            LOAD_GLOBAL             16 (AuditEvent)
+                LOAD_ATTR               24 (created_at)
+                LOAD_FAST               10 (cursor_row)
+                LOAD_ATTR               24 (created_at)
+                COMPARE_OP              72 (==)
+
+  74            LOAD_GLOBAL             16 (AuditEvent)
+                LOAD_ATTR                4 (id)
+                LOAD_FAST               10 (cursor_row)
+                LOAD_ATTR                4 (id)
+                COMPARE_OP               2 (<)
+
+  73            BINARY_OP                1 (&)
+
+  71            BINARY_OP                7 (|)
+
+  70            CALL                     1
+                STORE_FAST               9 (stmt)
+
+  78   L14:     LOAD_FAST                9 (stmt)
+                LOAD_ATTR               37 (limit + NULL|self)
+                LOAD_FAST                6 (limit)
+                LOAD_CONST               7 (1)
+                BINARY_OP                0 (+)
+                CALL                     1
+                STORE_FAST               9 (stmt)
+
+  80            LOAD_FAST                1 (db)
+                LOAD_ATTR               39 (execute + NULL|self)
+                LOAD_FAST                9 (stmt)
+                CALL                     1
+                GET_AWAITABLE            0
+                LOAD_CONST               0 (None)
+       L15:     SEND                     3 (to L18)
+       L16:     YIELD_VALUE              1
+       L17:     RESUME                   3
+                JUMP_BACKWARD_NO_INTERRUPT 5 (to L15)
+       L18:     END_SEND
+                STORE_FAST              11 (result)
+
+  81            LOAD_GLOBAL             41 (list + NULL)
+                LOAD_FAST               11 (result)
+                LOAD_ATTR               43 (scalars + NULL|self)
+                CALL                     0
+                LOAD_ATTR               45 (all + NULL|self)
+                CALL                     0
+                CALL                     1
+                STORE_FAST              12 (rows)
+
+  83            LOAD_GLOBAL             47 (len + NULL)
+                LOAD_FAST               12 (rows)
+                CALL                     1
+                LOAD_FAST                6 (limit)
+                COMPARE_OP             132 (>)
+                STORE_FAST              13 (has_more)
+
+  84            LOAD_FAST               12 (rows)
+                LOAD_CONST               0 (None)
+                LOAD_FAST                6 (limit)
+                BINARY_SLICE
+                STORE_FAST              14 (items)
+
+  96            LOAD_FAST               14 (items)
+                GET_ITER
+
+  86            LOAD_FAST_AND_CLEAR     15 (row)
+                SWAP                     2
+       L19:     BUILD_LIST               0
+                SWAP                     2
+
+  96            GET_ITER
+       L20:     FOR_ITER               134 (to L23)
+                STORE_FAST              15 (row)
+
+  87            LOAD_GLOBAL             49 (AuditEventResponse + NULL)
+
+  88            LOAD_GLOBAL             51 (str + NULL)
+                LOAD_FAST               15 (row)
+                LOAD_ATTR                4 (id)
+                CALL                     1
+
+  89            LOAD_FAST               15 (row)
+                LOAD_ATTR               28 (event_type)
+
+  90            LOAD_FAST               15 (row)
+                LOAD_ATTR               52 (actor_type)
+
+  91            LOAD_FAST               15 (row)
+                LOAD_ATTR               54 (target_type)
+
+  92            LOAD_FAST               15 (row)
+                LOAD_ATTR               56 (target_id)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       21 (to L21)
+                LOAD_GLOBAL             51 (str + NULL)
+                LOAD_FAST               15 (row)
+                LOAD_ATTR               56 (target_id)
+                CALL                     1
+                JUMP_FORWARD             1 (to L22)
+       L21:     LOAD_CONST               0 (None)
+
+  93   L22:     LOAD_FAST               15 (row)
+                LOAD_ATTR               24 (created_at)
+
+  94            LOAD_GLOBAL             59 (_strip_sensitive + NULL)
+                LOAD_FAST               15 (row)
+                LOAD_ATTR               60 (details)
+                CALL                     1
+
+  87            LOAD_CONST               8 (('id', 'event_type', 'actor_type', 'target_type', 'target_id', 'created_at', 'details'))
+                CALL_KW                  7
+                LIST_APPEND              2
+                JUMP_BACKWARD          136 (to L20)
+
+  96   L23:     END_FOR
+                POP_TOP
+
+  86   L24:     STORE_FAST              16 (response_items)
+                STORE_FAST              15 (row)
+
+  99            LOAD_FAST               13 (has_more)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       31 (to L25)
+                LOAD_FAST               14 (items)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       24 (to L25)
+                LOAD_GLOBAL             51 (str + NULL)
+                LOAD_FAST               14 (items)
+                LOAD_CONST               9 (-1)
+                BINARY_SUBSCR
+                LOAD_ATTR                4 (id)
+                CALL                     1
+                JUMP_FORWARD             1 (to L26)
+       L25:     LOAD_CONST               0 (None)
+       L26:     STORE_FAST              17 (next_cursor)
+
+ 101            LOAD_GLOBAL             63 (AuditEventListResponse + NULL)
+
+ 102            LOAD_FAST               16 (response_items)
+
+ 103            LOAD_FAST               17 (next_cursor)
+
+ 104            LOAD_FAST               13 (has_more)
+
+ 101            LOAD_CONST              10 (('items', 'next_cursor', 'has_more'))
+                CALL_KW                  3
+                RETURN_VALUE
+
+  44   L27:     CLEANUP_THROW
+       L28:     EXTENDED_ARG             2
+                JUMP_BACKWARD_NO_INTERRUPT 728 (to L5)
+
+  68   L29:     CLEANUP_THROW
+       L30:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 416 (to L13)
+
+  80   L31:     CLEANUP_THROW
+       L32:     EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 267 (to L18)
+
+  --   L33:     SWAP                     2
+                POP_TOP
+
+  86            SWAP                     2
+                STORE_FAST              15 (row)
+                RERAISE                  0
+
+  --   L34:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L34 [0] lasti
+  L3 to L4 -> L27 [2]
+  L4 to L11 -> L34 [0] lasti
+  L11 to L12 -> L29 [2]
+  L12 to L16 -> L34 [0] lasti
+  L16 to L17 -> L31 [2]
+  L17 to L19 -> L34 [0] lasti
+  L19 to L24 -> L33 [2]
+  L24 to L28 -> L34 [0] lasti
+  L29 to L30 -> L34 [0] lasti
+  L31 to L32 -> L34 [0] lasti
+  L33 to L34 -> L34 [0] lasti

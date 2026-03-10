@@ -1,0 +1,823 @@
+# Bytecode dump of: call_ai_session.cpython-313.pyc
+# co_filename: D:\fluence\Github\mattbot\backend\app\models\call_ai_session.py
+# co_names: ('__doc__', 'uuid', 'datetime', 'UTC', 'sqlalchemy', 'CheckConstraint', 'ForeignKey', 'Index', 'Integer', 'String', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'app.database', 'Base', 'app.models._types', 'tz_datetime', 'CallAiSession')
+# co_consts (strings): ['AI session record for each call that connects to the realtime bridge.', 'CallAiSession']
+
+# DOCSTRING: """AI session record for each call that connects to the realtime bridge."""
+# --- Nested code object: CallAiSession ---
+    # DOCSTRING: """CallAiSession"""
+    # --- Nested code object: CallAiSession.<lambda> ---
+        # co_names: ('datetime', 'now', 'UTC')
+        # co_varnames: ()
+         66           RESUME                   0
+                      LOAD_GLOBAL              0 (datetime)
+                      LOAD_ATTR                2 (now)
+                      PUSH_NULL
+                      LOAD_GLOBAL              4 (UTC)
+                      CALL                     1
+                      RETURN_VALUE
+        
+    # co_names: ('__name__', '__module__', '__qualname__', '__firstlineno__', '__tablename__', 'mapped_column', 'UUID', 'uuid', 'uuid4', 'id', 'Mapped', '__annotations__', 'ForeignKey', 'call_id', 'owner_user_id', 'Text', 'provider_session_id', 'str', 'agent_id', 'String', 'status', 'tz_datetime', 'started_at', 'datetime', 'ended_at', 'Integer', 'duration_seconds', 'int', 'last_error_redacted', 'prompt_pack_version', 'settings_snapshot_id', 'text', 'created_at', 'updated_at', 'CheckConstraint', 'Index', '__table_args__', '__static_attributes__')
+    # co_varnames: ()
+     22           RESUME                   0
+                  LOAD_NAME                0 (__name__)
+                  STORE_NAME               1 (__module__)
+                  LOAD_CONST               0 ('CallAiSession')
+                  STORE_NAME               2 (__qualname__)
+                  LOAD_CONST               1 (22)
+                  STORE_NAME               3 (__firstlineno__)
+                  SETUP_ANNOTATIONS
+    
+     23           LOAD_CONST               2 ('call_ai_sessions')
+                  STORE_NAME               4 (__tablename__)
+    
+     25           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     26           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               3 (True)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               16 (uuid4)
+    
+     25           LOAD_CONST               5 (('primary_key', 'default'))
+                  CALL_KW                  3
+                  STORE_NAME               9 (id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST               6 ('id')
+                  STORE_SUBSCR
+    
+     28           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     29           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     30           LOAD_NAME               12 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST               7 ('calls.id')
+                  LOAD_CONST               8 ('CASCADE')
+                  LOAD_CONST               9 (('ondelete',))
+                  CALL_KW                  2
+    
+     31           LOAD_CONST               3 (True)
+    
+     32           LOAD_CONST              10 (False)
+    
+     28           LOAD_CONST              11 (('unique', 'nullable'))
+                  CALL_KW                  4
+                  STORE_NAME              13 (call_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              12 ('call_id')
+                  STORE_SUBSCR
+    
+     34           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     35           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     36           LOAD_NAME               12 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST              13 ('users.id')
+                  LOAD_CONST               8 ('CASCADE')
+                  LOAD_CONST               9 (('ondelete',))
+                  CALL_KW                  2
+    
+     37           LOAD_CONST              10 (False)
+    
+     34           LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  3
+                  STORE_NAME              14 (owner_user_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              15 ('owner_user_id')
+                  STORE_SUBSCR
+    
+     39           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               15 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              16 (provider_session_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               17 (str)
+                  LOAD_CONST              16 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              17 ('provider_session_id')
+                  STORE_SUBSCR
+    
+     40           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     41           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+    
+     42           LOAD_NAME               12 (ForeignKey)
+                  PUSH_NULL
+                  LOAD_CONST              18 ('agents.id')
+                  LOAD_CONST              19 ('SET NULL')
+                  LOAD_CONST               9 (('ondelete',))
+                  CALL_KW                  2
+    
+     43           LOAD_CONST               3 (True)
+    
+     40           LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  3
+                  STORE_NAME              18 (agent_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  LOAD_CONST              16 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              20 ('agent_id')
+                  STORE_SUBSCR
+    
+     45           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     46           LOAD_NAME               19 (String)
+                  PUSH_NULL
+                  LOAD_CONST              21 (30)
+                  CALL                     1
+                  LOAD_CONST              10 (False)
+                  LOAD_CONST              22 ('pending')
+    
+     45           LOAD_CONST              23 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              20 (status)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               17 (str)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              24 ('status')
+                  STORE_SUBSCR
+    
+     48           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               21 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              22 (started_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               23 (datetime)
+                  LOAD_CONST              16 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              25 ('started_at')
+                  STORE_SUBSCR
+    
+     49           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               21 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              24 (ended_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               23 (datetime)
+                  LOAD_CONST              16 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              26 ('ended_at')
+                  STORE_SUBSCR
+    
+     50           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               25 (Integer)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              26 (duration_seconds)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               27 (int)
+                  LOAD_CONST              16 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              27 ('duration_seconds')
+                  STORE_SUBSCR
+    
+     51           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+                  LOAD_NAME               15 (Text)
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              28 (last_error_redacted)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               17 (str)
+                  LOAD_CONST              16 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              28 ('last_error_redacted')
+                  STORE_SUBSCR
+    
+     52           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     53           LOAD_NAME               19 (String)
+                  PUSH_NULL
+                  LOAD_CONST              29 (20)
+                  CALL                     1
+                  LOAD_CONST               3 (True)
+    
+     52           LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              29 (prompt_pack_version)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               17 (str)
+                  LOAD_CONST              16 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              30 ('prompt_pack_version')
+                  STORE_SUBSCR
+    
+     55           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     56           LOAD_NAME                6 (UUID)
+                  PUSH_NULL
+                  LOAD_CONST               3 (True)
+                  LOAD_CONST               4 (('as_uuid',))
+                  CALL_KW                  1
+                  LOAD_CONST               3 (True)
+    
+     55           LOAD_CONST              14 (('nullable',))
+                  CALL_KW                  2
+                  STORE_NAME              30 (settings_snapshot_id)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME                7 (uuid)
+                  LOAD_ATTR               12 (UUID)
+                  LOAD_CONST              16 (None)
+                  BINARY_OP                7 (|)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              31 ('settings_snapshot_id')
+                  STORE_SUBSCR
+    
+     59           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     60           LOAD_NAME               21 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+                  LOAD_CONST              10 (False)
+                  LOAD_NAME               31 (text)
+                  PUSH_NULL
+                  LOAD_CONST              32 ('now()')
+                  CALL                     1
+    
+     59           LOAD_CONST              23 (('nullable', 'server_default'))
+                  CALL_KW                  3
+                  STORE_NAME              32 (created_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               23 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              33 ('created_at')
+                  STORE_SUBSCR
+    
+     62           LOAD_NAME                5 (mapped_column)
+                  PUSH_NULL
+    
+     63           LOAD_NAME               21 (tz_datetime)
+                  PUSH_NULL
+                  CALL                     0
+    
+     64           LOAD_CONST              10 (False)
+    
+     65           LOAD_NAME               31 (text)
+                  PUSH_NULL
+                  LOAD_CONST              32 ('now()')
+                  CALL                     1
+    
+     66           LOAD_CONST              34 (<code object <lambda> at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\call_ai_session.py", line 66>)
+                  MAKE_FUNCTION
+    
+     62           LOAD_CONST              35 (('nullable', 'server_default', 'onupdate'))
+                  CALL_KW                  4
+                  STORE_NAME              33 (updated_at)
+                  LOAD_NAME               10 (Mapped)
+                  LOAD_NAME               23 (datetime)
+                  BINARY_SUBSCR
+                  LOAD_NAME               11 (__annotations__)
+                  LOAD_CONST              36 ('updated_at')
+                  STORE_SUBSCR
+    
+     70           LOAD_NAME               34 (CheckConstraint)
+                  PUSH_NULL
+    
+     71           LOAD_CONST              37 ("status IN ('pending', 'connected', 'active', 'completed', 'failed', 'timeout')")
+    
+     72           LOAD_CONST              38 ('ck_call_ai_sessions_status')
+    
+     70           LOAD_CONST              39 (('name',))
+                  CALL_KW                  2
+    
+     74           LOAD_NAME               35 (Index)
+                  PUSH_NULL
+                  LOAD_CONST              40 ('call_ai_sessions_call_id_idx')
+                  LOAD_CONST              12 ('call_id')
+                  CALL                     2
+    
+     75           LOAD_NAME               35 (Index)
+                  PUSH_NULL
+                  LOAD_CONST              41 ('call_ai_sessions_user_status_idx')
+                  LOAD_CONST              15 ('owner_user_id')
+                  LOAD_CONST              24 ('status')
+                  CALL                     3
+    
+     69           BUILD_TUPLE              3
+                  STORE_NAME              36 (__table_args__)
+                  LOAD_CONST              42 (())
+                  STORE_NAME              37 (__static_attributes__)
+                  RETURN_CONST            16 (None)
+    
+    Disassembly of <code object <lambda> at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\call_ai_session.py", line 66>:
+     66           RESUME                   0
+                  LOAD_GLOBAL              0 (datetime)
+                  LOAD_ATTR                2 (now)
+                  PUSH_NULL
+                  LOAD_GLOBAL              4 (UTC)
+                  CALL                     1
+                  RETURN_VALUE
+    
+# co_names: ('__doc__', 'uuid', 'datetime', 'UTC', 'sqlalchemy', 'CheckConstraint', 'ForeignKey', 'Index', 'Integer', 'String', 'Text', 'text', 'sqlalchemy.dialects.postgresql', 'UUID', 'sqlalchemy.orm', 'Mapped', 'mapped_column', 'app.database', 'Base', 'app.models._types', 'tz_datetime', 'CallAiSession')
+# co_varnames: ()
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 ('AI session record for each call that connects to the realtime bridge.')
+              STORE_NAME               0 (__doc__)
+
+  3           LOAD_CONST               1 (0)
+              LOAD_CONST               2 (None)
+              IMPORT_NAME              1 (uuid)
+              STORE_NAME               1 (uuid)
+
+  4           LOAD_CONST               1 (0)
+              LOAD_CONST               3 (('UTC', 'datetime'))
+              IMPORT_NAME              2 (datetime)
+              IMPORT_FROM              3 (UTC)
+              STORE_NAME               3 (UTC)
+              IMPORT_FROM              2 (datetime)
+              STORE_NAME               2 (datetime)
+              POP_TOP
+
+  6           LOAD_CONST               1 (0)
+              LOAD_CONST               4 (('CheckConstraint', 'ForeignKey', 'Index', 'Integer', 'String', 'Text', 'text'))
+              IMPORT_NAME              4 (sqlalchemy)
+              IMPORT_FROM              5 (CheckConstraint)
+              STORE_NAME               5 (CheckConstraint)
+              IMPORT_FROM              6 (ForeignKey)
+              STORE_NAME               6 (ForeignKey)
+              IMPORT_FROM              7 (Index)
+              STORE_NAME               7 (Index)
+              IMPORT_FROM              8 (Integer)
+              STORE_NAME               8 (Integer)
+              IMPORT_FROM              9 (String)
+              STORE_NAME               9 (String)
+              IMPORT_FROM             10 (Text)
+              STORE_NAME              10 (Text)
+              IMPORT_FROM             11 (text)
+              STORE_NAME              11 (text)
+              POP_TOP
+
+ 15           LOAD_CONST               1 (0)
+              LOAD_CONST               5 (('UUID',))
+              IMPORT_NAME             12 (sqlalchemy.dialects.postgresql)
+              IMPORT_FROM             13 (UUID)
+              STORE_NAME              13 (UUID)
+              POP_TOP
+
+ 16           LOAD_CONST               1 (0)
+              LOAD_CONST               6 (('Mapped', 'mapped_column'))
+              IMPORT_NAME             14 (sqlalchemy.orm)
+              IMPORT_FROM             15 (Mapped)
+              STORE_NAME              15 (Mapped)
+              IMPORT_FROM             16 (mapped_column)
+              STORE_NAME              16 (mapped_column)
+              POP_TOP
+
+ 18           LOAD_CONST               1 (0)
+              LOAD_CONST               7 (('Base',))
+              IMPORT_NAME             17 (app.database)
+              IMPORT_FROM             18 (Base)
+              STORE_NAME              18 (Base)
+              POP_TOP
+
+ 19           LOAD_CONST               1 (0)
+              LOAD_CONST               8 (('tz_datetime',))
+              IMPORT_NAME             19 (app.models._types)
+              IMPORT_FROM             20 (tz_datetime)
+              STORE_NAME              20 (tz_datetime)
+              POP_TOP
+
+ 22           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               9 (<code object CallAiSession at 0x0000024C0FB69590, file "D:\fluence\Github\mattbot\backend\app\models\call_ai_session.py", line 22>)
+              MAKE_FUNCTION
+              LOAD_CONST              10 ('CallAiSession')
+              LOAD_NAME               18 (Base)
+              CALL                     3
+              STORE_NAME              21 (CallAiSession)
+              RETURN_CONST             2 (None)
+
+Disassembly of <code object CallAiSession at 0x0000024C0FB69590, file "D:\fluence\Github\mattbot\backend\app\models\call_ai_session.py", line 22>:
+ 22           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('CallAiSession')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (22)
+              STORE_NAME               3 (__firstlineno__)
+              SETUP_ANNOTATIONS
+
+ 23           LOAD_CONST               2 ('call_ai_sessions')
+              STORE_NAME               4 (__tablename__)
+
+ 25           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 26           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               16 (uuid4)
+
+ 25           LOAD_CONST               5 (('primary_key', 'default'))
+              CALL_KW                  3
+              STORE_NAME               9 (id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST               6 ('id')
+              STORE_SUBSCR
+
+ 28           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 29           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 30           LOAD_NAME               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST               7 ('calls.id')
+              LOAD_CONST               8 ('CASCADE')
+              LOAD_CONST               9 (('ondelete',))
+              CALL_KW                  2
+
+ 31           LOAD_CONST               3 (True)
+
+ 32           LOAD_CONST              10 (False)
+
+ 28           LOAD_CONST              11 (('unique', 'nullable'))
+              CALL_KW                  4
+              STORE_NAME              13 (call_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              12 ('call_id')
+              STORE_SUBSCR
+
+ 34           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 35           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 36           LOAD_NAME               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              13 ('users.id')
+              LOAD_CONST               8 ('CASCADE')
+              LOAD_CONST               9 (('ondelete',))
+              CALL_KW                  2
+
+ 37           LOAD_CONST              10 (False)
+
+ 34           LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+              STORE_NAME              14 (owner_user_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              15 ('owner_user_id')
+              STORE_SUBSCR
+
+ 39           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               15 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              16 (provider_session_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               17 (str)
+              LOAD_CONST              16 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              17 ('provider_session_id')
+              STORE_SUBSCR
+
+ 40           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 41           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+
+ 42           LOAD_NAME               12 (ForeignKey)
+              PUSH_NULL
+              LOAD_CONST              18 ('agents.id')
+              LOAD_CONST              19 ('SET NULL')
+              LOAD_CONST               9 (('ondelete',))
+              CALL_KW                  2
+
+ 43           LOAD_CONST               3 (True)
+
+ 40           LOAD_CONST              14 (('nullable',))
+              CALL_KW                  3
+              STORE_NAME              18 (agent_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              LOAD_CONST              16 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              20 ('agent_id')
+              STORE_SUBSCR
+
+ 45           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 46           LOAD_NAME               19 (String)
+              PUSH_NULL
+              LOAD_CONST              21 (30)
+              CALL                     1
+              LOAD_CONST              10 (False)
+              LOAD_CONST              22 ('pending')
+
+ 45           LOAD_CONST              23 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              20 (status)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               17 (str)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              24 ('status')
+              STORE_SUBSCR
+
+ 48           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               21 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              22 (started_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               23 (datetime)
+              LOAD_CONST              16 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              25 ('started_at')
+              STORE_SUBSCR
+
+ 49           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               21 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST               3 (True)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              24 (ended_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               23 (datetime)
+              LOAD_CONST              16 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              26 ('ended_at')
+              STORE_SUBSCR
+
+ 50           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               25 (Integer)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              26 (duration_seconds)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               27 (int)
+              LOAD_CONST              16 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              27 ('duration_seconds')
+              STORE_SUBSCR
+
+ 51           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+              LOAD_NAME               15 (Text)
+              LOAD_CONST               3 (True)
+              LOAD_CONST              14 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              28 (last_error_redacted)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               17 (str)
+              LOAD_CONST              16 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              28 ('last_error_redacted')
+              STORE_SUBSCR
+
+ 52           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 53           LOAD_NAME               19 (String)
+              PUSH_NULL
+              LOAD_CONST              29 (20)
+              CALL                     1
+              LOAD_CONST               3 (True)
+
+ 52           LOAD_CONST              14 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              29 (prompt_pack_version)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               17 (str)
+              LOAD_CONST              16 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              30 ('prompt_pack_version')
+              STORE_SUBSCR
+
+ 55           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 56           LOAD_NAME                6 (UUID)
+              PUSH_NULL
+              LOAD_CONST               3 (True)
+              LOAD_CONST               4 (('as_uuid',))
+              CALL_KW                  1
+              LOAD_CONST               3 (True)
+
+ 55           LOAD_CONST              14 (('nullable',))
+              CALL_KW                  2
+              STORE_NAME              30 (settings_snapshot_id)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME                7 (uuid)
+              LOAD_ATTR               12 (UUID)
+              LOAD_CONST              16 (None)
+              BINARY_OP                7 (|)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              31 ('settings_snapshot_id')
+              STORE_SUBSCR
+
+ 59           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 60           LOAD_NAME               21 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+              LOAD_CONST              10 (False)
+              LOAD_NAME               31 (text)
+              PUSH_NULL
+              LOAD_CONST              32 ('now()')
+              CALL                     1
+
+ 59           LOAD_CONST              23 (('nullable', 'server_default'))
+              CALL_KW                  3
+              STORE_NAME              32 (created_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               23 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              33 ('created_at')
+              STORE_SUBSCR
+
+ 62           LOAD_NAME                5 (mapped_column)
+              PUSH_NULL
+
+ 63           LOAD_NAME               21 (tz_datetime)
+              PUSH_NULL
+              CALL                     0
+
+ 64           LOAD_CONST              10 (False)
+
+ 65           LOAD_NAME               31 (text)
+              PUSH_NULL
+              LOAD_CONST              32 ('now()')
+              CALL                     1
+
+ 66           LOAD_CONST              34 (<code object <lambda> at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\call_ai_session.py", line 66>)
+              MAKE_FUNCTION
+
+ 62           LOAD_CONST              35 (('nullable', 'server_default', 'onupdate'))
+              CALL_KW                  4
+              STORE_NAME              33 (updated_at)
+              LOAD_NAME               10 (Mapped)
+              LOAD_NAME               23 (datetime)
+              BINARY_SUBSCR
+              LOAD_NAME               11 (__annotations__)
+              LOAD_CONST              36 ('updated_at')
+              STORE_SUBSCR
+
+ 70           LOAD_NAME               34 (CheckConstraint)
+              PUSH_NULL
+
+ 71           LOAD_CONST              37 ("status IN ('pending', 'connected', 'active', 'completed', 'failed', 'timeout')")
+
+ 72           LOAD_CONST              38 ('ck_call_ai_sessions_status')
+
+ 70           LOAD_CONST              39 (('name',))
+              CALL_KW                  2
+
+ 74           LOAD_NAME               35 (Index)
+              PUSH_NULL
+              LOAD_CONST              40 ('call_ai_sessions_call_id_idx')
+              LOAD_CONST              12 ('call_id')
+              CALL                     2
+
+ 75           LOAD_NAME               35 (Index)
+              PUSH_NULL
+              LOAD_CONST              41 ('call_ai_sessions_user_status_idx')
+              LOAD_CONST              15 ('owner_user_id')
+              LOAD_CONST              24 ('status')
+              CALL                     3
+
+ 69           BUILD_TUPLE              3
+              STORE_NAME              36 (__table_args__)
+              LOAD_CONST              42 (())
+              STORE_NAME              37 (__static_attributes__)
+              RETURN_CONST            16 (None)
+
+Disassembly of <code object <lambda> at 0x0000024C11423930, file "D:\fluence\Github\mattbot\backend\app\models\call_ai_session.py", line 66>:
+ 66           RESUME                   0
+              LOAD_GLOBAL              0 (datetime)
+              LOAD_ATTR                2 (now)
+              PUSH_NULL
+              LOAD_GLOBAL              4 (UTC)
+              CALL                     1
+              RETURN_VALUE
