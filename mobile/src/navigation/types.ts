@@ -19,6 +19,8 @@ export type RootStackParamList = {
   ForwardingVerify: undefined;
   CallsList: undefined;
   CallDetail: { callId: string };
+  OnboardingAssistantSetup: undefined;
+  AssistantSettings: { agentId?: string };
   Settings: undefined;
 };
 

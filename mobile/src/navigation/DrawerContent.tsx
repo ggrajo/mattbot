@@ -62,6 +62,11 @@ export function DrawerContent(props: any) {
       </View>
 
       <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { color: theme.colors.textSecondary }]}>AI</Text>
+        <DrawerItem label="Assistant" onPress={() => navigateTo('AssistantSettings')} />
+      </View>
+
+      <View style={styles.section}>
         <Text style={[styles.sectionTitle, { color: theme.colors.textSecondary }]}>SETTINGS</Text>
         <DrawerItem label="Settings" onPress={() => navigateTo('Settings')} />
         <DrawerItem label="Devices" onPress={() => navigateTo('DeviceList')} />

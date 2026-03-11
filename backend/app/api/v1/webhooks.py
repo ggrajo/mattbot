@@ -91,6 +91,48 @@ async def twilio_voice_webhook(
     return Response(content=twiml, media_type="application/xml")
 
 
+@router.post("/elevenlabs")
+async def elevenlabs_webhook(
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+) -> JSONResponse:
+    try:
+        raw_body = await request.body()
+        payload = json.loads(raw_body)
+    except (json.JSONDecodeError, Exception):
+        raise AppError("WEBHOOK_ERROR", "Invalid ElevenLabs payload", 400)
+
+    provider_event = ProviderEvent(
+        provider="elevenlabs",
+        provider_event_id=payload.get("conversation_id"),
+        event_type=f"elevenlabs_{payload.get('event_type', 'unknown')}",
+        payload_redacted=json.dumps(
+            {k: v for k, v in payload.items() if k not in ("api_key",)}
+        ),
+    )
+    db.add(provider_event)
+
+    conversation_id = payload.get("conversation_id")
+    event_type = payload.get("event_type", "")
+
+    if event_type == "conversation_ended" and conversation_id:
+        call_sid = payload.get("metadata", {}).get("twilio_call_sid")
+        if call_sid:
+            try:
+                duration = payload.get("duration_seconds")
+                await call_service.handle_twilio_status_callback(
+                    db, call_sid, "completed", duration
+                )
+            except AppError:
+                logger.warning(
+                    "ElevenLabs callback for unknown call SID %s", call_sid
+                )
+            except Exception:
+                logger.exception("Failed to process ElevenLabs callback")
+
+    return JSONResponse(content={"status": "ok"}, status_code=200)
+
+
 @router.post("/twilio/voice/status")
 async def twilio_voice_status_webhook(
     request: Request,

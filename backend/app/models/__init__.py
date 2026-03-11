@@ -17,6 +17,14 @@ from app.models.forwarding_verification import ForwardingVerificationAttempt
 from app.models.call import Call
 from app.models.call_event import CallEvent
 from app.models.provider_event import ProviderEvent
+from app.models.call_ai_session import CallAiSession
+from app.models.call_artifact import CallArtifact
+from app.models.call_memory_item import CallMemoryItem
+from app.models.call_usage_event import CallUsageEvent
+from app.models.agent import Agent
+from app.models.agent_config import AgentConfig
+from app.models.voice_catalog import VoiceCatalog
+from app.models.prompt_suggestion import PromptSuggestion
 
 __all__ = [
     "User",
@@ -38,4 +46,12 @@ __all__ = [
     "Call",
     "CallEvent",
     "ProviderEvent",
+    "CallAiSession",
+    "CallArtifact",
+    "CallMemoryItem",
+    "CallUsageEvent",
+    "Agent",
+    "AgentConfig",
+    "VoiceCatalog",
+    "PromptSuggestion",
 ]

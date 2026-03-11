@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 import { Card } from '../components/ui/Card';
 import { useTheme } from '../theme/ThemeProvider';
+import { useAgentStore } from '../store/agentStore';
 
 export function HomeScreen() {
   const theme = useTheme();
   const { colors, spacing, typography } = theme;
   const navigation = useNavigation<any>();
+  const { currentAgent, fetchAgents } = useAgentStore();
+
+  useEffect(() => {
+    fetchAgents();
+  }, [fetchAgents]);
 
   const openDrawer = () => {
     navigation.dispatch(DrawerActions.openDrawer());
@@ -43,6 +49,34 @@ export function HomeScreen() {
           </Text>
         </Card>
 
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() =>
+            currentAgent
+              ? navigation.navigate('AssistantSettings', { agentId: currentAgent.id })
+              : navigation.navigate('OnboardingAssistantSetup')
+          }
+        >
+          <Card>
+            <View style={styles.assistantCardHeader}>
+              <View style={styles.assistantIcon}>
+                <Text style={styles.assistantIconText}>AI</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.cardTitle, { color: colors.textPrimary, marginBottom: 0 }]}>
+                  {currentAgent?.name ?? 'Set Up Assistant'}
+                </Text>
+                <Text style={[styles.cardBody, { color: colors.textSecondary }]}>
+                  {currentAgent
+                    ? `${currentAgent.personality.charAt(0).toUpperCase() + currentAgent.personality.slice(1)} personality`
+                    : 'Configure your AI call assistant'}
+                </Text>
+              </View>
+              <Text style={{ color: colors.textDisabled, fontSize: 18 }}>›</Text>
+            </View>
+          </Card>
+        </TouchableOpacity>
+
         <Card>
           <Text style={[styles.cardTitle, { color: colors.textPrimary }]}>Recent Activity</Text>
           <Text style={[styles.cardBody, { color: colors.textSecondary }]}>
@@ -75,5 +109,23 @@ const styles = StyleSheet.create({
   cardBody: {
     fontSize: 14,
     lineHeight: 20,
+  },
+  assistantCardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  assistantIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#7C3AED',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  assistantIconText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '700',
   },
 });

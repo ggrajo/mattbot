@@ -93,11 +93,19 @@ export function CallsListScreen() {
     >
       <View style={styles.cardHeader}>
         <View style={styles.cardLeft}>
-          <Text style={styles.phoneNumber}>
-            {item.direction === 'inbound' ? item.from_number : item.to_number}
-          </Text>
+          <View style={styles.phoneRow}>
+            <Text style={styles.phoneNumber}>
+              {item.direction === 'inbound' ? item.from_number : item.to_number}
+            </Text>
+            {item.ai_session_id && (
+              <View style={styles.aiBadge}>
+                <Text style={styles.aiBadgeText}>AI</Text>
+              </View>
+            )}
+          </View>
           <Text style={styles.directionLabel}>
             {item.direction === 'inbound' ? 'Incoming' : 'Outgoing'}
+            {item.ai_session_id ? ' · Screened by AI' : ''}
           </Text>
         </View>
         <StatusBadge status={item.status} />
@@ -179,7 +187,20 @@ function makeStyles(theme: Theme) {
     },
     cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
     cardLeft: { flex: 1, marginRight: spacing.md },
+    phoneRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
     phoneNumber: { ...typography.h3, color: colors.textPrimary },
+    aiBadge: {
+      backgroundColor: '#F3E5F5',
+      paddingHorizontal: spacing.sm,
+      paddingVertical: 2,
+      borderRadius: radii.full,
+    },
+    aiBadgeText: {
+      fontSize: 10,
+      fontWeight: '700',
+      color: '#7B1FA2',
+      letterSpacing: 0.5,
+    },
     directionLabel: { ...typography.caption, color: colors.textSecondary, marginTop: 2 },
     cardFooter: {
       flexDirection: 'row',

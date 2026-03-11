@@ -10,6 +10,7 @@ export interface CallResponse {
   started_at: string;
   answered_at: string | null;
   ended_at: string | null;
+  ai_session_id?: string | null;
 }
 
 export interface CallListResponse {

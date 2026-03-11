@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,8 +10,14 @@ import {
 import { useRoute } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeProvider';
 import { useCallStore } from '../store/callStore';
+import { apiClient } from '../api/client';
 import type { Theme } from '../theme/tokens';
 import type { CallEventResponse } from '../api/calls';
+
+interface CallArtifacts {
+  transcript: string | null;
+  summary: string | null;
+}
 
 const STATUS_COLORS: Record<string, { bg: string; fg: string }> = {
   ringing: { bg: '#FFF3E0', fg: '#E65100' },
@@ -48,10 +54,15 @@ export function CallDetailScreen() {
   const { callId } = route.params as { callId: string };
   const { selectedCall, events, loading, error, fetchCall, fetchCallEvents, clearSelected } =
     useCallStore();
+  const [artifacts, setArtifacts] = useState<CallArtifacts | null>(null);
 
   useEffect(() => {
     fetchCall(callId);
     fetchCallEvents(callId);
+    apiClient
+      .get<CallArtifacts>(`/calls/${callId}/artifacts`)
+      .then(({ data }) => setArtifacts(data))
+      .catch(() => setArtifacts(null));
     return () => clearSelected();
   }, [callId, fetchCall, fetchCallEvents, clearSelected]);
 
@@ -129,6 +140,24 @@ export function CallDetailScreen() {
               />
             ))}
           </View>
+        )}
+
+        {artifacts && (artifacts.transcript || artifacts.summary) && (
+          <>
+            <Text style={[styles.sectionTitle, { marginTop: theme.spacing.xl }]}>Artifacts</Text>
+            {artifacts.summary && (
+              <View style={styles.artifactCard}>
+                <Text style={styles.artifactLabel}>Summary</Text>
+                <Text style={styles.artifactBody}>{artifacts.summary}</Text>
+              </View>
+            )}
+            {artifacts.transcript && (
+              <View style={styles.artifactCard}>
+                <Text style={styles.artifactLabel}>Transcript</Text>
+                <Text style={styles.artifactBody}>{artifacts.transcript}</Text>
+              </View>
+            )}
+          </>
         )}
       </ScrollView>
     </SafeAreaView>
@@ -262,5 +291,27 @@ function makeStyles(theme: Theme) {
     },
     emptyTimeline: { ...typography.body, color: colors.textDisabled },
     timeline: { paddingLeft: spacing.sm },
+    artifactCard: {
+      backgroundColor: colors.surface,
+      borderRadius: radii.lg,
+      padding: spacing.xl,
+      marginBottom: spacing.md,
+      borderWidth: 1,
+      borderColor: colors.border,
+      ...shadows.card,
+    },
+    artifactLabel: {
+      ...typography.bodySmall,
+      fontWeight: '600',
+      color: colors.textSecondary,
+      marginBottom: spacing.sm,
+      textTransform: 'uppercase',
+      letterSpacing: 0.5,
+    },
+    artifactBody: {
+      ...typography.body,
+      color: colors.textPrimary,
+      lineHeight: 22,
+    },
   });
 }

@@ -36,6 +36,7 @@ def create_app() -> FastAPI:
     register_error_handlers(application)
 
     from app.api.v1 import (
+        agents,
         auth,
         billing,
         call_modes,
@@ -43,9 +44,13 @@ def create_app() -> FastAPI:
         dev_billing,
         devices,
         forwarding,
+        internal,
         me,
+        memory,
         numbers,
+        prompt_suggestions,
         push,
+        voices,
         webhooks,
     )
 
@@ -59,6 +64,11 @@ def create_app() -> FastAPI:
     application.include_router(call_modes.router, prefix="/api/v1/call-modes", tags=["call-modes"])
     application.include_router(forwarding.router, prefix="/api/v1/forwarding", tags=["forwarding"])
     application.include_router(calls.router, prefix="/api/v1/calls", tags=["calls"])
+    application.include_router(internal.router, prefix="/api/v1/internal", tags=["internal"])
+    application.include_router(memory.router, prefix="/api/v1/memory", tags=["memory"])
+    application.include_router(agents.router, prefix="/api/v1/agents", tags=["agents"])
+    application.include_router(voices.router, prefix="/api/v1/voices", tags=["voices"])
+    application.include_router(prompt_suggestions.router, prefix="/api/v1/prompt-suggestions", tags=["prompt-suggestions"])
     application.include_router(webhooks.router, prefix="/webhooks", tags=["webhooks"])
 
     return application
