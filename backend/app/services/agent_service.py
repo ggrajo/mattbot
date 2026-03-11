@@ -1,14 +1,31 @@
 """Service for managing AI agents and building system prompts."""
 
+import hashlib
+import logging
 import uuid
+from dataclasses import dataclass, field
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.middleware.error_handler import AppError
 from app.models.agent import Agent
 from app.models.agent_config import AgentConfig
 from app.models.user import User
+
+logger = logging.getLogger(__name__)
+
+
+@dataclass
+class CallerContext:
+    caller_phone_hash: str
+    caller_name: str | None = None
+    is_vip: bool = False
+    is_blocked: bool = False
+    memory_count: int = 0
+    call_count: int = 0
+    memory_summary: str = ""
+    memories: list[dict] = field(default_factory=list)
 
 
 class AgentService:
@@ -76,73 +93,132 @@ class AgentService:
         return list(result.scalars().all())
 
     @staticmethod
-    async def build_system_prompt(
-        db: AsyncSession,
-        agent: Agent,
-        user: User,
-        call_context: dict | None = None,
-    ) -> str:
-        """Assemble the full system prompt from agent config, user settings, call context, and memories."""
-        parts: list[str] = []
-
-        if agent.system_prompt:
-            parts.append(agent.system_prompt)
-
-        parts.append(f"The user's name is {user.display_name or 'the subscriber'}.")
-        parts.append(f"Speak in {agent.language}. Be {agent.personality}.")
-
-        config_result = await db.execute(
-            select(AgentConfig).where(AgentConfig.agent_id == agent.id)
-        )
-        configs = config_result.scalars().all()
-        for cfg in configs:
-            parts.append(f"{cfg.config_key}: {cfg.config_value}")
-
-        if call_context:
-            caller = call_context.get("from_number", "unknown")
-            parts.append(f"The caller's number is {caller}.")
-
-            caller_phone_hash = call_context.get("caller_phone_hash")
-            if caller_phone_hash:
-                memory_section = await AgentService._build_memory_section(
-                    db, user.id, caller_phone_hash
-                )
-                if memory_section:
-                    parts.append(memory_section)
-
-        return "\n\n".join(parts)
-
-    @staticmethod
-    async def _build_memory_section(
+    async def get_caller_context(
         db: AsyncSession,
         user_id: uuid.UUID,
         caller_phone_hash: str,
-    ) -> str | None:
-        """Fetch recent memories for a specific caller and format them for the prompt."""
+    ) -> CallerContext:
+        """Build full caller context including VIP status, memory items, and name."""
+        from app.models.call import Call
         from app.models.call_memory_item import CallMemoryItem
 
-        result = await db.execute(
-            select(CallMemoryItem)
-            .where(
-                CallMemoryItem.user_id == user_id,
-                CallMemoryItem.caller_phone_hash == caller_phone_hash,
+        ctx = CallerContext(caller_phone_hash=caller_phone_hash)
+
+        try:
+            result = await db.execute(
+                select(CallMemoryItem)
+                .where(
+                    CallMemoryItem.user_id == user_id,
+                    CallMemoryItem.caller_phone_hash == caller_phone_hash,
+                )
+                .order_by(
+                    CallMemoryItem.importance.desc(),
+                    CallMemoryItem.created_at.desc(),
+                )
+                .limit(20)
             )
-            .order_by(CallMemoryItem.importance.desc(), CallMemoryItem.created_at.desc())
-            .limit(20)
+            memories = list(result.scalars().all())
+            ctx.memory_count = len(memories)
+
+            ctx.caller_name = next(
+                (m.caller_name for m in memories if m.caller_name), None
+            )
+
+            high_importance = sum(1 for m in memories if m.importance >= 4)
+            ctx.is_vip = high_importance >= 1 or len(memories) >= 3
+
+            ctx.memories = [
+                {
+                    "memory_type": m.memory_type,
+                    "content": m.content,
+                    "importance": m.importance,
+                }
+                for m in memories
+            ]
+
+            if memories:
+                summary_parts = []
+                if ctx.caller_name:
+                    summary_parts.append(f"Known as {ctx.caller_name}.")
+                top_facts = [m.content for m in memories[:5]]
+                summary_parts.extend(top_facts)
+                ctx.memory_summary = " ".join(summary_parts)
+        except Exception:
+            logger.exception(
+                "Failed to fetch memories for caller %s of user %s",
+                caller_phone_hash,
+                user_id,
+            )
+
+        try:
+            call_count = await db.scalar(
+                select(func.count(Call.id)).where(
+                    Call.user_id == user_id,
+                    Call.from_number.isnot(None),
+                )
+            )
+            ctx.call_count = call_count or 0
+        except Exception:
+            logger.debug("Could not count calls for caller context")
+
+        try:
+            ctx.is_blocked = await AgentService._is_caller_blocked(
+                db, user_id, caller_phone_hash
+            )
+        except Exception:
+            logger.debug("Could not check block status for caller")
+
+        return ctx
+
+    @staticmethod
+    async def _is_caller_blocked(
+        db: AsyncSession,
+        user_id: uuid.UUID,
+        caller_phone_hash: str,
+    ) -> bool:
+        """Check if caller is on the block list via agent config metadata."""
+        result = await db.execute(
+            select(AgentConfig.metadata_json).where(
+                AgentConfig.user_id == user_id,
+                AgentConfig.is_default.is_(True),
+            )
         )
-        memories = list(result.scalars().all())
+        row = result.scalar_one_or_none()
+        if not row or not isinstance(row, dict):
+            return False
+        block_list: list[str] = row.get("block_list", [])
+        return caller_phone_hash in block_list
 
-        if not memories:
-            return None
+    @staticmethod
+    def hash_phone_number(phone: str) -> str:
+        """Create a consistent phone hash from an E.164 number."""
+        return hashlib.sha256(phone.strip().encode()).hexdigest()[:16]
 
-        caller_name = next(
-            (m.caller_name for m in memories if m.caller_name), None
+    @staticmethod
+    async def build_system_prompt(
+        db: AsyncSession,
+        agent: Agent,
+        user: User | None,
+        call_context: dict | None = None,
+    ) -> str:
+        """Assemble the full system prompt from agent config, user settings,
+        call context, memories, and VIP status."""
+        from app.services.prompts import build_system_prompt as build_prompt
+
+        caller_phone_hash = (call_context or {}).get("caller_phone_hash")
+
+        return await build_prompt(
+            db,
+            agent.user_id,
+            base_prompt=agent.system_prompt,
+            caller_phone_hash=caller_phone_hash,
+            agent_name=agent.name,
+            personality=agent.personality,
+            language=agent.language,
+            user_display_name=user.display_name if user else None,
+            user_timezone=user.default_timezone if user else None,
+            call_mode=(call_context or {}).get("call_mode"),
         )
-        lines = ["[CALLER MEMORY]"]
-        if caller_name:
-            lines.append(f"This caller is known as: {caller_name}")
-        lines.append(f"You have {len(memories)} memories about this caller:")
-        for m in memories:
-            lines.append(f"  - [{m.memory_type}] {m.content}")
 
-        return "\n".join(lines)
+
+agent_service = AgentService()

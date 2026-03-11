@@ -19,6 +19,7 @@ export interface ElevenLabsClientOptions {
   voiceId?: string;
   language?: string;
   callerMemory?: CallerMemoryContext;
+  dynamicVariables?: Record<string, string>;
 }
 
 /**
@@ -128,6 +129,10 @@ export class ElevenLabsClient extends EventEmitter {
     }
     if (Object.keys(conversationConfig).length > 0) {
       initPayload.conversation_config_override = conversationConfig;
+    }
+
+    if (this.options.dynamicVariables && Object.keys(this.options.dynamicVariables).length > 0) {
+      initPayload.dynamic_variables = this.options.dynamicVariables;
     }
 
     this.send(initPayload);

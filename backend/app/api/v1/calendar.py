@@ -61,6 +61,9 @@ async def connect_calendar(
         token = await calendar_service.connect_google_calendar(
             db, current_user.user_id, body.auth_code
         )
+
+        await _update_agent_calendar_status(db, current_user.user_id, connected=True)
+
         return CalendarStatusResponse(
             is_connected=True,
             calendar_id=token.calendar_id,
@@ -79,11 +82,39 @@ async def disconnect_calendar(
 ) -> None:
     try:
         await calendar_service.disconnect_calendar(db, current_user.user_id)
+
+        await _update_agent_calendar_status(db, current_user.user_id, connected=False)
     except AppError:
         raise
     except Exception as e:
         logger.exception("Failed to disconnect calendar for user %s", current_user.user_id)
         raise AppError("CALENDAR_ERROR", f"Failed to disconnect calendar: {e}", 500)
+
+
+async def _update_agent_calendar_status(
+    db: AsyncSession, user_id, *, connected: bool
+) -> None:
+    """Keep the default agent config in sync with calendar connection state."""
+    try:
+        from sqlalchemy import select
+        from app.models.agent_config import AgentConfig
+
+        result = await db.execute(
+            select(AgentConfig).where(
+                AgentConfig.user_id == user_id,
+                AgentConfig.is_default.is_(True),
+            )
+        )
+        config = result.scalar_one_or_none()
+        if config:
+            meta = config.metadata_json or {}
+            meta["calendar_connected"] = connected
+            config.metadata_json = meta
+            await db.flush()
+    except Exception:
+        logger.debug(
+            "Could not update agent config calendar status for user %s", user_id
+        )
 
 
 @router.get("/availability", response_model=AvailabilityResponse)

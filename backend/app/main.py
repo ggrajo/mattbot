@@ -51,12 +51,14 @@ def create_app() -> FastAPI:
         me,
         memory,
         numbers,
+        onboarding,
         prompt_suggestions,
         push,
         stats,
         voices,
         webhooks,
     )
+    from app.api.v1 import settings as settings_api
 
     application.include_router(health.router, prefix="/health", tags=["health"])
     application.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
@@ -76,7 +78,9 @@ def create_app() -> FastAPI:
     application.include_router(voices.router, prefix="/api/v1/voices", tags=["voices"])
     application.include_router(prompt_suggestions.router, prefix="/api/v1/prompt-suggestions", tags=["prompt-suggestions"])
     application.include_router(calendar.router, prefix="/api/v1/calendar", tags=["calendar"])
+    application.include_router(settings_api.router, prefix="/api/v1/settings", tags=["settings"])
     application.include_router(stats.router, prefix="/api/v1/stats", tags=["stats"])
+    application.include_router(onboarding.router, prefix="/api/v1/onboarding", tags=["onboarding"])
     application.include_router(webhooks.router, prefix="/webhooks", tags=["webhooks"])
 
     return application

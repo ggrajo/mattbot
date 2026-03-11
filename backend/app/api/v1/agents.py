@@ -12,6 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.dependencies import CurrentUser, get_current_user
 from app.database import get_db
 from app.middleware.error_handler import AppError
+from app.services.agent_service import agent_service
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +58,12 @@ class AgentListResponse(BaseModel):
     total: int
 
 
+class SyncResponse(BaseModel):
+    agent_id: uuid.UUID
+    status: str
+    prompt_length: int | None = None
+
+
 @router.get("", response_model=AgentListResponse)
 async def list_agents(
     current_user: CurrentUser = Depends(get_current_user),
@@ -74,6 +81,13 @@ async def list_agents(
             .order_by(Agent.created_at.desc())
         )
         agents = list(result.scalars().all())
+
+        if not agents:
+            default = await agent_service.get_or_create_default_agent(
+                db, current_user.user_id
+            )
+            agents = [default]
+
         return AgentListResponse(
             agents=[AgentResponse.model_validate(a) for a in agents],
             total=len(agents),
@@ -206,3 +220,58 @@ async def set_default_agent(
     except Exception as e:
         logger.exception("Failed to set default agent %s", agent_id)
         raise AppError("AGENT_ERROR", f"Failed to set default agent: {e}", 500)
+
+
+@router.post("/{agent_id}/sync", response_model=SyncResponse)
+async def sync_agent(
+    agent_id: uuid.UUID,
+    current_user: CurrentUser = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> SyncResponse:
+    """Manually trigger a sync of this agent's prompt with ElevenLabs."""
+    try:
+        from app.models.agent import Agent
+        from app.models.user import User
+
+        result = await db.execute(
+            select(Agent).where(
+                Agent.id == agent_id,
+                Agent.user_id == current_user.user_id,
+            )
+        )
+        agent = result.scalars().first()
+        if agent is None:
+            raise AppError("AGENT_NOT_FOUND", "Agent not found", 404)
+
+        user_result = await db.execute(
+            select(User).where(User.id == current_user.user_id)
+        )
+        user = user_result.scalar_one_or_none()
+
+        prompt = await agent_service.build_system_prompt(db, agent, user, None)
+
+        from app.services.elevenlabs_agent_service import ElevenLabsAgentService
+
+        await ElevenLabsAgentService.create_conversation(
+            agent_id=agent.voice_id or "",
+            system_prompt=prompt,
+            voice_id=agent.voice_id,
+        )
+
+        logger.info(
+            "Agent %s synced for user %s (prompt length: %d)",
+            agent_id,
+            current_user.user_id,
+            len(prompt),
+        )
+
+        return SyncResponse(
+            agent_id=agent.id,
+            status="synced",
+            prompt_length=len(prompt),
+        )
+    except AppError:
+        raise
+    except Exception as e:
+        logger.exception("Failed to sync agent %s", agent_id)
+        raise AppError("AGENT_ERROR", f"Failed to sync agent: {e}", 500)

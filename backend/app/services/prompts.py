@@ -4,6 +4,7 @@ Builds natural-conversation style prompts by combining:
 - Agent personality and role
 - User preferences (name, timezone, business hours)
 - Calendar context if connected
+- VIP caller context
 - Memory context for the specific caller
 - Call mode information
 
@@ -13,12 +14,15 @@ The result reads like a briefing to a real assistant, not a robotic instruction 
 import logging
 from datetime import datetime, timezone
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.services import calendar_service
 
 logger = logging.getLogger(__name__)
+
+MAX_PROMPT_TOKENS = 4000
+APPROX_CHARS_PER_TOKEN = 4
 
 PERSONALITY_DESCRIPTORS: dict[str, str] = {
     "professional": (
@@ -40,6 +44,18 @@ PERSONALITY_DESCRIPTORS: dict[str, str] = {
 }
 
 
+def _truncate_prompt(text: str, max_tokens: int = MAX_PROMPT_TOKENS) -> str:
+    """Truncate prompt to stay within token budget."""
+    max_chars = max_tokens * APPROX_CHARS_PER_TOKEN
+    if len(text) <= max_chars:
+        return text
+    truncated = text[: max_chars - 100]
+    last_newline = truncated.rfind("\n")
+    if last_newline > max_chars * 0.8:
+        truncated = truncated[:last_newline]
+    return truncated + "\n\n[Context truncated to fit token limits]"
+
+
 async def build_system_prompt(
     db: AsyncSession,
     user_id,
@@ -59,9 +75,10 @@ async def build_system_prompt(
       1. Identity & personality
       2. User preferences
       3. Call mode / scenario
-      4. Calendar availability
-      5. Caller memory
-      6. Behavioral guidelines
+      4. VIP caller context
+      5. Calendar availability
+      6. Caller memory
+      7. Behavioral guidelines
     """
     sections: list[str] = []
 
@@ -84,6 +101,11 @@ async def build_system_prompt(
     if call_mode:
         sections.append(_call_mode_section(call_mode))
 
+    if caller_phone_hash:
+        vip_section = await _vip_section(db, user_id, caller_phone_hash)
+        if vip_section:
+            sections.append(vip_section)
+
     calendar_section = await _calendar_section(db, user_id)
     if calendar_section:
         sections.append(calendar_section)
@@ -95,7 +117,8 @@ async def build_system_prompt(
 
     sections.append(_guidelines_section())
 
-    return "\n\n".join(s for s in sections if s)
+    full_prompt = "\n\n".join(s for s in sections if s)
+    return _truncate_prompt(full_prompt)
 
 
 def _identity_section(
@@ -165,6 +188,69 @@ def _call_mode_section(call_mode: str) -> str:
         call_mode,
         f"The current call mode is '{call_mode}'.",
     )
+
+
+async def _vip_section(
+    db: AsyncSession, user_id, caller_phone_hash: str
+) -> str | None:
+    """Generate VIP-specific instructions if the caller is on the VIP list.
+
+    VIP status is determined by high-importance memories (importance >= 4) or
+    callers with 3+ stored memories, indicating a known important contact.
+    """
+    try:
+        from app.models.call_memory_item import CallMemoryItem
+
+        high_importance_count = await db.scalar(
+            select(func.count(CallMemoryItem.id)).where(
+                CallMemoryItem.user_id == user_id,
+                CallMemoryItem.caller_phone_hash == caller_phone_hash,
+                CallMemoryItem.importance >= 4,
+            )
+        )
+
+        total_memory_count = await db.scalar(
+            select(func.count(CallMemoryItem.id)).where(
+                CallMemoryItem.user_id == user_id,
+                CallMemoryItem.caller_phone_hash == caller_phone_hash,
+            )
+        )
+
+        is_vip = (high_importance_count or 0) >= 1 or (total_memory_count or 0) >= 3
+
+        if not is_vip:
+            return None
+
+        caller_name_result = await db.execute(
+            select(CallMemoryItem.caller_name)
+            .where(
+                CallMemoryItem.user_id == user_id,
+                CallMemoryItem.caller_phone_hash == caller_phone_hash,
+                CallMemoryItem.caller_name.isnot(None),
+            )
+            .limit(1)
+        )
+        caller_name = caller_name_result.scalar_one_or_none()
+
+        lines = ["[VIP CALLER]"]
+        lines.append("This caller is a VIP — a known important contact.")
+        if caller_name:
+            lines.append(f"Their name is {caller_name}.")
+        lines.append(
+            "Give this caller priority treatment:\n"
+            "- Greet them warmly by name if known\n"
+            "- Be extra attentive and accommodating\n"
+            "- Offer to connect them directly with the owner if they request it\n"
+            "- Take their requests with high priority"
+        )
+        return "\n".join(lines)
+    except Exception:
+        logger.exception(
+            "Failed to build VIP section for user %s, caller %s",
+            user_id,
+            caller_phone_hash,
+        )
+        return None
 
 
 def _guidelines_section() -> str:

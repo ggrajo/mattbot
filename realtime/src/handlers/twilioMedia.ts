@@ -15,6 +15,13 @@ import type {
 
 const log = createChildLogger('twilioMedia');
 
+interface CallerDynamicVars {
+  caller_name: string;
+  is_vip: string;
+  memory_summary: string;
+  caller_phone_hash: string;
+}
+
 /**
  * Manages a single Twilio Media Stream WebSocket session.
  * Bridges audio between Twilio and ElevenLabs Conversational AI.
@@ -105,17 +112,52 @@ export class TwilioMediaHandler {
       this.session.toNumber,
     );
 
-    const callerPhoneHash = createHash('sha256')
-      .update(this.session.fromNumber.trim())
-      .digest('hex')
-      .slice(0, 16);
+    const callerPhoneHash = start.customParameters?.caller_phone_hash
+      || createHash('sha256')
+        .update(this.session.fromNumber.trim())
+        .digest('hex')
+        .slice(0, 16);
+
+    const isVipFromParams = start.customParameters?.is_vip === 'true';
+    const callerNameFromParams = start.customParameters?.caller_name || '';
 
     let callerMemory: CallerMemoryContext | undefined;
+    let dynamicVars: CallerDynamicVars = {
+      caller_name: callerNameFromParams || 'Unknown',
+      is_vip: isVipFromParams ? 'true' : 'false',
+      memory_summary: '',
+      caller_phone_hash: callerPhoneHash,
+    };
+
     try {
       callerMemory = await fetchCallerMemory(this.userId, callerPhoneHash);
+      if (callerMemory) {
+        dynamicVars.caller_name = callerMemory.callerName || dynamicVars.caller_name;
+        dynamicVars.is_vip = callerMemory.memories.some((m) => m.importance >= 4)
+          ? 'true'
+          : dynamicVars.is_vip;
+        dynamicVars.memory_summary = callerMemory.memories
+          .slice(0, 5)
+          .map((m) => m.content)
+          .join('; ');
+      }
     } catch (err) {
-      log.warn({ err, sessionId: this.sessionId }, 'Failed to fetch caller memory, proceeding without');
+      log.warn(
+        { err, sessionId: this.sessionId },
+        'Failed to fetch caller memory, proceeding with params-only context',
+      );
     }
+
+    log.info(
+      {
+        sessionId: this.sessionId,
+        callerPhoneHash,
+        callerName: dynamicVars.caller_name,
+        isVip: dynamicVars.is_vip,
+        hasMemory: !!callerMemory,
+      },
+      'Caller context resolved',
+    );
 
     this.eleven = new ElevenLabsClient({
       agentId: runtime.agentId,
@@ -124,6 +166,7 @@ export class TwilioMediaHandler {
       voiceId: runtime.voiceId,
       language: runtime.language,
       callerMemory,
+      dynamicVariables: dynamicVars,
     });
 
     this.eleven.on('audio', (chunk: string) => {

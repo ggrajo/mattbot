@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,10 @@ import {
   ActivityIndicator,
   Modal,
   SafeAreaView,
+  Platform,
+  PermissionsAndroid,
+  RefreshControl,
+  Alert,
 } from 'react-native';
 import { useTheme } from '../theme/ThemeProvider';
 import type { Theme } from '../theme/tokens';
@@ -22,46 +26,94 @@ interface ContactPickerProps {
   title?: string;
 }
 
-export function ContactPicker({ visible, onClose, onSelect, title = 'Select Contact' }: ContactPickerProps) {
+type PickerState = 'loading' | 'ready' | 'error';
+
+async function ensureContactsPermission(): Promise<boolean> {
+  if (Platform.OS !== 'android') return true;
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+      {
+        title: 'Contacts Permission',
+        message: 'MattBot needs access to your contacts to identify callers.',
+        buttonPositive: 'Allow',
+        buttonNegative: 'Deny',
+      },
+    );
+    return granted === PermissionsAndroid.RESULTS.GRANTED;
+  } catch {
+    return false;
+  }
+}
+
+export function ContactPicker({
+  visible,
+  onClose,
+  onSelect,
+  title = 'Select Contact',
+}: ContactPickerProps) {
   const theme = useTheme();
-  const styles = makeStyles(theme);
+  const styles = useMemo(() => makeStyles(theme), [theme]);
+
   const [callers, setCallers] = useState<CallerProfile[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [state, setState] = useState<PickerState>('loading');
   const [search, setSearch] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchCallers = useCallback(async () => {
     try {
-      const { data } = await memoryApi.listCallers({ limit: 100 });
+      await ensureContactsPermission();
+      const { data } = await memoryApi.listCallers({ limit: 200 });
       setCallers(data.callers);
+      setState('ready');
     } catch {
-      // ignore
-    } finally {
-      setLoading(false);
+      setState('error');
     }
   }, []);
 
   useEffect(() => {
     if (visible) {
-      setLoading(true);
+      setState('loading');
+      setSearch('');
       fetchCallers();
     }
   }, [visible, fetchCallers]);
 
-  const filtered = search.trim()
-    ? callers.filter(
-        (c) =>
-          c.caller_name?.toLowerCase().includes(search.toLowerCase()) ||
-          c.phone_hash.includes(search),
-      )
-    : callers;
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      const { data } = await memoryApi.listCallers({ limit: 200 });
+      setCallers(data.callers);
+      setState('ready');
+    } catch {
+      setState('error');
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return callers;
+    return callers.filter(
+      (c) =>
+        c.caller_name?.toLowerCase().includes(q) ||
+        c.phone_hash.includes(q),
+    );
+  }, [callers, search]);
+
+  const handleSelect = useCallback(
+    (caller: CallerProfile) => {
+      onSelect(caller);
+      onClose();
+    },
+    [onSelect, onClose],
+  );
 
   const renderCaller = ({ item }: { item: CallerProfile }) => (
     <TouchableOpacity
       style={styles.callerRow}
-      onPress={() => {
-        onSelect(item);
-        onClose();
-      }}
+      onPress={() => handleSelect(item)}
       activeOpacity={0.7}
     >
       <View style={styles.callerAvatar}>
@@ -74,10 +126,28 @@ export function ContactPicker({ visible, onClose, onSelect, title = 'Select Cont
           {item.caller_name || `Caller ${item.phone_hash.slice(0, 8)}`}
         </Text>
         <Text style={styles.callerMeta}>
-          {item.memory_count} memories &middot; {item.call_count} calls
+          {item.memory_count} memories · {item.call_count} calls
         </Text>
       </View>
     </TouchableOpacity>
+  );
+
+  const emptyComponent = (
+    <View style={styles.emptyState}>
+      <Text style={styles.emptyText}>
+        {search.trim()
+          ? `No contacts matching "${search.trim()}"`
+          : 'No known contacts yet. Contacts appear after calls.'}
+      </Text>
+      {search.trim() !== '' && (
+        <TouchableOpacity
+          style={styles.clearSearchBtn}
+          onPress={() => setSearch('')}
+        >
+          <Text style={styles.clearSearchText}>Clear search</Text>
+        </TouchableOpacity>
+      )}
+    </View>
   );
 
   return (
@@ -85,7 +155,7 @@ export function ContactPicker({ visible, onClose, onSelect, title = 'Select Cont
       <SafeAreaView style={styles.safe}>
         <View style={styles.header}>
           <Text style={styles.title}>{title}</Text>
-          <TouchableOpacity onPress={onClose}>
+          <TouchableOpacity onPress={onClose} hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
             <Text style={styles.closeBtn}>Close</Text>
           </TouchableOpacity>
         </View>
@@ -97,22 +167,53 @@ export function ContactPicker({ visible, onClose, onSelect, title = 'Select Cont
             placeholderTextColor={theme.colors.textDisabled}
             value={search}
             onChangeText={setSearch}
+            autoCorrect={false}
+            returnKeyType="search"
           />
+          {search.length > 0 && (
+            <TouchableOpacity
+              style={styles.clearIcon}
+              onPress={() => setSearch('')}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Text style={styles.clearIconText}>✕</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
-        {loading ? (
-          <ActivityIndicator size="large" color={theme.colors.primary} style={styles.loader} />
+        {state === 'loading' ? (
+          <View style={styles.centerContainer}>
+            <ActivityIndicator size="large" color={theme.colors.primary} />
+            <Text style={styles.loadingText}>Loading contacts...</Text>
+          </View>
+        ) : state === 'error' ? (
+          <View style={styles.centerContainer}>
+            <Text style={styles.errorText}>Failed to load contacts</Text>
+            <TouchableOpacity
+              style={styles.retryBtn}
+              onPress={() => {
+                setState('loading');
+                fetchCallers();
+              }}
+            >
+              <Text style={styles.retryBtnText}>Retry</Text>
+            </TouchableOpacity>
+          </View>
         ) : (
           <FlatList
             data={filtered}
             keyExtractor={(item) => item.phone_hash}
             renderItem={renderCaller}
             contentContainerStyle={styles.list}
-            ListEmptyComponent={
-              <View style={styles.emptyState}>
-                <Text style={styles.emptyText}>No known contacts found.</Text>
-              </View>
+            ListEmptyComponent={emptyComponent}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                tintColor={theme.colors.primary}
+              />
             }
+            keyboardShouldPersistTaps="handled"
           />
         )}
       </SafeAreaView>
@@ -137,6 +238,7 @@ function makeStyles(theme: Theme) {
     searchRow: {
       paddingHorizontal: spacing.xl,
       marginBottom: spacing.md,
+      position: 'relative' as const,
     },
     searchInput: {
       ...typography.body,
@@ -146,9 +248,48 @@ function makeStyles(theme: Theme) {
       borderRadius: radii.md,
       paddingHorizontal: spacing.md,
       paddingVertical: spacing.sm,
+      paddingRight: spacing.xxl,
       backgroundColor: colors.surface,
     },
-    loader: { marginTop: spacing.xxl },
+    clearIcon: {
+      position: 'absolute' as const,
+      right: spacing.xl + spacing.md,
+      top: 0,
+      bottom: 0,
+      justifyContent: 'center',
+    },
+    clearIconText: {
+      fontSize: 16,
+      color: colors.textSecondary,
+    },
+    centerContainer: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingHorizontal: spacing.xl,
+    },
+    loadingText: {
+      ...typography.body,
+      color: colors.textSecondary,
+      marginTop: spacing.md,
+    },
+    errorText: {
+      ...typography.body,
+      color: colors.error || '#FF3B30',
+      marginBottom: spacing.md,
+      textAlign: 'center',
+    },
+    retryBtn: {
+      backgroundColor: colors.primary,
+      paddingHorizontal: spacing.xl,
+      paddingVertical: spacing.sm,
+      borderRadius: radii.md,
+    },
+    retryBtnText: {
+      ...typography.body,
+      color: '#FFFFFF',
+      fontWeight: '600',
+    },
     list: { paddingHorizontal: spacing.xl, paddingBottom: spacing.xxxl },
     callerRow: {
       flexDirection: 'row',
@@ -171,6 +312,19 @@ function makeStyles(theme: Theme) {
     callerName: { ...typography.body, color: colors.textPrimary, fontWeight: '600' },
     callerMeta: { ...typography.caption, color: colors.textSecondary, marginTop: 2 },
     emptyState: { alignItems: 'center', paddingVertical: spacing.xxl },
-    emptyText: { ...typography.body, color: colors.textDisabled },
+    emptyText: { ...typography.body, color: colors.textDisabled, textAlign: 'center' },
+    clearSearchBtn: {
+      marginTop: spacing.md,
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.sm,
+      borderRadius: radii.md,
+      borderWidth: 1,
+      borderColor: colors.primary,
+    },
+    clearSearchText: {
+      ...typography.body,
+      color: colors.primary,
+      fontWeight: '600',
+    },
   });
 }
