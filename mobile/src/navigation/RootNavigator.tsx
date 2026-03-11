@@ -107,6 +107,7 @@ export function RootNavigator() {
   const { state, tryRestoreSession } = useAuthStore();
   const settings = useSettingsStore(s => s.settings);
   const loadSettings = useSettingsStore(s => s.loadSettings);
+  const loadOnboarding = useSettingsStore(s => s.loadOnboarding);
   const onboarding = useSettingsStore(s => s.onboarding);
   const loadBillingStatus = useBillingStore(s => s.loadBillingStatus);
   const isSubscriptionActive = useIsSubscriptionActive();
@@ -124,6 +125,7 @@ export function RootNavigator() {
   useEffect(() => {
     if (state === 'authenticated' && !settingsLoaded) {
       loadSettings().then(() => setSettingsLoaded(true));
+      loadOnboarding();
       loadBillingStatus();
       useAuthStore.getState().loadProfile();
       fetchDevices();
@@ -131,6 +133,7 @@ export function RootNavigator() {
     }
     if (state !== 'authenticated') {
       setSettingsLoaded(false);
+      useSettingsStore.getState().reset();
       useBillingStore.getState().reset();
       useRealtimeStore.getState().disconnect();
       fcmInitialized.current = false;

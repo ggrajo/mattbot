@@ -20,6 +20,7 @@ interface SettingsStore {
   loadSettings: () => Promise<void>;
   loadOnboarding: () => Promise<void>;
   completeStep: (step: string) => Promise<void>;
+  reset: () => void;
 }
 
 export const useSettingsStore = create<SettingsStore>((set, get) => ({
@@ -50,12 +51,14 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
   completeStep: async (step: string) => {
     try {
       const { apiClient } = await import('../api/client');
-      await apiClient.post('/onboarding/complete-step', { step });
-      const current = get().onboarding;
-      const steps = [...(current?.completed_steps ?? []), step];
-      set({ onboarding: { ...current, is_complete: false, completed_steps: steps } });
+      const { data } = await apiClient.post('/onboarding/complete-step', { step });
+      set({ onboarding: data });
     } catch {
       // non-blocking
     }
+  },
+
+  reset: () => {
+    set({ settings: null, onboarding: null, error: undefined });
   },
 }));

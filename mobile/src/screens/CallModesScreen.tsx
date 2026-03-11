@@ -138,9 +138,28 @@ export function CallModesScreen({ route }: Props) {
       </View>
 
       {onboarding && (
-        <View style={{ marginTop: spacing.xl, marginHorizontal: spacing.lg }}>
+        <View style={{ marginTop: spacing.xl, marginHorizontal: spacing.lg, gap: spacing.md }}>
           <TouchableOpacity
             onPress={() => navigation.navigate('ForwardingSetupGuide' as never)}
+            style={{
+              backgroundColor: colors.surface,
+              borderRadius: radii.md,
+              paddingVertical: spacing.md,
+              alignItems: 'center',
+              borderWidth: 1,
+              borderColor: colors.primary,
+            }}
+          >
+            <Text style={{ ...typography.button, color: colors.primary }}>Set Up Forwarding</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={async () => {
+              try {
+                await apiClient.post('/onboarding/complete-step', { step: 'call_modes_configured' });
+                await apiClient.post('/onboarding/complete-step', { step: 'onboarding_complete' });
+              } catch {}
+              navigation.navigate('TabRoot' as never);
+            }}
             style={{
               backgroundColor: colors.primary,
               borderRadius: radii.md,
@@ -148,7 +167,7 @@ export function CallModesScreen({ route }: Props) {
               alignItems: 'center',
             }}
           >
-            <Text style={{ ...typography.button, color: colors.onPrimary }}>Continue</Text>
+            <Text style={{ ...typography.button, color: colors.onPrimary }}>Finish Setup</Text>
           </TouchableOpacity>
         </View>
       )}

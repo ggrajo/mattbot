@@ -77,9 +77,12 @@ export function NumberProvisionScreen({ route }: Props) {
     }
   }
 
-  function handleContinue() {
+  async function handleContinue() {
     if (isOnboarding) {
-      navigation.navigate('TabRoot');
+      try {
+        await apiClient.post('/onboarding/complete-step', { step: 'number_provisioned' });
+      } catch {}
+      navigation.navigate('CallModes', { onboarding: true });
     } else {
       navigation.goBack();
     }

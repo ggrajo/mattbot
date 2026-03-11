@@ -50,7 +50,7 @@ These are confirmed broken paths where the mobile calls an endpoint that **does 
 - [x] 3.5 Push token registration (`POST /push/register`)
 - [x] 3.6 Test push notification (`POST /push/test`)
 - [x] 3.7 FCM service for Android push
-- [ ] **3.8** APNS push for iOS — env vars exist (`APNS_KEY_ID`, `APNS_TEAM_ID`, `APNS_AUTH_KEY`) but verify the backend actually sends via APNS or only FCM.
+- [x] **3.8** ~~APNS push for iOS~~ — Verified: mobile registers FCM tokens on both platforms; Firebase Admin SDK routes iOS tokens through APNS automatically. **Fixed**: `notify_call_screened` was only logging "Would send" — now actually calls `fcm_service.send_push_notification()`.
 
 ---
 
@@ -61,11 +61,12 @@ These are confirmed broken paths where the mobile calls an endpoint that **does 
 - [x] 4.3 OnboardingSettingsScreen (step 2) — timezone, language, theme
 - [x] 4.4 OnboardingAssistantSetupScreen (step 3) — name, greeting, personality
 - [x] 4.5 OnboardingCalendarSetupScreen (step 4) — calendar connect (bonus, not in plan)
-- [ ] **4.6** Missing onboarding step: **Number provisioning** — the plan requires guided dedicated AI number setup during onboarding. `NumberProvisionScreen` exists but is not wired into the onboarding flow.
-- [ ] **4.7** Missing onboarding step: **Forwarding setup** — the plan requires conditional call forwarding setup with test flow during onboarding. `ForwardingSetupGuideScreen` and `ForwardingVerifyScreen` exist but are not wired into onboarding.
-- [ ] **4.8** Missing onboarding step: **Push notification permission** — the plan requires notification registration and test push during onboarding.
-- [ ] **4.9** Missing onboarding step: **Biometric setup** — the plan requires biometric enrollment during onboarding.
-- [ ] **4.10** Missing onboarding step: **First call test** — the plan requires a "test my AI number" flow that confirms the AI answered and a call record + notification were generated.
+- [x] **4.6** ~~Missing onboarding step: **Number provisioning**~~ Fixed: `PaymentMethodScreen` now navigates to `NumberProvision` (with `onboarding: true`); `NumberProvisionScreen` now calls `complete-step: number_provisioned` and navigates to `CallModes`.
+- [x] **4.7** ~~Missing onboarding step: **Forwarding setup**~~ Fixed: `CallModesScreen` now has "Set Up Forwarding" button + "Finish Setup" button that completes `call_modes_configured` and `onboarding_complete`.
+- [x] **4.8** ~~Missing onboarding step: **Subscription**~~ Fixed: `PaymentMethodScreen` now calls `complete-step: plan_selected` and `payment_method_added` when `source === 'onboarding'`.
+- [ ] **4.9** Missing onboarding step: **Push notification permission** — the plan requires notification registration and test push during onboarding.
+- [ ] **4.10** Missing onboarding step: **Biometric setup** — the plan requires biometric enrollment during onboarding.
+- [ ] **4.11** Missing onboarding step: **First call test** — the plan requires a "test my AI number" flow that confirms the AI answered and a call record + notification were generated.
 
 ---
 

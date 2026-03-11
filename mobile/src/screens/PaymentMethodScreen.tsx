@@ -30,12 +30,20 @@ export function PaymentMethodScreen({ route }: Props) {
       setSubscribing(true);
       setError(null);
       await apiClient.post('/billing/subscribe', { plan_code: plan });
+
+      if (source === 'onboarding') {
+        try {
+          await apiClient.post('/onboarding/complete-step', { step: 'plan_selected' });
+          await apiClient.post('/onboarding/complete-step', { step: 'payment_method_added' });
+        } catch {}
+      }
+
       Alert.alert('Success', 'Your subscription is now active!', [
         {
           text: 'OK',
           onPress: () => {
             if (source === 'onboarding') {
-              navigation.navigate('TabRoot');
+              navigation.navigate('NumberProvision', { onboarding: true });
             } else {
               navigation.goBack();
             }

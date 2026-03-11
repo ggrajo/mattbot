@@ -17,6 +17,7 @@ from app.models.notification_delivery import NotificationDelivery
 from app.models.push_token import PushToken
 from app.models.user_settings import UserSettings
 from app.services.event_emitter import emit_event
+from app.services.fcm_service import send_push_notification
 
 logger = logging.getLogger(__name__)
 
@@ -178,12 +179,25 @@ async def notify_call_screened(
         return
 
     for token in tokens:
-        logger.info(
-            "Would send push to device %s for call %s (provider=%s)",
-            str(token.device_id)[:8] if hasattr(token, "device_id") else "unknown",
-            str(call_id)[:8],
-            getattr(token, "provider", "unknown"),
-        )
+        try:
+            await send_push_notification(
+                fcm_token=token.token,
+                title=_payload["title"],
+                body=_payload["body"],
+                data={k: str(v) for k, v in (_payload.get("data") or {}).items()},
+            )
+            logger.info(
+                "Push sent to device %s for call %s (provider=%s)",
+                str(token.device_id)[:8] if hasattr(token, "device_id") else "unknown",
+                str(call_id)[:8],
+                getattr(token, "provider", "unknown"),
+            )
+        except Exception:
+            logger.exception(
+                "Failed push to device %s for call %s",
+                str(token.device_id)[:8] if hasattr(token, "device_id") else "unknown",
+                str(call_id)[:8],
+            )
 
     uid = str(user_id)
     cid = str(call_id)
