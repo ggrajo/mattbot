@@ -15,6 +15,7 @@ export function createElevenLabsSession(callbacks: {
   finalPrompt: string;
   greetingText: string;
   onAudio: (audioBase64: string) => void;
+  onTranscript: (role: string, text: string) => void;
   onEnd: (conversationId: string) => void;
   onError: (error: Error) => void;
 }): ElevenLabsSession {
@@ -55,7 +56,7 @@ export function createElevenLabsSession(callbacks: {
   ws.on("message", (data: WebSocket.Data) => {
     try {
       const msg = JSON.parse(data.toString());
-      handleElevenLabsMessage(session, msg);
+      handleElevenLabsMessage(session, msg, callbacks.onTranscript);
     } catch (err) {
       logger.error("Failed to parse ElevenLabs message", {
         error: err instanceof Error ? err.message : "unknown",
@@ -83,7 +84,8 @@ export function createElevenLabsSession(callbacks: {
 
 function handleElevenLabsMessage(
   session: ElevenLabsSession,
-  msg: Record<string, unknown>
+  msg: Record<string, unknown>,
+  onTranscript: (role: string, text: string) => void
 ): void {
   const type = msg.type as string;
 
@@ -130,9 +132,25 @@ function handleElevenLabsMessage(
       break;
     }
 
-    case "agent_response":
-    case "user_transcript":
+    case "user_transcript": {
+      const utMsg = msg as {
+        user_transcription_event?: { user_transcript?: string };
+      };
+      if (utMsg.user_transcription_event?.user_transcript) {
+        onTranscript("user", utMsg.user_transcription_event.user_transcript);
+      }
       break;
+    }
+
+    case "agent_response": {
+      const arMsg = msg as {
+        agent_response_event?: { agent_response?: string };
+      };
+      if (arMsg.agent_response_event?.agent_response) {
+        onTranscript("agent", arMsg.agent_response_event.agent_response);
+      }
+      break;
+    }
 
     default:
       logger.debug("Unhandled ElevenLabs message type", { type });

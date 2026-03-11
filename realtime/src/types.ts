@@ -54,6 +54,7 @@ export interface SessionContext {
   startedAt: number;
   callerPhone: string;
   userTimezone: string;
+  transcriptSeq: number;
 }
 
 export interface BridgeEvent {

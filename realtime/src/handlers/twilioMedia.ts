@@ -129,6 +129,7 @@ export function handleTwilioConnection(
       startedAt: Date.now(),
       callerPhone: params.caller_phone || "",
       userTimezone: params.user_timezone || "",
+      transcriptSeq: 0,
     };
 
     activeSessions.set(callId, sessionCtx);
@@ -177,6 +178,20 @@ export function handleTwilioConnection(
             },
           })
         );
+      },
+      onTranscript: (role: string, text: string) => {
+        if (!sessionCtx) return;
+        sessionCtx.transcriptSeq++;
+        fanOutToUser(sessionCtx.userId, {
+          type: "LIVE_TRANSCRIPT",
+          payload: {
+            call_id: sessionCtx.callId,
+            role,
+            text,
+            seq: sessionCtx.transcriptSeq,
+            timestamp: new Date().toISOString(),
+          },
+        });
       },
       onEnd: (conversationId: string) => {
         if (sessionCtx) {
