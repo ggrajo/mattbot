@@ -1,0 +1,109 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        description: GitHub Environment name (dev, staging, production)
+      branch:
+        required: true
+        type: string
+        description: Git branch to deploy
+    secrets:
+      EC2_HOST:
+        required: true
+      EC2_USER:
+        required: true
+      EC2_SSH_KEY:
+        required: true
+      BACKEND_ENV:
+        required: true
+      REALTIME_ENV:
+        required: true
+      FIREBASE_SERVICE_ACCOUNT_JSON:
+        required: false
+
+env:
+  DEPLOY_PATH: /home/${{ secrets.EC2_USER }}/mattbot
+
+jobs:
+  deploy:
+    name: Deploy to ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Write .env files and Firebase credentials to server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            mkdir -p ${{ env.DEPLOY_PATH }}/backend
+            mkdir -p ${{ env.DEPLOY_PATH }}/realtime
+
+            # --- backend/.env (single secret contains the full file) ---
+            cat > ${{ env.DEPLOY_PATH }}/backend/.env << 'ENVEOF'
+            ${{ secrets.BACKEND_ENV }}
+            ENVEOF
+            sed -i 's/^[[:space:]]*//' ${{ env.DEPLOY_PATH }}/backend/.env
+
+            # --- Firebase service account JSON ---
+            cat > ${{ env.DEPLOY_PATH }}/backend/firebase-service-account.json << 'FBEOF'
+            ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+            FBEOF
+
+            # --- realtime/.env (single secret contains the full file) ---
+            cat > ${{ env.DEPLOY_PATH }}/realtime/.env << 'ENVEOF'
+            ${{ secrets.REALTIME_ENV }}
+            ENVEOF
+            sed -i 's/^[[:space:]]*//' ${{ env.DEPLOY_PATH }}/realtime/.env
+
+      - name: Deploy code and restart
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          command_timeout: 10m
+          script: |
+            set -e
+            cd ${{ env.DEPLOY_PATH }}
+
+            echo "=== Deploying ${{ inputs.environment }} from ${{ inputs.branch }} ==="
+
+            git fetch origin ${{ inputs.branch }}
+            git reset --hard origin/${{ inputs.branch }}
+
+            # .env files were written in the previous step; git reset --hard
+            # doesn't touch untracked files, so they survive. Verify:
+            test -f backend/.env || { echo "ERROR: backend/.env missing"; exit 1; }
+            test -f realtime/.env || { echo "ERROR: realtime/.env missing"; exit 1; }
+
+            echo "=== Building and restarting containers ==="
+            docker compose down --remove-orphans
+            docker compose build --no-cache
+            docker compose up -d
+
+            echo "=== Waiting for services to be healthy ==="
+            sleep 20
+
+            echo "=== Container status ==="
+            docker compose ps
+
+            echo "=== Backend health check ==="
+            curl -sf http://localhost:8000/health && echo " OK" || echo " WARNING: Backend health check failed"
+
+            echo "=== Realtime bridge health check ==="
+            curl -sf http://localhost:3001/health && echo " OK" || echo " WARNING: Realtime health check failed"
+
+            echo "=== Deploy complete (${{ inputs.environment }}) ==="

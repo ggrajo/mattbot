@@ -1,6 +1,10 @@
 # Python
 __pycache__/
 *.py[cod]
+
+# TEMPORARY: Allow .pyc files (source .py files missing, only bytecode remains)
+!backend/app/**/*.pyc
+!backend/alembic/versions/*.pyc
 *.egg-info/
 *.egg
 dist/
@@ -8,20 +12,46 @@ build/
 .venv/
 venv/
 *.so
+.pytest_cache/
+.mypy_cache/
+*.egg-info
 
 # Node / React Native
 node_modules/
 .expo/
 ios/Pods/
 android/.gradle/
+mobile/android/.gradle/
 android/app/build/
+android/app/.cxx/
+mobile/android/app/.cxx/
+mobile/android/app/build/
 *.jks
 *.keystore
+dist/
+build/
+*.apk
+*.aab
 
 # Environment
 .env
 .env.local
+.env.backup
+.env.staging
+.env.prod
 .env.*.local
+.env.production.local
+# EXCEPTION: Track .env.dev files as templates for reference
+!backend/.env.dev
+!mobile/.env.dev
+!realtime/.env.dev
+
+# Secrets & Credentials
+firebase-service-account.json
+*.key
+*.pem
+credentials.json
+secrets.json
 
 # IDE
 .idea/
@@ -29,20 +59,60 @@ android/app/build/
 *.swp
 *.swo
 *~
+*.sublime-project
+*.sublime-workspace
 
 # OS
 .DS_Store
 Thumbs.db
+.AppleDouble
+.LSOverride
 
 # Coverage
 htmlcov/
 .coverage
 coverage/
 lcov.info
+coverage.xml
+*.cover
 
 # Testing
 .pytest_cache/
 .mypy_cache/
+test-results/
+junit.xml
 
 # Build artifacts
 *.log
+dist/
+build/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# Alembic
+alembic/versions/__pycache__/
+
+# Docker
+.dockerignore
+
+# Nginx SSL & Certbot (generated on server)
+nginx/ssl/
+nginx/certbot/
+
+# Misc
+.cache/
+.DS_Store
+
+DEPLOY_GUIDE.md
+backend/.env.dev
+mobile/.env.dev
+realtime/.env.dev
