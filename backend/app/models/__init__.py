@@ -26,6 +26,8 @@ from app.models.agent_config import AgentConfig
 from app.models.voice_catalog import VoiceCatalog
 from app.models.prompt_suggestion import PromptSuggestion
 from app.models.google_calendar_token import GoogleCalendarToken
+from app.models.user_settings import UserSettings
+from app.models.onboarding_state import OnboardingState
 
 __all__ = [
     "User",
@@ -56,4 +58,6 @@ __all__ = [
     "VoiceCatalog",
     "PromptSuggestion",
     "GoogleCalendarToken",
+    "UserSettings",
+    "OnboardingState",
 ]

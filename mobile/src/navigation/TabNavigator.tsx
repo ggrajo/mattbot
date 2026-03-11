@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Platform } from 'react-native';
 import { useTheme } from '../theme/ThemeProvider';
 import { HomeScreen } from '../screens/HomeScreen';
 import { CallsListScreen } from '../screens/CallsListScreen';
-import { SettingsScreen } from '../screens/SettingsScreen';
+import { SettingsHubScreen } from '../screens/SettingsHubScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -81,7 +81,7 @@ export function TabNavigator() {
       />
       <Tab.Screen
         name="SettingsTab"
-        component={SettingsScreen}
+        component={SettingsHubScreen}
         options={{
           title: 'Settings',
           tabBarLabel: 'Settings',

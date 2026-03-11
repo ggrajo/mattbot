@@ -44,6 +44,21 @@ import { CategoryDefaultsScreen } from '../screens/CategoryDefaultsScreen';
 import { PinSetupScreen } from '../screens/PinSetupScreen';
 import { PinLoginScreen } from '../screens/PinLoginScreen';
 import { PaymentMethodsListScreen } from '../screens/PaymentMethodsListScreen';
+import { RemindersListScreen } from '../screens/RemindersListScreen';
+import { CreateReminderScreen } from '../screens/CreateReminderScreen';
+import { SettingsHubScreen } from '../screens/SettingsHubScreen';
+import { ProfileSettingsScreen } from '../screens/ProfileSettingsScreen';
+import { ChangePasswordScreen } from '../screens/ChangePasswordScreen';
+import { PrivacySettingsScreen } from '../screens/PrivacySettingsScreen';
+import { PasswordResetConfirmScreen } from '../screens/PasswordResetConfirmScreen';
+import { HandoffSettingsScreen } from '../screens/HandoffSettingsScreen';
+import { QuietHoursScreen } from '../screens/QuietHoursScreen';
+import { UrgentNotificationsScreen } from '../screens/UrgentNotificationsScreen';
+import { VipListScreen } from '../screens/VipListScreen';
+import { BlockListScreen } from '../screens/BlockListScreen';
+import { MemorySettingsScreen } from '../screens/MemorySettingsScreen';
+import { LiveTranscriptScreen } from '../screens/LiveTranscriptScreen';
+import { TextBackScreen } from '../screens/TextBackScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -239,6 +254,76 @@ export function RootNavigator() {
               component={PaymentMethodsListScreen}
               options={{ headerShown: true, title: 'Payment Methods' }}
             />
+            <Stack.Screen
+              name="RemindersList"
+              component={RemindersListScreen}
+              options={{ headerShown: true, title: 'Reminders' }}
+            />
+            <Stack.Screen
+              name="CreateReminder"
+              component={CreateReminderScreen}
+              options={{ headerShown: true, title: 'Create Reminder' }}
+            />
+            <Stack.Screen
+              name="SettingsHub"
+              component={SettingsHubScreen}
+              options={{ headerShown: true, title: 'Settings' }}
+            />
+            <Stack.Screen
+              name="ProfileSettings"
+              component={ProfileSettingsScreen}
+              options={{ headerShown: true, title: 'Profile' }}
+            />
+            <Stack.Screen
+              name="ChangePassword"
+              component={ChangePasswordScreen}
+              options={{ headerShown: true, title: 'Change Password' }}
+            />
+            <Stack.Screen
+              name="PrivacySettings"
+              component={PrivacySettingsScreen}
+              options={{ headerShown: true, title: 'Privacy' }}
+            />
+            <Stack.Screen
+              name="HandoffSettings"
+              component={HandoffSettingsScreen}
+              options={{ headerShown: true, title: 'Handoff' }}
+            />
+            <Stack.Screen
+              name="QuietHours"
+              component={QuietHoursScreen}
+              options={{ headerShown: true, title: 'Quiet Hours' }}
+            />
+            <Stack.Screen
+              name="UrgentNotifications"
+              component={UrgentNotificationsScreen}
+              options={{ headerShown: true, title: 'Urgent Notifications' }}
+            />
+            <Stack.Screen
+              name="VipList"
+              component={VipListScreen}
+              options={{ headerShown: true, title: 'VIP List' }}
+            />
+            <Stack.Screen
+              name="BlockList"
+              component={BlockListScreen}
+              options={{ headerShown: true, title: 'Block List' }}
+            />
+            <Stack.Screen
+              name="MemorySettings"
+              component={MemorySettingsScreen}
+              options={{ headerShown: true, title: 'AI Memory' }}
+            />
+            <Stack.Screen
+              name="LiveTranscript"
+              component={LiveTranscriptScreen}
+              options={{ headerShown: true, title: 'Live Transcript' }}
+            />
+            <Stack.Screen
+              name="TextBack"
+              component={TextBackScreen}
+              options={{ headerShown: true, title: 'Text Back' }}
+            />
           </>
         ) : (
           <>
@@ -273,6 +358,11 @@ export function RootNavigator() {
               name="MfaVerify"
               component={MfaVerifyScreen}
               options={{ headerShown: true, title: 'Verify 2FA' }}
+            />
+            <Stack.Screen
+              name="PasswordResetConfirm"
+              component={PasswordResetConfirmScreen}
+              options={{ headerShown: true, title: 'Set New Password' }}
             />
           </>
         )}

@@ -51,6 +51,12 @@ class User(Base):
     audit_events: Mapped[list["AuditEvent"]] = relationship(  # noqa: F821
         back_populates="user", cascade="all, delete-orphan"
     )
+    settings: Mapped["UserSettings | None"] = relationship(  # noqa: F821
+        back_populates="user", uselist=False, cascade="all, delete-orphan"
+    )
+    onboarding_state: Mapped["OnboardingState | None"] = relationship(  # noqa: F821
+        back_populates="user", uselist=False, cascade="all, delete-orphan"
+    )
 
     __table_args__ = (
         CheckConstraint(

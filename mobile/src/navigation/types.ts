@@ -40,6 +40,21 @@ export type RootStackParamList = {
   PinSetup: undefined;
   PinLogin: undefined;
   PaymentMethodsList: undefined;
+  RemindersList: undefined;
+  CreateReminder: { callId?: string } | undefined;
+  SettingsHub: undefined;
+  ProfileSettings: undefined;
+  ChangePassword: undefined;
+  PrivacySettings: undefined;
+  PasswordResetConfirm: { token?: string; email?: string };
+  HandoffSettings: undefined;
+  QuietHours: undefined;
+  UrgentNotifications: undefined;
+  VipList: undefined;
+  BlockList: undefined;
+  MemorySettings: undefined;
+  LiveTranscript: { callId: string };
+  TextBack: { callId: string };
 };
 
 declare global {
