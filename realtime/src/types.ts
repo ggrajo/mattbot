@@ -71,4 +71,5 @@ export interface AgentRuntime {
   elevenlabs_agent_id: string;
   final_prompt: string;
   greeting_text: string;
+  dynamic_variables?: Record<string, string>;
 }

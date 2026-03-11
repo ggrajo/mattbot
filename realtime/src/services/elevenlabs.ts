@@ -14,6 +14,7 @@ export function createElevenLabsSession(callbacks: {
   agentId: string;
   finalPrompt: string;
   greetingText: string;
+  dynamicVariables?: Record<string, string>;
   onAudio: (audioBase64: string) => void;
   onTranscript: (role: string, text: string) => void;
   onEnd: (conversationId: string) => void;
@@ -49,6 +50,13 @@ export function createElevenLabsSession(callbacks: {
         agent_output_audio_format: "mulaw_8000",
       },
     };
+
+    if (
+      callbacks.dynamicVariables &&
+      Object.keys(callbacks.dynamicVariables).length > 0
+    ) {
+      (initConfig as any).dynamic_variables = callbacks.dynamicVariables;
+    }
 
     ws.send(JSON.stringify(initConfig));
   });

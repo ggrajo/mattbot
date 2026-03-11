@@ -162,10 +162,18 @@ export function handleTwilioConnection(
       timestamp: new Date().toISOString(),
     }).catch(() => {});
 
+    const dynamicVars: Record<string, string> = {
+      caller_phone: sessionCtx.callerPhone,
+      user_timezone: sessionCtx.userTimezone,
+      today_date: new Date().toISOString().split("T")[0]!,
+      ...(agentRuntime.dynamic_variables ?? {}),
+    };
+
     elSession = createElevenLabsSession({
       agentId,
       finalPrompt: agentRuntime.final_prompt,
       greetingText: agentRuntime.greeting_text,
+      dynamicVariables: dynamicVars,
       onAudio: (audioBase64: string) => {
         if (twilioWs.readyState !== WebSocket.OPEN) return;
 
