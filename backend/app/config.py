@@ -36,6 +36,25 @@ class Settings(BaseSettings):
     IP_RATE_LIMIT_REQUESTS: int = 20
     IP_RATE_LIMIT_WINDOW_MINUTES: int = 10
 
+    # Billing
+    BILLING_PROVIDER: str = "manual"
+    STRIPE_SECRET_KEY: str = ""
+    STRIPE_WEBHOOK_SECRET: str = ""
+    STRIPE_PRICE_FREE: str = ""
+    STRIPE_PRICE_STANDARD: str = ""
+    STRIPE_PRICE_PRO: str = ""
+    BILLING_PLANS_JSON: str = ""
+    BILLING_UPGRADE_RULES_JSON: str = ""
+    STRIPE_PRICE_IDS_JSON: str = ""
+    BILLING_PERIOD_DAYS: int = 30
+    BILLING_CONFIG_CACHE_TTL: int = 60
+
+    # Telephony
+    TWILIO_ACCOUNT_SID: str = ""
+    TWILIO_AUTH_TOKEN: str = ""
+    TWILIO_NUMBER_PROVISIONING_ENABLED: bool = False
+    TWILIO_WEBHOOK_BASE_URL: str = ""
+
     model_config = {"env_file": ".env", "extra": "ignore"}
 
 

@@ -40,16 +40,46 @@ export function HomeScreen({ navigation }: Props) {
           MattBot
         </Text>
         <Text style={{ ...typography.body, color: colors.textSecondary }} allowFontScaling>
-          You're signed in. Call features coming soon.
+          Your AI-powered call assistant is ready.
         </Text>
+
+        <Card>
+          <View style={{ gap: spacing.md }}>
+            <Button
+              title="Subscription"
+              onPress={() => navigation.navigate('SubscriptionStatus')}
+              variant="secondary"
+            />
+            <Button
+              title="Phone Number"
+              onPress={() => navigation.navigate('NumberProvision')}
+              variant="secondary"
+            />
+            <Button
+              title="Call Modes"
+              onPress={() => navigation.navigate('CallModes')}
+              variant="secondary"
+            />
+          </View>
+        </Card>
 
         <Card>
           <View style={{ gap: spacing.md }}>
             <Button
               title="Manage Devices"
               onPress={() => navigation.navigate('DeviceList')}
-              variant="secondary"
+              variant="outline"
             />
+            <Button
+              title="Settings"
+              onPress={() => navigation.navigate('Settings')}
+              variant="outline"
+            />
+          </View>
+        </Card>
+
+        <Card>
+          <View style={{ gap: spacing.md }}>
             <Button
               title="Sign Out"
               onPress={handleLogout}

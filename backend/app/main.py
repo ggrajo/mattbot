@@ -35,12 +35,29 @@ def create_app() -> FastAPI:
     application.add_middleware(RequestIdMiddleware)
     register_error_handlers(application)
 
-    from app.api.v1 import auth, devices, push, me
+    from app.api.v1 import (
+        auth,
+        billing,
+        call_modes,
+        dev_billing,
+        devices,
+        forwarding,
+        me,
+        numbers,
+        push,
+        webhooks,
+    )
 
     application.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
     application.include_router(devices.router, prefix="/api/v1/devices", tags=["devices"])
     application.include_router(push.router, prefix="/api/v1/push", tags=["push"])
     application.include_router(me.router, prefix="/api/v1/me", tags=["me"])
+    application.include_router(billing.router, prefix="/api/v1/billing", tags=["billing"])
+    application.include_router(dev_billing.router, prefix="/api/v1/dev/billing", tags=["dev-billing"])
+    application.include_router(numbers.router, prefix="/api/v1/numbers", tags=["numbers"])
+    application.include_router(call_modes.router, prefix="/api/v1/call-modes", tags=["call-modes"])
+    application.include_router(forwarding.router, prefix="/api/v1/forwarding", tags=["forwarding"])
+    application.include_router(webhooks.router, prefix="/webhooks", tags=["webhooks"])
 
     return application
 

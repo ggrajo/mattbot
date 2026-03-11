@@ -16,6 +16,15 @@ import { RecoveryCodesScreen } from '../screens/RecoveryCodesScreen';
 import { MfaVerifyScreen } from '../screens/MfaVerifyScreen';
 import { HomeScreen } from '../screens/HomeScreen';
 import { DeviceListScreen } from '../screens/DeviceListScreen';
+import { PlanSelectionScreen } from '../screens/PlanSelectionScreen';
+import { PaymentMethodScreen } from '../screens/PaymentMethodScreen';
+import { SubscriptionStatusScreen } from '../screens/SubscriptionStatusScreen';
+import { ManageSubscriptionScreen } from '../screens/ManageSubscriptionScreen';
+import { NumberProvisionScreen } from '../screens/NumberProvisionScreen';
+import { CallModesScreen } from '../screens/CallModesScreen';
+import { ForwardingSetupGuideScreen } from '../screens/ForwardingSetupGuideScreen';
+import { ForwardingVerifyScreen } from '../screens/ForwardingVerifyScreen';
+import { SettingsScreen } from '../screens/SettingsScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -70,6 +79,51 @@ export function RootNavigator() {
               name="DeviceList"
               component={DeviceListScreen}
               options={{ headerShown: true, title: 'Devices' }}
+            />
+            <Stack.Screen
+              name="PlanSelection"
+              component={PlanSelectionScreen}
+              options={{ headerShown: true, title: 'Choose Plan' }}
+            />
+            <Stack.Screen
+              name="PaymentMethod"
+              component={PaymentMethodScreen}
+              options={{ headerShown: true, title: 'Payment Method' }}
+            />
+            <Stack.Screen
+              name="SubscriptionStatus"
+              component={SubscriptionStatusScreen}
+              options={{ headerShown: true, title: 'Subscription' }}
+            />
+            <Stack.Screen
+              name="ManageSubscription"
+              component={ManageSubscriptionScreen}
+              options={{ headerShown: true, title: 'Manage Subscription' }}
+            />
+            <Stack.Screen
+              name="NumberProvision"
+              component={NumberProvisionScreen}
+              options={{ headerShown: true, title: 'Phone Number' }}
+            />
+            <Stack.Screen
+              name="CallModes"
+              component={CallModesScreen}
+              options={{ headerShown: true, title: 'Call Modes' }}
+            />
+            <Stack.Screen
+              name="ForwardingSetupGuide"
+              component={ForwardingSetupGuideScreen}
+              options={{ headerShown: true, title: 'Forwarding Setup' }}
+            />
+            <Stack.Screen
+              name="ForwardingVerify"
+              component={ForwardingVerifyScreen}
+              options={{ headerShown: true, title: 'Verify Forwarding' }}
+            />
+            <Stack.Screen
+              name="Settings"
+              component={SettingsScreen}
+              options={{ headerShown: true, title: 'Settings' }}
             />
           </>
         ) : (

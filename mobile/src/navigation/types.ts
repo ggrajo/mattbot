@@ -9,6 +9,15 @@ export type RootStackParamList = {
   MfaVerify: undefined;
   Home: undefined;
   DeviceList: undefined;
+  PlanSelection: undefined;
+  PaymentMethod: undefined;
+  SubscriptionStatus: undefined;
+  ManageSubscription: undefined;
+  NumberProvision: undefined;
+  CallModes: undefined;
+  ForwardingSetupGuide: undefined;
+  ForwardingVerify: undefined;
+  Settings: undefined;
 };
 
 declare global {

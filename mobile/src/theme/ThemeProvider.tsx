@@ -1,8 +1,13 @@
-import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
+import React, { createContext, useContext, useEffect, useState, useMemo, useCallback } from 'react';
 import { Appearance, ColorSchemeName, StatusBar } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Theme } from './tokens';
 import { lightTheme } from './lightTheme';
 import { darkTheme } from './darkTheme';
+import { apiClient } from '../api/client';
+import { useAuthStore } from '../store/authStore';
+
+const STORAGE_KEY = 'mattbot_theme_mode';
 
 type ThemeMode = 'system' | 'light' | 'dark';
 
@@ -31,10 +36,19 @@ interface Props {
 }
 
 export function ThemeProvider({ children }: Props) {
-  const [themeMode, setThemeMode] = useState<ThemeMode>('system');
+  const [themeMode, setThemeModeState] = useState<ThemeMode>('system');
   const [systemScheme, setSystemScheme] = useState<ColorSchemeName>(
     Appearance.getColorScheme()
   );
+  const authState = useAuthStore((s) => s.state);
+
+  useEffect(() => {
+    AsyncStorage.getItem(STORAGE_KEY).then((stored) => {
+      if (stored === 'light' || stored === 'dark' || stored === 'system') {
+        setThemeModeState(stored);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const listener = Appearance.addChangeListener(({ colorScheme }) => {
@@ -42,6 +56,20 @@ export function ThemeProvider({ children }: Props) {
     });
     return () => listener.remove();
   }, []);
+
+  const setThemeMode = useCallback(
+    (mode: ThemeMode) => {
+      setThemeModeState(mode);
+      AsyncStorage.setItem(STORAGE_KEY, mode).catch(() => {});
+
+      if (authState === 'authenticated') {
+        apiClient
+          .put('/settings', { theme_mode: mode })
+          .catch(() => {});
+      }
+    },
+    [authState],
+  );
 
   const theme = useMemo(() => {
     if (themeMode === 'light') return lightTheme;
