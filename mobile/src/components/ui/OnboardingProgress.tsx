@@ -1,59 +1,71 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, Animated } from 'react-native';
+import { View, Text } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  runOnJS,
+} from 'react-native-reanimated';
 import { useTheme } from '../../theme/ThemeProvider';
+import { hapticMedium } from '../../utils/haptics';
 
 interface Props {
-  current: number;
-  total: number;
-  label?: string;
+  currentStep: number;
+  totalSteps: number;
 }
 
-export function OnboardingProgress({ current, total, label }: Props) {
-  const theme = useTheme();
-  const { colors, spacing, typography } = theme;
-  const fillWidth = useRef(new Animated.Value(0)).current;
+export function OnboardingProgress({ currentStep, totalSteps }: Props) {
+  const { colors, spacing, typography, radii } = useTheme();
+  const progress = useSharedValue(0);
+  const firedHaptic = useRef(false);
+
+  const targetPct = Math.min(currentStep / totalSteps, 1);
 
   useEffect(() => {
-    Animated.spring(fillWidth, {
-      toValue: current / total,
-      useNativeDriver: false,
-      speed: 12,
-      bounciness: 0,
-    }).start();
-  }, [current, total, fillWidth]);
+    firedHaptic.current = false;
+    progress.value = withSpring(targetPct, { damping: 16, stiffness: 80 }, (finished) => {
+      if (finished && !firedHaptic.current) {
+        firedHaptic.current = true;
+        runOnJS(hapticMedium)();
+      }
+    });
+  }, [targetPct]);
+
+  const barStyle = useAnimatedStyle(() => ({
+    width: `${progress.value * 100}%`,
+  }));
 
   return (
-    <View style={{ marginBottom: spacing.xl }}>
-      <View
-        style={{
-          height: 4,
-          borderRadius: 2,
-          backgroundColor: colors.border,
-          overflow: 'hidden',
-        }}
-      >
-        <Animated.View
-          style={{
-            height: '100%',
-            borderRadius: 2,
-            backgroundColor: colors.primary,
-            width: fillWidth.interpolate({
-              inputRange: [0, 1],
-              outputRange: ['0%', '100%'],
-            }),
-          }}
-        />
-      </View>
+    <View style={{ marginBottom: spacing.lg }}>
       <Text
         style={{
           ...typography.caption,
           color: colors.textSecondary,
-          marginTop: spacing.xs,
+          fontWeight: '600',
+          marginBottom: spacing.xs,
         }}
-        allowFontScaling
       >
-        {label ? `Step ${current} of ${total} — ${label}` : `Step ${current} of ${total}`}
+        Step {currentStep} of {totalSteps}
       </Text>
+      <View
+        style={{
+          height: 6,
+          backgroundColor: colors.surfaceVariant,
+          borderRadius: radii.full,
+          overflow: 'hidden',
+        }}
+      >
+        <Animated.View
+          style={[
+            {
+              height: '100%',
+              backgroundColor: colors.primary,
+              borderRadius: radii.full,
+            },
+            barStyle,
+          ]}
+        />
+      </View>
     </View>
   );
 }

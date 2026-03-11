@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -336,7 +336,7 @@ export function PaymentMethodScreen({ route }: Props) {
             <>
               <Icon name="rocket-launch-outline" size="sm" color={canSubscribe ? colors.onPrimary : colors.textDisabled} />
               <Text style={{ ...typography.button, color: canSubscribe ? colors.onPrimary : colors.textDisabled }}>
-                {isFree ? 'Start Free Trial' : `Subscribe ΓÇö $${price.toFixed(0)}/mo`}
+                {isFree ? 'Start Free Trial' : `Subscribe — $${price.toFixed(0)}/mo`}
               </Text>
             </>
           )}

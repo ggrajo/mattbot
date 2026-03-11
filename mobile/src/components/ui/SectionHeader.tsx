@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { View, Text, ViewStyle } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
 

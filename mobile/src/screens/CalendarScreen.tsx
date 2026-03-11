@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -633,7 +633,7 @@ export function CalendarScreen() {
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
                     <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: colors.success }} />
                     <Text style={{ ...typography.caption, color: colors.success }} allowFontScaling>
-                      Connected{googleEmail ? ` ┬╖ ${googleEmail}` : ''}
+                      Connected{googleEmail ? ` · ${googleEmail}` : ''}
                     </Text>
                   </View>
                 ) : (

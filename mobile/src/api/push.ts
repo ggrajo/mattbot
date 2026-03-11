@@ -1,4 +1,4 @@
-﻿import { apiClient } from './client';
+import { apiClient } from './client';
 
 export async function registerPushToken(deviceId: string, token: string) {
   const { data } = await apiClient.post('/push/register', {

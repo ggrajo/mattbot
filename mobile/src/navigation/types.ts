@@ -1,4 +1,4 @@
-﻿export type TabParamList = {
+export type TabParamList = {
   HomeTab: undefined;
   CallsTab: undefined;
   CalendarTab: undefined;

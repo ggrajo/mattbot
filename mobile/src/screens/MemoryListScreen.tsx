@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -221,7 +221,7 @@ export function MemoryListScreen() {
                 <Text style={{ ...typography.caption, color: colors.textDisabled }}>{date}</Text>
                 {item.memory_type && (
                   <>
-                    <Text style={{ ...typography.caption, color: colors.textDisabled }}> ┬╖ </Text>
+                    <Text style={{ ...typography.caption, color: colors.textDisabled }}> · </Text>
                     <Text style={{ ...typography.caption, color: colors.textDisabled }}>{item.memory_type.replace(/_/g, ' ')}</Text>
                   </>
                 )}

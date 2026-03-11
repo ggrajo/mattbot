@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -108,7 +108,7 @@ export function ForwardingSetupGuideScreen({ route }: Props) {
           </Text>
         </View>
         <Text style={{ ...typography.bodySmall, color: colors.textPrimary, lineHeight: 22 }}>
-          Call forwarding is set up from your personal phone's dialer ΓÇö not inside MattBot. You'll dial a special code that tells your carrier to redirect calls to your AI number.
+          Call forwarding is set up from your personal phone's dialer — not inside MattBot. You'll dial a special code that tells your carrier to redirect calls to your AI number.
         </Text>
         <View style={{ marginTop: spacing.md, gap: spacing.sm }}>
           {[
@@ -320,11 +320,11 @@ export function ForwardingSetupGuideScreen({ route }: Props) {
               {[
                 'Dial these codes from the phone whose calls you want to forward.',
                 'You should hear a confirmation tone or see a success message from your carrier.',
-                'Conditional forwarding (busy/unreachable) means your phone will still ring first ΓÇö if you don\'t answer, the call goes to MattBot.',
+                'Conditional forwarding (busy/unreachable) means your phone will still ring first — if you don\'t answer, the call goes to MattBot.',
                 'To stop forwarding at any time, dial the disable code for your carrier.',
               ].map((note, i) => (
                 <View key={i} style={{ flexDirection: 'row', gap: spacing.sm, alignItems: 'flex-start' }}>
-                  <Text style={{ color: colors.warning ?? colors.textSecondary, fontWeight: '700', fontSize: 14, marginTop: 1 }}>ΓÇó</Text>
+                  <Text style={{ color: colors.warning ?? colors.textSecondary, fontWeight: '700', fontSize: 14, marginTop: 1 }}>•</Text>
                   <Text style={{ ...typography.bodySmall, color: colors.textPrimary, flex: 1, lineHeight: 20 }}>
                     {note}
                   </Text>
@@ -345,7 +345,7 @@ export function ForwardingSetupGuideScreen({ route }: Props) {
             activeOpacity={0.8}
           >
             <Text style={{ ...typography.button, color: colors.onPrimary }}>
-              I've Set Up Forwarding ΓÇö Verify
+              I've Set Up Forwarding — Verify
             </Text>
           </TouchableOpacity>
 

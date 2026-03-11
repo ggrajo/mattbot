@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { View, Text, Pressable, Switch, ViewStyle, Platform } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
 import { Icon } from './Icon';

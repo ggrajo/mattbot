@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { ThemeProvider } from './src/theme/ThemeProvider';

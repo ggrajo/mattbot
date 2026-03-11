@@ -1,4 +1,4 @@
-﻿import { create } from 'zustand';
+import { create } from 'zustand';
 
 export interface Settings {
   biometric_unlock_enabled: boolean;

@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -257,7 +257,7 @@ export function CallsListScreen() {
 
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 3 }}>
               <Text style={{ ...typography.caption, color: colors.textSecondary }}>
-                Call ended ┬╖ {formatDuration(item.duration_seconds)}
+                Call ended · {formatDuration(item.duration_seconds)}
               </Text>
               <Text style={{ ...typography.caption, color: colors.textSecondary }}>
                 {timeAgo(item.started_at || item.created_at)}

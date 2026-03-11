@@ -1,4 +1,4 @@
-﻿import * as Keychain from 'react-native-keychain';
+import * as Keychain from 'react-native-keychain';
 
 const SERVICE_PREFIX = 'com.mattbot.';
 

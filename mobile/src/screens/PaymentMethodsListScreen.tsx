@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -134,7 +134,7 @@ export function PaymentMethodsListScreen() {
           <View style={{ flex: 1 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
               <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }}>
-                {item.brand.charAt(0).toUpperCase() + item.brand.slice(1)} ┬╖┬╖┬╖┬╖{item.last4}
+                {item.brand.charAt(0).toUpperCase() + item.brand.slice(1)} ····{item.last4}
               </Text>
               {item.is_default && (
                 <View

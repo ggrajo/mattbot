@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -177,7 +177,7 @@ export function OnboardingPrivacyScreen() {
             <ActivityIndicator size="small" color={colors.onPrimary} />
           ) : (
             <Text style={{ ...typography.button, color: colors.onPrimary }} allowFontScaling>
-              I Understand ΓÇö Continue
+              I Understand — Continue
             </Text>
           )}
         </TouchableOpacity>

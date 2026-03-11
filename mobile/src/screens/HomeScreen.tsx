@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -357,7 +357,7 @@ export function HomeScreen() {
                   {getGreeting(userName)}
                 </Text>
                 <Text style={{ fontSize: 14, color: colors.textSecondary, marginTop: 2 }} allowFontScaling>
-                  Let's manage your calls Γ£¿
+                  Let's manage your calls ✨
                 </Text>
               </View>
               <Pressable
@@ -394,7 +394,7 @@ export function HomeScreen() {
             <EmptyDashboard colors={colors} spacing={spacing} isDark={isDark} />
           ) : (
             <View style={{ gap: 12 }}>
-              {/* Hero Card ΓÇö Total Calls */}
+              {/* Hero Card — Total Calls */}
               <FadeIn delay={0} scale>
                 <GradientView
                   colors={['#7C3AED', '#A855F7', '#EC4899']}
@@ -467,7 +467,7 @@ export function HomeScreen() {
                 >
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                      <Text style={{ fontSize: 16 }}>≡ƒææ</Text>
+                      <Text style={{ fontSize: 16 }}>👑</Text>
                       <Text style={{ fontSize: 15, fontWeight: '700', color: colors.textPrimary }}>{planName}</Text>
                     </View>
                     <Pressable
@@ -490,7 +490,7 @@ export function HomeScreen() {
                 </View>
               </FadeIn>
 
-              {/* Screened ΓÇö Full Width */}
+              {/* Screened — Full Width */}
               <FadeIn delay={80} scale>
                 <View
                   style={{
@@ -520,7 +520,7 @@ export function HomeScreen() {
                 </View>
               </FadeIn>
 
-              {/* Callers + Spam ΓÇö 2 columns */}
+              {/* Callers + Spam — 2 columns */}
               <View style={{ flexDirection: 'row', gap: 12 }}>
                 <FadeIn delay={120} scale style={{ flex: 1 }}>
                   <View
@@ -572,7 +572,7 @@ export function HomeScreen() {
                 </FadeIn>
               </View>
 
-              {/* Avg Call + VIP Calls ΓÇö 2 columns */}
+              {/* Avg Call + VIP Calls — 2 columns */}
               <View style={{ flexDirection: 'row', gap: 12 }}>
                 <FadeIn delay={180} scale style={{ flex: 1 }}>
                   <View
@@ -717,7 +717,7 @@ export function HomeScreen() {
                   }}
                 >
                   <View style={{ position: 'absolute', right: 20, top: 20 }}>
-                    <Text style={{ fontSize: 40 }}>≡ƒææ</Text>
+                    <Text style={{ fontSize: 40 }}>👑</Text>
                   </View>
 
                   <View style={{ backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 20, paddingHorizontal: 12, paddingVertical: 4, alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 4, borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>

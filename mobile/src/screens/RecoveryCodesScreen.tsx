@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
@@ -107,7 +107,7 @@ export function RecoveryCodesScreen({ navigation }: Props) {
 
       <View style={{ marginTop: spacing.xl }}>
         <Button
-          title="I've saved my codes ΓÇö Continue"
+          title="I've saved my codes — Continue"
           icon="check-circle-outline"
           onPress={handleContinue}
           loading={activating}

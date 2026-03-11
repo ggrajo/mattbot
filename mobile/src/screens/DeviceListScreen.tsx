@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, FlatList, Switch, TouchableOpacity } from 'react-native';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Card } from '../components/ui/Card';
@@ -150,7 +150,7 @@ export function DeviceListScreen() {
               >
                 {item.platform.charAt(0).toUpperCase() + item.platform.slice(1)}
                 {item.os_version ? ` ${item.os_version}` : ''}
-                {item.last_seen_at ? ` ┬╖ ${timeAgo(item.last_seen_at, userTz)}` : ''}
+                {item.last_seen_at ? ` · ${timeAgo(item.last_seen_at, userTz)}` : ''}
               </Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>

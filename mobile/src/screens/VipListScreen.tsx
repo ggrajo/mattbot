@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -96,7 +96,7 @@ export function VipListScreen() {
   function handleRemove(item: VipEntry) {
     Alert.alert(
       'Remove VIP',
-      `Remove ${item.display_name || '┬╖┬╖┬╖┬╖' + item.phone_last4} from VIP list?`,
+      `Remove ${item.display_name || '····' + item.phone_last4} from VIP list?`,
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -150,10 +150,10 @@ export function VipListScreen() {
           </View>
           <View style={{ flex: 1 }}>
           <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }}>
-            {item.display_name || '┬╖┬╖┬╖┬╖' + item.phone_last4}
+            {item.display_name || '····' + item.phone_last4}
           </Text>
           {item.display_name && (
-            <Text style={{ ...typography.caption, color: colors.textSecondary }}>┬╖┬╖┬╖┬╖{item.phone_last4}</Text>
+            <Text style={{ ...typography.caption, color: colors.textSecondary }}>····{item.phone_last4}</Text>
           )}
             <Text style={{ ...typography.caption, color: colors.textDisabled, marginTop: 2 }}>
               Added {date}

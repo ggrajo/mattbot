@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -104,7 +104,7 @@ export function ContactsListScreen() {
             </Text>
             {item.phone_last4 && (
               <Text style={{ ...typography.caption, color: colors.textSecondary, marginTop: 2 }}>
-                ┬╖┬╖┬╖┬╖{item.phone_last4}
+                ····{item.phone_last4}
               </Text>
             )}
           </View>

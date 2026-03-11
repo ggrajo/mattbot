@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View,
   Text,
@@ -153,7 +153,7 @@ export function CallerProfileScreen({ route }: Props) {
             </Text>
             {(profile.vip_company || profile.vip_relationship) && (
               <Text style={{ ...typography.bodySmall, color: colors.textSecondary, marginTop: 4 }}>
-                {[profile.vip_relationship, profile.vip_company].filter(Boolean).join(' ┬╖ ')}
+                {[profile.vip_relationship, profile.vip_company].filter(Boolean).join(' · ')}
               </Text>
             )}
             <View style={{ flexDirection: 'row', gap: spacing.md, marginTop: spacing.md }}>

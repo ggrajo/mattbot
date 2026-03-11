@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, ScrollView, Switch, TextInput, ActivityIndicator, Pressable, Alert } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeProvider';
@@ -179,7 +179,7 @@ export function UrgentNotificationsScreen() {
               <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
                 <Icon name="phone-check-outline" size="md" color={colors.success} />
                 <Text style={{ fontSize: 16, fontWeight: '600', color: colors.textPrimary }}>
-                  {'┬╖┬╖┬╖┬╖' + settings.personal_phone_last4}
+                  {'····' + settings.personal_phone_last4}
                 </Text>
               </View>
               <Pressable

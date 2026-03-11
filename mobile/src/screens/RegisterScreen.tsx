@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Dimensions, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { GradientView } from '../components/ui/GradientView';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';

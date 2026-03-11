@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
 
@@ -30,7 +30,7 @@ export function OtpInput({ length = 6, value, onChange }: Props) {
             borderColor: theme.colors.border,
           },
         ]}
-        placeholder={Array(length).fill('ΓÇó').join('')}
+        placeholder={Array(length).fill('•').join('')}
         placeholderTextColor={theme.colors.textDisabled}
       />
     </View>

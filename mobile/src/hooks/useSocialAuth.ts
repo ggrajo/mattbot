@@ -1,4 +1,4 @@
-﻿import { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { oauthGoogle, oauthApple } from '../api/auth';
 import { useAuthStore } from '../store/authStore';

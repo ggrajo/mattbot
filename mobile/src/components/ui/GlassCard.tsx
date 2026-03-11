@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { View, ViewStyle, Platform } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
 import { GradientView } from './GradientView';

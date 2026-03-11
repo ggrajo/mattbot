@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Animated, Text, View } from 'react-native';
 import { Icon } from './Icon';
 import { useTheme } from '../../theme/ThemeProvider';

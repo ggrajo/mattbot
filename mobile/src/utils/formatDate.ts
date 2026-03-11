@@ -1,4 +1,4 @@
-﻿export function getDeviceTimezone(): string {
+export function getDeviceTimezone(): string {
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
   if (tz && tz !== 'GMT' && (tz.includes('/') || tz === 'UTC')) return tz;
   return 'UTC';

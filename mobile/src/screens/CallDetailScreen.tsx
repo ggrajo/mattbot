@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -218,7 +218,7 @@ export function CallDetailScreen({ route }: Props) {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ padding: spacing.lg, paddingBottom: insets.bottom + 60 }}
       >
-        {/* ΓöÇΓöÇΓöÇ Header: avatar, phone, badges ΓöÇΓöÇΓöÇ */}
+        {/* ─── Header: avatar, phone, badges ─── */}
         <FadeIn delay={0} slide="up">
           <View style={{ alignItems: 'center', marginBottom: spacing.xl }}>
             <View
@@ -368,7 +368,7 @@ export function CallDetailScreen({ route }: Props) {
           </View>
         </FadeIn>
 
-        {/* ΓöÇΓöÇΓöÇ Time row: Started / Ended ΓöÇΓöÇΓöÇ */}
+        {/* ─── Time row: Started / Ended ─── */}
         <FadeIn delay={60} slide="up">
           <View
             style={{
@@ -400,7 +400,7 @@ export function CallDetailScreen({ route }: Props) {
           </View>
         </FadeIn>
 
-        {/* ΓöÇΓöÇΓöÇ Info row: Duration / Type ΓöÇΓöÇΓöÇ */}
+        {/* ─── Info row: Duration / Type ─── */}
         <FadeIn delay={100} slide="up">
           <View
             style={{
@@ -432,7 +432,7 @@ export function CallDetailScreen({ route }: Props) {
           </View>
         </FadeIn>
 
-        {/* ΓöÇΓöÇΓöÇ Summary ΓöÇΓöÇΓöÇ */}
+        {/* ─── Summary ─── */}
         {summary && (
           <FadeIn delay={140} slide="up">
             <SectionTitle title="Summary" colors={colors} typography={typography} spacing={spacing} />
@@ -455,7 +455,7 @@ export function CallDetailScreen({ route }: Props) {
           </FadeIn>
         )}
 
-        {/* ΓöÇΓöÇΓöÇ Recording ΓöÇΓöÇΓöÇ */}
+        {/* ─── Recording ─── */}
         {call.recording_url && (
           <FadeIn delay={180} slide="up">
             <SectionTitle title="Recording" colors={colors} typography={typography} spacing={spacing} />
@@ -522,7 +522,7 @@ export function CallDetailScreen({ route }: Props) {
           </FadeIn>
         )}
 
-        {/* ΓöÇΓöÇΓöÇ Actions ΓöÇΓöÇΓöÇ */}
+        {/* ─── Actions ─── */}
         <FadeIn delay={220} slide="up">
           <SectionTitle title="Actions" colors={colors} typography={typography} spacing={spacing} />
           <View
@@ -652,7 +652,7 @@ export function CallDetailScreen({ route }: Props) {
           </View>
         </FadeIn>
 
-        {/* ΓöÇΓöÇΓöÇ Caller Memory ΓöÇΓöÇΓöÇ */}
+        {/* ─── Caller Memory ─── */}
         {memoryItems.length > 0 && (
           <FadeIn delay={260} slide="up">
             <SectionTitle title="Caller Memory" colors={colors} typography={typography} spacing={spacing} />
@@ -687,7 +687,7 @@ export function CallDetailScreen({ route }: Props) {
           </FadeIn>
         )}
 
-        {/* ΓöÇΓöÇΓöÇ Labels ΓöÇΓöÇΓöÇ */}
+        {/* ─── Labels ─── */}
         {labelsData.length > 0 && (
           <FadeIn delay={300} slide="up">
             <SectionTitle title="Labels" colors={colors} typography={typography} spacing={spacing} />
@@ -751,7 +751,7 @@ export function CallDetailScreen({ route }: Props) {
           </FadeIn>
         )}
 
-        {/* ΓöÇΓöÇΓöÇ Transcript ΓöÇΓöÇΓöÇ */}
+        {/* ─── Transcript ─── */}
         <FadeIn delay={340} slide="up">
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm }}>
             <Text style={{ ...typography.h3, color: colors.textPrimary }}>Transcript</Text>
@@ -867,7 +867,7 @@ export function CallDetailScreen({ route }: Props) {
           )}
         </FadeIn>
 
-        {/* ΓöÇΓöÇΓöÇ Timeline ΓöÇΓöÇΓöÇ */}
+        {/* ─── Timeline ─── */}
         {timelineEvents.length > 0 && (
           <FadeIn delay={380} slide="up">
             <SectionTitle title="Timeline" colors={colors} typography={typography} spacing={spacing} />
@@ -919,7 +919,7 @@ export function CallDetailScreen({ route }: Props) {
   );
 }
 
-/* ΓöÇΓöÇΓöÇ Sub-components ΓöÇΓöÇΓöÇ */
+/* ─── Sub-components ─── */
 
 function SectionTitle({
   title,

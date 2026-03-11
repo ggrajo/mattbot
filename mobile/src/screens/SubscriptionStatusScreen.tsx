@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -82,7 +82,7 @@ export function SubscriptionStatusScreen() {
         day: 'numeric',
         year: 'numeric',
       })
-    : 'ΓÇö';
+    : '—';
 
   return (
     <ScrollView

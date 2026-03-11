@@ -1,4 +1,4 @@
-﻿import { Theme, spacing, radii, typography, iconSize } from './tokens';
+import { Theme, spacing, radii, typography, iconSize } from './tokens';
 
 export const lightTheme: Theme = {
   dark: false,

@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -135,7 +135,7 @@ export function BlockListScreen() {
           </View>
           <View style={{ flex: 1 }}>
           <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }}>
-            {item.display_name || '┬╖┬╖┬╖┬╖' + item.phone_last4}
+            {item.display_name || '····' + item.phone_last4}
           </Text>
             {item.reason && (
               <Text style={{ ...typography.caption, color: colors.textSecondary, marginTop: 2 }}>

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Modal, View, Text, Pressable, StyleSheet } from 'react-native';
 import { Icon } from './Icon';
 import { useTheme } from '../../theme/ThemeProvider';
@@ -93,7 +93,7 @@ export function ConfirmSheet({
               }}
             >
               <Text style={{ ...typography.button, color: colors.onPrimary }}>
-                {loading ? 'Please waitΓÇª' : confirmLabel}
+                {loading ? 'Please wait…' : confirmLabel}
               </Text>
             </Pressable>
             <Pressable

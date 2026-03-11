@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { View, Text, Platform, Dimensions, StyleSheet } from 'react-native';
 import { GradientView } from '../components/ui/GradientView';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';

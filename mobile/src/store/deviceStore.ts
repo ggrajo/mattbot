@@ -1,4 +1,4 @@
-﻿import { create } from 'zustand';
+import { create } from 'zustand';
 import { DeviceInfo, listDevices } from '../api/devices';
 import { extractApiError } from '../api/client';
 
