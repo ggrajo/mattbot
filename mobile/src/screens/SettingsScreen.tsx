@@ -101,6 +101,14 @@ export function SettingsScreen() {
               colors={colors}
               typography={typography}
             />
+            <View style={[styles.separator, { backgroundColor: colors.border }]} />
+            <SettingsRow
+              label="Calendar"
+              hint="Google Calendar booking"
+              onPress={() => navigation.navigate('CalendarBookingSettings')}
+              colors={colors}
+              typography={typography}
+            />
           </Card>
         </FadeIn>
 
@@ -123,7 +131,7 @@ export function SettingsScreen() {
             <View style={[styles.separator, { backgroundColor: colors.border }]} />
             <View style={styles.aboutRow}>
               <Text style={[typography.bodySmall, { color: colors.textSecondary }]}>Build</Text>
-              <Text style={[typography.bodySmall, { color: colors.textPrimary, fontWeight: '600' }]}>Phase 5</Text>
+              <Text style={[typography.bodySmall, { color: colors.textPrimary, fontWeight: '600' }]}>Phase 6</Text>
             </View>
           </Card>
         </FadeIn>

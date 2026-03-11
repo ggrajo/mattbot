@@ -55,6 +55,11 @@ class Settings(BaseSettings):
     TWILIO_NUMBER_PROVISIONING_ENABLED: bool = False
     TWILIO_WEBHOOK_BASE_URL: str = ""
 
+    # Google Calendar
+    GOOGLE_CALENDAR_CLIENT_ID: str = ""
+    GOOGLE_CALENDAR_CLIENT_SECRET: str = ""
+    GOOGLE_CALENDAR_REDIRECT_URI: str = ""
+
     model_config = {"env_file": ".env", "extra": "ignore"}
 
 

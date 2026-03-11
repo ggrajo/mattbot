@@ -5,16 +5,25 @@ import { Card } from '../components/ui/Card';
 import { FadeIn } from '../components/ui/FadeIn';
 import { useTheme } from '../theme/ThemeProvider';
 import { useAgentStore } from '../store/agentStore';
+import { useCalendarStore } from '../store/calendarStore';
 
 export function HomeScreen() {
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
   const navigation = useNavigation<any>();
   const { currentAgent, fetchAgents } = useAgentStore();
+  const { status: calStatus, events: calEvents, fetchStatus: fetchCalStatus, fetchEvents: fetchCalEvents } = useCalendarStore();
 
   useEffect(() => {
     fetchAgents();
-  }, [fetchAgents]);
+    fetchCalStatus();
+  }, [fetchAgents, fetchCalStatus]);
+
+  useEffect(() => {
+    if (calStatus?.is_connected) {
+      fetchCalEvents(5);
+    }
+  }, [calStatus?.is_connected, fetchCalEvents]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
@@ -105,7 +114,33 @@ export function HomeScreen() {
           </View>
         </FadeIn>
 
-        <FadeIn delay={240}>
+        {calStatus?.is_connected && calEvents.length > 0 && (
+          <FadeIn delay={240}>
+            <Card>
+              <View style={styles.sectionHeader}>
+                <Text style={[styles.cardTitle, { color: colors.textPrimary }]}>Upcoming Events</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Calendar')}>
+                  <Text style={[styles.seeAll, { color: colors.primary }]}>See All</Text>
+                </TouchableOpacity>
+              </View>
+              {calEvents.slice(0, 3).map((evt) => (
+                <View key={evt.event_id} style={styles.eventRow}>
+                  <View style={[styles.eventBar, { backgroundColor: colors.primary }]} />
+                  <View style={{ flex: 1 }}>
+                    <Text style={[styles.eventTitle, { color: colors.textPrimary }]}>{evt.title}</Text>
+                    <Text style={[styles.eventTime, { color: colors.textSecondary }]}>
+                      {new Date(evt.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {' – '}
+                      {new Date(evt.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </Text>
+                  </View>
+                </View>
+              ))}
+            </Card>
+          </FadeIn>
+        )}
+
+        <FadeIn delay={calStatus?.is_connected && calEvents.length > 0 ? 320 : 240}>
           <Card>
             <View style={styles.sectionHeader}>
               <Text style={[styles.cardTitle, { color: colors.textPrimary }]}>Recent Activity</Text>
@@ -218,5 +253,23 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     textAlign: 'center',
     paddingHorizontal: 16,
+  },
+  eventRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 10,
+  },
+  eventBar: {
+    width: 3,
+    borderRadius: 2,
+    alignSelf: 'stretch',
+  },
+  eventTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  eventTime: {
+    fontSize: 12,
+    marginTop: 2,
   },
 });

@@ -24,6 +24,9 @@ export type RootStackParamList = {
   OnboardingAssistantSetup: undefined;
   AssistantSettings: { agentId?: string };
   SubscriptionGate: undefined;
+  Calendar: undefined;
+  CalendarBookingSettings: undefined;
+  OnboardingCalendarSetup: undefined;
 };
 
 declare global {

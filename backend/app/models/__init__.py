@@ -25,6 +25,7 @@ from app.models.agent import Agent
 from app.models.agent_config import AgentConfig
 from app.models.voice_catalog import VoiceCatalog
 from app.models.prompt_suggestion import PromptSuggestion
+from app.models.google_calendar_token import GoogleCalendarToken
 
 __all__ = [
     "User",
@@ -54,4 +55,5 @@ __all__ = [
     "AgentConfig",
     "VoiceCatalog",
     "PromptSuggestion",
+    "GoogleCalendarToken",
 ]

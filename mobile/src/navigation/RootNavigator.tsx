@@ -28,6 +28,9 @@ import { CallDetailScreen } from '../screens/CallDetailScreen';
 import { OnboardingAssistantSetupScreen } from '../screens/OnboardingAssistantSetupScreen';
 import { AssistantSettingsScreen } from '../screens/AssistantSettingsScreen';
 import { SubscriptionGateScreen } from '../screens/SubscriptionGateScreen';
+import { CalendarScreen } from '../screens/CalendarScreen';
+import { CalendarBookingSettingsScreen } from '../screens/CalendarBookingSettingsScreen';
+import { OnboardingCalendarSetupScreen } from '../screens/OnboardingCalendarSetupScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -142,6 +145,21 @@ export function RootNavigator() {
               name="SubscriptionGate"
               component={SubscriptionGateScreen}
               options={{ headerShown: true, title: 'Subscription Required' }}
+            />
+            <Stack.Screen
+              name="Calendar"
+              component={CalendarScreen}
+              options={{ headerShown: true, title: 'Calendar' }}
+            />
+            <Stack.Screen
+              name="CalendarBookingSettings"
+              component={CalendarBookingSettingsScreen}
+              options={{ headerShown: true, title: 'Calendar Settings' }}
+            />
+            <Stack.Screen
+              name="OnboardingCalendarSetup"
+              component={OnboardingCalendarSetupScreen}
+              options={{ headerShown: true, title: 'Calendar Setup' }}
             />
           </>
         ) : (
