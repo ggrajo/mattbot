@@ -72,14 +72,14 @@ export function createElevenLabsSession(callbacks: {
     }
   });
 
-  ws.on("error", (err) => {
+  ws.on("error", (err: Error) => {
     logger.error("ElevenLabs WebSocket error", {
       error: err.message,
     });
     callbacks.onError(err);
   });
 
-  ws.on("close", (code, reason) => {
+  ws.on("close", (code: number, reason: Buffer) => {
     logger.info("ElevenLabs WebSocket closed", {
       code,
       reason: reason?.toString().slice(0, 100),
