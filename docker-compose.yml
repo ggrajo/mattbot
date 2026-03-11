@@ -37,6 +37,18 @@ services:
       retries: 3
       start_period: 10s
 
+  worker:
+    build: ./backend
+    container_name: mattbot-worker
+    restart: unless-stopped
+    env_file: ./backend/.env
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - mattbot-net
+    command: ["python", "-m", "app.workers.run"]
+
   redis:
     image: redis:7-alpine
     container_name: mattbot-redis
