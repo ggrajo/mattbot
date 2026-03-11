@@ -1,8 +1,11 @@
-"""Critical negative tests for cross-user data isolation."""
+"""Critical negative tests for cross-user data isolation and JWT type confusion."""
+
+import uuid
 
 import pytest
 from httpx import AsyncClient
 
+from app.core.jwt_utils import create_partial_token
 from tests.conftest import create_test_user
 
 
@@ -38,6 +41,7 @@ async def test_user_cannot_revoke_other_users_device(client: AsyncClient):
     device_a_id = resp.json()["items"][0]["id"]
 
     import pyotp
+
     totp = pyotp.TOTP(user_b["totp_secret"])
     step_up_resp = await client.post(
         "/api/v1/auth/step-up",
@@ -81,5 +85,41 @@ async def test_invalid_token_rejected(client: AsyncClient):
     resp = await client.get(
         "/api/v1/devices",
         headers={"Authorization": "Bearer totally-invalid-jwt-token"},
+    )
+    assert resp.status_code == 401
+
+
+@pytest.mark.asyncio
+async def test_mfa_challenge_token_rejected_as_access(client: AsyncClient):
+    fake_user_id = uuid.uuid4()
+    fake_device_id = uuid.uuid4()
+    token = create_partial_token(fake_user_id, fake_device_id, "mfa_challenge")
+    resp = await client.get(
+        "/api/v1/me",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert resp.status_code == 401
+
+
+@pytest.mark.asyncio
+async def test_mfa_enrollment_token_rejected_as_access(client: AsyncClient):
+    fake_user_id = uuid.uuid4()
+    fake_device_id = uuid.uuid4()
+    token = create_partial_token(fake_user_id, fake_device_id, "mfa_enrollment")
+    resp = await client.get(
+        "/api/v1/me",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert resp.status_code == 401
+
+
+@pytest.mark.asyncio
+async def test_step_up_token_rejected_as_access(client: AsyncClient):
+    fake_user_id = uuid.uuid4()
+    fake_device_id = uuid.uuid4()
+    token = create_partial_token(fake_user_id, fake_device_id, "step_up")
+    resp = await client.get(
+        "/api/v1/me",
+        headers={"Authorization": f"Bearer {token}"},
     )
     assert resp.status_code == 401

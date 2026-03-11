@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 
 class PushRegisterRequest(BaseModel):
     device_id: str
-    provider: str = Field(default="fcm", pattern="^fcm$")
+    provider: str = Field(default="fcm", pattern="^(fcm|apns)$")
     token: str
 
 

@@ -23,6 +23,7 @@ class RegisterResponse(BaseModel):
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str
+    device: DeviceInfo
 
 
 class LoginResponse(BaseModel):
@@ -82,6 +83,8 @@ class MfaVerifyResponse(BaseModel):
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
+    requires_mfa_enrollment: bool = False
+    partial_token: str | None = None
 
 
 class RecoveryCodesRevealResponse(BaseModel):
@@ -96,6 +99,7 @@ class EmailOtpVerifyRequest(BaseModel):
     email: EmailStr
     otp_code: str = Field(..., min_length=6, max_length=6)
     password: str | None = None
+    device: DeviceInfo | None = None
 
 
 class EmailOtpVerifyResponse(BaseModel):
@@ -126,6 +130,32 @@ class PasswordResetConfirmResponse(BaseModel):
     requires_mfa: bool = False
     mfa_challenge_token: str | None = None
     status: str | None = None
+
+
+class PinSetupRequest(BaseModel):
+    pin: str = Field(..., min_length=6, max_length=6, pattern=r"^\d{6}$")
+
+
+class PinSetupResponse(BaseModel):
+    status: str
+
+
+class PinLoginRequest(BaseModel):
+    device_id: str
+    pin: str = Field(..., min_length=6, max_length=6, pattern=r"^\d{6}$")
+
+
+class PinStatusResponse(BaseModel):
+    pin_enabled: bool
+
+
+class PasswordChangeRequest(BaseModel):
+    current_password: str | None = None
+    new_password: str = Field(..., min_length=12, max_length=128)
+
+
+class PasswordChangeResponse(BaseModel):
+    status: str
 
 
 class StepUpRequest(BaseModel):

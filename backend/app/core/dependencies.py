@@ -5,7 +5,6 @@ from datetime import UTC, datetime
 
 import jwt as pyjwt
 from fastapi import Depends, Header, Request
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
@@ -20,7 +19,7 @@ async def get_client_ip(request: Request) -> str:
     forwarded = request.headers.get("X-Forwarded-For")
     if forwarded:
         return forwarded.split(",")[0].strip()
-    return request.client.host if request.client else "0.0.0.0"
+    return request.client.host if request.client else "0.0.0.0"  # noqa: S104
 
 
 async def get_request_id(request: Request) -> str:
@@ -35,20 +34,17 @@ class CurrentUser:
         self.user_id = user.id
 
 
-async def get_current_user(
-    authorization: str = Header(..., alias="Authorization"),
-    db: AsyncSession = Depends(get_db),
+async def _resolve_user_from_token(
+    token: str,
+    db: AsyncSession,
 ) -> CurrentUser:
-    if not authorization.startswith("Bearer "):
-        raise AppError("INVALID_TOKEN", "Invalid authorization header", 401)
-
-    token = authorization[7:]
+    """Shared logic: validate a Bearer token and return CurrentUser."""
     try:
         payload = decode_token(token, expected_type="access")
     except pyjwt.ExpiredSignatureError:
-        raise AppError("TOKEN_EXPIRED", "Access token has expired", 401)
+        raise AppError("TOKEN_EXPIRED", "Access token has expired", 401) from None
     except pyjwt.InvalidTokenError:
-        raise AppError("INVALID_TOKEN", "Invalid access token", 401)
+        raise AppError("INVALID_TOKEN", "Invalid access token", 401) from None
 
     session_id = uuid.UUID(payload["sid"])
     user_id = uuid.UUID(payload["sub"])
@@ -61,10 +57,17 @@ async def get_current_user(
         raise AppError("INVALID_TOKEN", "Token session mismatch", 401)
 
     now = datetime.now(UTC)
-    if session.access_expires_at < now:
+
+    access_exp = session.access_expires_at
+    if access_exp.tzinfo is None:
+        access_exp = access_exp.replace(tzinfo=UTC)
+    if access_exp < now:
         raise AppError("TOKEN_EXPIRED", "Access token has expired", 401)
 
-    absolute_age = (now - session.created_at.replace(tzinfo=UTC)).days
+    created = session.created_at
+    if created.tzinfo is None:
+        created = created.replace(tzinfo=UTC)
+    absolute_age = (now - created).days
     if absolute_age > settings.ABSOLUTE_SESSION_DAYS:
         raise AppError("SESSION_EXPIRED", "Session has exceeded maximum age", 401)
 
@@ -81,11 +84,34 @@ async def get_current_user(
     )
 
 
+async def get_current_user(
+    authorization: str = Header(..., alias="Authorization"),
+    db: AsyncSession = Depends(get_db),
+) -> CurrentUser:
+    if not authorization.startswith("Bearer "):
+        raise AppError("INVALID_TOKEN", "Invalid authorization header", 401)
+    return await _resolve_user_from_token(authorization[7:], db)
+
+
+async def get_current_user_from_query(
+    token: str,
+    db: AsyncSession = Depends(get_db),
+) -> CurrentUser:
+    """Authenticate via ?token= query parameter (for media streaming endpoints)."""
+    if not token:
+        raise AppError("INVALID_TOKEN", "Token query parameter required", 401)
+    return await _resolve_user_from_token(token, db)
+
+
 async def require_step_up(
     request: Request,
-    authorization: str = Header(..., alias="Authorization"),
+    current_user: CurrentUser = Depends(get_current_user),
 ) -> dict:
-    """Validate a step-up token from the X-Step-Up-Token header."""
+    """Validate a step-up token from the X-Step-Up-Token header.
+
+    Verifies the step-up token's ``sub`` matches the authenticated user
+    to prevent cross-user privilege escalation.
+    """
     step_up_token = request.headers.get("X-Step-Up-Token")
     if not step_up_token:
         raise AppError("STEP_UP_REQUIRED", "This action requires step-up authentication", 403)
@@ -93,8 +119,11 @@ async def require_step_up(
     try:
         payload = decode_token(step_up_token, expected_type="step_up")
     except pyjwt.ExpiredSignatureError:
-        raise AppError("STEP_UP_EXPIRED", "Step-up token has expired", 403)
+        raise AppError("STEP_UP_EXPIRED", "Step-up token has expired", 403) from None
     except pyjwt.InvalidTokenError:
-        raise AppError("STEP_UP_INVALID", "Invalid step-up token", 403)
+        raise AppError("STEP_UP_INVALID", "Invalid step-up token", 403) from None
+
+    if payload.get("sub") != str(current_user.user_id):
+        raise AppError("STEP_UP_INVALID", "Step-up token does not match authenticated user", 403)
 
     return payload

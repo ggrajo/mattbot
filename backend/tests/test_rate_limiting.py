@@ -1,5 +1,8 @@
 """Unit tests for core/rate_limiter.py"""
 
+import time
+from unittest.mock import patch
+
 import pytest
 
 from app.core.rate_limiter import check_rate_limit, is_locked_out, reset_memory_store, set_lockout
@@ -35,3 +38,14 @@ async def test_lockout_set_and_check():
     assert not await is_locked_out(key)
     await set_lockout(key, 60)
     assert await is_locked_out(key)
+
+
+@pytest.mark.asyncio
+async def test_lockout_expires_after_duration():
+    key = "test:lockout_expire"
+    await set_lockout(key, 5)
+    assert await is_locked_out(key) is True
+
+    with patch("app.core.rate_limiter.time") as mock_time:
+        mock_time.time.return_value = time.time() + 6
+        assert await is_locked_out(key) is False

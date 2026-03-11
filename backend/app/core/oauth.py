@@ -43,7 +43,7 @@ async def _get_apple_public_keys() -> dict:
     global _apple_jwks_cache
     if _apple_jwks_cache is None:
         async with httpx.AsyncClient() as client:
-            resp = await client.get(_APPLE_JWKS_URL, timeout=10)
+            resp = await client.get(_APPLE_JWKS_URL, timeout=settings.APPLE_JWKS_TIMEOUT)
             resp.raise_for_status()
             _apple_jwks_cache = resp.json()
     return _apple_jwks_cache
@@ -53,7 +53,6 @@ async def verify_apple_identity_token(token: str) -> OAuthUserInfo:
     """Validate an Apple Sign-In identity token."""
     try:
         jwks_data = await _get_apple_public_keys()
-        jwk_client = pyjwt.PyJWKClient.__new__(pyjwt.PyJWKClient)
 
         header = pyjwt.get_unverified_header(token)
         kid = header.get("kid")
@@ -64,6 +63,7 @@ async def verify_apple_identity_token(token: str) -> OAuthUserInfo:
         for key_data in jwks_data.get("keys", []):
             if key_data.get("kid") == kid:
                 from jwt.algorithms import RSAAlgorithm
+
                 matching_key = RSAAlgorithm.from_jwk(key_data)
                 break
 
@@ -72,7 +72,7 @@ async def verify_apple_identity_token(token: str) -> OAuthUserInfo:
 
         payload = pyjwt.decode(
             token,
-            matching_key,
+            matching_key,  # type: ignore[arg-type]
             algorithms=["RS256"],
             audience=settings.APPLE_BUNDLE_ID,
             issuer="https://appleid.apple.com",

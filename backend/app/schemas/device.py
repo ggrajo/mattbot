@@ -9,6 +9,9 @@ class DeviceResponse(BaseModel):
     device_name: str | None
     app_version: str | None
     os_version: str | None
+    last_ip: str | None = None
+    last_location: str | None = None
+    is_remembered: bool = False
     last_seen_at: datetime | None
     created_at: datetime
     is_current: bool = False
@@ -26,3 +29,7 @@ class DeviceRegisterRequest(BaseModel):
     device_name: str | None = None
     app_version: str | None = None
     os_version: str | None = None
+
+
+class DeviceRememberRequest(BaseModel):
+    is_remembered: bool

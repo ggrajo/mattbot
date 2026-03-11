@@ -1,5 +1,9 @@
 """Unit tests for core/encryption.py"""
 
+import os
+
+import pytest
+
 from app.core.encryption import decrypt_field, encrypt_field
 
 
@@ -24,8 +28,37 @@ def test_different_nonces():
 
 
 def test_decrypt_with_wrong_data():
-    import pytest
     plaintext = b"test"
     ct, nonce, kv = encrypt_field(plaintext)
-    with pytest.raises(Exception):
+    with pytest.raises(Exception):  # noqa: B017
         decrypt_field(ct + b"x", nonce, kv)
+
+
+def test_decrypt_with_tampered_nonce():
+    plaintext = b"secret"
+    ct, nonce, kv = encrypt_field(plaintext)
+    bad_nonce = bytes([b ^ 0xFF for b in nonce])
+    with pytest.raises(Exception):  # noqa: B017
+        decrypt_field(ct, bad_nonce, kv)
+
+
+def test_decrypt_with_bit_flipped_ciphertext():
+    plaintext = b"sensitive"
+    ct, nonce, kv = encrypt_field(plaintext)
+    flipped = bytearray(ct)
+    flipped[0] ^= 0x01
+    with pytest.raises(Exception):  # noqa: B017
+        decrypt_field(bytes(flipped), nonce, kv)
+
+
+def test_encrypt_empty_plaintext():
+    ct, nonce, kv = encrypt_field(b"")
+    decrypted = decrypt_field(ct, nonce, kv)
+    assert decrypted == b""
+
+
+def test_encrypt_long_plaintext():
+    plaintext = os.urandom(10_000)
+    ct, nonce, kv = encrypt_field(plaintext)
+    decrypted = decrypt_field(ct, nonce, kv)
+    assert decrypted == plaintext

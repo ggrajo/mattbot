@@ -18,6 +18,7 @@ async def create_or_get_device(
     device_name: str | None = None,
     app_version: str | None = None,
     os_version: str | None = None,
+    last_ip: str | None = None,
 ) -> Device:
     device = Device(
         owner_user_id=owner_user_id,
@@ -25,6 +26,7 @@ async def create_or_get_device(
         device_name=device_name,
         app_version=app_version,
         os_version=os_version,
+        last_ip=last_ip,
         last_seen_at=datetime.now(UTC),
     )
     db.add(device)
@@ -48,6 +50,7 @@ async def update_device(
     device_name: str | None = None,
     app_version: str | None = None,
     os_version: str | None = None,
+    last_ip: str | None = None,
 ) -> Device:
     if device_name is not None:
         device.device_name = device_name
@@ -55,14 +58,14 @@ async def update_device(
         device.app_version = app_version
     if os_version is not None:
         device.os_version = os_version
+    if last_ip is not None:
+        device.last_ip = last_ip
     device.last_seen_at = datetime.now(UTC)
     await db.flush()
     return device
 
 
-async def list_user_devices(
-    db: AsyncSession, owner_user_id: uuid.UUID
-) -> list[Device]:
+async def list_user_devices(db: AsyncSession, owner_user_id: uuid.UUID) -> list[Device]:
     result = await db.execute(
         select(Device)
         .where(Device.owner_user_id == owner_user_id, Device.revoked_at.is_(None))
@@ -75,9 +78,7 @@ async def get_device(
     db: AsyncSession, device_id: uuid.UUID, owner_user_id: uuid.UUID
 ) -> Device | None:
     result = await db.execute(
-        select(Device).where(
-            Device.id == device_id, Device.owner_user_id == owner_user_id
-        )
+        select(Device).where(Device.id == device_id, Device.owner_user_id == owner_user_id)
     )
     return result.scalar_one_or_none()
 

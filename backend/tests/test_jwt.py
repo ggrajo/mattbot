@@ -1,7 +1,6 @@
 """Unit tests for core/jwt_utils.py"""
 
 import uuid
-from datetime import UTC, datetime, timedelta
 
 import jwt as pyjwt
 import pytest

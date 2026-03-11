@@ -41,7 +41,7 @@ async def test_register_common_password(client: AsyncClient):
         "/api/v1/auth/register",
         json={
             "email": "common@example.com",
-            "password": "password12345",
+            "password": "password1234",
             "device": {"platform": "ios"},
         },
     )
@@ -74,7 +74,11 @@ async def test_register_duplicate_email(client: AsyncClient):
 async def test_login_nonexistent_email_uniform_error(client: AsyncClient):
     resp = await client.post(
         "/api/v1/auth/login",
-        json={"email": "nobody@example.com", "password": "SomePassword123!"},
+        json={
+            "email": "nobody@example.com",
+            "password": "SomePassword123!",
+            "device": {"platform": "ios"},
+        },
     )
     assert resp.status_code == 401
     assert "Invalid credentials" in resp.json()["error"]["message"]
@@ -92,7 +96,11 @@ async def test_login_wrong_password_uniform_error(client: AsyncClient):
     )
     resp = await client.post(
         "/api/v1/auth/login",
-        json={"email": "user@example.com", "password": "WrongPassword999!"},
+        json={
+            "email": "user@example.com",
+            "password": "WrongPassword999!",
+            "device": {"platform": "ios"},
+        },
     )
     assert resp.status_code == 401
     assert "Invalid credentials" in resp.json()["error"]["message"]
@@ -108,11 +116,15 @@ async def test_full_registration_and_login_flow(client: AsyncClient):
 
 @pytest.mark.asyncio
 async def test_login_requires_mfa_after_enrollment(client: AsyncClient):
-    user_data = await create_test_user(client, "mfa@example.com", "SecurePassword123!")
+    await create_test_user(client, "mfa@example.com", "SecurePassword123!")
 
     resp = await client.post(
         "/api/v1/auth/login",
-        json={"email": "mfa@example.com", "password": "SecurePassword123!"},
+        json={
+            "email": "mfa@example.com",
+            "password": "SecurePassword123!",
+            "device": {"platform": "ios"},
+        },
     )
     data = resp.json()
     assert data.get("requires_mfa") is True

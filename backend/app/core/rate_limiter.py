@@ -19,7 +19,7 @@ async def _get_redis() -> aioredis.Redis | None:
     if _redis_client is None:
         try:
             _redis_client = aioredis.from_url(settings.REDIS_URL, decode_responses=True)
-            await _redis_client.ping()
+            await _redis_client.ping()  # type: ignore[misc]
         except Exception:
             _redis_client = None
     return _redis_client
@@ -66,7 +66,10 @@ async def is_locked_out(key: str) -> bool:
     if r is not None:
         val = await r.get(lockout_key)
         return val is not None
-    return _memory_store.get(lockout_key, [False])[-1] if lockout_key in _memory_store else False
+    entries = _memory_store.get(lockout_key)
+    if entries:
+        return entries[-1] > time.time()
+    return False
 
 
 async def set_lockout(key: str, duration_seconds: int) -> None:
@@ -75,7 +78,7 @@ async def set_lockout(key: str, duration_seconds: int) -> None:
     if r is not None:
         await r.setex(lockout_key, duration_seconds, "1")
     else:
-        _memory_store[lockout_key] = [True]
+        _memory_store[lockout_key] = [time.time() + duration_seconds]
 
 
 async def clear_rate_limit(key: str) -> None:
