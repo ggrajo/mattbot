@@ -18,6 +18,30 @@ export function RecoveryCodesScreen({ navigation }: Props) {
   const { colors, spacing, typography } = theme;
   const { recoveryCodes, activatePendingTokens } = useAuthStore();
   const [showConfirm, setShowConfirm] = useState(false);
+  const [activating, setActivating] = useState(false);
+
+  if (!recoveryCodes || recoveryCodes.length === 0) {
+    return (
+      <ScreenWrapper>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Icon name="alert-circle-outline" size="xl" color={colors.warning} />
+          <Text style={{ ...typography.h3, color: colors.textPrimary, marginTop: spacing.lg, textAlign: 'center' }} allowFontScaling>
+            No recovery codes
+          </Text>
+          <Text style={{ ...typography.body, color: colors.textSecondary, marginTop: spacing.sm, textAlign: 'center' }} allowFontScaling>
+            Something went wrong. Please try setting up MFA again.
+          </Text>
+          <View style={{ marginTop: spacing.xl }}>
+            <Button
+              title="Go Back"
+              variant="outline"
+              onPress={() => navigation.goBack()}
+            />
+          </View>
+        </View>
+      </ScreenWrapper>
+    );
+  }
 
   function handleCopyAll() {
     try {
@@ -35,7 +59,14 @@ export function RecoveryCodesScreen({ navigation }: Props) {
 
   async function proceedToLogin() {
     setShowConfirm(false);
-    await activatePendingTokens();
+    setActivating(true);
+    try {
+      await activatePendingTokens();
+    } catch {
+      Alert.alert('Error', 'Failed to complete setup. Please try signing in again.');
+    } finally {
+      setActivating(false);
+    }
   }
 
   return (
@@ -79,6 +110,7 @@ export function RecoveryCodesScreen({ navigation }: Props) {
           title="I've saved my codes — Continue"
           icon="check-circle-outline"
           onPress={handleContinue}
+          loading={activating}
         />
       </View>
 

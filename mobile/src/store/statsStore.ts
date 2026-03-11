@@ -25,7 +25,7 @@ export const useStatsStore = create<StatsStore>((set) => ({
     set({ loading: true });
     try {
       const { apiClient } = await import('../api/client');
-      const { data } = await apiClient.get('/stats/calls');
+      const { data } = await apiClient.get('/stats');
       set({ stats: data, loading: false, error: undefined });
     } catch {
       set({ stats: null, loading: false, error: undefined });

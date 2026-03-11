@@ -6,6 +6,7 @@ import { useTheme, useThemeContext, ThemeMode } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
 import { FadeIn } from '../components/ui/FadeIn';
 import { useAuthStore } from '../store/authStore';
+import { hapticLight } from '../utils/haptics';
 import { deleteAccount } from '../api/auth';
 import { extractApiError } from '../api/client';
 
@@ -44,7 +45,7 @@ function ThemeToggle({
         return (
           <Pressable
             key={opt.value}
-            onPress={() => onSelect(opt.value)}
+            onPress={() => { hapticLight(); onSelect(opt.value); }}
             style={{
               flex: 1,
               paddingVertical: spacing.sm,

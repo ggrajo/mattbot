@@ -3,7 +3,20 @@ import { View, Text, ScrollView, TextInput, TouchableOpacity, ActivityIndicator,
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
+import { StepUpPrompt } from '../components/auth/StepUpPrompt';
+import { setupPin } from '../api/auth';
 import { apiClient, extractApiError } from '../api/client';
+import { storePinDeviceId, getSecureItem, TOKEN_KEYS } from '../utils/secureStorage';
+
+function extractDeviceIdFromToken(accessToken: string): string | null {
+  try {
+    const payload = accessToken.split('.')[1];
+    const decoded = JSON.parse(atob(payload));
+    return decoded.did ?? null;
+  } catch {
+    return null;
+  }
+}
 
 export function PinSetupScreen() {
   const { colors, spacing, typography, radii } = useTheme();
@@ -16,6 +29,8 @@ export function PinSetupScreen() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [showStepUp, setShowStepUp] = useState(false);
+  const [pendingPin, setPendingPin] = useState('');
 
   useFocusEffect(
     useCallback(() => {
@@ -50,23 +65,40 @@ export function PinSetupScreen() {
     }
   }
 
-  async function handleSetup() {
+  function handleSetup() {
     if (pin !== confirmPin) {
       setError('PINs do not match');
       setConfirmPin('');
       return;
     }
+    setPendingPin(pin);
+    setShowStepUp(true);
+  }
+
+  async function handleStepUpSuccess(stepUpToken: string) {
+    setShowStepUp(false);
     setSaving(true);
     setError('');
     try {
-      await apiClient.post('/auth/pin/setup', { pin });
+      await setupPin(pendingPin, stepUpToken);
+
+      const accessToken = await getSecureItem(TOKEN_KEYS.ACCESS_TOKEN);
+      if (accessToken) {
+        const deviceId = extractDeviceIdFromToken(accessToken);
+        if (deviceId) {
+          await storePinDeviceId(deviceId);
+        }
+      }
+
       Alert.alert('Success', 'PIN has been set up.', [
         { text: 'OK', onPress: () => navigation.goBack() },
       ]);
+      setPinSet(true);
     } catch (err) {
       setError(extractApiError(err));
     } finally {
       setSaving(false);
+      setPendingPin('');
     }
   }
 
@@ -226,6 +258,14 @@ export function PinSetupScreen() {
           </TouchableOpacity>
         </View>
       )}
+
+      <StepUpPrompt
+        visible={showStepUp}
+        onSuccess={handleStepUpSuccess}
+        onCancel={() => { setShowStepUp(false); setPendingPin(''); }}
+        title="Verify to set PIN"
+        message="Enter your password to enable PIN login."
+      />
     </ScrollView>
   );
 }

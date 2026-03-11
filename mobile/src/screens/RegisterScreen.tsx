@@ -22,7 +22,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Register'>;
 export function RegisterScreen({ navigation }: Props) {
   const theme = useTheme();
   const { colors, spacing, typography } = theme;
-  const { setMfaEnrollment } = useAuthStore();
+  const { setMfaEnrollment, setAuthenticated } = useAuthStore();
   const social = useSocialAuth();
 
   const [email, setEmail] = useState('');
@@ -54,6 +54,8 @@ export function RegisterScreen({ navigation }: Props) {
       } else if (data.requires_mfa_enrollment) {
         setMfaEnrollment(data.partial_token);
         navigation.navigate('MfaEnroll');
+      } else if (data.access_token && data.refresh_token) {
+        await setAuthenticated(data.access_token, data.refresh_token);
       }
     } catch (error) {
       setApiError(extractApiError(error));

@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme, useThemeContext } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
+import { OnboardingProgress } from '../components/ui/OnboardingProgress';
 import { apiClient, extractApiError } from '../api/client';
 import { getDeviceTimezone } from '../utils/formatDate';
 
@@ -68,6 +69,8 @@ export function OnboardingSettingsScreen() {
           paddingBottom: insets.bottom + 100,
         }}
       >
+        <OnboardingProgress currentStep={2} totalSteps={7} />
+
         {/* Illustration Area */}
         <View style={{ alignItems: 'center', paddingVertical: spacing.xl }}>
           <View

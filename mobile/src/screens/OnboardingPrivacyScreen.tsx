@@ -11,6 +11,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
+import { FadeIn } from '../components/ui/FadeIn';
+import { OnboardingProgress } from '../components/ui/OnboardingProgress';
 import { apiClient, extractApiError } from '../api/client';
 
 const PRIVACY_POINTS = [
@@ -47,6 +49,8 @@ export function OnboardingPrivacyScreen() {
           paddingBottom: insets.bottom + 100,
         }}
       >
+        <OnboardingProgress currentStep={1} totalSteps={7} />
+
         {/* Illustration Area */}
         <View style={{ alignItems: 'center', paddingVertical: spacing.xxl }}>
           <View

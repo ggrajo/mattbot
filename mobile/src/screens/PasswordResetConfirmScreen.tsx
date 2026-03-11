@@ -1,27 +1,23 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-  Alert,
-} from 'react-native';
+import { View, Text } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../theme/ThemeProvider';
-import { Icon } from '../components/ui/Icon';
+import { ScreenWrapper } from '../components/ui/ScreenWrapper';
+import { StatusScreen } from '../components/ui/StatusScreen';
+import { Button } from '../components/ui/Button';
 import { TextInput } from '../components/ui/TextInput';
+import { PasswordStrength } from '../components/ui/PasswordStrength';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
-import { apiClient, extractApiError } from '../api/client';
+import { confirmPasswordReset } from '../api/auth';
+import { extractApiError } from '../api/client';
 import { RootStackParamList } from '../navigation/types';
 
 type RouteParams = RouteProp<RootStackParamList, 'PasswordResetConfirm'>;
 
 export function PasswordResetConfirmScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const { colors, spacing, typography } = useTheme();
   const navigation = useNavigation();
   const route = useRoute<RouteParams>();
-  const insets = useSafeAreaInsets();
 
   const token = route.params?.token ?? '';
 
@@ -32,10 +28,24 @@ export function PasswordResetConfirmScreen() {
   const [success, setSuccess] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{ password?: string; confirm?: string }>({});
 
+  if (!token) {
+    return (
+      <ScreenWrapper>
+        <StatusScreen
+          icon="link-off"
+          iconColor={colors.error}
+          title="Invalid reset link"
+          message="This password reset link is invalid or has expired. Please request a new one."
+          action={{ title: 'Back to Sign In', onPress: () => navigation.navigate('Login' as never) }}
+        />
+      </ScreenWrapper>
+    );
+  }
+
   function validate(): boolean {
     const errors: { password?: string; confirm?: string } = {};
-    if (password.length < 8) {
-      errors.password = 'Password must be at least 8 characters';
+    if (password.length < 12) {
+      errors.password = 'Password must be at least 12 characters';
     }
     if (password !== confirmPassword) {
       errors.confirm = 'Passwords do not match';
@@ -50,10 +60,7 @@ export function PasswordResetConfirmScreen() {
 
     setLoading(true);
     try {
-      await apiClient.post('/auth/password/reset/confirm', {
-        token,
-        new_password: password,
-      });
+      await confirmPasswordReset(token, password);
       setSuccess(true);
     } catch (e) {
       setError(extractApiError(e) || 'Failed to reset password');
@@ -64,76 +71,20 @@ export function PasswordResetConfirmScreen() {
 
   if (success) {
     return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: colors.background,
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: spacing.xl,
-        }}
-      >
-        <View
-          style={{
-            width: 80,
-            height: 80,
-            borderRadius: 40,
-            backgroundColor: colors.successContainer,
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: spacing.xl,
-          }}
-        >
-          <Icon name="check-circle" size="xl" color={colors.success} />
-        </View>
-        <Text
-          style={{ ...typography.h2, color: colors.textPrimary, textAlign: 'center' }}
-          allowFontScaling
-        >
-          Password Reset!
-        </Text>
-        <Text
-          style={{
-            ...typography.body,
-            color: colors.textSecondary,
-            textAlign: 'center',
-            marginTop: spacing.sm,
-            marginBottom: spacing.xxl,
-          }}
-          allowFontScaling
-        >
-          Your password has been successfully updated. You can now sign in with your new password.
-        </Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Login' as never)}
-          style={{
-            backgroundColor: colors.primary,
-            borderRadius: radii.lg,
-            paddingVertical: spacing.md + 2,
-            paddingHorizontal: spacing.xxl,
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: 52,
-          }}
-        >
-          <Text style={{ ...typography.button, color: colors.onPrimary }} allowFontScaling>
-            Go to Sign In
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <ScreenWrapper>
+        <StatusScreen
+          icon="check-circle"
+          iconColor={colors.success}
+          title="Password Reset!"
+          message="Your password has been successfully updated. You can now sign in with your new password."
+          action={{ title: 'Go to Sign In', onPress: () => navigation.navigate('Login' as never) }}
+        />
+      </ScreenWrapper>
     );
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: colors.background,
-        padding: spacing.lg,
-        paddingTop: spacing.xl,
-        paddingBottom: insets.bottom + spacing.lg,
-      }}
-    >
+    <ScreenWrapper>
       <View style={{ gap: spacing.sm, marginBottom: spacing.xl }}>
         <Text style={{ ...typography.h2, color: colors.textPrimary }} allowFontScaling>
           Set New Password
@@ -143,11 +94,7 @@ export function PasswordResetConfirmScreen() {
         </Text>
       </View>
 
-      {error ? (
-        <View style={{ marginBottom: spacing.md }}>
-          <ErrorMessage message={error} />
-        </View>
-      ) : null}
+      {error ? <ErrorMessage message={error} /> : null}
 
       <TextInput
         label="New Password"
@@ -161,7 +108,9 @@ export function PasswordResetConfirmScreen() {
         isPassword
         autoCapitalize="none"
         autoComplete="password-new"
+        textContentType="newPassword"
       />
+      <PasswordStrength password={password} />
 
       <TextInput
         label="Confirm Password"
@@ -175,44 +124,23 @@ export function PasswordResetConfirmScreen() {
         isPassword
         autoCapitalize="none"
         autoComplete="password-new"
+        textContentType="newPassword"
       />
 
-      <TouchableOpacity
-        onPress={handleSubmit}
-        disabled={loading}
-        style={{
-          backgroundColor: colors.primary,
-          borderRadius: radii.lg,
-          paddingVertical: spacing.md + 2,
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexDirection: 'row',
-          gap: spacing.sm,
-          opacity: loading ? 0.6 : 1,
-          minHeight: 52,
-          marginTop: spacing.md,
-        }}
-      >
-        {loading ? (
-          <ActivityIndicator size="small" color={colors.onPrimary} />
-        ) : (
-          <>
-            <Icon name="lock-reset" size="md" color={colors.onPrimary} />
-            <Text style={{ ...typography.button, color: colors.onPrimary }} allowFontScaling>
-              Reset Password
-            </Text>
-          </>
-        )}
-      </TouchableOpacity>
+      <View style={{ marginTop: spacing.md }}>
+        <Button
+          title="Reset Password"
+          icon="lock-reset"
+          onPress={handleSubmit}
+          loading={loading}
+        />
+      </View>
 
-      <TouchableOpacity
+      <Button
+        title="Back to Sign In"
         onPress={() => navigation.navigate('Login' as never)}
-        style={{ paddingVertical: spacing.md, alignItems: 'center', marginTop: spacing.sm }}
-      >
-        <Text style={{ ...typography.body, color: colors.primary }} allowFontScaling>
-          Back to Sign In
-        </Text>
-      </TouchableOpacity>
-    </View>
+        variant="ghost"
+      />
+    </ScreenWrapper>
   );
 }

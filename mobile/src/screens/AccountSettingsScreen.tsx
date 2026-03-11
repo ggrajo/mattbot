@@ -3,6 +3,8 @@ import { View, Text, ScrollView, TouchableOpacity, Alert, ActivityIndicator } fr
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
+import { StepUpPrompt } from '../components/auth/StepUpPrompt';
+import { deleteAccount } from '../api/auth';
 import { apiClient, extractApiError } from '../api/client';
 import { useAuthStore } from '../store/authStore';
 
@@ -16,6 +18,7 @@ export function AccountSettingsScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [deleting, setDeleting] = useState(false);
+  const [showStepUp, setShowStepUp] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -55,20 +58,23 @@ export function AccountSettingsScreen() {
         {
           text: 'Delete',
           style: 'destructive',
-          onPress: async () => {
-            setDeleting(true);
-            try {
-              await apiClient.post('/me/delete-account');
-              await signOut();
-            } catch (err) {
-              Alert.alert('Error', extractApiError(err));
-            } finally {
-              setDeleting(false);
-            }
-          },
+          onPress: () => setShowStepUp(true),
         },
       ],
     );
+  }
+
+  async function handleDeleteStepUpSuccess(stepUpToken: string) {
+    setShowStepUp(false);
+    setDeleting(true);
+    try {
+      await deleteAccount(stepUpToken);
+      await signOut();
+    } catch (err) {
+      Alert.alert('Error', extractApiError(err));
+    } finally {
+      setDeleting(false);
+    }
   }
 
   if (loading) {
@@ -177,6 +183,14 @@ export function AccountSettingsScreen() {
           <Text style={{ ...typography.button, color: colors.error }}>Delete Account</Text>
         </TouchableOpacity>
       </View>
+
+      <StepUpPrompt
+        visible={showStepUp}
+        onSuccess={handleDeleteStepUpSuccess}
+        onCancel={() => setShowStepUp(false)}
+        title="Verify to delete account"
+        message="Enter your password to permanently delete your account."
+      />
     </ScrollView>
   );
 }

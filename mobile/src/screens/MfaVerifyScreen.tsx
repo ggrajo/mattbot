@@ -6,6 +6,7 @@ import { Button } from '../components/ui/Button';
 import { OtpInput } from '../components/ui/OtpInput';
 import { TextInput } from '../components/ui/TextInput';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { StatusScreen } from '../components/ui/StatusScreen';
 import { Icon } from '../components/ui/Icon';
 import { useTheme } from '../theme/ThemeProvider';
 import { useAuthStore } from '../store/authStore';
@@ -27,6 +28,20 @@ export function MfaVerifyScreen({ navigation }: Props) {
   const [apiError, setApiError] = useState<string>();
   const [loading, setLoading] = useState(false);
 
+  if (!mfaChallengeToken) {
+    return (
+      <ScreenWrapper>
+        <StatusScreen
+          icon="alert-circle-outline"
+          title="Session expired"
+          message="Your MFA session has expired. Please sign in again."
+          actionTitle="Back to Sign In"
+          onAction={() => navigation.navigate('Login')}
+        />
+      </ScreenWrapper>
+    );
+  }
+
   async function handleVerify() {
     const schema = mode === 'totp' ? totpCodeSchema : recoveryCodeSchema;
     const err = validateField(schema, code);
@@ -37,7 +52,7 @@ export function MfaVerifyScreen({ navigation }: Props) {
     setLoading(true);
     try {
       const data = await mfaVerify(
-        mfaChallengeToken!,
+        mfaChallengeToken,
         mode === 'totp' ? code : undefined,
         mode === 'recovery' ? code : undefined,
       );

@@ -47,7 +47,12 @@ function formatDurationCompact(seconds: number | null): string {
 }
 
 function getGreeting(name: string | null): string {
-  return name ? `Hey ${name}` : 'Hey there';
+  const hour = new Date().getHours();
+  const timeLabel =
+    hour >= 5 && hour < 12 ? 'Good morning' :
+    hour >= 12 && hour < 17 ? 'Good afternoon' :
+    'Good evening';
+  return name ? `${timeLabel}, ${name}` : timeLabel;
 }
 
 function CircularProgress({
@@ -173,12 +178,12 @@ function QuickActionCard({
           width: 44,
           height: 44,
           borderRadius: 14,
-          backgroundColor: action.color + '25',
+          backgroundColor: isDark ? action.color + '25' : colors.surfaceVariant,
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <Icon name={action.icon} size={22} color={action.color} />
+        <Icon name={action.icon} size={22} color={isDark ? action.color : colors.primary} />
       </View>
       <Text
         style={{

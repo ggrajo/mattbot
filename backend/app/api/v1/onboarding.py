@@ -115,12 +115,21 @@ async def complete_step(
     )
 
     if body.step == "assistant_setup":
-        agent = await agent_service.get_or_create_default_agent(db, current_user.user_id)
-        if not agent.elevenlabs_agent_id:
-            await agent_service.ensure_elevenlabs_agent(
-                db,
-                agent,
-                current_user.user_id,
+        try:
+            agent = await agent_service.get_or_create_default_agent(db, current_user.user_id)
+            if not agent.elevenlabs_agent_id:
+                await agent_service.ensure_elevenlabs_agent(
+                    db,
+                    agent,
+                    current_user.user_id,
+                )
+        except Exception:
+            import logging
+
+            logging.getLogger(__name__).warning(
+                "ElevenLabs agent provisioning failed during onboarding; "
+                "will retry on next settings sync",
+                exc_info=True,
             )
 
     if body.step == "onboarding_complete":

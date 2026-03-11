@@ -15,8 +15,8 @@ import { useDeviceStore } from '../store/deviceStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { getDeviceTimezone } from '../utils/formatDate';
 import { revokeDevice, rememberDevice, DeviceInfo } from '../api/devices';
-import { stepUp } from '../api/auth';
 import { extractApiError } from '../api/client';
+import { StepUpPrompt } from '../components/auth/StepUpPrompt';
 import { Toast } from '../components/ui/Toast';
 
 function platformIcon(platform: string): string {
@@ -51,6 +51,7 @@ export function DeviceListScreen() {
   const [revokeTarget, setRevokeTarget] = useState<DeviceInfo | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [showStepUp, setShowStepUp] = useState(false);
 
   useEffect(() => {
     fetchDevices();
@@ -60,12 +61,17 @@ export function DeviceListScreen() {
     setRevokeTarget(device);
   }, []);
 
-  async function performRevoke() {
+  function performRevoke() {
+    if (!revokeTarget) return;
+    setShowStepUp(true);
+  }
+
+  async function handleStepUpSuccess(stepUpToken: string) {
+    setShowStepUp(false);
     if (!revokeTarget) return;
     setRevoking(true);
     try {
-      const stepUpData = await stepUp(undefined, undefined);
-      await revokeDevice(revokeTarget.id, stepUpData.step_up_token);
+      await revokeDevice(revokeTarget.id, stepUpToken);
       setRevokeTarget(null);
       await fetchDevices();
     } catch (e) {
@@ -296,7 +302,7 @@ export function DeviceListScreen() {
       />
 
       <ConfirmSheet
-        visible={!!revokeTarget}
+        visible={!!revokeTarget && !showStepUp}
         onDismiss={() => setRevokeTarget(null)}
         icon="alert-circle-outline"
         iconColor={colors.error}
@@ -307,6 +313,14 @@ export function DeviceListScreen() {
         destructive
         onConfirm={performRevoke}
         loading={revoking}
+      />
+
+      <StepUpPrompt
+        visible={showStepUp}
+        onSuccess={handleStepUpSuccess}
+        onCancel={() => { setShowStepUp(false); setRevokeTarget(null); }}
+        title="Verify to revoke device"
+        message="Enter your password to revoke this device."
       />
     </ScreenWrapper>
   );

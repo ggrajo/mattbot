@@ -21,7 +21,7 @@ export const useTelephonyStore = create<TelephonyStore>((set) => ({
   loadNumbers: async () => {
     try {
       const { apiClient } = await import('../api/client');
-      const { data } = await apiClient.get('/telephony/numbers');
+      const { data } = await apiClient.get('/numbers');
       set({ numbers: data?.numbers ?? data ?? [], error: undefined });
     } catch {
       set({ numbers: [], error: undefined });

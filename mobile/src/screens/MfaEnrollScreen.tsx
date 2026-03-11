@@ -7,6 +7,7 @@ import { OtpInput } from '../components/ui/OtpInput';
 import { Card } from '../components/ui/Card';
 import { TotpQrCode } from '../components/auth/TotpQrCode';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { StatusScreen } from '../components/ui/StatusScreen';
 import { LoadingOverlay } from '../components/ui/LoadingOverlay';
 import { Icon } from '../components/ui/Icon';
 import { useTheme } from '../theme/ThemeProvider';
@@ -33,7 +34,21 @@ export function MfaEnrollScreen({ navigation }: Props) {
     if (!totpSecret && partialToken) {
       initializeTotp();
     }
-  }, []);
+  }, [partialToken]);
+
+  if (!partialToken && !totpSecret) {
+    return (
+      <ScreenWrapper>
+        <StatusScreen
+          icon="alert-circle-outline"
+          title="Session expired"
+          message="Your enrollment session has expired. Please sign in again to set up MFA."
+          actionTitle="Back to Sign In"
+          onAction={() => navigation.navigate('Login')}
+        />
+      </ScreenWrapper>
+    );
+  }
 
   async function initializeTotp() {
     setInitializing(true);

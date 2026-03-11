@@ -30,7 +30,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
   loadSettings: async () => {
     try {
       const { apiClient } = await import('../api/client');
-      const { data } = await apiClient.get('/me/settings');
+      const { data } = await apiClient.get('/settings');
       set({ settings: data, error: undefined });
     } catch {
       set({ error: undefined });
@@ -40,7 +40,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
   loadOnboarding: async () => {
     try {
       const { apiClient } = await import('../api/client');
-      const { data } = await apiClient.get('/me/onboarding');
+      const { data } = await apiClient.get('/onboarding');
       set({ onboarding: data, error: undefined });
     } catch {
       set({ onboarding: { is_complete: true, steps_completed: [] }, error: undefined });
@@ -50,7 +50,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
   completeStep: async (step: string) => {
     try {
       const { apiClient } = await import('../api/client');
-      await apiClient.post('/me/onboarding/complete-step', { step });
+      await apiClient.post('/onboarding/complete-step', { step });
       const current = get().onboarding;
       const steps = [...(current?.completed_steps ?? []), step];
       set({ onboarding: { ...current, is_complete: false, completed_steps: steps } });

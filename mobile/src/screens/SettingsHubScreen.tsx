@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTheme, useThemeContext, ThemeMode } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
 import { FadeIn } from '../components/ui/FadeIn';
+import { hapticLight } from '../utils/haptics';
 
 const THEME_OPTIONS: { value: ThemeMode; label: string }[] = [
   { value: 'system', label: 'System' },
@@ -41,7 +42,7 @@ function ThemeToggle({
         return (
           <Pressable
             key={opt.value}
-            onPress={() => onSelect(opt.value)}
+            onPress={() => { hapticLight(); onSelect(opt.value); }}
             style={{
               flex: 1,
               paddingVertical: spacing.sm,
@@ -254,7 +255,18 @@ export function SettingsHubScreen() {
                         borderBottomColor: colors.border,
                       })}
                     >
-                      <Icon name={row.icon} size={20} color={row.color || colors.primary} />
+                      <View
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: 16,
+                          backgroundColor: (row.color || colors.primary) + '18',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Icon name={row.icon} size={18} color={row.color || colors.primary} />
+                      </View>
                       <Text
                         style={{
                           ...typography.body,

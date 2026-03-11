@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
+import { OnboardingProgress } from '../components/ui/OnboardingProgress';
 import { apiClient, extractApiError } from '../api/client';
 
 const PERSONALITIES: Array<{ label: string; value: string; icon: string; description: string }> = [
@@ -57,6 +58,8 @@ export function OnboardingAssistantSetupScreen() {
         }}
         keyboardShouldPersistTaps="handled"
       >
+        <OnboardingProgress currentStep={3} totalSteps={7} />
+
         {/* Illustration Area */}
         <View style={{ alignItems: 'center', paddingVertical: spacing.xl }}>
           <View

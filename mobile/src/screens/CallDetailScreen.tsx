@@ -15,6 +15,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
 import { FadeIn } from '../components/ui/FadeIn';
+import { hapticLight } from '../utils/haptics';
 import { apiClient, extractApiError } from '../api/client';
 import type { RootStackParamList } from '../navigation/types';
 
@@ -163,7 +164,7 @@ export function CallDetailScreen({ route }: Props) {
     <View style={{ flex: 1, backgroundColor: colors.background, paddingTop: insets.top }}>
       {/* Navigation header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}>
-        <Pressable onPress={() => navigation.goBack()} hitSlop={12}>
+        <Pressable onPress={() => { hapticLight(); navigation.goBack(); }} hitSlop={12}>
           <Icon name="arrow-left" size={24} color={colors.textPrimary} />
         </Pressable>
         <Text style={{ ...typography.h3, color: colors.textPrimary, marginLeft: spacing.md, flex: 1 }}>
@@ -335,6 +336,8 @@ export function CallDetailScreen({ route }: Props) {
                 marginBottom: spacing.xl,
                 borderWidth: 1,
                 borderColor: colors.border,
+                borderLeftWidth: 3,
+                borderLeftColor: colors.primary,
               }}
             >
               <Text style={{ ...typography.body, color: colors.textSecondary, lineHeight: 22 }}>
@@ -673,7 +676,7 @@ function ActionChip({
 }) {
   return (
     <Pressable
-      onPress={onPress}
+      onPress={() => { hapticLight(); onPress(); }}
       style={({ pressed }) => ({
         flex: 1,
         flexDirection: 'row',

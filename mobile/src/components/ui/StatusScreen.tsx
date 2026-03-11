@@ -4,17 +4,40 @@ import { Icon } from './Icon';
 import { Button } from './Button';
 import { useTheme } from '../../theme/ThemeProvider';
 
-interface Props {
-  icon: string;
+interface ActionObject {
   title: string;
-  message: string;
-  actionTitle?: string;
-  onAction?: () => void;
+  onPress: () => void;
+  variant?: 'filled' | 'outline' | 'ghost';
 }
 
-export function StatusScreen({ icon, title, message, actionTitle, onAction }: Props) {
+interface Props {
+  icon: string;
+  iconColor?: string;
+  title: string;
+  message?: string;
+  subtitle?: string;
+  actionTitle?: string;
+  onAction?: () => void;
+  action?: ActionObject;
+}
+
+export function StatusScreen({
+  icon,
+  iconColor,
+  title,
+  message,
+  subtitle,
+  actionTitle,
+  onAction,
+  action,
+}: Props) {
   const theme = useTheme();
   const { colors, spacing, typography } = theme;
+
+  const displayMessage = message || subtitle || '';
+  const resolvedActionTitle = actionTitle || action?.title;
+  const resolvedOnAction = onAction || action?.onPress;
+  const resolvedVariant = action?.variant;
 
   return (
     <View
@@ -27,7 +50,7 @@ export function StatusScreen({ icon, title, message, actionTitle, onAction }: Pr
       }}
     >
       <View style={{ marginBottom: spacing.lg }}>
-        <Icon name={icon} size={48} color={colors.textSecondary} />
+        <Icon name={icon} size={48} color={iconColor || colors.textSecondary} />
       </View>
       <Text
         style={{
@@ -36,21 +59,29 @@ export function StatusScreen({ icon, title, message, actionTitle, onAction }: Pr
           textAlign: 'center',
           marginBottom: spacing.sm,
         }}
+        allowFontScaling
       >
         {title}
       </Text>
-      <Text
-        style={{
-          ...typography.body,
-          color: colors.textSecondary,
-          textAlign: 'center',
-          marginBottom: spacing.xl,
-        }}
-      >
-        {message}
-      </Text>
-      {actionTitle && onAction && (
-        <Button title={actionTitle} onPress={onAction} />
+      {displayMessage ? (
+        <Text
+          style={{
+            ...typography.body,
+            color: colors.textSecondary,
+            textAlign: 'center',
+            marginBottom: spacing.xl,
+          }}
+          allowFontScaling
+        >
+          {displayMessage}
+        </Text>
+      ) : null}
+      {resolvedActionTitle && resolvedOnAction && (
+        <Button
+          title={resolvedActionTitle}
+          onPress={resolvedOnAction}
+          variant={resolvedVariant}
+        />
       )}
     </View>
   );

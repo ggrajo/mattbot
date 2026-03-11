@@ -11,6 +11,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
+import { FadeIn } from '../components/ui/FadeIn';
+import { Badge } from '../components/ui/Badge';
+import { hapticLight } from '../utils/haptics';
 import { apiClient, extractApiError } from '../api/client';
 import { RootStackParamList } from '../navigation/types';
 
@@ -71,6 +74,7 @@ export function PlanSelectionScreen({ route }: Props) {
   );
 
   function handleSelect(plan: Plan) {
+    hapticLight();
     navigation.navigate('PaymentMethod', {
       plan: plan.code,
       source: source ?? 'manage',
@@ -120,12 +124,12 @@ export function PlanSelectionScreen({ route }: Props) {
       )}
 
       {!loading &&
-        plans.map((plan) => {
+        plans.map((plan, planIndex) => {
           const isCurrent = currentPlan === plan.code;
           const isRecommended = plan.recommended && !isCurrent;
           return (
+            <FadeIn key={plan.code} delay={planIndex * 80} slide="up">
             <View
-              key={plan.code}
               style={{
                 borderWidth: isCurrent ? 2 : isRecommended ? 2 : 1,
                 borderColor: isCurrent
@@ -173,7 +177,7 @@ export function PlanSelectionScreen({ route }: Props) {
                   }}
                 >
                   <Text style={{ ...typography.caption, color: colors.onPrimary, fontWeight: '700' }}>
-                    RECOMMENDED
+                    MOST POPULAR
                   </Text>
                 </View>
               )}
@@ -188,10 +192,10 @@ export function PlanSelectionScreen({ route }: Props) {
                   ) : null}
                 </View>
                 <View style={{ alignItems: 'flex-end' }}>
-                  <Text style={{ ...typography.h2, color: colors.primary }}>
-                    ${parseFloat(plan.price_usd).toFixed(2)}
+                  <Text style={{ ...typography.h1, color: colors.primary }}>
+                    ${parseFloat(plan.price_usd).toFixed(0)}
                   </Text>
-                  <Text style={{ ...typography.caption, color: colors.textSecondary }}>/month</Text>
+                  <Text style={{ ...typography.caption, color: colors.textSecondary }}>/mo</Text>
                 </View>
               </View>
 
@@ -245,6 +249,7 @@ export function PlanSelectionScreen({ route }: Props) {
                 </Text>
               </TouchableOpacity>
             </View>
+            </FadeIn>
           );
         })}
     </ScrollView>

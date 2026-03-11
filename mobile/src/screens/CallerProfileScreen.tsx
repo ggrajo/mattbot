@@ -56,8 +56,17 @@ export function CallerProfileScreen({ route }: Props) {
   useFocusEffect(useCallback(() => { load(); }, []));
 
   async function handleVip() {
+    const callId = profile?.last_call_id;
+    if (!callId) {
+      Alert.alert('Error', 'No call found for this caller');
+      return;
+    }
     try {
-      await apiClient.post(`/callers/${phoneHash}/vip`);
+      if (profile?.is_vip) {
+        await apiClient.delete(`/calls/${callId}/mark-vip`);
+      } else {
+        await apiClient.post(`/calls/${callId}/mark-vip`);
+      }
       load();
     } catch {
       Alert.alert('Error', 'Failed to update VIP status');
@@ -65,6 +74,11 @@ export function CallerProfileScreen({ route }: Props) {
   }
 
   async function handleBlock() {
+    const callId = profile?.last_call_id;
+    if (!callId) {
+      Alert.alert('Error', 'No call found for this caller');
+      return;
+    }
     Alert.alert('Block Caller', 'Are you sure you want to block this caller?', [
       { text: 'Cancel', style: 'cancel' },
       {
@@ -72,7 +86,7 @@ export function CallerProfileScreen({ route }: Props) {
         style: 'destructive',
         onPress: async () => {
           try {
-            await apiClient.post(`/callers/${phoneHash}/block`);
+            await apiClient.post(`/calls/${callId}/mark-blocked`);
             load();
           } catch {
             Alert.alert('Error', 'Failed to block caller');
@@ -135,11 +149,11 @@ export function CallerProfileScreen({ route }: Props) {
               <Icon name="account-outline" size={40} color={colors.primary} />
             </View>
             <Text style={{ ...typography.h2, color: colors.textPrimary }}>
-              {profile.name || profile.phone_masked || 'Unknown'}
+              {profile.vip_display_name || profile.name || profile.phone_masked || 'Unknown'}
             </Text>
-            {profile.phone_masked && (
+            {(profile.vip_company || profile.vip_relationship) && (
               <Text style={{ ...typography.bodySmall, color: colors.textSecondary, marginTop: 4 }}>
-                {profile.phone_masked}
+                {[profile.vip_relationship, profile.vip_company].filter(Boolean).join(' · ')}
               </Text>
             )}
             <View style={{ flexDirection: 'row', gap: spacing.md, marginTop: spacing.md }}>
@@ -171,14 +185,14 @@ export function CallerProfileScreen({ route }: Props) {
           >
             <View style={{ flex: 1, alignItems: 'center' }}>
               <Text style={{ ...typography.h2, color: colors.textPrimary }}>
-                {profile.total_calls ?? 0}
+                {profile.call_count ?? profile.total_calls ?? 0}
               </Text>
               <Text style={{ ...typography.caption, color: colors.textSecondary }}>Total Calls</Text>
             </View>
             <View style={{ width: 1, backgroundColor: colors.border }} />
             <View style={{ flex: 1, alignItems: 'center' }}>
               <Text style={{ ...typography.bodySmall, color: colors.textPrimary, fontWeight: '600' }}>
-                {profile.last_call_at ? timeAgo(profile.last_call_at) : 'N/A'}
+                {(profile.last_call_date || profile.last_call_at) ? timeAgo(profile.last_call_date || profile.last_call_at) : 'N/A'}
               </Text>
               <Text style={{ ...typography.caption, color: colors.textSecondary }}>Last Call</Text>
             </View>

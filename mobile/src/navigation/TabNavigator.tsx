@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { View, Pressable, Text, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from 'react-native-reanimated';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
+import { hapticLight } from '../utils/haptics';
 import { HomeScreen } from '../screens/HomeScreen';
 import { CallsListScreen } from '../screens/CallsListScreen';
 import { CalendarScreen } from '../screens/CalendarScreen';
@@ -10,53 +18,167 @@ import { TabParamList } from './types';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
-export function TabNavigator() {
-  const theme = useTheme();
+const TABS: {
+  name: keyof TabParamList;
+  label: string;
+  iconActive: string;
+  iconInactive: string;
+}[] = [
+  { name: 'HomeTab', label: 'Home', iconActive: 'home', iconInactive: 'home-outline' },
+  { name: 'CallsTab', label: 'Calls', iconActive: 'phone', iconInactive: 'phone-outline' },
+  { name: 'CalendarTab', label: 'Calendar', iconActive: 'calendar', iconInactive: 'calendar-outline' },
+  { name: 'AccountTab', label: 'Account', iconActive: 'account', iconInactive: 'account-outline' },
+];
+
+function TabBarButton({
+  tab,
+  focused,
+  onPress,
+}: {
+  tab: (typeof TABS)[number];
+  focused: boolean;
+  onPress: () => void;
+}) {
+  const { colors, spacing, typography, radii } = useTheme();
+  const scale = useSharedValue(1);
+
+  const animStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  const handlePressIn = useCallback(() => {
+    scale.value = withSpring(0.88, { damping: 15, stiffness: 400 });
+  }, []);
+
+  const handlePressOut = useCallback(() => {
+    scale.value = withSpring(1, { damping: 15, stiffness: 400 });
+  }, []);
+
+  const handlePress = useCallback(() => {
+    hapticLight();
+    onPress();
+  }, [onPress]);
 
   return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: theme.colors.primary,
-        tabBarInactiveTintColor: theme.colors.textSecondary,
-        tabBarStyle: {
-          backgroundColor: theme.colors.tabBar,
-          borderTopColor: theme.colors.tabBarBorder,
-        },
-      }}
+    <Pressable
+      onPress={handlePress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      style={styles.tabButton}
+      accessibilityRole="tab"
+      accessibilityState={{ selected: focused }}
+      accessibilityLabel={tab.label}
     >
-      <Tab.Screen
-        name="HomeTab"
-        component={HomeScreen}
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, size }) => <Icon name="home-outline" size={size} color={color} />,
-        }}
-      />
-      <Tab.Screen
-        name="CallsTab"
-        component={CallsListScreen}
-        options={{
-          title: 'Calls',
-          tabBarIcon: ({ color, size }) => <Icon name="phone-outline" size={size} color={color} />,
-        }}
-      />
-      <Tab.Screen
-        name="CalendarTab"
-        component={CalendarScreen}
-        options={{
-          title: 'Calendar',
-          tabBarIcon: ({ color, size }) => <Icon name="calendar-outline" size={size} color={color} />,
-        }}
-      />
-      <Tab.Screen
-        name="AccountTab"
-        component={AccountHubScreen}
-        options={{
-          title: 'Account',
-          tabBarIcon: ({ color, size }) => <Icon name="account-outline" size={size} color={color} />,
-        }}
-      />
+      <Animated.View
+        style={[
+          styles.tabContent,
+          {
+            backgroundColor: focused
+              ? colors.primary + '1A'
+              : 'transparent',
+            borderRadius: radii.lg,
+            paddingHorizontal: spacing.md,
+            paddingVertical: spacing.xs + 2,
+          },
+          animStyle,
+        ]}
+      >
+        <Icon
+          name={focused ? tab.iconActive : tab.iconInactive}
+          size={22}
+          color={focused ? colors.primary : colors.textSecondary}
+        />
+        <Text
+          style={{
+            ...typography.caption,
+            fontWeight: focused ? '600' : '400',
+            color: focused ? colors.primary : colors.textSecondary,
+            marginTop: 1,
+          }}
+          numberOfLines={1}
+        >
+          {tab.label}
+        </Text>
+      </Animated.View>
+    </Pressable>
+  );
+}
+
+function FloatingTabBar({ state, navigation }: any) {
+  const theme = useTheme();
+  const { colors, radii, shadows } = theme;
+  const insets = useSafeAreaInsets();
+
+  const glassEdge =
+    theme.dark
+      ? { borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)' }
+      : {};
+
+  return (
+    <View
+      style={[
+        styles.floatingBar,
+        {
+          bottom: Math.max(insets.bottom, 8) + 4,
+          backgroundColor: colors.tabBar,
+          borderRadius: radii.xxl,
+          ...shadows.card,
+          ...glassEdge,
+        },
+      ]}
+    >
+      {TABS.map((tab, idx) => (
+        <TabBarButton
+          key={tab.name}
+          tab={tab}
+          focused={state.index === idx}
+          onPress={() => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: state.routes[idx].key,
+              canPreventDefault: true,
+            });
+            if (!event.defaultPrevented && state.index !== idx) {
+              navigation.navigate(state.routes[idx].name);
+            }
+          }}
+        />
+      ))}
+    </View>
+  );
+}
+
+export function TabNavigator() {
+  return (
+    <Tab.Navigator
+      tabBar={(props) => <FloatingTabBar {...props} />}
+      screenOptions={{ headerShown: false }}
+    >
+      <Tab.Screen name="HomeTab" component={HomeScreen} />
+      <Tab.Screen name="CallsTab" component={CallsListScreen} />
+      <Tab.Screen name="CalendarTab" component={CalendarScreen} />
+      <Tab.Screen name="AccountTab" component={AccountHubScreen} />
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  floatingBar: {
+    position: 'absolute',
+    left: 16,
+    right: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 6,
+    paddingHorizontal: 8,
+  },
+  tabButton: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tabContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
