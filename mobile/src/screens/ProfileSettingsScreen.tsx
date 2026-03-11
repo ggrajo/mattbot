@@ -3,37 +3,33 @@ import { View, Text, ScrollView, TextInput, TouchableOpacity, ActivityIndicator,
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeProvider';
 import { apiClient, extractApiError } from '../api/client';
+import { useAuthStore } from '../store/authStore';
 
 interface ProfileFields {
   display_name: string;
   nickname: string;
-  company: string;
+  company_name: string;
   role_title: string;
-  timezone: string;
-  language: string;
 }
 
 const INITIAL: ProfileFields = {
   display_name: '',
   nickname: '',
-  company: '',
+  company_name: '',
   role_title: '',
-  timezone: '',
-  language: '',
 };
 
 const FIELD_META: { key: keyof ProfileFields; label: string; icon: string }[] = [
   { key: 'display_name', label: 'Display Name', icon: 'account-outline' },
   { key: 'nickname', label: 'Nickname', icon: 'tag-outline' },
-  { key: 'company', label: 'Company', icon: 'office-building-outline' },
+  { key: 'company_name', label: 'Company', icon: 'office-building-outline' },
   { key: 'role_title', label: 'Role Title', icon: 'briefcase-outline' },
-  { key: 'timezone', label: 'Timezone', icon: 'clock-outline' },
-  { key: 'language', label: 'Language', icon: 'translate' },
 ];
 
 export function ProfileSettingsScreen() {
   const { colors, spacing, typography, radii } = useTheme();
   const navigation = useNavigation();
+  const setProfileName = useAuthStore(s => s.setProfileName);
 
   const [fields, setFields] = useState<ProfileFields>(INITIAL);
   const [original, setOriginal] = useState<ProfileFields>(INITIAL);
@@ -54,10 +50,8 @@ export function ProfileSettingsScreen() {
           const vals: ProfileFields = {
             display_name: d.display_name ?? '',
             nickname: d.nickname ?? '',
-            company: d.company ?? '',
+            company_name: d.company_name ?? '',
             role_title: d.role_title ?? '',
-            timezone: d.timezone ?? '',
-            language: d.language ?? '',
           };
           setFields(vals);
           setOriginal(vals);
@@ -84,6 +78,7 @@ export function ProfileSettingsScreen() {
       }
       await apiClient.patch('/me', changed);
       setOriginal(fields);
+      setProfileName(fields.display_name || null, fields.nickname || null);
       Alert.alert('Saved', 'Your profile has been updated.');
     } catch (err) {
       setError(extractApiError(err));

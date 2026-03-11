@@ -260,6 +260,8 @@ export function HomeScreen() {
       if (state && !state.is_complete) {
         if (!state.steps_completed.includes('privacy_review')) {
           navigation.navigate('OnboardingPrivacy');
+        } else if (!state.steps_completed.includes('profile_setup')) {
+          navigation.navigate('OnboardingProfile');
         } else if (!state.steps_completed.includes('settings_configured')) {
           navigation.navigate('OnboardingSettings');
         } else if (!state.steps_completed.includes('assistant_setup')) {

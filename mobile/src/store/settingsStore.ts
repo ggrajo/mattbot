@@ -33,6 +33,10 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
       const { apiClient } = await import('../api/client');
       const { data } = await apiClient.get('/settings');
       set({ settings: data, error: undefined });
+      if (data.timezone) {
+        const { setUserTimezone } = await import('../utils/formatDate');
+        setUserTimezone(data.timezone);
+      }
     } catch {
       set({ error: undefined });
     }
@@ -43,8 +47,11 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
       const { apiClient } = await import('../api/client');
       const { data } = await apiClient.get('/onboarding');
       set({ onboarding: data, error: undefined });
-    } catch {
-      set({ onboarding: { is_complete: true, steps_completed: [] }, error: undefined });
+    } catch (e: any) {
+      const status = e?.response?.status;
+      if (status === 401 || status === 403) {
+        set({ onboarding: { is_complete: true, steps_completed: [] }, error: undefined });
+      }
     }
   },
 
@@ -60,5 +67,6 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
 
   reset: () => {
     set({ settings: null, onboarding: null, error: undefined });
+    import('../utils/formatDate').then(({ setUserTimezone }) => setUserTimezone(''));
   },
 }));

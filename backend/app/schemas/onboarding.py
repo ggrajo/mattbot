@@ -7,6 +7,7 @@ ONBOARDING_STEPS = [
     "email_verified",
     "mfa_enrolled",
     "privacy_review",
+    "profile_setup",
     "settings_configured",
     "assistant_setup",
     "calendar_setup",
@@ -19,6 +20,7 @@ ONBOARDING_STEPS = [
 
 COMPLETABLE_STEPS = {
     "privacy_review",
+    "profile_setup",
     "settings_configured",
     "assistant_setup",
     "calendar_setup",

@@ -23,6 +23,7 @@ import { MfaEnrollScreen } from '../screens/MfaEnrollScreen';
 import { RecoveryCodesScreen } from '../screens/RecoveryCodesScreen';
 import { MfaVerifyScreen } from '../screens/MfaVerifyScreen';
 import { OnboardingPrivacyScreen } from '../screens/OnboardingPrivacyScreen';
+import { OnboardingProfileScreen } from '../screens/OnboardingProfileScreen';
 import { OnboardingSettingsScreen } from '../screens/OnboardingSettingsScreen';
 import { PrivacySettingsScreen } from '../screens/PrivacySettingsScreen';
 import { QuietHoursScreen } from '../screens/QuietHoursScreen';
@@ -272,6 +273,11 @@ export function RootNavigator() {
                 name="OnboardingPrivacy"
                 component={OnboardingPrivacyScreen}
                 options={{ headerShown: true, title: 'Privacy Review', headerBackVisible: false }}
+              />
+              <Stack.Screen
+                name="OnboardingProfile"
+                component={OnboardingProfileScreen}
+                options={{ headerShown: true, title: 'Your Profile', headerBackVisible: false }}
               />
               <Stack.Screen
                 name="OnboardingSettings"

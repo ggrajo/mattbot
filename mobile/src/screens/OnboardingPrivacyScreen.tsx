@@ -32,7 +32,7 @@ export function OnboardingPrivacyScreen() {
     setLoading(true);
     try {
       await apiClient.post('/onboarding/complete-step', { step: 'privacy_review' });
-      navigation.navigate('OnboardingSettings' as never);
+      navigation.navigate('OnboardingProfile' as never);
     } catch (e) {
       Alert.alert('Error', extractApiError(e) || 'Failed to complete step');
     } finally {
@@ -49,7 +49,7 @@ export function OnboardingPrivacyScreen() {
           paddingBottom: insets.bottom + 100,
         }}
       >
-        <OnboardingProgress currentStep={1} totalSteps={7} />
+        <OnboardingProgress currentStep={1} totalSteps={8} />
 
         {/* Illustration Area */}
         <View style={{ alignItems: 'center', paddingVertical: spacing.xxl }}>

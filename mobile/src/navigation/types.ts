@@ -16,6 +16,7 @@ export type RootStackParamList = {
   RecoveryCodes: undefined;
   MfaVerify: undefined;
   OnboardingPrivacy: undefined;
+  OnboardingProfile: undefined;
   OnboardingSettings: undefined;
   OnboardingAssistantSetup: undefined;
   OnboardingCalendarSetup: undefined;
