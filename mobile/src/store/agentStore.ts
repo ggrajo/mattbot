@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { agentsApi, Agent } from '../api/agents';
+import { settingsApi, VoiceCatalogEntry } from '../api/settings';
 import { extractApiError } from '../api/client';
 
 interface AgentStore {
@@ -8,17 +9,25 @@ interface AgentStore {
   loading: boolean;
   error: string | null;
 
+  voiceCatalog: VoiceCatalogEntry[];
+  voicesLoading: boolean;
+
   fetchAgents: () => Promise<void>;
   fetchAgent: (agentId: string) => Promise<void>;
   updateAgent: (agentId: string, data: Partial<Agent>) => Promise<Agent | null>;
   createAgent: (data: Partial<Agent>) => Promise<Agent | null>;
+  fetchVoiceCatalog: (locale?: string) => Promise<void>;
+  updateTemperament: (agentId: string, personality: string) => Promise<Agent | null>;
 }
 
-export const useAgentStore = create<AgentStore>((set) => ({
+export const useAgentStore = create<AgentStore>((set, get) => ({
   agents: [],
   currentAgent: null,
   loading: false,
   error: null,
+
+  voiceCatalog: [],
+  voicesLoading: false,
 
   fetchAgents: async () => {
     set({ loading: true, error: null });
@@ -71,5 +80,19 @@ export const useAgentStore = create<AgentStore>((set) => ({
       set({ loading: false, error: extractApiError(err) });
       return null;
     }
+  },
+
+  fetchVoiceCatalog: async (locale?: string) => {
+    set({ voicesLoading: true });
+    try {
+      const { data } = await settingsApi.listVoices(locale ? { locale } : undefined);
+      set({ voiceCatalog: data.voices, voicesLoading: false });
+    } catch {
+      set({ voicesLoading: false });
+    }
+  },
+
+  updateTemperament: async (agentId, personality) => {
+    return get().updateAgent(agentId, { personality });
   },
 }));

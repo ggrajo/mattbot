@@ -9,9 +9,9 @@ export const spacing = {
 } as const;
 
 export const radii = {
-  sm: 6,
-  md: 10,
-  lg: 16,
+  sm: 8,
+  md: 12,
+  lg: 18,
   xl: 24,
   full: 9999,
 } as const;
@@ -31,6 +31,7 @@ export interface ColorTokens {
   background: string;
   surface: string;
   surfaceVariant: string;
+  glassBg: string;
   primary: string;
   primaryContainer: string;
   onPrimary: string;
@@ -51,10 +52,19 @@ export interface ColorTokens {
   borderFocused: string;
   overlay: string;
   skeleton: string;
+  accentGradientStart: string;
+  accentGradientEnd: string;
 }
 
 export interface ShadowTokens {
   card: {
+    shadowColor: string;
+    shadowOffset: { width: number; height: number };
+    shadowOpacity: number;
+    shadowRadius: number;
+    elevation: number;
+  };
+  cardHover: {
     shadowColor: string;
     shadowOffset: { width: number; height: number };
     shadowOpacity: number;

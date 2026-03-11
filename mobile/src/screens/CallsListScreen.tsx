@@ -10,20 +10,23 @@ import {
   RefreshControl,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Badge } from '../components/ui/Badge';
 import { FadeIn } from '../components/ui/FadeIn';
 import { useTheme } from '../theme/ThemeProvider';
 import { useCallStore } from '../store/callStore';
 import type { Theme } from '../theme/tokens';
 import type { CallResponse } from '../api/calls';
 
-const STATUS_COLORS: Record<string, { bg: string; fg: string }> = {
-  ringing: { bg: '#FFF3E0', fg: '#E65100' },
-  answered: { bg: '#E8F5E9', fg: '#2E7D32' },
-  in_progress: { bg: '#E3F2FD', fg: '#1565C0' },
-  screening: { bg: '#F3E5F5', fg: '#7B1FA2' },
-  ended: { bg: '#ECEFF1', fg: '#546E7A' },
-  missed: { bg: '#FFEBEE', fg: '#C62828' },
-  rejected: { bg: '#FFEBEE', fg: '#C62828' },
+type BadgeVariant = 'primary' | 'success' | 'warning' | 'error' | 'secondary' | 'info';
+
+const STATUS_BADGE: Record<string, { label: string; variant: BadgeVariant }> = {
+  ringing: { label: 'Ringing', variant: 'warning' },
+  answered: { label: 'Answered', variant: 'success' },
+  in_progress: { label: 'In Progress', variant: 'primary' },
+  screening: { label: 'Screening', variant: 'secondary' },
+  ended: { label: 'Ended', variant: 'info' },
+  missed: { label: 'Missed', variant: 'error' },
+  rejected: { label: 'Rejected', variant: 'error' },
 };
 
 function formatDate(iso: string): string {
@@ -45,32 +48,6 @@ function formatDuration(seconds: number | null): string {
   const s = seconds % 60;
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
-
-function StatusBadge({ status }: { status: string }) {
-  const colors = STATUS_COLORS[status] ?? { bg: '#ECEFF1', fg: '#546E7A' };
-  return (
-    <View style={[badgeStyles.badge, { backgroundColor: colors.bg }]}>
-      <Text style={[badgeStyles.text, { color: colors.fg }]}>
-        {status.replace('_', ' ')}
-      </Text>
-    </View>
-  );
-}
-
-const badgeStyles = StyleSheet.create({
-  badge: {
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-    borderRadius: 12,
-    alignSelf: 'flex-start',
-  },
-  text: {
-    fontSize: 11,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-});
 
 function EmptyState({ theme }: { theme: Theme }) {
   const { colors, spacing, typography } = theme;
@@ -105,7 +82,7 @@ const emptyStyles = StyleSheet.create({
   illustration: {
     width: 80,
     height: 80,
-    borderRadius: 40,
+    borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
@@ -129,37 +106,38 @@ export function CallsListScreen() {
     fetchCalls();
   }, [fetchCalls]);
 
-  const renderCall = ({ item }: { item: CallResponse }) => (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={() => navigation.navigate('CallDetail', { callId: item.id })}
-      activeOpacity={0.7}
-    >
-      <View style={styles.cardHeader}>
-        <View style={styles.cardLeft}>
-          <View style={styles.phoneRow}>
-            <Text style={styles.phoneNumber}>
-              {item.direction === 'inbound' ? item.from_number : item.to_number}
+  const renderCall = ({ item }: { item: CallResponse }) => {
+    const badge = STATUS_BADGE[item.status] ?? { label: item.status, variant: 'info' as BadgeVariant };
+    return (
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() => navigation.navigate('CallDetail', { callId: item.id })}
+        activeOpacity={0.7}
+      >
+        <View style={styles.cardHeader}>
+          <View style={styles.cardLeft}>
+            <View style={styles.phoneRow}>
+              <Text style={styles.phoneNumber}>
+                {item.direction === 'inbound' ? item.from_number : item.to_number}
+              </Text>
+              {item.ai_session_id && (
+                <Badge label="AI" variant="secondary" size="sm" />
+              )}
+            </View>
+            <Text style={styles.directionLabel}>
+              {item.direction === 'inbound' ? 'Incoming' : 'Outgoing'}
+              {item.ai_session_id ? ' · Screened by AI' : ''}
             </Text>
-            {item.ai_session_id && (
-              <View style={styles.aiBadge}>
-                <Text style={styles.aiBadgeText}>AI</Text>
-              </View>
-            )}
           </View>
-          <Text style={styles.directionLabel}>
-            {item.direction === 'inbound' ? 'Incoming' : 'Outgoing'}
-            {item.ai_session_id ? ' · Screened by AI' : ''}
-          </Text>
+          <Badge label={badge.label} variant={badge.variant} />
         </View>
-        <StatusBadge status={item.status} />
-      </View>
-      <View style={styles.cardFooter}>
-        <Text style={styles.meta}>{formatDate(item.started_at)}</Text>
-        <Text style={styles.meta}>{formatDuration(item.duration_seconds)}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+        <View style={styles.cardFooter}>
+          <Text style={styles.meta}>{formatDate(item.started_at)}</Text>
+          <Text style={styles.meta}>{formatDuration(item.duration_seconds)}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -228,19 +206,7 @@ function makeStyles(theme: Theme) {
     cardLeft: { flex: 1, marginRight: spacing.md },
     phoneRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
     phoneNumber: { ...typography.h3, color: colors.textPrimary },
-    aiBadge: {
-      backgroundColor: '#F3E5F5',
-      paddingHorizontal: spacing.sm,
-      paddingVertical: 2,
-      borderRadius: radii.full,
-    },
-    aiBadgeText: {
-      fontSize: 10,
-      fontWeight: '700',
-      color: '#7B1FA2',
-      letterSpacing: 0.5,
-    },
-    directionLabel: { ...typography.caption, color: colors.textSecondary, marginTop: 2 },
+    directionLabel: { ...typography.caption, color: colors.textSecondary, marginTop: 4 },
     cardFooter: {
       flexDirection: 'row',
       justifyContent: 'space-between',

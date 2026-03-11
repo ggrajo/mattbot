@@ -6,12 +6,19 @@ import type { ElevenLabsMessage } from '../types.js';
 
 const log = createChildLogger('elevenlabs');
 
+export interface CallerMemoryContext {
+  callerPhoneHash: string;
+  callerName?: string;
+  memories: Array<{ type: string; content: string; importance: number }>;
+}
+
 export interface ElevenLabsClientOptions {
   agentId: string;
   systemPrompt?: string;
   greeting?: string;
   voiceId?: string;
   language?: string;
+  callerMemory?: CallerMemoryContext;
 }
 
 /**
@@ -92,11 +99,22 @@ export class ElevenLabsClient extends EventEmitter {
     const conversationConfig: Record<string, unknown> = {};
     const agentOverrides: Record<string, unknown> = {};
 
-    if (this.options.systemPrompt) {
-      agentOverrides.prompt = { prompt: this.options.systemPrompt };
+    let effectivePrompt = this.options.systemPrompt || '';
+    if (this.options.callerMemory) {
+      effectivePrompt += '\n\n' + this.buildMemoryPromptSection(this.options.callerMemory);
+    }
+
+    if (effectivePrompt) {
+      agentOverrides.prompt = { prompt: effectivePrompt };
     }
     if (this.options.greeting) {
-      agentOverrides.first_message = this.options.greeting;
+      const greeting = this.options.callerMemory?.callerName
+        ? this.options.greeting.replace(
+            /\bHow can I help you\b/i,
+            `Hi ${this.options.callerMemory.callerName}, how can I help you`,
+          )
+        : this.options.greeting;
+      agentOverrides.first_message = greeting;
     }
     if (this.options.voiceId) {
       agentOverrides.tts = { voice_id: this.options.voiceId };
@@ -113,6 +131,24 @@ export class ElevenLabsClient extends EventEmitter {
     }
 
     this.send(initPayload);
+  }
+
+  private buildMemoryPromptSection(memory: CallerMemoryContext): string {
+    const lines = ['[CALLER MEMORY]'];
+    if (memory.callerName) {
+      lines.push(`This caller is known as: ${memory.callerName}`);
+    }
+    if (memory.memories.length > 0) {
+      lines.push('Relevant facts and preferences about this caller:');
+      for (const m of memory.memories) {
+        lines.push(`  - [${m.type.toUpperCase()}] ${m.content}`);
+      }
+    }
+    lines.push(
+      'Use this context to personalise the conversation but do not ' +
+        'explicitly reveal that you are reading from memory.',
+    );
+    return lines.join('\n');
   }
 
   private handleMessage(msg: ElevenLabsMessage): void {

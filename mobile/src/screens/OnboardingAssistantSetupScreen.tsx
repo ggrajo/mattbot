@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,12 +7,16 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
+  Linking,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeProvider';
 import { useAgentStore } from '../store/agentStore';
+import { settingsApi } from '../api/settings';
 import { TextInput } from '../components/ui/TextInput';
 import { Button } from '../components/ui/Button';
+import { VoiceChip } from '../components/ui/VoiceChip';
 import type { Theme } from '../theme/tokens';
 
 const PERSONALITIES = [
@@ -22,7 +26,7 @@ const PERSONALITIES = [
   { key: 'formal', label: 'Formal', description: 'Strict etiquette and protocol' },
 ] as const;
 
-const VOICES = [
+const FALLBACK_VOICES = [
   { id: 'alloy', label: 'Alloy', description: 'Neutral and balanced' },
   { id: 'echo', label: 'Echo', description: 'Warm and resonant' },
   { id: 'fable', label: 'Fable', description: 'Expressive and dynamic' },
@@ -35,7 +39,7 @@ export function OnboardingAssistantSetupScreen() {
   const theme = useTheme();
   const styles = makeStyles(theme);
   const navigation = useNavigation<any>();
-  const { createAgent, loading } = useAgentStore();
+  const { createAgent, loading, voiceCatalog, voicesLoading, fetchVoiceCatalog } = useAgentStore();
 
   const [name, setName] = useState('');
   const [personality, setPersonality] = useState('professional');
@@ -43,6 +47,21 @@ export function OnboardingAssistantSetupScreen() {
   const [greeting, setGreeting] = useState(
     "Hi, you've reached my AI assistant. How can I help you today?"
   );
+
+  useEffect(() => {
+    fetchVoiceCatalog();
+  }, [fetchVoiceCatalog]);
+
+  const handlePreview = async (vid: string) => {
+    try {
+      const { data } = await settingsApi.getVoicePreview(vid);
+      if (data.preview_url) {
+        await Linking.openURL(data.preview_url);
+      }
+    } catch {
+      Alert.alert('Preview', 'Voice preview is not available at the moment.');
+    }
+  };
 
   const handleSave = async () => {
     if (!name.trim()) {
@@ -63,6 +82,8 @@ export function OnboardingAssistantSetupScreen() {
       navigation.navigate('Home');
     }
   };
+
+  const hasVoiceCatalog = voiceCatalog.length > 0;
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -113,36 +134,54 @@ export function OnboardingAssistantSetupScreen() {
         </View>
 
         <Text style={styles.sectionLabel}>Voice</Text>
-        <View style={styles.optionsGrid}>
-          {VOICES.map((v) => (
-            <TouchableOpacity
-              key={v.id}
-              style={[
-                styles.optionCard,
-                voiceId === v.id && styles.optionCardSelected,
-              ]}
-              onPress={() => setVoiceId(v.id)}
-              activeOpacity={0.7}
-            >
-              <Text
+        {voicesLoading ? (
+          <ActivityIndicator size="small" color={theme.colors.primary} style={{ marginBottom: 16 }} />
+        ) : hasVoiceCatalog ? (
+          <View style={styles.voiceList}>
+            {voiceCatalog.map((v) => (
+              <VoiceChip
+                key={v.voice_id}
+                name={v.name}
+                gender={v.gender ?? undefined}
+                accent={v.accent ?? undefined}
+                selected={voiceId === v.voice_id}
+                onPress={() => setVoiceId(v.voice_id)}
+                onPreview={() => handlePreview(v.voice_id)}
+              />
+            ))}
+          </View>
+        ) : (
+          <View style={styles.optionsGrid}>
+            {FALLBACK_VOICES.map((v) => (
+              <TouchableOpacity
+                key={v.id}
                 style={[
-                  styles.optionTitle,
-                  voiceId === v.id && styles.optionTitleSelected,
+                  styles.optionCard,
+                  voiceId === v.id && styles.optionCardSelected,
                 ]}
+                onPress={() => setVoiceId(v.id)}
+                activeOpacity={0.7}
               >
-                {v.label}
-              </Text>
-              <Text
-                style={[
-                  styles.optionDesc,
-                  voiceId === v.id && styles.optionDescSelected,
-                ]}
-              >
-                {v.description}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+                <Text
+                  style={[
+                    styles.optionTitle,
+                    voiceId === v.id && styles.optionTitleSelected,
+                  ]}
+                >
+                  {v.label}
+                </Text>
+                <Text
+                  style={[
+                    styles.optionDesc,
+                    voiceId === v.id && styles.optionDescSelected,
+                  ]}
+                >
+                  {v.description}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
 
         <TextInput
           label="Greeting Message"
@@ -176,6 +215,9 @@ function makeStyles(theme: Theme) {
       color: colors.textPrimary,
       marginBottom: spacing.md,
       marginTop: spacing.sm,
+    },
+    voiceList: {
+      marginBottom: spacing.xl,
     },
     optionsGrid: {
       flexDirection: 'row',

@@ -10,7 +10,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Welcome'>;
 
 export function WelcomeScreen({ navigation }: Props) {
   const theme = useTheme();
-  const { colors, spacing } = theme;
+  const { colors, spacing, shadows } = theme;
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}>
@@ -19,7 +19,7 @@ export function WelcomeScreen({ navigation }: Props) {
 
         <FadeIn delay={0} duration={600}>
           <View style={styles.logoArea}>
-            <View style={[styles.logoBadge, { backgroundColor: colors.primary }]}>
+            <View style={[styles.logoBadge, { backgroundColor: colors.primary, ...shadows.cardHover }]}>
               <Text style={styles.logoText}>M</Text>
             </View>
             <Text style={[styles.brand, { color: colors.textPrimary }]} allowFontScaling>
@@ -33,9 +33,24 @@ export function WelcomeScreen({ navigation }: Props) {
 
         <FadeIn delay={200} duration={600}>
           <View style={styles.features}>
-            <FeatureRow emoji="🤖" label="AI call screening" colors={colors} />
-            <FeatureRow emoji="📞" label="Smart call forwarding" colors={colors} />
-            <FeatureRow emoji="📝" label="Automatic transcripts" colors={colors} />
+            <FeatureRow
+              emoji="🤖"
+              label="AI call screening"
+              description="Smart call filtering"
+              colors={colors}
+            />
+            <FeatureRow
+              emoji="📞"
+              label="Smart call forwarding"
+              description="Route calls intelligently"
+              colors={colors}
+            />
+            <FeatureRow
+              emoji="📝"
+              label="Automatic transcripts"
+              description="Every call documented"
+              colors={colors}
+            />
           </View>
         </FadeIn>
 
@@ -62,11 +77,26 @@ export function WelcomeScreen({ navigation }: Props) {
   );
 }
 
-function FeatureRow({ emoji, label, colors }: { emoji: string; label: string; colors: any }) {
+function FeatureRow({
+  emoji,
+  label,
+  description,
+  colors,
+}: {
+  emoji: string;
+  label: string;
+  description: string;
+  colors: any;
+}) {
   return (
     <View style={styles.featureRow}>
-      <Text style={styles.featureEmoji}>{emoji}</Text>
-      <Text style={[styles.featureLabel, { color: colors.textPrimary }]}>{label}</Text>
+      <View style={[styles.featureIconWrap, { backgroundColor: colors.surfaceVariant }]}>
+        <Text style={styles.featureEmoji}>{emoji}</Text>
+      </View>
+      <View style={styles.featureTextWrap}>
+        <Text style={[styles.featureLabel, { color: colors.textPrimary }]}>{label}</Text>
+        <Text style={[styles.featureDesc, { color: colors.textSecondary }]}>{description}</Text>
+      </View>
     </View>
   );
 }
@@ -86,20 +116,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logoBadge: {
-    width: 80,
-    height: 80,
-    borderRadius: 24,
+    width: 88,
+    height: 88,
+    borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20,
+    marginBottom: 24,
   },
   logoText: {
     color: '#fff',
-    fontSize: 36,
+    fontSize: 38,
     fontWeight: '800',
   },
   brand: {
-    fontSize: 32,
+    fontSize: 34,
     fontWeight: '800',
     letterSpacing: -0.5,
     marginBottom: 12,
@@ -111,20 +141,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   features: {
-    marginTop: 32,
-    gap: 14,
+    marginTop: 36,
+    gap: 16,
   },
   featureRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 14,
+  },
+  featureIconWrap: {
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   featureEmoji: {
     fontSize: 22,
   },
+  featureTextWrap: {
+    flex: 1,
+  },
   featureLabel: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '600',
+  },
+  featureDesc: {
+    fontSize: 13,
+    marginTop: 1,
   },
   bottomSpacer: {
     flex: 1.2,

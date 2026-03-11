@@ -41,6 +41,7 @@ def create_app() -> FastAPI:
         billing,
         calendar,
         call_modes,
+        callers,
         calls,
         dev_billing,
         devices,
@@ -67,6 +68,7 @@ def create_app() -> FastAPI:
     application.include_router(calls.router, prefix="/api/v1/calls", tags=["calls"])
     application.include_router(internal.router, prefix="/api/v1/internal", tags=["internal"])
     application.include_router(memory.router, prefix="/api/v1/memory", tags=["memory"])
+    application.include_router(callers.router, prefix="/api/v1/callers", tags=["callers"])
     application.include_router(agents.router, prefix="/api/v1/agents", tags=["agents"])
     application.include_router(voices.router, prefix="/api/v1/voices", tags=["voices"])
     application.include_router(prompt_suggestions.router, prefix="/api/v1/prompt-suggestions", tags=["prompt-suggestions"])

@@ -27,6 +27,11 @@ export type RootStackParamList = {
   Calendar: undefined;
   CalendarBookingSettings: undefined;
   OnboardingCalendarSetup: undefined;
+  CallerProfile: { phoneHash: string; callerName?: string };
+  MemoryList: { callerPhoneHash?: string } | undefined;
+  Temperament: undefined;
+  BusinessHours: undefined;
+  AccountSettings: undefined;
 };
 
 declare global {

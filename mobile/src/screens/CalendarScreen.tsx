@@ -88,7 +88,7 @@ export function CalendarScreen() {
                 </View>
               ) : (
                 events.map((event) => (
-                  <View key={event.event_id} style={s.eventRow}>
+                  <View key={event.event_id} style={s.eventCard}>
                     <View style={[s.eventBar, { backgroundColor: theme.colors.primary }]} />
                     <View style={s.eventContent}>
                       <Text style={s.eventTitle}>{event.title}</Text>
@@ -96,9 +96,12 @@ export function CalendarScreen() {
                         {formatTime(event.start_time)} – {formatTime(event.end_time)}
                       </Text>
                       {event.attendees.length > 0 && (
-                        <Text style={s.eventAttendees}>
-                          {event.attendees.join(', ')}
-                        </Text>
+                        <View style={s.attendeeRow}>
+                          <Text style={s.attendeeIcon}>👤</Text>
+                          <Text style={s.eventAttendees}>
+                            {event.attendees.join(', ')}
+                          </Text>
+                        </View>
                       )}
                     </View>
                   </View>
@@ -122,7 +125,7 @@ function formatTime(iso: string): string {
 }
 
 function makeStyles(theme: Theme) {
-  const { colors, spacing, typography, radii } = theme;
+  const { colors, spacing, typography, radii, shadows } = theme;
   return StyleSheet.create({
     safe: { flex: 1, backgroundColor: colors.background },
     scroll: { padding: spacing.xl, paddingBottom: spacing.xxxl },
@@ -151,15 +154,20 @@ function makeStyles(theme: Theme) {
     emptyState: { alignItems: 'center', paddingVertical: spacing.xl },
     emptyEmoji: { fontSize: 32, marginBottom: spacing.sm },
     emptyText: { ...typography.body, color: colors.textSecondary },
-    eventRow: {
+    eventCard: {
       flexDirection: 'row',
       marginBottom: spacing.md,
       gap: spacing.md,
+      backgroundColor: colors.surfaceVariant,
+      borderRadius: radii.md,
+      padding: spacing.md,
     },
-    eventBar: { width: 3, borderRadius: 2, alignSelf: 'stretch' },
+    eventBar: { width: 4, borderRadius: 2, alignSelf: 'stretch' },
     eventContent: { flex: 1 },
     eventTitle: { ...typography.body, fontWeight: '600', color: colors.textPrimary },
-    eventTime: { ...typography.bodySmall, color: colors.textSecondary, marginTop: 2 },
-    eventAttendees: { ...typography.caption, color: colors.textSecondary, marginTop: 2 },
+    eventTime: { ...typography.bodySmall, color: colors.textSecondary, marginTop: 4 },
+    attendeeRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 },
+    attendeeIcon: { fontSize: 12 },
+    eventAttendees: { ...typography.caption, color: colors.textSecondary },
   });
 }

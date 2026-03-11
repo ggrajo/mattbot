@@ -5,11 +5,14 @@ import { useTheme } from '../../theme/ThemeProvider';
 interface Props {
   children: React.ReactNode;
   style?: ViewStyle;
+  variant?: 'default' | 'elevated';
 }
 
-export function Card({ children, style }: Props) {
+export function Card({ children, style, variant = 'default' }: Props) {
   const theme = useTheme();
   const { colors, spacing, radii, shadows } = theme;
+
+  const shadow = variant === 'elevated' ? shadows.cardHover : shadows.card;
 
   return (
     <View
@@ -18,7 +21,10 @@ export function Card({ children, style }: Props) {
           backgroundColor: colors.surface,
           borderRadius: radii.lg,
           padding: spacing.lg,
-          ...shadows.card,
+          borderWidth: 1,
+          borderColor: colors.border,
+          marginBottom: spacing.md,
+          ...shadow,
         },
         style,
       ]}

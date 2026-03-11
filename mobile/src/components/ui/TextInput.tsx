@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   TextInput as RNTextInput,
   Text,
   TouchableOpacity,
-  StyleSheet,
+  Animated,
   TextInputProps as RNTextInputProps,
 } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
@@ -21,33 +21,55 @@ export function TextInput({
   error,
   isPassword = false,
   containerStyle,
+  value,
   ...rest
 }: Props) {
   const theme = useTheme();
   const [focused, setFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const borderAnim = useRef(new Animated.Value(0)).current;
 
   const { colors, spacing, radii, typography } = theme;
 
-  const borderColor = error ? colors.error : focused ? colors.borderFocused : colors.border;
+  useEffect(() => {
+    Animated.timing(borderAnim, {
+      toValue: focused ? 1 : 0,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+  }, [focused, borderAnim]);
+
+  const borderColor = error
+    ? colors.error
+    : (borderAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [colors.border, colors.borderFocused],
+      }) as unknown as string);
+
+  const labelColor = error
+    ? colors.error
+    : focused
+      ? colors.primary
+      : colors.textSecondary;
 
   return (
     <View style={[{ marginBottom: spacing.lg }, containerStyle]}>
       <Text
         style={{
           ...typography.bodySmall,
-          color: error ? colors.error : colors.textSecondary,
-          marginBottom: spacing.xs,
+          fontWeight: '500',
+          color: labelColor,
+          marginBottom: spacing.xs + 2,
         }}
         accessibilityRole="text"
       >
         {label}
       </Text>
-      <View
+      <Animated.View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          borderWidth: 1.5,
+          borderWidth: focused ? 2 : 1.5,
           borderColor,
           borderRadius: radii.md,
           backgroundColor: colors.surface,
@@ -56,6 +78,7 @@ export function TextInput({
       >
         <RNTextInput
           {...rest}
+          value={value}
           secureTextEntry={isPassword && !showPassword}
           onFocus={(e) => {
             setFocused(true);
@@ -81,12 +104,12 @@ export function TextInput({
             accessibilityLabel={showPassword ? 'Hide password' : 'Show password'}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Text style={{ color: colors.textSecondary, ...typography.bodySmall }}>
+            <Text style={{ color: colors.primary, ...typography.bodySmall, fontWeight: '600' }}>
               {showPassword ? 'Hide' : 'Show'}
             </Text>
           </TouchableOpacity>
         )}
-      </View>
+      </Animated.View>
       {error && (
         <Text
           style={{

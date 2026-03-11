@@ -17,7 +17,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
 export function LoginScreen({ navigation }: Props) {
   const theme = useTheme();
-  const { colors, spacing, typography } = theme;
+  const { colors, spacing, typography, radii } = theme;
   const { setAuthenticated, setMfaRequired, setMfaEnrollment } = useAuthStore();
 
   const [email, setEmail] = useState('');
@@ -69,12 +69,17 @@ export function LoginScreen({ navigation }: Props) {
           showsVerticalScrollIndicator={false}
         >
           <FadeIn delay={0}>
-            <Text style={[typography.h1, { color: colors.textPrimary, marginBottom: spacing.xs }]} allowFontScaling>
-              Welcome back
-            </Text>
-            <Text style={[typography.body, { color: colors.textSecondary, marginBottom: spacing.xl }]} allowFontScaling>
-              Sign in to your MattBot account
-            </Text>
+            <View style={styles.headerArea}>
+              <View style={[styles.logoBadge, { backgroundColor: colors.primary }]}>
+                <Text style={styles.logoText}>M</Text>
+              </View>
+              <Text style={[typography.h1, { color: colors.textPrimary, marginBottom: spacing.xs }]} allowFontScaling>
+                Welcome back
+              </Text>
+              <Text style={[typography.body, { color: colors.textSecondary, marginBottom: spacing.xl }]} allowFontScaling>
+                Sign in to your MattBot account
+              </Text>
+            </View>
           </FadeIn>
 
           {apiError && (
@@ -86,7 +91,7 @@ export function LoginScreen({ navigation }: Props) {
           )}
 
           <FadeIn delay={80}>
-            <View style={{ gap: spacing.lg }}>
+            <View style={{ gap: spacing.sm }}>
               <TextInput
                 label="Email"
                 value={email}
@@ -151,9 +156,26 @@ export function LoginScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
+  headerArea: {
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  logoBadge: {
+    width: 56,
+    height: 56,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  logoText: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: '800',
+  },
   forgotRow: {
     alignItems: 'flex-end',
-    marginTop: -8,
+    marginTop: -4,
   },
   dividerRow: {
     flexDirection: 'row',

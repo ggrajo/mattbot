@@ -11,6 +11,9 @@ export interface CallResponse {
   answered_at: string | null;
   ended_at: string | null;
   ai_session_id?: string | null;
+  caller_phone_hash?: string | null;
+  caller_name?: string | null;
+  memory_count?: number;
 }
 
 export interface CallListResponse {

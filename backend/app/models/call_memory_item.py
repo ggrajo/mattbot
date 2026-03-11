@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import CheckConstraint, ForeignKey, String, Text, text
+from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Integer, String, Text, text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -28,6 +28,14 @@ class CallMemoryItem(Base):
     memory_type: Mapped[str] = mapped_column(String(20), nullable=False)
     content: Mapped[str] = mapped_column(Text, nullable=False)
     source: Mapped[str] = mapped_column(String(20), nullable=False)
+    caller_phone_hash: Mapped[str | None] = mapped_column(
+        String(64), nullable=True, index=True
+    )
+    caller_name: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    importance: Mapped[int] = mapped_column(
+        Integer, nullable=False, server_default="1"
+    )
+    expires_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         nullable=False, server_default=text("now()")
     )

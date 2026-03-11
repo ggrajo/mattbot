@@ -8,12 +8,15 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  Linking,
 } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeProvider';
 import { useAgentStore } from '../store/agentStore';
+import { settingsApi } from '../api/settings';
 import { TextInput } from '../components/ui/TextInput';
 import { Button } from '../components/ui/Button';
+import { VoiceChip } from '../components/ui/VoiceChip';
 import type { Theme } from '../theme/tokens';
 
 const PERSONALITIES = ['professional', 'friendly', 'casual', 'formal'] as const;
@@ -26,7 +29,7 @@ const LANGUAGES = [
   { code: 'ja', label: 'Japanese' },
 ] as const;
 
-const VOICES = [
+const FALLBACK_VOICES = [
   { id: 'alloy', label: 'Alloy' },
   { id: 'echo', label: 'Echo' },
   { id: 'fable', label: 'Fable' },
@@ -42,7 +45,17 @@ export function AssistantSettingsScreen() {
   const route = useRoute<any>();
   const agentId = route.params?.agentId as string | undefined;
 
-  const { currentAgent, loading, error, fetchAgents, fetchAgent, updateAgent } = useAgentStore();
+  const {
+    currentAgent,
+    loading,
+    error,
+    fetchAgents,
+    fetchAgent,
+    updateAgent,
+    voiceCatalog,
+    voicesLoading,
+    fetchVoiceCatalog,
+  } = useAgentStore();
 
   const [name, setName] = useState('');
   const [systemPrompt, setSystemPrompt] = useState('');
@@ -53,12 +66,13 @@ export function AssistantSettingsScreen() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+    fetchVoiceCatalog();
     if (agentId) {
       fetchAgent(agentId);
     } else {
       fetchAgents();
     }
-  }, [agentId, fetchAgent, fetchAgents]);
+  }, [agentId, fetchAgent, fetchAgents, fetchVoiceCatalog]);
 
   useEffect(() => {
     if (currentAgent) {
@@ -70,6 +84,17 @@ export function AssistantSettingsScreen() {
       setPersonality(currentAgent.personality ?? 'professional');
     }
   }, [currentAgent]);
+
+  const handlePreview = async (vid: string) => {
+    try {
+      const { data } = await settingsApi.getVoicePreview(vid);
+      if (data.preview_url) {
+        await Linking.openURL(data.preview_url);
+      }
+    } catch {
+      Alert.alert('Preview', 'Voice preview is not available at the moment.');
+    }
+  };
 
   const handleSave = async () => {
     if (!currentAgent) return;
@@ -106,6 +131,8 @@ export function AssistantSettingsScreen() {
       </SafeAreaView>
     );
   }
+
+  const hasVoiceCatalog = voiceCatalog.length > 0;
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -161,21 +188,39 @@ export function AssistantSettingsScreen() {
         </View>
 
         <Text style={styles.sectionLabel}>Voice</Text>
-        <View style={styles.chipRow}>
-          {VOICES.map((v) => (
-            <TouchableOpacity
-              key={v.id}
-              style={[styles.chip, voiceId === v.id && styles.chipActive]}
-              onPress={() => setVoiceId(v.id)}
-            >
-              <Text
-                style={[styles.chipText, voiceId === v.id && styles.chipTextActive]}
+        {voicesLoading ? (
+          <ActivityIndicator size="small" color={theme.colors.primary} style={{ marginBottom: 16 }} />
+        ) : hasVoiceCatalog ? (
+          <View style={styles.voiceList}>
+            {voiceCatalog.map((v) => (
+              <VoiceChip
+                key={v.voice_id}
+                name={v.name}
+                gender={v.gender ?? undefined}
+                accent={v.accent ?? undefined}
+                selected={voiceId === v.voice_id}
+                onPress={() => setVoiceId(v.voice_id)}
+                onPreview={() => handlePreview(v.voice_id)}
+              />
+            ))}
+          </View>
+        ) : (
+          <View style={styles.chipRow}>
+            {FALLBACK_VOICES.map((v) => (
+              <TouchableOpacity
+                key={v.id}
+                style={[styles.chip, voiceId === v.id && styles.chipActive]}
+                onPress={() => setVoiceId(v.id)}
               >
-                {v.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+                <Text
+                  style={[styles.chipText, voiceId === v.id && styles.chipTextActive]}
+                >
+                  {v.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
 
         <Text style={styles.sectionLabel}>Language</Text>
         <View style={styles.chipRow}>
@@ -248,6 +293,9 @@ function makeStyles(theme: Theme) {
       color: colors.textSecondary,
     },
     segmentTextActive: { color: colors.onPrimary },
+    voiceList: {
+      marginBottom: spacing.xl,
+    },
     chipRow: {
       flexDirection: 'row',
       flexWrap: 'wrap',

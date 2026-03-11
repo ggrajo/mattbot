@@ -82,7 +82,7 @@ class AgentService:
         user: User,
         call_context: dict | None = None,
     ) -> str:
-        """Assemble the full system prompt from agent config, user settings, and call context."""
+        """Assemble the full system prompt from agent config, user settings, call context, and memories."""
         parts: list[str] = []
 
         if agent.system_prompt:
@@ -102,4 +102,47 @@ class AgentService:
             caller = call_context.get("from_number", "unknown")
             parts.append(f"The caller's number is {caller}.")
 
+            caller_phone_hash = call_context.get("caller_phone_hash")
+            if caller_phone_hash:
+                memory_section = await AgentService._build_memory_section(
+                    db, user.id, caller_phone_hash
+                )
+                if memory_section:
+                    parts.append(memory_section)
+
         return "\n\n".join(parts)
+
+    @staticmethod
+    async def _build_memory_section(
+        db: AsyncSession,
+        user_id: uuid.UUID,
+        caller_phone_hash: str,
+    ) -> str | None:
+        """Fetch recent memories for a specific caller and format them for the prompt."""
+        from app.models.call_memory_item import CallMemoryItem
+
+        result = await db.execute(
+            select(CallMemoryItem)
+            .where(
+                CallMemoryItem.user_id == user_id,
+                CallMemoryItem.caller_phone_hash == caller_phone_hash,
+            )
+            .order_by(CallMemoryItem.importance.desc(), CallMemoryItem.created_at.desc())
+            .limit(20)
+        )
+        memories = list(result.scalars().all())
+
+        if not memories:
+            return None
+
+        caller_name = next(
+            (m.caller_name for m in memories if m.caller_name), None
+        )
+        lines = ["[CALLER MEMORY]"]
+        if caller_name:
+            lines.append(f"This caller is known as: {caller_name}")
+        lines.append(f"You have {len(memories)} memories about this caller:")
+        for m in memories:
+            lines.append(f"  - [{m.memory_type}] {m.content}")
+
+        return "\n".join(lines)

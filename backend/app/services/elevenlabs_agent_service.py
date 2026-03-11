@@ -53,6 +53,74 @@ class ElevenLabsAgentService:
             return resp.json()
 
     @staticmethod
+    async def sync_voices(db: "AsyncSession") -> int:
+        """Fetch available voices from ElevenLabs and upsert into voice_catalog.
+
+        Returns the number of voices synced.
+        """
+        from sqlalchemy import select
+        from sqlalchemy.ext.asyncio import AsyncSession  # noqa: F811
+
+        from app.models.voice_catalog import VoiceCatalog
+
+        api_key = getattr(settings, "ELEVENLABS_API_KEY", "")
+        if not api_key:
+            logger.info("ElevenLabs API key not set; skipping voice sync")
+            return 0
+
+        headers = {"xi-api-key": api_key}
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.get(f"{ELEVENLABS_API_BASE}/voices", headers=headers)
+            resp.raise_for_status()
+            payload = resp.json()
+
+        voices = payload.get("voices", [])
+        synced = 0
+
+        for v in voices:
+            el_voice_id = v.get("voice_id", "")
+            if not el_voice_id:
+                continue
+
+            labels = v.get("labels", {}) or {}
+            gender = labels.get("gender")
+            accent = labels.get("accent")
+            locale = labels.get("language", "en")
+            preview_url = v.get("preview_url")
+            name = v.get("name", el_voice_id)
+
+            result = await db.execute(
+                select(VoiceCatalog).where(VoiceCatalog.voice_id == el_voice_id)
+            )
+            existing = result.scalars().first()
+
+            if existing:
+                existing.name = name
+                existing.gender = gender
+                existing.accent = accent
+                existing.locale = locale
+                existing.preview_url = preview_url
+                existing.is_active = True
+            else:
+                db.add(
+                    VoiceCatalog(
+                        voice_id=el_voice_id,
+                        name=name,
+                        provider="elevenlabs",
+                        gender=gender,
+                        accent=accent,
+                        preview_url=preview_url,
+                        locale=locale,
+                        is_active=True,
+                    )
+                )
+            synced += 1
+
+        await db.commit()
+        logger.info("Synced %d voices from ElevenLabs", synced)
+        return synced
+
+    @staticmethod
     async def end_conversation(conversation_id: str) -> dict:
         """End an active ElevenLabs conversation."""
         api_key = getattr(settings, "ELEVENLABS_API_KEY", "")

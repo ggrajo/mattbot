@@ -6,8 +6,9 @@ import {
   ScrollView,
   SafeAreaView,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import { FadeIn } from '../components/ui/FadeIn';
 import { useTheme } from '../theme/ThemeProvider';
 import { useCallStore } from '../store/callStore';
@@ -52,6 +53,7 @@ export function CallDetailScreen() {
   const theme = useTheme();
   const styles = makeStyles(theme);
   const route = useRoute<any>();
+  const navigation = useNavigation<any>();
   const { callId } = route.params as { callId: string };
   const { selectedCall, events, loading, error, fetchCall, fetchCallEvents, clearSelected } =
     useCallStore();
@@ -157,6 +159,50 @@ export function CallDetailScreen() {
             </View>
           )}
         </FadeIn>
+
+        {selectedCall.caller_phone_hash && (
+          <FadeIn delay={200}>
+            <Text style={[styles.sectionTitle, { marginTop: theme.spacing.xl }]}>Caller</Text>
+            <TouchableOpacity
+              style={styles.infoCard}
+              activeOpacity={0.7}
+              onPress={() =>
+                navigation.navigate('CallerProfile', {
+                  phoneHash: selectedCall.caller_phone_hash,
+                  callerName: selectedCall.caller_name,
+                })
+              }
+            >
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.md }}>
+                <View
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 22,
+                    backgroundColor: theme.colors.primary,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Text style={{ fontSize: 18, fontWeight: '700', color: '#FFF' }}>
+                    {(selectedCall.caller_name || '?')[0].toUpperCase()}
+                  </Text>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ ...theme.typography.body, color: theme.colors.textPrimary, fontWeight: '600' }}>
+                    {selectedCall.caller_name || `Caller ${selectedCall.caller_phone_hash.slice(0, 8)}`}
+                  </Text>
+                  {(selectedCall.memory_count ?? 0) > 0 && (
+                    <Text style={{ ...theme.typography.caption, color: theme.colors.textSecondary }}>
+                      {selectedCall.memory_count} memories
+                    </Text>
+                  )}
+                </View>
+                <Text style={{ ...theme.typography.body, color: theme.colors.textDisabled }}>{'>'}</Text>
+              </View>
+            </TouchableOpacity>
+          </FadeIn>
+        )}
 
         {artifacts && (artifacts.transcript || artifacts.summary) && (
           <FadeIn delay={240}>

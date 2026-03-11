@@ -9,7 +9,7 @@ import { useCalendarStore } from '../store/calendarStore';
 
 export function HomeScreen() {
   const theme = useTheme();
-  const { colors, spacing, typography, radii } = theme;
+  const { colors, spacing, typography, radii, shadows } = theme;
   const navigation = useNavigation<any>();
   const { currentAgent, fetchAgents } = useAgentStore();
   const { status: calStatus, events: calEvents, fetchStatus: fetchCalStatus, fetchEvents: fetchCalEvents } = useCalendarStore();
@@ -33,12 +33,20 @@ export function HomeScreen() {
       >
         <FadeIn delay={0}>
           <View style={styles.header}>
-            <Text style={[typography.h1, { color: colors.textPrimary }]} allowFontScaling>
-              MattBot
-            </Text>
-            <Text style={[typography.body, { color: colors.textSecondary, marginTop: spacing.xs }]} allowFontScaling>
-              Your AI call assistant is ready.
-            </Text>
+            <View style={styles.headerRow}>
+              <View>
+                <Text style={[typography.h1, { color: colors.textPrimary, letterSpacing: -0.5 }]} allowFontScaling>
+                  MattBot
+                </Text>
+                <Text style={[typography.body, { color: colors.textSecondary, marginTop: spacing.xs }]} allowFontScaling>
+                  Your AI call assistant is ready.
+                </Text>
+              </View>
+              <View style={[styles.statusPill, { backgroundColor: colors.successContainer }]}>
+                <View style={[styles.statusDot, { backgroundColor: colors.success }]} />
+                <Text style={[styles.statusText, { color: colors.success }]}>Active</Text>
+              </View>
+            </View>
           </View>
         </FadeIn>
 
@@ -51,7 +59,7 @@ export function HomeScreen() {
                 : navigation.navigate('OnboardingAssistantSetup')
             }
           >
-            <Card>
+            <Card variant="elevated">
               <View style={styles.assistantCardHeader}>
                 <View style={[styles.assistantIcon, { backgroundColor: colors.primary }]}>
                   <Text style={styles.assistantIconText}>AI</Text>
@@ -62,7 +70,7 @@ export function HomeScreen() {
                   </Text>
                   <Text style={[styles.cardCaption, { color: colors.textSecondary }]}>
                     {currentAgent
-                      ? `${currentAgent.personality.charAt(0).toUpperCase() + currentAgent.personality.slice(1)} personality`
+                      ? `${currentAgent.personality.charAt(0).toUpperCase() + currentAgent.personality.slice(1)} · ${currentAgent.language?.toUpperCase() ?? 'EN'}`
                       : 'Configure your AI call assistant'}
                   </Text>
                 </View>
@@ -77,7 +85,7 @@ export function HomeScreen() {
         <FadeIn delay={160}>
           <View style={styles.quickActions}>
             <TouchableOpacity
-              style={[styles.actionCard, { backgroundColor: colors.surface, borderColor: colors.border }]}
+              style={[styles.actionCard, { backgroundColor: colors.surface, borderColor: colors.border, ...shadows.card }]}
               activeOpacity={0.7}
               onPress={() => navigation.navigate('SubscriptionStatus')}
             >
@@ -89,7 +97,7 @@ export function HomeScreen() {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.actionCard, { backgroundColor: colors.surface, borderColor: colors.border }]}
+              style={[styles.actionCard, { backgroundColor: colors.surface, borderColor: colors.border, ...shadows.card }]}
               activeOpacity={0.7}
               onPress={() => navigation.navigate('NumberProvision')}
             >
@@ -101,7 +109,7 @@ export function HomeScreen() {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.actionCard, { backgroundColor: colors.surface, borderColor: colors.border }]}
+              style={[styles.actionCard, { backgroundColor: colors.surface, borderColor: colors.border, ...shadows.card }]}
               activeOpacity={0.7}
               onPress={() => navigation.navigate('CallModes')}
             >
@@ -165,6 +173,29 @@ const styles = StyleSheet.create({
   header: {
     marginBottom: 20,
   },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  statusPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    marginTop: 4,
+  },
+  statusDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '700',
+  },
   cardTitle: {
     fontSize: 16,
     fontWeight: '700',
@@ -177,45 +208,45 @@ const styles = StyleSheet.create({
   assistantCardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 14,
   },
   assistantIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 48,
+    height: 48,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
   assistantIconText: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '700',
   },
   chevronCircle: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
   },
   quickActions: {
     flexDirection: 'row',
     gap: 10,
-    marginTop: 16,
-    marginBottom: 16,
+    marginTop: 8,
+    marginBottom: 8,
   },
   actionCard: {
     flex: 1,
-    borderRadius: 14,
+    borderRadius: 16,
     padding: 14,
     borderWidth: 1,
     alignItems: 'center',
     gap: 8,
   },
   actionIconWrap: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
+    width: 42,
+    height: 42,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },

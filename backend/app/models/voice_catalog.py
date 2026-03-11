@@ -22,7 +22,7 @@ class VoiceCatalog(Base):
     gender: Mapped[str | None] = mapped_column(String(20), nullable=True)
     accent: Mapped[str | None] = mapped_column(String(50), nullable=True)
     preview_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
-    locale: Mapped[str] = mapped_column(String(10), nullable=False, default="en")
+    locale: Mapped[str] = mapped_column(String(50), nullable=False, default="en")
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     created_at: Mapped[datetime] = mapped_column(
         nullable=False, server_default=text("now()")

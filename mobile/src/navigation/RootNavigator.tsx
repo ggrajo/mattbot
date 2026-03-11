@@ -31,6 +31,11 @@ import { SubscriptionGateScreen } from '../screens/SubscriptionGateScreen';
 import { CalendarScreen } from '../screens/CalendarScreen';
 import { CalendarBookingSettingsScreen } from '../screens/CalendarBookingSettingsScreen';
 import { OnboardingCalendarSetupScreen } from '../screens/OnboardingCalendarSetupScreen';
+import { CallerProfileScreen } from '../screens/CallerProfileScreen';
+import { MemoryListScreen } from '../screens/MemoryListScreen';
+import { TemperamentScreen } from '../screens/TemperamentScreen';
+import { BusinessHoursScreen } from '../screens/BusinessHoursScreen';
+import { AccountSettingsScreen } from '../screens/AccountSettingsScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -160,6 +165,31 @@ export function RootNavigator() {
               name="OnboardingCalendarSetup"
               component={OnboardingCalendarSetupScreen}
               options={{ headerShown: true, title: 'Calendar Setup' }}
+            />
+            <Stack.Screen
+              name="Temperament"
+              component={TemperamentScreen}
+              options={{ headerShown: true, title: 'Temperament' }}
+            />
+            <Stack.Screen
+              name="BusinessHours"
+              component={BusinessHoursScreen}
+              options={{ headerShown: true, title: 'Business Hours' }}
+            />
+            <Stack.Screen
+              name="AccountSettings"
+              component={AccountSettingsScreen}
+              options={{ headerShown: true, title: 'Account' }}
+            />
+            <Stack.Screen
+              name="CallerProfile"
+              component={CallerProfileScreen}
+              options={{ headerShown: true, title: 'Caller Profile' }}
+            />
+            <Stack.Screen
+              name="MemoryList"
+              component={MemoryListScreen}
+              options={{ headerShown: true, title: 'Memories' }}
             />
           </>
         ) : (

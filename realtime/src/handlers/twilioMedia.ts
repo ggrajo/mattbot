@@ -1,10 +1,12 @@
+import { createHash } from 'node:crypto';
 import { v4 as uuidv4 } from 'uuid';
 import type WebSocket from 'ws';
 import { createChildLogger } from '../utils/logger.js';
 import { twilioToElevenLabs, elevenLabsToTwilio } from '../utils/audio.js';
 import { ElevenLabsClient } from '../services/elevenlabs.js';
+import type { CallerMemoryContext } from '../services/elevenlabs.js';
 import { backendEvents } from '../services/eventEmitter.js';
-import { fetchAgentRuntime, buildSystemPrompt } from '../services/agentRuntime.js';
+import { fetchAgentRuntime, buildSystemPrompt, fetchCallerMemory } from '../services/agentRuntime.js';
 import type {
   TwilioStreamMessage,
   CallSession,
@@ -103,12 +105,25 @@ export class TwilioMediaHandler {
       this.session.toNumber,
     );
 
+    const callerPhoneHash = createHash('sha256')
+      .update(this.session.fromNumber.trim())
+      .digest('hex')
+      .slice(0, 16);
+
+    let callerMemory: CallerMemoryContext | undefined;
+    try {
+      callerMemory = await fetchCallerMemory(this.userId, callerPhoneHash);
+    } catch (err) {
+      log.warn({ err, sessionId: this.sessionId }, 'Failed to fetch caller memory, proceeding without');
+    }
+
     this.eleven = new ElevenLabsClient({
       agentId: runtime.agentId,
       systemPrompt,
       greeting: runtime.greeting,
       voiceId: runtime.voiceId,
       language: runtime.language,
+      callerMemory,
     });
 
     this.eleven.on('audio', (chunk: string) => {

@@ -14,6 +14,9 @@ class CallResponse(BaseModel):
     started_at: datetime
     answered_at: datetime | None = None
     ended_at: datetime | None = None
+    caller_phone_hash: str | None = None
+    caller_name: str | None = None
+    memory_count: int = 0
 
     model_config = {"from_attributes": True}
 

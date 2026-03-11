@@ -36,6 +36,10 @@ class VoiceListResponse(BaseModel):
     total: int
 
 
+class VoicePreviewResponse(BaseModel):
+    preview_url: str
+
+
 @router.get("", response_model=VoiceListResponse)
 async def list_voices(
     gender: str | None = Query(None),
@@ -64,6 +68,38 @@ async def list_voices(
     except Exception as e:
         logger.exception("Failed to list voices")
         raise AppError("VOICE_ERROR", f"Failed to list voices: {e}", 500)
+
+
+@router.get("/preview/{voice_id}", response_model=VoicePreviewResponse)
+async def get_voice_preview(
+    voice_id: str,
+    current_user: CurrentUser = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> VoicePreviewResponse:
+    """Return preview URL for a voice by its provider voice_id string."""
+    try:
+        from app.models.voice_catalog import VoiceCatalog
+
+        result = await db.execute(
+            select(VoiceCatalog).where(
+                VoiceCatalog.voice_id == voice_id,
+                VoiceCatalog.is_active.is_(True),
+            )
+        )
+        voice = result.scalars().first()
+        if voice is None:
+            raise AppError("VOICE_NOT_FOUND", "Voice not found", 404)
+
+        preview_url = voice.preview_url
+        if not preview_url:
+            preview_url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream?optimize_streaming_latency=0"
+
+        return VoicePreviewResponse(preview_url=preview_url)
+    except AppError:
+        raise
+    except Exception as e:
+        logger.exception("Failed to get voice preview %s", voice_id)
+        raise AppError("VOICE_ERROR", f"Failed to get voice preview: {e}", 500)
 
 
 @router.get("/{voice_id}", response_model=VoiceResponse)

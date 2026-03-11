@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ViewStyle,
   TextStyle,
+  View,
 } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
 import { Theme } from '../../theme/tokens';
@@ -20,6 +21,7 @@ interface Props {
   disabled?: boolean;
   style?: ViewStyle;
   accessibilityLabel?: string;
+  icon?: React.ReactNode;
 }
 
 export function Button({
@@ -30,6 +32,7 @@ export function Button({
   disabled = false,
   style,
   accessibilityLabel,
+  icon,
 }: Props) {
   const theme = useTheme();
   const styles = makeStyles(theme, variant, disabled || loading);
@@ -39,7 +42,7 @@ export function Button({
       onPress={onPress}
       disabled={disabled || loading}
       style={[styles.container, style]}
-      activeOpacity={0.7}
+      activeOpacity={0.75}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel || title}
       accessibilityState={{ disabled: disabled || loading, busy: loading }}
@@ -50,24 +53,27 @@ export function Button({
           color={variant === 'outline' || variant === 'ghost' ? theme.colors.primary : theme.colors.onPrimary}
         />
       ) : (
-        <Text style={styles.text} allowFontScaling>
-          {title}
-        </Text>
+        <View style={styles.contentRow}>
+          {icon && <View style={styles.iconWrap}>{icon}</View>}
+          <Text style={styles.text} allowFontScaling>
+            {title}
+          </Text>
+        </View>
       )}
     </TouchableOpacity>
   );
 }
 
 function makeStyles(theme: Theme, variant: Variant, isDisabled: boolean) {
-  const { colors, spacing, radii, typography } = theme;
+  const { colors, spacing, radii, typography, shadows } = theme;
 
   const base: ViewStyle = {
-    paddingVertical: spacing.md,
+    paddingVertical: spacing.md + 2,
     paddingHorizontal: spacing.xl,
     borderRadius: radii.md,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 48,
+    minHeight: 50,
     opacity: isDisabled ? 0.5 : 1,
   };
 
@@ -75,26 +81,36 @@ function makeStyles(theme: Theme, variant: Variant, isDisabled: boolean) {
     ...typography.button,
   };
 
-  const variantStyles: Record<Variant, { container: ViewStyle; text: TextStyle }> = {
+  const variantStyles: Record<Variant, { container: ViewStyle; text: TextStyle; contentRow: ViewStyle; iconWrap: ViewStyle }> = {
     primary: {
-      container: { ...base, backgroundColor: colors.primary },
+      container: { ...base, backgroundColor: colors.primary, ...shadows.card },
       text: { ...textBase, color: colors.onPrimary },
+      contentRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+      iconWrap: {},
     },
     secondary: {
       container: { ...base, backgroundColor: colors.secondaryContainer },
       text: { ...textBase, color: colors.secondary },
+      contentRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+      iconWrap: {},
     },
     outline: {
       container: { ...base, backgroundColor: 'transparent', borderWidth: 1.5, borderColor: colors.primary },
       text: { ...textBase, color: colors.primary },
+      contentRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+      iconWrap: {},
     },
     destructive: {
-      container: { ...base, backgroundColor: colors.error },
+      container: { ...base, backgroundColor: colors.error, ...shadows.card },
       text: { ...textBase, color: colors.onError },
+      contentRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+      iconWrap: {},
     },
     ghost: {
       container: { ...base, backgroundColor: 'transparent' },
       text: { ...textBase, color: colors.primary },
+      contentRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+      iconWrap: {},
     },
   };
 

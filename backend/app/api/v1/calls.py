@@ -1,10 +1,11 @@
+import hashlib
 import logging
 import uuid
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dependencies import CurrentUser, get_current_user
@@ -41,6 +42,10 @@ async def list_calls(
         raise AppError("CALL_ERROR", f"Failed to list calls: {e}", 500)
 
 
+def _phone_hash(number: str) -> str:
+    return hashlib.sha256(number.strip().encode()).hexdigest()[:16]
+
+
 @router.get("/{call_id}", response_model=CallResponse)
 async def get_call(
     call_id: uuid.UUID,
@@ -49,7 +54,27 @@ async def get_call(
 ) -> CallResponse:
     try:
         call = await call_service.get_call(db, call_id, current_user.user_id)
-        return CallResponse.model_validate(call)
+        resp = CallResponse.model_validate(call)
+
+        phone_hash = _phone_hash(call.from_number)
+        resp.caller_phone_hash = phone_hash
+
+        from app.models.call_memory_item import CallMemoryItem
+
+        mem_result = await db.execute(
+            select(
+                func.count(CallMemoryItem.id),
+                func.max(CallMemoryItem.caller_name),
+            ).where(
+                CallMemoryItem.user_id == current_user.user_id,
+                CallMemoryItem.caller_phone_hash == phone_hash,
+            )
+        )
+        row = mem_result.one()
+        resp.memory_count = row[0] or 0
+        resp.caller_name = row[1]
+
+        return resp
     except AppError:
         raise
     except Exception as e:
