@@ -15,7 +15,7 @@ export class InvalidTokenError extends Error {
 }
 
 export function verifySessionToken(token: string): { callId: string; userId: string } {
-  const secret = config.internalEventSecret || "fallback";
+  const secret = process.env.INTERNAL_EVENT_SECRET || config.internalEventSecret || "fallback";
   const dotIdx = token.lastIndexOf(".");
   if (dotIdx === -1) throw new InvalidTokenError("malformed");
 

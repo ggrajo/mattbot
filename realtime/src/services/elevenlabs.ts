@@ -2,25 +2,23 @@ import WebSocket from "ws";
 import { config } from "../config.js";
 import { logger } from "../utils/logger.js";
 
-const EL_WS_URL = "wss://api.elevenlabs.io/v1/convai/conversation";
-
 export interface ElevenLabsSession {
   ws: WebSocket;
   conversationId: string | null;
-  onAudio: (pcm16kBase64: string) => void;
+  onAudio: (audioBase64: string) => void;
   onEnd: (conversationId: string) => void;
   onError: (error: Error) => void;
 }
 
-/**
- * Create a WebSocket session to ElevenLabs Conversational AI.
- */
 export function createElevenLabsSession(callbacks: {
+  agentId: string;
+  finalPrompt: string;
+  greetingText: string;
   onAudio: (audioBase64: string) => void;
   onEnd: (conversationId: string) => void;
   onError: (error: Error) => void;
 }): ElevenLabsSession {
-  const url = `${EL_WS_URL}?agent_id=${config.elevenlabsAgentId}`;
+  const url = `${config.elevenlabsWsUrl}?agent_id=${callbacks.agentId}`;
 
   const ws = new WebSocket(url, {
     headers: {
@@ -38,6 +36,20 @@ export function createElevenLabsSession(callbacks: {
 
   ws.on("open", () => {
     logger.info("ElevenLabs WebSocket connected");
+
+    const initConfig: Record<string, unknown> = {
+      type: "conversation_initiation_client_data",
+      conversation_config_override: {
+        agent: {
+          prompt: { prompt: callbacks.finalPrompt },
+          first_message: callbacks.greetingText,
+        },
+        user_input_audio_format: "mulaw_8000",
+        agent_output_audio_format: "mulaw_8000",
+      },
+    };
+
+    ws.send(JSON.stringify(initConfig));
   });
 
   ws.on("message", (data: WebSocket.Data) => {
@@ -98,9 +110,22 @@ function handleElevenLabsMessage(
       break;
     }
 
+    case "interruption": {
+      break;
+    }
+
     case "ping": {
-      if (session.ws.readyState === WebSocket.OPEN) {
-        session.ws.send(JSON.stringify({ type: "pong" }));
+      const pingMsg = msg as { ping_event?: { event_id?: number } };
+      if (
+        session.ws.readyState === WebSocket.OPEN &&
+        pingMsg.ping_event?.event_id
+      ) {
+        session.ws.send(
+          JSON.stringify({
+            type: "pong",
+            event_id: pingMsg.ping_event.event_id,
+          })
+        );
       }
       break;
     }
@@ -114,17 +139,14 @@ function handleElevenLabsMessage(
   }
 }
 
-/**
- * Send audio to an ElevenLabs session.
- */
 export function sendAudioToElevenLabs(
   session: ElevenLabsSession,
-  pcm16kBase64: string
+  audioBase64: string
 ): void {
   if (session.ws.readyState !== WebSocket.OPEN) return;
 
   const buffered = session.ws.bufferedAmount;
-  if (buffered > 512_000) {
+  if (buffered > config.elevenlabsBufferLimitBytes) {
     logger.warn("ElevenLabs backpressure, dropping audio frame", {
       buffered,
     });
@@ -133,14 +155,11 @@ export function sendAudioToElevenLabs(
 
   session.ws.send(
     JSON.stringify({
-      user_audio_chunk: pcm16kBase64,
+      user_audio_chunk: audioBase64,
     })
   );
 }
 
-/**
- * Close an ElevenLabs session gracefully.
- */
 export function closeElevenLabsSession(session: ElevenLabsSession): void {
   if (session.ws.readyState === WebSocket.OPEN) {
     session.ws.close(1000, "call_ended");

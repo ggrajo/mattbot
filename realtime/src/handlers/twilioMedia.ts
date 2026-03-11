@@ -8,13 +8,9 @@ import {
   type ElevenLabsSession,
 } from "../services/elevenlabs.js";
 import { emitEvent } from "../services/eventEmitter.js";
+import { fetchAgentRuntime } from "../services/agentRuntime.js";
+import { fanOutToUser } from "./userEvents.js";
 import type { SessionContext, TwilioMessage } from "../types.js";
-import {
-  downsample16to8,
-  mulawToPcm,
-  pcmToMulaw,
-  upsample8to16,
-} from "../utils/audio.js";
 import { logger } from "../utils/logger.js";
 import { InvalidTokenError, verifySessionToken } from "../utils/token.js";
 
@@ -87,16 +83,15 @@ export function handleTwilioConnection(
     }
   }
 
-  function handleStart(
+  async function handleStart(
     twilioWs: WebSocket,
     msg: TwilioMessage & { event: "start" }
-  ): void {
+  ): Promise<void> {
     const params = msg.start.customParameters;
     const token = params.session_token;
     const callId = params.call_id;
     const userId = params.user_id;
 
-    // Validate session token
     try {
       verifySessionToken(token);
     } catch (err) {
@@ -110,7 +105,6 @@ export function handleTwilioConnection(
       return;
     }
 
-    // Concurrency check
     if (activeSessions.size >= config.maxConcurrentSessions) {
       logger.warn("Max concurrent sessions reached, rejecting");
       twilioWs.close(4002, "capacity_exceeded");
@@ -133,10 +127,32 @@ export function handleTwilioConnection(
       streamSid: msg.start.streamSid,
       conversationId: null,
       startedAt: Date.now(),
+      callerPhone: params.caller_phone || "",
+      userTimezone: params.user_timezone || "",
     };
 
     activeSessions.set(callId, sessionCtx);
     userSessionCounts.set(userId, userCount + 1);
+
+    const agentRuntime = await fetchAgentRuntime(callId);
+    if (!agentRuntime) {
+      logger.error("No agent runtime config, closing stream", {
+        callId: callId.slice(0, 8),
+      });
+      twilioWs.close(4004, "no_agent_runtime");
+      cleanup("no_agent_runtime");
+      return;
+    }
+
+    const agentId = agentRuntime.elevenlabs_agent_id;
+    if (!agentId) {
+      logger.error("No ElevenLabs agent ID in runtime config", {
+        callId: callId.slice(0, 8),
+      });
+      twilioWs.close(4005, "no_agent_id");
+      cleanup("no_agent_id");
+      return;
+    }
 
     emitEvent({
       event_type: "stream_connected",
@@ -145,31 +161,27 @@ export function handleTwilioConnection(
       timestamp: new Date().toISOString(),
     }).catch(() => {});
 
-    // Create ElevenLabs session
     elSession = createElevenLabsSession({
+      agentId,
+      finalPrompt: agentRuntime.final_prompt,
+      greetingText: agentRuntime.greeting_text,
       onAudio: (audioBase64: string) => {
         if (twilioWs.readyState !== WebSocket.OPEN) return;
-
-        // ElevenLabs returns base64 PCM 16kHz -> downsample to 8kHz -> mulaw
-        const pcm16k = new Int16Array(
-          Buffer.from(audioBase64, "base64").buffer
-        );
-        const pcm8k = downsample16to8(pcm16k);
-        const mulawBuf = pcmToMulaw(pcm8k);
 
         twilioWs.send(
           JSON.stringify({
             event: "media",
             streamSid: sessionCtx!.streamSid,
             media: {
-              payload: mulawBuf.toString("base64"),
+              payload: audioBase64,
             },
           })
         );
       },
       onEnd: (conversationId: string) => {
         if (sessionCtx) {
-          sessionCtx.conversationId = conversationId || sessionCtx.conversationId;
+          sessionCtx.conversationId =
+            conversationId || sessionCtx.conversationId;
         }
         cleanup("elevenlabs_close");
       },
@@ -192,25 +204,19 @@ export function handleTwilioConnection(
 
   function handleMedia(msg: TwilioMessage & { event: "media" }): void {
     if (!elSession) return;
-
-    // Twilio: base64 mulaw 8kHz -> PCM 8kHz -> upsample 16kHz -> base64 PCM
-    const mulawBuf = Buffer.from(msg.media.payload, "base64");
-    const pcm8k = mulawToPcm(mulawBuf);
-    const pcm16k = upsample8to16(pcm8k);
-    const pcm16kBase64 = Buffer.from(pcm16k.buffer).toString("base64");
-
-    sendAudioToElevenLabs(elSession, pcm16kBase64);
+    sendAudioToElevenLabs(elSession, msg.media.payload);
   }
 
   function cleanup(reason: string): void {
     if (!sessionCtx) return;
 
+    const ctx = sessionCtx;
     const durationSeconds = Math.round(
-      (Date.now() - sessionCtx.startedAt) / 1000
+      (Date.now() - ctx.startedAt) / 1000
     );
 
     const conversationId =
-      elSession?.conversationId || sessionCtx.conversationId || "";
+      elSession?.conversationId || ctx.conversationId || "";
 
     if (elSession) {
       closeElevenLabsSession(elSession);
@@ -221,20 +227,29 @@ export function handleTwilioConnection(
       ws.close(1000, reason);
     }
 
-    activeSessions.delete(sessionCtx.callId);
-    const count = userSessionCounts.get(sessionCtx.userId) || 1;
+    activeSessions.delete(ctx.callId);
+    const count = userSessionCounts.get(ctx.userId) || 1;
     if (count <= 1) {
-      userSessionCounts.delete(sessionCtx.userId);
+      userSessionCounts.delete(ctx.userId);
     } else {
-      userSessionCounts.set(sessionCtx.userId, count - 1);
+      userSessionCounts.set(ctx.userId, count - 1);
     }
+
+    fanOutToUser(ctx.userId, {
+      type: "CALL_ENDED",
+      payload: {
+        call_id: ctx.callId,
+        duration_seconds: durationSeconds,
+        timestamp: new Date().toISOString(),
+      },
+    });
 
     const isError = reason.includes("error");
 
     emitEvent({
       event_type: isError ? "stream_error" : "stream_ended",
-      call_id: sessionCtx.callId,
-      user_id: sessionCtx.userId,
+      call_id: ctx.callId,
+      user_id: ctx.userId,
       timestamp: new Date().toISOString(),
       elevenlabs_conversation_id: conversationId,
       duration_seconds: durationSeconds,
@@ -242,7 +257,7 @@ export function handleTwilioConnection(
     }).catch(() => {});
 
     logger.info("Session cleaned up", {
-      callId: sessionCtx.callId.slice(0, 8),
+      callId: ctx.callId.slice(0, 8),
       reason,
       durationSeconds,
     });

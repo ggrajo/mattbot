@@ -22,7 +22,7 @@ export async function emitEvent(event: BridgeEvent): Promise<void> {
         "X-Internal-Signature": signature,
       },
       body,
-      signal: AbortSignal.timeout(10_000),
+      signal: AbortSignal.timeout(config.eventEmissionTimeoutMs),
     });
 
     if (!resp.ok) {

@@ -52,6 +52,8 @@ export interface SessionContext {
   streamSid: string;
   conversationId: string | null;
   startedAt: number;
+  callerPhone: string;
+  userTimezone: string;
 }
 
 export interface BridgeEvent {
@@ -62,4 +64,10 @@ export interface BridgeEvent {
   elevenlabs_conversation_id?: string;
   duration_seconds?: number;
   error_message?: string;
+}
+
+export interface AgentRuntime {
+  elevenlabs_agent_id: string;
+  final_prompt: string;
+  greeting_text: string;
 }
