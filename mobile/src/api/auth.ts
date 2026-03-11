@@ -1,4 +1,4 @@
-import { apiClient } from './client';
+﻿import { apiClient } from './client';
 import { Platform } from 'react-native';
 
 interface DeviceInfo {
@@ -26,7 +26,11 @@ export async function register(email: string, password: string) {
 }
 
 export async function login(email: string, password: string) {
-  const { data } = await apiClient.post('/auth/login', { email, password });
+  const { data } = await apiClient.post('/auth/login', {
+    email,
+    password,
+    device: getDeviceInfo(),
+  });
   return data;
 }
 
@@ -122,7 +126,78 @@ export async function verifyEmailOtp(email: string, otpCode: string, password?: 
   return data;
 }
 
+export async function changePassword(currentPassword?: string, newPassword?: string) {
+  const { data } = await apiClient.post('/auth/password/change', {
+    current_password: currentPassword || undefined,
+    new_password: newPassword,
+  });
+  return data;
+}
+
+export async function setupPin(pin: string, stepUpToken: string) {
+  const { data } = await apiClient.post(
+    '/auth/pin/setup',
+    { pin },
+    { headers: { 'X-Step-Up-Token': stepUpToken } },
+  );
+  return data;
+}
+
+export async function pinLogin(deviceId: string, pin: string) {
+  const { data } = await apiClient.post('/auth/pin/login', {
+    device_id: deviceId,
+    pin,
+  });
+  return data;
+}
+
+export async function disablePin() {
+  const { data } = await apiClient.delete('/auth/pin');
+  return data;
+}
+
+export async function getPinStatus(): Promise<{ pin_enabled: boolean }> {
+  const { data } = await apiClient.get('/auth/pin/status');
+  return data;
+}
+
 export async function stepUp(password?: string, totpCode?: string) {
   const { data } = await apiClient.post('/auth/step-up', { password, totp_code: totpCode });
+  return data;
+}
+
+export async function deleteAccount(stepUpToken: string) {
+  const { data } = await apiClient.post(
+    '/me/delete-account',
+    {},
+    { headers: { 'X-Step-Up-Token': stepUpToken } },
+  );
+  return data;
+}
+
+export interface UserProfile {
+  id: string;
+  email: string | null;
+  email_verified: boolean;
+  status: string;
+  display_name: string | null;
+  nickname: string | null;
+  company_name: string | null;
+  role_title: string | null;
+  ai_greeting_instructions: string | null;
+  default_timezone: string;
+  language_code: string;
+  mfa_enabled: boolean;
+  has_password: boolean;
+  created_at: string;
+}
+
+export async function getProfile(): Promise<UserProfile> {
+  const { data } = await apiClient.get('/me');
+  return data;
+}
+
+export async function updateProfile(changes: Partial<Omit<UserProfile, 'id' | 'email' | 'email_verified' | 'status' | 'mfa_enabled' | 'created_at'>>): Promise<UserProfile> {
+  const { data } = await apiClient.patch('/me', changes);
   return data;
 }

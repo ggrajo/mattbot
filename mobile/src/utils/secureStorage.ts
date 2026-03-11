@@ -1,4 +1,4 @@
-import * as Keychain from 'react-native-keychain';
+﻿import * as Keychain from 'react-native-keychain';
 
 const SERVICE_PREFIX = 'com.mattbot.';
 
@@ -28,6 +28,7 @@ export async function removeSecureItem(key: string): Promise<void> {
 export const TOKEN_KEYS = {
   ACCESS_TOKEN: 'access_token',
   REFRESH_TOKEN: 'refresh_token',
+  PIN_DEVICE_ID: 'pin_device_id',
 } as const;
 
 export async function storeTokens(accessToken: string, refreshToken: string): Promise<void> {
@@ -44,4 +45,16 @@ export async function getStoredTokens(): Promise<{ accessToken: string | null; r
 export async function clearTokens(): Promise<void> {
   await removeSecureItem(TOKEN_KEYS.ACCESS_TOKEN);
   await removeSecureItem(TOKEN_KEYS.REFRESH_TOKEN);
+}
+
+export async function storePinDeviceId(deviceId: string): Promise<void> {
+  await setSecureItem(TOKEN_KEYS.PIN_DEVICE_ID, deviceId);
+}
+
+export async function getPinDeviceId(): Promise<string | null> {
+  return getSecureItem(TOKEN_KEYS.PIN_DEVICE_ID);
+}
+
+export async function clearPinDeviceId(): Promise<void> {
+  await removeSecureItem(TOKEN_KEYS.PIN_DEVICE_ID);
 }

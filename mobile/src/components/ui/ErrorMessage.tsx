@@ -1,5 +1,6 @@
-import React from 'react';
+﻿import React from 'react';
 import { View, Text } from 'react-native';
+import { Icon } from './Icon';
 import { useTheme } from '../../theme/ThemeProvider';
 
 interface Props {
@@ -20,9 +21,11 @@ export function ErrorMessage({ message, action, onAction }: Props) {
         padding: spacing.md,
         flexDirection: 'row',
         alignItems: 'center',
+        gap: spacing.sm,
       }}
       accessibilityRole="alert"
     >
+      <Icon name="alert-circle-outline" size="md" color={colors.error} />
       <Text style={{ ...typography.bodySmall, color: colors.error, flex: 1 }} allowFontScaling>
         {message}
       </Text>
@@ -34,7 +37,6 @@ export function ErrorMessage({ message, action, onAction }: Props) {
             color: colors.error,
             fontWeight: '700',
             textDecorationLine: 'underline',
-            marginLeft: spacing.sm,
           }}
           accessibilityRole="button"
           allowFontScaling

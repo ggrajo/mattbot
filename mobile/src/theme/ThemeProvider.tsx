@@ -1,10 +1,13 @@
-import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
+﻿import React, { createContext, useContext, useEffect, useState, useMemo, useCallback } from 'react';
 import { Appearance, ColorSchemeName, StatusBar } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Theme } from './tokens';
 import { lightTheme } from './lightTheme';
 import { darkTheme } from './darkTheme';
 
-type ThemeMode = 'system' | 'light' | 'dark';
+export type ThemeMode = 'system' | 'light' | 'dark';
+
+const THEME_STORAGE_KEY = '@mattbot/theme_preference';
 
 interface ThemeContextType {
   theme: Theme;
@@ -31,10 +34,20 @@ interface Props {
 }
 
 export function ThemeProvider({ children }: Props) {
-  const [themeMode, setThemeMode] = useState<ThemeMode>('system');
+  const [themeMode, setThemeModeState] = useState<ThemeMode>('system');
+  const [loaded, setLoaded] = useState(false);
   const [systemScheme, setSystemScheme] = useState<ColorSchemeName>(
     Appearance.getColorScheme()
   );
+
+  useEffect(() => {
+    AsyncStorage.getItem(THEME_STORAGE_KEY).then((stored) => {
+      if (stored === 'light' || stored === 'dark' || stored === 'system') {
+        setThemeModeState(stored);
+      }
+      setLoaded(true);
+    });
+  }, []);
 
   useEffect(() => {
     const listener = Appearance.addChangeListener(({ colorScheme }) => {
@@ -43,11 +56,20 @@ export function ThemeProvider({ children }: Props) {
     return () => listener.remove();
   }, []);
 
+  const setThemeMode = useCallback((mode: ThemeMode) => {
+    setThemeModeState(mode);
+    AsyncStorage.setItem(THEME_STORAGE_KEY, mode).catch(() => {});
+  }, []);
+
   const theme = useMemo(() => {
     if (themeMode === 'light') return lightTheme;
     if (themeMode === 'dark') return darkTheme;
     return systemScheme === 'dark' ? darkTheme : lightTheme;
   }, [themeMode, systemScheme]);
+
+  if (!loaded) {
+    return null;
+  }
 
   return (
     <ThemeContext.Provider value={{ theme, themeMode, setThemeMode }}>
