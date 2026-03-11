@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
+import { FadeIn } from '../components/ui/FadeIn';
 import { useTheme } from '../theme/ThemeProvider';
 import { useBillingStore } from '../store/billingStore';
 import type { Theme } from '../theme/tokens';
@@ -71,73 +72,83 @@ export function PlanSelectionScreen({ navigation }: any) {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <ScrollView contentContainerStyle={styles.scroll}>
-        <Text style={styles.title}>Choose Your Plan</Text>
-        <Text style={styles.subtitle}>
-          Select the plan that works best for you
-        </Text>
+      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+        <FadeIn delay={0}>
+          <Text style={styles.title}>Choose Your Plan</Text>
+          <Text style={styles.subtitle}>
+            Select the plan that works best for you
+          </Text>
+        </FadeIn>
 
-        {PLANS.map((plan) => {
+        {PLANS.map((plan, index) => {
           const isCurrent = plan.id === currentPlan;
           return (
-            <View
-              key={plan.id}
-              style={[
-                styles.card,
-                plan.popular && styles.cardPopular,
-                isCurrent && styles.cardCurrent,
-              ]}
-            >
-              {plan.popular && (
-                <View style={styles.popularBadge}>
-                  <Text style={styles.popularText}>Most Popular</Text>
-                </View>
-              )}
-              <Text style={styles.planName}>{plan.name}</Text>
-              <View style={styles.priceRow}>
-                <Text style={styles.price}>{plan.price}</Text>
-                <Text style={styles.period}>{plan.period}</Text>
-              </View>
-              <Text style={styles.minutesLabel}>
-                {plan.minutes} minutes included
-              </Text>
-
-              <View style={styles.divider} />
-
-              {plan.features.map((feat) => (
-                <View key={feat} style={styles.featureRow}>
-                  <Text style={styles.checkmark}>{'✓'}</Text>
-                  <Text style={styles.featureText}>{feat}</Text>
-                </View>
-              ))}
-
-              <TouchableOpacity
+            <FadeIn key={plan.id} delay={100 + index * 80}>
+              <View
                 style={[
-                  styles.selectButton,
-                  isCurrent && styles.selectButtonDisabled,
-                  plan.popular && !isCurrent && styles.selectButtonPopular,
+                  styles.card,
+                  plan.popular && styles.cardPopular,
+                  isCurrent && styles.cardCurrent,
                 ]}
-                onPress={() => handleSelect(plan.id)}
-                disabled={loading || isCurrent}
-                activeOpacity={0.7}
               >
-                {loading ? (
-                  <ActivityIndicator
-                    size="small"
-                    color={theme.colors.onPrimary}
-                  />
-                ) : (
-                  <Text
-                    style={[
-                      styles.selectButtonText,
-                      isCurrent && styles.selectButtonTextDisabled,
-                    ]}
-                  >
-                    {isCurrent ? 'Current Plan' : 'Select Plan'}
-                  </Text>
+                {plan.popular && (
+                  <View style={styles.popularBadge}>
+                    <Text style={styles.popularStar}>⭐</Text>
+                    <Text style={styles.popularText}>Most Popular</Text>
+                  </View>
                 )}
-              </TouchableOpacity>
-            </View>
+                {isCurrent && (
+                  <View style={styles.currentBadge}>
+                    <Text style={styles.currentText}>Current Plan</Text>
+                  </View>
+                )}
+                <Text style={styles.planName}>{plan.name}</Text>
+                <View style={styles.priceRow}>
+                  <Text style={styles.price}>{plan.price}</Text>
+                  <Text style={styles.period}>{plan.period}</Text>
+                </View>
+                <Text style={styles.minutesLabel}>
+                  {plan.minutes} minutes included
+                </Text>
+
+                <View style={styles.divider} />
+
+                {plan.features.map((feat) => (
+                  <View key={feat} style={styles.featureRow}>
+                    <Text style={styles.checkmark}>✓</Text>
+                    <Text style={styles.featureText}>{feat}</Text>
+                  </View>
+                ))}
+
+                <TouchableOpacity
+                  style={[
+                    styles.selectButton,
+                    isCurrent && styles.selectButtonDisabled,
+                    plan.popular && !isCurrent && styles.selectButtonPopular,
+                  ]}
+                  onPress={() => handleSelect(plan.id)}
+                  disabled={loading || isCurrent}
+                  activeOpacity={0.7}
+                >
+                  {loading ? (
+                    <ActivityIndicator
+                      size="small"
+                      color={theme.colors.onPrimary}
+                    />
+                  ) : (
+                    <Text
+                      style={[
+                        styles.selectButtonText,
+                        isCurrent && styles.selectButtonTextDisabled,
+                        plan.popular && !isCurrent && styles.selectButtonTextPopular,
+                      ]}
+                    >
+                      {isCurrent ? 'Current Plan' : 'Select Plan'}
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              </View>
+            </FadeIn>
           );
         })}
       </ScrollView>
@@ -188,15 +199,34 @@ function makeStyles(theme: Theme) {
     popularBadge: {
       backgroundColor: colors.primary,
       alignSelf: 'flex-start',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 4,
       paddingHorizontal: spacing.md,
       paddingVertical: spacing.xs,
       borderRadius: radii.full,
       marginBottom: spacing.md,
     },
+    popularStar: {
+      fontSize: 12,
+    },
     popularText: {
       ...typography.caption,
       color: colors.onPrimary,
-      fontWeight: '600',
+      fontWeight: '700',
+    },
+    currentBadge: {
+      backgroundColor: colors.successContainer,
+      alignSelf: 'flex-start',
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.xs,
+      borderRadius: radii.full,
+      marginBottom: spacing.md,
+    },
+    currentText: {
+      ...typography.caption,
+      color: colors.success,
+      fontWeight: '700',
     },
     planName: {
       ...typography.h2,
@@ -208,9 +238,10 @@ function makeStyles(theme: Theme) {
       marginTop: spacing.xs,
     },
     price: {
-      fontSize: 36,
-      fontWeight: '700',
+      fontSize: 40,
+      fontWeight: '800',
       color: colors.textPrimary,
+      letterSpacing: -1,
     },
     period: {
       ...typography.body,
@@ -246,7 +277,7 @@ function makeStyles(theme: Theme) {
     selectButton: {
       marginTop: spacing.lg,
       backgroundColor: colors.secondaryContainer,
-      paddingVertical: spacing.md,
+      paddingVertical: 14,
       borderRadius: radii.md,
       alignItems: 'center',
       minHeight: 48,
@@ -261,6 +292,9 @@ function makeStyles(theme: Theme) {
     selectButtonText: {
       ...typography.button,
       color: colors.secondary,
+    },
+    selectButtonTextPopular: {
+      color: colors.onPrimary,
     },
     selectButtonTextDisabled: {
       color: colors.textDisabled,

@@ -3,9 +3,16 @@
 from __future__ import annotations
 
 import logging
+import os
 from datetime import datetime, time
 
 logger = logging.getLogger(__name__)
+
+FCM_SERVER_KEY = os.getenv("FCM_SERVER_KEY", "")
+APNS_KEY_ID = os.getenv("APNS_KEY_ID", "")
+APNS_TEAM_ID = os.getenv("APNS_TEAM_ID", "")
+APNS_BUNDLE_ID = os.getenv("APNS_BUNDLE_ID", "com.mattbot.app")
+APP_BASE_URL = os.getenv("APP_BASE_URL", "http://localhost:8000")
 
 
 def parse_time(t: str | None) -> time | None:
@@ -82,6 +89,15 @@ class NotificationService:
                 title,
             )
             return {"sent": False, "reason": "quiet_hours"}
+
+        if not FCM_SERVER_KEY and not APNS_KEY_ID:
+            logger.warning(
+                "No push provider configured (FCM_SERVER_KEY / APNS_KEY_ID unset); "
+                "notification logged only for user %s: %s",
+                user_id,
+                title,
+            )
+            return {"sent": False, "reason": "no_push_provider"}
 
         logger.info("Sending notification to user %s: %s", user_id, title)
         return {"sent": True, "reason": None}

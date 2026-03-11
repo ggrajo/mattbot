@@ -172,6 +172,25 @@ async def end_call(
     return call
 
 
+async def delete_call(
+    db: AsyncSession,
+    call_id: uuid.UUID,
+    user_id: uuid.UUID,
+) -> None:
+    """Delete a call, enforcing user ownership.
+
+    Hard-deletes the call row; cascade removes associated call_events.
+    """
+    call = await db.get(Call, call_id)
+    if call is None:
+        raise AppError("CALL_NOT_FOUND", "Call not found", 404)
+    if call.user_id != user_id:
+        raise AppError("CALL_NOT_FOUND", "Call not found", 404)
+
+    await db.delete(call)
+    await db.flush()
+
+
 async def handle_twilio_status_callback(
     db: AsyncSession,
     twilio_call_sid: str,

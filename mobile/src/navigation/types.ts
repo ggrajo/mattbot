@@ -8,6 +8,9 @@ export type RootStackParamList = {
   RecoveryCodes: undefined;
   MfaVerify: undefined;
   Home: undefined;
+  HomeTab: undefined;
+  CallsTab: undefined;
+  SettingsTab: undefined;
   DeviceList: undefined;
   PlanSelection: undefined;
   PaymentMethod: undefined;
@@ -17,11 +20,10 @@ export type RootStackParamList = {
   CallModes: undefined;
   ForwardingSetupGuide: undefined;
   ForwardingVerify: undefined;
-  CallsList: undefined;
   CallDetail: { callId: string };
   OnboardingAssistantSetup: undefined;
   AssistantSettings: { agentId?: string };
-  Settings: undefined;
+  SubscriptionGate: undefined;
 };
 
 declare global {

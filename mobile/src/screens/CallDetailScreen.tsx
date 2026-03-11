@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import { FadeIn } from '../components/ui/FadeIn';
 import { useTheme } from '../theme/ThemeProvider';
 import { useCallStore } from '../store/callStore';
 import { apiClient } from '../api/client';
@@ -90,109 +91,129 @@ export function CallDetailScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <ScrollView contentContainerStyle={styles.scroll}>
-        <View style={styles.statusBanner}>
-          <View style={[styles.statusBadge, { backgroundColor: statusColor.bg }]}>
-            <Text style={[styles.statusText, { color: statusColor.fg }]}>
-              {selectedCall.status.replace('_', ' ')}
+      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+        <FadeIn delay={0}>
+          <View style={styles.statusBanner}>
+            <View style={[styles.statusBadge, { backgroundColor: statusColor.bg }]}>
+              <Text style={[styles.statusText, { color: statusColor.fg }]}>
+                {selectedCall.status.replace('_', ' ')}
+              </Text>
+            </View>
+            <Text style={styles.phoneHero}>
+              {selectedCall.direction === 'inbound' ? selectedCall.from_number : selectedCall.to_number}
+            </Text>
+            <Text style={styles.directionHint}>
+              {selectedCall.direction === 'inbound' ? 'Incoming Call' : 'Outgoing Call'}
             </Text>
           </View>
-        </View>
+        </FadeIn>
 
-        <View style={styles.infoCard}>
-          <InfoRow label="From" value={selectedCall.from_number} theme={theme} />
-          <InfoRow label="To" value={selectedCall.to_number} theme={theme} />
-          <InfoRow
-            label="Direction"
-            value={selectedCall.direction === 'inbound' ? 'Incoming' : 'Outgoing'}
-            theme={theme}
-          />
-          <InfoRow
-            label="Duration"
-            value={formatDuration(selectedCall.duration_seconds)}
-            theme={theme}
-          />
-          <InfoRow label="Started" value={formatDateTime(selectedCall.started_at)} theme={theme} />
-          {selectedCall.answered_at && (
+        <FadeIn delay={80}>
+          <View style={styles.infoCard}>
+            <InfoRow label="From" value={selectedCall.from_number} theme={theme} />
+            <InfoRow label="To" value={selectedCall.to_number} theme={theme} />
             <InfoRow
-              label="Answered"
-              value={formatDateTime(selectedCall.answered_at)}
+              label="Direction"
+              value={selectedCall.direction === 'inbound' ? 'Incoming' : 'Outgoing'}
               theme={theme}
             />
-          )}
-          {selectedCall.ended_at && (
-            <InfoRow label="Ended" value={formatDateTime(selectedCall.ended_at)} theme={theme} />
-          )}
-        </View>
-
-        <Text style={styles.sectionTitle}>Timeline</Text>
-
-        {events.length === 0 ? (
-          <Text style={styles.emptyTimeline}>No events recorded.</Text>
-        ) : (
-          <View style={styles.timeline}>
-            {events.map((evt, idx) => (
-              <TimelineItem
-                key={evt.id}
-                event={evt}
-                isLast={idx === events.length - 1}
+            <InfoRow
+              label="Duration"
+              value={formatDuration(selectedCall.duration_seconds)}
+              theme={theme}
+            />
+            <InfoRow label="Started" value={formatDateTime(selectedCall.started_at)} theme={theme} />
+            {selectedCall.answered_at && (
+              <InfoRow
+                label="Answered"
+                value={formatDateTime(selectedCall.answered_at)}
                 theme={theme}
               />
-            ))}
+            )}
+            {selectedCall.ended_at && (
+              <InfoRow label="Ended" value={formatDateTime(selectedCall.ended_at)} theme={theme} isLast />
+            )}
           </View>
-        )}
+        </FadeIn>
+
+        <FadeIn delay={160}>
+          <Text style={styles.sectionTitle}>Timeline</Text>
+
+          {events.length === 0 ? (
+            <View style={styles.emptyTimeline}>
+              <Text style={styles.emptyTimelineEmoji}>📋</Text>
+              <Text style={styles.emptyTimelineText}>No events recorded.</Text>
+            </View>
+          ) : (
+            <View style={styles.timeline}>
+              {events.map((evt, idx) => (
+                <TimelineItem
+                  key={evt.id}
+                  event={evt}
+                  isLast={idx === events.length - 1}
+                  theme={theme}
+                />
+              ))}
+            </View>
+          )}
+        </FadeIn>
 
         {artifacts && (artifacts.transcript || artifacts.summary) && (
-          <>
+          <FadeIn delay={240}>
             <Text style={[styles.sectionTitle, { marginTop: theme.spacing.xl }]}>Artifacts</Text>
             {artifacts.summary && (
               <View style={styles.artifactCard}>
-                <Text style={styles.artifactLabel}>Summary</Text>
+                <View style={styles.artifactHeader}>
+                  <Text style={styles.artifactEmoji}>📝</Text>
+                  <Text style={styles.artifactLabel}>Summary</Text>
+                </View>
                 <Text style={styles.artifactBody}>{artifacts.summary}</Text>
               </View>
             )}
             {artifacts.transcript && (
               <View style={styles.artifactCard}>
-                <Text style={styles.artifactLabel}>Transcript</Text>
+                <View style={styles.artifactHeader}>
+                  <Text style={styles.artifactEmoji}>💬</Text>
+                  <Text style={styles.artifactLabel}>Transcript</Text>
+                </View>
                 <Text style={styles.artifactBody}>{artifacts.transcript}</Text>
               </View>
             )}
-          </>
+          </FadeIn>
         )}
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-function InfoRow({ label, value, theme }: { label: string; value: string; theme: Theme }) {
-  const styles = infoRowStyles(theme);
+function InfoRow({
+  label,
+  value,
+  theme,
+  isLast,
+}: {
+  label: string;
+  value: string;
+  theme: Theme;
+  isLast?: boolean;
+}) {
+  const { colors, spacing, typography } = theme;
   return (
-    <View style={styles.row}>
-      <Text style={styles.label}>{label}</Text>
-      <Text style={styles.value}>{value}</Text>
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: spacing.sm,
+        borderBottomWidth: isLast ? 0 : StyleSheet.hairlineWidth,
+        borderBottomColor: colors.border,
+      }}
+    >
+      <Text style={{ ...typography.bodySmall, color: colors.textSecondary, fontWeight: '600' }}>
+        {label}
+      </Text>
+      <Text style={{ ...typography.bodySmall, color: colors.textPrimary }}>{value}</Text>
     </View>
   );
-}
-
-function infoRowStyles(theme: Theme) {
-  return StyleSheet.create({
-    row: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      paddingVertical: theme.spacing.sm,
-      borderBottomWidth: StyleSheet.hairlineWidth,
-      borderBottomColor: theme.colors.border,
-    },
-    label: {
-      ...theme.typography.bodySmall,
-      color: theme.colors.textSecondary,
-      fontWeight: '600',
-    },
-    value: {
-      ...theme.typography.bodySmall,
-      color: theme.colors.textPrimary,
-    },
-  });
 }
 
 function TimelineItem({
@@ -205,50 +226,83 @@ function TimelineItem({
   theme: Theme;
 }) {
   const statusColor = STATUS_COLORS[event.to_status] ?? { bg: '#ECEFF1', fg: '#546E7A' };
-  const styles = timelineStyles(theme);
+  const { colors, spacing, typography } = theme;
 
   return (
-    <View style={styles.item}>
-      <View style={styles.dotColumn}>
-        <View style={[styles.dot, { backgroundColor: statusColor.fg }]} />
-        {!isLast && <View style={styles.line} />}
-      </View>
-      <View style={styles.content}>
-        <Text style={styles.eventType}>{event.event_type.replace(/_/g, ' ')}</Text>
-        <View style={styles.transitionRow}>
-          {event.from_status && (
-            <Text style={styles.transitionText}>{event.from_status}</Text>
-          )}
-          {event.from_status && <Text style={styles.arrow}>{' -> '}</Text>}
-          <Text style={[styles.transitionText, { color: statusColor.fg, fontWeight: '700' }]}>
-            {event.to_status}
-          </Text>
+    <View style={tlStyles.item}>
+      <View style={tlStyles.dotColumn}>
+        <View style={[tlStyles.dotOuter, { borderColor: statusColor.fg }]}>
+          <View style={[tlStyles.dotInner, { backgroundColor: statusColor.fg }]} />
         </View>
-        <Text style={styles.timestamp}>{formatDateTime(event.created_at)}</Text>
+        {!isLast && <View style={[tlStyles.line, { backgroundColor: colors.border }]} />}
+      </View>
+      <View style={[tlStyles.content, { paddingBottom: isLast ? 0 : spacing.lg }]}>
+        <Text
+          style={{
+            ...typography.bodySmall,
+            color: colors.textPrimary,
+            fontWeight: '600',
+            textTransform: 'capitalize',
+          }}
+        >
+          {event.event_type.replace(/_/g, ' ')}
+        </Text>
+        <View style={tlStyles.transitionRow}>
+          {event.from_status && (
+            <>
+              <View style={[tlStyles.transitionBadge, { backgroundColor: '#ECEFF1' }]}>
+                <Text style={[tlStyles.transitionBadgeText, { color: '#546E7A' }]}>
+                  {event.from_status}
+                </Text>
+              </View>
+              <Text style={{ color: colors.textDisabled, fontSize: 12, marginHorizontal: 4 }}>→</Text>
+            </>
+          )}
+          <View style={[tlStyles.transitionBadge, { backgroundColor: statusColor.bg }]}>
+            <Text style={[tlStyles.transitionBadgeText, { color: statusColor.fg }]}>
+              {event.to_status}
+            </Text>
+          </View>
+        </View>
+        <Text style={{ ...typography.caption, color: colors.textDisabled, marginTop: 4 }}>
+          {formatDateTime(event.created_at)}
+        </Text>
       </View>
     </View>
   );
 }
 
-function timelineStyles(theme: Theme) {
-  return StyleSheet.create({
-    item: { flexDirection: 'row', minHeight: 60 },
-    dotColumn: { width: 24, alignItems: 'center' },
-    dot: { width: 10, height: 10, borderRadius: 5, marginTop: 4 },
-    line: { width: 2, flex: 1, backgroundColor: theme.colors.border, marginTop: 4 },
-    content: { flex: 1, paddingLeft: theme.spacing.md, paddingBottom: theme.spacing.lg },
-    eventType: {
-      ...theme.typography.bodySmall,
-      color: theme.colors.textPrimary,
-      fontWeight: '600',
-      textTransform: 'capitalize',
-    },
-    transitionRow: { flexDirection: 'row', alignItems: 'center', marginTop: 2 },
-    transitionText: { ...theme.typography.caption, color: theme.colors.textSecondary },
-    arrow: { ...theme.typography.caption, color: theme.colors.textDisabled },
-    timestamp: { ...theme.typography.caption, color: theme.colors.textDisabled, marginTop: 4 },
-  });
-}
+const tlStyles = StyleSheet.create({
+  item: { flexDirection: 'row', minHeight: 60 },
+  dotColumn: { width: 28, alignItems: 'center' },
+  dotOuter: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 3,
+  },
+  dotInner: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+  },
+  line: { width: 2, flex: 1, marginTop: 4 },
+  content: { flex: 1, paddingLeft: 12 },
+  transitionRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
+  transitionBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  transitionBadgeText: {
+    fontSize: 11,
+    fontWeight: '600',
+    textTransform: 'capitalize',
+  },
+});
 
 function makeStyles(theme: Theme) {
   const { colors, spacing, radii, typography, shadows } = theme;
@@ -268,12 +322,22 @@ function makeStyles(theme: Theme) {
       paddingHorizontal: spacing.lg,
       paddingVertical: spacing.sm,
       borderRadius: radii.full,
+      marginBottom: spacing.md,
     },
     statusText: {
       fontSize: 14,
       fontWeight: '700',
       textTransform: 'uppercase',
       letterSpacing: 1,
+    },
+    phoneHero: {
+      ...typography.h1,
+      color: colors.textPrimary,
+      marginBottom: 4,
+    },
+    directionHint: {
+      ...typography.bodySmall,
+      color: colors.textSecondary,
     },
     infoCard: {
       backgroundColor: colors.surface,
@@ -289,8 +353,19 @@ function makeStyles(theme: Theme) {
       color: colors.textPrimary,
       marginBottom: spacing.lg,
     },
-    emptyTimeline: { ...typography.body, color: colors.textDisabled },
-    timeline: { paddingLeft: spacing.sm },
+    emptyTimeline: {
+      alignItems: 'center',
+      paddingVertical: spacing.xl,
+    },
+    emptyTimelineEmoji: {
+      fontSize: 28,
+      marginBottom: spacing.sm,
+    },
+    emptyTimelineText: {
+      ...typography.body,
+      color: colors.textDisabled,
+    },
+    timeline: { paddingLeft: spacing.xs },
     artifactCard: {
       backgroundColor: colors.surface,
       borderRadius: radii.lg,
@@ -300,11 +375,19 @@ function makeStyles(theme: Theme) {
       borderColor: colors.border,
       ...shadows.card,
     },
+    artifactHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+      marginBottom: spacing.sm,
+    },
+    artifactEmoji: {
+      fontSize: 16,
+    },
     artifactLabel: {
       ...typography.bodySmall,
-      fontWeight: '600',
+      fontWeight: '700',
       color: colors.textSecondary,
-      marginBottom: spacing.sm,
       textTransform: 'uppercase',
       letterSpacing: 0.5,
     },

@@ -10,6 +10,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { FadeIn } from '../components/ui/FadeIn';
 import { useTheme } from '../theme/ThemeProvider';
 import { useCallStore } from '../store/callStore';
 import type { Theme } from '../theme/tokens';
@@ -71,6 +72,49 @@ const badgeStyles = StyleSheet.create({
   },
 });
 
+function EmptyState({ theme }: { theme: Theme }) {
+  const { colors, spacing, typography } = theme;
+  return (
+    <FadeIn delay={100}>
+      <View style={emptyStyles.container}>
+        <View style={[emptyStyles.illustration, { backgroundColor: colors.surfaceVariant }]}>
+          <Text style={emptyStyles.emoji}>📞</Text>
+        </View>
+        <Text style={[typography.h3, { color: colors.textSecondary, marginBottom: spacing.sm, textAlign: 'center' }]}>
+          No calls yet
+        </Text>
+        <Text
+          style={[
+            typography.body,
+            { color: colors.textDisabled, textAlign: 'center', paddingHorizontal: spacing.xl, lineHeight: 22 },
+          ]}
+        >
+          Inbound calls will appear here once your number is active. Set up your phone number to get started.
+        </Text>
+      </View>
+    </FadeIn>
+  );
+}
+
+const emptyStyles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    paddingTop: 64,
+    paddingBottom: 32,
+  },
+  illustration: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  emoji: {
+    fontSize: 36,
+  },
+});
+
 export function CallsListScreen() {
   const theme = useTheme();
   const styles = makeStyles(theme);
@@ -119,10 +163,12 @@ export function CallsListScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Calls</Text>
-        <Text style={styles.subtitle}>{total} total</Text>
-      </View>
+      <FadeIn delay={0}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Calls</Text>
+          {total > 0 && <Text style={styles.subtitle}>{total} total</Text>}
+        </View>
+      </FadeIn>
 
       {error && (
         <View style={styles.errorBox}>
@@ -145,14 +191,7 @@ export function CallsListScreen() {
           refreshControl={
             <RefreshControl refreshing={loading} onRefresh={onRefresh} />
           }
-          ListEmptyComponent={
-            <View style={styles.empty}>
-              <Text style={styles.emptyTitle}>No calls yet</Text>
-              <Text style={styles.emptySubtitle}>
-                Inbound calls will appear here once your number is active.
-              </Text>
-            </View>
-          }
+          ListEmptyComponent={<EmptyState theme={theme} />}
         />
       )}
     </SafeAreaView>
@@ -211,8 +250,5 @@ function makeStyles(theme: Theme) {
       borderTopColor: colors.border,
     },
     meta: { ...typography.caption, color: colors.textSecondary },
-    empty: { alignItems: 'center', paddingTop: spacing.xxxl },
-    emptyTitle: { ...typography.h3, color: colors.textSecondary, marginBottom: spacing.sm },
-    emptySubtitle: { ...typography.body, color: colors.textDisabled, textAlign: 'center', paddingHorizontal: spacing.xl },
   });
 }

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from '../components/ui/Button';
 import { TextInput } from '../components/ui/TextInput';
 import { SocialLoginButtons } from '../components/auth/SocialLoginButtons';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { FadeIn } from '../components/ui/FadeIn';
 import { useTheme } from '../theme/ThemeProvider';
 import { useAuthStore } from '../store/authStore';
 import { login } from '../api/auth';
@@ -63,73 +64,103 @@ export function LoginScreen({ navigation }: Props) {
         style={{ flex: 1 }}
       >
         <ScrollView
-          contentContainerStyle={{ padding: spacing.xl, gap: spacing.lg }}
+          contentContainerStyle={{ padding: spacing.xl, paddingTop: spacing.xxl }}
           keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
         >
-          <Text style={{ ...typography.h2, color: colors.textPrimary }} allowFontScaling>
-            Welcome back
-          </Text>
+          <FadeIn delay={0}>
+            <Text style={[typography.h1, { color: colors.textPrimary, marginBottom: spacing.xs }]} allowFontScaling>
+              Welcome back
+            </Text>
+            <Text style={[typography.body, { color: colors.textSecondary, marginBottom: spacing.xl }]} allowFontScaling>
+              Sign in to your MattBot account
+            </Text>
+          </FadeIn>
 
-          {apiError && <ErrorMessage message={apiError} />}
+          {apiError && (
+            <FadeIn duration={200}>
+              <View style={{ marginBottom: spacing.lg }}>
+                <ErrorMessage message={apiError} />
+              </View>
+            </FadeIn>
+          )}
 
-          <TextInput
-            label="Email"
-            value={email}
-            onChangeText={setEmail}
-            error={emailError}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoComplete="email"
-            textContentType="emailAddress"
-          />
+          <FadeIn delay={80}>
+            <View style={{ gap: spacing.lg }}>
+              <TextInput
+                label="Email"
+                value={email}
+                onChangeText={setEmail}
+                error={emailError}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoComplete="email"
+                textContentType="emailAddress"
+              />
 
-          <TextInput
-            label="Password"
-            value={password}
-            onChangeText={setPassword}
-            error={passwordError}
-            isPassword
-            autoComplete="current-password"
-            textContentType="password"
-          />
+              <TextInput
+                label="Password"
+                value={password}
+                onChangeText={setPassword}
+                error={passwordError}
+                isPassword
+                autoComplete="current-password"
+                textContentType="password"
+              />
 
-          <Button
-            title="Sign In"
-            onPress={handleLogin}
-            loading={loading}
-          />
+              <View style={styles.forgotRow}>
+                <Button
+                  title="Forgot password?"
+                  onPress={() => navigation.navigate('ForgotPassword')}
+                  variant="ghost"
+                />
+              </View>
 
-          <Button
-            title="Forgot password?"
-            onPress={() => navigation.navigate('ForgotPassword')}
-            variant="ghost"
-          />
+              <Button
+                title="Sign In"
+                onPress={handleLogin}
+                loading={loading}
+              />
+            </View>
+          </FadeIn>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: spacing.md,
-              marginVertical: spacing.md,
-            }}
-          >
-            <View style={{ flex: 1, height: 1, backgroundColor: colors.border }} />
-            <Text style={{ ...typography.bodySmall, color: colors.textSecondary }}>or</Text>
-            <View style={{ flex: 1, height: 1, backgroundColor: colors.border }} />
-          </View>
+          <FadeIn delay={160}>
+            <View style={[styles.dividerRow, { marginVertical: spacing.xl }]}>
+              <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+              <Text style={[typography.bodySmall, { color: colors.textSecondary, paddingHorizontal: spacing.md }]}>or</Text>
+              <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+            </View>
 
-          <SocialLoginButtons
-            onGooglePress={() => { /* Google Sign-In flow placeholder */ }}
-            onApplePress={() => { /* Apple Sign-In flow placeholder */ }}
-          />
+            <SocialLoginButtons
+              onGooglePress={() => {}}
+              onApplePress={() => {}}
+            />
 
-          <Button
-            title="Don't have an account? Register"
-            onPress={() => navigation.navigate('Register')}
-            variant="ghost"
-          />
+            <View style={{ marginTop: spacing.xl }}>
+              <Button
+                title="Don't have an account? Register"
+                onPress={() => navigation.navigate('Register')}
+                variant="ghost"
+              />
+            </View>
+          </FadeIn>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  forgotRow: {
+    alignItems: 'flex-end',
+    marginTop: -8,
+  },
+  dividerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+  },
+});

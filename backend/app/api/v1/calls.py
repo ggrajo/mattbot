@@ -74,6 +74,21 @@ async def get_call_events(
         raise AppError("CALL_ERROR", f"Failed to get call events: {e}", 500)
 
 
+@router.delete("/{call_id}", status_code=204)
+async def delete_call(
+    call_id: uuid.UUID,
+    current_user: CurrentUser = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> None:
+    try:
+        await call_service.delete_call(db, call_id, current_user.user_id)
+    except AppError:
+        raise
+    except Exception as e:
+        logger.exception("Failed to delete call %s", call_id)
+        raise AppError("CALL_ERROR", f"Failed to delete call: {e}", 500)
+
+
 class CallArtifactResponse(BaseModel):
     id: uuid.UUID
     call_id: uuid.UUID

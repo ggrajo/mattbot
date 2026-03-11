@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from '../components/ui/Button';
 import { TextInput } from '../components/ui/TextInput';
 import { SocialLoginButtons } from '../components/auth/SocialLoginButtons';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { FadeIn } from '../components/ui/FadeIn';
 import { useTheme } from '../theme/ThemeProvider';
 import { useAuthStore } from '../store/authStore';
 import { register } from '../api/auth';
@@ -61,77 +62,101 @@ export function RegisterScreen({ navigation }: Props) {
         style={{ flex: 1 }}
       >
         <ScrollView
-          contentContainerStyle={{ padding: spacing.xl, gap: spacing.lg }}
+          contentContainerStyle={{ padding: spacing.xl, paddingTop: spacing.xxl }}
           keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
         >
-          <Text style={{ ...typography.h2, color: colors.textPrimary }} allowFontScaling>
-            Create your account
-          </Text>
+          <FadeIn delay={0}>
+            <Text style={[typography.h1, { color: colors.textPrimary, marginBottom: spacing.xs }]} allowFontScaling>
+              Create your account
+            </Text>
+            <Text style={[typography.body, { color: colors.textSecondary, marginBottom: spacing.xl }]} allowFontScaling>
+              Get started with MattBot in seconds
+            </Text>
+          </FadeIn>
 
-          {apiError && <ErrorMessage message={apiError} />}
+          {apiError && (
+            <FadeIn duration={200}>
+              <View style={{ marginBottom: spacing.lg }}>
+                <ErrorMessage message={apiError} />
+              </View>
+            </FadeIn>
+          )}
 
-          <TextInput
-            label="Email"
-            value={email}
-            onChangeText={setEmail}
-            error={emailError}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoComplete="email"
-            textContentType="emailAddress"
-          />
+          <FadeIn delay={80}>
+            <View style={{ gap: spacing.lg }}>
+              <TextInput
+                label="Email"
+                value={email}
+                onChangeText={setEmail}
+                error={emailError}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoComplete="email"
+                textContentType="emailAddress"
+              />
 
-          <TextInput
-            label="Password"
-            value={password}
-            onChangeText={setPassword}
-            error={passwordError}
-            isPassword
-            autoComplete="new-password"
-            textContentType="newPassword"
-          />
+              <TextInput
+                label="Password"
+                value={password}
+                onChangeText={setPassword}
+                error={passwordError}
+                isPassword
+                autoComplete="new-password"
+                textContentType="newPassword"
+              />
 
-          <TextInput
-            label="Confirm Password"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            error={confirmError}
-            isPassword
-            autoComplete="new-password"
-            textContentType="newPassword"
-          />
+              <TextInput
+                label="Confirm Password"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                error={confirmError}
+                isPassword
+                autoComplete="new-password"
+                textContentType="newPassword"
+              />
 
-          <Button
-            title="Create Account"
-            onPress={handleRegister}
-            loading={loading}
-          />
+              <Button
+                title="Create Account"
+                onPress={handleRegister}
+                loading={loading}
+              />
+            </View>
+          </FadeIn>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: spacing.md,
-              marginVertical: spacing.md,
-            }}
-          >
-            <View style={{ flex: 1, height: 1, backgroundColor: colors.border }} />
-            <Text style={{ ...typography.bodySmall, color: colors.textSecondary }}>or</Text>
-            <View style={{ flex: 1, height: 1, backgroundColor: colors.border }} />
-          </View>
+          <FadeIn delay={160}>
+            <View style={[styles.dividerRow, { marginVertical: spacing.xl }]}>
+              <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+              <Text style={[typography.bodySmall, { color: colors.textSecondary, paddingHorizontal: spacing.md }]}>or</Text>
+              <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+            </View>
 
-          <SocialLoginButtons
-            onGooglePress={() => { /* Google Sign-In flow placeholder */ }}
-            onApplePress={() => { /* Apple Sign-In flow placeholder */ }}
-          />
+            <SocialLoginButtons
+              onGooglePress={() => {}}
+              onApplePress={() => {}}
+            />
 
-          <Button
-            title="Already have an account? Sign In"
-            onPress={() => navigation.navigate('Login')}
-            variant="ghost"
-          />
+            <View style={{ marginTop: spacing.xl }}>
+              <Button
+                title="Already have an account? Sign In"
+                onPress={() => navigation.navigate('Login')}
+                variant="ghost"
+              />
+            </View>
+          </FadeIn>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  dividerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+  },
+});

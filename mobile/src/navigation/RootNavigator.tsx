@@ -14,7 +14,7 @@ import { EmailVerificationScreen } from '../screens/EmailVerificationScreen';
 import { MfaEnrollScreen } from '../screens/MfaEnrollScreen';
 import { RecoveryCodesScreen } from '../screens/RecoveryCodesScreen';
 import { MfaVerifyScreen } from '../screens/MfaVerifyScreen';
-import { DrawerNavigator } from './DrawerNavigator';
+import { TabNavigator } from './TabNavigator';
 import { DeviceListScreen } from '../screens/DeviceListScreen';
 import { PlanSelectionScreen } from '../screens/PlanSelectionScreen';
 import { PaymentMethodScreen } from '../screens/PaymentMethodScreen';
@@ -24,11 +24,10 @@ import { NumberProvisionScreen } from '../screens/NumberProvisionScreen';
 import { CallModesScreen } from '../screens/CallModesScreen';
 import { ForwardingSetupGuideScreen } from '../screens/ForwardingSetupGuideScreen';
 import { ForwardingVerifyScreen } from '../screens/ForwardingVerifyScreen';
-import { CallsListScreen } from '../screens/CallsListScreen';
 import { CallDetailScreen } from '../screens/CallDetailScreen';
 import { OnboardingAssistantSetupScreen } from '../screens/OnboardingAssistantSetupScreen';
 import { AssistantSettingsScreen } from '../screens/AssistantSettingsScreen';
-import { SettingsScreen } from '../screens/SettingsScreen';
+import { SubscriptionGateScreen } from '../screens/SubscriptionGateScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -78,7 +77,7 @@ export function RootNavigator() {
       >
         {state === 'authenticated' ? (
           <>
-            <Stack.Screen name="Home" component={DrawerNavigator} />
+            <Stack.Screen name="Home" component={TabNavigator} />
             <Stack.Screen
               name="DeviceList"
               component={DeviceListScreen}
@@ -125,11 +124,6 @@ export function RootNavigator() {
               options={{ headerShown: true, title: 'Verify Forwarding' }}
             />
             <Stack.Screen
-              name="CallsList"
-              component={CallsListScreen}
-              options={{ headerShown: true, title: 'Calls' }}
-            />
-            <Stack.Screen
               name="CallDetail"
               component={CallDetailScreen}
               options={{ headerShown: true, title: 'Call Detail' }}
@@ -145,9 +139,9 @@ export function RootNavigator() {
               options={{ headerShown: true, title: 'Assistant Settings' }}
             />
             <Stack.Screen
-              name="Settings"
-              component={SettingsScreen}
-              options={{ headerShown: true, title: 'Settings' }}
+              name="SubscriptionGate"
+              component={SubscriptionGateScreen}
+              options={{ headerShown: true, title: 'Subscription Required' }}
             />
           </>
         ) : (
