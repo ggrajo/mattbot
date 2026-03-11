@@ -6,6 +6,7 @@ from datetime import UTC, datetime, timedelta
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.core.clock import utcnow
 from app.core.security import hash_password, verify_password
 from app.middleware.error_handler import AppError
 from app.models.device import Device
@@ -28,7 +29,7 @@ async def setup_pin(
     device.pin_hash = hash_password(pin)
     device.pin_failed_attempts = 0
     device.pin_locked_until = None
-    device.pin_set_at = datetime.now(UTC)
+    device.pin_set_at = utcnow()
 
     await audit_service.log_event(
         db,
@@ -92,12 +93,10 @@ async def verify_pin_and_login(
         hash_password("dummy-timing-defense")
         raise AppError("INVALID_CREDENTIALS", "Invalid credentials", 401)
 
-    now = datetime.now(UTC)
+    now = utcnow()
 
     if device.pin_locked_until is not None:
         locked_until = device.pin_locked_until
-        if not locked_until.tzinfo:
-            locked_until = locked_until.replace(tzinfo=UTC)
         if now < locked_until:
             remaining = int((locked_until - now).total_seconds())
             raise AppError(

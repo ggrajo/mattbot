@@ -20,6 +20,8 @@ from app.models.onboarding_state import OnboardingState
 from app.models.recovery_code import RecoveryCode
 from app.models.user_settings import UserSettings
 from app.services import audit_service
+from app.core.clock import utcnow
+
 
 
 async def start_totp_enrollment(
@@ -85,7 +87,7 @@ async def confirm_totp_enrollment(
     if not verify_totp(secret, totp_code):
         raise AppError("INVALID_TOTP", "Invalid TOTP code", 400)
 
-    mfa.enabled_at = datetime.now(UTC)
+    mfa.enabled_at = utcnow()
     await db.flush()
 
     codes = await _generate_and_store_recovery_codes(db, user_id)
@@ -150,7 +152,7 @@ async def verify_recovery_code(db: AsyncSession, user_id: uuid.UUID, code: str) 
     if recovery is None:
         return False
 
-    recovery.used_at = datetime.now(UTC)
+    recovery.used_at = utcnow()
     await db.flush()
 
     await audit_service.log_event(
@@ -177,7 +179,7 @@ async def regenerate_recovery_codes(db: AsyncSession, user_id: uuid.UUID) -> lis
     await db.execute(
         update(RecoveryCode)
         .where(RecoveryCode.owner_user_id == user_id, RecoveryCode.used_at.is_(None))
-        .values(used_at=datetime.now(UTC))
+        .values(used_at=utcnow())
     )
 
     codes = await _generate_and_store_recovery_codes(db, user_id)
@@ -202,7 +204,7 @@ async def has_active_totp(db: AsyncSession, user_id: uuid.UUID) -> bool:
 
 
 async def disable_all_mfa(db: AsyncSession, user_id: uuid.UUID) -> None:
-    now = datetime.now(UTC)
+    now = utcnow()
     await db.execute(
         update(MfaMethod)
         .where(MfaMethod.owner_user_id == user_id, MfaMethod.disabled_at.is_(None))

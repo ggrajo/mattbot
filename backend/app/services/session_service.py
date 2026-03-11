@@ -5,6 +5,7 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.core.clock import utcnow
 from app.core.jwt_utils import create_access_token
 from app.core.security import generate_token, hash_token
 from app.middleware.error_handler import AppError
@@ -27,7 +28,7 @@ async def create_session(
     ip: str | None = None,
     user_agent: str | None = None,
 ) -> TokenPair:
-    now = datetime.now(UTC)
+    now = utcnow()
 
     refresh_raw = generate_token(32)
     refresh_hash = hash_token(refresh_raw)
@@ -91,16 +92,12 @@ async def refresh_session(
     if session.revoked_at is not None:
         raise AppError("SESSION_REVOKED", "Session has been revoked", 401)
 
-    now = datetime.now(UTC)
+    now = utcnow()
     refresh_exp = session.refresh_expires_at
-    if refresh_exp.tzinfo is None:
-        refresh_exp = refresh_exp.replace(tzinfo=UTC)
     if refresh_exp < now:
         raise AppError("TOKEN_EXPIRED", "Refresh token has expired", 401)
 
     created = session.created_at
-    if created.tzinfo is None:
-        created = created.replace(tzinfo=UTC)
     absolute_age = (now - created).days
     if absolute_age > settings.ABSOLUTE_SESSION_DAYS:
         raise AppError("SESSION_EXPIRED", "Session exceeded maximum age", 401)
@@ -173,7 +170,7 @@ async def revoke_session(
     *,
     ip: str | None = None,
 ) -> None:
-    session.revoked_at = datetime.now(UTC)
+    session.revoked_at = utcnow()
     session.revoke_reason = reason
 
     await audit_service.log_event(
@@ -196,7 +193,7 @@ async def revoke_all_user_sessions(
     *,
     ip: str | None = None,
 ) -> int:
-    now = datetime.now(UTC)
+    now = utcnow()
     result = await db.execute(
         update(Session)
         .where(Session.owner_user_id == user_id, Session.revoked_at.is_(None))

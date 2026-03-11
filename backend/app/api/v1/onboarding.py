@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.clock import utcnow
 from app.core.dependencies import CurrentUser, get_current_user
 from app.database import get_db
 from app.middleware.error_handler import AppError
@@ -102,7 +103,7 @@ async def complete_step(
 
     completed.append(body.step)
     state.steps_completed = completed
-    state.updated_at = datetime.now(UTC)
+    state.updated_at = utcnow()
     state.updated_by_device_id = current_user.device_id
 
     await audit_service.log_event(
@@ -124,7 +125,7 @@ async def complete_step(
 
     if body.step == "onboarding_complete":
         state.current_step = "onboarding_complete"
-        state.completed_at = datetime.now(UTC)
+        state.completed_at = utcnow()
         await audit_service.log_event(
             db,
             owner_user_id=current_user.user_id,

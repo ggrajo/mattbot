@@ -10,6 +10,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.core.clock import utcnow
 from app.core.dependencies import CurrentUser, get_current_user
 from app.core.encryption import decrypt_field, encrypt_field
 from app.core.rate_limiter import check_rate_limit
@@ -236,7 +237,7 @@ async def approve_text_back(
     msg.to_number_hash = hash_phone(body.to_number)
     msg.to_number_last4 = extract_last4(body.to_number)
 
-    now = datetime.now(UTC)
+    now = utcnow()
     msg.status = "approved"
     msg.approved_at = now
     msg.approved_by_device_id = uuid.UUID(body.device_id)

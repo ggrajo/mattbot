@@ -4,6 +4,7 @@ from datetime import UTC, datetime
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.clock import utcnow
 from app.models.device import Device
 from app.models.push_token import PushToken
 from app.models.session import Session
@@ -27,7 +28,7 @@ async def create_or_get_device(
         app_version=app_version,
         os_version=os_version,
         last_ip=last_ip,
-        last_seen_at=datetime.now(UTC),
+        last_seen_at=utcnow(),
     )
     db.add(device)
     await db.flush()
@@ -60,7 +61,7 @@ async def update_device(
         device.os_version = os_version
     if last_ip is not None:
         device.last_ip = last_ip
-    device.last_seen_at = datetime.now(UTC)
+    device.last_seen_at = utcnow()
     await db.flush()
     return device
 
@@ -90,7 +91,7 @@ async def revoke_device(
     *,
     ip: str | None = None,
 ) -> None:
-    now = datetime.now(UTC)
+    now = utcnow()
     device.revoked_at = now
     device.revoke_reason = reason
 

@@ -12,6 +12,7 @@ from datetime import UTC, datetime
 import httpx
 
 from app.config import settings
+from app.core.clock import utcnow
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +53,7 @@ async def emit_event(
         "event_type": event_type,
         "event_version": 1,
         "call_id": call_id,
-        "ts": datetime.now(UTC).isoformat(),
+        "ts": utcnow().isoformat(),
         "seq": seq,
         "privacy_level": privacy_level,
         "payload": payload,

@@ -11,6 +11,7 @@ from fastapi import APIRouter, Depends, Request, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings as app_settings
+from app.core.clock import utcnow
 from app.core.rate_limiter import check_rate_limit
 from app.core.session_token import verify_internal_hmac
 from app.database import get_db
@@ -147,7 +148,7 @@ async def receive_bridge_event(
             call_id=call_id,
             status="completed",
             provider_session_id=conversation_id or None,
-            ended_at=datetime.now(UTC),
+            ended_at=utcnow(),
             duration_seconds=duration_seconds,
         )
 
@@ -165,7 +166,7 @@ async def receive_bridge_event(
             call_id=call_id,
             status="failed",
             provider_session_id=conversation_id or None,
-            ended_at=datetime.now(UTC),
+            ended_at=utcnow(),
             last_error_redacted=error_redacted,
         )
 

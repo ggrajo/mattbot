@@ -12,6 +12,7 @@ from datetime import UTC, datetime, timedelta
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.clock import utcnow
 from app.models.call import Call
 from app.models.call_artifact import CallArtifact
 from app.models.call_event import CallEvent
@@ -24,7 +25,7 @@ HARD_DELETE_GRACE_DAYS = 7
 
 async def process_hard_deletions(db: AsyncSession) -> int:
     """Hard-delete calls soft-deleted more than 7 days ago. Returns count."""
-    cutoff = datetime.now(UTC) - timedelta(days=HARD_DELETE_GRACE_DAYS)
+    cutoff = utcnow() - timedelta(days=HARD_DELETE_GRACE_DAYS)
 
     stmt = (
         select(Call)

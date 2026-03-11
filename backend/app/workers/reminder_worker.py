@@ -8,6 +8,7 @@ from datetime import UTC, datetime
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.clock import utcnow
 from app.models.reminder import Reminder
 
 logger = logging.getLogger(__name__)
@@ -18,7 +19,7 @@ async def process_due_reminders(db: AsyncSession) -> int:
 
     Returns the number of reminders that were triggered.
     """
-    now = datetime.now(UTC)
+    now = utcnow()
 
     stmt = select(Reminder).where(
         Reminder.status == "scheduled",

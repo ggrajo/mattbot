@@ -13,6 +13,7 @@ from sqlalchemy import select as sa_select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings as app_settings
+from app.core.clock import utcnow
 from app.core.rate_limiter import check_rate_limit, clear_rate_limit
 from app.core.session_token import verify_elevenlabs_hmac
 from app.core.twilio_utils import hash_phone, validate_twilio_signature
@@ -729,7 +730,7 @@ async def twilio_voice_status(
     ended_at = None
     duration = None
     if internal_status in call_service.TERMINAL_STATES:
-        ended_at = datetime.now(UTC)
+        ended_at = utcnow()
         if call_duration:
             with contextlib.suppress(ValueError, TypeError):
                 duration = int(call_duration)
@@ -775,7 +776,7 @@ async def twilio_voice_status(
             if conv_id:
                 ai_session.provider_session_id = conv_id
                 ai_session.status = "completed"
-                ai_session.ended_at = datetime.now(UTC)
+                ai_session.ended_at = utcnow()
                 if duration:
                     ai_session.duration_seconds = duration
                 logger.info(
@@ -889,7 +890,7 @@ async def elevenlabs_conversation_webhook(
         )
 
     pe.process_status = "processed"
-    pe.processed_at = datetime.now(UTC)
+    pe.processed_at = utcnow()
     await db.commit()
 
     return Response(
@@ -965,7 +966,7 @@ async def twilio_sms_status(
         attempt.provider_error_message_short = params.get("ErrorMessage", "")[:200]
 
     if normalized in _SMS_TERMINAL_SUCCESS or normalized in _SMS_TERMINAL_FAILURE:
-        attempt.finished_at = datetime.now(UTC)
+        attempt.finished_at = utcnow()
 
     msg = await db.get(OutboundMessage, attempt.message_id)
     if msg is not None:

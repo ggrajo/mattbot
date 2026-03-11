@@ -10,6 +10,7 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.core.clock import utcnow
 from app.core.dependencies import CurrentUser, get_current_user
 from app.core.encryption import decrypt_field, encrypt_field
 from app.core.rate_limiter import check_rate_limit
@@ -190,7 +191,7 @@ async def delete_memory_item(
             status_code=404,
         )
 
-    item.deleted_at = datetime.now(UTC)
+    item.deleted_at = utcnow()
     await db.commit()
     return {"deleted": True}
 
@@ -214,7 +215,7 @@ async def delete_all_memory(
             CallMemoryItem.owner_user_id == current_user.user.id,
             CallMemoryItem.deleted_at.is_(None),
         )
-        .values(deleted_at=datetime.now(UTC))
+        .values(deleted_at=utcnow())
     )
     result = await db.execute(stmt)
     await db.commit()

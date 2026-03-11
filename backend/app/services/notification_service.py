@@ -9,6 +9,7 @@ from datetime import UTC, datetime, time
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.clock import utcnow
 from app.core.encryption import decrypt_field
 from app.models.device import Device
 from app.models.notification import Notification
@@ -75,7 +76,7 @@ def is_quiet_hours(settings: UserSettings, now: datetime | None = None) -> bool:
         return False
 
     if now is None:
-        now = datetime.now(UTC)
+        now = utcnow()
 
     current_day = now.weekday()
     iso_to_js_day = (current_day + 1) % 7
@@ -155,7 +156,7 @@ async def notify_call_screened(
         data={
             "call_id": str(call_id),
             "event_type": "call_screened",
-            "timestamp": datetime.now(UTC).isoformat(),
+            "timestamp": utcnow().isoformat(),
         },
         privacy_mode=privacy_mode,
     )

@@ -10,6 +10,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.core.clock import utcnow
 from app.core.dependencies import CurrentUser, get_current_user
 from app.core.rate_limiter import check_rate_limit
 from app.database import get_db
@@ -110,8 +111,8 @@ async def create_reminder(
     if not allowed:
         raise AppError(code="RATE_LIMITED", message="Too many requests", status_code=429)
 
-    now = datetime.now(UTC)
-    due = body.due_at if body.due_at.tzinfo else body.due_at.replace(tzinfo=UTC)
+    now = utcnow()
+    due = body.due_at.replace(tzinfo=None) if body.due_at.tzinfo else body.due_at
     if due <= now:
         raise AppError(
             code="INVALID_DUE_DATE",
@@ -185,8 +186,8 @@ async def update_reminder(
         changes["title"] = body.title
 
     if body.due_at is not None:
-        due = body.due_at if body.due_at.tzinfo else body.due_at.replace(tzinfo=UTC)
-        if due <= datetime.now(UTC):
+        due = body.due_at.replace(tzinfo=None) if body.due_at.tzinfo else body.due_at
+        if due <= utcnow():
             raise AppError(
                 code="INVALID_DUE_DATE",
                 message="due_at must be in the future",
