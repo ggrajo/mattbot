@@ -14,6 +14,9 @@ from app.models.billing_event import BillingEvent
 from app.models.user_number import UserNumber
 from app.models.call_mode_config import CallModeConfig
 from app.models.forwarding_verification import ForwardingVerificationAttempt
+from app.models.call import Call
+from app.models.call_event import CallEvent
+from app.models.provider_event import ProviderEvent
 
 __all__ = [
     "User",
@@ -32,4 +35,7 @@ __all__ = [
     "UserNumber",
     "CallModeConfig",
     "ForwardingVerificationAttempt",
+    "Call",
+    "CallEvent",
+    "ProviderEvent",
 ]

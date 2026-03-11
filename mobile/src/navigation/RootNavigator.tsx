@@ -24,6 +24,8 @@ import { NumberProvisionScreen } from '../screens/NumberProvisionScreen';
 import { CallModesScreen } from '../screens/CallModesScreen';
 import { ForwardingSetupGuideScreen } from '../screens/ForwardingSetupGuideScreen';
 import { ForwardingVerifyScreen } from '../screens/ForwardingVerifyScreen';
+import { CallsListScreen } from '../screens/CallsListScreen';
+import { CallDetailScreen } from '../screens/CallDetailScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -119,6 +121,16 @@ export function RootNavigator() {
               name="ForwardingVerify"
               component={ForwardingVerifyScreen}
               options={{ headerShown: true, title: 'Verify Forwarding' }}
+            />
+            <Stack.Screen
+              name="CallsList"
+              component={CallsListScreen}
+              options={{ headerShown: true, title: 'Calls' }}
+            />
+            <Stack.Screen
+              name="CallDetail"
+              component={CallDetailScreen}
+              options={{ headerShown: true, title: 'Call Detail' }}
             />
             <Stack.Screen
               name="Settings"

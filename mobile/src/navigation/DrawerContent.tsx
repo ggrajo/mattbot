@@ -55,6 +55,7 @@ export function DrawerContent(props: any) {
 
       <View style={styles.section}>
         <Text style={[styles.sectionTitle, { color: theme.colors.textSecondary }]}>TELEPHONY</Text>
+        <DrawerItem label="Calls" onPress={() => navigateTo('CallsList')} />
         <DrawerItem label="Phone Number" onPress={() => navigateTo('NumberProvision')} />
         <DrawerItem label="Call Modes" onPress={() => navigateTo('CallModes')} />
         <DrawerItem label="Forwarding Setup" onPress={() => navigateTo('ForwardingSetupGuide')} />

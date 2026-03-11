@@ -17,6 +17,8 @@ export type RootStackParamList = {
   CallModes: undefined;
   ForwardingSetupGuide: undefined;
   ForwardingVerify: undefined;
+  CallsList: undefined;
+  CallDetail: { callId: string };
   Settings: undefined;
 };
 

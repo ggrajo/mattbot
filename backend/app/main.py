@@ -39,6 +39,7 @@ def create_app() -> FastAPI:
         auth,
         billing,
         call_modes,
+        calls,
         dev_billing,
         devices,
         forwarding,
@@ -57,6 +58,7 @@ def create_app() -> FastAPI:
     application.include_router(numbers.router, prefix="/api/v1/numbers", tags=["numbers"])
     application.include_router(call_modes.router, prefix="/api/v1/call-modes", tags=["call-modes"])
     application.include_router(forwarding.router, prefix="/api/v1/forwarding", tags=["forwarding"])
+    application.include_router(calls.router, prefix="/api/v1/calls", tags=["calls"])
     application.include_router(webhooks.router, prefix="/webhooks", tags=["webhooks"])
 
     return application
