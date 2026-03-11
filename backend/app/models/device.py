@@ -26,6 +26,8 @@ class Device(Base):
     last_seen_at: Mapped[datetime | None] = mapped_column(nullable=True)
     revoked_at: Mapped[datetime | None] = mapped_column(nullable=True)
     revoke_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
+    biometric_enabled: Mapped[bool] = mapped_column(default=False)
+    biometric_type: Mapped[str | None] = mapped_column(String(30), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         nullable=False, server_default=text("now()")
     )

@@ -306,48 +306,100 @@ class BillingService:
         if new_plan not in config.valid_plan_codes():
             raise AppError("INVALID_PLAN", f"Unknown plan: {new_plan}", 422)
 
+        customer = await self.get_or_create_customer(db, user_id)
+
         result = await db.execute(
             select(BillingSubscription).where(
                 BillingSubscription.user_id == user_id
             )
         )
         subscription = result.scalars().first()
-        if not subscription:
-            raise AppError(
-                "NO_SUBSCRIPTION",
-                "No active subscription to change",
-                404,
-            )
 
         minutes = get_minutes_for_plan(new_plan)
         now = datetime.now(UTC)
+        period_end = now + timedelta(days=settings.BILLING_PERIOD_DAYS)
+
+        if subscription and subscription.status not in ("active", "incomplete"):
+            logger.info(
+                "Resetting stale subscription (status=%s) for user %s",
+                subscription.status,
+                user_id,
+            )
+            subscription.status = "active"
 
         if settings.BILLING_PROVIDER == "stripe" and settings.STRIPE_SECRET_KEY:
             stripe.api_key = settings.STRIPE_SECRET_KEY
             price_map = config.get_stripe_price_map()
             new_price = price_map.get(new_plan)
-            if subscription.stripe_subscription_id:
-                sub = stripe.Subscription.retrieve(
-                    subscription.stripe_subscription_id
+
+            if subscription and subscription.stripe_subscription_id:
+                try:
+                    sub = stripe.Subscription.retrieve(
+                        subscription.stripe_subscription_id
+                    )
+                    stripe.Subscription.modify(
+                        subscription.stripe_subscription_id,
+                        items=[{
+                            "id": sub["items"]["data"][0]["id"],
+                            "price": new_price,
+                        }],
+                        proration_behavior="create_prorations",
+                    )
+                    subscription.stripe_price_id = new_price
+                except stripe.error.InvalidRequestError:
+                    logger.warning(
+                        "Stripe subscription %s invalid, creating new one",
+                        subscription.stripe_subscription_id,
+                    )
+                    sub = stripe.Subscription.create(
+                        customer=customer.stripe_customer_id,
+                        items=[{"price": new_price}],
+                    )
+                    subscription.stripe_subscription_id = sub["id"]
+                    subscription.stripe_price_id = new_price
+                    period_end = datetime.fromtimestamp(
+                        sub["current_period_end"], tz=UTC
+                    )
+            elif not subscription:
+                sub = stripe.Subscription.create(
+                    customer=customer.stripe_customer_id,
+                    items=[{"price": new_price}],
                 )
-                stripe.Subscription.modify(
-                    subscription.stripe_subscription_id,
-                    items=[{
-                        "id": sub["items"]["data"][0]["id"],
-                        "price": new_price,
-                    }],
-                    proration_behavior="create_prorations",
+                subscription = BillingSubscription(
+                    user_id=user_id,
+                    plan=new_plan,
+                    status="active",
+                    stripe_subscription_id=sub["id"],
+                    stripe_price_id=new_price,
+                    current_period_start=now,
+                    current_period_end=datetime.fromtimestamp(
+                        sub["current_period_end"], tz=UTC
+                    ),
+                    minutes_included=minutes,
                 )
-                subscription.stripe_price_id = new_price
+                db.add(subscription)
+                await db.flush()
+                return subscription
+        else:
+            if not subscription:
+                subscription = BillingSubscription(
+                    user_id=user_id,
+                    plan=new_plan,
+                    status="active",
+                    current_period_start=now,
+                    current_period_end=period_end,
+                    minutes_included=minutes,
+                )
+                db.add(subscription)
+                await db.flush()
+                return subscription
 
         subscription.plan = new_plan
         subscription.status = "active"
         subscription.minutes_included = minutes
         subscription.cancel_at_period_end = False
         subscription.current_period_start = now
-        subscription.current_period_end = now + timedelta(
-            days=settings.BILLING_PERIOD_DAYS
-        )
+        subscription.current_period_end = period_end
         await db.flush()
         return subscription
 

@@ -14,7 +14,7 @@ import { EmailVerificationScreen } from '../screens/EmailVerificationScreen';
 import { MfaEnrollScreen } from '../screens/MfaEnrollScreen';
 import { RecoveryCodesScreen } from '../screens/RecoveryCodesScreen';
 import { MfaVerifyScreen } from '../screens/MfaVerifyScreen';
-import { HomeScreen } from '../screens/HomeScreen';
+import { DrawerNavigator } from './DrawerNavigator';
 import { DeviceListScreen } from '../screens/DeviceListScreen';
 import { PlanSelectionScreen } from '../screens/PlanSelectionScreen';
 import { PaymentMethodScreen } from '../screens/PaymentMethodScreen';
@@ -74,7 +74,7 @@ export function RootNavigator() {
       >
         {state === 'authenticated' ? (
           <>
-            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Home" component={DrawerNavigator} />
             <Stack.Screen
               name="DeviceList"
               component={DeviceListScreen}

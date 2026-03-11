@@ -10,6 +10,8 @@ class DeviceResponse(BaseModel):
     app_version: str | None
     os_version: str | None
     last_seen_at: datetime | None
+    biometric_enabled: bool = False
+    biometric_type: str | None = None
     created_at: datetime
     is_current: bool = False
 
