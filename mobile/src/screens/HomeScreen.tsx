@@ -322,10 +322,10 @@ export function HomeScreen() {
 
   const userName = displayName ? displayName.split(' ')[0] : (nickname || null);
   const isDark = theme.dark;
-  const isStatsLoaded = stats !== null;
-  const hasNoCalls = isStatsLoaded && stats.total_calls === 0;
+  const isStatsLoaded = stats != null;
+  const hasNoCalls = isStatsLoaded && stats?.total_calls === 0;
 
-  const bestUpgradePlan = plans
+  const bestUpgradePlan = (plans ?? [])
     .filter(p => !p.limited && parseFloat(p.price_usd) > 0 && p.code !== billingStatus?.plan)
     .sort((a, b) => parseFloat(b.price_usd) - parseFloat(a.price_usd))[0] ?? null;
 

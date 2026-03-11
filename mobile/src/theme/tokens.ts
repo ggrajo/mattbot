@@ -71,6 +71,12 @@ export interface ColorTokens {
   gradientStart: string;
   gradientEnd: string;
   cardGlow: string;
+  inputBackground: string;
+  inputBorder: string;
+  badgeBg: string;
+  badgeText: string;
+  shimmer: string;
+  cardBorder: string;
 }
 
 export interface ShadowTokens {

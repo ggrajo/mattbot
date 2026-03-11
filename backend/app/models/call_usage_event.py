@@ -11,7 +11,7 @@ from app.database import Base
 class CallUsageEvent(Base):
     __tablename__ = "call_usage_events"
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     call_id: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True), ForeignKey("calls.id", ondelete="SET NULL")
     )

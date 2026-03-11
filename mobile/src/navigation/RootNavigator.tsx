@@ -60,7 +60,6 @@ import { PinSetupScreen } from '../screens/PinSetupScreen';
 import { PinLoginScreen } from '../screens/PinLoginScreen';
 import { OnboardingCalendarSetupScreen } from '../screens/OnboardingCalendarSetupScreen';
 import { LiveTranscriptScreen } from '../screens/LiveTranscriptScreen';
-import { SettingsScreen } from '../screens/SettingsScreen';
 import { PaymentMethodsListScreen } from '../screens/PaymentMethodsListScreen';
 import { ContactsListScreen } from '../screens/ContactsListScreen';
 import { ContactDetailScreen } from '../screens/ContactDetailScreen';
@@ -379,13 +378,16 @@ export function RootNavigator() {
                 component={TemperamentScreen}
                 options={{ headerShown: true, title: 'Temperament' }}
               />
-              {/* HandoffSettings screen hidden until feature is fully wired up
               <Stack.Screen
                 name="HandoffSettings"
                 component={HandoffSettingsScreen}
                 options={{ headerShown: true, title: 'Handoff' }}
               />
-              */}
+              <Stack.Screen
+                name="AccountSettings"
+                component={AccountSettingsScreen}
+                options={{ headerShown: true, title: 'Account' }}
+              />
               <Stack.Screen
                 name="VipList"
                 component={VipListScreen}
@@ -420,11 +422,6 @@ export function RootNavigator() {
                 name="UrgentNotifications"
                 component={UrgentNotificationsScreen}
                 options={{ headerShown: true, title: 'Urgent Call Alerts' }}
-              />
-              <Stack.Screen
-                name="Settings"
-                component={SettingsScreen}
-                options={{ headerShown: true, title: 'Settings' }}
               />
               <Stack.Screen
                 name="PaymentMethodsList"

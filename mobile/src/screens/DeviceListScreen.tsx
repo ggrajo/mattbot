@@ -9,6 +9,7 @@ import { StatusScreen } from '../components/ui/StatusScreen';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { LoadingOverlay } from '../components/ui/LoadingOverlay';
 import { Icon } from '../components/ui/Icon';
+import { FadeIn } from '../components/ui/FadeIn';
 import { useTheme } from '../theme/ThemeProvider';
 import { useDeviceStore } from '../store/deviceStore';
 import { useSettingsStore } from '../store/settingsStore';
@@ -84,10 +85,11 @@ export function DeviceListScreen() {
     }
   }
 
-  function renderDevice({ item }: { item: DeviceInfo }) {
+  function renderDevice({ item, index }: { item: DeviceInfo; index: number }) {
     const isExpanded = expandedId === item.id;
 
     return (
+      <FadeIn delay={index * 40} slide="up">
       <Card variant="elevated" style={{ marginBottom: spacing.sm }}>
         <TouchableOpacity
           onPress={() => setExpandedId(isExpanded ? null : item.id)}
@@ -246,6 +248,7 @@ export function DeviceListScreen() {
           </View>
         )}
       </Card>
+      </FadeIn>
     );
   }
 
@@ -254,15 +257,17 @@ export function DeviceListScreen() {
       <Toast message={actionError ?? ''} type="error" visible={!!actionError} onDismiss={() => setActionError(null)} />
       <LoadingOverlay visible={revoking} message="Revoking device..." />
 
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.lg }}>
-        <Icon name="devices" size="lg" color={colors.primary} />
-        <Text style={{ ...typography.h2, color: colors.textPrimary, flex: 1 }} allowFontScaling>
-          Your Devices
-        </Text>
-        <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
-          {devices.length} active
-        </Text>
-      </View>
+      <FadeIn delay={0} slide="up">
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.lg }}>
+          <Icon name="devices" size="lg" color={colors.primary} />
+          <Text style={{ ...typography.h2, color: colors.textPrimary, flex: 1 }} allowFontScaling>
+            Your Devices
+          </Text>
+          <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+            {devices.length} active
+          </Text>
+        </View>
+      </FadeIn>
 
       {error && <ErrorMessage message={error} action="Retry" onAction={fetchDevices} />}
 

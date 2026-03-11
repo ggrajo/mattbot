@@ -1,7 +1,7 @@
 export type TabParamList = {
   HomeTab: undefined;
   CallsTab: undefined;
-  CalendarTab: undefined;
+  SettingsTab: undefined;
   AccountTab: undefined;
 };
 
@@ -22,7 +22,6 @@ export type RootStackParamList = {
   TabRoot: undefined;
   SubscriptionGate: undefined;
   DeviceList: undefined;
-  Settings: undefined;
   PrivacySettings: undefined;
   QuietHours: undefined;
   MemorySettings: undefined;

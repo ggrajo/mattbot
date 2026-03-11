@@ -11,7 +11,7 @@ from app.database import Base
 class NotificationDelivery(Base):
     __tablename__ = "notification_deliveries"
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     notification_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("notifications.id", ondelete="CASCADE"), nullable=False
     )
