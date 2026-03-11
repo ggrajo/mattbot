@@ -144,6 +144,8 @@ export function AccountHubScreen() {
         { icon: 'pin-outline', label: 'PIN Setup', route: 'PinSetup' },
         { icon: 'cellphone-link', label: 'Devices', route: 'DeviceList' },
         { icon: 'bell-outline', label: 'Reminders', route: 'RemindersList' },
+        { icon: 'cog-outline', label: 'Settings', route: 'SettingsHub' },
+        { icon: 'credit-card-outline', label: 'Payment Methods', route: 'PaymentMethodsList' },
       ],
     },
     {

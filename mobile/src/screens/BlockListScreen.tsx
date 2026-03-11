@@ -4,7 +4,6 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  TextInput,
   ActivityIndicator,
   Alert,
 } from 'react-native';
@@ -13,6 +12,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
 import { FadeIn } from '../components/ui/FadeIn';
+import { PhoneInput } from '../components/ui/PhoneInput';
+import { ContactPicker } from '../components/ui/ContactPicker';
 import { apiClient, extractApiError } from '../api/client';
 
 interface BlockEntry {
@@ -170,24 +171,18 @@ export function BlockListScreen() {
 
       {showInput && (
         <FadeIn delay={0} slide="up">
-          <View style={{ flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.md }}>
-            <TextInput
+          <View style={{ marginBottom: spacing.md }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.sm }}>
+              <ContactPicker
+                onSelect={(phone) => setNewPhone(phone)}
+                buttonLabel="From Contacts"
+              />
+            </View>
+            <PhoneInput
               value={newPhone}
-              onChangeText={setNewPhone}
+              onChangeValue={setNewPhone}
+              label=""
               placeholder="Phone number to block"
-              placeholderTextColor={colors.textDisabled}
-              keyboardType="phone-pad"
-              style={{
-                flex: 1,
-                backgroundColor: colors.surface,
-                borderRadius: radii.md,
-                paddingHorizontal: spacing.md,
-                paddingVertical: spacing.sm,
-                borderWidth: 1,
-                borderColor: colors.cardBorder,
-                color: colors.textPrimary,
-                ...typography.body,
-              }}
             />
             <TouchableOpacity
               onPress={handleBlock}
@@ -195,8 +190,8 @@ export function BlockListScreen() {
               style={{
                 backgroundColor: colors.error,
                 borderRadius: radii.md,
-                paddingHorizontal: spacing.lg,
-                justifyContent: 'center',
+                paddingVertical: spacing.md,
+                alignItems: 'center',
                 opacity: adding || !newPhone.trim() ? 0.5 : 1,
               }}
               activeOpacity={0.8}
@@ -204,7 +199,7 @@ export function BlockListScreen() {
               {adding ? (
                 <ActivityIndicator color={colors.onError} size="small" />
               ) : (
-                <Text style={{ ...typography.button, color: colors.onError }}>Block</Text>
+                <Text style={{ ...typography.button, color: colors.onError }}>Block Number</Text>
               )}
             </TouchableOpacity>
           </View>

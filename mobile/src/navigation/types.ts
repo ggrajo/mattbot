@@ -1,7 +1,7 @@
 export type TabParamList = {
   HomeTab: undefined;
   CallsTab: undefined;
-  SettingsTab: undefined;
+  CalendarTab: undefined;
   AccountTab: undefined;
 };
 
@@ -59,6 +59,7 @@ export type RootStackParamList = {
   ContactDetail: { contactId: string };
   AddContact: undefined;
   CategoryDefaults: undefined;
+  SettingsHub: undefined;
 };
 
 declare global {

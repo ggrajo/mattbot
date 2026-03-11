@@ -4,7 +4,7 @@ import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
 import { HomeScreen } from '../screens/HomeScreen';
 import { CallsListScreen } from '../screens/CallsListScreen';
-import { SettingsHubScreen } from '../screens/SettingsHubScreen';
+import { CalendarScreen } from '../screens/CalendarScreen';
 import { AccountHubScreen } from '../screens/AccountHubScreen';
 import { TabParamList } from './types';
 
@@ -42,11 +42,11 @@ export function TabNavigator() {
         }}
       />
       <Tab.Screen
-        name="SettingsTab"
-        component={SettingsHubScreen}
+        name="CalendarTab"
+        component={CalendarScreen}
         options={{
-          title: 'Settings',
-          tabBarIcon: ({ color, size }) => <Icon name="cog-outline" size={size} color={color} />,
+          title: 'Calendar',
+          tabBarIcon: ({ color, size }) => <Icon name="calendar-outline" size={size} color={color} />,
         }}
       />
       <Tab.Screen

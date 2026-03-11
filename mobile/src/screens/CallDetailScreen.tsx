@@ -338,7 +338,7 @@ export function CallDetailScreen({ route }: Props) {
               }}
             >
               <Text style={{ ...typography.body, color: colors.textSecondary, lineHeight: 22 }}>
-                {summary.content || summary.text || JSON.stringify(summary)}
+                {typeof summary === 'string' ? summary : summary.content || summary.text || JSON.stringify(summary)}
               </Text>
             </View>
           </FadeIn>

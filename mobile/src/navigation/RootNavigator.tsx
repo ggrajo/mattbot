@@ -65,6 +65,7 @@ import { ContactsListScreen } from '../screens/ContactsListScreen';
 import { ContactDetailScreen } from '../screens/ContactDetailScreen';
 import { AddContactScreen } from '../screens/AddContactScreen';
 import { CategoryDefaultsScreen } from '../screens/CategoryDefaultsScreen';
+import { SettingsHubScreen } from '../screens/SettingsHubScreen';
 import { HandoffBanner } from '../components/HandoffBanner';
 
 let _deepLinkScheme: string | undefined;
@@ -230,6 +231,11 @@ export function RootNavigator() {
                 component={AccountSettingsScreen}
                 options={{ headerShown: true, title: 'Account' }}
               />
+              <Stack.Screen
+                name="SettingsHub"
+                component={SettingsHubScreen}
+                options={{ headerShown: true, title: 'Settings' }}
+              />
             </>
           ) : (
             <>
@@ -387,6 +393,11 @@ export function RootNavigator() {
                 name="AccountSettings"
                 component={AccountSettingsScreen}
                 options={{ headerShown: true, title: 'Account' }}
+              />
+              <Stack.Screen
+                name="SettingsHub"
+                component={SettingsHubScreen}
+                options={{ headerShown: true, title: 'Settings' }}
               />
               <Stack.Screen
                 name="VipList"

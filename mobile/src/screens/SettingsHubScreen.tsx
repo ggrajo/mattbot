@@ -92,7 +92,8 @@ export function SettingsHubScreen() {
         { icon: 'phone-settings-outline', label: 'Call Modes', route: 'CallModes' },
         { icon: 'clock-outline', label: 'Business Hours', route: 'BusinessHours' },
         { icon: 'emoticon-outline', label: 'Temperament', route: 'Temperament' },
-        { icon: 'phone-forward-outline', label: 'Handoff', route: 'HandoffSettings' },
+        // Handoff hidden until feature is fully wired up
+        // { icon: 'phone-forward-outline', label: 'Handoff', route: 'HandoffSettings' },
       ],
     },
     {

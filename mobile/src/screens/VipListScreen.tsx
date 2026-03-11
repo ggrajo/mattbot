@@ -4,7 +4,6 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  TextInput,
   ActivityIndicator,
   Alert,
 } from 'react-native';
@@ -13,6 +12,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
 import { FadeIn } from '../components/ui/FadeIn';
+import { PhoneInput } from '../components/ui/PhoneInput';
+import { ContactPicker } from '../components/ui/ContactPicker';
 import { apiClient, extractApiError } from '../api/client';
 
 interface VipEntry {
@@ -167,30 +168,18 @@ export function VipListScreen() {
 
       {showInput && (
         <FadeIn delay={0} slide="up">
-          <View
-            style={{
-              flexDirection: 'row',
-              gap: spacing.sm,
-              marginBottom: spacing.md,
-            }}
-          >
-            <TextInput
+          <View style={{ marginBottom: spacing.md }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.sm }}>
+              <ContactPicker
+                onSelect={(phone) => setNewPhone(phone)}
+                buttonLabel="From Contacts"
+              />
+            </View>
+            <PhoneInput
               value={newPhone}
-              onChangeText={setNewPhone}
-              placeholder="Phone number"
-              placeholderTextColor={colors.textDisabled}
-              keyboardType="phone-pad"
-              style={{
-                flex: 1,
-                backgroundColor: colors.surface,
-                borderRadius: radii.md,
-                paddingHorizontal: spacing.md,
-                paddingVertical: spacing.sm,
-                borderWidth: 1,
-                borderColor: colors.cardBorder,
-                color: colors.textPrimary,
-                ...typography.body,
-              }}
+              onChangeValue={setNewPhone}
+              label=""
+              placeholder="(555) 123-4567"
             />
             <TouchableOpacity
               onPress={handleAdd}
@@ -198,8 +187,8 @@ export function VipListScreen() {
               style={{
                 backgroundColor: colors.primary,
                 borderRadius: radii.md,
-                paddingHorizontal: spacing.lg,
-                justifyContent: 'center',
+                paddingVertical: spacing.md,
+                alignItems: 'center',
                 opacity: adding || !newPhone.trim() ? 0.5 : 1,
               }}
               activeOpacity={0.8}
@@ -207,7 +196,7 @@ export function VipListScreen() {
               {adding ? (
                 <ActivityIndicator color={colors.onPrimary} size="small" />
               ) : (
-                <Text style={{ ...typography.button, color: colors.onPrimary }}>Add</Text>
+                <Text style={{ ...typography.button, color: colors.onPrimary }}>Add to VIP</Text>
               )}
             </TouchableOpacity>
           </View>
