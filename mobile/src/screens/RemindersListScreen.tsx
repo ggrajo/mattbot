@@ -47,7 +47,8 @@ function statusMeta(status: string, colors: any): { icon: string; color: string;
 }
 
 export function RemindersListScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
   const insets = useSafeAreaInsets();
 
   const [items, setItems] = useState<Reminder[]>([]);
@@ -135,12 +136,12 @@ export function RemindersListScreen() {
     return (
       <View
         style={{
-          backgroundColor: isOverdue ? colors.warningContainer : colors.surface,
+          backgroundColor: isOverdue ? colors.warningContainer : (theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF'),
           borderRadius: radii.lg,
           padding: spacing.lg,
           marginBottom: spacing.sm,
           borderWidth: 1,
-          borderColor: isOverdue ? colors.warning : colors.border,
+          borderColor: isOverdue ? colors.warning : (theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder),
         }}
       >
         <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: spacing.md }}>

@@ -20,6 +20,7 @@ export type RootStackParamList = {
   OnboardingSettings: undefined;
   OnboardingAssistantSetup: undefined;
   OnboardingCalendarSetup: undefined;
+  OnboardingComplete: undefined;
   TabRoot: undefined;
   SubscriptionGate: undefined;
   DeviceList: undefined;
@@ -34,7 +35,18 @@ export type RootStackParamList = {
   ForwardingSetupGuide: { onboarding?: boolean } | undefined;
   ForwardingVerify: { onboarding?: boolean } | undefined;
   PlanSelection: { source?: 'onboarding' | 'manage' } | undefined;
-  PaymentMethod: { plan: string; source?: 'onboarding' | 'manage' };
+  PaymentMethod: {
+    plan: string;
+    planName?: string;
+    priceUsd?: string;
+    minutesIncluded?: number;
+    description?: string;
+    icon?: string;
+    features?: string[];
+    recommended?: boolean;
+    billingProvider?: string;
+    source?: 'onboarding' | 'manage';
+  };
   SubscriptionStatus: undefined;
   ManageSubscription: undefined;
   CallDetail: { callId: string };

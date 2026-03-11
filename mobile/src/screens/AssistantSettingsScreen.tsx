@@ -32,7 +32,8 @@ const SWEARING_RULES = [
 ];
 
 export function AssistantSettingsScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
   const insets = useSafeAreaInsets();
 
   const [agentId, setAgentId] = useState('');
@@ -179,8 +180,11 @@ export function AssistantSettingsScreen() {
     return (
       <View
         style={{
-          backgroundColor: colors.surfaceElevated, borderRadius: radii.xl,
+          backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
+          borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
+          borderRadius: radii.xl,
           padding: spacing.lg, marginBottom: spacing.lg,
+          borderWidth: 1,
         }}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.md }}>
@@ -198,6 +202,26 @@ export function AssistantSettingsScreen() {
         contentContainerStyle={{ padding: spacing.lg, paddingBottom: insets.bottom + 100 }}
         keyboardShouldPersistTaps="handled"
       >
+        {/* Info banner */}
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            backgroundColor: colors.primary + '12',
+            borderRadius: radii.xl,
+            padding: spacing.md,
+            marginBottom: spacing.lg,
+            borderWidth: 1,
+            borderColor: colors.primary + '25',
+            gap: spacing.sm,
+          }}
+        >
+          <Icon name="information-outline" size="md" color={colors.primary} />
+          <Text style={{ ...typography.bodySmall, color: colors.textSecondary, flex: 1 }}>
+            These settings apply to all callers by default. To customize behavior for a specific contact, edit their Contact Profile.
+          </Text>
+        </View>
+
         {error ? (
           <View style={{ padding: spacing.md, backgroundColor: colors.error + '15', borderRadius: radii.md, marginBottom: spacing.lg }}>
             <Text style={{ ...typography.body, color: colors.error }}>{error}</Text>

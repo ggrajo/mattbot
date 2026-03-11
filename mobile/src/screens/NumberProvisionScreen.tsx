@@ -3,9 +3,7 @@ import {
   View,
   Text,
   TouchableOpacity,
-  TextInput,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -19,7 +17,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'NumberProvision'>;
 
 interface UserNumber {
   id: string;
-  phone_number: string;
+  e164: string;
   status: string;
 }
 
@@ -30,18 +28,18 @@ export function NumberProvisionScreen({ route }: Props) {
   const isOnboarding = route.params?.onboarding;
 
   const [existingNumber, setExistingNumber] = useState<UserNumber | null>(null);
-  const [areaCode, setAreaCode] = useState('');
   const [provisioning, setProvisioning] = useState(false);
   const [provisionedNumber, setProvisionedNumber] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [numberVisible, setNumberVisible] = useState(false);
 
   const loadNumbers = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
       const { data } = await apiClient.get('/numbers');
-      const numbers: UserNumber[] = data.numbers ?? data ?? [];
+      const numbers: UserNumber[] = data.items ?? [];
       if (numbers.length > 0) {
         setExistingNumber(numbers[0]);
       }
@@ -59,17 +57,11 @@ export function NumberProvisionScreen({ route }: Props) {
   );
 
   async function handleProvision() {
-    if (!areaCode.trim()) {
-      Alert.alert('Area Code Required', 'Please enter a preferred area code.');
-      return;
-    }
     try {
       setProvisioning(true);
       setError(null);
-      const { data } = await apiClient.post('/numbers/provision', {
-        area_code: areaCode.trim(),
-      });
-      setProvisionedNumber(data.phone_number ?? data.number);
+      const { data } = await apiClient.post('/numbers/provision');
+      setProvisionedNumber(data.e164);
     } catch (e) {
       setError(extractApiError(e));
     } finally {
@@ -88,7 +80,18 @@ export function NumberProvisionScreen({ route }: Props) {
     }
   }
 
-  const displayNumber = provisionedNumber || existingNumber?.phone_number;
+  const fullNumber = provisionedNumber || existingNumber?.e164;
+
+  function maskNumber(num: string): string {
+    if (num.length <= 4) return num;
+    const last4 = num.slice(-4);
+    const prefix = num.slice(0, num.length - 4);
+    return prefix.replace(/\d/g, '\u2022') + last4;
+  }
+
+  const displayNumber = fullNumber
+    ? (numberVisible ? fullNumber : maskNumber(fullNumber))
+    : undefined;
 
   return (
     <View
@@ -130,7 +133,7 @@ export function NumberProvisionScreen({ route }: Props) {
         </View>
       )}
 
-      {!loading && displayNumber && (
+      {!loading && fullNumber && (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <View
             style={{
@@ -148,16 +151,36 @@ export function NumberProvisionScreen({ route }: Props) {
           <Text style={{ ...typography.h3, color: colors.textSecondary, marginBottom: spacing.sm }}>
             {provisionedNumber ? 'Number Provisioned!' : 'Your Number'}
           </Text>
-          <Text
-            style={{
-              ...typography.h1,
-              color: colors.textPrimary,
-              textAlign: 'center',
-              letterSpacing: 1,
-            }}
-          >
-            {displayNumber}
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Text
+              style={{
+                ...typography.h1,
+                color: colors.textPrimary,
+                textAlign: 'center',
+                letterSpacing: 1,
+              }}
+            >
+              {displayNumber}
+            </Text>
+            <TouchableOpacity
+              onPress={() => setNumberVisible(!numberVisible)}
+              hitSlop={12}
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 18,
+                backgroundColor: colors.surfaceVariant,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Icon
+                name={numberVisible ? 'eye-off-outline' : 'eye-outline'}
+                size="md"
+                color={colors.textSecondary}
+              />
+            </TouchableOpacity>
+          </View>
           {existingNumber && !provisionedNumber && (
             <View
               style={{
@@ -176,7 +199,7 @@ export function NumberProvisionScreen({ route }: Props) {
         </View>
       )}
 
-      {!loading && !displayNumber && (
+      {!loading && !fullNumber && (
         <View style={{ flex: 1, justifyContent: 'center' }}>
           <View style={{ alignItems: 'center', marginBottom: spacing.xxl }}>
             <View
@@ -207,31 +230,6 @@ export function NumberProvisionScreen({ route }: Props) {
             </Text>
           </View>
 
-          <Text style={{ ...typography.bodySmall, color: colors.textSecondary, marginBottom: spacing.sm }}>
-            Preferred area code
-          </Text>
-          <TextInput
-            value={areaCode}
-            onChangeText={setAreaCode}
-            placeholder="e.g. 415"
-            placeholderTextColor={colors.textDisabled}
-            keyboardType="number-pad"
-            maxLength={3}
-            style={{
-              backgroundColor: colors.surface,
-              borderRadius: radii.md,
-              paddingHorizontal: spacing.md,
-              paddingVertical: spacing.md,
-              borderWidth: 1,
-              borderColor: colors.border,
-              color: colors.textPrimary,
-              ...typography.h3,
-              textAlign: 'center',
-              letterSpacing: 4,
-              marginBottom: spacing.xl,
-            }}
-          />
-
           <TouchableOpacity
             onPress={handleProvision}
             disabled={provisioning}
@@ -256,7 +254,7 @@ export function NumberProvisionScreen({ route }: Props) {
         </View>
       )}
 
-      {displayNumber && !loading && (
+      {fullNumber && !loading && (
         <TouchableOpacity
           onPress={handleContinue}
           style={{

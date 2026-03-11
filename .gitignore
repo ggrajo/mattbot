@@ -21,6 +21,7 @@ node_modules/
 .expo/
 ios/Pods/
 android/.gradle/
+mobile/android/.gradle/
 android/app/build/
 android/app/.cxx/
 mobile/android/app/.cxx/

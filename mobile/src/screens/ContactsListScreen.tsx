@@ -26,7 +26,8 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export function ContactsListScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();
 
@@ -166,10 +167,10 @@ export function ContactsListScreen() {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: colors.surface,
+            backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
             borderRadius: radii.lg,
             borderWidth: 1,
-            borderColor: colors.cardBorder,
+            borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
             paddingHorizontal: spacing.md,
           }}
         >

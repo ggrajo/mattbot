@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
+  TextInput,
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
@@ -29,15 +30,20 @@ interface BlockEntry {
 }
 
 export function BlockListScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
   const insets = useSafeAreaInsets();
 
   const [items, setItems] = useState<BlockEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [newPhone, setNewPhone] = useState('');
   const [adding, setAdding] = useState(false);
   const [showInput, setShowInput] = useState(false);
+
+  const [newPhone, setNewPhone] = useState('');
+  const [newName, setNewName] = useState('');
+  const [newReason, setNewReason] = useState('');
+  const [newNotes, setNewNotes] = useState('');
 
   const loadItems = useCallback(async () => {
     try {
@@ -58,13 +64,24 @@ export function BlockListScreen() {
     }, [loadItems]),
   );
 
+  function resetForm() {
+    setNewPhone('');
+    setNewName('');
+    setNewReason('');
+    setNewNotes('');
+  }
+
   async function handleBlock() {
     const phone = newPhone.trim();
     if (!phone) return;
     try {
       setAdding(true);
-      await apiClient.post('/blocks', { phone_number: phone });
-      setNewPhone('');
+      const payload: Record<string, string> = { phone_number: phone };
+      if (newName.trim()) payload.display_name = newName.trim();
+      if (newReason.trim()) payload.reason = newReason.trim();
+      if (newNotes.trim()) payload.notes = newNotes.trim();
+      await apiClient.post('/blocks', payload);
+      resetForm();
       setShowInput(false);
       await loadItems();
     } catch (e) {
@@ -93,12 +110,12 @@ export function BlockListScreen() {
       <FadeIn delay={index * 40} slide="up">
         <View
           style={{
-            backgroundColor: colors.surface,
+            backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
             borderRadius: radii.lg,
             padding: spacing.lg,
             marginBottom: spacing.sm,
             borderWidth: 1,
-            borderColor: colors.cardBorder,
+            borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
             flexDirection: 'row',
             alignItems: 'center',
             gap: spacing.md,
@@ -171,18 +188,80 @@ export function BlockListScreen() {
 
       {showInput && (
         <FadeIn delay={0} slide="up">
-          <View style={{ marginBottom: spacing.md }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.sm }}>
+          <View
+            style={{
+              marginBottom: spacing.md,
+              backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
+              borderRadius: radii.lg,
+              padding: spacing.lg,
+              borderWidth: 1,
+              borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
+              gap: spacing.sm,
+            }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.xs }}>
               <ContactPicker
-                onSelect={(phone) => setNewPhone(phone)}
+                onSelect={(phone, name) => {
+                  setNewPhone(phone);
+                  if (name) setNewName(name);
+                }}
                 buttonLabel="From Contacts"
               />
             </View>
             <PhoneInput
               value={newPhone}
               onChangeValue={setNewPhone}
-              label=""
+              label="Phone Number"
               placeholder="Phone number to block"
+            />
+            <TextInput
+              value={newName}
+              onChangeText={setNewName}
+              placeholder="Display Name (optional)"
+              placeholderTextColor={colors.textDisabled}
+              style={{
+                ...typography.body,
+                color: colors.textPrimary,
+                backgroundColor: colors.surface,
+                borderRadius: radii.md,
+                padding: spacing.md,
+                borderWidth: 1,
+                borderColor: colors.border,
+              }}
+            />
+            <TextInput
+              value={newReason}
+              onChangeText={setNewReason}
+              placeholder="Reason for blocking (optional)"
+              placeholderTextColor={colors.textDisabled}
+              style={{
+                ...typography.body,
+                color: colors.textPrimary,
+                backgroundColor: colors.surface,
+                borderRadius: radii.md,
+                padding: spacing.md,
+                borderWidth: 1,
+                borderColor: colors.border,
+              }}
+            />
+            <TextInput
+              value={newNotes}
+              onChangeText={setNewNotes}
+              placeholder="Notes (optional)"
+              placeholderTextColor={colors.textDisabled}
+              multiline
+              numberOfLines={2}
+              textAlignVertical="top"
+              style={{
+                ...typography.body,
+                color: colors.textPrimary,
+                backgroundColor: colors.surface,
+                borderRadius: radii.md,
+                padding: spacing.md,
+                borderWidth: 1,
+                borderColor: colors.border,
+                minHeight: 60,
+              }}
             />
             <TouchableOpacity
               onPress={handleBlock}
@@ -193,6 +272,7 @@ export function BlockListScreen() {
                 paddingVertical: spacing.md,
                 alignItems: 'center',
                 opacity: adding || !newPhone.trim() ? 0.5 : 1,
+                marginTop: spacing.xs,
               }}
               activeOpacity={0.8}
             >

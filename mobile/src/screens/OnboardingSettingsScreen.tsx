@@ -8,14 +8,19 @@ import {
   Alert,
   TextInput,
   FlatList,
+  Dimensions,
+  StyleSheet,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme, useThemeContext } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
+import { GradientView } from '../components/ui/GradientView';
 import { OnboardingProgress } from '../components/ui/OnboardingProgress';
 import { apiClient, extractApiError } from '../api/client';
 import { getDeviceTimezone } from '../utils/formatDate';
+
+const { width: SCREEN_W } = Dimensions.get('window');
 
 const COMMON_TIMEZONES = [
   'Pacific/Honolulu', 'America/Anchorage', 'America/Los_Angeles', 'America/Denver',
@@ -64,7 +69,8 @@ const THEME_OPTIONS: Array<{ label: string; value: 'light' | 'dark' | 'system'; 
 ];
 
 export function OnboardingSettingsScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
   const { themeMode, setThemeMode } = useThemeContext();
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
@@ -127,6 +133,14 @@ export function OnboardingSettingsScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
+      <View style={StyleSheet.absoluteFill} pointerEvents="none">
+        <GradientView
+          colors={[theme.dark ? 'rgba(129,140,248,0.10)' : 'rgba(129,140,248,0.05)', 'transparent']}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
+          style={{ position: 'absolute', top: -SCREEN_W * 0.3, left: -SCREEN_W * 0.1, width: SCREEN_W, height: SCREEN_W, borderRadius: SCREEN_W * 0.5 }}
+        />
+      </View>
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
@@ -137,17 +151,15 @@ export function OnboardingSettingsScreen() {
         <OnboardingProgress currentStep={3} totalSteps={8} />
 
         <View style={{ alignItems: 'center', paddingVertical: spacing.xl }}>
-          <View
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: 40,
-              backgroundColor: colors.primaryContainer,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Icon name="cog-outline" size="xl" color={colors.primary} />
+          <View style={{ width: 80, height: 80, borderRadius: 24, overflow: 'hidden' }}>
+            <GradientView
+              colors={[colors.gradientStart, colors.gradientEnd]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={{ width: 80, height: 80, alignItems: 'center', justifyContent: 'center' }}
+            >
+              <Icon name="cog-outline" size={36} color="#FFFFFF" />
+            </GradientView>
           </View>
         </View>
 
@@ -173,7 +185,9 @@ export function OnboardingSettingsScreen() {
         {/* Timezone */}
         <View
           style={{
-            backgroundColor: colors.surfaceElevated,
+            backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
+            borderWidth: 1,
+            borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
             borderRadius: radii.xl,
             padding: spacing.lg,
             marginBottom: spacing.lg,
@@ -210,7 +224,9 @@ export function OnboardingSettingsScreen() {
         {/* Language */}
         <View
           style={{
-            backgroundColor: colors.surfaceElevated,
+            backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
+            borderWidth: 1,
+            borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
             borderRadius: radii.xl,
             padding: spacing.lg,
             marginBottom: spacing.lg,
@@ -278,7 +294,9 @@ export function OnboardingSettingsScreen() {
         {/* Theme */}
         <View
           style={{
-            backgroundColor: colors.surfaceElevated,
+            backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
+            borderWidth: 1,
+            borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
             borderRadius: radii.xl,
             padding: spacing.lg,
             marginBottom: spacing.lg,

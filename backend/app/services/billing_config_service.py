@@ -34,6 +34,12 @@ _DEFAULT_PLANS_JSON = json.dumps(
             "sort_order": 0,
             "description": "Try MattBot with basic call handling",
             "icon": "gift-outline",
+            "features": [
+                "AI-powered call answering",
+                "Basic call screening",
+                "Real-time notifications",
+            ],
+            "recommended": False,
         },
         {
             "code": "standard",
@@ -45,6 +51,14 @@ _DEFAULT_PLANS_JSON = json.dumps(
             "sort_order": 1,
             "description": "For everyday personal use with generous minutes",
             "icon": "star-outline",
+            "features": [
+                "AI-powered call answering",
+                "Smart call screening & routing",
+                "Automated text-back responses",
+                "Real-time call notifications",
+                "Caller memory & context",
+            ],
+            "recommended": True,
         },
         {
             "code": "pro",
@@ -56,6 +70,16 @@ _DEFAULT_PLANS_JSON = json.dumps(
             "sort_order": 2,
             "description": "High-volume coverage for busy professionals",
             "icon": "rocket-launch-outline",
+            "features": [
+                "AI-powered call answering",
+                "Smart call screening & routing",
+                "Automated text-back responses",
+                "Real-time call notifications",
+                "Caller memory & context",
+                "Priority support",
+                "Live handoff to your phone",
+            ],
+            "recommended": False,
         },
     ]
 )
@@ -79,6 +103,8 @@ class PlanConfig:
     sort_order: int = 0
     description: str = ""
     icon: str = ""
+    features: tuple[str, ...] = ()
+    recommended: bool = False
 
 
 @dataclass(frozen=True)
@@ -163,6 +189,8 @@ def _load_from_env() -> BillingConfig:
             sort_order=p.get("sort_order", 0),
             description=p.get("description", ""),
             icon=p.get("icon", ""),
+            features=tuple(p.get("features", [])),
+            recommended=p.get("recommended", False),
         )
         for p in plans_data
     ]
@@ -222,6 +250,8 @@ async def _load_from_db() -> BillingConfig | None:
                 sort_order=p.sort_order,
                 description=p.description,
                 icon=p.icon,
+                features=tuple(getattr(p, "features", None) or []),
+                recommended=getattr(p, "recommended", False),
             )
             for p in db_plans
         ]

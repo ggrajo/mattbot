@@ -139,60 +139,55 @@ function QuickActionCard({
       accessibilityLabel={action.label}
       style={[
         {
-          width: 100,
-          height: 100,
-          borderRadius: 20,
-          backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : '#FFFFFF',
+          width: 88,
           alignItems: 'center',
-          justifyContent: 'center',
           marginRight: 12,
-          ...(isDark
-            ? { borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)' }
-            : {
-                borderWidth: 1,
-                borderColor: 'rgba(124,58,237,0.10)',
-                ...Platform.select({
-                  ios: { shadowColor: '#7C3AED', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.08, shadowRadius: 8 },
-                  android: { elevation: 2 },
-                }),
-              }),
         },
         animatedStyle,
       ]}
     >
-      {'hasIndicator' in action && action.hasIndicator && (
-        <View
-          style={{
-            position: 'absolute',
-            top: 10,
-            right: 10,
-            width: 8,
-            height: 8,
-            borderRadius: 4,
-            backgroundColor: '#10B981',
-          }}
-        />
-      )}
       <View
         style={{
-          width: 44,
-          height: 44,
-          borderRadius: 14,
-          backgroundColor: isDark ? action.color + '25' : colors.surfaceVariant,
+          width: 56,
+          height: 56,
+          borderRadius: 18,
+          backgroundColor: isDark ? action.color + '18' : action.color + '12',
           alignItems: 'center',
           justifyContent: 'center',
+          ...(isDark
+            ? { borderWidth: 1, borderColor: action.color + '25' }
+            : Platform.select({
+                ios: { shadowColor: action.color, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.15, shadowRadius: 6 },
+                android: { elevation: 2 },
+              }) || {}),
         }}
       >
-        <Icon name={action.icon} size={22} color={isDark ? action.color : colors.primary} />
+        {'hasIndicator' in action && action.hasIndicator && (
+          <View
+            style={{
+              position: 'absolute',
+              top: -2,
+              right: -2,
+              width: 10,
+              height: 10,
+              borderRadius: 5,
+              backgroundColor: '#10B981',
+              borderWidth: 2,
+              borderColor: isDark ? '#0D0221' : colors.background,
+            }}
+          />
+        )}
+        <Icon name={action.icon} size={24} color={action.color} />
       </View>
       <Text
         style={{
-          fontSize: 12,
+          fontSize: 11,
           fontWeight: '600',
-          color: colors.textPrimary,
+          color: colors.textSecondary,
           marginTop: 8,
         }}
         allowFontScaling
+        numberOfLines={1}
       >
         {action.label}
       </Text>
@@ -279,6 +274,7 @@ export function HomeScreen() {
           navigation.navigate('CallModes', { onboarding: true });
         } else if (!state.steps_completed.includes('onboarding_complete')) {
           await completeStep('onboarding_complete');
+          navigation.navigate('OnboardingComplete');
         }
       }
     });
@@ -632,14 +628,14 @@ export function HomeScreen() {
 
           {/* Quick Actions */}
           <Text
-            style={{ fontSize: 15, fontWeight: '600', color: colors.textSecondary, marginTop: spacing.xl, marginBottom: spacing.md }}
+            style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: spacing.xl, marginBottom: spacing.md }}
             allowFontScaling
           >
             Quick Actions
           </Text>
           <ScrollView
             horizontal
-            showsHorizontalScrollIndicator={true}
+            showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ paddingRight: H_PAD }}
           >
             {QUICK_ACTIONS.map((action) => (

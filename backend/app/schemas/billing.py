@@ -15,10 +15,13 @@ class BillingPlanResponse(BaseModel):
     sort_order: int = 0
     description: str = ""
     icon: str = ""
+    features: list[str] = []
+    recommended: bool = False
 
 
 class BillingPlansListResponse(BaseModel):
     plans: list[BillingPlanResponse]
+    billing_provider: str = "manual"
 
 
 class PaymentMethodInfo(BaseModel):
@@ -60,7 +63,7 @@ def _validate_plan_code(v: str) -> str:
 
 class SubscribeRequest(BaseModel):
     plan: str
-    payment_method_id: str
+    payment_method_id: str = ""
 
     @field_validator("plan")
     @classmethod

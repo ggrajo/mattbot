@@ -24,6 +24,7 @@ from app.schemas.billing import (
 )
 from app.services import billing_service
 from app.services.billing_config_service import get_billing_config_async
+from app.config import settings as app_settings
 
 router = APIRouter()
 
@@ -45,9 +46,12 @@ async def get_plans(
                 sort_order=p.sort_order,
                 description=p.description,
                 icon=p.icon,
+                features=list(p.features),
+                recommended=p.recommended,
             )
             for p in sorted(config.plans, key=lambda x: x.sort_order)
-        ]
+        ],
+        billing_provider=app_settings.BILLING_PROVIDER,
     )
 
 

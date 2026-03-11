@@ -96,7 +96,15 @@ export function DeviceListScreen() {
 
     return (
       <FadeIn delay={index * 40} slide="up">
-      <Card variant="elevated" style={{ marginBottom: spacing.sm }}>
+      <Card
+        variant="elevated"
+        style={{
+          marginBottom: spacing.sm,
+          backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
+          borderWidth: 1,
+          borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
+        }}
+      >
         <TouchableOpacity
           onPress={() => setExpandedId(isExpanded ? null : item.id)}
           activeOpacity={0.8}

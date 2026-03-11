@@ -6,6 +6,7 @@ import {
   Switch,
   TouchableOpacity,
   ActivityIndicator,
+  Pressable,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeProvider';
@@ -14,20 +15,20 @@ import { GradientView } from '../components/ui/GradientView';
 import { FadeIn } from '../components/ui/FadeIn';
 import { apiClient, extractApiError } from '../api/client';
 
-type TriggerRule = 'vip_only' | 'urgent_only' | 'vip_and_urgent';
+type TriggerRule = 'vip_only' | 'urgent_only' | 'vip_and_urgent' | 'always' | 'never';
 
 interface HandoffSettings {
   handoff_enabled: boolean;
-  handoff_auto_accept: boolean;
-  handoff_timeout_seconds: number;
-  handoff_trigger_rule: TriggerRule;
+  handoff_trigger: TriggerRule;
+  handoff_offer_timeout_seconds: number;
+  revision: number;
 }
 
 const DEFAULTS: HandoffSettings = {
   handoff_enabled: true,
-  handoff_auto_accept: false,
-  handoff_timeout_seconds: 20,
-  handoff_trigger_rule: 'vip_only',
+  handoff_trigger: 'vip_only',
+  handoff_offer_timeout_seconds: 20,
+  revision: 1,
 };
 
 const TRIGGER_OPTIONS: {
@@ -54,10 +55,25 @@ const TRIGGER_OPTIONS: {
     label: 'VIP and Urgent',
     description: 'Offer handoff for VIP callers or urgent calls',
   },
+  {
+    value: 'always',
+    icon: 'phone-forward',
+    label: 'Always',
+    description: 'Offer handoff for all calls',
+  },
+  {
+    value: 'never',
+    icon: 'phone-off',
+    label: 'Never',
+    description: 'Never offer handoff (even if enabled)',
+  },
 ];
 
+const TIMEOUT_OPTIONS = [10, 15, 20, 30, 45, 60];
+
 export function HandoffSettingsScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
   const [settings, setSettings] = useState<HandoffSettings>(DEFAULTS);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -74,9 +90,9 @@ export function HandoffSettingsScreen() {
           const d = res.data;
           setSettings({
             handoff_enabled: d.handoff_enabled ?? DEFAULTS.handoff_enabled,
-            handoff_auto_accept: d.handoff_auto_accept ?? DEFAULTS.handoff_auto_accept,
-            handoff_timeout_seconds: d.handoff_timeout_seconds ?? DEFAULTS.handoff_timeout_seconds,
-            handoff_trigger_rule: d.handoff_trigger_rule ?? DEFAULTS.handoff_trigger_rule,
+            handoff_trigger: d.handoff_trigger ?? DEFAULTS.handoff_trigger,
+            handoff_offer_timeout_seconds: d.handoff_offer_timeout_seconds ?? DEFAULTS.handoff_offer_timeout_seconds,
+            revision: d.revision ?? 1,
           });
         })
         .catch((err) => {
@@ -91,13 +107,21 @@ export function HandoffSettingsScreen() {
     }, []),
   );
 
-  function patch(partial: Partial<HandoffSettings>) {
+  async function patch(changes: Partial<Omit<HandoffSettings, 'revision'>>) {
     const prev = { ...settings };
-    setSettings((s) => ({ ...s, ...partial }));
-    apiClient.patch('/settings', partial).catch((err) => {
+    setSettings((s) => ({ ...s, ...changes }));
+    try {
+      const res = await apiClient.patch('/settings', {
+        expected_revision: settings.revision,
+        changes,
+      });
+      if (res.data?.revision) {
+        setSettings((s) => ({ ...s, revision: res.data.revision }));
+      }
+    } catch (err) {
       setSettings(prev);
       setError(extractApiError(err));
-    });
+    }
   }
 
   if (loading) {
@@ -126,14 +150,14 @@ export function HandoffSettingsScreen() {
           style={{
             marginTop: spacing.lg,
             marginHorizontal: spacing.lg,
-            backgroundColor: colors.surface,
+            backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
             borderRadius: radii.lg,
             borderWidth: 1,
             borderColor: colors.primary + '50',
             padding: spacing.lg,
           }}
         >
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View
               style={{
                 width: 44,
@@ -142,6 +166,7 @@ export function HandoffSettingsScreen() {
                 backgroundColor: colors.primary + '18',
                 alignItems: 'center',
                 justifyContent: 'center',
+                marginRight: spacing.md,
               }}
             >
               <Icon name="phone-forward" size="lg" color={colors.primary} />
@@ -187,12 +212,12 @@ export function HandoffSettingsScreen() {
           style={{
             marginTop: spacing.lg,
             marginHorizontal: spacing.lg,
-            backgroundColor: colors.surface,
+            backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
             borderRadius: radii.lg,
             padding: spacing.lg,
           }}
         >
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md, marginBottom: spacing.xs }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.xs }}>
             <View
               style={{
                 width: 44,
@@ -201,6 +226,7 @@ export function HandoffSettingsScreen() {
                 backgroundColor: colors.primary + '18',
                 alignItems: 'center',
                 justifyContent: 'center',
+                marginRight: spacing.md,
               }}
             >
               <Icon name="filter-variant" size="lg" color={colors.primary} />
@@ -220,12 +246,12 @@ export function HandoffSettingsScreen() {
           </Text>
 
           {TRIGGER_OPTIONS.map((opt) => {
-            const selected = settings.handoff_trigger_rule === opt.value;
+            const selected = settings.handoff_trigger === opt.value;
             return (
               <TouchableOpacity
                 key={opt.value}
                 activeOpacity={0.7}
-                onPress={() => patch({ handoff_trigger_rule: opt.value })}
+                onPress={() => patch({ handoff_trigger: opt.value })}
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
@@ -235,11 +261,10 @@ export function HandoffSettingsScreen() {
                   borderColor: selected ? colors.primary : colors.border,
                   backgroundColor: selected ? colors.primary + '0C' : colors.surfaceVariant,
                   marginBottom: spacing.sm,
-                  gap: spacing.md,
                 }}
               >
                 <Icon name={opt.icon} size="lg" color={selected ? colors.primary : colors.textSecondary} />
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, marginLeft: spacing.md }}>
                   <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }}>
                     {opt.label}
                   </Text>
@@ -275,30 +300,27 @@ export function HandoffSettingsScreen() {
         </View>
       </FadeIn>
 
-      {/* Handoff Timeout gradient info card */}
+      {/* Handoff Timeout */}
       <FadeIn delay={160} slide="up">
-        <GradientView
-          colors={[colors.gradientStart + '25', colors.gradientEnd + '18']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
+        <View
           style={{
             marginTop: spacing.lg,
             marginHorizontal: spacing.lg,
+            backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
             borderRadius: radii.lg,
             padding: spacing.lg,
-            borderWidth: 1,
-            borderColor: colors.primary + '30',
           }}
         >
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.xs }}>
             <View
               style={{
                 width: 44,
                 height: 44,
                 borderRadius: radii.md,
-                backgroundColor: colors.primary + '25',
+                backgroundColor: colors.primary + '18',
                 alignItems: 'center',
                 justifyContent: 'center',
+                marginRight: spacing.md,
               }}
             >
               <Icon name="timer-outline" size="lg" color={colors.primary} />
@@ -309,17 +331,38 @@ export function HandoffSettingsScreen() {
             style={{
               ...typography.bodySmall,
               color: colors.textSecondary,
-              marginTop: spacing.md,
+              marginBottom: spacing.md,
               lineHeight: 22,
             }}
           >
-            You have{' '}
-            <Text style={{ color: colors.primary, fontWeight: '700' }}>
-              {settings.handoff_timeout_seconds} seconds
-            </Text>{' '}
-            to accept a handoff before the assistant continues the call.
+            How long you have to accept a handoff before the assistant continues (10-60 seconds)
           </Text>
-        </GradientView>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+            {TIMEOUT_OPTIONS.map((t) => {
+              const selected = settings.handoff_offer_timeout_seconds === t;
+              return (
+                <Pressable
+                  key={t}
+                  onPress={() => patch({ handoff_offer_timeout_seconds: t })}
+                  style={{
+                    paddingVertical: spacing.sm,
+                    paddingHorizontal: spacing.lg,
+                    borderRadius: radii.md,
+                    backgroundColor: selected ? colors.primary : colors.surfaceVariant,
+                    borderWidth: 1,
+                    borderColor: selected ? colors.primary : colors.border,
+                    marginRight: 8,
+                    marginBottom: 8,
+                  }}
+                >
+                  <Text style={{ fontSize: 14, fontWeight: '600', color: selected ? '#FFFFFF' : colors.textPrimary }}>
+                    {t}s
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
       </FadeIn>
 
       {/* Privacy Mode card */}
@@ -328,12 +371,12 @@ export function HandoffSettingsScreen() {
           style={{
             marginTop: spacing.lg,
             marginHorizontal: spacing.lg,
-            backgroundColor: colors.surface,
+            backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
             borderRadius: radii.lg,
             padding: spacing.lg,
           }}
         >
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View
               style={{
                 width: 44,
@@ -342,6 +385,7 @@ export function HandoffSettingsScreen() {
                 backgroundColor: colors.primary + '18',
                 alignItems: 'center',
                 justifyContent: 'center',
+                marginRight: spacing.md,
               }}
             >
               <Icon name="shield-lock-outline" size="lg" color={colors.primary} />

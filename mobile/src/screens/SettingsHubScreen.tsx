@@ -4,287 +4,152 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme, useThemeContext, ThemeMode } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
+import { GlassCard } from '../components/ui/GlassCard';
+import { SettingsSection, SettingsRowItem } from '../components/ui/SettingsSection';
 import { FadeIn } from '../components/ui/FadeIn';
 import { hapticLight } from '../utils/haptics';
 
-const THEME_OPTIONS: { value: ThemeMode; label: string }[] = [
-  { value: 'system', label: 'System' },
-  { value: 'light', label: 'Light' },
-  { value: 'dark', label: 'Dark' },
+const THEME_OPTIONS: { value: ThemeMode; label: string; icon: string }[] = [
+  { value: 'system', label: 'Auto', icon: 'cellphone' },
+  { value: 'light', label: 'Light', icon: 'white-balance-sunny' },
+  { value: 'dark', label: 'Dark', icon: 'moon-waning-crescent' },
 ];
 
-function ThemeToggle({
-  themeMode,
-  onSelect,
-  colors,
-  spacing,
-  typography,
-  radii,
-}: {
-  themeMode: ThemeMode;
-  onSelect: (mode: ThemeMode) => void;
-  colors: ReturnType<typeof useTheme>['colors'];
-  spacing: ReturnType<typeof useTheme>['spacing'];
-  typography: ReturnType<typeof useTheme>['typography'];
-  radii: ReturnType<typeof useTheme>['radii'];
-}) {
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        backgroundColor: colors.surfaceVariant,
-        borderRadius: radii.full,
-        padding: 3,
-      }}
-    >
-      {THEME_OPTIONS.map((opt) => {
-        const active = themeMode === opt.value;
-        return (
-          <Pressable
-            key={opt.value}
-            onPress={() => { hapticLight(); onSelect(opt.value); }}
-            style={{
-              flex: 1,
-              paddingVertical: spacing.sm,
-              borderRadius: radii.full,
-              alignItems: 'center',
-              backgroundColor: active ? colors.primary : 'transparent',
-            }}
-          >
-            <Text
-              style={{
-                ...typography.bodySmall,
-                fontWeight: '600',
-                color: active ? '#FFFFFF' : colors.textSecondary,
-              }}
-            >
-              {opt.label}
-            </Text>
-          </Pressable>
-        );
-      })}
-    </View>
-  );
-}
-
-interface SettingsRow {
-  icon: string;
-  label: string;
-  route?: string;
-  color?: string;
-}
-
-interface SettingsSection {
-  title: string;
-  rows: SettingsRow[];
-}
-
 export function SettingsHubScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, radii } = theme;
   const { themeMode, setThemeMode } = useThemeContext();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();
 
-  const sections: SettingsSection[] = [
+  const sections: { title: string; rows: SettingsRowItem[] }[] = [
     {
       title: 'Assistant',
       rows: [
-        { icon: 'robot-outline', label: 'AI Settings', route: 'AssistantSettings' },
-        { icon: 'phone-settings-outline', label: 'Call Modes', route: 'CallModes' },
-        { icon: 'clock-outline', label: 'Business Hours', route: 'BusinessHours' },
-        { icon: 'emoticon-outline', label: 'Temperament', route: 'Temperament' },
-        // Handoff hidden until feature is fully wired up
-        // { icon: 'phone-forward-outline', label: 'Handoff', route: 'HandoffSettings' },
+        { icon: 'robot-outline', label: 'AI Settings', onPress: () => navigation.navigate('AssistantSettings') },
+        { icon: 'phone-settings-outline', label: 'Call Modes', onPress: () => navigation.navigate('CallModes') },
+        { icon: 'clock-outline', label: 'Business Hours', onPress: () => navigation.navigate('BusinessHours') },
       ],
     },
     {
       title: 'Phone',
       rows: [
-        { icon: 'phone-outline', label: 'My Numbers', route: 'NumberProvision' },
-        { icon: 'phone-forward-outline', label: 'Forwarding', route: 'ForwardingSetupGuide' },
-        { icon: 'star-outline', label: 'VIP List', route: 'VipList' },
-        { icon: 'block-helper', label: 'Block List', route: 'BlockList' },
+        { icon: 'phone-outline', label: 'My Numbers', onPress: () => navigation.navigate('NumberProvision') },
+        { icon: 'phone-forward-outline', label: 'Forwarding', onPress: () => navigation.navigate('ForwardingSetupGuide') },
+        { icon: 'star-outline', label: 'VIP List', onPress: () => navigation.navigate('VipList') },
+        { icon: 'block-helper', label: 'Block List', onPress: () => navigation.navigate('BlockList') },
       ],
     },
     {
       title: 'Notifications',
       rows: [
-        { icon: 'moon-waning-crescent', label: 'Quiet Hours', route: 'QuietHours' },
-        { icon: 'bell-alert-outline', label: 'Urgent Notifications', route: 'UrgentNotifications' },
+        { icon: 'moon-waning-crescent', label: 'Quiet Hours', onPress: () => navigation.navigate('QuietHours') },
+        { icon: 'bell-alert-outline', label: 'Urgent Notifications', onPress: () => navigation.navigate('UrgentNotifications') },
       ],
     },
     {
       title: 'Contacts & Memory',
       rows: [
-        { icon: 'account-group-outline', label: 'Contacts', route: 'ContactsList' },
-        { icon: 'tag-outline', label: 'Category Defaults', route: 'CategoryDefaults' },
-        { icon: 'brain', label: 'Memory', route: 'MemoryList' },
+        { icon: 'account-group-outline', label: 'Contacts', onPress: () => navigation.navigate('ContactsList') },
+        { icon: 'tag-outline', label: 'Category Defaults', onPress: () => navigation.navigate('CategoryDefaults') },
+        { icon: 'brain', label: 'Memory', onPress: () => navigation.navigate('MemoryList') },
       ],
     },
     {
       title: 'Calendar',
       rows: [
-        { icon: 'calendar-outline', label: 'Calendar Integration', route: 'Calendar' },
-        { icon: 'calendar-clock', label: 'Booking Settings', route: 'CalendarBookingSettings' },
+        { icon: 'calendar-outline', label: 'Calendar Integration', onPress: () => navigation.navigate('Calendar') },
+        { icon: 'calendar-clock', label: 'Booking Settings', onPress: () => navigation.navigate('CalendarBookingSettings') },
       ],
     },
     {
       title: 'Billing',
       rows: [
-        { icon: 'credit-card-outline', label: 'Subscription', route: 'SubscriptionStatus' },
-        { icon: 'wallet-outline', label: 'Payment Methods', route: 'PaymentMethodsList' },
-        { icon: 'swap-horizontal', label: 'Manage Plan', route: 'ManageSubscription' },
+        { icon: 'credit-card-outline', label: 'Subscription', onPress: () => navigation.navigate('SubscriptionStatus') },
+        { icon: 'wallet-outline', label: 'Payment Methods', onPress: () => navigation.navigate('PaymentMethodsList') },
+        { icon: 'swap-horizontal', label: 'Manage Plan', onPress: () => navigation.navigate('ManageSubscription') },
       ],
     },
     {
       title: 'Privacy & Security',
       rows: [
-        { icon: 'shield-lock-outline', label: 'Privacy Settings', route: 'PrivacySettings' },
-        { icon: 'database-lock-outline', label: 'Memory Settings', route: 'MemorySettings' },
+        { icon: 'shield-lock-outline', label: 'Privacy Settings', onPress: () => navigation.navigate('PrivacySettings') },
+        { icon: 'database-lock-outline', label: 'Memory Settings', onPress: () => navigation.navigate('MemorySettings') },
       ],
     },
   ];
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background, paddingTop: insets.top }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingHorizontal: spacing.lg,
-          paddingTop: spacing.lg,
-          paddingBottom: spacing.md,
-        }}
-      >
-        <Icon name="cog-outline" size={28} color={colors.textPrimary} />
-        <Text style={{ ...typography.h1, color: colors.textPrimary, marginLeft: spacing.sm }}>
-          Settings
-        </Text>
-      </View>
-
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
+        contentContainerStyle={{ paddingTop: insets.top + spacing.lg, paddingBottom: insets.bottom + 40 }}
       >
-        <FadeIn delay={0} slide="up">
-          <View>
-            <Text
-              style={{
-                ...typography.caption,
-                fontWeight: '600',
-                color: colors.textSecondary,
-                textTransform: 'uppercase',
-                letterSpacing: 0.8,
-                paddingHorizontal: spacing.lg,
-                marginBottom: spacing.xs,
-              }}
-            >
-              Appearance
-            </Text>
-            <View
-              style={{
-                marginHorizontal: spacing.lg,
-                backgroundColor: colors.surface,
-                borderRadius: radii.lg,
-                borderWidth: 1,
-                borderColor: colors.cardBorder,
-                overflow: 'hidden',
-                padding: spacing.lg,
-              }}
-            >
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.md }}>
-                <Icon name="theme-light-dark" size={20} color={colors.primary} />
-                <Text style={{ ...typography.body, color: colors.textPrimary, marginLeft: spacing.md }}>
-                  Theme
-                </Text>
-              </View>
-              <ThemeToggle
-                themeMode={themeMode}
-                onSelect={setThemeMode}
-                colors={colors}
-                spacing={spacing}
-                typography={typography}
-                radii={radii}
-              />
+        {/* Header */}
+        <FadeIn delay={0} slide="down">
+          <View style={{ paddingHorizontal: spacing.lg, marginBottom: spacing.md }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Pressable
+                onPress={() => navigation.goBack()}
+                hitSlop={12}
+                style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: 12,
+                  backgroundColor: colors.primary + '15',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: spacing.md,
+                }}
+              >
+                <Icon name="arrow-left" size={20} color={colors.primary} />
+              </Pressable>
+              <Text style={{ fontSize: 28, fontWeight: '800', color: colors.textPrimary, letterSpacing: -0.5 }}>Settings</Text>
             </View>
           </View>
         </FadeIn>
 
-        {sections.map((section, sIdx) => (
-          <FadeIn key={section.title} delay={(sIdx + 1) * 40} slide="up">
-            <View style={{ marginTop: spacing.lg }}>
-              <Text
-                style={{
-                  ...typography.caption,
-                  fontWeight: '600',
-                  color: colors.textSecondary,
-                  textTransform: 'uppercase',
-                  letterSpacing: 0.8,
-                  paddingHorizontal: spacing.lg,
-                  marginBottom: spacing.xs,
-                }}
-              >
-                {section.title}
+        {/* Theme Selector */}
+        <FadeIn delay={30}>
+          <View style={{ paddingHorizontal: spacing.lg, marginBottom: spacing.sm }}>
+            <GlassCard padding={spacing.md}>
+              <Text style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginBottom: spacing.sm }}>
+                Appearance
               </Text>
-
-              <View
-                style={{
-                  marginHorizontal: spacing.lg,
-                  backgroundColor: colors.surface,
-                  borderRadius: radii.lg,
-                  borderWidth: 1,
-                  borderColor: colors.cardBorder,
-                  overflow: 'hidden',
-                }}
-              >
-                {section.rows.map((row, rIdx) => {
-                  const isLast = rIdx === section.rows.length - 1;
-
+              <View style={{ flexDirection: 'row' }}>
+                {THEME_OPTIONS.map((opt, idx) => {
+                  const active = themeMode === opt.value;
                   return (
                     <Pressable
-                      key={row.label}
-                      onPress={() => row.route && navigation.navigate(row.route)}
-                      disabled={!row.route}
-                      style={({ pressed }) => ({
+                      key={opt.value}
+                      onPress={() => { hapticLight(); setThemeMode(opt.value); }}
+                      style={{
+                        flex: 1,
                         flexDirection: 'row',
                         alignItems: 'center',
-                        paddingVertical: spacing.md,
-                        paddingHorizontal: spacing.lg,
-                        backgroundColor: pressed ? colors.surfaceVariant : 'transparent',
-                        borderBottomWidth: isLast ? 0 : 1,
-                        borderBottomColor: colors.border,
-                      })}
+                        justifyContent: 'center',
+                        paddingVertical: 10,
+                        borderRadius: 14,
+                        backgroundColor: active ? colors.primary : 'transparent',
+                        marginRight: idx < THEME_OPTIONS.length - 1 ? 6 : 0,
+                      }}
                     >
-                      <View
-                        style={{
-                          width: 32,
-                          height: 32,
-                          borderRadius: 16,
-                          backgroundColor: (row.color || colors.primary) + '18',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Icon name={row.icon} size={18} color={row.color || colors.primary} />
-                      </View>
-                      <Text
-                        style={{
-                          ...typography.body,
-                          color: row.color || colors.textPrimary,
-                          flex: 1,
-                          marginLeft: spacing.md,
-                        }}
-                      >
-                        {row.label}
+                      <Icon name={opt.icon} size={16} color={active ? '#FFFFFF' : colors.textSecondary} />
+                      <Text style={{ fontSize: 13, fontWeight: '600', color: active ? '#FFFFFF' : colors.textSecondary, marginLeft: 6 }}>
+                        {opt.label}
                       </Text>
-                      {row.route && (
-                        <Icon name="chevron-right" size={20} color={colors.textSecondary} />
-                      )}
                     </Pressable>
                   );
                 })}
               </View>
-            </View>
+            </GlassCard>
+          </View>
+        </FadeIn>
+
+        {/* All sections */}
+        {sections.map((section, sIdx) => (
+          <FadeIn key={section.title} delay={60 + sIdx * 30}>
+            <SettingsSection title={section.title} rows={section.rows} />
           </FadeIn>
         ))}
       </ScrollView>

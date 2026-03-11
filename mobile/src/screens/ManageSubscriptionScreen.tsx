@@ -26,7 +26,8 @@ interface BillingStatus {
 }
 
 export function ManageSubscriptionScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();
 
@@ -131,11 +132,11 @@ export function ManageSubscriptionScreen() {
         <>
           <View
             style={{
-              backgroundColor: colors.surface,
+              backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
               borderRadius: radii.lg,
               padding: spacing.lg,
               borderWidth: 1,
-              borderColor: colors.border,
+              borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
               marginBottom: spacing.lg,
             }}
           >

@@ -14,6 +14,7 @@ import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
 import { FadeIn } from '../components/ui/FadeIn';
 import { Card } from '../components/ui/Card';
+import { GlassCard } from '../components/ui/GlassCard';
 import { apiClient, extractApiError } from '../api/client';
 
 interface CalendarEvent {
@@ -247,24 +248,36 @@ export function CalendarScreen() {
     );
   }
 
-  function formatEventTime(start: string): string {
-    const s = new Date(start);
-    return s.toLocaleTimeString(undefined, {
-      hour: 'numeric',
-      minute: '2-digit',
-    });
+  const [viewMode, setViewMode] = useState<'Month' | 'Week' | 'Day' | 'List'>('Month');
+
+  function formatEventTimeRange(start: string, end: string): string {
+    const fmt = (d: Date) => d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+    return `${fmt(new Date(start))}-${fmt(new Date(end))}`;
   }
 
   function formatSelectedDate(dateKey: string): string {
     const [y, m, d] = dateKey.split('-').map(Number);
     const date = new Date(y, m - 1, d);
-    if (dateKey === todayKey) return 'Today';
     return date.toLocaleDateString(undefined, {
       weekday: 'long',
       month: 'long',
       day: 'numeric',
     });
   }
+
+  function formatTopDate(): string {
+    const [y, m, d] = selectedDate.split('-').map(Number);
+    const date = new Date(y, m - 1, d);
+    return `${d} ${date.toLocaleString(undefined, { month: 'short' })} ${y}`;
+  }
+
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const tzAbbr = (() => {
+    try {
+      const parts = new Intl.DateTimeFormat('en-US', { timeZoneName: 'short' }).formatToParts(new Date());
+      return parts.find(p => p.type === 'timeZoneName')?.value || 'TZ';
+    } catch { return 'TZ'; }
+  })();
 
   if (loading && events.length === 0) {
     return (
@@ -277,7 +290,7 @@ export function CalendarScreen() {
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: colors.background }}
-      contentContainerStyle={{ paddingBottom: insets.bottom + spacing.xxl }}
+      contentContainerStyle={{ paddingTop: insets.top + spacing.lg, paddingBottom: insets.bottom + 100 }}
       showsVerticalScrollIndicator={false}
     >
       {error ? (
@@ -305,9 +318,44 @@ export function CalendarScreen() {
         </View>
       ) : null}
 
+      {/* Header */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, marginBottom: spacing.md }}>
+        <Text style={{ fontSize: 28, fontWeight: '800', color: colors.textPrimary, letterSpacing: -0.5 }}>Calendar</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: colors.primary + '15', borderRadius: 20, paddingHorizontal: 12, paddingVertical: 4 }}>
+          <Icon name="earth" size={14} color={colors.primary} />
+          <Text style={{ fontSize: 12, fontWeight: '700', color: colors.primary }}>{tzAbbr}</Text>
+        </View>
+      </View>
+
+      {/* View Toggle Tabs */}
+      <View style={{ marginHorizontal: spacing.lg, marginBottom: spacing.md }}>
+        <GlassCard padding={3}>
+          <View style={{ flexDirection: 'row' }}>
+            {(['Month', 'Week', 'Day', 'List'] as const).map((mode) => (
+              <TouchableOpacity
+                key={mode}
+                onPress={() => setViewMode(mode)}
+                style={{
+                  flex: 1,
+                  paddingVertical: spacing.sm,
+                  borderRadius: 14,
+                  alignItems: 'center',
+                  backgroundColor: viewMode === mode ? colors.primary : 'transparent',
+                }}
+              >
+                <Text style={{ fontSize: 12, fontWeight: '600', color: viewMode === mode ? '#FFFFFF' : colors.textSecondary }}>
+                  {mode}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </GlassCard>
+      </View>
+
       {/* Calendar Card */}
       <FadeIn slide="up" delay={0}>
-        <Card style={{ marginHorizontal: spacing.lg, marginTop: spacing.md }}>
+        <View style={{ marginHorizontal: spacing.lg }}>
+        <GlassCard>
           {/* Month/Year Header */}
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.lg }}>
             <TouchableOpacity
@@ -393,7 +441,7 @@ export function CalendarScreen() {
                     style={{
                       width: CELL_SIZE,
                       height: CELL_SIZE,
-                      borderRadius: CELL_SIZE / 2,
+                      borderRadius: 14,
                       alignItems: 'center',
                       justifyContent: 'center',
                       backgroundColor: isSelected ? colors.primary : 'transparent',
@@ -435,18 +483,29 @@ export function CalendarScreen() {
               );
             })}
           </View>
-        </Card>
+        </GlassCard>
+        </View>
       </FadeIn>
 
       {/* Events for Selected Day */}
       <FadeIn slide="up" delay={100}>
         <View style={{ marginTop: spacing.lg, paddingHorizontal: spacing.lg }}>
-          <Text
-            style={{ ...typography.h3, color: colors.textPrimary, marginBottom: spacing.md }}
-            allowFontScaling
-          >
-            {formatSelectedDate(selectedDate)}
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.md }}>
+            <Text style={{ ...typography.h3, color: colors.textPrimary }} allowFontScaling>
+              {formatSelectedDate(selectedDate)}
+            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.surface, borderRadius: radii.full, paddingHorizontal: spacing.sm, paddingVertical: 2 }}>
+                <Icon name="earth" size={12} color={colors.textSecondary} />
+                <Text style={{ ...typography.caption, color: colors.textSecondary, fontWeight: '600', fontSize: 10 }}>{tzAbbr}</Text>
+              </View>
+              {selectedEvents.length > 0 && (
+                <Text style={{ ...typography.caption, color: colors.textSecondary }}>
+                  {selectedEvents.length} event{selectedEvents.length !== 1 ? 's' : ''}
+                </Text>
+              )}
+            </View>
+          </View>
 
           {loading && (
             <View style={{ paddingVertical: spacing.lg, alignItems: 'center' }}>
@@ -466,57 +525,53 @@ export function CalendarScreen() {
             </Card>
           )}
 
-          {selectedEvents.map((event) => (
-            <Card
-              key={event.id}
-              style={{
-                marginBottom: spacing.sm,
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: spacing.md,
-              }}
-            >
+          {selectedEvents.map((event) => {
+            const borderColor = event.source === 'google' ? colors.accent : colors.primary;
+            return (
               <View
+                key={event.id}
                 style={{
-                  width: 4,
-                  height: '100%',
-                  minHeight: 40,
-                  backgroundColor: event.source === 'google' ? colors.accent : colors.primary,
-                  borderRadius: 2,
+                  backgroundColor: colors.surface,
+                  borderRadius: radii.lg,
+                  borderLeftWidth: 4,
+                  borderLeftColor: borderColor,
+                  padding: spacing.lg,
+                  marginBottom: spacing.sm,
+                  borderWidth: 1,
+                  borderColor: colors.border,
                 }}
-              />
-              <View style={{ flex: 1 }}>
+              >
                 <Text
                   style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }}
-                  numberOfLines={1}
+                  numberOfLines={2}
                   allowFontScaling
                 >
                   {event.title}
                 </Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginTop: 2 }}>
-                  <Icon name="clock-outline" size="sm" color={colors.textSecondary} />
-                  <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
-                    {formatEventTime(event.start)}
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.xs }}>
+                  <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
+                    {formatEventTimeRange(event.start, event.end)}
                   </Text>
-                  {event.source === 'google' && (
-                    <View
-                      style={{
-                        backgroundColor: colors.accent + '20',
-                        paddingHorizontal: spacing.xs + 2,
-                        paddingVertical: 1,
-                        borderRadius: radii.sm,
-                        marginLeft: spacing.xs,
-                      }}
-                    >
-                      <Text style={{ ...typography.caption, color: colors.accent, fontSize: 10, fontWeight: '600' }} allowFontScaling>
-                        GOOGLE
-                      </Text>
-                    </View>
-                  )}
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 4,
+                      backgroundColor: (event.source === 'google' ? colors.accent : colors.primary) + '20',
+                      paddingHorizontal: spacing.sm,
+                      paddingVertical: 2,
+                      borderRadius: radii.sm,
+                    }}
+                  >
+                    <Icon name={event.source === 'google' ? 'google' : 'robot-outline'} size={12} color={event.source === 'google' ? colors.accent : colors.primary} />
+                    <Text style={{ ...typography.caption, color: event.source === 'google' ? colors.accent : colors.primary, fontSize: 10, fontWeight: '700' }} allowFontScaling>
+                      {event.source === 'google' ? 'Google' : 'AI Booked'}
+                    </Text>
+                  </View>
                 </View>
               </View>
-            </Card>
-          ))}
+            );
+          })}
         </View>
       </FadeIn>
 

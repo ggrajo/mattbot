@@ -2,14 +2,19 @@ import React, { useState, useEffect } from 'react';
 import {
   View, Text, ScrollView, TextInput, TouchableOpacity,
   ActivityIndicator, Alert, KeyboardAvoidingView, Platform,
+  Dimensions, StyleSheet,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
 import { OnboardingProgress } from '../components/ui/OnboardingProgress';
+import { PhoneInput } from '../components/ui/PhoneInput';
 import { apiClient, extractApiError } from '../api/client';
 import { useAuthStore } from '../store/authStore';
+import { GradientView } from '../components/ui/GradientView';
+
+const { width: SCREEN_W } = Dimensions.get('window');
 
 interface ProfileField {
   key: string;
@@ -28,7 +33,8 @@ const FIELDS: ProfileField[] = [
 ];
 
 export function OnboardingProfileScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const setProfileName = useAuthStore(s => s.setProfileName);
@@ -36,20 +42,23 @@ export function OnboardingProfileScreen() {
   const [values, setValues] = useState<Record<string, string>>({
     nickname: '', display_name: '', company_name: '', role_title: '',
   });
+  const [personalPhone, setPersonalPhone] = useState('');
+  const [settingsRevision, setSettingsRevision] = useState(1);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [nicknameError, setNicknameError] = useState('');
 
   useEffect(() => {
-    apiClient.get('/me')
-      .then(res => {
-        const d = res.data;
+    Promise.all([apiClient.get('/me'), apiClient.get('/settings')])
+      .then(([meRes, settingsRes]) => {
+        const d = meRes.data;
         setValues({
           nickname: d.nickname ?? '',
           display_name: d.display_name ?? '',
           company_name: d.company_name ?? '',
           role_title: d.role_title ?? '',
         });
+        setSettingsRevision(settingsRes.data.revision ?? 1);
       })
       .catch(() => {})
       .finally(() => setInitialLoading(false));
@@ -81,6 +90,14 @@ export function OnboardingProfileScreen() {
       await apiClient.patch('/me', payload);
       setProfileName(payload.display_name || null, nick);
 
+      const cleanPhone = personalPhone.replace(/[^+\d]/g, '');
+      if (cleanPhone) {
+        await apiClient.patch('/settings', {
+          expected_revision: settingsRevision,
+          changes: { personal_phone: cleanPhone },
+        });
+      }
+
       await apiClient.post('/onboarding/complete-step', { step: 'profile_setup' });
       navigation.navigate('OnboardingSettings' as never);
     } catch (e) {
@@ -100,6 +117,15 @@ export function OnboardingProfileScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
+      {/* Ambient glow */}
+      <View style={StyleSheet.absoluteFill} pointerEvents="none">
+        <GradientView
+          colors={[theme.dark ? 'rgba(167,139,250,0.10)' : 'rgba(167,139,250,0.05)', 'transparent']}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
+          style={{ position: 'absolute', top: -SCREEN_W * 0.3, right: -SCREEN_W * 0.1, width: SCREEN_W, height: SCREEN_W, borderRadius: SCREEN_W * 0.5 }}
+        />
+      </View>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -115,14 +141,15 @@ export function OnboardingProfileScreen() {
           <OnboardingProgress currentStep={2} totalSteps={8} />
 
           <View style={{ alignItems: 'center', paddingVertical: spacing.xl }}>
-            <View
-              style={{
-                width: 80, height: 80, borderRadius: 40,
-                backgroundColor: colors.primaryContainer,
-                alignItems: 'center', justifyContent: 'center',
-              }}
-            >
-              <Icon name="account-edit-outline" size="xl" color={colors.primary} />
+            <View style={{ width: 80, height: 80, borderRadius: 24, overflow: 'hidden' }}>
+              <GradientView
+                colors={[colors.gradientStart, colors.gradientEnd]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={{ width: 80, height: 80, alignItems: 'center', justifyContent: 'center' }}
+              >
+                <Icon name="account-edit-outline" size={36} color="#FFFFFF" />
+              </GradientView>
             </View>
           </View>
 
@@ -144,7 +171,9 @@ export function OnboardingProfileScreen() {
               <View
                 key={field.key}
                 style={{
-                  backgroundColor: colors.surfaceElevated,
+                  backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
+                  borderWidth: 1,
+                  borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
                   borderRadius: radii.xl,
                   padding: spacing.lg,
                 }}
@@ -191,6 +220,33 @@ export function OnboardingProfileScreen() {
                 ) : null}
               </View>
             ))}
+
+            {/* Personal Phone */}
+            <View
+              style={{
+                backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
+                borderWidth: 1,
+                borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
+                borderRadius: radii.xl,
+                padding: spacing.lg,
+              }}
+            >
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.sm }}>
+                <Icon name="phone-outline" size="md" color={colors.primary} />
+                <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }}>
+                  Personal Phone
+                </Text>
+              </View>
+              <Text style={{ ...typography.caption, color: colors.textSecondary, marginBottom: spacing.sm }}>
+                Used for urgent SMS/call alerts from your AI assistant
+              </Text>
+              <PhoneInput
+                value={personalPhone}
+                onChangeValue={setPersonalPhone}
+                label=""
+                placeholder="+1 (555) 123-4567"
+              />
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

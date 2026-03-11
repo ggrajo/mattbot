@@ -6,7 +6,8 @@ import { Icon } from '../components/ui/Icon';
 import { apiClient, extractApiError } from '../api/client';
 
 export function ChangePasswordScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
   const navigation = useNavigation();
 
   const [currentPassword, setCurrentPassword] = useState('');

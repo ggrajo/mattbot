@@ -16,7 +16,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'ForgotPassword'>;
 
 export function ForgotPasswordScreen({ navigation }: Props) {
   const theme = useTheme();
-  const { colors, spacing, typography } = theme;
+  const { colors, spacing, typography, radii } = theme;
 
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState<string>();

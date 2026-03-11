@@ -14,7 +14,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'EmailVerification'>;
 
 export function EmailVerificationScreen({ route, navigation }: Props) {
   const theme = useTheme();
-  const { colors, spacing } = theme;
+  const { colors, spacing, typography, radii } = theme;
 
   const token = route.params?.token;
   const email = route.params?.email;

@@ -28,7 +28,8 @@ interface MemoryItem {
 }
 
 export function MemoryListScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
   const insets = useSafeAreaInsets();
 
   const [items, setItems] = useState<MemoryItem[]>([]);
@@ -144,12 +145,12 @@ export function MemoryListScreen() {
       <FadeIn delay={index * 40} slide="up">
         <View
           style={{
-            backgroundColor: colors.surface,
+            backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
             borderRadius: radii.lg,
             padding: spacing.lg,
             marginBottom: spacing.sm,
             borderWidth: isEditing ? 2 : 1,
-            borderColor: isEditing ? colors.primary : colors.cardBorder,
+            borderColor: isEditing ? colors.primary : (theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder),
           }}
         >
           {isEditing ? (

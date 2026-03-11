@@ -15,9 +15,20 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
 import { FadeIn } from '../components/ui/FadeIn';
+import { PhoneInput } from '../components/ui/PhoneInput';
 import { apiClient } from '../api/client';
 
-const CATEGORIES = ['Personal', 'Business', 'Medical', 'Legal', 'Financial', 'Other'];
+const CATEGORIES: { slug: string; label: string }[] = [
+  { slug: 'friends', label: 'Friends' },
+  { slug: 'family', label: 'Family' },
+  { slug: 'business', label: 'Business' },
+  { slug: 'clients', label: 'Clients' },
+  { slug: 'colleagues', label: 'Colleagues' },
+  { slug: 'healthcare', label: 'Healthcare' },
+  { slug: 'vendors', label: 'Vendors' },
+  { slug: 'acquaintances', label: 'Acquaintances' },
+  { slug: 'other', label: 'Other' },
+];
 
 export function AddContactScreen() {
   const { colors, spacing, typography, radii } = useTheme();
@@ -27,7 +38,9 @@ export function AddContactScreen() {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
-  const [category, setCategory] = useState('');
+  const [company, setCompany] = useState('');
+  const [relationship, setRelationship] = useState('');
+  const [category, setCategory] = useState('other');
   const [notes, setNotes] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -36,19 +49,25 @@ export function AddContactScreen() {
       Alert.alert('Error', 'Name is required');
       return;
     }
+    if (!phone.trim()) {
+      Alert.alert('Error', 'Phone number is required');
+      return;
+    }
 
     setSaving(true);
     try {
       await apiClient.post('/contacts', {
+        phone_number: phone.trim(),
         display_name: name.trim(),
-        phone_number: phone.trim() || undefined,
         email: email.trim() || undefined,
-        category: category || undefined,
+        company: company.trim() || undefined,
+        relationship: relationship.trim() || undefined,
+        category,
         notes: notes.trim() || undefined,
       });
       navigation.goBack();
     } catch (e: any) {
-      Alert.alert('Error', e?.response?.data?.error?.message || 'Failed to create contact');
+      Alert.alert('Error', e?.response?.data?.detail || e?.response?.data?.error?.message || 'Failed to create contact');
     } finally {
       setSaving(false);
     }
@@ -65,18 +84,18 @@ export function AddContactScreen() {
         </Text>
         <Pressable
           onPress={handleSave}
-          disabled={saving || !name.trim()}
+          disabled={saving || !name.trim() || !phone.trim()}
           style={{
             paddingHorizontal: spacing.lg,
             paddingVertical: spacing.sm,
-            backgroundColor: !name.trim() ? colors.textDisabled : colors.primary,
+            backgroundColor: (!name.trim() || !phone.trim()) ? colors.textDisabled : colors.primary,
             borderRadius: radii.full,
           }}
         >
           {saving ? (
-            <ActivityIndicator size="small" color={colors.onPrimary} />
+            <ActivityIndicator size="small" color="#FFFFFF" />
           ) : (
-            <Text style={{ ...typography.button, color: colors.onPrimary, fontSize: 14 }}>Save</Text>
+            <Text style={{ fontSize: 14, fontWeight: '700', color: '#FFFFFF' }}>Save</Text>
           )}
         </Pressable>
       </View>
@@ -91,43 +110,132 @@ export function AddContactScreen() {
           keyboardShouldPersistTaps="handled"
         >
           <FadeIn delay={0}>
-            <FieldInput label="Name *" value={name} onChangeText={setName} placeholder="Contact name" colors={colors} spacing={spacing} typography={typography} radii={radii} />
+            <Text style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginBottom: spacing.xs }}>
+              Name *
+            </Text>
+            <TextInput
+              value={name}
+              onChangeText={setName}
+              placeholder="Contact name"
+              placeholderTextColor={colors.textDisabled}
+              style={{
+                backgroundColor: colors.surface,
+                borderRadius: radii.lg,
+                borderWidth: 1,
+                borderColor: colors.border,
+                padding: spacing.md,
+                fontSize: 16,
+                color: colors.textPrimary,
+              }}
+            />
           </FadeIn>
+
           <FadeIn delay={30}>
-            <FieldInput label="Phone" value={phone} onChangeText={setPhone} placeholder="Phone number" colors={colors} spacing={spacing} typography={typography} radii={radii} keyboardType="phone-pad" />
+            <View style={{ marginTop: spacing.lg }}>
+              <PhoneInput
+                value={phone}
+                onChangeValue={setPhone}
+                label="Phone Number *"
+                placeholder="(555) 123-4567"
+              />
+            </View>
           </FadeIn>
+
           <FadeIn delay={60}>
-            <FieldInput label="Email" value={email} onChangeText={setEmail} placeholder="Email address" colors={colors} spacing={spacing} typography={typography} radii={radii} keyboardType="email-address" />
+            <Text style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginBottom: spacing.xs }}>
+              Email
+            </Text>
+            <TextInput
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Email address"
+              placeholderTextColor={colors.textDisabled}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              style={{
+                backgroundColor: colors.surface,
+                borderRadius: radii.lg,
+                borderWidth: 1,
+                borderColor: colors.border,
+                padding: spacing.md,
+                fontSize: 16,
+                color: colors.textPrimary,
+              }}
+            />
+          </FadeIn>
+
+          <FadeIn delay={70}>
+            <Text style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginTop: spacing.lg, marginBottom: spacing.xs }}>
+              Company
+            </Text>
+            <TextInput
+              value={company}
+              onChangeText={setCompany}
+              placeholder="Company name"
+              placeholderTextColor={colors.textDisabled}
+              style={{
+                backgroundColor: colors.surface,
+                borderRadius: radii.lg,
+                borderWidth: 1,
+                borderColor: colors.border,
+                padding: spacing.md,
+                fontSize: 16,
+                color: colors.textPrimary,
+              }}
+            />
+          </FadeIn>
+
+          <FadeIn delay={80}>
+            <Text style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginTop: spacing.lg, marginBottom: spacing.xs }}>
+              Relationship
+            </Text>
+            <TextInput
+              value={relationship}
+              onChangeText={setRelationship}
+              placeholder="e.g., Client, Friend, Manager"
+              placeholderTextColor={colors.textDisabled}
+              style={{
+                backgroundColor: colors.surface,
+                borderRadius: radii.lg,
+                borderWidth: 1,
+                borderColor: colors.border,
+                padding: spacing.md,
+                fontSize: 16,
+                color: colors.textPrimary,
+              }}
+            />
           </FadeIn>
 
           <FadeIn delay={90}>
-            <Text style={{ ...typography.caption, fontWeight: '600', color: colors.textSecondary, marginTop: spacing.xl, marginBottom: spacing.sm }}>
-              CATEGORY
+            <Text style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginTop: spacing.xl, marginBottom: spacing.sm }}>
+              Category
             </Text>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }}>
-              {CATEGORIES.map((cat) => {
-                const isSelected = category === cat.toLowerCase();
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+              {CATEGORIES.map((cat, idx) => {
+                const isSelected = category === cat.slug;
                 return (
                   <Pressable
-                    key={cat}
-                    onPress={() => setCategory(isSelected ? '' : cat.toLowerCase())}
+                    key={cat.slug}
+                    onPress={() => setCategory(isSelected ? 'other' : cat.slug)}
                     style={{
                       paddingHorizontal: spacing.md,
                       paddingVertical: spacing.sm,
-                      borderRadius: radii.full,
+                      borderRadius: 20,
                       backgroundColor: isSelected ? colors.primary : colors.surface,
                       borderWidth: 1,
                       borderColor: isSelected ? colors.primary : colors.border,
+                      marginRight: 8,
+                      marginBottom: 8,
                     }}
                   >
                     <Text
                       style={{
-                        ...typography.caption,
+                        fontSize: 13,
                         fontWeight: '600',
-                        color: isSelected ? colors.onPrimary : colors.textPrimary,
+                        color: isSelected ? '#FFFFFF' : colors.textPrimary,
                       }}
                     >
-                      {cat}
+                      {cat.label}
                     </Text>
                   </Pressable>
                 );
@@ -136,8 +244,8 @@ export function AddContactScreen() {
           </FadeIn>
 
           <FadeIn delay={120}>
-            <Text style={{ ...typography.caption, fontWeight: '600', color: colors.textSecondary, marginTop: spacing.xl, marginBottom: spacing.xs }}>
-              NOTES
+            <Text style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginTop: spacing.xl, marginBottom: spacing.xs }}>
+              Notes
             </Text>
             <TextInput
               value={notes}
@@ -152,7 +260,7 @@ export function AddContactScreen() {
                 borderColor: colors.border,
                 padding: spacing.md,
                 minHeight: 100,
-                ...typography.body,
+                fontSize: 16,
                 color: colors.textPrimary,
                 textAlignVertical: 'top',
               }}
@@ -160,52 +268,6 @@ export function AddContactScreen() {
           </FadeIn>
         </ScrollView>
       </KeyboardAvoidingView>
-    </View>
-  );
-}
-
-function FieldInput({
-  label,
-  value,
-  onChangeText,
-  placeholder,
-  colors,
-  spacing,
-  typography,
-  radii,
-  keyboardType,
-}: {
-  label: string;
-  value: string;
-  onChangeText: (v: string) => void;
-  placeholder: string;
-  colors: any;
-  spacing: any;
-  typography: any;
-  radii: any;
-  keyboardType?: 'default' | 'phone-pad' | 'email-address';
-}) {
-  return (
-    <View style={{ marginTop: spacing.lg }}>
-      <Text style={{ ...typography.caption, fontWeight: '600', color: colors.textSecondary, marginBottom: spacing.xs }}>
-        {label.toUpperCase()}
-      </Text>
-      <TextInput
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        placeholderTextColor={colors.textDisabled}
-        keyboardType={keyboardType}
-        style={{
-          backgroundColor: colors.surface,
-          borderRadius: radii.lg,
-          borderWidth: 1,
-          borderColor: colors.border,
-          padding: spacing.md,
-          ...typography.body,
-          color: colors.textPrimary,
-        }}
-      />
     </View>
   );
 }

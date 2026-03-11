@@ -41,7 +41,8 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export function CategoryDefaultsScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();
 
@@ -154,10 +155,10 @@ export function CategoryDefaultsScreen() {
               <FadeIn key={cat.category} delay={catIdx * 50}>
                 <View
                   style={{
-                    backgroundColor: colors.surface,
+                    backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
                     borderRadius: radii.xl,
                     borderWidth: 1,
-                    borderColor: colors.border,
+                    borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
                     marginBottom: spacing.lg,
                     overflow: 'hidden',
                   }}

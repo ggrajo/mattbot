@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { View, Pressable, Text, StyleSheet } from 'react-native';
+import { View, Pressable, Text, StyleSheet, Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, {
@@ -109,10 +109,21 @@ function FloatingTabBar({ state, navigation }: any) {
   const { colors, radii, shadows } = theme;
   const insets = useSafeAreaInsets();
 
-  const glassEdge =
-    theme.dark
-      ? { borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)' }
-      : {};
+  const barStyle = theme.dark
+    ? {
+        backgroundColor: 'rgba(15,8,32,0.85)',
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.08)',
+      }
+    : {
+        backgroundColor: 'rgba(255,255,255,0.95)',
+        borderWidth: 1,
+        borderColor: 'rgba(124,58,237,0.06)',
+        ...Platform.select({
+          ios: { shadowColor: '#7C3AED', shadowOffset: { width: 0, height: -4 }, shadowOpacity: 0.08, shadowRadius: 20 },
+          android: { elevation: 8 },
+        }),
+      };
 
   return (
     <View
@@ -120,10 +131,8 @@ function FloatingTabBar({ state, navigation }: any) {
         styles.floatingBar,
         {
           bottom: Math.max(insets.bottom, 8) + 4,
-          backgroundColor: colors.tabBar,
           borderRadius: radii.xxl,
-          ...shadows.card,
-          ...glassEdge,
+          ...barStyle,
         },
       ]}
     >

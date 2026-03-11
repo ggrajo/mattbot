@@ -5,13 +5,13 @@ import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
 import { apiClient, extractApiError } from '../api/client';
 
-function ToggleRow({ icon, label, subtitle, value, onValueChange, colors, spacing, typography }: any) {
+function ToggleRow({ icon, label, subtitle, value, onValueChange, colors, spacing }: any) {
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.md, paddingHorizontal: spacing.lg, gap: spacing.md }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.md, paddingHorizontal: spacing.lg }}>
       <Icon name={icon} size="md" color={colors.textSecondary} />
-      <View style={{ flex: 1 }}>
-        <Text style={{ ...typography.body, color: colors.textPrimary }}>{label}</Text>
-        {subtitle && <Text style={{ ...typography.caption, color: colors.textSecondary }}>{subtitle}</Text>}
+      <View style={{ flex: 1, marginLeft: spacing.md }}>
+        <Text style={{ fontSize: 16, color: colors.textPrimary }}>{label}</Text>
+        {subtitle && <Text style={{ fontSize: 12, color: colors.textSecondary }}>{subtitle}</Text>}
       </View>
       <Switch value={value} onValueChange={onValueChange} trackColor={{ false: colors.border, true: colors.primary }} />
     </View>
@@ -20,16 +20,17 @@ function ToggleRow({ icon, label, subtitle, value, onValueChange, colors, spacin
 
 interface MemorySettings {
   memory_enabled: boolean;
-  auto_learn_from_calls: boolean;
+  revision: number;
 }
 
 const DEFAULTS: MemorySettings = {
   memory_enabled: true,
-  auto_learn_from_calls: true,
+  revision: 1,
 };
 
 export function MemorySettingsScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
   const [settings, setSettings] = useState<MemorySettings>(DEFAULTS);
   const [loading, setLoading] = useState(true);
   const [clearing, setClearing] = useState(false);
@@ -47,7 +48,7 @@ export function MemorySettingsScreen() {
           const d = res.data;
           setSettings({
             memory_enabled: d.memory_enabled ?? DEFAULTS.memory_enabled,
-            auto_learn_from_calls: d.auto_learn_from_calls ?? DEFAULTS.auto_learn_from_calls,
+            revision: d.revision ?? 1,
           });
         })
         .catch((err) => {
@@ -60,13 +61,21 @@ export function MemorySettingsScreen() {
     }, []),
   );
 
-  function handleToggle(key: keyof MemorySettings) {
-    const next = !settings[key];
-    setSettings((prev) => ({ ...prev, [key]: next }));
-    apiClient.patch('/settings', { [key]: next }).catch((err) => {
-      setSettings((prev) => ({ ...prev, [key]: !next }));
+  async function handleToggle() {
+    const next = !settings.memory_enabled;
+    setSettings((prev) => ({ ...prev, memory_enabled: next }));
+    try {
+      const res = await apiClient.patch('/settings', {
+        expected_revision: settings.revision,
+        changes: { memory_enabled: next },
+      });
+      if (res.data?.revision) {
+        setSettings((prev) => ({ ...prev, revision: res.data.revision }));
+      }
+    } catch (err) {
+      setSettings((prev) => ({ ...prev, memory_enabled: !next }));
       setError(extractApiError(err));
-    });
+    }
   }
 
   function handleClearMemory() {
@@ -106,31 +115,19 @@ export function MemorySettingsScreen() {
     <ScrollView style={{ flex: 1, backgroundColor: colors.background }} contentContainerStyle={{ paddingBottom: spacing.xxl }}>
       {error ? (
         <View style={{ padding: spacing.lg }}>
-          <Text style={{ ...typography.body, color: colors.error }}>{error}</Text>
+          <Text style={{ fontSize: 14, color: colors.error }}>{error}</Text>
         </View>
       ) : null}
 
-      <View style={{ marginTop: spacing.lg, marginHorizontal: spacing.lg, backgroundColor: colors.surface, borderRadius: radii.md, overflow: 'hidden' }}>
+      <View style={{ marginTop: spacing.lg, marginHorizontal: spacing.lg, backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', borderRadius: radii.md, overflow: 'hidden' }}>
         <ToggleRow
           icon="brain"
           label="Enable AI Memory"
           subtitle="Allow the assistant to remember context between calls"
           value={settings.memory_enabled}
-          onValueChange={() => handleToggle('memory_enabled')}
+          onValueChange={handleToggle}
           colors={colors}
           spacing={spacing}
-          typography={typography}
-        />
-        <View style={{ height: 1, backgroundColor: colors.border, marginLeft: spacing.lg + 20 + spacing.md }} />
-        <ToggleRow
-          icon="lightbulb-on-outline"
-          label="Auto-Learn from Calls"
-          subtitle="Automatically extract and store key information"
-          value={settings.auto_learn_from_calls}
-          onValueChange={() => handleToggle('auto_learn_from_calls')}
-          colors={colors}
-          spacing={spacing}
-          typography={typography}
         />
       </View>
 
@@ -146,7 +143,6 @@ export function MemorySettingsScreen() {
             borderRadius: radii.md,
             paddingVertical: spacing.md,
             paddingHorizontal: spacing.lg,
-            gap: spacing.sm,
             opacity: clearing ? 0.6 : 1,
           }}
         >
@@ -155,7 +151,7 @@ export function MemorySettingsScreen() {
           ) : (
             <Icon name="delete-sweep-outline" size="md" color={colors.error} />
           )}
-          <Text style={{ ...typography.button, color: colors.error }}>Clear All Memory</Text>
+          <Text style={{ fontSize: 15, fontWeight: '700', color: colors.error, marginLeft: spacing.sm }}>Clear All Memory</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

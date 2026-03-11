@@ -8,14 +8,19 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
+  Dimensions,
+  StyleSheet,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Video from 'react-native-video';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
+import { GradientView } from '../components/ui/GradientView';
 import { OnboardingProgress } from '../components/ui/OnboardingProgress';
 import { apiClient, extractApiError } from '../api/client';
+
+const { width: SCREEN_W } = Dimensions.get('window');
 
 interface Voice {
   id: string;
@@ -39,7 +44,8 @@ const SWEARING_RULES = [
 ];
 
 export function OnboardingAssistantSetupScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
 
@@ -100,8 +106,11 @@ export function OnboardingAssistantSetupScreen() {
   async function handleContinue() {
     setLoading(true);
     try {
+      const freshSettings = (await apiClient.get('/settings')).data;
+      const currentRevision = freshSettings.revision ?? revision;
+
       await apiClient.patch('/settings', {
-        expected_revision: revision,
+        expected_revision: currentRevision,
         changes: {
           assistant_name: name || undefined,
           temperament_preset: temperament,
@@ -143,7 +152,9 @@ export function OnboardingAssistantSetupScreen() {
     return (
       <View
         style={{
-          backgroundColor: colors.surfaceElevated,
+          backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
+          borderWidth: 1,
+          borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
           borderRadius: radii.xl,
           padding: spacing.lg,
           marginBottom: spacing.lg,
@@ -162,6 +173,14 @@ export function OnboardingAssistantSetupScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
+      <View style={StyleSheet.absoluteFill} pointerEvents="none">
+        <GradientView
+          colors={[theme.dark ? 'rgba(167,139,250,0.10)' : 'rgba(167,139,250,0.05)', 'transparent']}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
+          style={{ position: 'absolute', top: -SCREEN_W * 0.3, right: -SCREEN_W * 0.1, width: SCREEN_W, height: SCREEN_W, borderRadius: SCREEN_W * 0.5 }}
+        />
+      </View>
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,

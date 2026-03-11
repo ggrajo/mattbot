@@ -21,15 +21,16 @@ interface SliderRowProps {
   icon: string;
   value: number;
   onSelect: (val: number) => void;
+  theme: { dark: boolean };
   colors: any;
   spacing: any;
   typography: any;
   radii: any;
 }
 
-function SliderRow({ label, leftLabel, rightLabel, icon, value, onSelect, colors, spacing, typography, radii }: SliderRowProps) {
+function SliderRow({ label, leftLabel, rightLabel, icon, value, onSelect, theme, colors, spacing, typography, radii }: SliderRowProps) {
   return (
-    <View style={{ backgroundColor: colors.surface, borderRadius: radii.md, padding: spacing.lg }}>
+    <View style={{ backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', borderRadius: radii.md, padding: spacing.lg }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.md }}>
         <Icon name={icon} size="md" color={colors.textSecondary} />
         <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }}>{label}</Text>
@@ -67,7 +68,8 @@ function SliderRow({ label, leftLabel, rightLabel, icon, value, onSelect, colors
 }
 
 export function TemperamentScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
   const [agentId, setAgentId] = useState('');
   const [values, setValues] = useState<TemperamentValues>(DEFAULTS);
   const [original, setOriginal] = useState<TemperamentValues>(DEFAULTS);
@@ -148,6 +150,7 @@ export function TemperamentScreen() {
           icon="tie"
           value={values.formality}
           onSelect={(v) => setValues((p) => ({ ...p, formality: v }))}
+          theme={theme}
           colors={colors}
           spacing={spacing}
           typography={typography}
@@ -160,6 +163,7 @@ export function TemperamentScreen() {
           icon="text-long"
           value={values.verbosity}
           onSelect={(v) => setValues((p) => ({ ...p, verbosity: v }))}
+          theme={theme}
           colors={colors}
           spacing={spacing}
           typography={typography}
@@ -172,6 +176,7 @@ export function TemperamentScreen() {
           icon="emoticon-outline"
           value={values.tone}
           onSelect={(v) => setValues((p) => ({ ...p, tone: v }))}
+          theme={theme}
           colors={colors}
           spacing={spacing}
           typography={typography}

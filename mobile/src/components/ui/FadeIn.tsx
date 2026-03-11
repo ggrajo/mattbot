@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -14,6 +15,7 @@ interface Props {
   slide?: 'up' | 'down';
   scale?: boolean;
   spring?: boolean;
+  style?: StyleProp<ViewStyle>;
   children: React.ReactNode;
 }
 
@@ -23,6 +25,7 @@ export function FadeIn({
   slide,
   scale: useScale = false,
   spring: useSpring = false,
+  style,
   children,
 }: Props) {
   const opacity = useSharedValue(0);
@@ -47,5 +50,5 @@ export function FadeIn({
     ],
   }));
 
-  return <Animated.View style={animatedStyle}>{children}</Animated.View>;
+  return <Animated.View style={[animatedStyle, style]}>{children}</Animated.View>;
 }

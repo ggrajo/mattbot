@@ -7,15 +7,22 @@ import {
   ActivityIndicator,
   Alert,
   Linking,
+  Dimensions,
+  StyleSheet,
 } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
+import { GradientView } from '../components/ui/GradientView';
+import { OnboardingProgress } from '../components/ui/OnboardingProgress';
 import { apiClient, extractApiError } from '../api/client';
 
+const { width: SCREEN_W } = Dimensions.get('window');
+
 export function OnboardingCalendarSetupScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
 
@@ -81,6 +88,14 @@ export function OnboardingCalendarSetupScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
+      <View style={StyleSheet.absoluteFill} pointerEvents="none">
+        <GradientView
+          colors={[theme.dark ? 'rgba(129,140,248,0.10)' : 'rgba(129,140,248,0.05)', 'transparent']}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
+          style={{ position: 'absolute', top: -SCREEN_W * 0.3, left: -SCREEN_W * 0.1, width: SCREEN_W, height: SCREEN_W, borderRadius: SCREEN_W * 0.5 }}
+        />
+      </View>
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
@@ -88,19 +103,18 @@ export function OnboardingCalendarSetupScreen() {
           paddingBottom: insets.bottom + 140,
         }}
       >
+        <OnboardingProgress currentStep={5} totalSteps={8} />
         {/* Illustration Area */}
         <View style={{ alignItems: 'center', paddingVertical: spacing.xxl }}>
-          <View
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: 40,
-              backgroundColor: colors.primaryContainer,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Icon name="calendar-sync-outline" size="xl" color={colors.primary} />
+          <View style={{ width: 80, height: 80, borderRadius: 24, overflow: 'hidden' }}>
+            <GradientView
+              colors={[colors.gradientStart, colors.gradientEnd]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={{ width: 80, height: 80, alignItems: 'center', justifyContent: 'center' }}
+            >
+              <Icon name="calendar-sync-outline" size={36} color="#FFFFFF" />
+            </GradientView>
           </View>
         </View>
 
@@ -169,7 +183,9 @@ export function OnboardingCalendarSetupScreen() {
           <View style={{ gap: spacing.lg }}>
             <View
               style={{
-                backgroundColor: colors.surfaceElevated,
+                backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
+                borderWidth: 1,
+                borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
                 borderRadius: radii.xl,
                 padding: spacing.xl,
                 alignItems: 'center',

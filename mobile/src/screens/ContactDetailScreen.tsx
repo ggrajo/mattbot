@@ -19,6 +19,22 @@ import type { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ContactDetail'>;
 
+const CATEGORIES: { slug: string; label: string }[] = [
+  { slug: 'friends', label: 'Friends' },
+  { slug: 'family', label: 'Family' },
+  { slug: 'business', label: 'Business' },
+  { slug: 'clients', label: 'Clients' },
+  { slug: 'colleagues', label: 'Colleagues' },
+  { slug: 'healthcare', label: 'Healthcare' },
+  { slug: 'vendors', label: 'Vendors' },
+  { slug: 'acquaintances', label: 'Acquaintances' },
+  { slug: 'other', label: 'Other' },
+];
+
+function categoryLabel(slug: string): string {
+  return CATEGORIES.find((c) => c.slug === slug)?.label || slug;
+}
+
 export function ContactDetailScreen({ route }: Props) {
   const { contactId } = route.params;
   const { colors, spacing, typography, radii } = useTheme();
@@ -34,7 +50,7 @@ export function ContactDetailScreen({ route }: Props) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState('other');
   const [notes, setNotes] = useState('');
 
   async function load() {
@@ -45,11 +61,11 @@ export function ContactDetailScreen({ route }: Props) {
       setName(res.display_name || '');
       setPhone(res.phone_last4 || '');
       setEmail(res.email || '');
-      setCategory(res.category || '');
+      setCategory(res.category || 'other');
       setNotes(res.notes || '');
       setError(undefined);
     } catch (e: any) {
-      setError(e?.response?.data?.error?.message || 'Failed to load contact');
+      setError(e?.response?.data?.detail || e?.response?.data?.error?.message || 'Failed to load contact');
     } finally {
       setLoading(false);
     }
@@ -63,13 +79,13 @@ export function ContactDetailScreen({ route }: Props) {
       await apiClient.patch(`/contacts/${contactId}`, {
         display_name: name.trim(),
         email: email.trim() || undefined,
-        category: category.trim() || undefined,
+        category,
         notes: notes.trim() || undefined,
       });
       setEditing(false);
       load();
     } catch (e: any) {
-      Alert.alert('Error', e?.response?.data?.error?.message || 'Failed to save contact');
+      Alert.alert('Error', e?.response?.data?.detail || e?.response?.data?.error?.message || 'Failed to save contact');
     } finally {
       setSaving(false);
     }
@@ -86,7 +102,7 @@ export function ContactDetailScreen({ route }: Props) {
             await apiClient.delete(`/contacts/${contactId}`);
             navigation.goBack();
           } catch (e: any) {
-            Alert.alert('Error', e?.response?.data?.error?.message || 'Failed to delete contact');
+            Alert.alert('Error', e?.response?.data?.detail || e?.response?.data?.error?.message || 'Failed to delete contact');
           }
         },
       },
@@ -105,22 +121,22 @@ export function ContactDetailScreen({ route }: Props) {
     return (
       <View style={{ flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center', padding: spacing.xl }}>
         <Icon name="alert-circle-outline" size={48} color={colors.error} />
-        <Text style={{ ...typography.body, color: colors.error, marginTop: spacing.md, textAlign: 'center' }}>
+        <Text style={{ fontSize: 16, color: colors.error, marginTop: spacing.md, textAlign: 'center' }}>
           {error || 'Contact not found'}
         </Text>
         <Pressable onPress={load} style={{ marginTop: spacing.md }}>
-          <Text style={{ ...typography.button, color: colors.primary }}>Retry</Text>
+          <Text style={{ fontSize: 15, fontWeight: '700', color: colors.primary }}>Retry</Text>
         </Pressable>
       </View>
     );
   }
 
-  const fields: { label: string; value: string; setter: (v: string) => void; key: string; readonly?: boolean }[] = [
-    { label: 'Name', value: name, setter: setName, key: 'name' },
-    { label: 'Phone (last 4)', value: phone, setter: setPhone, key: 'phone', readonly: true },
-    { label: 'Email', value: email, setter: setEmail, key: 'email' },
-    { label: 'Category', value: category, setter: setCategory, key: 'category' },
-    { label: 'Notes', value: notes, setter: setNotes, key: 'notes' },
+  const viewFields: { label: string; value: string; key: string }[] = [
+    { label: 'Name', value: name, key: 'name' },
+    { label: 'Phone (last 4)', value: phone, key: 'phone' },
+    { label: 'Email', value: email, key: 'email' },
+    { label: 'Category', value: categoryLabel(category), key: 'category' },
+    { label: 'Notes', value: notes, key: 'notes' },
   ];
 
   return (
@@ -134,25 +150,30 @@ export function ContactDetailScreen({ route }: Props) {
         </Text>
         {!editing ? (
           <Pressable onPress={() => setEditing(true)}>
-            <Text style={{ ...typography.button, color: colors.primary }}>Edit</Text>
+            <Text style={{ fontSize: 15, fontWeight: '700', color: colors.primary }}>Edit</Text>
           </Pressable>
         ) : (
-          <Pressable
-            onPress={handleSave}
-            disabled={saving}
-            style={{
-              paddingHorizontal: spacing.lg,
-              paddingVertical: spacing.sm,
-              backgroundColor: colors.primary,
-              borderRadius: radii.full,
-            }}
-          >
-            {saving ? (
-              <ActivityIndicator size="small" color={colors.onPrimary} />
-            ) : (
-              <Text style={{ ...typography.button, color: colors.onPrimary, fontSize: 14 }}>Save</Text>
-            )}
-          </Pressable>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Pressable onPress={() => { setEditing(false); load(); }} style={{ marginRight: spacing.md }}>
+              <Text style={{ fontSize: 15, fontWeight: '600', color: colors.textSecondary }}>Cancel</Text>
+            </Pressable>
+            <Pressable
+              onPress={handleSave}
+              disabled={saving}
+              style={{
+                paddingHorizontal: spacing.lg,
+                paddingVertical: spacing.sm,
+                backgroundColor: colors.primary,
+                borderRadius: radii.full,
+              }}
+            >
+              {saving ? (
+                <ActivityIndicator size="small" color="#FFFFFF" />
+              ) : (
+                <Text style={{ fontSize: 14, fontWeight: '700', color: '#FFFFFF' }}>Save</Text>
+              )}
+            </Pressable>
+          </View>
         )}
       </View>
 
@@ -161,6 +182,7 @@ export function ContactDetailScreen({ route }: Props) {
         contentContainerStyle={{ padding: spacing.lg, paddingBottom: insets.bottom + 40 }}
         keyboardShouldPersistTaps="handled"
       >
+        {/* Avatar */}
         <FadeIn delay={0}>
           <View style={{ alignItems: 'center', marginBottom: spacing.xl }}>
             <View
@@ -184,53 +206,150 @@ export function ContactDetailScreen({ route }: Props) {
           </View>
         </FadeIn>
 
-        <FadeIn delay={40}>
-          <View
-            style={{
-              backgroundColor: colors.surface,
-              borderRadius: radii.xl,
-              borderWidth: 1,
-              borderColor: colors.border,
-              overflow: 'hidden',
-            }}
-          >
-            {fields.map((field, idx) => (
-              <View
-                key={field.key}
-                style={{
-                  paddingVertical: spacing.md,
-                  paddingHorizontal: spacing.lg,
-                  borderBottomWidth: idx < fields.length - 1 ? 1 : 0,
-                  borderBottomColor: colors.border,
-                }}
-              >
-                <Text style={{ ...typography.caption, fontWeight: '600', color: colors.textSecondary, marginBottom: spacing.xs }}>
-                  {field.label}
-                </Text>
-                {editing && !field.readonly ? (
-                  <TextInput
-                    value={field.value}
-                    onChangeText={field.setter}
-                    placeholder={`Enter ${field.label.toLowerCase()}`}
-                    placeholderTextColor={colors.textDisabled}
-                    multiline={field.key === 'notes'}
-                    style={{
-                      ...typography.body,
-                      color: colors.textPrimary,
-                      padding: 0,
-                      ...(field.key === 'notes' ? { minHeight: 60, textAlignVertical: 'top' as const } : {}),
-                    }}
-                  />
-                ) : (
-                  <Text style={{ ...typography.body, color: field.value ? colors.textPrimary : colors.textDisabled }}>
+        {!editing ? (
+          /* View mode */
+          <FadeIn delay={40}>
+            <View
+              style={{
+                backgroundColor: colors.surface,
+                borderRadius: radii.xl,
+                borderWidth: 1,
+                borderColor: colors.border,
+                overflow: 'hidden',
+              }}
+            >
+              {viewFields.map((field, idx) => (
+                <View
+                  key={field.key}
+                  style={{
+                    paddingVertical: spacing.md,
+                    paddingHorizontal: spacing.lg,
+                    borderBottomWidth: idx < viewFields.length - 1 ? 1 : 0,
+                    borderBottomColor: colors.border,
+                  }}
+                >
+                  <Text style={{ fontSize: 12, fontWeight: '600', color: colors.textSecondary, marginBottom: spacing.xs }}>
+                    {field.label}
+                  </Text>
+                  <Text style={{ fontSize: 16, color: field.value ? colors.textPrimary : colors.textDisabled }}>
                     {field.value || 'Not set'}
                   </Text>
-                )}
-              </View>
-            ))}
-          </View>
-        </FadeIn>
+                </View>
+              ))}
+            </View>
+          </FadeIn>
+        ) : (
+          /* Edit mode */
+          <FadeIn delay={40}>
+            <View
+              style={{
+                backgroundColor: colors.surface,
+                borderRadius: radii.xl,
+                borderWidth: 1,
+                borderColor: colors.border,
+                overflow: 'hidden',
+                padding: spacing.lg,
+              }}
+            >
+              {/* Name */}
+              <Text style={{ fontSize: 12, fontWeight: '600', color: colors.textSecondary, marginBottom: spacing.xs }}>Name</Text>
+              <TextInput
+                value={name}
+                onChangeText={setName}
+                placeholder="Contact name"
+                placeholderTextColor={colors.textDisabled}
+                style={{
+                  fontSize: 16,
+                  color: colors.textPrimary,
+                  borderBottomWidth: 1,
+                  borderBottomColor: colors.border,
+                  paddingBottom: spacing.sm,
+                  marginBottom: spacing.lg,
+                }}
+              />
 
+              {/* Phone (read-only) */}
+              <Text style={{ fontSize: 12, fontWeight: '600', color: colors.textSecondary, marginBottom: spacing.xs }}>Phone (last 4)</Text>
+              <Text style={{ fontSize: 16, color: colors.textDisabled, marginBottom: spacing.lg }}>
+                {phone || 'Not set'}
+              </Text>
+
+              {/* Email */}
+              <Text style={{ fontSize: 12, fontWeight: '600', color: colors.textSecondary, marginBottom: spacing.xs }}>Email</Text>
+              <TextInput
+                value={email}
+                onChangeText={setEmail}
+                placeholder="Email address"
+                placeholderTextColor={colors.textDisabled}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                style={{
+                  fontSize: 16,
+                  color: colors.textPrimary,
+                  borderBottomWidth: 1,
+                  borderBottomColor: colors.border,
+                  paddingBottom: spacing.sm,
+                  marginBottom: spacing.lg,
+                }}
+              />
+
+              {/* Category (chip picker) */}
+              <Text style={{ fontSize: 12, fontWeight: '600', color: colors.textSecondary, marginBottom: spacing.sm }}>Category</Text>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: spacing.lg }}>
+                {CATEGORIES.map((cat) => {
+                  const isSelected = category === cat.slug;
+                  return (
+                    <Pressable
+                      key={cat.slug}
+                      onPress={() => setCategory(cat.slug)}
+                      style={{
+                        paddingHorizontal: 12,
+                        paddingVertical: 6,
+                        borderRadius: 16,
+                        backgroundColor: isSelected ? colors.primary : colors.background,
+                        borderWidth: 1,
+                        borderColor: isSelected ? colors.primary : colors.border,
+                        marginRight: 8,
+                        marginBottom: 8,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          fontWeight: '600',
+                          color: isSelected ? '#FFFFFF' : colors.textPrimary,
+                        }}
+                      >
+                        {cat.label}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
+
+              {/* Notes */}
+              <Text style={{ fontSize: 12, fontWeight: '600', color: colors.textSecondary, marginBottom: spacing.xs }}>Notes</Text>
+              <TextInput
+                value={notes}
+                onChangeText={setNotes}
+                placeholder="Add any notes..."
+                placeholderTextColor={colors.textDisabled}
+                multiline
+                style={{
+                  fontSize: 16,
+                  color: colors.textPrimary,
+                  minHeight: 60,
+                  textAlignVertical: 'top',
+                  borderBottomWidth: 1,
+                  borderBottomColor: colors.border,
+                  paddingBottom: spacing.sm,
+                }}
+              />
+            </View>
+          </FadeIn>
+        )}
+
+        {/* Delete */}
         <FadeIn delay={80}>
           <Pressable
             onPress={handleDelete}
@@ -238,7 +357,6 @@ export function ContactDetailScreen({ route }: Props) {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: spacing.sm,
               marginTop: spacing.xxl,
               paddingVertical: spacing.md,
               backgroundColor: colors.error + '12',
@@ -248,7 +366,7 @@ export function ContactDetailScreen({ route }: Props) {
             }}
           >
             <Icon name="delete-outline" size={20} color={colors.error} />
-            <Text style={{ ...typography.button, color: colors.error }}>Delete Contact</Text>
+            <Text style={{ fontSize: 15, fontWeight: '700', color: colors.error, marginLeft: spacing.sm }}>Delete Contact</Text>
           </Pressable>
         </FadeIn>
       </ScrollView>

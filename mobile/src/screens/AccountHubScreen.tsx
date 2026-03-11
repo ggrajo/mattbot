@@ -1,92 +1,27 @@
 import React, { useCallback } from 'react';
-import { View, Text, ScrollView, Pressable, Alert } from 'react-native';
+import { View, Text, ScrollView, Pressable, Alert, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme, useThemeContext, ThemeMode } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
+import { GlassCard } from '../components/ui/GlassCard';
+import { GradientView } from '../components/ui/GradientView';
+import { SettingsSection, SettingsRowItem } from '../components/ui/SettingsSection';
 import { FadeIn } from '../components/ui/FadeIn';
 import { useAuthStore } from '../store/authStore';
 import { hapticLight } from '../utils/haptics';
 import { deleteAccount } from '../api/auth';
 import { extractApiError } from '../api/client';
 
-const THEME_OPTIONS: { value: ThemeMode; label: string }[] = [
-  { value: 'system', label: 'System' },
-  { value: 'light', label: 'Light' },
-  { value: 'dark', label: 'Dark' },
+const THEME_OPTIONS: { value: ThemeMode; label: string; icon: string }[] = [
+  { value: 'system', label: 'Auto', icon: 'cellphone' },
+  { value: 'light', label: 'Light', icon: 'white-balance-sunny' },
+  { value: 'dark', label: 'Dark', icon: 'moon-waning-crescent' },
 ];
 
-function ThemeToggle({
-  themeMode,
-  onSelect,
-  colors,
-  spacing,
-  typography,
-  radii,
-}: {
-  themeMode: ThemeMode;
-  onSelect: (mode: ThemeMode) => void;
-  colors: ReturnType<typeof useTheme>['colors'];
-  spacing: ReturnType<typeof useTheme>['spacing'];
-  typography: ReturnType<typeof useTheme>['typography'];
-  radii: ReturnType<typeof useTheme>['radii'];
-}) {
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        backgroundColor: colors.surfaceVariant,
-        borderRadius: radii.full,
-        padding: 3,
-      }}
-    >
-      {THEME_OPTIONS.map((opt) => {
-        const active = themeMode === opt.value;
-        return (
-          <Pressable
-            key={opt.value}
-            onPress={() => { hapticLight(); onSelect(opt.value); }}
-            style={{
-              flex: 1,
-              paddingVertical: spacing.sm,
-              borderRadius: radii.full,
-              alignItems: 'center',
-              backgroundColor: active ? colors.primary : 'transparent',
-            }}
-          >
-            <Text
-              style={{
-                ...typography.bodySmall,
-                fontWeight: '600',
-                color: active ? '#FFFFFF' : colors.textSecondary,
-              }}
-            >
-              {opt.label}
-            </Text>
-          </Pressable>
-        );
-      })}
-    </View>
-  );
-}
-
-interface AccountRow {
-  icon: string;
-  label: string;
-  route?: string;
-  color?: string;
-  action?: () => void;
-  destructive?: boolean;
-  disabled?: boolean;
-}
-
-interface AccountSection {
-  title: string;
-  rows: AccountRow[];
-}
-
 export function AccountHubScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, radii } = theme;
   const { themeMode, setThemeMode } = useThemeContext();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();
@@ -113,7 +48,7 @@ export function AccountHubScreen() {
           onPress: () => {
             Alert.alert(
               'Are you absolutely sure?',
-              'This cannot be reversed. Your account and all associated data will be permanently removed.',
+              'This cannot be reversed.',
               [
                 { text: 'Cancel', style: 'cancel' },
                 {
@@ -136,209 +71,132 @@ export function AccountHubScreen() {
     );
   }, []);
 
-  const sections: AccountSection[] = [
-    {
-      title: 'Account',
-      rows: [
-        { icon: 'account-outline', label: 'Profile', route: 'ProfileSettings' },
-        { icon: 'lock-outline', label: 'Change Password', route: 'ChangePassword' },
-        { icon: 'pin-outline', label: 'PIN Setup', route: 'PinSetup' },
-        { icon: 'cellphone-link', label: 'Devices', route: 'DeviceList' },
-        { icon: 'bell-outline', label: 'Reminders', route: 'RemindersList' },
-        { icon: 'cog-outline', label: 'Settings', route: 'SettingsHub' },
-        { icon: 'credit-card-outline', label: 'Payment Methods', route: 'PaymentMethodsList' },
-      ],
-    },
-    {
-      title: 'About',
-      rows: [
-        { icon: 'information-outline', label: 'App Version 1.0.0', color: colors.textSecondary, disabled: true },
-      ],
-    },
-    {
-      title: 'Danger Zone',
-      rows: [
-        { icon: 'logout', label: 'Sign Out', destructive: true, action: handleSignOut },
-        { icon: 'delete-outline', label: 'Delete Account', destructive: true, action: handleDeleteAccount },
-      ],
-    },
+  const userLabel = displayName || nickname || 'User';
+  const initial = userLabel.charAt(0).toUpperCase();
+
+  const accountRows: SettingsRowItem[] = [
+    { icon: 'account-outline', label: 'Profile', onPress: () => navigation.navigate('ProfileSettings') },
+    { icon: 'lock-outline', label: 'Change Password', onPress: () => navigation.navigate('ChangePassword') },
+    { icon: 'pin-outline', label: 'PIN Setup', onPress: () => navigation.navigate('PinSetup') },
+    { icon: 'cellphone-link', label: 'Devices', onPress: () => navigation.navigate('DeviceList') },
   ];
 
-  function handleRowPress(row: AccountRow) {
-    if (row.action) {
-      row.action();
-    } else if (row.route) {
-      navigation.navigate(row.route);
-    }
-  }
+  const quickAccessRows: SettingsRowItem[] = [
+    { icon: 'bell-outline', label: 'Reminders', onPress: () => navigation.navigate('RemindersList') },
+    { icon: 'credit-card-outline', label: 'Payment Methods', onPress: () => navigation.navigate('PaymentMethodsList') },
+    { icon: 'cog-outline', label: 'All Settings', onPress: () => navigation.navigate('SettingsHub') },
+  ];
 
-  const userLabel = displayName || nickname || 'User';
+  const dangerRows: SettingsRowItem[] = [
+    { icon: 'logout', label: 'Sign Out', destructive: true, onPress: handleSignOut },
+    { icon: 'delete-outline', label: 'Delete Account', destructive: true, onPress: handleDeleteAccount },
+  ];
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background, paddingTop: insets.top }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingHorizontal: spacing.lg,
-          paddingTop: spacing.lg,
-          paddingBottom: spacing.md,
-        }}
-      >
-        <Icon name="account-outline" size={28} color={colors.textPrimary} />
-        <Text style={{ ...typography.h1, color: colors.textPrimary, marginLeft: spacing.sm }}>
-          Account
-        </Text>
-      </View>
-
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
+        contentContainerStyle={{ paddingTop: insets.top + spacing.lg, paddingBottom: insets.bottom + 40 }}
       >
-        <FadeIn delay={0}>
-          <View style={{ alignItems: 'center', paddingVertical: spacing.xl }}>
-            <View
-              style={{
-                width: 80,
-                height: 80,
-                borderRadius: 40,
-                backgroundColor: colors.surfaceVariant,
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: spacing.md,
-              }}
-            >
-              <Icon name="account" size={40} color={colors.primary} />
-            </View>
-            <Text style={{ ...typography.h2, color: colors.textPrimary }}>{userLabel}</Text>
-            {nickname && displayName && (
-              <Text style={{ ...typography.caption, color: colors.textSecondary, marginTop: 2 }}>
-                @{nickname}
-              </Text>
-            )}
+        {/* Profile Header */}
+        <FadeIn delay={0} slide="down">
+          <View style={{ paddingHorizontal: spacing.lg, marginBottom: spacing.xl }}>
+            <GlassCard>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <GradientView
+                  colors={[colors.gradientStart, colors.gradientEnd]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: 18,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    ...Platform.select({
+                      ios: { shadowColor: colors.primary, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8 },
+                      android: { elevation: 4 },
+                    }),
+                  }}
+                >
+                  <Text style={{ fontSize: 24, fontWeight: '800', color: '#FFFFFF' }}>{initial}</Text>
+                </GradientView>
+                <View style={{ flex: 1, marginLeft: spacing.lg }}>
+                  <Text style={{ fontSize: 20, fontWeight: '700', color: colors.textPrimary }}>{userLabel}</Text>
+                  {nickname && displayName && (
+                    <Text style={{ fontSize: 13, color: colors.textSecondary, marginTop: 2 }}>@{nickname}</Text>
+                  )}
+                </View>
+                <Pressable
+                  onPress={() => { hapticLight(); navigation.navigate('ProfileSettings'); }}
+                  hitSlop={8}
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 12,
+                    backgroundColor: colors.primary + '15',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Icon name="pencil-outline" size={18} color={colors.primary} />
+                </Pressable>
+              </View>
+            </GlassCard>
           </View>
         </FadeIn>
 
-        {sections.map((section, sIdx) => (
-          <React.Fragment key={section.title}>
-            {section.title === 'Danger Zone' && (
-              <FadeIn delay={(sIdx + 1) * 30}>
-                <View style={{ marginTop: spacing.lg }}>
-                  <Text
-                    style={{
-                      ...typography.caption,
-                      fontWeight: '600',
-                      color: colors.textSecondary,
-                      textTransform: 'uppercase',
-                      letterSpacing: 0.8,
-                      paddingHorizontal: spacing.lg,
-                      marginBottom: spacing.xs,
-                    }}
-                  >
-                    Preferences
-                  </Text>
-                  <View
-                    style={{
-                      marginHorizontal: spacing.lg,
-                      backgroundColor: colors.surface,
-                      borderRadius: radii.lg,
-                      borderWidth: 1,
-                      borderColor: colors.border,
-                      overflow: 'hidden',
-                      padding: spacing.lg,
-                    }}
-                  >
-                    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.md }}>
-                      <Icon name="theme-light-dark" size={20} color={colors.primary} />
-                      <Text style={{ ...typography.body, color: colors.textPrimary, marginLeft: spacing.md }}>
-                        Theme
+        {/* Theme Selector */}
+        <FadeIn delay={30}>
+          <View style={{ paddingHorizontal: spacing.lg, marginBottom: spacing.sm }}>
+            <GlassCard padding={spacing.md}>
+              <View style={{ flexDirection: 'row' }}>
+                {THEME_OPTIONS.map((opt, idx) => {
+                  const active = themeMode === opt.value;
+                  return (
+                    <Pressable
+                      key={opt.value}
+                      onPress={() => { hapticLight(); setThemeMode(opt.value); }}
+                      style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        paddingVertical: 10,
+                        borderRadius: 14,
+                        backgroundColor: active ? colors.primary : 'transparent',
+                        marginRight: idx < THEME_OPTIONS.length - 1 ? 6 : 0,
+                      }}
+                    >
+                      <Icon name={opt.icon} size={16} color={active ? '#FFFFFF' : colors.textSecondary} />
+                      <Text style={{ fontSize: 13, fontWeight: '600', color: active ? '#FFFFFF' : colors.textSecondary, marginLeft: 6 }}>
+                        {opt.label}
                       </Text>
-                    </View>
-                    <ThemeToggle
-                      themeMode={themeMode}
-                      onSelect={setThemeMode}
-                      colors={colors}
-                      spacing={spacing}
-                      typography={typography}
-                      radii={radii}
-                    />
-                  </View>
-                </View>
-              </FadeIn>
-            )}
-            <FadeIn delay={(sIdx + 1) * 30}>
-              <View style={{ marginTop: sIdx === 0 ? 0 : spacing.lg }}>
-                <Text
-                  style={{
-                    ...typography.caption,
-                    fontWeight: '600',
-                    color: colors.textSecondary,
-                    textTransform: 'uppercase',
-                    letterSpacing: 0.8,
-                    paddingHorizontal: spacing.lg,
-                    marginBottom: spacing.xs,
-                  }}
-                >
-                  {section.title}
-                </Text>
-
-                <View
-                  style={{
-                    marginHorizontal: spacing.lg,
-                    backgroundColor: colors.surface,
-                    borderRadius: radii.lg,
-                    borderWidth: 1,
-                    borderColor: colors.border,
-                    overflow: 'hidden',
-                  }}
-                >
-                  {section.rows.map((row, rIdx) => {
-                    const isLast = rIdx === section.rows.length - 1;
-                    const rowColor = row.destructive
-                      ? colors.error
-                      : row.color || colors.textPrimary;
-                    const iconColor = row.destructive
-                      ? colors.error
-                      : row.color || colors.primary;
-                    const showChevron = !row.destructive && !row.disabled && (!!row.route || !!row.action);
-
-                    return (
-                      <Pressable
-                        key={row.label}
-                        onPress={() => handleRowPress(row)}
-                        disabled={row.disabled || (!row.route && !row.action)}
-                        style={({ pressed }) => ({
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          paddingVertical: spacing.md,
-                          paddingHorizontal: spacing.lg,
-                          backgroundColor: pressed ? colors.surfaceVariant : 'transparent',
-                          borderBottomWidth: isLast ? 0 : 1,
-                          borderBottomColor: colors.border,
-                        })}
-                      >
-                        <Icon name={row.icon} size={20} color={iconColor} />
-                        <Text
-                          style={{
-                            ...typography.body,
-                            color: rowColor,
-                            flex: 1,
-                            marginLeft: spacing.md,
-                          }}
-                        >
-                          {row.label}
-                        </Text>
-                        {showChevron && (
-                          <Icon name="chevron-right" size={20} color={colors.textSecondary} />
-                        )}
-                      </Pressable>
-                    );
-                  })}
-                </View>
+                    </Pressable>
+                  );
+                })}
               </View>
-            </FadeIn>
-          </React.Fragment>
-        ))}
+            </GlassCard>
+          </View>
+        </FadeIn>
+
+        {/* Sections */}
+        <FadeIn delay={60}>
+          <SettingsSection title="Account" rows={accountRows} />
+        </FadeIn>
+        <FadeIn delay={90}>
+          <SettingsSection title="Quick Access" rows={quickAccessRows} />
+        </FadeIn>
+        <FadeIn delay={120}>
+          <SettingsSection title="Danger Zone" rows={dangerRows} />
+        </FadeIn>
+
+        {/* Version */}
+        <FadeIn delay={150}>
+          <Text style={{ fontSize: 12, color: colors.textDisabled, textAlign: 'center', marginTop: spacing.xl }}>
+            MattBot v1.0.0
+          </Text>
+        </FadeIn>
       </ScrollView>
     </View>
   );

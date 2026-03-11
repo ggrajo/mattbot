@@ -60,6 +60,7 @@ import { ChangePasswordScreen } from '../screens/ChangePasswordScreen';
 import { PinSetupScreen } from '../screens/PinSetupScreen';
 import { PinLoginScreen } from '../screens/PinLoginScreen';
 import { OnboardingCalendarSetupScreen } from '../screens/OnboardingCalendarSetupScreen';
+import { OnboardingCompleteScreen } from '../screens/OnboardingCompleteScreen';
 import { LiveTranscriptScreen } from '../screens/LiveTranscriptScreen';
 import { PaymentMethodsListScreen } from '../screens/PaymentMethodsListScreen';
 import { ContactsListScreen } from '../screens/ContactsListScreen';
@@ -315,6 +316,11 @@ export function RootNavigator() {
                 options={{ headerShown: true, title: 'Call Modes' }}
               />
               <Stack.Screen
+                name="OnboardingComplete"
+                component={OnboardingCompleteScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
                 name="DeviceList"
                 component={DeviceListScreen}
                 options={{ headerShown: true, title: 'Devices' }}
@@ -361,7 +367,7 @@ export function RootNavigator() {
               <Stack.Screen
                 name="CallDetail"
                 component={CallDetailScreen}
-                options={{ headerShown: true, title: 'Call Details' }}
+                options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="CallerProfile"
@@ -376,7 +382,7 @@ export function RootNavigator() {
               <Stack.Screen
                 name="CreateReminder"
                 component={CreateReminderScreen}
-                options={{ headerShown: true, title: 'Create Reminder' }}
+                options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="TextBack"
@@ -456,12 +462,12 @@ export function RootNavigator() {
               <Stack.Screen
                 name="ContactDetail"
                 component={ContactDetailScreen}
-                options={{ headerShown: true, title: 'Contact' }}
+                options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="AddContact"
                 component={AddContactScreen}
-                options={{ headerShown: true, title: 'Add Contact' }}
+                options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="CategoryDefaults"

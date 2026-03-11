@@ -4,7 +4,7 @@ import {
   Text,
   ScrollView,
   Switch,
-  TouchableOpacity,
+  Pressable,
   ActivityIndicator,
   Alert,
 } from 'react-native';
@@ -14,11 +14,12 @@ import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
 import { apiClient, extractApiError } from '../api/client';
 
-const DURATION_OPTIONS = [15, 30, 45, 60];
-const BUFFER_OPTIONS = [0, 5, 10, 15, 30];
+const DURATION_OPTIONS = [15, 30, 45, 60, 90, 120];
+const WINDOW_OPTIONS = [7, 14, 30, 60];
 
 export function CalendarBookingSettingsScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
   const insets = useSafeAreaInsets();
 
   const [loading, setLoading] = useState(true);
@@ -26,19 +27,19 @@ export function CalendarBookingSettingsScreen() {
   const [error, setError] = useState<string | undefined>();
 
   const [calendarEnabled, setCalendarEnabled] = useState(false);
-  const [blockBusyTimes, setBlockBusyTimes] = useState(false);
-  const [slotDuration, setSlotDuration] = useState(30);
-  const [bufferMinutes, setBufferMinutes] = useState(10);
+  const [defaultDuration, setDefaultDuration] = useState(30);
+  const [bookingWindow, setBookingWindow] = useState(14);
+  const [revision, setRevision] = useState(1);
 
   const loadSettings = useCallback(async () => {
     setLoading(true);
     setError(undefined);
     try {
       const { data } = await apiClient.get('/settings');
-      setCalendarEnabled(data.calendar_availability_enabled ?? false);
-      setBlockBusyTimes(data.calendar_block_busy ?? false);
-      setSlotDuration(data.booking_slot_duration ?? 30);
-      setBufferMinutes(data.booking_buffer_minutes ?? 10);
+      setCalendarEnabled(data.calendar_booking_enabled ?? false);
+      setDefaultDuration(data.calendar_default_duration_minutes ?? 30);
+      setBookingWindow(data.calendar_booking_window_days ?? 14);
+      setRevision(data.revision ?? 1);
     } catch (e) {
       setError(extractApiError(e));
     } finally {
@@ -52,10 +53,16 @@ export function CalendarBookingSettingsScreen() {
     }, [loadSettings]),
   );
 
-  async function saveSettings(patch: Record<string, unknown>) {
+  async function saveSettings(changes: Record<string, unknown>) {
     setSaving(true);
     try {
-      await apiClient.patch('/settings', patch);
+      const res = await apiClient.patch('/settings', {
+        expected_revision: revision,
+        changes,
+      });
+      if (res.data?.revision) {
+        setRevision(res.data.revision);
+      }
     } catch (e) {
       Alert.alert('Error', extractApiError(e) || 'Failed to save settings');
     } finally {
@@ -65,22 +72,17 @@ export function CalendarBookingSettingsScreen() {
 
   function handleCalendarEnabledToggle(value: boolean) {
     setCalendarEnabled(value);
-    saveSettings({ calendar_availability_enabled: value });
-  }
-
-  function handleBlockBusyToggle(value: boolean) {
-    setBlockBusyTimes(value);
-    saveSettings({ calendar_block_busy: value });
+    saveSettings({ calendar_booking_enabled: value });
   }
 
   function handleDurationSelect(duration: number) {
-    setSlotDuration(duration);
-    saveSettings({ booking_slot_duration: duration });
+    setDefaultDuration(duration);
+    saveSettings({ calendar_default_duration_minutes: duration });
   }
 
-  function handleBufferSelect(buffer: number) {
-    setBufferMinutes(buffer);
-    saveSettings({ booking_buffer_minutes: buffer });
+  function handleWindowSelect(days: number) {
+    setBookingWindow(days);
+    saveSettings({ calendar_booking_window_days: days });
   }
 
   if (loading) {
@@ -104,30 +106,27 @@ export function CalendarBookingSettingsScreen() {
             padding: spacing.md,
             flexDirection: 'row',
             alignItems: 'center',
-            gap: spacing.sm,
             marginBottom: spacing.lg,
           }}
         >
           <Icon name="alert-circle-outline" size="md" color={colors.error} />
-          <Text style={{ ...typography.bodySmall, color: colors.error, flex: 1 }} allowFontScaling>
+          <Text style={{ fontSize: 13, color: colors.error, flex: 1, marginLeft: spacing.sm }}>
             {error}
           </Text>
-          <TouchableOpacity onPress={loadSettings}>
-            <Text style={{ ...typography.bodySmall, color: colors.error, fontWeight: '700' }} allowFontScaling>
-              Retry
-            </Text>
-          </TouchableOpacity>
+          <Pressable onPress={loadSettings}>
+            <Text style={{ fontSize: 13, color: colors.error, fontWeight: '700' }}>Retry</Text>
+          </Pressable>
         </View>
       ) : null}
 
       {saving && (
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.md }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.md }}>
           <ActivityIndicator size="small" color={colors.primary} />
-          <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>Saving...</Text>
+          <Text style={{ fontSize: 12, color: colors.textSecondary, marginLeft: spacing.sm }}>Saving...</Text>
         </View>
       )}
 
-      {/* Calendar Availability Toggle */}
+      {/* Calendar Booking Toggle */}
       <View
         style={{
           backgroundColor: colors.surfaceElevated,
@@ -138,11 +137,11 @@ export function CalendarBookingSettingsScreen() {
       >
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <View style={{ flex: 1, marginRight: spacing.md }}>
-            <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }} allowFontScaling>
-              Calendar-Based Availability
+            <Text style={{ fontSize: 16, color: colors.textPrimary, fontWeight: '600' }}>
+              Calendar Booking
             </Text>
-            <Text style={{ ...typography.caption, color: colors.textSecondary, marginTop: 4 }} allowFontScaling>
-              Use your calendar to determine when you're available for bookings
+            <Text style={{ fontSize: 12, color: colors.textSecondary, marginTop: 4 }}>
+              Allow the AI assistant to book meetings on your calendar
             </Text>
           </View>
           <Switch
@@ -153,118 +152,94 @@ export function CalendarBookingSettingsScreen() {
         </View>
       </View>
 
-      {/* Block Busy Times Toggle */}
+      {/* Default Duration Picker */}
       <View
         style={{
-          backgroundColor: colors.surfaceElevated,
+          backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
           borderRadius: radii.xl,
           padding: spacing.lg,
           marginBottom: spacing.lg,
         }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <View style={{ flex: 1, marginRight: spacing.md }}>
-            <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }} allowFontScaling>
-              Block Busy Times
-            </Text>
-            <Text style={{ ...typography.caption, color: colors.textSecondary, marginTop: 4 }} allowFontScaling>
-              Automatically block time slots when you have existing events
-            </Text>
-          </View>
-          <Switch
-            value={blockBusyTimes}
-            onValueChange={handleBlockBusyToggle}
-            trackColor={{ false: colors.border, true: colors.primary }}
-          />
-        </View>
-      </View>
-
-      {/* Slot Duration Picker */}
-      <View
-        style={{
-          backgroundColor: colors.surfaceElevated,
-          borderRadius: radii.xl,
-          padding: spacing.lg,
-          marginBottom: spacing.lg,
-        }}
-      >
-        <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600', marginBottom: spacing.sm }} allowFontScaling>
-          Slot Duration
+        <Text style={{ fontSize: 16, color: colors.textPrimary, fontWeight: '600', marginBottom: spacing.sm }}>
+          Default Duration
         </Text>
-        <Text style={{ ...typography.caption, color: colors.textSecondary, marginBottom: spacing.md }} allowFontScaling>
-          How long each booking slot should be
+        <Text style={{ fontSize: 12, color: colors.textSecondary, marginBottom: spacing.md }}>
+          Default length of booked meetings (15-120 min)
         </Text>
-        <View style={{ flexDirection: 'row', gap: spacing.sm }}>
-          {DURATION_OPTIONS.map((d) => (
-            <TouchableOpacity
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+          {DURATION_OPTIONS.map((d, idx) => (
+            <Pressable
               key={d}
               onPress={() => handleDurationSelect(d)}
-              style={{
-                flex: 1,
-                paddingVertical: spacing.md,
-                borderRadius: radii.md,
-                backgroundColor: slotDuration === d ? colors.primary : colors.surface,
-                borderWidth: slotDuration === d ? 0 : 1,
-                borderColor: colors.border,
-                alignItems: 'center',
-              }}
-            >
-              <Text
-                style={{
-                  ...typography.bodySmall,
-                  fontWeight: '600',
-                  color: slotDuration === d ? colors.onPrimary : colors.textPrimary,
-                }}
-                allowFontScaling
-              >
-                {d} min
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-
-      {/* Buffer Time Picker */}
-      <View
-        style={{
-          backgroundColor: colors.surfaceElevated,
-          borderRadius: radii.xl,
-          padding: spacing.lg,
-          marginBottom: spacing.lg,
-        }}
-      >
-        <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600', marginBottom: spacing.sm }} allowFontScaling>
-          Buffer Time
-        </Text>
-        <Text style={{ ...typography.caption, color: colors.textSecondary, marginBottom: spacing.md }} allowFontScaling>
-          Break between consecutive meetings
-        </Text>
-        <View style={{ flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap' }}>
-          {BUFFER_OPTIONS.map((b) => (
-            <TouchableOpacity
-              key={b}
-              onPress={() => handleBufferSelect(b)}
               style={{
                 paddingVertical: spacing.sm,
                 paddingHorizontal: spacing.lg,
                 borderRadius: radii.md,
-                backgroundColor: bufferMinutes === b ? colors.primary : colors.surface,
-                borderWidth: bufferMinutes === b ? 0 : 1,
+                backgroundColor: defaultDuration === d ? colors.primary : colors.surface,
+                borderWidth: defaultDuration === d ? 0 : 1,
                 borderColor: colors.border,
                 alignItems: 'center',
+                marginRight: 8,
+                marginBottom: 8,
               }}
             >
               <Text
                 style={{
-                  ...typography.bodySmall,
+                  fontSize: 14,
                   fontWeight: '600',
-                  color: bufferMinutes === b ? colors.onPrimary : colors.textPrimary,
+                  color: defaultDuration === d ? '#FFFFFF' : colors.textPrimary,
                 }}
-                allowFontScaling
               >
-                {b === 0 ? 'None' : `${b} min`}
+                {d} min
               </Text>
-            </TouchableOpacity>
+            </Pressable>
+          ))}
+        </View>
+      </View>
+
+      {/* Booking Window Picker */}
+      <View
+        style={{
+          backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
+          borderRadius: radii.xl,
+          padding: spacing.lg,
+          marginBottom: spacing.lg,
+        }}
+      >
+        <Text style={{ fontSize: 16, color: colors.textPrimary, fontWeight: '600', marginBottom: spacing.sm }}>
+          Booking Window
+        </Text>
+        <Text style={{ fontSize: 12, color: colors.textSecondary, marginBottom: spacing.md }}>
+          How far in advance people can book meetings (1-60 days)
+        </Text>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+          {WINDOW_OPTIONS.map((w) => (
+            <Pressable
+              key={w}
+              onPress={() => handleWindowSelect(w)}
+              style={{
+                paddingVertical: spacing.sm,
+                paddingHorizontal: spacing.lg,
+                borderRadius: radii.md,
+                backgroundColor: bookingWindow === w ? colors.primary : colors.surface,
+                borderWidth: bookingWindow === w ? 0 : 1,
+                borderColor: colors.border,
+                alignItems: 'center',
+                marginRight: 8,
+                marginBottom: 8,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: '600',
+                  color: bookingWindow === w ? '#FFFFFF' : colors.textPrimary,
+                }}
+              >
+                {w} days
+              </Text>
+            </Pressable>
           ))}
         </View>
       </View>
