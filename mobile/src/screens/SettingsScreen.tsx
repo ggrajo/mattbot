@@ -78,7 +78,7 @@ export function SettingsScreen() {
         </FadeIn>
 
         <FadeIn delay={120}>
-          <Text style={[styles.sectionHeader, { color: colors.textSecondary }]}>ASSISTANT</Text>
+          <Text style={[styles.sectionHeader, { color: colors.textSecondary }]}>AI ASSISTANT</Text>
           <Card>
             <ListRow
               icon="🤖"
@@ -100,6 +100,13 @@ export function SettingsScreen() {
               hint="Availability schedule"
               onPress={() => navigation.navigate('BusinessHours')}
             />
+            <View style={[styles.separator, { backgroundColor: colors.border }]} />
+            <ListRow
+              icon="🛡️"
+              label="Screening Defaults"
+              hint="Category call rules"
+              onPress={() => navigation.navigate('CategoryDefaults')}
+            />
           </Card>
         </FadeIn>
 
@@ -108,9 +115,9 @@ export function SettingsScreen() {
           <Card>
             <ListRow
               icon="👤"
-              label="Account Settings"
-              hint="Profile, password, security"
-              onPress={() => navigation.navigate('AccountSettings')}
+              label="Account Hub"
+              hint="Profile, security, billing"
+              onPress={() => navigation.navigate('AccountHub')}
             />
             <View style={[styles.separator, { backgroundColor: colors.border }]} />
             <ListRow
@@ -137,15 +144,51 @@ export function SettingsScreen() {
         </FadeIn>
 
         <FadeIn delay={240}>
-          <Text style={[styles.sectionHeader, { color: colors.textSecondary }]}>NOTIFICATIONS</Text>
+          <Text style={[styles.sectionHeader, { color: colors.textSecondary }]}>TELEPHONY</Text>
           <Card>
-            <Text style={[typography.bodySmall, { color: colors.textSecondary }]}>
-              Notification preferences can be configured in your device's system settings.
-            </Text>
+            <ListRow
+              icon="📞"
+              label="Phone Number"
+              hint="Manage your MattBot number"
+              onPress={() => navigation.navigate('NumberProvision')}
+            />
+            <View style={[styles.separator, { backgroundColor: colors.border }]} />
+            <ListRow
+              icon="🔀"
+              label="Call Modes"
+              hint="Screening, forwarding rules"
+              onPress={() => navigation.navigate('CallModes')}
+            />
+            <View style={[styles.separator, { backgroundColor: colors.border }]} />
+            <ListRow
+              icon="👥"
+              label="Contacts"
+              hint="Manage callers & VIPs"
+              onPress={() => navigation.navigate('ContactsList')}
+            />
           </Card>
         </FadeIn>
 
         <FadeIn delay={300}>
+          <Text style={[styles.sectionHeader, { color: colors.textSecondary }]}>SUPPORT</Text>
+          <Card>
+            <ListRow
+              icon="❓"
+              label="Help & FAQ"
+              hint="Get answers to common questions"
+              onPress={() => {}}
+            />
+            <View style={[styles.separator, { backgroundColor: colors.border }]} />
+            <ListRow
+              icon="📧"
+              label="Contact Support"
+              hint="Reach our support team"
+              onPress={() => {}}
+            />
+          </Card>
+        </FadeIn>
+
+        <FadeIn delay={360}>
           <Text style={[styles.sectionHeader, { color: colors.textSecondary }]}>ABOUT</Text>
           <Card>
             <View style={styles.aboutRow}>
@@ -155,12 +198,12 @@ export function SettingsScreen() {
             <View style={[styles.separator, { backgroundColor: colors.border }]} />
             <View style={styles.aboutRow}>
               <Text style={[typography.bodySmall, { color: colors.textSecondary }]}>Build</Text>
-              <Text style={[typography.bodySmall, { color: colors.textPrimary, fontWeight: '600' }]}>Phase 9</Text>
+              <Text style={[typography.bodySmall, { color: colors.textPrimary, fontWeight: '600' }]}>Phase 11</Text>
             </View>
           </Card>
         </FadeIn>
 
-        <FadeIn delay={360}>
+        <FadeIn delay={420}>
           <TouchableOpacity
             style={[styles.logoutButton, { borderColor: colors.error }]}
             activeOpacity={0.7}

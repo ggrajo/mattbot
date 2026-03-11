@@ -36,6 +36,14 @@ import { MemoryListScreen } from '../screens/MemoryListScreen';
 import { TemperamentScreen } from '../screens/TemperamentScreen';
 import { BusinessHoursScreen } from '../screens/BusinessHoursScreen';
 import { AccountSettingsScreen } from '../screens/AccountSettingsScreen';
+import { AccountHubScreen } from '../screens/AccountHubScreen';
+import { ContactsListScreen } from '../screens/ContactsListScreen';
+import { ContactDetailScreen } from '../screens/ContactDetailScreen';
+import { AddContactScreen } from '../screens/AddContactScreen';
+import { CategoryDefaultsScreen } from '../screens/CategoryDefaultsScreen';
+import { PinSetupScreen } from '../screens/PinSetupScreen';
+import { PinLoginScreen } from '../screens/PinLoginScreen';
+import { PaymentMethodsListScreen } from '../screens/PaymentMethodsListScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -190,6 +198,46 @@ export function RootNavigator() {
               name="MemoryList"
               component={MemoryListScreen}
               options={{ headerShown: true, title: 'Memories' }}
+            />
+            <Stack.Screen
+              name="AccountHub"
+              component={AccountHubScreen}
+              options={{ headerShown: true, title: 'Account Hub' }}
+            />
+            <Stack.Screen
+              name="ContactsList"
+              component={ContactsListScreen}
+              options={{ headerShown: true, title: 'Contacts' }}
+            />
+            <Stack.Screen
+              name="ContactDetail"
+              component={ContactDetailScreen}
+              options={{ headerShown: true, title: 'Contact' }}
+            />
+            <Stack.Screen
+              name="AddContact"
+              component={AddContactScreen}
+              options={{ headerShown: true, title: 'Add Contact' }}
+            />
+            <Stack.Screen
+              name="CategoryDefaults"
+              component={CategoryDefaultsScreen}
+              options={{ headerShown: true, title: 'Screening Defaults' }}
+            />
+            <Stack.Screen
+              name="PinSetup"
+              component={PinSetupScreen}
+              options={{ headerShown: true, title: 'Set PIN' }}
+            />
+            <Stack.Screen
+              name="PinLogin"
+              component={PinLoginScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PaymentMethodsList"
+              component={PaymentMethodsListScreen}
+              options={{ headerShown: true, title: 'Payment Methods' }}
             />
           </>
         ) : (

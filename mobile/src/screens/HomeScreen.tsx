@@ -6,6 +6,8 @@ import { FadeIn } from '../components/ui/FadeIn';
 import { useTheme } from '../theme/ThemeProvider';
 import { useAgentStore } from '../store/agentStore';
 import { useCalendarStore } from '../store/calendarStore';
+import { useStatsStore } from '../store/statsStore';
+import { useRealtimeStore } from '../store/realtimeStore';
 
 export function HomeScreen() {
   const theme = useTheme();
@@ -13,11 +15,14 @@ export function HomeScreen() {
   const navigation = useNavigation<any>();
   const { currentAgent, fetchAgents } = useAgentStore();
   const { status: calStatus, events: calEvents, fetchStatus: fetchCalStatus, fetchEvents: fetchCalEvents } = useCalendarStore();
+  const { total_calls, minutes_used, memory_items, loading: statsLoading, fetchStats } = useStatsStore();
+  const { isCallActive, activeCallId } = useRealtimeStore();
 
   useEffect(() => {
     fetchAgents();
     fetchCalStatus();
-  }, [fetchAgents, fetchCalStatus]);
+    fetchStats();
+  }, [fetchAgents, fetchCalStatus, fetchStats]);
 
   useEffect(() => {
     if (calStatus?.is_connected) {
@@ -50,7 +55,63 @@ export function HomeScreen() {
           </View>
         </FadeIn>
 
-        <FadeIn delay={80}>
+        {isCallActive && (
+          <FadeIn delay={40}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => activeCallId && navigation.navigate('CallDetail', { callId: activeCallId })}
+            >
+              <Card variant="elevated" style={{ borderColor: colors.primary, borderWidth: 2 }}>
+                <View style={styles.activeCallRow}>
+                  <View style={[styles.pulsingDot, { backgroundColor: colors.primary }]} />
+                  <View style={{ flex: 1 }}>
+                    <Text style={[styles.cardTitle, { color: colors.primary, marginBottom: 2 }]}>
+                      Active Call
+                    </Text>
+                    <Text style={[styles.cardCaption, { color: colors.textSecondary }]}>
+                      Tap to view live transcript
+                    </Text>
+                  </View>
+                  <View style={[styles.chevronCircle, { backgroundColor: colors.primaryContainer }]}>
+                    <Text style={{ color: colors.primary, fontSize: 16, fontWeight: '600' }}>›</Text>
+                  </View>
+                </View>
+              </Card>
+            </TouchableOpacity>
+          </FadeIn>
+        )}
+
+        <FadeIn delay={isCallActive ? 120 : 80}>
+          <Card>
+            <View style={styles.sectionHeader}>
+              <Text style={[styles.cardTitle, { color: colors.textPrimary }]}>Dashboard</Text>
+            </View>
+            <View style={styles.statsRow}>
+              <View style={styles.statItem}>
+                <Text style={[styles.statValue, { color: colors.primary }]}>
+                  {statsLoading ? '–' : total_calls}
+                </Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Total Calls</Text>
+              </View>
+              <View style={[styles.statDivider, { backgroundColor: colors.border }]} />
+              <View style={styles.statItem}>
+                <Text style={[styles.statValue, { color: colors.primary }]}>
+                  {statsLoading ? '–' : minutes_used}
+                </Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Minutes</Text>
+              </View>
+              <View style={[styles.statDivider, { backgroundColor: colors.border }]} />
+              <View style={styles.statItem}>
+                <Text style={[styles.statValue, { color: colors.primary }]}>
+                  {statsLoading ? '–' : memory_items}
+                </Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Memories</Text>
+              </View>
+            </View>
+          </Card>
+        </FadeIn>
+
+        <FadeIn delay={isCallActive ? 200 : 160}>
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={() =>
@@ -82,7 +143,7 @@ export function HomeScreen() {
           </TouchableOpacity>
         </FadeIn>
 
-        <FadeIn delay={160}>
+        <FadeIn delay={isCallActive ? 280 : 240}>
           <View style={styles.quickActions}>
             <TouchableOpacity
               style={[styles.actionCard, { backgroundColor: colors.surface, borderColor: colors.border, ...shadows.card }]}
@@ -123,7 +184,7 @@ export function HomeScreen() {
         </FadeIn>
 
         {calStatus?.is_connected && calEvents.length > 0 && (
-          <FadeIn delay={240}>
+          <FadeIn delay={isCallActive ? 360 : 320}>
             <Card>
               <View style={styles.sectionHeader}>
                 <Text style={[styles.cardTitle, { color: colors.textPrimary }]}>Upcoming Events</Text>
@@ -148,7 +209,7 @@ export function HomeScreen() {
           </FadeIn>
         )}
 
-        <FadeIn delay={calStatus?.is_connected && calEvents.length > 0 ? 320 : 240}>
+        <FadeIn delay={calStatus?.is_connected && calEvents.length > 0 ? (isCallActive ? 440 : 400) : (isCallActive ? 360 : 320)}>
           <Card>
             <View style={styles.sectionHeader}>
               <Text style={[styles.cardTitle, { color: colors.textPrimary }]}>Recent Activity</Text>
@@ -195,6 +256,38 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 12,
     fontWeight: '700',
+  },
+  activeCallRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+  },
+  pulsingDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  statItem: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  statValue: {
+    fontSize: 24,
+    fontWeight: '800',
+    marginBottom: 4,
+  },
+  statLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  statDivider: {
+    width: StyleSheet.hairlineWidth,
+    height: 36,
   },
   cardTitle: {
     fontSize: 16,

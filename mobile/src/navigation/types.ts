@@ -32,6 +32,14 @@ export type RootStackParamList = {
   Temperament: undefined;
   BusinessHours: undefined;
   AccountSettings: undefined;
+  AccountHub: undefined;
+  ContactsList: undefined;
+  ContactDetail: { contactId: string };
+  AddContact: undefined;
+  CategoryDefaults: undefined;
+  PinSetup: undefined;
+  PinLogin: undefined;
+  PaymentMethodsList: undefined;
 };
 
 declare global {

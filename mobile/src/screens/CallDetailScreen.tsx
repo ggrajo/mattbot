@@ -12,6 +12,7 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 import { FadeIn } from '../components/ui/FadeIn';
 import { useTheme } from '../theme/ThemeProvider';
 import { useCallStore } from '../store/callStore';
+import { useRealtimeStore } from '../store/realtimeStore';
 import { apiClient } from '../api/client';
 import type { Theme } from '../theme/tokens';
 import type { CallEventResponse } from '../api/calls';
@@ -58,6 +59,8 @@ export function CallDetailScreen() {
   const { selectedCall, events, loading, error, fetchCall, fetchCallEvents, clearSelected } =
     useCallStore();
   const [artifacts, setArtifacts] = useState<CallArtifacts | null>(null);
+  const { isCallActive, activeCallId, transcript } = useRealtimeStore();
+  const isLiveCall = isCallActive && activeCallId === callId;
 
   useEffect(() => {
     fetchCall(callId);
@@ -204,6 +207,39 @@ export function CallDetailScreen() {
           </FadeIn>
         )}
 
+        {isLiveCall && (
+          <FadeIn delay={220}>
+            <Text style={[styles.sectionTitle, { marginTop: theme.spacing.xl }]}>Live Transcript</Text>
+            <View style={styles.infoCard}>
+              <View style={liveStyles.liveHeader}>
+                <View style={[liveStyles.liveDot, { backgroundColor: theme.colors.primary }]} />
+                <Text style={{ ...theme.typography.bodySmall, color: theme.colors.primary, fontWeight: '700' }}>
+                  LIVE
+                </Text>
+              </View>
+              {transcript.length === 0 ? (
+                <Text style={{ ...theme.typography.body, color: theme.colors.textDisabled, fontStyle: 'italic' }}>
+                  Waiting for transcript...
+                </Text>
+              ) : (
+                transcript.map((line, idx) => (
+                  <Text
+                    key={idx}
+                    style={{
+                      ...theme.typography.body,
+                      color: theme.colors.textPrimary,
+                      lineHeight: 22,
+                      marginBottom: 4,
+                    }}
+                  >
+                    {line}
+                  </Text>
+                ))
+              )}
+            </View>
+          </FadeIn>
+        )}
+
         {artifacts && (artifacts.transcript || artifacts.summary) && (
           <FadeIn delay={240}>
             <Text style={[styles.sectionTitle, { marginTop: theme.spacing.xl }]}>Artifacts</Text>
@@ -347,6 +383,20 @@ const tlStyles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '600',
     textTransform: 'capitalize',
+  },
+});
+
+const liveStyles = StyleSheet.create({
+  liveHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 12,
+  },
+  liveDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
   },
 });
 

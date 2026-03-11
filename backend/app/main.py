@@ -46,16 +46,19 @@ def create_app() -> FastAPI:
         dev_billing,
         devices,
         forwarding,
+        health,
         internal,
         me,
         memory,
         numbers,
         prompt_suggestions,
         push,
+        stats,
         voices,
         webhooks,
     )
 
+    application.include_router(health.router, prefix="/health", tags=["health"])
     application.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
     application.include_router(devices.router, prefix="/api/v1/devices", tags=["devices"])
     application.include_router(push.router, prefix="/api/v1/push", tags=["push"])
@@ -73,6 +76,7 @@ def create_app() -> FastAPI:
     application.include_router(voices.router, prefix="/api/v1/voices", tags=["voices"])
     application.include_router(prompt_suggestions.router, prefix="/api/v1/prompt-suggestions", tags=["prompt-suggestions"])
     application.include_router(calendar.router, prefix="/api/v1/calendar", tags=["calendar"])
+    application.include_router(stats.router, prefix="/api/v1/stats", tags=["stats"])
     application.include_router(webhooks.router, prefix="/webhooks", tags=["webhooks"])
 
     return application

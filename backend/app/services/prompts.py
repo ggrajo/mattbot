@@ -1,8 +1,13 @@
 """Prompt builder that enriches the agent system prompt with live context.
 
-When the user has Google Calendar connected, the builder fetches today's
-availability and injects it so the AI agent can offer booking during calls.
-Memory context for known callers is also injected when available.
+Builds natural-conversation style prompts by combining:
+- Agent personality and role
+- User preferences (name, timezone, business hours)
+- Calendar context if connected
+- Memory context for the specific caller
+- Call mode information
+
+The result reads like a briefing to a real assistant, not a robotic instruction set.
 """
 
 import logging
@@ -15,36 +20,168 @@ from app.services import calendar_service
 
 logger = logging.getLogger(__name__)
 
+PERSONALITY_DESCRIPTORS: dict[str, str] = {
+    "professional": (
+        "You are polished, courteous, and efficient. "
+        "You keep responses concise and respectful."
+    ),
+    "friendly": (
+        "You are warm, approachable, and conversational. "
+        "You use a casual but respectful tone."
+    ),
+    "formal": (
+        "You are highly formal, precise, and deferential. "
+        "You use proper titles and measured language."
+    ),
+    "casual": (
+        "You are relaxed and easygoing. "
+        "You speak like a helpful neighbour — natural and unpretentious."
+    ),
+}
+
 
 async def build_system_prompt(
     db: AsyncSession,
     user_id,
     base_prompt: str | None = None,
     caller_phone_hash: str | None = None,
+    *,
+    agent_name: str | None = None,
+    personality: str | None = None,
+    language: str | None = None,
+    user_display_name: str | None = None,
+    user_timezone: str | None = None,
+    call_mode: str | None = None,
 ) -> str:
-    """Return the final system prompt with calendar and memory context appended."""
-    parts: list[str] = []
+    """Return the final system prompt with all context sections assembled.
 
-    if base_prompt:
-        parts.append(base_prompt)
+    The prompt is structured as a natural briefing:
+      1. Identity & personality
+      2. User preferences
+      3. Call mode / scenario
+      4. Calendar availability
+      5. Caller memory
+      6. Behavioral guidelines
+    """
+    sections: list[str] = []
+
+    sections.append(
+        _identity_section(
+            agent_name=agent_name,
+            personality=personality,
+            language=language,
+            base_prompt=base_prompt,
+        )
+    )
+
+    sections.append(
+        _user_preferences_section(
+            display_name=user_display_name,
+            timezone=user_timezone,
+        )
+    )
+
+    if call_mode:
+        sections.append(_call_mode_section(call_mode))
 
     calendar_section = await _calendar_section(db, user_id)
     if calendar_section:
-        parts.append(calendar_section)
+        sections.append(calendar_section)
 
     if caller_phone_hash:
         memory_section = await _memory_section(db, user_id, caller_phone_hash)
         if memory_section:
-            parts.append(memory_section)
+            sections.append(memory_section)
 
-    return "\n\n".join(parts) if parts else ""
+    sections.append(_guidelines_section())
+
+    return "\n\n".join(s for s in sections if s)
+
+
+def _identity_section(
+    *,
+    agent_name: str | None,
+    personality: str | None,
+    language: str | None,
+    base_prompt: str | None,
+) -> str:
+    name = agent_name or "MattBot"
+    personality_text = PERSONALITY_DESCRIPTORS.get(
+        personality or "professional",
+        PERSONALITY_DESCRIPTORS["professional"],
+    )
+
+    lines = [
+        f"You are {name}, an AI phone assistant.",
+        personality_text,
+    ]
+
+    if language and language not in ("en", "English"):
+        lines.append(f"Speak in {language}.")
+
+    if base_prompt:
+        lines.append(base_prompt)
+
+    return "\n".join(lines)
+
+
+def _user_preferences_section(
+    *,
+    display_name: str | None,
+    timezone: str | None,
+) -> str:
+    owner = display_name or "the subscriber"
+    tz = timezone or "UTC"
+    return (
+        f"You are answering calls on behalf of {owner}. "
+        f"Their timezone is {tz}. Keep this in mind when discussing times or "
+        f"scheduling."
+    )
+
+
+def _call_mode_section(call_mode: str) -> str:
+    mode_descriptions: dict[str, str] = {
+        "screen": (
+            "This call is in SCREENING mode. Your job is to find out who is "
+            "calling and why, then relay that to the owner. Be polite but "
+            "gather the essentials quickly."
+        ),
+        "assistant": (
+            "This call is in ASSISTANT mode. Help the caller with whatever "
+            "they need — answer questions, take messages, or schedule "
+            "appointments if the calendar is available."
+        ),
+        "away": (
+            "This call is in AWAY mode. The owner is unavailable. Take a "
+            "detailed message and let the caller know someone will get back "
+            "to them."
+        ),
+        "dnd": (
+            "This call is in DO NOT DISTURB mode. Keep the interaction brief. "
+            "Take a message unless the caller indicates it's an emergency."
+        ),
+    }
+    return mode_descriptions.get(
+        call_mode,
+        f"The current call mode is '{call_mode}'.",
+    )
+
+
+def _guidelines_section() -> str:
+    return (
+        "Guidelines:\n"
+        "- Speak naturally, as a real person would on the phone.\n"
+        "- Keep responses concise — callers don't like long monologues.\n"
+        "- If you don't know something, say so honestly.\n"
+        "- Never reveal that you are reading from memory or a database.\n"
+        "- Confirm important details (names, numbers, times) by repeating them back."
+    )
 
 
 async def _calendar_section(db: AsyncSession, user_id) -> str | None:
     """Generate the calendar availability block, or ``None`` if not connected."""
     try:
         from app.models.google_calendar_token import GoogleCalendarToken
-        from sqlalchemy import select
 
         result = await db.execute(
             select(GoogleCalendarToken).where(
@@ -62,7 +199,7 @@ async def _calendar_section(db: AsyncSession, user_id) -> str | None:
         if not slots:
             return (
                 "[CALENDAR]\n"
-                "The user's Google Calendar is connected but there are no "
+                "The owner's Google Calendar is connected but there are no "
                 "available slots today. Offer to check another day if the "
                 "caller wants to book an appointment."
             )
@@ -72,7 +209,7 @@ async def _calendar_section(db: AsyncSession, user_id) -> str | None:
         )
         return (
             "[CALENDAR]\n"
-            f"Today's date is {today}. The user's Google Calendar is connected.\n"
+            f"Today's date is {today}. The owner's Google Calendar is connected.\n"
             f"Available slots today:\n{slot_lines}\n"
             "You may offer to book an appointment in one of these slots if the "
             "caller requests it. Confirm the time before booking."

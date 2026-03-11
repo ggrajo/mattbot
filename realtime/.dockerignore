@@ -2,7 +2,5 @@ node_modules
 dist
 .env
 .env.*
-.git
-.gitignore
-tests
-*.md
+!.env.example
+tests/

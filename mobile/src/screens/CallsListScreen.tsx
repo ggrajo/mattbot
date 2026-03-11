@@ -51,6 +51,7 @@ function formatDuration(seconds: number | null): string {
 
 function EmptyState({ theme }: { theme: Theme }) {
   const { colors, spacing, typography } = theme;
+  const navigation = useNavigation<any>();
   return (
     <FadeIn delay={100}>
       <View style={emptyStyles.container}>
@@ -68,6 +69,13 @@ function EmptyState({ theme }: { theme: Theme }) {
         >
           Inbound calls will appear here once your number is active. Set up your phone number to get started.
         </Text>
+        <TouchableOpacity
+          style={[emptyStyles.setupButton, { backgroundColor: colors.primary }]}
+          activeOpacity={0.7}
+          onPress={() => navigation.navigate('NumberProvision')}
+        >
+          <Text style={{ color: colors.onPrimary, fontWeight: '600', fontSize: 14 }}>Set Up Number</Text>
+        </TouchableOpacity>
       </View>
     </FadeIn>
   );
@@ -90,6 +98,12 @@ const emptyStyles = StyleSheet.create({
   emoji: {
     fontSize: 36,
   },
+  setupButton: {
+    marginTop: 20,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 12,
+  },
 });
 
 export function CallsListScreen() {
@@ -103,7 +117,7 @@ export function CallsListScreen() {
   }, [fetchCalls]);
 
   const onRefresh = useCallback(() => {
-    fetchCalls();
+    fetchCalls(true);
   }, [fetchCalls]);
 
   const renderCall = ({ item }: { item: CallResponse }) => {

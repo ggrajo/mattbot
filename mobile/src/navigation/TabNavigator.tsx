@@ -25,9 +25,9 @@ function TabIcon({ label, focused, color }: { label: string; focused: boolean; c
 }
 
 const tabIconStyles = StyleSheet.create({
-  wrap: { alignItems: 'center', gap: 2 },
-  icon: { fontSize: 20, opacity: 0.7 },
-  iconFocused: { opacity: 1 },
+  wrap: { alignItems: 'center', gap: 3 },
+  icon: { fontSize: 22, opacity: 0.6 },
+  iconFocused: { opacity: 1, transform: [{ scale: 1.1 }] },
   dot: { width: 5, height: 5, borderRadius: 2.5 },
 });
 
@@ -42,16 +42,22 @@ export function TabNavigator() {
           backgroundColor: theme.colors.surface,
           borderTopColor: theme.colors.border,
           borderTopWidth: StyleSheet.hairlineWidth,
-          paddingBottom: Platform.OS === 'ios' ? 24 : 10,
-          paddingTop: 10,
-          height: Platform.OS === 'ios' ? 88 : 64,
+          paddingBottom: Platform.OS === 'ios' ? 28 : 12,
+          paddingTop: 8,
+          height: Platform.OS === 'ios' ? 90 : 66,
+          elevation: 8,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: -2 },
+          shadowOpacity: 0.06,
+          shadowRadius: 8,
         },
         tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: theme.colors.textSecondary,
         tabBarLabelStyle: {
           fontSize: 11,
           fontWeight: '600',
-          marginTop: -2,
+          marginTop: 0,
+          letterSpacing: 0.2,
         },
       }}
     >
