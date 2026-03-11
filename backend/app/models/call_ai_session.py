@@ -11,7 +11,7 @@ from app.database import Base
 class CallAiSession(Base):
     __tablename__ = "call_ai_sessions"
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     call_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("calls.id", ondelete="CASCADE"), unique=True, nullable=False
     )

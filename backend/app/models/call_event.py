@@ -12,7 +12,7 @@ from app.models._types import JsonbDict
 class CallEvent(Base):
     __tablename__ = "call_events"
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     call_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("calls.id", ondelete="CASCADE"), nullable=False
     )

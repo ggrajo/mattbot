@@ -12,7 +12,7 @@ from app.models._types import JsonbDict
 class ProviderEvent(Base):
     __tablename__ = "provider_events"
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     provider: Mapped[str] = mapped_column(String(20), nullable=False)
     provider_event_id: Mapped[str | None] = mapped_column(Text)
     provider_call_sid: Mapped[str | None] = mapped_column(Text)
