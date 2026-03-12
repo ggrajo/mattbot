@@ -9,15 +9,17 @@ import {
   getOnboarding as fetchOnboarding,
   completeOnboardingStep as apiCompleteStep,
 } from '../api/onboarding';
+import { extractApiError } from '../api/client';
 
 interface SettingsStore {
   settings: UserSettings | null;
   onboarding: OnboardingState | null;
   loading: boolean;
+  saving: boolean;
   error: string | null;
 
   loadSettings: () => Promise<void>;
-  updateSettings: (changes: Partial<Omit<UserSettings, 'revision'>>) => Promise<boolean>;
+  updateSettings: (changes: Record<string, unknown>) => Promise<boolean>;
   loadOnboarding: () => Promise<void>;
   completeStep: (step: string) => Promise<boolean>;
   reset: () => void;
@@ -27,6 +29,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
   settings: null,
   onboarding: null,
   loading: false,
+  saving: false,
   error: null,
 
   loadSettings: async () => {
@@ -34,34 +37,41 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     try {
       const settings = await fetchSettings();
       set({ settings, loading: false });
-    } catch (e: any) {
-      const msg = e?.response?.data?.error?.message || 'Failed to load settings';
-      set({ error: msg, loading: false });
+    } catch (e: unknown) {
+      set({ error: extractApiError(e), loading: false });
     }
   },
 
   updateSettings: async (changes) => {
     const current = get().settings;
-    if (!current) return false;
+    if (!current) {
+      try {
+        const fresh = await fetchSettings();
+        set({ settings: fresh });
+        return get().updateSettings(changes);
+      } catch (e: unknown) {
+        set({ error: extractApiError(e) });
+        return false;
+      }
+    }
 
-    set({ loading: true, error: null });
+    set({ saving: true, error: null });
     try {
       const result = await apiPatchSettings(current.revision, changes);
-      set({ settings: result.settings, loading: false });
+      set({ settings: result.settings, saving: false });
       return true;
     } catch (e: any) {
       const code = e?.response?.data?.error?.code;
       if (code === 'REVISION_CONFLICT') {
         try {
           const fresh = await fetchSettings();
-          set({ settings: fresh, loading: false, error: 'Settings were updated on another device. Please review and try again.' });
+          set({ settings: fresh, saving: false, error: 'Settings were updated on another device. Please review and try again.' });
         } catch {
-          set({ loading: false, error: 'Settings conflict. Please refresh.' });
+          set({ saving: false, error: 'Settings conflict. Please refresh.' });
         }
         return false;
       }
-      const msg = e?.response?.data?.error?.message || 'Failed to save settings';
-      set({ error: msg, loading: false });
+      set({ error: extractApiError(e), saving: false });
       return false;
     }
   },
@@ -71,26 +81,24 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     try {
       const onboarding = await fetchOnboarding();
       set({ onboarding, loading: false });
-    } catch (e: any) {
-      const msg = e?.response?.data?.error?.message || 'Failed to load onboarding state';
-      set({ error: msg, loading: false });
+    } catch (e: unknown) {
+      set({ error: extractApiError(e), loading: false });
     }
   },
 
   completeStep: async (step: string) => {
-    set({ loading: true, error: null });
+    set({ saving: true, error: null });
     try {
       const onboarding = await apiCompleteStep(step);
-      set({ onboarding, loading: false });
+      set({ onboarding, saving: false });
       return true;
-    } catch (e: any) {
-      const msg = e?.response?.data?.error?.message || 'Failed to complete step';
-      set({ error: msg, loading: false });
+    } catch (e: unknown) {
+      set({ error: extractApiError(e), saving: false });
       return false;
     }
   },
 
   reset: () => {
-    set({ settings: null, onboarding: null, loading: false, error: null });
+    set({ settings: null, onboarding: null, loading: false, saving: false, error: null });
   },
 }));

@@ -7,7 +7,7 @@ import { useAuthStore } from '../store/authStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { BiometricGate } from '../components/ui/BiometricGate';
 import { RootStackParamList } from './types';
-import { DrawerNavigator } from './DrawerNavigator';
+import { TabNavigator } from './TabNavigator';
 
 import { WelcomeScreen } from '../screens/WelcomeScreen';
 import { RegisterScreen } from '../screens/RegisterScreen';
@@ -46,6 +46,15 @@ import { ContactDetailScreen } from '../screens/ContactDetailScreen';
 import { BlockListScreen } from '../screens/BlockListScreen';
 import { VipListScreen } from '../screens/VipListScreen';
 import { LiveTranscriptScreen } from '../screens/LiveTranscriptScreen';
+import { CalendarBookingSettingsScreen } from '../screens/CalendarBookingSettingsScreen';
+import { ProfileSettingsScreen } from '../screens/ProfileSettingsScreen';
+import { MemoryListScreen } from '../screens/MemoryListScreen';
+import { UrgentNotificationsScreen } from '../screens/UrgentNotificationsScreen';
+import { SettingsScreen } from '../screens/SettingsScreen';
+import { BusinessHoursScreen } from '../screens/BusinessHoursScreen';
+import { RemindersListScreen } from '../screens/RemindersListScreen';
+import { TextBackScreen } from '../screens/TextBackScreen';
+import { CreateReminderScreen } from '../screens/CreateReminderScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -132,11 +141,16 @@ export function RootNavigator() {
                   enabled={biometricEnabled}
                   promptMessage="Authenticate to access MattBot"
                 >
-                  <DrawerNavigator />
+                  <TabNavigator />
                 </BiometricGate>
               )}
             </Stack.Screen>
             {/* Sub-screens accessible from within drawer screens */}
+            <Stack.Screen
+              name="Settings"
+              component={SettingsScreen}
+              options={{ headerShown: true, title: 'Settings' }}
+            />
             <Stack.Screen
               name="PrivacySettings"
               component={PrivacySettingsScreen}
@@ -277,6 +291,56 @@ export function RootNavigator() {
               name="LiveTranscript"
               component={LiveTranscriptScreen}
               options={{ headerShown: true, title: 'Live Transcript' }}
+            />
+            <Stack.Screen
+              name="CalendarBookingSettings"
+              component={CalendarBookingSettingsScreen}
+              options={{ headerShown: true, title: 'Calendar Booking' }}
+            />
+            <Stack.Screen
+              name="ProfileSettings"
+              component={ProfileSettingsScreen}
+              options={{ headerShown: true, title: 'Profile Settings' }}
+            />
+            <Stack.Screen
+              name="MemoryList"
+              component={MemoryListScreen}
+              options={{ headerShown: true, title: 'AI Memory' }}
+            />
+            <Stack.Screen
+              name="UrgentNotifications"
+              component={UrgentNotificationsScreen}
+              options={{ headerShown: true, title: 'Urgent Notifications' }}
+            />
+            <Stack.Screen
+              name="BusinessHours"
+              component={BusinessHoursScreen}
+              options={{ headerShown: true, title: 'Business Hours' }}
+            />
+            <Stack.Screen
+              name="RemindersList"
+              component={RemindersListScreen}
+              options={{ headerShown: true, title: 'Reminders' }}
+            />
+            <Stack.Screen
+              name="TextBack"
+              component={TextBackScreen}
+              options={{ headerShown: true, title: 'Text Back' }}
+            />
+            <Stack.Screen
+              name="CreateReminder"
+              component={CreateReminderScreen}
+              options={{ headerShown: true, title: 'Create Reminder' }}
+            />
+            <Stack.Screen
+              name="OnboardingAssistantSetup"
+              component={AssistantSettingsScreen}
+              options={{ headerShown: true, title: 'AI Assistant Setup', headerBackVisible: false }}
+            />
+            <Stack.Screen
+              name="OnboardingCalendarSetup"
+              component={CalendarBookingSettingsScreen}
+              options={{ headerShown: true, title: 'Calendar Setup', headerBackVisible: false }}
             />
           </>
         ) : (

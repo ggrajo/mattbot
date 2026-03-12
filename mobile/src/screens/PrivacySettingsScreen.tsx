@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Switch, ActivityIndicator } from 'react-native';
+import { View, Text, Switch, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Card } from '../components/ui/Card';
@@ -16,9 +16,9 @@ type Props = NativeStackScreenProps<RootStackParamList, 'PrivacySettings'>;
 
 export function PrivacySettingsScreen({}: Props) {
   const theme = useTheme();
-  const { colors, spacing, typography } = theme;
+  const { colors, spacing, typography, radii } = theme;
   const { settings, loading, error, loadSettings, updateSettings } = useSettingsStore();
-  const { available: biometricAvailable, biometryType, loading: biometricLoading } = useBiometric();
+  const { available: biometricAvailable, biometryType, loading: biometricLoading, authenticate } = useBiometric();
   const [toast, setToast] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
 
@@ -35,6 +35,18 @@ export function PrivacySettingsScreen({}: Props) {
       setToastType('error');
       setToast(useSettingsStore.getState().error ?? 'Failed to save setting.');
     }
+  }
+
+  async function handleBiometricToggle(enabled: boolean) {
+    if (enabled) {
+      const success = await authenticate('Verify your identity');
+      if (!success) {
+        setToastType('error');
+        setToast('Biometric verification failed. Setting was not changed.');
+        return;
+      }
+    }
+    handleToggle('biometric_unlock_enabled', enabled);
   }
 
   if (!settings && loading) {
@@ -78,43 +90,72 @@ export function PrivacySettingsScreen({}: Props) {
 
           <Divider />
 
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <View style={{ flex: 1 }}>
-              <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500' }} allowFontScaling>
-                Private
-              </Text>
-              <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
-                Shows "New activity" only
-              </Text>
-            </View>
-            <Switch
-              value={settings?.notification_privacy_mode === 'private'}
-              onValueChange={() => handleToggle('notification_privacy_mode', 'private')}
-              trackColor={{ false: colors.border, true: colors.primary }}
-              accessibilityLabel="Private mode"
-              accessibilityRole="radio"
-              accessibilityState={{ checked: settings?.notification_privacy_mode === 'private' }}
-            />
-          </View>
-
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <View style={{ flex: 1 }}>
-              <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500' }} allowFontScaling>
-                Preview
-              </Text>
-              <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
-                Shows limited preview text
-              </Text>
-            </View>
-            <Switch
-              value={settings?.notification_privacy_mode === 'preview'}
-              onValueChange={() => handleToggle('notification_privacy_mode', 'preview')}
-              trackColor={{ false: colors.border, true: colors.primary }}
-              accessibilityLabel="Preview mode"
-              accessibilityRole="radio"
-              accessibilityState={{ checked: settings?.notification_privacy_mode === 'preview' }}
-            />
-          </View>
+          {[
+            { value: 'private' as const, label: 'Private', desc: 'Hide notification content' },
+            { value: 'preview' as const, label: 'Preview', desc: 'Show caller info in notifications' },
+            { value: 'full' as const, label: 'Full', desc: 'Show all details in notifications' },
+          ].map((opt) => {
+            const selected = settings?.notification_privacy_mode === opt.value;
+            return (
+              <TouchableOpacity
+                key={opt.value}
+                onPress={() => handleToggle('notification_privacy_mode', opt.value)}
+                activeOpacity={0.7}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: spacing.md,
+                  paddingVertical: spacing.md,
+                  paddingHorizontal: spacing.md,
+                  borderRadius: radii.md,
+                  borderWidth: 1.5,
+                  borderColor: selected ? colors.primary : colors.border,
+                  backgroundColor: selected ? colors.primary + '14' : 'transparent',
+                }}
+                accessibilityRole="radio"
+                accessibilityState={{ checked: selected }}
+                accessibilityLabel={opt.label}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={{
+                      ...typography.body,
+                      color: colors.textPrimary,
+                      fontWeight: selected ? '600' : '500',
+                    }}
+                    allowFontScaling
+                  >
+                    {opt.label}
+                  </Text>
+                  <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+                    {opt.desc}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    width: 22,
+                    height: 22,
+                    borderRadius: 11,
+                    borderWidth: 2,
+                    borderColor: selected ? colors.primary : colors.border,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {selected && (
+                    <View
+                      style={{
+                        width: 12,
+                        height: 12,
+                        borderRadius: 6,
+                        backgroundColor: colors.primary,
+                      }}
+                    />
+                  )}
+                </View>
+              </TouchableOpacity>
+            );
+          })}
         </View>
       </Card>
 
@@ -154,7 +195,7 @@ export function PrivacySettingsScreen({}: Props) {
             </Text>
             <Switch
               value={biometricAvailable ? (settings?.biometric_unlock_enabled ?? false) : false}
-              onValueChange={v => handleToggle('biometric_unlock_enabled', v)}
+              onValueChange={handleBiometricToggle}
               disabled={!biometricAvailable}
               trackColor={{ false: colors.border, true: colors.primary }}
               accessibilityLabel="Enable biometric unlock"

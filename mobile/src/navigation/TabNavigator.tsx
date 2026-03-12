@@ -13,7 +13,7 @@ import { TabParamList } from './types';
 
 import { HomeScreen } from '../screens/HomeScreen';
 import { CallsListScreen } from '../screens/CallsListScreen';
-import { SettingsScreen } from '../screens/SettingsScreen';
+import { CalendarScreen } from '../screens/CalendarScreen';
 import { AccountSettingsScreen } from '../screens/AccountSettingsScreen';
 
 const Tab = createBottomTabNavigator<TabParamList>();
@@ -26,8 +26,8 @@ const TAB_CONFIG: {
 }[] = [
   { name: 'HomeTab', label: 'Home', iconOutline: 'home-outline', iconFilled: 'home' },
   { name: 'CallsTab', label: 'Calls', iconOutline: 'phone-outline', iconFilled: 'phone' },
-  { name: 'SettingsTab', label: 'Settings', iconOutline: 'cog-outline', iconFilled: 'cog' },
-  { name: 'AccountTab', label: 'Profile', iconOutline: 'account-outline', iconFilled: 'account' },
+  { name: 'CalendarTab', label: 'Calendar', iconOutline: 'calendar-outline', iconFilled: 'calendar' },
+  { name: 'AccountTab', label: 'Account', iconOutline: 'account-outline', iconFilled: 'account' },
 ];
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -64,9 +64,9 @@ export function TabNavigator() {
         options={{ title: 'Calls' }}
       />
       <Tab.Screen
-        name="SettingsTab"
-        component={SettingsScreen}
-        options={{ title: 'Settings' }}
+        name="CalendarTab"
+        component={CalendarScreen}
+        options={{ headerShown: false, title: 'Calendar' }}
       />
       <Tab.Screen
         name="AccountTab"

@@ -1,5 +1,6 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, RefreshControl, Modal, Pressable, TextInput as RNTextInput } from 'react-native';
+import Video from 'react-native-video';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Card } from '../components/ui/Card';
@@ -14,6 +15,10 @@ import { useTheme } from '../theme/ThemeProvider';
 import { useCallStore } from '../store/callStore';
 import { useVipStore } from '../store/vipStore';
 import { useBlockStore } from '../store/blockStore';
+import { useSettingsStore } from '../store/settingsStore';
+import { patchCallNotes, getCallRecordingUrl } from '../api/calls';
+import { getSecureItem, TOKEN_KEYS } from '../utils/secureStorage';
+import { getTimezoneAbbr } from '../utils/timezones';
 import type { CallEvent, CallLabel, TranscriptTurn } from '../api/calls';
 
 function formatDateTime(iso: string): string {
@@ -25,6 +30,13 @@ function formatDateTime(iso: string): string {
     minute: '2-digit',
     second: '2-digit',
   });
+}
+
+function formatDateTimeWithTz(iso: string, tz: string | undefined): string {
+  const base = formatDateTime(iso);
+  if (!tz) return base;
+  const abbr = getTimezoneAbbr(tz);
+  return `${base} ${abbr}`;
 }
 
 function formatDuration(seconds: number | null): string {
@@ -123,6 +135,21 @@ function labelBadgeVariant(name: string): 'primary' | 'success' | 'warning' | 'e
   }
 }
 
+function labelColor(name: string, colors: any): string {
+  switch (name) {
+    case 'spam':
+      return colors.error;
+    case 'urgent':
+      return colors.warning ?? '#F59E0B';
+    case 'vip':
+      return colors.primary;
+    case 'sales':
+      return colors.info ?? '#3B82F6';
+    default:
+      return colors.success ?? '#22C55E';
+  }
+}
+
 function labelDisplayName(name: string): string {
   switch (name) {
     case 'spam':
@@ -149,15 +176,17 @@ export function CallDetailScreen() {
   const {
     selectedCall,
     transcript,
-    loading,
+    detailLoading,
     transcriptLoading,
-    error,
+    detailError,
+    transcriptError,
     loadCallDetail,
     loadTranscript,
     retryTranscript,
   } = useCallStore();
   const vipStore = useVipStore();
   const blockStore = useBlockStore();
+  const userTz = useSettingsStore((s) => s.settings?.timezone);
 
   const [toast, setToast] = useState('');
   const [noteModalVisible, setNoteModalVisible] = useState(false);
@@ -165,11 +194,19 @@ export function CallDetailScreen() {
   const [blockConfirmVisible, setBlockConfirmVisible] = useState(false);
   const [spamSheetVisible, setSpamSheetVisible] = useState(false);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [showTranscript, setShowTranscript] = useState(false);
+  const [recordingUrl, setRecordingUrl] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioDuration, setAudioDuration] = useState(0);
+  const [audioProgress, setAudioProgress] = useState(0);
+  const [audioLoading, setAudioLoading] = useState(false);
+  const videoRef = useRef<any>(null);
 
   const callerNumber = selectedCall?.from_masked ?? '';
   const callerLast4 = callerNumber.slice(-4);
   const isVip = vipStore.items.some((v) => callerLast4 && v.phone_last4 === callerLast4);
   const isBlocked = blockStore.items.some((b) => callerLast4 && b.phone_last4 === callerLast4);
+  const isSpam = blockStore.items.some((b) => callerLast4 && b.phone_last4 === callerLast4 && b.reason === 'spam');
   const vipEntry = vipStore.items.find((v) => callerLast4 && v.phone_last4 === callerLast4);
   const blockEntry = blockStore.items.find((b) => callerLast4 && b.phone_last4 === callerLast4);
 
@@ -179,6 +216,17 @@ export function CallDetailScreen() {
     blockStore.loadBlocks();
   }, [callId]);
 
+  useEffect(() => {
+    if (
+      selectedCall?.transcript_status === 'ready' &&
+      !transcript &&
+      !transcriptLoading &&
+      !transcriptError
+    ) {
+      loadTranscript(callId);
+    }
+  }, [selectedCall?.transcript_status, transcript, transcriptLoading, transcriptError, callId, loadTranscript]);
+
   const handleRefreshTranscript = useCallback(() => {
     loadTranscript(callId);
   }, [callId, loadTranscript]);
@@ -187,10 +235,10 @@ export function CallDetailScreen() {
     setActionLoading('vip');
     if (isVip && vipEntry) {
       const ok = await vipStore.removeVip(vipEntry.id);
-      setToast(ok ? 'Removed from VIP' : vipStore.error ?? 'Failed');
+      setToast(ok ? 'Removed from VIP' : 'Could not complete action. Please try again.');
     } else {
       const ok = await vipStore.addVip({ phone_number: callerNumber });
-      setToast(ok ? 'Added to VIP' : vipStore.error ?? 'Failed');
+      setToast(ok ? 'Added to VIP' : 'Could not complete action. Please try again.');
     }
     setActionLoading(null);
   }, [isVip, vipEntry, callerNumber]);
@@ -200,10 +248,10 @@ export function CallDetailScreen() {
     setActionLoading('block');
     if (isBlocked && blockEntry) {
       const ok = await blockStore.removeBlock(blockEntry.id);
-      setToast(ok ? 'Number unblocked' : blockStore.error ?? 'Failed');
+      setToast(ok ? 'Number unblocked' : 'Could not complete action. Please try again.');
     } else {
       const ok = await blockStore.addBlock({ phone_number: callerNumber });
-      setToast(ok ? 'Number blocked' : blockStore.error ?? 'Failed');
+      setToast(ok ? 'Number blocked' : 'Could not complete action. Please try again.');
     }
     setActionLoading(null);
   }, [isBlocked, blockEntry, callerNumber]);
@@ -212,19 +260,99 @@ export function CallDetailScreen() {
     setSpamSheetVisible(false);
     setActionLoading('spam');
     const ok = await blockStore.addBlock({ phone_number: callerNumber, reason: 'spam' });
-    setToast(ok ? 'Marked as spam & blocked' : blockStore.error ?? 'Failed');
+    setToast(ok ? 'Marked as spam & blocked' : 'Could not complete action. Please try again.');
     setActionLoading(null);
   }, [callerNumber]);
 
-  const handleSaveNote = useCallback(() => {
+  const handleRemoveSpam = useCallback(async () => {
+    setActionLoading('spam');
+    if (blockEntry) {
+      const ok = await blockStore.removeBlock(blockEntry.id);
+      setToast(ok ? 'Removed from spam' : 'Could not complete action. Please try again.');
+    }
+    setActionLoading(null);
+  }, [blockEntry]);
+
+  const handleSaveNote = useCallback(async () => {
+    if (!noteText.trim()) return;
     setNoteModalVisible(false);
-    if (noteText.trim()) {
+    setActionLoading('note');
+    try {
+      await patchCallNotes(callId, noteText.trim());
       setToast('Note saved');
       setNoteText('');
+      loadCallDetail(callId);
+    } catch {
+      setToast('Could not save note. Please try again.');
     }
-  }, [noteText]);
+    setActionLoading(null);
+  }, [noteText, callId, loadCallDetail]);
 
-  if (loading && !selectedCall) {
+  const handlePlayRecording = useCallback(async () => {
+    if (isPlaying) {
+      setIsPlaying(false);
+      return;
+    }
+    if (recordingUrl) {
+      setIsPlaying(true);
+      return;
+    }
+    try {
+      setAudioLoading(true);
+      const token = await getSecureItem(TOKEN_KEYS.ACCESS_TOKEN);
+      if (!token) {
+        setToast('Please sign in again to play recording.');
+        setAudioLoading(false);
+        return;
+      }
+      const url = getCallRecordingUrl(callId, token);
+      setRecordingUrl(url);
+      setIsPlaying(true);
+    } catch {
+      setToast('Could not play recording. Please try again.');
+    } finally {
+      setAudioLoading(false);
+    }
+  }, [callId, isPlaying, recordingUrl]);
+
+  const onAudioLoad = useCallback((data: { duration: number }) => {
+    setAudioDuration(data.duration);
+    setAudioLoading(false);
+  }, []);
+
+  const onAudioProgress = useCallback((data: { currentTime: number }) => {
+    setAudioProgress(data.currentTime);
+  }, []);
+
+  const onAudioEnd = useCallback(() => {
+    setIsPlaying(false);
+    setAudioProgress(0);
+  }, []);
+
+  const onAudioError = useCallback(() => {
+    setIsPlaying(false);
+    setRecordingUrl(null);
+    setToast('Could not play recording. Please try again.');
+  }, []);
+
+  const formatTime = (seconds: number): string => {
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  };
+
+  const progressBarWidth = useRef(0);
+
+  const seekAudio = useCallback((locationX: number) => {
+    if (videoRef.current && audioDuration > 0 && progressBarWidth.current > 0) {
+      const ratio = Math.max(0, Math.min(1, locationX / progressBarWidth.current));
+      const seekTo = ratio * audioDuration;
+      videoRef.current.seek(seekTo);
+      setAudioProgress(seekTo);
+    }
+  }, [audioDuration]);
+
+  if (detailLoading && !selectedCall) {
     return (
       <ScreenWrapper>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -234,10 +362,10 @@ export function CallDetailScreen() {
     );
   }
 
-  if (error && !selectedCall) {
+  if (detailError && !selectedCall) {
     return (
       <ScreenWrapper>
-        <ErrorMessage message={error} action="Retry" onAction={() => loadCallDetail(callId)} />
+        <ErrorMessage message="Could not load call details. Please try again." action="Retry" onAction={() => loadCallDetail(callId)} />
       </ScreenWrapper>
     );
   }
@@ -261,15 +389,24 @@ export function CallDetailScreen() {
 
   return (
     <ScreenWrapper scroll>
+      {/* Back button */}
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginBottom: spacing.md, paddingVertical: spacing.xs }}
+      >
+        <Icon name="arrow-left" size="md" color={colors.primary} />
+        <Text style={{ ...typography.body, color: colors.primary }}>Back</Text>
+      </TouchableOpacity>
+
       {/* Header */}
       <FadeIn delay={0}>
-      <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
+      <Card variant="elevated" style={{ marginBottom: spacing.lg, borderTopWidth: 3, borderTopColor: colors.primary }}>
         <View style={{ alignItems: 'center', gap: spacing.md }}>
           <View
             style={{
-              width: 56,
-              height: 56,
-              borderRadius: 28,
+              width: 64,
+              height: 64,
+              borderRadius: 32,
               backgroundColor: colors.primary + '18',
               alignItems: 'center',
               justifyContent: 'center',
@@ -301,7 +438,7 @@ export function CallDetailScreen() {
             <DetailItem
               icon="clock-outline"
               label="Started"
-              value={formatDateTime(selectedCall.started_at)}
+              value={formatDateTimeWithTz(selectedCall.started_at, userTz)}
               colors={colors}
               typography={typography}
               spacing={spacing}
@@ -310,7 +447,7 @@ export function CallDetailScreen() {
               <DetailItem
                 icon="clock-check-outline"
                 label="Ended"
-                value={formatDateTime(selectedCall.ended_at)}
+                value={formatDateTimeWithTz(selectedCall.ended_at, userTz)}
                 colors={colors}
                 typography={typography}
                 spacing={spacing}
@@ -374,6 +511,77 @@ export function CallDetailScreen() {
       </View>
       </FadeIn>
 
+      {/* Recording */}
+      {selectedCall.recording_available && (
+        <FadeIn delay={75}>
+        <View style={{ marginBottom: spacing.lg }}>
+          <Text style={{ ...typography.h3, color: colors.textPrimary, marginBottom: spacing.md }}>Recording</Text>
+          <Card variant="flat">
+            {recordingUrl && (
+              <Video
+                ref={videoRef}
+                source={{ uri: recordingUrl }}
+                paused={!isPlaying}
+                playInBackground={false}
+                onLoad={onAudioLoad}
+                onProgress={onAudioProgress}
+                onEnd={onAudioEnd}
+                onError={onAudioError}
+                progressUpdateInterval={250}
+                style={{ width: 0, height: 0, position: 'absolute' }}
+              />
+            )}
+            <View style={{ gap: spacing.sm }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
+                <TouchableOpacity
+                  onPress={handlePlayRecording}
+                  disabled={audioLoading}
+                  activeOpacity={0.7}
+                  style={{
+                    width: 48, height: 48, borderRadius: 24,
+                    backgroundColor: isPlaying ? colors.error + '18' : colors.primary + '18',
+                    alignItems: 'center', justifyContent: 'center',
+                  }}
+                >
+                  {audioLoading ? (
+                    <ActivityIndicator size="small" color={colors.primary} />
+                  ) : (
+                    <Icon name={isPlaying ? 'pause' : 'play'} size="md" color={isPlaying ? colors.error : colors.primary} />
+                  )}
+                </TouchableOpacity>
+                <View style={{ flex: 1 }}>
+                  <Pressable
+                    onLayout={(e) => { progressBarWidth.current = e.nativeEvent.layout.width; }}
+                    onPress={(e) => seekAudio(e.nativeEvent.locationX)}
+                    style={{ justifyContent: 'center', paddingVertical: 8 }}
+                  >
+                    <View style={{ height: 4, borderRadius: 2, backgroundColor: colors.border }}>
+                      <View
+                        style={{
+                          width: audioDuration > 0 ? `${(audioProgress / audioDuration) * 100}%` : '0%',
+                          height: 4,
+                          borderRadius: 2,
+                          backgroundColor: colors.primary,
+                        }}
+                      />
+                    </View>
+                  </Pressable>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 }}>
+                    <Text style={{ ...typography.caption, color: colors.textSecondary }}>
+                      {formatTime(audioProgress)}
+                    </Text>
+                    <Text style={{ ...typography.caption, color: colors.textSecondary }}>
+                      {audioDuration > 0 ? formatTime(audioDuration) : '--:--'}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </Card>
+        </View>
+        </FadeIn>
+      )}
+
       {/* Actions */}
       <FadeIn delay={90}>
       <View style={{ marginBottom: spacing.lg }}>
@@ -381,70 +589,113 @@ export function CallDetailScreen() {
           Actions
         </Text>
         <Card variant="flat">
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }}>
-            <ActionChip
-              icon="message-text-outline"
-              label="Text back"
-              colors={colors}
-              typography={typography}
-              spacing={spacing}
-              radii={radii}
-              loading={actionLoading === 'textback'}
-              onPress={() => navigation.navigate('TextBack', { callId, callerId: callerNumber })}
-            />
-            <ActionChip
-              icon="pencil-outline"
-              label="Add note"
-              colors={colors}
-              typography={typography}
-              spacing={spacing}
-              radii={radii}
-              onPress={() => setNoteModalVisible(true)}
-            />
-            <ActionChip
-              icon="clock-outline"
-              label="Reminder"
-              colors={colors}
-              typography={typography}
-              spacing={spacing}
-              radii={radii}
-              onPress={() => navigation.navigate('CreateReminder', { callId })}
-            />
-            <ActionChip
-              icon={isBlocked ? 'shield-off-outline' : 'shield-outline'}
-              label={isBlocked ? 'Unblock' : 'Block'}
-              colors={colors}
-              typography={typography}
-              spacing={spacing}
-              radii={radii}
-              loading={actionLoading === 'block'}
-              onPress={() => isBlocked ? handleToggleBlock() : setBlockConfirmVisible(true)}
-            />
-            <ActionChip
-              icon="alert-octagon-outline"
-              label="Spam"
-              colors={colors}
-              typography={typography}
-              spacing={spacing}
-              radii={radii}
-              loading={actionLoading === 'spam'}
-              onPress={() => setSpamSheetVisible(true)}
-            />
-            <ActionChip
-              icon={isVip ? 'star' : 'star-outline'}
-              label={isVip ? 'Remove VIP' : 'VIP'}
-              colors={colors}
-              typography={typography}
-              spacing={spacing}
-              radii={radii}
-              loading={actionLoading === 'vip'}
-              onPress={handleToggleVip}
-              highlight={isVip}
-            />
+          <View style={{ gap: spacing.md }}>
+            <View>
+              <Text style={{ ...typography.caption, color: colors.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }} allowFontScaling>
+                Communication
+              </Text>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }}>
+                <ActionChip
+                  icon="message-text-outline"
+                  label="Text back"
+                  colors={colors}
+                  typography={typography}
+                  spacing={spacing}
+                  radii={radii}
+                  loading={actionLoading === 'textback'}
+                  onPress={() => navigation.navigate('TextBack', { callId, callerId: callerNumber })}
+                />
+                <ActionChip
+                  icon="clock-outline"
+                  label="Reminder"
+                  colors={colors}
+                  typography={typography}
+                  spacing={spacing}
+                  radii={radii}
+                  onPress={() => navigation.navigate('CreateReminder', { callId })}
+                />
+              </View>
+            </View>
+
+            <View>
+              <Text style={{ ...typography.caption, color: colors.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }} allowFontScaling>
+                Moderation
+              </Text>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }}>
+                <ActionChip
+                  icon={isVip ? 'star' : 'star-outline'}
+                  label={isVip ? 'Remove VIP' : 'VIP'}
+                  colors={colors}
+                  typography={typography}
+                  spacing={spacing}
+                  radii={radii}
+                  loading={actionLoading === 'vip'}
+                  onPress={handleToggleVip}
+                  highlight={isVip}
+                />
+                <ActionChip
+                  icon={isBlocked ? 'shield-off-outline' : 'shield-outline'}
+                  label={isBlocked ? 'Unblock' : 'Block'}
+                  colors={colors}
+                  typography={typography}
+                  spacing={spacing}
+                  radii={radii}
+                  loading={actionLoading === 'block'}
+                  onPress={() => isBlocked ? handleToggleBlock() : setBlockConfirmVisible(true)}
+                />
+                <ActionChip
+                  icon={isSpam ? 'alert-octagon' : 'alert-octagon-outline'}
+                  label={isSpam ? 'Remove Spam' : 'Spam'}
+                  colors={colors}
+                  typography={typography}
+                  spacing={spacing}
+                  radii={radii}
+                  loading={actionLoading === 'spam'}
+                  onPress={() => isSpam ? handleRemoveSpam() : setSpamSheetVisible(true)}
+                  highlight={isSpam}
+                />
+              </View>
+            </View>
+
+            <View>
+              <Text style={{ ...typography.caption, color: colors.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }} allowFontScaling>
+                Notes
+              </Text>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }}>
+                <ActionChip
+                  icon={selectedCall.notes ? 'pencil' : 'pencil-outline'}
+                  label={selectedCall.notes ? 'Edit note' : 'Add note'}
+                  colors={colors}
+                  typography={typography}
+                  spacing={spacing}
+                  radii={radii}
+                  onPress={() => {
+                    if (selectedCall.notes) setNoteText(selectedCall.notes);
+                    setNoteModalVisible(true);
+                  }}
+                />
+              </View>
+            </View>
           </View>
         </Card>
       </View>
       </FadeIn>
+
+      {/* Notes Section */}
+      {selectedCall.notes && (
+        <FadeIn delay={95}>
+        <View style={{ marginBottom: spacing.lg }}>
+          <Text style={{ ...typography.h3, color: colors.textPrimary, marginBottom: spacing.md }} allowFontScaling>
+            Notes
+          </Text>
+          <Card variant="flat" style={{ borderLeftWidth: 3, borderLeftColor: colors.warning ?? '#F59E0B' }}>
+            <Text style={{ ...typography.body, color: colors.textPrimary, lineHeight: 22 }} allowFontScaling>
+              {selectedCall.notes}
+            </Text>
+          </Card>
+        </View>
+        </FadeIn>
+      )}
 
       {/* Labels Section */}
       {sortedLabels.length > 0 && (
@@ -455,38 +706,46 @@ export function CallDetailScreen() {
           </Text>
           <Card variant="flat">
             <View style={{ gap: spacing.md }}>
-              {sortedLabels.map((label: CallLabel) => (
-                <View key={label.label_name}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: 4 }}>
-                    <Badge label={labelDisplayName(label.label_name)} variant={labelBadgeVariant(label.label_name)} />
-                    <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
-                      {Math.round(label.confidence * 100)}% confidence
-                    </Text>
-                  </View>
-                  <Text style={{ ...typography.bodySmall, color: colors.textPrimary }} allowFontScaling>
-                    {label.reason_text}
-                  </Text>
-                  {label.evidence_snippets.length > 0 && (
-                    <View style={{ marginTop: 4 }}>
-                      {label.evidence_snippets.map((snippet, idx) => (
-                        <Text
-                          key={idx}
-                          style={{
-                            ...typography.caption,
-                            color: colors.textSecondary,
-                            fontStyle: 'italic',
-                            marginTop: 2,
-                          }}
-                          numberOfLines={2}
-                          allowFontScaling
-                        >
-                          "{snippet}"
-                        </Text>
-                      ))}
+              {sortedLabels.map((label: CallLabel) => {
+                const lc = labelColor(label.label_name, colors);
+                return (
+                  <View key={label.label_name}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: 4 }}>
+                      <Badge label={labelDisplayName(label.label_name)} variant={labelBadgeVariant(label.label_name)} />
                     </View>
-                  )}
-                </View>
-              ))}
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                      <View style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: colors.border }}>
+                        <View style={{ width: `${Math.round(label.confidence * 100)}%`, height: 4, borderRadius: 2, backgroundColor: lc }} />
+                      </View>
+                      <Text style={{ ...typography.caption, color: colors.textSecondary, width: 36, textAlign: 'right' }}>
+                        {Math.round(label.confidence * 100)}%
+                      </Text>
+                    </View>
+                    <Text style={{ ...typography.bodySmall, color: colors.textPrimary }} allowFontScaling>
+                      {label.reason_text}
+                    </Text>
+                    {label.evidence_snippets.length > 0 && (
+                      <View style={{ marginTop: 4 }}>
+                        {label.evidence_snippets.map((snippet, idx) => (
+                          <Text
+                            key={idx}
+                            style={{
+                              ...typography.caption,
+                              color: colors.textSecondary,
+                              fontStyle: 'italic',
+                              marginTop: 2,
+                            }}
+                            numberOfLines={2}
+                            allowFontScaling
+                          >
+                            "{snippet}"
+                          </Text>
+                        ))}
+                      </View>
+                    )}
+                  </View>
+                );
+              })}
             </View>
           </Card>
         </View>
@@ -500,17 +759,26 @@ export function CallDetailScreen() {
           <Text style={{ ...typography.h3, color: colors.textPrimary }} allowFontScaling>
             Transcript
           </Text>
-          {selectedCall.transcript_status === 'ready' && !transcript && (
-            <TouchableOpacity onPress={handleRefreshTranscript}>
-              <Text style={{ ...typography.bodySmall, color: colors.primary }} allowFontScaling>
-                Load transcript
-              </Text>
-            </TouchableOpacity>
-          )}
+          <View style={{ flexDirection: 'row', gap: spacing.md }}>
+            {transcript && transcript.turns.length > 0 && (
+              <TouchableOpacity onPress={() => setShowTranscript(!showTranscript)}>
+                <Text style={{ ...typography.bodySmall, color: colors.primary }} allowFontScaling>
+                  {showTranscript ? 'Hide' : 'Show'}
+                </Text>
+              </TouchableOpacity>
+            )}
+            {selectedCall.transcript_status === 'ready' && !transcript && !transcriptLoading && (
+              <TouchableOpacity onPress={handleRefreshTranscript}>
+                <Text style={{ ...typography.bodySmall, color: colors.primary }} allowFontScaling>
+                  Load transcript
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
         <Card variant="flat">
           {selectedCall.transcript_status === 'ready' ? (
-            transcript && transcript.turns.length > 0 ? (
+            transcript && transcript.turns.length > 0 && showTranscript ? (
               <View style={{ gap: spacing.sm }}>
                 {transcript.turns.map((turn: TranscriptTurn, idx: number) => (
                   <View key={idx} style={{ flexDirection: 'row', gap: spacing.sm }}>
@@ -548,6 +816,15 @@ export function CallDetailScreen() {
                   Loading transcript...
                 </Text>
               </View>
+            ) : transcriptError && !transcript ? (
+              <TouchableOpacity onPress={handleRefreshTranscript}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+                  <Icon name="alert-circle" size="md" color={colors.error} />
+                  <Text style={{ ...typography.body, color: colors.error }} allowFontScaling>
+                    Could not load transcript. Tap to retry.
+                  </Text>
+                </View>
+              </TouchableOpacity>
             ) : (
               <TouchableOpacity onPress={handleRefreshTranscript}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
@@ -595,7 +872,7 @@ export function CallDetailScreen() {
           <Text style={{ ...typography.h3, color: colors.textPrimary, marginBottom: spacing.md }} allowFontScaling>
             Timeline
           </Text>
-          <Card variant="flat">
+          <Card variant="flat" style={{ borderLeftWidth: 3, borderLeftColor: colors.primary + '30' }}>
             {selectedCall.events.map((event: CallEvent, index: number) => (
               <View key={event.id}>
                 <View
@@ -624,7 +901,7 @@ export function CallDetailScreen() {
                         style={{
                           width: 2,
                           flex: 1,
-                          backgroundColor: colors.border,
+                          backgroundColor: colors.primary + '30',
                           marginTop: 4,
                           minHeight: 16,
                         }}
@@ -639,7 +916,7 @@ export function CallDetailScreen() {
                       {eventLabel(event.event_type, event.provider_status)}
                     </Text>
                     <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
-                      {formatDateTime(event.event_at)}
+                      {formatDateTimeWithTz(event.event_at, userTz)}
                     </Text>
                   </View>
                 </View>
@@ -758,8 +1035,8 @@ function ActionChip({
         flexDirection: 'row',
         alignItems: 'center',
         gap: spacing.xs,
-        paddingVertical: spacing.sm,
-        paddingHorizontal: spacing.md,
+        paddingVertical: 10,
+        paddingHorizontal: 14,
         borderRadius: radii.lg,
         backgroundColor: highlight ? colors.primary + '18' : colors.background,
         borderWidth: 1,

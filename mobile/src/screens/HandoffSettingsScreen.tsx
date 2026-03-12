@@ -21,14 +21,13 @@ const TRIGGER_OPTIONS: { value: HandoffTrigger; label: string; desc: string; ico
   { value: 'vip_and_urgent', label: 'VIP and Urgent', desc: 'Offer handoff for VIP callers or urgent calls', icon: 'shield-star-outline' },
 ];
 
-export function HandoffSettingsScreen({}: Props) {
+export function HandoffSettingsScreen({ navigation }: Props) {
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
-  const { settings, loading, error, loadSettings, updateSettings } = useSettingsStore();
+  const { settings, loading, saving, error, loadSettings, updateSettings } = useSettingsStore();
 
   const [enabled, setEnabled] = useState(false);
   const [trigger, setTrigger] = useState<HandoffTrigger>('vip_only');
-  const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
 
@@ -44,7 +43,6 @@ export function HandoffSettingsScreen({}: Props) {
   }, [settings]);
 
   async function handleSave() {
-    setSaving(true);
     const ok = await updateSettings({
       handoff_enabled: enabled,
       handoff_trigger: trigger,
@@ -52,11 +50,11 @@ export function HandoffSettingsScreen({}: Props) {
     if (ok) {
       setToastType('success');
       setToast('Handoff settings saved');
+      setTimeout(() => navigation.goBack(), 500);
     } else {
       setToastType('error');
       setToast(useSettingsStore.getState().error ?? 'Failed to save handoff settings.');
     }
-    setSaving(false);
   }
 
   if (!settings && loading) {

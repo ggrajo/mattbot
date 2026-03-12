@@ -18,6 +18,7 @@ interface DeviceContact {
   displayName: string;
   company: string;
   phoneNumbers: { label: string; number: string }[];
+  emailAddresses: { label: string; email: string }[];
 }
 
 export interface SelectedContact {
@@ -112,9 +113,10 @@ export function ContactPicker({ visible: controlledVisible, onSelect, onClose, b
     }
   }, [modalVisible, contacts.length, loadContacts]);
 
-  const handleSelect = (phone: string, name: string, company?: string) => {
+  const handleSelect = (phone: string, name: string, company?: string, email?: string) => {
     const cleaned = phone.replace(/[\s()\-\.]/g, '');
-    onSelect({ phoneNumber: cleaned, displayName: name, company });
+    const normalized = cleaned.startsWith('+') ? cleaned : `+1${cleaned}`;
+    onSelect({ phoneNumber: normalized, displayName: name, company, email });
     handleClose();
   };
 
@@ -195,7 +197,7 @@ export function ContactPicker({ visible: controlledVisible, onSelect, onClose, b
                   {item.phoneNumbers.map((pn, idx) => (
                     <Pressable
                       key={`${item.recordID}-${idx}`}
-                      onPress={() => handleSelect(pn.number, item.displayName, item.company)}
+                      onPress={() => handleSelect(pn.number, item.displayName, item.company, item.emailAddresses?.[0]?.email)}
                       style={({ pressed }) => ({
                         flexDirection: 'row',
                         alignItems: 'center',

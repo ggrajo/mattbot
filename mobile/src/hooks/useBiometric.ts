@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import * as Keychain from 'react-native-keychain';
+import ReactNativeBiometrics from 'react-native-biometrics';
 
-type BiometricType = 'FaceID' | 'TouchID' | 'Fingerprint' | null;
+type BiometryType = 'FaceID' | 'TouchID' | 'Biometrics' | null;
 
 interface BiometricState {
   available: boolean;
-  biometryType: BiometricType;
+  biometryType: BiometryType;
   loading: boolean;
   error: string | null;
 }
@@ -13,6 +13,8 @@ interface BiometricState {
 interface UseBiometricReturn extends BiometricState {
   authenticate: (promptMessage?: string) => Promise<boolean>;
 }
+
+const rnBiometrics = new ReactNativeBiometrics();
 
 export function useBiometric(): UseBiometricReturn {
   const [state, setState] = useState<BiometricState>({
@@ -28,14 +30,14 @@ export function useBiometric(): UseBiometricReturn {
 
   async function checkBiometricAvailability() {
     try {
-      const biometryType = await Keychain.getSupportedBiometryType();
+      const { available, biometryType } = await rnBiometrics.isSensorAvailable();
       setState({
-        available: biometryType !== null,
-        biometryType: biometryType as BiometricType,
+        available,
+        biometryType: (biometryType as BiometryType) ?? null,
         loading: false,
         error: null,
       });
-    } catch (error) {
+    } catch {
       setState({
         available: false,
         biometryType: null,
@@ -52,12 +54,8 @@ export function useBiometric(): UseBiometricReturn {
       }
 
       try {
-        const result = await Keychain.getGenericPassword({
-          service: 'com.mattbot.biometric_check',
-          accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
-          authenticationPrompt: { title: promptMessage },
-        });
-        return result !== false;
+        const { success } = await rnBiometrics.simplePrompt({ promptMessage });
+        return success;
       } catch {
         return false;
       }

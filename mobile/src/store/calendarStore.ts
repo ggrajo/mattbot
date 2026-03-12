@@ -27,8 +27,8 @@ export const useCalendarStore = create<CalendarStore>((set) => ({
     try {
       const status = await getCalendarStatus();
       set({ status, error: null });
-    } catch (e: any) {
-      set({ error: e?.message || 'Failed to load calendar status' });
+    } catch {
+      set({ status: { connected: false, email: null, calendar_id: null } });
     }
   },
 
@@ -36,9 +36,9 @@ export const useCalendarStore = create<CalendarStore>((set) => ({
     set({ loading: true, error: null });
     try {
       const events = await getCalendarEvents(start, end);
-      set({ events, loading: false });
-    } catch (e: any) {
-      set({ loading: false, error: e?.message || 'Failed to load events' });
+      set({ events: Array.isArray(events) ? events : [], loading: false });
+    } catch {
+      set({ loading: false, error: 'Could not load events. Please try again.' });
     }
   },
 
@@ -46,8 +46,8 @@ export const useCalendarStore = create<CalendarStore>((set) => ({
     try {
       await apiDisconnect();
       set({ status: { connected: false, email: null, calendar_id: null }, events: [], error: null });
-    } catch (e: any) {
-      set({ error: e?.message || 'Failed to disconnect calendar' });
+    } catch {
+      set({ error: 'Could not disconnect calendar. Please try again.' });
     }
   },
 }));

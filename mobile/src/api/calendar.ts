@@ -46,7 +46,7 @@ export async function getCalendarEvents(
   const { data } = await apiClient.get('/calendar/events', {
     params: { start, end },
   });
-  return data.events;
+  return data.events ?? data.items ?? [];
 }
 
 export async function getAvailableSlots(
@@ -55,5 +55,5 @@ export async function getAvailableSlots(
   const { data } = await apiClient.get('/calendar/available-slots', {
     params: { date },
   });
-  return data.slots;
+  return data.slots ?? data.items ?? [];
 }

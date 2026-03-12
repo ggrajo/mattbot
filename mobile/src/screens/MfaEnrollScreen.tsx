@@ -18,7 +18,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'MfaEnroll'>;
 export function MfaEnrollScreen({ navigation }: Props) {
   const theme = useTheme();
   const { colors, spacing, typography } = theme;
-  const { partialToken, totpSecret, totpQrUri, mfaSetupToken, setTotpSetup, setRecoveryCodes } = useAuthStore();
+  const { partialToken, totpSecret, totpQrUri, mfaSetupToken, setTotpSetup, setRecoveryCodes, setPendingTokens } = useAuthStore();
 
   const [code, setCode] = useState('');
   const [codeError, setCodeError] = useState<string>();
@@ -54,6 +54,9 @@ export function MfaEnrollScreen({ navigation }: Props) {
     try {
       const data = await mfaTotpConfirm(mfaSetupToken!, code);
       setRecoveryCodes(data.recovery_codes);
+      if (data.access_token && data.refresh_token) {
+        setPendingTokens(data.access_token, data.refresh_token);
+      }
       navigation.replace('RecoveryCodes');
     } catch (error) {
       setApiError(extractApiError(error));

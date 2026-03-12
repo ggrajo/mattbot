@@ -122,11 +122,11 @@ export interface PaymentMethodItem {
 
 export async function listPaymentMethods(): Promise<{ items: PaymentMethodItem[] }> {
   const { data } = await apiClient.get('/billing/payment-methods');
-  return data;
+  return { items: data.payment_methods ?? data.items ?? [] };
 }
 
 export async function addPaymentMethod(paymentMethodId: string): Promise<PaymentMethodItem> {
-  const { data } = await apiClient.post('/billing/payment-methods', { payment_method_id: paymentMethodId });
+  const { data } = await apiClient.post('/billing/payment-methods/add', { payment_method_id: paymentMethodId });
   return data;
 }
 
@@ -135,6 +135,6 @@ export async function removePaymentMethod(methodId: string): Promise<void> {
 }
 
 export async function setDefaultPaymentMethod(methodId: string): Promise<PaymentMethodItem> {
-  const { data } = await apiClient.post(`/billing/payment-methods/${methodId}/default`);
+  const { data } = await apiClient.put(`/billing/payment-methods/${methodId}/default`);
   return data;
 }

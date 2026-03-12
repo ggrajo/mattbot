@@ -6,79 +6,118 @@ export function getDeviceTimezone(): string {
   }
 }
 
-export function formatDate(iso: string, tz?: string): string {
-  const d = new Date(iso);
+export function getTimezoneAbbr(tz: string): string {
   try {
-    return d.toLocaleDateString(undefined, {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      timeZone: tz ?? getDeviceTimezone(),
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: tz,
       timeZoneName: 'short',
-    });
+    }).formatToParts(new Date());
+    const tzPart = parts.find(p => p.type === 'timeZoneName');
+    return tzPart?.value ?? '';
+  } catch {
+    return '';
+  }
+}
+
+export function formatDate(date: string | Date, timezone?: string): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  const opts: Intl.DateTimeFormatOptions = {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    ...(timezone ? { timeZone: timezone } : {}),
+  };
+  try {
+    const formatted = d.toLocaleDateString('en-US', opts);
+    if (timezone) {
+      const abbr = getTimezoneAbbr(timezone);
+      return abbr ? `${formatted} ${abbr}` : formatted;
+    }
+    return formatted;
   } catch {
     return d.toLocaleDateString();
   }
 }
 
-export function formatDateTime(iso: string, tz?: string): string {
-  const d = new Date(iso);
+export function formatDateTime(date: string | Date, timezone?: string): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  const opts: Intl.DateTimeFormatOptions = {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+    ...(timezone ? { timeZone: timezone } : {}),
+  };
   try {
-    return d.toLocaleString(undefined, {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZone: tz ?? getDeviceTimezone(),
-      timeZoneName: 'short',
-    });
+    const formatted = d.toLocaleDateString('en-US', opts);
+    if (timezone) {
+      const abbr = getTimezoneAbbr(timezone);
+      return abbr ? `${formatted} ${abbr}` : formatted;
+    }
+    return formatted;
   } catch {
     return d.toLocaleString();
   }
 }
 
-export function formatDateTimeFull(iso: string, tz?: string): string {
-  const d = new Date(iso);
+export function formatDateTimeFull(date: string | Date, timezone?: string): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  const opts: Intl.DateTimeFormatOptions = {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+    ...(timezone ? { timeZone: timezone } : {}),
+  };
   try {
-    return d.toLocaleString(undefined, {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZone: tz ?? getDeviceTimezone(),
-      timeZoneName: 'short',
-    });
+    const formatted = d.toLocaleDateString('en-US', opts);
+    if (timezone) {
+      const abbr = getTimezoneAbbr(timezone);
+      return abbr ? `${formatted} ${abbr}` : formatted;
+    }
+    return formatted;
   } catch {
     return d.toLocaleString();
   }
 }
 
-export function formatTime(iso: string, tz?: string): string {
-  const d = new Date(iso);
+export function formatTime(date: string | Date, timezone?: string): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  const opts: Intl.DateTimeFormatOptions = {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+    ...(timezone ? { timeZone: timezone } : {}),
+  };
   try {
-    return d.toLocaleTimeString(undefined, {
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZone: tz ?? getDeviceTimezone(),
-      timeZoneName: 'short',
-    });
+    const formatted = d.toLocaleTimeString('en-US', opts);
+    if (timezone) {
+      const abbr = getTimezoneAbbr(timezone);
+      return abbr ? `${formatted} ${abbr}` : formatted;
+    }
+    return formatted;
   } catch {
     return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 }
 
-export function formatRelative(iso: string): string {
-  const d = new Date(iso);
-  const now = new Date();
-  const diffMs = now.getTime() - d.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
-
-  if (diffMins < 1) return 'just now';
-  if (diffMins < 60) return `${diffMins}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  if (diffDays < 7) return `${diffDays}d ago`;
-  return formatDate(iso);
+export function formatRelativeTime(date: string | Date): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  const diff = Date.now() - d.getTime();
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 1) return 'Just now';
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}d ago`;
+  return formatDateTime(date);
 }
+
+/** @deprecated Use formatRelativeTime instead */
+export const formatRelative = formatRelativeTime;

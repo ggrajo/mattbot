@@ -172,26 +172,7 @@ function getDateKey(iso: string): string {
 }
 
 function tzAbbr(tz: string): string {
-  // Use the comprehensive timezone abbreviation mapping
-  const abbr = getTimezoneAbbr(tz);
-  
-  // If the mapping returned the same ID, try Intl as fallback
-  if (abbr === tz) {
-    try {
-      const parts = new Intl.DateTimeFormat('en-US', {
-        timeZone: tz, timeZoneName: 'short',
-      }).formatToParts(new Date());
-      const result = parts.find((p) => p.type === 'timeZoneName')?.value ?? tz;
-      // If Intl returns something like "GMT+8", still prefer the mapping result
-      if (result && !result.includes('GMT')) {
-        return result;
-      }
-    } catch {
-      // Intl failed, return the mapping result
-    }
-  }
-  
-  return abbr;
+  return getTimezoneAbbr(tz);
 }
 
 function maskPhone(e164: string): string {
@@ -246,22 +227,25 @@ export function CalendarScreen() {
   // --- Data loading ---
   const loadEventsForRange = useCallback(() => {
     if (!useCalendarStore.getState().status?.connected) return;
-    const ref = new Date(selectedDate);
+    const ref = new Date(selectedDate + 'T12:00:00');
+    if (isNaN(ref.getTime())) return;
     const start = new Date(ref);
     const end = new Date(ref);
     if (viewMode === 'month') {
       start.setDate(1);
-      end.setMonth(end.getMonth() + 1);
-      end.setDate(0);
+      end.setMonth(end.getMonth() + 1, 0);
     } else if (viewMode === 'week') {
       const day = start.getDay();
       start.setDate(start.getDate() - day);
-      end.setDate(start.getDate() + 7);
+      end.setTime(start.getTime());
+      end.setDate(end.getDate() + 6);
     } else {
-      end.setDate(end.getDate() + 1);
+      // day or list: just the selected day
     }
     start.setDate(start.getDate() - 7);
+    start.setHours(0, 0, 0, 0);
     end.setDate(end.getDate() + 7);
+    end.setHours(23, 59, 59, 999);
     loadEvents(start.toISOString(), end.toISOString());
   }, [selectedDate, viewMode, loadEvents]);
 

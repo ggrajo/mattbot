@@ -1,11 +1,22 @@
 import { apiClient } from './client';
-import { type MemoryItem } from './calls';
+
+export interface MemoryItem {
+  id: string;
+  memory_type: string;
+  subject: string | null;
+  value: string | null;
+  confidence: number | null;
+  user_confirmed: boolean;
+  source_call_id: string | null;
+  created_at: string;
+}
 
 export interface CreateMemoryParams {
   memory_type: string;
-  subject?: string;
-  value?: string;
+  subject: string;
+  value: string;
   source_call_id?: string;
+  caller_phone_hash?: string;
 }
 
 export interface UpdateMemoryParams {

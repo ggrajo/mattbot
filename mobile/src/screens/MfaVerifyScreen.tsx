@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from '../components/ui/Button';
 import { TextInput } from '../components/ui/TextInput';
+import { OtpInput } from '../components/ui/OtpInput';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { Icon } from '../components/ui/Icon';
+import { ScreenWrapper } from '../components/ui/ScreenWrapper';
+import { Card } from '../components/ui/Card';
 import { useTheme } from '../theme/ThemeProvider';
 import { useAuthStore } from '../store/authStore';
 import { mfaVerify } from '../api/auth';
@@ -15,8 +20,8 @@ type Props = NativeStackScreenProps<RootStackParamList, 'MfaVerify'>;
 
 export function MfaVerifyScreen({ navigation }: Props) {
   const theme = useTheme();
-  const { colors, spacing, typography } = theme;
-  const { mfaChallengeToken, setAuthenticated } = useAuthStore();
+  const { colors, spacing, typography, radii } = theme;
+  const { mfaChallengeToken, setAuthenticated, setMfaEnrollment } = useAuthStore();
 
   const [mode, setMode] = useState<'totp' | 'recovery'>('totp');
   const [code, setCode] = useState('');
@@ -38,7 +43,12 @@ export function MfaVerifyScreen({ navigation }: Props) {
         mode === 'totp' ? code : undefined,
         mode === 'recovery' ? code : undefined,
       );
-      await setAuthenticated(data.access_token, data.refresh_token);
+      if (data.requires_mfa_enrollment && data.partial_token) {
+        setMfaEnrollment(data.partial_token);
+        navigation.navigate('MfaEnroll');
+      } else if (data.access_token) {
+        await setAuthenticated(data.access_token, data.refresh_token);
+      }
     } catch (error) {
       setApiError(extractApiError(error));
     } finally {
@@ -46,62 +56,220 @@ export function MfaVerifyScreen({ navigation }: Props) {
     }
   }
 
+  const isTotp = mode === 'totp';
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
+    <ScreenWrapper>
+      {/* Hero icon */}
+      <Animated.View
+        entering={FadeInDown.duration(400).delay(100)}
+        style={{ alignItems: 'center', paddingTop: spacing.xxl, marginBottom: spacing.xl }}
       >
-        <ScrollView
-          contentContainerStyle={{ padding: spacing.xl, gap: spacing.lg }}
-          keyboardShouldPersistTaps="handled"
+        <View
+          style={{
+            width: 72,
+            height: 72,
+            borderRadius: radii.full,
+            backgroundColor: colors.primaryContainer,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: spacing.lg,
+          }}
         >
-          <Text style={{ ...typography.h2, color: colors.textPrimary }} allowFontScaling>
-            Two-factor authentication
-          </Text>
+          <Icon name="shield-lock-outline" size={36} color={colors.primary} />
+        </View>
+        <Text style={{ ...typography.h1, color: colors.textPrimary }} allowFontScaling>
+          Two-factor auth
+        </Text>
+        <Text
+          style={{
+            ...typography.bodySmall,
+            color: colors.textSecondary,
+            textAlign: 'center',
+            marginTop: spacing.xs,
+            maxWidth: 280,
+          }}
+          allowFontScaling
+        >
+          {isTotp
+            ? 'Enter the 6-digit code from your authenticator app'
+            : 'Enter one of your single-use recovery codes'}
+        </Text>
+      </Animated.View>
+
+      {/* Tab-style toggle */}
+      <Animated.View
+        entering={FadeInDown.duration(400).delay(200)}
+        style={{
+          flexDirection: 'row',
+          backgroundColor: colors.surfaceVariant,
+          borderRadius: radii.md,
+          padding: spacing.xs,
+          marginBottom: spacing.lg,
+        }}
+      >
+        <Pressable
+          onPress={() => {
+            setMode('totp');
+            setCode('');
+            setCodeError(undefined);
+            setApiError(undefined);
+          }}
+          style={{
+            flex: 1,
+            paddingVertical: spacing.sm,
+            borderRadius: radii.sm,
+            backgroundColor: isTotp ? colors.surface : 'transparent',
+            alignItems: 'center',
+            ...(isTotp ? theme.shadows.card : {}),
+          }}
+        >
           <Text
-            style={{ ...typography.body, color: colors.textSecondary }}
+            style={{
+              ...typography.bodySmall,
+              fontWeight: isTotp ? '600' : '400',
+              color: isTotp ? colors.primary : colors.textSecondary,
+            }}
             allowFontScaling
           >
-            {mode === 'totp'
-              ? 'Enter the 6-digit code from your authenticator app.'
-              : 'Enter one of your recovery codes.'}
+            Authenticator
           </Text>
-
-          {apiError && <ErrorMessage message={apiError} />}
-
-          <TextInput
-            label={mode === 'totp' ? 'Authenticator code' : 'Recovery code'}
-            value={code}
-            onChangeText={(text) => {
-              setCode(text);
-              setCodeError(undefined);
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            setMode('recovery');
+            setCode('');
+            setCodeError(undefined);
+            setApiError(undefined);
+          }}
+          style={{
+            flex: 1,
+            paddingVertical: spacing.sm,
+            borderRadius: radii.sm,
+            backgroundColor: !isTotp ? colors.surface : 'transparent',
+            alignItems: 'center',
+            ...(!isTotp ? theme.shadows.card : {}),
+          }}
+        >
+          <Text
+            style={{
+              ...typography.bodySmall,
+              fontWeight: !isTotp ? '600' : '400',
+              color: !isTotp ? colors.primary : colors.textSecondary,
             }}
-            error={codeError}
-            keyboardType={mode === 'totp' ? 'number-pad' : 'default'}
-            maxLength={mode === 'totp' ? 6 : 9}
-            autoCapitalize="characters"
-            autoComplete="one-time-code"
-          />
+            allowFontScaling
+          >
+            Recovery Code
+          </Text>
+        </Pressable>
+      </Animated.View>
+
+      {apiError && (
+        <Animated.View entering={FadeInDown.duration(300)} style={{ marginBottom: spacing.md }}>
+          <ErrorMessage message={apiError} />
+        </Animated.View>
+      )}
+
+      {/* Code input card */}
+      <Animated.View entering={FadeInDown.duration(400).delay(300)}>
+        <Card variant="elevated" style={{ gap: spacing.md }}>
+          {isTotp ? (
+            <View style={{ marginBottom: 0 }}>
+              <Text
+                style={{
+                  ...typography.bodySmall,
+                  color: codeError ? colors.error : colors.textSecondary,
+                  marginBottom: spacing.xs,
+                  fontWeight: '500',
+                }}
+                allowFontScaling
+              >
+                Authenticator code
+              </Text>
+              <OtpInput
+                value={code}
+                onChange={(text) => {
+                  setCode(text);
+                  setCodeError(undefined);
+                }}
+                autoFocus
+              />
+              {codeError && (
+                <Text
+                  style={{
+                    ...typography.caption,
+                    color: colors.error,
+                    marginTop: spacing.xs,
+                  }}
+                  accessibilityRole="alert"
+                >
+                  {codeError}
+                </Text>
+              )}
+            </View>
+          ) : (
+            <TextInput
+              label="Recovery code"
+              value={code}
+              onChangeText={(text) => {
+                setCode(text);
+                setCodeError(undefined);
+              }}
+              error={codeError}
+              leftIcon="key-outline"
+              keyboardType="default"
+              maxLength={9}
+              autoCapitalize="characters"
+              autoComplete="one-time-code"
+              containerStyle={{
+                marginBottom: 0,
+              }}
+            />
+          )}
+
+          {isTotp && (
+            <Text
+              style={{
+                ...typography.caption,
+                color: colors.textSecondary,
+                textAlign: 'center',
+              }}
+              allowFontScaling
+            >
+              Code refreshes every 30 seconds
+            </Text>
+          )}
 
           <Button
             title="Verify"
             onPress={handleVerify}
             loading={loading}
+            icon="check-circle-outline"
           />
+        </Card>
+      </Animated.View>
 
-          <Button
-            title={mode === 'totp' ? 'Use recovery code instead' : 'Use authenticator code instead'}
-            onPress={() => {
-              setMode(mode === 'totp' ? 'recovery' : 'totp');
-              setCode('');
-              setCodeError(undefined);
-              setApiError(undefined);
-            }}
-            variant="ghost"
-          />
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+      {/* Help text */}
+      <Animated.View
+        entering={FadeInDown.duration(400).delay(400)}
+        style={{
+          alignItems: 'center',
+          marginTop: spacing.xxl,
+          gap: spacing.sm,
+        }}
+      >
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+          <Icon name="information-outline" size="sm" color={colors.textSecondary} />
+          <Text
+            style={{ ...typography.caption, color: colors.textSecondary }}
+            allowFontScaling
+          >
+            {isTotp
+              ? 'Open your authenticator app to find the code'
+              : 'Recovery codes were provided during MFA setup'}
+          </Text>
+        </View>
+      </Animated.View>
+    </ScreenWrapper>
   );
 }

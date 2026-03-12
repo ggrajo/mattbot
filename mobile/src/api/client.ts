@@ -1,7 +1,8 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import Config from 'react-native-config';
 import { getSecureItem, storeTokens, clearTokens, TOKEN_KEYS } from '../utils/secureStorage';
 
-export const API_BASE_URL = 'http://localhost:8000/api/v1';
+export const API_BASE_URL = Config.API_BASE_URL || 'http://localhost:8000/api/v1';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,

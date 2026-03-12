@@ -60,11 +60,11 @@ async def _resolve_user_from_token(
     now = utcnow()
 
     access_exp = session.access_expires_at
-    if access_exp < now:
+    if access_exp.replace(tzinfo=None) < now:
         raise AppError("TOKEN_EXPIRED", "Access token has expired", 401)
 
     created = session.created_at
-    absolute_age = (now - created).days
+    absolute_age = (now - created.replace(tzinfo=None)).days
     if absolute_age > settings.ABSOLUTE_SESSION_DAYS:
         raise AppError("SESSION_EXPIRED", "Session has exceeded maximum age", 401)
 

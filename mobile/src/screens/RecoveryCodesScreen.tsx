@@ -13,7 +13,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'RecoveryCodes'>;
 export function RecoveryCodesScreen({ navigation }: Props) {
   const theme = useTheme();
   const { colors, spacing, typography } = theme;
-  const { recoveryCodes, setAuthenticated } = useAuthStore();
+  const { recoveryCodes, activatePendingTokens } = useAuthStore();
   const [saved, setSaved] = useState(false);
 
   function handleCopyAll() {
@@ -48,7 +48,7 @@ export function RecoveryCodesScreen({ navigation }: Props) {
   }
 
   async function proceedToLogin() {
-    navigation.navigate('Login');
+    await activatePendingTokens();
   }
 
   return (

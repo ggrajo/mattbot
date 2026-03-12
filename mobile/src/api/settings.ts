@@ -64,6 +64,13 @@ export interface QuietHoursInterval {
   days: number[];
 }
 
+export interface SettingsChanges {
+  [key: string]: unknown;
+  personal_phone?: string;
+  handoff_target_phone?: string;
+  urgent_notify_phone?: string;
+}
+
 export interface SettingsPatchResponse {
   revision: number;
   settings: UserSettings;

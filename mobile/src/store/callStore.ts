@@ -17,14 +17,18 @@ interface CallStore {
   calls: CallListItem[];
   selectedCall: CallDetail | null;
   loading: boolean;
+  detailLoading: boolean;
   loadingMore: boolean;
   error: string | null;
+  detailError: string | null;
   nextCursor: string | null;
   hasMore: boolean;
   artifacts: CallArtifacts | null;
   transcript: TranscriptResponse | null;
   artifactsLoading: boolean;
   transcriptLoading: boolean;
+  artifactsError: string | null;
+  transcriptError: string | null;
 
   loadCalls: (filters?: CallFilters) => Promise<void>;
   loadMore: (filters?: CallFilters) => Promise<void>;
@@ -39,14 +43,18 @@ export const useCallStore = create<CallStore>((set, get) => ({
   calls: [],
   selectedCall: null,
   loading: false,
+  detailLoading: false,
   loadingMore: false,
   error: null,
+  detailError: null,
   nextCursor: null,
   hasMore: false,
   artifacts: null,
   transcript: null,
   artifactsLoading: false,
   transcriptLoading: false,
+  artifactsError: null,
+  transcriptError: null,
 
   loadCalls: async (filters) => {
     set({ loading: true, error: null });
@@ -81,32 +89,32 @@ export const useCallStore = create<CallStore>((set, get) => ({
   },
 
   loadCallDetail: async (callId) => {
-    set({ loading: true, error: null, selectedCall: null });
+    set({ detailLoading: true, detailError: null, selectedCall: null });
     try {
       const detail = await apiFetchDetail(callId);
-      set({ selectedCall: detail, loading: false });
+      set({ selectedCall: detail, detailLoading: false });
     } catch (e: unknown) {
-      set({ error: extractApiError(e), loading: false });
+      set({ detailError: extractApiError(e), detailLoading: false });
     }
   },
 
   loadArtifacts: async (callId) => {
-    set({ artifactsLoading: true, artifacts: null });
+    set({ artifactsLoading: true, artifacts: null, artifactsError: null });
     try {
       const artifacts = await apiFetchArtifacts(callId);
       set({ artifacts, artifactsLoading: false });
-    } catch {
-      set({ artifactsLoading: false });
+    } catch (e: unknown) {
+      set({ artifactsError: extractApiError(e), artifactsLoading: false });
     }
   },
 
   loadTranscript: async (callId) => {
-    set({ transcriptLoading: true, transcript: null });
+    set({ transcriptLoading: true, transcript: null, transcriptError: null });
     try {
       const transcript = await apiFetchTranscript(callId);
       set({ transcript, transcriptLoading: false });
-    } catch {
-      set({ transcriptLoading: false });
+    } catch (e: unknown) {
+      set({ transcriptError: extractApiError(e), transcriptLoading: false });
     }
   },
 
@@ -124,13 +132,17 @@ export const useCallStore = create<CallStore>((set, get) => ({
       calls: [],
       selectedCall: null,
       loading: false,
+      detailLoading: false,
       loadingMore: false,
       error: null,
+      detailError: null,
       nextCursor: null,
       hasMore: false,
       artifacts: null,
       transcript: null,
       artifactsLoading: false,
       transcriptLoading: false,
+      artifactsError: null,
+      transcriptError: null,
     }),
 }));

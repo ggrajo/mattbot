@@ -58,20 +58,30 @@ const QUICK_PATTERNS: QuickPattern[] = [
   },
 ];
 
-export function QuietHoursScreen({}: Props) {
+export function QuietHoursScreen({ navigation }: Props) {
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
-  const { settings, loading, error, loadSettings, updateSettings } = useSettingsStore();
+  const { settings, saving, error, loadSettings, updateSettings } = useSettingsStore();
+
+  interface Interval {
+    label: string;
+    start: string;
+    end: string;
+    days: number[];
+  }
 
   const [enabled, setEnabled] = useState(false);
-  const [startTime, setStartTime] = useState('22:00');
-  const [endTime, setEndTime] = useState('07:00');
-  const [days, setDays] = useState<number[]>([0, 1, 2, 3, 4, 5, 6]);
+  const [intervals, setIntervals] = useState<Interval[]>([{ label: 'Default', start: '22:00', end: '07:00', days: [0, 1, 2, 3, 4, 5, 6] }]);
   const [allowVip, setAllowVip] = useState(true);
+  const [editingInterval, setEditingInterval] = useState<number | null>(null);
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [dirty, setDirty] = useState(false);
+
+  const startTime = editingInterval != null ? intervals[editingInterval]?.start ?? '22:00' : '22:00';
+  const endTime = editingInterval != null ? intervals[editingInterval]?.end ?? '07:00' : '07:00';
+  const days = editingInterval != null ? intervals[editingInterval]?.days ?? [] : [];
 
   useEffect(() => {
     loadSettings();
@@ -80,46 +90,83 @@ export function QuietHoursScreen({}: Props) {
   useEffect(() => {
     if (settings) {
       setEnabled(settings.quiet_hours_enabled);
-      setStartTime(settings.quiet_hours_start ?? '22:00');
-      setEndTime(settings.quiet_hours_end ?? '07:00');
-      setDays(settings.quiet_hours_days ?? [0, 1, 2, 3, 4, 5, 6]);
       setAllowVip(settings.quiet_hours_allow_vip);
+      if (settings.quiet_hours_intervals && settings.quiet_hours_intervals.length > 0) {
+        setIntervals(settings.quiet_hours_intervals);
+      } else {
+        setIntervals([{
+          label: 'Default',
+          start: settings.quiet_hours_start ?? '22:00',
+          end: settings.quiet_hours_end ?? '07:00',
+          days: settings.quiet_hours_days ?? [0, 1, 2, 3, 4, 5, 6],
+        }]);
+      }
     }
   }, [settings]);
 
   function toggleDay(day: number) {
+    if (editingInterval == null) return;
     hapticLight();
     setDirty(true);
-    setDays((prev) => (prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]));
+    setIntervals((prev) => prev.map((iv, i) =>
+      i === editingInterval
+        ? { ...iv, days: iv.days.includes(day) ? iv.days.filter((d) => d !== day) : [...iv.days, day] }
+        : iv
+    ));
   }
 
   function applyPattern(pattern: QuickPattern) {
     hapticLight();
-    setStartTime(pattern.start);
-    setEndTime(pattern.end);
-    setDays(pattern.days);
+    setIntervals([{ label: pattern.label, start: pattern.start, end: pattern.end, days: pattern.days }]);
+    setEditingInterval(0);
     setEnabled(true);
     setDirty(true);
   }
 
   function isPatternActive(pattern: QuickPattern): boolean {
-    if (!enabled) return false;
-    if (startTime !== pattern.start || endTime !== pattern.end) return false;
-    if (pattern.days.length !== days.length) return false;
-    return pattern.days.every((d) => days.includes(d));
+    if (!enabled || intervals.length !== 1) return false;
+    const iv = intervals[0];
+    if (iv.start !== pattern.start || iv.end !== pattern.end) return false;
+    if (pattern.days.length !== iv.days.length) return false;
+    return pattern.days.every((d) => iv.days.includes(d));
+  }
+
+  function addInterval() {
+    if (intervals.length >= 5) return;
+    hapticLight();
+    const newIv: Interval = { label: `Interval ${intervals.length + 1}`, start: '22:00', end: '07:00', days: [0, 1, 2, 3, 4, 5, 6] };
+    setIntervals((prev) => [...prev, newIv]);
+    setEditingInterval(intervals.length);
+    setDirty(true);
+  }
+
+  function removeInterval(idx: number) {
+    hapticLight();
+    setIntervals((prev) => prev.filter((_, i) => i !== idx));
+    if (editingInterval === idx) setEditingInterval(intervals.length > 1 ? 0 : null);
+    setDirty(true);
+  }
+
+  function updateIntervalTime(field: 'start' | 'end', value: string) {
+    if (editingInterval == null) return;
+    setIntervals((prev) => prev.map((iv, i) => i === editingInterval ? { ...iv, [field]: value } : iv));
+    setDirty(true);
   }
 
   async function handleSave() {
+    const first = intervals[0];
     const ok = await updateSettings({
       quiet_hours_enabled: enabled,
-      quiet_hours_start: startTime,
-      quiet_hours_end: endTime,
-      quiet_hours_days: days,
+      quiet_hours_start: first?.start ?? '22:00',
+      quiet_hours_end: first?.end ?? '07:00',
+      quiet_hours_days: first?.days ?? [],
+      quiet_hours_intervals: intervals,
       quiet_hours_allow_vip: allowVip,
     });
     if (ok) {
       setDirty(false);
       setToast({ message: 'Quiet hours saved', type: 'success' });
+      setTimeout(() => navigation.goBack(), 500);
     } else {
       setToast({ message: 'Failed to save settings', type: 'error' });
     }
@@ -137,14 +184,14 @@ export function QuietHoursScreen({}: Props) {
       <TimePicker
         visible={showStartPicker}
         value={startTime}
-        onChange={(t) => { setStartTime(t); setDirty(true); }}
+        onChange={(t) => { updateIntervalTime('start', t); }}
         onDismiss={() => setShowStartPicker(false)}
         label="Start Time"
       />
       <TimePicker
         visible={showEndPicker}
         value={endTime}
-        onChange={(t) => { setEndTime(t); setDirty(true); }}
+        onChange={(t) => { updateIntervalTime('end', t); }}
         onDismiss={() => setShowEndPicker(false)}
         label="End Time"
       />
@@ -241,97 +288,95 @@ export function QuietHoursScreen({}: Props) {
 
           <Divider style={{ marginBottom: spacing.lg }} />
 
-          {/* Time pickers */}
-          <Card style={{ marginBottom: spacing.lg }}>
-            <Text
-              style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600', marginBottom: spacing.md }}
-              allowFontScaling
-            >
-              Schedule
-            </Text>
-            <View style={{ flexDirection: 'row', gap: spacing.md }}>
-              <TouchableOpacity
-                onPress={() => setShowStartPicker(true)}
-                activeOpacity={0.7}
-                style={{
-                  flex: 1,
-                  backgroundColor: colors.surfaceVariant,
-                  borderRadius: radii.md,
-                  padding: spacing.md,
-                  alignItems: 'center',
-                }}
-                accessibilityLabel="Select start time"
-              >
-                <Text style={{ ...typography.caption, color: colors.textSecondary, marginBottom: spacing.xs }} allowFontScaling>
-                  Start
-                </Text>
-                <Text style={{ ...typography.h3, color: colors.textPrimary }} allowFontScaling>
-                  {formatTime12h(startTime)}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setShowEndPicker(true)}
-                activeOpacity={0.7}
-                style={{
-                  flex: 1,
-                  backgroundColor: colors.surfaceVariant,
-                  borderRadius: radii.md,
-                  padding: spacing.md,
-                  alignItems: 'center',
-                }}
-                accessibilityLabel="Select end time"
-              >
-                <Text style={{ ...typography.caption, color: colors.textSecondary, marginBottom: spacing.xs }} allowFontScaling>
-                  End
-                </Text>
-                <Text style={{ ...typography.h3, color: colors.textPrimary }} allowFontScaling>
-                  {formatTime12h(endTime)}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </Card>
-
-          {/* Day chips */}
-          <Card style={{ marginBottom: spacing.lg }}>
-            <Text
-              style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600', marginBottom: spacing.md }}
-              allowFontScaling
-            >
-              Active Days
-            </Text>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }}>
-              {DAYS.map((d) => {
-                const active = days.includes(d.value);
-                return (
-                  <TouchableOpacity
-                    key={d.value}
-                    onPress={() => toggleDay(d.value)}
-                    activeOpacity={0.7}
-                    style={{
-                      paddingHorizontal: spacing.md,
-                      paddingVertical: spacing.sm,
-                      borderRadius: radii.full,
-                      backgroundColor: active ? colors.primary : colors.surfaceVariant,
-                    }}
-                    accessibilityRole="checkbox"
-                    accessibilityState={{ checked: active }}
-                    accessibilityLabel={d.label}
-                  >
-                    <Text
-                      style={{
-                        ...typography.bodySmall,
-                        color: active ? colors.onPrimary : colors.textPrimary,
-                        fontWeight: '600',
-                      }}
-                      allowFontScaling
-                    >
-                      {d.label}
+          {/* Intervals */}
+          {intervals.map((iv, idx) => {
+            const isEditing = editingInterval === idx;
+            return (
+              <Card key={idx} style={{ marginBottom: spacing.md, borderWidth: isEditing ? 1.5 : 0, borderColor: isEditing ? colors.primary : 'transparent' }}>
+                <TouchableOpacity
+                  onPress={() => setEditingInterval(isEditing ? null : idx)}
+                  style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: isEditing ? spacing.md : 0 }}
+                >
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }} allowFontScaling>
+                      {iv.label || `Interval ${idx + 1}`}
                     </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          </Card>
+                    <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+                      {formatTime12h(iv.start)} - {formatTime12h(iv.end)}
+                    </Text>
+                  </View>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+                    {intervals.length > 1 && (
+                      <TouchableOpacity onPress={() => removeInterval(idx)} hitSlop={8}>
+                        <Icon name="close-circle-outline" size="md" color={colors.error} />
+                      </TouchableOpacity>
+                    )}
+                    <Icon name={isEditing ? 'chevron-up' : 'chevron-down'} size="md" color={colors.textSecondary} />
+                  </View>
+                </TouchableOpacity>
+
+                {isEditing && (
+                  <>
+                    {/* Time pickers */}
+                    <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.md }}>
+                      <TouchableOpacity
+                        onPress={() => setShowStartPicker(true)}
+                        activeOpacity={0.7}
+                        style={{ flex: 1, backgroundColor: colors.surfaceVariant, borderRadius: radii.md, padding: spacing.md, alignItems: 'center' }}
+                      >
+                        <Text style={{ ...typography.caption, color: colors.textSecondary, marginBottom: spacing.xs }} allowFontScaling>Start</Text>
+                        <Text style={{ ...typography.h3, color: colors.textPrimary }} allowFontScaling>{formatTime12h(iv.start)}</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => setShowEndPicker(true)}
+                        activeOpacity={0.7}
+                        style={{ flex: 1, backgroundColor: colors.surfaceVariant, borderRadius: radii.md, padding: spacing.md, alignItems: 'center' }}
+                      >
+                        <Text style={{ ...typography.caption, color: colors.textSecondary, marginBottom: spacing.xs }} allowFontScaling>End</Text>
+                        <Text style={{ ...typography.h3, color: colors.textPrimary }} allowFontScaling>{formatTime12h(iv.end)}</Text>
+                      </TouchableOpacity>
+                    </View>
+
+                    {/* Day chips */}
+                    <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600', marginBottom: spacing.sm }} allowFontScaling>Active Days</Text>
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }}>
+                      {DAYS.map((d) => {
+                        const active = iv.days.includes(d.value);
+                        return (
+                          <TouchableOpacity
+                            key={d.value}
+                            onPress={() => toggleDay(d.value)}
+                            activeOpacity={0.7}
+                            style={{
+                              paddingHorizontal: spacing.md,
+                              paddingVertical: spacing.sm,
+                              borderRadius: radii.full,
+                              backgroundColor: active ? colors.primary : colors.surfaceVariant,
+                            }}
+                            accessibilityRole="checkbox"
+                            accessibilityState={{ checked: active }}
+                            accessibilityLabel={d.label}
+                          >
+                            <Text style={{ ...typography.bodySmall, color: active ? colors.onPrimary : colors.textPrimary, fontWeight: '600' }} allowFontScaling>{d.label}</Text>
+                          </TouchableOpacity>
+                        );
+                      })}
+                    </View>
+                  </>
+                )}
+              </Card>
+            );
+          })}
+
+          {intervals.length < 5 && (
+            <TouchableOpacity
+              onPress={addInterval}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.lg, paddingVertical: spacing.sm }}
+            >
+              <Icon name="plus-circle-outline" size="md" color={colors.primary} />
+              <Text style={{ ...typography.body, color: colors.primary, fontWeight: '500' }} allowFontScaling>Add Interval</Text>
+            </TouchableOpacity>
+          )}
 
           {/* Allow VIP */}
           <Card style={{ marginBottom: spacing.xl }}>
@@ -361,7 +406,7 @@ export function QuietHoursScreen({}: Props) {
       <Button
         title="Save Changes"
         onPress={handleSave}
-        loading={loading}
+        loading={saving}
         disabled={!dirty}
         icon="content-save-outline"
       />

@@ -22,11 +22,13 @@ import { RootStackParamList } from '../navigation/types';
 type Props = NativeStackScreenProps<RootStackParamList, 'AssistantSettings'>;
 
 interface VoiceOption {
-  voice_id: string;
-  name: string;
-  gender: string;
-  accent: string;
+  id: string;
+  provider_voice_id: string;
+  display_name: string;
+  locale: string;
+  gender_tag: string;
   preview_url?: string;
+  sort_order?: number;
 }
 
 type Temperament =
@@ -46,7 +48,7 @@ const TEMPERAMENT_OPTIONS: { value: Temperament; label: string; icon: string }[]
   { value: 'short_and_direct', label: 'Direct', icon: 'flash-outline' },
   { value: 'warm_and_supportive', label: 'Warm', icon: 'heart-outline' },
   { value: 'formal', label: 'Formal', icon: 'school-outline' },
-  { value: 'custom', label: 'Custom', icon: 'tune-variant' },
+  { value: 'custom', label: 'Custom', icon: 'tune' },
 ];
 
 const SWEARING_OPTIONS: { value: SwearingRule; label: string; desc: string }[] = [
@@ -91,19 +93,19 @@ export function AssistantSettingsScreen({}: Props) {
     useCallback(() => {
       loadSettings();
       loadVoices();
+      loadAgent();
     }, []),
   );
 
   useEffect(() => {
     if (settings) {
       setAssistantName(settings.assistant_name ?? '');
-      setSelectedVoice('');
       setTemperament((settings.temperament_preset as Temperament) ?? 'professional_polite');
       setSwearingRule((settings.swearing_rule as SwearingRule) ?? 'no_swearing');
       setPrimaryLanguage(settings.language_primary ?? 'en');
       setSecondaryLanguage(settings.language_secondary ?? '');
       setGreetingTemplate((settings.greeting_template as GreetingTemplate) ?? 'standard');
-      setCustomInstructions('');
+      // custom_instructions lives on the agent, not settings - loaded via loadAgent
     }
   }, [settings]);
 
@@ -112,7 +114,8 @@ export function AssistantSettingsScreen({}: Props) {
     setVoicesError(null);
     try {
       const { data } = await apiClient.get('/voices');
-      setVoices(data.voices ?? data);
+      const list = data?.items ?? data?.voices ?? data;
+      setVoices(Array.isArray(list) ? list : []);
     } catch (e) {
       setVoicesError(extractApiError(e));
     } finally {
@@ -120,13 +123,22 @@ export function AssistantSettingsScreen({}: Props) {
     }
   }
 
+  async function loadAgent() {
+    try {
+      const { data } = await apiClient.get('/agents/default');
+      if (data?.voice?.voice_id) setSelectedVoice(data.voice.voice_id);
+      else if (data?.voice_id) setSelectedVoice(data.voice_id);
+      if (data?.user_instructions) setCustomInstructions(data.user_instructions);
+    } catch {}
+  }
+
   function handlePlayPreview(voice: VoiceOption) {
     hapticLight();
-    if (playingVoiceId === voice.voice_id) {
+    if (playingVoiceId === voice.id) {
       setPlayingVoiceId(null);
       return;
     }
-    setPlayingVoiceId(voice.voice_id);
+    setPlayingVoiceId(voice.id);
     setTimeout(() => setPlayingVoiceId(null), 3000);
   }
 
@@ -141,6 +153,11 @@ export function AssistantSettingsScreen({}: Props) {
         language_secondary: secondaryLanguage || undefined,
         greeting_template: greetingTemplate,
       });
+
+      const agentPatch: Record<string, unknown> = {};
+      if (selectedVoice) agentPatch.voice_id = selectedVoice;
+      agentPatch.user_instructions = customInstructions.trim() || null;
+      await apiClient.patch('/agents/default', agentPatch);
 
       if (ok) {
         setDirty(false);
@@ -228,14 +245,14 @@ export function AssistantSettingsScreen({}: Props) {
               contentContainerStyle={{ gap: spacing.sm, paddingVertical: spacing.xs }}
             >
               {voices.map((voice) => {
-                const selected = selectedVoice === voice.voice_id;
-                const playing = playingVoiceId === voice.voice_id;
+                const selected = selectedVoice === voice.id;
+                const playing = playingVoiceId === voice.id;
                 return (
                   <TouchableOpacity
-                    key={voice.voice_id}
+                    key={voice.id}
                     onPress={() => {
                       hapticLight();
-                      setSelectedVoice(voice.voice_id);
+                      setSelectedVoice(voice.id);
                       markDirty();
                     }}
                     activeOpacity={0.7}
@@ -251,10 +268,10 @@ export function AssistantSettingsScreen({}: Props) {
                     }}
                     accessibilityRole="radio"
                     accessibilityState={{ checked: selected }}
-                    accessibilityLabel={`${voice.name} voice`}
+                    accessibilityLabel={`${voice.display_name} voice`}
                   >
                     <Icon
-                      name={voice.gender === 'female' ? 'face-woman' : 'face-man'}
+                      name={voice.gender_tag === 'female' ? 'face-woman' : 'face-man'}
                       size="lg"
                       color={selected ? colors.primary : colors.textSecondary}
                     />
@@ -268,14 +285,14 @@ export function AssistantSettingsScreen({}: Props) {
                       numberOfLines={1}
                       allowFontScaling
                     >
-                      {voice.name}
+                      {voice.display_name}
                     </Text>
                     <Text
                       style={{ ...typography.caption, color: colors.textSecondary, textAlign: 'center' }}
                       numberOfLines={1}
                       allowFontScaling
                     >
-                      {voice.accent}
+                      {voice.locale}
                     </Text>
                     {voice.preview_url && (
                       <TouchableOpacity
@@ -507,7 +524,7 @@ export function AssistantSettingsScreen({}: Props) {
       <Card variant="elevated" style={{ marginBottom: spacing.xl }}>
         <View style={{ gap: spacing.md }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
-            <Icon name="text-box-edit-outline" size="md" color={colors.secondary} />
+            <Icon name="text-box-outline" size="md" color={colors.secondary} />
             <Text style={{ ...typography.h3, color: colors.textPrimary, flex: 1 }} allowFontScaling>
               Custom Instructions
             </Text>
@@ -541,7 +558,7 @@ export function AssistantSettingsScreen({}: Props) {
             />
           </View>
           <Text style={{ ...typography.caption, color: colors.textDisabled }} allowFontScaling>
-            {customInstructions.length} / 500 characters
+            {customInstructions.length} / 2000 characters
           </Text>
         </View>
       </Card>

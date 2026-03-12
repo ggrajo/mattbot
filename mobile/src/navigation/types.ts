@@ -1,16 +1,7 @@
-export type DrawerParamList = {
-  HomeTab: undefined;
-  SettingsTab: undefined;
-  SubscriptionTab: undefined;
-  CallModesTab: undefined;
-  DevicesTab: undefined;
-  AccountTab: undefined;
-};
-
 export type TabParamList = {
   HomeTab: undefined;
   CallsTab: undefined;
-  SettingsTab: undefined;
+  CalendarTab: undefined;
   AccountTab: undefined;
 };
 
@@ -26,6 +17,8 @@ export type RootStackParamList = {
   MfaVerify: undefined;
   OnboardingPrivacy: undefined;
   OnboardingSettings: undefined;
+  OnboardingAssistantSetup: undefined;
+  OnboardingCalendarSetup: undefined;
   DrawerRoot: undefined;
   Home: undefined;
   DeviceList: undefined;
@@ -55,6 +48,14 @@ export type RootStackParamList = {
   HandoffSettings: undefined;
   AssistantSettings: undefined;
   PaymentMethodsList: undefined;
+  CalendarBookingSettings: undefined;
+  ProfileSettings: undefined;
+  MemoryList: undefined;
+  UrgentNotifications: undefined;
+  BusinessHours: undefined;
+  RemindersList: undefined;
+  TextBack: { callId: string };
+  CreateReminder: { callId: string };
 };
 
 declare global {

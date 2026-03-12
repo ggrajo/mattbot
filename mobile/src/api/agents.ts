@@ -19,10 +19,6 @@ export interface AgentResponse {
   created_at: string;
 }
 
-export interface AgentListResponse {
-  items: AgentResponse[];
-}
-
 export interface VoiceCatalogItem {
   id: string;
   provider_voice_id: string;
@@ -48,8 +44,8 @@ export interface PromptSuggestionsResponse {
   items: PromptSuggestionItem[];
 }
 
-export async function fetchAgents(): Promise<AgentListResponse> {
-  const { data } = await apiClient.get('/agents');
+export async function fetchDefaultAgent(): Promise<AgentResponse> {
+  const { data } = await apiClient.get('/agents/default');
   return data;
 }
 
@@ -62,17 +58,14 @@ export async function createDefaultAgent(body?: {
   return data;
 }
 
-export async function updateAgent(
-  agentId: string,
-  patch: {
-    display_name?: string;
-    voice_id?: string | null;
-    user_instructions?: string | null;
-    greeting_instructions?: string | null;
-    expected_revision?: number;
-  },
-): Promise<AgentResponse> {
-  const { data } = await apiClient.patch(`/agents/${agentId}`, patch);
+export async function updateDefaultAgent(patch: {
+  display_name?: string;
+  voice_id?: string | null;
+  user_instructions?: string | null;
+  greeting_instructions?: string | null;
+  expected_revision?: number;
+}): Promise<AgentResponse> {
+  const { data } = await apiClient.patch('/agents/default', patch);
   return data;
 }
 

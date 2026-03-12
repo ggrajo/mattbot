@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View, Text, TouchableOpacity, Modal, Pressable, SectionList,
-  TextInput as RNTextInput, Platform,
+  View, Text, TouchableOpacity, Platform,
 } from 'react-native';
 import { GradientView } from '../components/ui/GradientView';
 import { useFocusEffect } from '@react-navigation/native';
@@ -21,8 +20,7 @@ import { useBillingStore } from '../store/billingStore';
 import { useTelephonyStore } from '../store/telephonyStore';
 import { logout, logoutAll, stepUp, deleteAccount } from '../api/auth';
 import { extractApiError } from '../api/client';
-import { getDeviceTimezone } from '../utils/formatDate';
-import { TIMEZONE_SECTIONS, tzLabel, getTimezoneAbbr, type TimezoneEntry, type TimezoneSection } from '../utils/timezones';
+import { getTimezoneAbbr } from '../utils/timezones';
 
 function maskPhone(e164: string): string {
   if (e164.length <= 6) return e164;
@@ -60,38 +58,8 @@ export function AccountSettingsScreen() {
   const { numbers, loadNumbers } = useTelephonyStore();
   const activeNumber = numbers.find((n) => n.status === 'active');
   const [numberRevealed, setNumberRevealed] = useState(false);
-  const [showTzPicker, setShowTzPicker] = useState(false);
-  const [tzSearch, setTzSearch] = useState('');
 
-  const currentTz = settings?.timezone || getDeviceTimezone();
-
-  const filteredSections = useMemo((): TimezoneSection[] => {
-    if (!tzSearch.trim()) return TIMEZONE_SECTIONS;
-    const q = tzSearch.toLowerCase();
-    return TIMEZONE_SECTIONS
-      .map(section => ({
-        title: section.title,
-        data: section.data.filter(
-          (t) => t.value.toLowerCase().includes(q) || t.label.toLowerCase().includes(q) || t.offset.toLowerCase().includes(q),
-        ),
-      }))
-      .filter(section => section.data.length > 0);
-  }, [tzSearch]);
-
-  async function handleTimezoneSelect(tz: string) {
-    setShowTzPicker(false);
-    setTzSearch('');
-    if (tz !== currentTz) {
-      const ok = await updateSettings({ timezone: tz });
-      if (ok) {
-        setToastType('info');
-        setToast(`Timezone set to ${tz.split('/').pop()?.replace(/_/g, ' ')}`);
-      } else {
-        setToastType('error');
-        setToast('Failed to save timezone. Please try again.');
-      }
-    }
-  }
+  const currentTz = settings?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   useEffect(() => {
     loadBillingStatus();
@@ -281,13 +249,13 @@ export function AccountSettingsScreen() {
             accessibilityLabel="Edit profile"
           />
           <ListRow
-            icon="earth"
+            icon="cog-outline"
             iconColor={colors.primary}
-            title="Timezone"
-            subtitle={tzLabel(currentTz)}
-            onPress={() => setShowTzPicker(true)}
+            title="App Settings"
+            subtitle="Assistant, calls, calendar, memory, and more"
+            onPress={() => navigation.navigate('Settings')}
             right={<Icon name="chevron-right" size="md" color={colors.textDisabled} />}
-            accessibilityLabel="Change timezone"
+            accessibilityLabel="App settings"
           />
         </View>
       </View>
@@ -427,104 +395,6 @@ export function AccountSettingsScreen() {
         loading={deleting}
       />
 
-      {/* Timezone Picker Modal */}
-      <Modal visible={showTzPicker} transparent animationType="slide" onRequestClose={() => setShowTzPicker(false)}>
-        <Pressable
-          style={{ flex: 1, backgroundColor: colors.overlay, justifyContent: 'flex-end' }}
-          onPress={() => { setShowTzPicker(false); setTzSearch(''); }}
-        >
-          <Pressable
-            style={{
-              backgroundColor: colors.surface,
-              borderTopLeftRadius: radii.xl,
-              borderTopRightRadius: radii.xl,
-              maxHeight: '80%',
-            }}
-            onPress={(e) => e.stopPropagation()}
-          >
-            <View style={{ padding: spacing.lg, paddingBottom: 0 }}>
-              <View style={{ width: 36, height: 4, borderRadius: 2, backgroundColor: colors.border, alignSelf: 'center', marginBottom: spacing.md }} />
-              <Text style={{ ...typography.h3, color: colors.textPrimary, marginBottom: spacing.md }}>
-                Select Timezone
-              </Text>
-              <View style={{
-                flexDirection: 'row', alignItems: 'center', gap: spacing.sm,
-                backgroundColor: colors.surfaceVariant, borderRadius: radii.md,
-                paddingHorizontal: spacing.md, marginBottom: spacing.md,
-              }}>
-                <Icon name="magnify" size={18} color={colors.textDisabled} />
-                <RNTextInput
-                  value={tzSearch}
-                  onChangeText={setTzSearch}
-                  placeholder="Search timezones..."
-                  placeholderTextColor={colors.textDisabled}
-                  style={{ flex: 1, ...typography.bodySmall, color: colors.textPrimary, paddingVertical: spacing.sm }}
-                  autoFocus
-                />
-                {tzSearch ? (
-                  <Pressable onPress={() => setTzSearch('')}>
-                    <Icon name="close-circle" size={16} color={colors.textDisabled} />
-                  </Pressable>
-                ) : null}
-              </View>
-            </View>
-            <SectionList
-              sections={filteredSections}
-              keyExtractor={(item) => item.value}
-              keyboardShouldPersistTaps="handled"
-              contentContainerStyle={{ paddingBottom: spacing.xxl }}
-              stickySectionHeadersEnabled
-              renderSectionHeader={({ section }) => (
-                <View style={{
-                  paddingVertical: spacing.sm, paddingHorizontal: spacing.lg,
-                  backgroundColor: colors.surface,
-                  borderBottomWidth: 1, borderBottomColor: colors.border,
-                }}>
-                  <Text style={{
-                    ...typography.caption, fontWeight: '700',
-                    color: colors.primary, textTransform: 'uppercase', letterSpacing: 1,
-                  }}>
-                    {section.title}
-                  </Text>
-                </View>
-              )}
-              renderItem={({ item }) => {
-                const selected = item.value === currentTz;
-                return (
-                  <Pressable
-                    onPress={() => handleTimezoneSelect(item.value)}
-                    style={({ pressed }) => ({
-                      flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-                      paddingVertical: spacing.md, paddingHorizontal: spacing.lg,
-                      backgroundColor: pressed ? colors.surfaceVariant : selected ? colors.primary + '10' : 'transparent',
-                    })}
-                  >
-                    <View style={{ flex: 1 }}>
-                      <Text style={{
-                        ...typography.bodySmall, fontWeight: selected ? '700' : '400',
-                        color: selected ? colors.primary : colors.textPrimary,
-                      }}>
-                        {item.label}
-                      </Text>
-                      <Text style={{ ...typography.caption, color: colors.textSecondary, marginTop: 1 }}>
-                        {item.value} ({item.offset})
-                      </Text>
-                    </View>
-                    {selected && <Icon name="check-circle" size={20} color={colors.primary} />}
-                  </Pressable>
-                );
-              }}
-              ListEmptyComponent={
-                <View style={{ padding: spacing.xl, alignItems: 'center' }}>
-                  <Text style={{ ...typography.body, color: colors.textSecondary }}>
-                    No matching timezones
-                  </Text>
-                </View>
-              }
-            />
-          </Pressable>
-        </Pressable>
-      </Modal>
     </ScreenWrapper>
   );
 }

@@ -358,7 +358,7 @@ export function HomeScreen() {
                 </Text>
               </View>
               <Pressable
-                onPress={() => { hapticLight(); navigation.navigate('SettingsTab'); }}
+                onPress={() => { hapticLight(); navigation.navigate('Settings'); }}
                 hitSlop={12}
                 accessibilityRole="button"
                 accessibilityLabel="Settings"
@@ -419,7 +419,7 @@ export function HomeScreen() {
                     </View>
                     <View style={{ backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 4, flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                       <Icon name="trending-up" size={14} color="#4ADE80" />
-                      <Text style={{ fontSize: 12, fontWeight: '700', color: '#4ADE80' }}>+12%</Text>
+                      <Text style={{ fontSize: 12, fontWeight: '700', color: '#4ADE80' }}>vs last week</Text>
                     </View>
                   </View>
 

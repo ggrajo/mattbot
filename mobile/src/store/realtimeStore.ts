@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { getSecureItem, TOKEN_KEYS } from '../utils/secureStorage';
+import { API_BASE_URL } from '../api/client';
 
 interface TranscriptTurn {
   role: 'user' | 'agent';
@@ -36,7 +37,9 @@ export const useRealtimeStore = create<RealtimeStore>((set, get) => ({
     const token = await getSecureItem(TOKEN_KEYS.ACCESS_TOKEN);
     if (!token) return;
 
-    const wsUrl = 'ws://localhost:8000/ws/events';
+    const base = API_BASE_URL.replace(/\/api\/v1\/?$/, '');
+    const wsBase = base.replace(/^http/, 'ws');
+    const wsUrl = `${wsBase}/ws/events`;
     ws = new WebSocket(`${wsUrl}?token=${token}`);
 
     ws.onopen = () => {

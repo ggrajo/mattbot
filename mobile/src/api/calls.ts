@@ -64,6 +64,8 @@ export interface CallDetail {
   labels: CallLabel[] | null;
   labels_status: string | null;
   transcript_status: string | null;
+  notes: string | null;
+  recording_available?: boolean;
 }
 
 export interface CallArtifacts {
@@ -88,17 +90,6 @@ export interface TranscriptResponse {
   turns: TranscriptTurn[];
   turn_count: number;
   status: string;
-}
-
-export interface MemoryItem {
-  id: string;
-  memory_type: string;
-  subject: string | null;
-  value: string | null;
-  confidence: number | null;
-  user_confirmed: boolean;
-  source_call_id: string | null;
-  created_at: string;
 }
 
 export interface CallFilters {
@@ -160,15 +151,28 @@ export async function retryCallTranscript(callId: string): Promise<{ status: str
   return data;
 }
 
-export async function fetchMemoryItems(): Promise<{ items: MemoryItem[] }> {
-  const { data } = await apiClient.get('/memory');
+export async function patchCallNotes(callId: string, notes: string): Promise<CallDetail> {
+  const { data } = await apiClient.patch(`/calls/${callId}`, { notes });
   return data;
 }
 
-export async function deleteMemoryItem(id: string): Promise<void> {
-  await apiClient.delete(`/memory/${id}`);
+export function getCallRecordingUrl(callId: string, token: string): string {
+  const base = apiClient.defaults.baseURL ?? '';
+  return `${base}/calls/${callId}/recording?token=${encodeURIComponent(token)}`;
 }
 
-export async function deleteAllMemory(): Promise<void> {
-  await apiClient.delete('/memory');
+export async function markCallVip(callId: string): Promise<void> {
+  await apiClient.post(`/calls/${callId}/mark-vip`);
+}
+
+export async function unmarkCallVip(callId: string): Promise<void> {
+  await apiClient.delete(`/calls/${callId}/mark-vip`);
+}
+
+export async function markCallBlocked(callId: string, reason?: string): Promise<void> {
+  await apiClient.post(`/calls/${callId}/mark-blocked`, reason ? { reason } : {});
+}
+
+export async function unmarkCallBlocked(callId: string): Promise<void> {
+  await apiClient.delete(`/calls/${callId}/mark-blocked`);
 }

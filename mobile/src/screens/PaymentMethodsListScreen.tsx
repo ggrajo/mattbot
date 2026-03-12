@@ -1,5 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, FlatList, Pressable, Alert, Platform, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  Pressable,
+  Alert,
+  Platform,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
 import Config from 'react-native-config';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Icon } from '../components/ui/Icon';
@@ -34,6 +43,7 @@ export function PaymentMethodsListScreen() {
   const { colors, spacing, typography, radii } = theme;
   const [methods, setMethods] = useState<PaymentMethodItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [adding, setAdding] = useState(false);
   const [toast, setToast] = useState('');
   const [toastType, setToastType] = useState<'info' | 'error'>('info');
@@ -49,10 +59,16 @@ export function PaymentMethodsListScreen() {
       setToast(extractApiError(e));
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    load();
+  }, [load]);
 
   const handleAdd = async () => {
     setAdding(true);
@@ -63,11 +79,9 @@ export function PaymentMethodsListScreen() {
         setToastType('info');
         setToast('Card added (dev mode)');
       } else {
-        const { client_secret } = await createSetupIntent();
-        // In production, the Stripe SDK CardField would be used here.
-        // For now, show a placeholder message.
+        await createSetupIntent();
         setToastType('info');
-        setToast('Stripe card entry not yet integrated. Use dev mode for testing.');
+        setToast('Card input coming soon — use web dashboard to add cards');
       }
     } catch (e) {
       setToastType('error');
@@ -173,7 +187,7 @@ export function PaymentMethodsListScreen() {
           </View>
           <Text style={{ ...typography.caption, color: colors.textSecondary, marginTop: 2 }}>
             {item.exp_month && item.exp_year
-              ? `Expires ${String(item.exp_month).padStart(2, '0')}/${item.exp_year}`
+              ? `Expires ${String(item.exp_month).padStart(2, '0')}/${String(item.exp_year).slice(-2)}`
               : 'No expiry info'}
           </Text>
         </View>
@@ -183,6 +197,8 @@ export function PaymentMethodsListScreen() {
             <Pressable
               onPress={() => handleSetDefault(item)}
               hitSlop={8}
+              accessibilityLabel={`Set ${brandLabel(item.brand)} ending in ${item.last4} as default`}
+              accessibilityRole="button"
               style={{
                 width: 36, height: 36, borderRadius: 18,
                 backgroundColor: colors.primary + '14',
@@ -195,6 +211,8 @@ export function PaymentMethodsListScreen() {
           <Pressable
             onPress={() => handleRemove(item)}
             hitSlop={8}
+            accessibilityLabel={`Remove ${brandLabel(item.brand)} ending in ${item.last4}`}
+            accessibilityRole="button"
             style={{
               width: 36, height: 36, borderRadius: 18,
               backgroundColor: colors.error + '14',
@@ -212,7 +230,7 @@ export function PaymentMethodsListScreen() {
     <ScreenWrapper scroll={false}>
       <Toast message={toast} type={toastType} visible={!!toast} onDismiss={() => setToast('')} />
 
-      {loading ? (
+      {loading && !refreshing ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ActivityIndicator size="large" color={colors.primary} />
         </View>
@@ -221,6 +239,14 @@ export function PaymentMethodsListScreen() {
           data={methods}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={[colors.primary]}
+              tintColor={colors.primary}
+            />
+          }
           contentContainerStyle={
             methods.length === 0
               ? { flex: 1, justifyContent: 'center', alignItems: 'center', padding: spacing.xl }
@@ -244,14 +270,17 @@ export function PaymentMethodsListScreen() {
             </View>
           }
           ListFooterComponent={
-            <View style={{ marginTop: spacing.lg }}>
-              <Button
-                title={adding ? 'Adding...' : 'Add Card'}
-                icon="plus"
-                onPress={handleAdd}
-                disabled={adding}
-              />
-            </View>
+            methods.length > 0 || !loading ? (
+              <View style={{ marginTop: spacing.lg }}>
+                <Button
+                  title={adding ? 'Adding...' : 'Add Payment Method'}
+                  icon="plus"
+                  onPress={handleAdd}
+                  disabled={adding}
+                  accessibilityLabel="Add a new payment method"
+                />
+              </View>
+            ) : null
           }
         />
       )}

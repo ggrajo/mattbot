@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator, Switch } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Card } from '../components/ui/Card';
@@ -27,25 +27,58 @@ export function SubscriptionStatusScreen({ navigation }: Props) {
     loading,
     error,
     loadBillingStatus,
+    loadPaymentMethods,
     cancel,
+    subscribe,
   } = useBillingStore();
 
   const [cancelSheetVisible, setCancelSheetVisible] = useState(false);
   const [canceling, setCanceling] = useState(false);
+  const [togglingRenewal, setTogglingRenewal] = useState(false);
   const [toastMsg, setToastMsg] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
   useEffect(() => {
     loadPlans();
     loadBillingStatus();
+    loadPaymentMethods();
   }, []);
 
-  async function handleCancel() {
+  async function handleToggleRenewal(newValue: boolean) {
+    if (togglingRenewal) return;
+
+    if (!newValue) {
+      setCancelSheetVisible(true);
+      return;
+    }
+
+    setTogglingRenewal(true);
+    await loadPaymentMethods();
+    const methods = useBillingStore.getState().paymentMethods;
+    const defaultPm = methods.find((pm) => pm.is_default) ?? methods[0];
+    if (!defaultPm) {
+      setToastMsg({ text: 'Please add a payment method first', type: 'error' });
+      setTogglingRenewal(false);
+      navigation.navigate('PaymentMethodsList');
+      return;
+    }
+    const currentPlan = billingStatus?.plan ?? 'free';
+    const success = await subscribe(currentPlan, defaultPm.id);
+    setTogglingRenewal(false);
+
+    if (success) {
+      setToastMsg({ text: 'Auto-renewal reactivated', type: 'success' });
+    } else {
+      setToastMsg({ text: useBillingStore.getState().error ?? 'Failed to reactivate', type: 'error' });
+    }
+  }
+
+  async function handleCancelConfirm() {
     setCanceling(true);
     const success = await cancel();
     setCanceling(false);
     setCancelSheetVisible(false);
     if (success) {
-      setToastMsg({ text: 'Subscription will cancel at end of period', type: 'success' });
+      setToastMsg({ text: 'Auto-renewal turned off — subscription ends at period end', type: 'success' });
     } else {
       setToastMsg({ text: useBillingStore.getState().error ?? 'Cancellation failed', type: 'error' });
     }
@@ -82,6 +115,8 @@ export function SubscriptionStatusScreen({ navigation }: Props) {
   const usageRatio = totalMinutes > 0 ? Math.min(minutesUsed / totalMinutes, 1) : 0;
   const paymentMethod = billingStatus?.payment_method;
   const cancelAtPeriodEnd = billingStatus?.cancel_at_period_end ?? false;
+  const hasSubscription = billingStatus?.has_subscription ?? false;
+  const autoRenewalOn = hasSubscription && !cancelAtPeriodEnd;
 
   const periodEndDate = billingStatus?.current_period_end
     ? new Date(billingStatus.current_period_end)
@@ -111,13 +146,13 @@ export function SubscriptionStatusScreen({ navigation }: Props) {
       <ConfirmSheet
         visible={cancelSheetVisible}
         onDismiss={() => setCancelSheetVisible(false)}
-        title="Cancel Subscription"
+        title="Turn Off Auto-Renewal"
         message="Your plan will remain active until the end of the current billing period. After that, you'll be moved to the Free plan."
         icon="alert-circle-outline"
         destructive
-        confirmLabel="Cancel Subscription"
-        cancelLabel="Keep Plan"
-        onConfirm={handleCancel}
+        confirmLabel="Turn Off Renewal"
+        cancelLabel="Keep Renewal"
+        onConfirm={handleCancelConfirm}
         loading={canceling}
       />
 
@@ -231,6 +266,48 @@ export function SubscriptionStatusScreen({ navigation }: Props) {
         </View>
       </Card>
 
+      {/* Auto-renewal toggle */}
+      {hasSubscription && plan !== 'free' && (
+        <Card variant="flat" style={{ marginBottom: spacing.lg }}>
+          <View style={{ gap: spacing.sm }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, flex: 1 }}>
+                <Icon name="autorenew" size="md" color={autoRenewalOn ? colors.primary : colors.textSecondary} />
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500' }}
+                    allowFontScaling
+                  >
+                    Auto-Renewal
+                  </Text>
+                  <Text
+                    style={{ ...typography.caption, color: colors.textSecondary }}
+                    allowFontScaling
+                  >
+                    {autoRenewalOn
+                      ? periodEndFormatted
+                        ? `Renews on ${periodEndFormatted}`
+                        : 'Will auto-renew'
+                      : periodEndFormatted
+                        ? `Expires on ${periodEndFormatted}`
+                        : 'Will not renew'}
+                  </Text>
+                </View>
+              </View>
+              <Switch
+                value={autoRenewalOn}
+                onValueChange={handleToggleRenewal}
+                disabled={togglingRenewal}
+                trackColor={{ false: colors.surfaceVariant, true: colors.primary + '66' }}
+                thumbColor={autoRenewalOn ? colors.primary : colors.textSecondary}
+                accessibilityLabel="Toggle auto-renewal"
+                accessibilityRole="switch"
+              />
+            </View>
+          </View>
+        </Card>
+      )}
+
       {/* Current period ends */}
       {periodEndFormatted && (
         <Card variant="flat" style={{ marginBottom: spacing.lg }}>
@@ -340,16 +417,23 @@ export function SubscriptionStatusScreen({ navigation }: Props) {
         <Button
           title="Change Plan"
           icon="swap-horizontal"
-          onPress={() => navigation.navigate('ManageSubscription')}
+          onPress={() => navigation.navigate('PlanSelection', { source: 'manage' })}
           variant="primary"
           accessibilityLabel="Change subscription plan"
         />
-        {!cancelAtPeriodEnd && billingStatus?.has_subscription && plan !== 'free' && (
+        <Button
+          title="Manage Payment Methods"
+          icon="credit-card-outline"
+          onPress={() => navigation.navigate('PaymentMethodsList')}
+          variant="outline"
+          accessibilityLabel="Manage payment methods"
+        />
+        {!cancelAtPeriodEnd && hasSubscription && plan !== 'free' && (
           <Button
             title="Cancel Subscription"
             icon="close-circle-outline"
             onPress={() => setCancelSheetVisible(true)}
-            variant="outline"
+            variant="ghost"
             accessibilityLabel="Cancel your subscription"
           />
         )}

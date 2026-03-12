@@ -23,10 +23,10 @@ const RETENTION_OPTIONS = [
   { value: 90, label: '90 days', desc: 'Extended context' },
 ];
 
-export function MemorySettingsScreen({}: Props) {
+export function MemorySettingsScreen({ navigation }: Props) {
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
-  const { settings, loading, error, loadSettings, updateSettings } = useSettingsStore();
+  const { settings, saving, error, loadSettings, updateSettings } = useSettingsStore();
 
   const [memoryEnabled, setMemoryEnabled] = useState(true);
   const [retentionDays, setRetentionDays] = useState(30);
@@ -157,7 +157,8 @@ export function MemorySettingsScreen({}: Props) {
         </View>
       </Card>
 
-      {/* Data Retention */}
+      {/* Data Retention — only when memory is enabled */}
+      {memoryEnabled && (
       <Card style={{ marginBottom: spacing.lg }}>
         <View style={{ gap: spacing.md }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
@@ -241,6 +242,7 @@ export function MemorySettingsScreen({}: Props) {
           </View>
         </View>
       </Card>
+      )}
 
       {/* Clear all memories */}
       <Card style={{ marginBottom: spacing.xl }}>
@@ -268,7 +270,7 @@ export function MemorySettingsScreen({}: Props) {
       <Button
         title="Save Changes"
         onPress={handleSave}
-        loading={loading}
+        loading={saving}
         disabled={!dirty}
         icon="content-save-outline"
       />

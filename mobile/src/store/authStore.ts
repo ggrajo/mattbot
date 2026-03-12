@@ -27,6 +27,7 @@ interface AuthStore {
   signOut: () => Promise<void>;
   tryRestoreSession: () => Promise<boolean>;
   loadProfile: () => Promise<void>;
+  reset: () => void;
 }
 
 export const useAuthStore = create<AuthStore>((set, get) => ({
@@ -72,6 +73,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         accessToken: pendingAccessToken,
         mfaChallengeToken: null,
         partialToken: null,
+        recoveryCodes: null,
         totpSecret: null,
         totpQrUri: null,
         mfaSetupToken: null,
@@ -102,12 +104,16 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     set({
       state: 'unauthenticated',
       accessToken: null,
+      nickname: null,
+      displayName: null,
       mfaChallengeToken: null,
       partialToken: null,
       recoveryCodes: null,
       totpSecret: null,
       totpQrUri: null,
       mfaSetupToken: null,
+      pendingAccessToken: null,
+      pendingRefreshToken: null,
     });
   },
 
@@ -144,5 +150,22 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     } catch {
       // profile load failure is non-critical
     }
+  },
+
+  reset: () => {
+    set({
+      state: 'unauthenticated',
+      accessToken: null,
+      nickname: null,
+      displayName: null,
+      mfaChallengeToken: null,
+      partialToken: null,
+      recoveryCodes: null,
+      totpSecret: null,
+      totpQrUri: null,
+      mfaSetupToken: null,
+      pendingAccessToken: null,
+      pendingRefreshToken: null,
+    });
   },
 }));

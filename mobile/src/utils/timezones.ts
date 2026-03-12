@@ -17,14 +17,49 @@ export function tzLabel(tz: string): string {
   return label(tz);
 }
 
+const TZ_ABBREVIATIONS: Record<string, string> = {
+  'America/New_York': 'EST', 'America/Chicago': 'CST', 'America/Denver': 'MST',
+  'America/Los_Angeles': 'PST', 'America/Anchorage': 'AKST', 'Pacific/Honolulu': 'HST',
+  'America/Phoenix': 'MST', 'America/Toronto': 'EST', 'America/Vancouver': 'PST',
+  'America/Winnipeg': 'CST', 'America/Halifax': 'AST', 'America/St_Johns': 'NST',
+  'America/Edmonton': 'MST', 'America/Regina': 'CST',
+  'America/Mexico_City': 'CST', 'America/Bogota': 'COT', 'America/Lima': 'PET',
+  'America/Santiago': 'CLT', 'America/Buenos_Aires': 'ART', 'America/Sao_Paulo': 'BRT',
+  'Europe/London': 'GMT', 'Europe/Dublin': 'GMT', 'Europe/Paris': 'CET',
+  'Europe/Berlin': 'CET', 'Europe/Madrid': 'CET', 'Europe/Rome': 'CET',
+  'Europe/Amsterdam': 'CET', 'Europe/Brussels': 'CET', 'Europe/Zurich': 'CET',
+  'Europe/Vienna': 'CET', 'Europe/Stockholm': 'CET', 'Europe/Oslo': 'CET',
+  'Europe/Copenhagen': 'CET', 'Europe/Helsinki': 'EET', 'Europe/Warsaw': 'CET',
+  'Europe/Prague': 'CET', 'Europe/Budapest': 'CET', 'Europe/Bucharest': 'EET',
+  'Europe/Athens': 'EET', 'Europe/Istanbul': 'TRT', 'Europe/Moscow': 'MSK',
+  'Europe/Lisbon': 'WET',
+  'Asia/Dubai': 'GST', 'Asia/Riyadh': 'AST', 'Asia/Tehran': 'IRST',
+  'Asia/Karachi': 'PKT', 'Asia/Kolkata': 'IST', 'Asia/Colombo': 'IST',
+  'Asia/Dhaka': 'BST', 'Asia/Kathmandu': 'NPT', 'Asia/Almaty': 'ALMT',
+  'Asia/Bangkok': 'ICT', 'Asia/Ho_Chi_Minh': 'ICT', 'Asia/Jakarta': 'WIB',
+  'Asia/Singapore': 'SGT', 'Asia/Kuala_Lumpur': 'MYT', 'Asia/Manila': 'PHT',
+  'Asia/Hong_Kong': 'HKT', 'Asia/Shanghai': 'CST', 'Asia/Taipei': 'CST',
+  'Asia/Seoul': 'KST', 'Asia/Tokyo': 'JST',
+  'Australia/Sydney': 'AEST', 'Australia/Melbourne': 'AEST',
+  'Australia/Brisbane': 'AEST', 'Australia/Perth': 'AWST',
+  'Australia/Adelaide': 'ACST', 'Australia/Darwin': 'ACST',
+  'Pacific/Auckland': 'NZST', 'Pacific/Fiji': 'FJT',
+  'Africa/Cairo': 'EET', 'Africa/Lagos': 'WAT', 'Africa/Nairobi': 'EAT',
+  'Africa/Johannesburg': 'SAST', 'Africa/Casablanca': 'WET',
+};
+
 export function getTimezoneAbbr(timezone: string): string {
+  const mapped = TZ_ABBREVIATIONS[timezone];
+  if (mapped) return mapped;
+
   try {
     const parts = new Intl.DateTimeFormat('en-US', {
       timeZone: timezone,
       timeZoneName: 'short',
     }).formatToParts(new Date());
-    const tzPart = parts.find((p) => p.type === 'timeZoneName');
-    return tzPart?.value ?? timezone;
+    const val = parts.find((p) => p.type === 'timeZoneName')?.value;
+    if (val && !val.startsWith('GMT')) return val;
+    return val ?? timezone;
   } catch {
     return timezone;
   }

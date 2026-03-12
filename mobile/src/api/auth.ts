@@ -26,7 +26,11 @@ export async function register(email: string, password: string) {
 }
 
 export async function login(email: string, password: string) {
-  const { data } = await apiClient.post('/auth/login', { email, password });
+  const { data } = await apiClient.post('/auth/login', {
+    email,
+    password,
+    device: getDeviceInfo(),
+  });
   return data;
 }
 
@@ -119,6 +123,11 @@ export async function verifyEmailOtp(email: string, otpCode: string, password?: 
     otp_code: otpCode,
     password,
   });
+  return data;
+}
+
+export async function getProfile(): Promise<any> {
+  const { data } = await apiClient.get('/me');
   return data;
 }
 
