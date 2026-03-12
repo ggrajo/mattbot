@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
+import { View, Text, SafeAreaView } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ScreenWrapper } from '../components/ui/ScreenWrapper';
-import { StatusScreen } from '../components/ui/StatusScreen';
+import { Button } from '../components/ui/Button';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { LoadingOverlay } from '../components/ui/LoadingOverlay';
 import { useTheme } from '../theme/ThemeProvider';
@@ -14,10 +13,9 @@ type Props = NativeStackScreenProps<RootStackParamList, 'EmailVerification'>;
 
 export function EmailVerificationScreen({ route, navigation }: Props) {
   const theme = useTheme();
-  const { colors, spacing, typography, radii } = theme;
+  const { colors, spacing, typography } = theme;
 
   const token = route.params?.token;
-  const email = route.params?.email;
   const [loading, setLoading] = useState(!!token);
   const [success, setSuccess] = useState(false);
   const [apiError, setApiError] = useState<string>();
@@ -41,34 +39,68 @@ export function EmailVerificationScreen({ route, navigation }: Props) {
   }
 
   return (
-    <ScreenWrapper scroll={false} keyboardAvoiding={false}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <LoadingOverlay visible={loading} message="Verifying email..." />
-
-      {success ? (
-        <StatusScreen
-          icon="check-circle-outline"
-          iconColor={colors.success}
-          title="Email verified!"
-          subtitle="Your email has been verified successfully. You can now sign in."
-          action={{ title: 'Go to Sign In', onPress: () => navigation.navigate('Login') }}
-        />
-      ) : !token ? (
-        <StatusScreen
-          icon="email-check-outline"
-          iconColor={colors.primary}
-          title="Check your inbox"
-          subtitle={
-            email
-              ? `We've sent a verification link to ${email}. Please click the link to verify your account.`
-              : "We've sent a verification link to your email address. Please click the link to verify your account."
-          }
-          action={{ title: 'Go to Sign In', onPress: () => navigation.navigate('Login'), variant: 'outline' }}
-        />
-      ) : apiError ? (
-        <View style={{ flex: 1, justifyContent: 'center', paddingHorizontal: spacing.xl }}>
-          <ErrorMessage message={apiError} action="Retry" onAction={() => handleVerify(token)} />
-        </View>
-      ) : null}
-    </ScreenWrapper>
+      <View
+        style={{
+          flex: 1,
+          padding: spacing.xl,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: spacing.lg,
+        }}
+      >
+        {success ? (
+          <>
+            <Text
+              style={{ ...typography.h2, color: colors.success, textAlign: 'center' }}
+              allowFontScaling
+            >
+              Email verified!
+            </Text>
+            <Text
+              style={{ ...typography.body, color: colors.textSecondary, textAlign: 'center' }}
+              allowFontScaling
+            >
+              Your email has been verified successfully. You can now sign in.
+            </Text>
+            <Button
+              title="Go to Sign In"
+              onPress={() => navigation.navigate('Login')}
+            />
+          </>
+        ) : !token ? (
+          <>
+            <Text
+              style={{ ...typography.h2, color: colors.textPrimary, textAlign: 'center' }}
+              allowFontScaling
+            >
+              Check your email
+            </Text>
+            <Text
+              style={{ ...typography.body, color: colors.textSecondary, textAlign: 'center' }}
+              allowFontScaling
+            >
+              We've sent a verification link to your email address.
+              Please click the link to verify your account.
+            </Text>
+            <Button
+              title="Go to Sign In"
+              onPress={() => navigation.navigate('Login')}
+              variant="outline"
+            />
+          </>
+        ) : apiError ? (
+          <>
+            <ErrorMessage message={apiError} />
+            <Button
+              title="Go to Sign In"
+              onPress={() => navigation.navigate('Login')}
+              variant="outline"
+            />
+          </>
+        ) : null}
+      </View>
+    </SafeAreaView>
   );
 }

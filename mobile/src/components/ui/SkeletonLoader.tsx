@@ -1,51 +1,80 @@
-import React, { useEffect } from 'react';
-import { View } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withTiming,
-  Easing,
-} from 'react-native-reanimated';
+import React, { useEffect, useRef } from 'react';
+import { Animated, ViewStyle } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
 
 interface Props {
   width?: number | string;
   height?: number;
   borderRadius?: number;
+  style?: ViewStyle;
 }
 
-export function SkeletonLoader({
-  width = '100%',
-  height = 24,
-  borderRadius = 8,
-}: Props) {
+export function SkeletonLoader({ width = '100%', height = 16, borderRadius, style }: Props) {
   const theme = useTheme();
-  const opacity = useSharedValue(0.5);
+  const opacity = useRef(new Animated.Value(0.4)).current;
+  const radius = borderRadius ?? theme.radii.sm;
 
   useEffect(() => {
-    opacity.value = withRepeat(
-      withTiming(1, { duration: 800, easing: Easing.inOut(Easing.ease) }),
-      -1,
-      true
+    const pulse = Animated.loop(
+      Animated.sequence([
+        Animated.timing(opacity, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacity, {
+          toValue: 0.4,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+      ]),
     );
-  }, []);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-  }));
+    pulse.start();
+    return () => pulse.stop();
+  }, [opacity]);
 
   return (
     <Animated.View
       style={[
         {
-          width: typeof width === 'number' ? width : (width as string),
+          width: width as any,
           height,
-          borderRadius,
+          borderRadius: radius,
           backgroundColor: theme.colors.skeleton,
+          opacity,
         },
-        animatedStyle,
+        style,
       ]}
     />
+  );
+}
+
+export function CallListSkeleton() {
+  const theme = useTheme();
+  const { spacing, radii, colors } = theme;
+
+  return (
+    <>
+      {[0, 1, 2, 3].map((i) => (
+        <Animated.View
+          key={i}
+          style={{
+            backgroundColor: colors.surface,
+            borderRadius: radii.lg,
+            padding: spacing.lg,
+            marginBottom: spacing.sm,
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: spacing.md,
+          }}
+        >
+          <SkeletonLoader width={44} height={44} borderRadius={radii.md} />
+          <Animated.View style={{ flex: 1, gap: spacing.xs }}>
+            <SkeletonLoader width="60%" height={18} />
+            <SkeletonLoader width="80%" height={14} />
+          </Animated.View>
+        </Animated.View>
+      ))}
+    </>
   );
 }

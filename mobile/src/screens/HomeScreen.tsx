@@ -47,12 +47,7 @@ function formatDurationCompact(seconds: number | null): string {
 }
 
 function getGreeting(name: string | null): string {
-  const hour = new Date().getHours();
-  const timeLabel =
-    hour >= 5 && hour < 12 ? 'Good morning' :
-    hour >= 12 && hour < 17 ? 'Good afternoon' :
-    'Good evening';
-  return name ? `${timeLabel}, ${name}` : timeLabel;
+  return name ? `Hey ${name}` : 'Hey there';
 }
 
 function CircularProgress({
@@ -109,7 +104,7 @@ const QUICK_ACTIONS = [
   { icon: 'calendar-outline', label: 'Schedule', route: 'Calendar', color: '#14B8A6' },
   { icon: 'bell-outline', label: 'Alerts', route: 'RemindersList', color: '#F472B6' },
   { icon: 'brain', label: 'Memory', route: 'MemoryList', color: '#0EA5E9' },
-  { icon: 'account-group-outline', label: 'Contacts', route: 'ContactsList', color: '#F59E0B' },
+  { icon: 'star-outline', label: 'VIP', route: 'VipList', color: '#F59E0B' },
 ] as const;
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -139,55 +134,60 @@ function QuickActionCard({
       accessibilityLabel={action.label}
       style={[
         {
-          width: 88,
+          width: 100,
+          height: 100,
+          borderRadius: 20,
+          backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : '#FFFFFF',
           alignItems: 'center',
+          justifyContent: 'center',
           marginRight: 12,
+          ...(isDark
+            ? { borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)' }
+            : {
+                borderWidth: 1,
+                borderColor: 'rgba(124,58,237,0.10)',
+                ...Platform.select({
+                  ios: { shadowColor: '#7C3AED', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.08, shadowRadius: 8 },
+                  android: { elevation: 2 },
+                }),
+              }),
         },
         animatedStyle,
       ]}
     >
+      {'hasIndicator' in action && action.hasIndicator && (
+        <View
+          style={{
+            position: 'absolute',
+            top: 10,
+            right: 10,
+            width: 8,
+            height: 8,
+            borderRadius: 4,
+            backgroundColor: '#10B981',
+          }}
+        />
+      )}
       <View
         style={{
-          width: 56,
-          height: 56,
-          borderRadius: 18,
-          backgroundColor: isDark ? action.color + '18' : action.color + '12',
+          width: 44,
+          height: 44,
+          borderRadius: 14,
+          backgroundColor: action.color + '25',
           alignItems: 'center',
           justifyContent: 'center',
-          ...(isDark
-            ? { borderWidth: 1, borderColor: action.color + '25' }
-            : Platform.select({
-                ios: { shadowColor: action.color, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.15, shadowRadius: 6 },
-                android: { elevation: 2 },
-              }) || {}),
         }}
       >
-        {'hasIndicator' in action && action.hasIndicator && (
-          <View
-            style={{
-              position: 'absolute',
-              top: -2,
-              right: -2,
-              width: 10,
-              height: 10,
-              borderRadius: 5,
-              backgroundColor: '#10B981',
-              borderWidth: 2,
-              borderColor: isDark ? '#0D0221' : colors.background,
-            }}
-          />
-        )}
-        <Icon name={action.icon} size={24} color={action.color} />
+        <Icon name={action.icon} size={22} color={action.color} />
       </View>
       <Text
         style={{
-          fontSize: 11,
+          fontSize: 12,
           fontWeight: '600',
-          color: colors.textSecondary,
+          color: colors.textPrimary,
           marginTop: 8,
         }}
         allowFontScaling
-        numberOfLines={1}
       >
         {action.label}
       </Text>
@@ -255,8 +255,6 @@ export function HomeScreen() {
       if (state && !state.is_complete) {
         if (!state.steps_completed.includes('privacy_review')) {
           navigation.navigate('OnboardingPrivacy');
-        } else if (!state.steps_completed.includes('profile_setup')) {
-          navigation.navigate('OnboardingProfile');
         } else if (!state.steps_completed.includes('settings_configured')) {
           navigation.navigate('OnboardingSettings');
         } else if (!state.steps_completed.includes('assistant_setup')) {
@@ -274,7 +272,6 @@ export function HomeScreen() {
           navigation.navigate('CallModes', { onboarding: true });
         } else if (!state.steps_completed.includes('onboarding_complete')) {
           await completeStep('onboarding_complete');
-          navigation.navigate('OnboardingComplete');
         }
       }
     });
@@ -325,10 +322,10 @@ export function HomeScreen() {
 
   const userName = displayName ? displayName.split(' ')[0] : (nickname || null);
   const isDark = theme.dark;
-  const isStatsLoaded = stats != null;
-  const hasNoCalls = isStatsLoaded && stats?.total_calls === 0;
+  const isStatsLoaded = stats !== null;
+  const hasNoCalls = isStatsLoaded && stats.total_calls === 0;
 
-  const bestUpgradePlan = (plans ?? [])
+  const bestUpgradePlan = plans
     .filter(p => !p.limited && parseFloat(p.price_usd) > 0 && p.code !== billingStatus?.plan)
     .sort((a, b) => parseFloat(b.price_usd) - parseFloat(a.price_usd))[0] ?? null;
 
@@ -361,7 +358,7 @@ export function HomeScreen() {
                 </Text>
               </View>
               <Pressable
-                onPress={() => { hapticLight(); navigation.navigate('AccountTab'); }}
+                onPress={() => { hapticLight(); navigation.navigate('SettingsTab'); }}
                 hitSlop={12}
                 accessibilityRole="button"
                 accessibilityLabel="Settings"
@@ -628,14 +625,14 @@ export function HomeScreen() {
 
           {/* Quick Actions */}
           <Text
-            style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: spacing.xl, marginBottom: spacing.md }}
+            style={{ fontSize: 15, fontWeight: '600', color: colors.textSecondary, marginTop: spacing.xl, marginBottom: spacing.md }}
             allowFontScaling
           >
             Quick Actions
           </Text>
           <ScrollView
             horizontal
-            showsHorizontalScrollIndicator={false}
+            showsHorizontalScrollIndicator={true}
             contentContainerStyle={{ paddingRight: H_PAD }}
           >
             {QUICK_ACTIONS.map((action) => (

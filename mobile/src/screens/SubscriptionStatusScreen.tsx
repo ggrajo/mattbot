@@ -1,273 +1,359 @@
-import React, { useState, useCallback } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTheme } from '../theme/ThemeProvider';
+import React, { useEffect, useState } from 'react';
+import { View, Text, ActivityIndicator } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ScreenWrapper } from '../components/ui/ScreenWrapper';
+import { Card } from '../components/ui/Card';
+import { Button } from '../components/ui/Button';
 import { Icon } from '../components/ui/Icon';
-import { apiClient, extractApiError } from '../api/client';
+import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { ConfirmSheet } from '../components/ui/ConfirmSheet';
+import { Toast } from '../components/ui/Toast';
+import { useTheme } from '../theme/ThemeProvider';
+import { useBillingStore } from '../store/billingStore';
+import { useSettingsStore } from '../store/settingsStore';
+import { getDeviceTimezone } from '../utils/formatDate';
+import { RootStackParamList } from '../navigation/types';
 
-interface BillingStatus {
-  plan: string | null;
-  status: string | null;
-  minutes_used: number;
-  minutes_included: number;
-  minutes_remaining: number;
-  minutes_carried_over: number;
-  current_period_end: string | null;
-  cancel_at_period_end: boolean;
-  has_subscription: boolean;
-  payment_method?: {
-    brand?: string | null;
-    last4?: string | null;
-    exp_month?: number | null;
-    exp_year?: number | null;
-  } | null;
-}
+type Props = NativeStackScreenProps<RootStackParamList, 'SubscriptionStatus'>;
 
-function statusColor(status: string, colors: any): string {
-  switch (status) {
-    case 'active':
-      return colors.success;
-    case 'cancelled':
-      return colors.error;
-    case 'past_due':
-      return colors.warning;
-    default:
-      return colors.textSecondary;
-  }
-}
-
-export function SubscriptionStatusScreen() {
+export function SubscriptionStatusScreen({ navigation }: Props) {
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
-  const insets = useSafeAreaInsets();
-  const navigation = useNavigation<any>();
+  const userTz = useSettingsStore(s => s.settings?.timezone) || getDeviceTimezone();
+  const {
+    plans,
+    loadPlans,
+    billingStatus,
+    loading,
+    error,
+    loadBillingStatus,
+    cancel,
+  } = useBillingStore();
 
-  const [status, setStatus] = useState<BillingStatus | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [cancelSheetVisible, setCancelSheetVisible] = useState(false);
+  const [canceling, setCanceling] = useState(false);
+  const [toastMsg, setToastMsg] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
-  const loadStatus = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const { data } = await apiClient.get('/billing/status');
-      setStatus(data);
-    } catch (e) {
-      setError(extractApiError(e));
-    } finally {
-      setLoading(false);
-    }
+  useEffect(() => {
+    loadPlans();
+    loadBillingStatus();
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      loadStatus();
-    }, [loadStatus]),
-  );
+  async function handleCancel() {
+    setCanceling(true);
+    const success = await cancel();
+    setCanceling(false);
+    setCancelSheetVisible(false);
+    if (success) {
+      setToastMsg({ text: 'Subscription will cancel at end of period', type: 'success' });
+    } else {
+      setToastMsg({ text: useBillingStore.getState().error ?? 'Cancellation failed', type: 'error' });
+    }
+  }
 
-  const minutesUsed = status?.minutes_used ?? 0;
-  const minutesIncluded = status?.minutes_included ?? 0;
-  const usagePercent = minutesIncluded > 0 ? Math.min(1, minutesUsed / minutesIncluded) : 0;
+  if (loading && !billingStatus) {
+    return (
+      <ScreenWrapper scroll={false}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color={colors.primary} accessibilityLabel="Loading subscription status" />
+        </View>
+      </ScreenWrapper>
+    );
+  }
 
-  const periodEnd = status?.current_period_end
-    ? new Date(status.current_period_end).toLocaleDateString(undefined, {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
+  if (error && !billingStatus) {
+    return (
+      <ScreenWrapper scroll>
+        <View style={{ marginTop: spacing.xxl }}>
+          <ErrorMessage message={error} action="Retry" onAction={loadBillingStatus} />
+        </View>
+      </ScreenWrapper>
+    );
+  }
+
+  const plan = billingStatus?.plan ?? 'free';
+  const planData = plans.find((p) => p.code === plan);
+  const planLabel = planData?.name ?? plan;
+  const price = planData ? parseFloat(planData.price_usd) : 0;
+  const minutesUsed = billingStatus?.minutes_used ?? 0;
+  const minutesIncluded = billingStatus?.minutes_included ?? 0;
+  const minutesCarriedOver = billingStatus?.minutes_carried_over ?? 0;
+  const totalMinutes = minutesIncluded + minutesCarriedOver;
+  const usageRatio = totalMinutes > 0 ? Math.min(minutesUsed / totalMinutes, 1) : 0;
+  const paymentMethod = billingStatus?.payment_method;
+  const cancelAtPeriodEnd = billingStatus?.cancel_at_period_end ?? false;
+
+  const periodEndDate = billingStatus?.current_period_end
+    ? new Date(billingStatus.current_period_end)
+    : null;
+  const periodEndFormatted = periodEndDate
+    ? periodEndDate.toLocaleString(undefined, {
+        dateStyle: 'long',
+        timeStyle: 'short',
+        timeZone: userTz,
       })
-    : '—';
+    : null;
+  const daysUntilExpiry = periodEndDate
+    ? Math.max(0, Math.ceil((periodEndDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
+    : null;
 
   return (
-    <ScrollView
-      style={{ flex: 1, backgroundColor: colors.background }}
-      contentContainerStyle={{
-        paddingTop: insets.top + spacing.lg,
-        paddingBottom: insets.bottom + spacing.xxl,
-        paddingHorizontal: spacing.lg,
-      }}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.xl }}>
-        <Icon name="chart-bar" size="lg" color={colors.primary} />
-        <Text style={{ ...typography.h2, color: colors.textPrimary, flex: 1 }}>
-          Subscription Status
-        </Text>
-      </View>
-
-      {loading && (
-        <ActivityIndicator size="large" color={colors.primary} style={{ marginTop: spacing.xxl }} />
+    <ScreenWrapper scroll>
+      {toastMsg && (
+        <Toast
+          message={toastMsg.text}
+          type={toastMsg.type}
+          visible={!!toastMsg}
+          onDismiss={() => setToastMsg(null)}
+        />
       )}
 
-      {error && !loading && (
-        <View style={{ alignItems: 'center', marginTop: spacing.xl }}>
-          <Icon name="alert-circle-outline" size={32} color={colors.error} />
-          <Text style={{ ...typography.body, color: colors.error, textAlign: 'center', marginTop: spacing.sm }}>
-            {error}
+      <ConfirmSheet
+        visible={cancelSheetVisible}
+        onDismiss={() => setCancelSheetVisible(false)}
+        title="Cancel Subscription"
+        message="Your plan will remain active until the end of the current billing period. After that, you'll be moved to the Free plan."
+        icon="alert-circle-outline"
+        destructive
+        confirmLabel="Cancel Subscription"
+        cancelLabel="Keep Plan"
+        onConfirm={handleCancel}
+        loading={canceling}
+      />
+
+      <Text
+        style={{ ...typography.h2, color: colors.textPrimary, marginBottom: spacing.xl }}
+        accessibilityRole="header"
+        allowFontScaling
+      >
+        Subscription
+      </Text>
+
+      {/* Plan badge & price */}
+      <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
+            <View
+              style={{
+                paddingHorizontal: spacing.md,
+                paddingVertical: spacing.xs,
+                borderRadius: radii.sm,
+                backgroundColor: colors.primaryContainer,
+              }}
+            >
+              <Text
+                style={{ ...typography.bodySmall, color: colors.primary, fontWeight: '700' }}
+                allowFontScaling
+              >
+                {planLabel}
+              </Text>
+            </View>
+            {billingStatus?.status && (
+              <Text
+                style={{ ...typography.caption, color: colors.textSecondary, textTransform: 'capitalize' }}
+                allowFontScaling
+              >
+                {billingStatus.status}
+              </Text>
+            )}
+          </View>
+          <Text
+            style={{ ...typography.h2, color: colors.textPrimary }}
+            accessibilityLabel={`${price} dollars per month`}
+            allowFontScaling
+          >
+            ${price}
+            <Text style={{ ...typography.bodySmall, color: colors.textSecondary }}>/mo</Text>
           </Text>
-          <TouchableOpacity onPress={loadStatus} style={{ marginTop: spacing.md }}>
-            <Text style={{ ...typography.button, color: colors.primary }}>Retry</Text>
-          </TouchableOpacity>
         </View>
-      )}
+      </Card>
 
-      {status && !loading && (
-        <>
-          {/* Plan + Status */}
+      {/* Minutes usage */}
+      <Card variant="flat" style={{ marginBottom: spacing.lg }}>
+        <View style={{ gap: spacing.sm }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+              <Icon name="clock-outline" size="md" color={colors.textSecondary} />
+              <Text
+                style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500' }}
+                allowFontScaling
+              >
+                Minutes Usage
+              </Text>
+            </View>
+            <Text
+              style={{ ...typography.bodySmall, color: colors.textSecondary }}
+              accessibilityLabel={`${minutesUsed} of ${totalMinutes} minutes used`}
+              allowFontScaling
+            >
+              {minutesUsed} / {totalMinutes}
+            </Text>
+          </View>
+
+          {/* Progress bar */}
           <View
             style={{
-              backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
-              borderRadius: radii.lg,
-              padding: spacing.lg,
-              borderWidth: 1,
-              borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
-              marginBottom: spacing.lg,
+              height: 8,
+              borderRadius: radii.full,
+              backgroundColor: colors.surfaceVariant,
+              overflow: 'hidden',
             }}
+            accessibilityRole="progressbar"
+            accessibilityValue={{ min: 0, max: totalMinutes, now: minutesUsed }}
           >
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <View>
-                <Text style={{ ...typography.caption, color: colors.textSecondary }}>Plan</Text>
-                <Text style={{ ...typography.h3, color: colors.textPrimary }}>
-                  {(status.plan ?? 'none').charAt(0).toUpperCase() + (status.plan ?? 'none').slice(1)}
-                </Text>
-              </View>
+            <View
+              style={{
+                height: '100%',
+                width: `${usageRatio * 100}%`,
+                borderRadius: radii.full,
+                backgroundColor: usageRatio > 0.9 ? colors.error : colors.primary,
+              }}
+            />
+          </View>
+
+          {usageRatio > 0.9 && (
+            <Text
+              style={{ ...typography.caption, color: colors.error }}
+              allowFontScaling
+            >
+              Approaching minute limit
+            </Text>
+          )}
+
+          {minutesCarriedOver > 0 && (
+            <Text
+              style={{ ...typography.caption, color: colors.textSecondary }}
+              allowFontScaling
+            >
+              Includes {minutesCarriedOver} minutes carried over from your previous plan.
+            </Text>
+          )}
+        </View>
+      </Card>
+
+      {/* Current period ends */}
+      {periodEndFormatted && (
+        <Card variant="flat" style={{ marginBottom: spacing.lg }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
+            <Icon name="calendar-outline" size="md" color={colors.textSecondary} />
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{ ...typography.bodySmall, color: colors.textSecondary }}
+                allowFontScaling
+              >
+                {cancelAtPeriodEnd ? 'Subscription ends' : 'Current period ends'}
+              </Text>
+              <Text
+                style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500' }}
+                allowFontScaling
+              >
+                {periodEndFormatted}
+              </Text>
+            </View>
+            {daysUntilExpiry !== null && (
               <View
                 style={{
-                  backgroundColor: statusColor(status.status, colors) + '20',
-                  borderRadius: radii.full,
                   paddingHorizontal: spacing.md,
                   paddingVertical: spacing.xs,
+                  borderRadius: radii.full,
+                  backgroundColor: daysUntilExpiry <= 3
+                    ? colors.errorContainer
+                    : daysUntilExpiry <= 7
+                      ? colors.warningContainer
+                      : colors.primaryContainer,
                 }}
               >
                 <Text
                   style={{
                     ...typography.caption,
-                    color: statusColor(status.status, colors),
                     fontWeight: '700',
-                    textTransform: 'uppercase',
+                    color: daysUntilExpiry <= 3
+                      ? colors.error
+                      : daysUntilExpiry <= 7
+                        ? colors.warning
+                        : colors.primary,
                   }}
+                  allowFontScaling
                 >
-                  {(status.status ?? 'unknown').replace('_', ' ')}
+                  {daysUntilExpiry === 0 ? 'Today' : `${daysUntilExpiry}d left`}
+                </Text>
+              </View>
+            )}
+          </View>
+        </Card>
+      )}
+
+      {/* Payment method */}
+      {paymentMethod?.brand && paymentMethod?.last4 && (
+        <Card variant="flat" style={{ marginBottom: spacing.lg }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
+            <Icon name="credit-card-outline" size="md" color={colors.textSecondary} />
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{ ...typography.bodySmall, color: colors.textSecondary }}
+                allowFontScaling
+              >
+                Payment method
+              </Text>
+              <Text
+                style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500', textTransform: 'capitalize' }}
+                accessibilityLabel={`${paymentMethod.brand} ending in ${paymentMethod.last4}`}
+                allowFontScaling
+              >
+                {paymentMethod.brand} •••• {paymentMethod.last4}
+              </Text>
+            </View>
+          </View>
+        </Card>
+      )}
+
+      {/* Cancellation warning */}
+      {cancelAtPeriodEnd && (
+        <View style={{ marginBottom: spacing.lg }}>
+          <Card
+            variant="flat"
+            style={{ borderColor: colors.warning, backgroundColor: colors.warningContainer }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
+              <Icon name="alert-outline" size="lg" color={colors.warning} />
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{ ...typography.body, color: colors.warning, fontWeight: '600' }}
+                  allowFontScaling
+                >
+                  Canceling at end of period
+                </Text>
+                <Text
+                  style={{ ...typography.bodySmall, color: colors.warning }}
+                  allowFontScaling
+                >
+                  Your subscription will end{periodEndFormatted ? ` on ${periodEndFormatted}` : ' soon'}.
                 </Text>
               </View>
             </View>
-          </View>
-
-          {/* Usage */}
-          <View
-            style={{
-              backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
-              borderRadius: radii.lg,
-              padding: spacing.lg,
-              borderWidth: 1,
-              borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
-              marginBottom: spacing.lg,
-            }}
-          >
-            <Text style={{ ...typography.h3, color: colors.textPrimary, marginBottom: spacing.md }}>
-              Minutes Usage
-            </Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: spacing.sm }}>
-              <Text style={{ ...typography.bodySmall, color: colors.textSecondary }}>
-                {minutesUsed} used
-              </Text>
-              <Text style={{ ...typography.bodySmall, color: colors.textSecondary }}>
-                {minutesIncluded} included
-              </Text>
-            </View>
-
-            {/* Progress bar */}
-            <View
-              style={{
-                height: 10,
-                backgroundColor: colors.surfaceVariant,
-                borderRadius: radii.full,
-                overflow: 'hidden',
-              }}
-            >
-              <View
-                style={{
-                  height: '100%',
-                  width: `${usagePercent * 100}%`,
-                  backgroundColor:
-                    usagePercent >= 1
-                      ? colors.error
-                      : usagePercent >= 0.8
-                        ? colors.warning
-                        : colors.primary,
-                  borderRadius: radii.full,
-                }}
-              />
-            </View>
-            <Text
-              style={{
-                ...typography.caption,
-                color: colors.textDisabled,
-                textAlign: 'center',
-                marginTop: spacing.sm,
-              }}
-            >
-              {Math.round(usagePercent * 100)}% used
-            </Text>
-          </View>
-
-          {/* Period */}
-          <View
-            style={{
-              backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
-              borderRadius: radii.lg,
-              padding: spacing.lg,
-              borderWidth: 1,
-              borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
-              marginBottom: spacing.xl,
-            }}
-          >
-            <Text style={{ ...typography.h3, color: colors.textPrimary, marginBottom: spacing.md }}>
-              Billing Period
-            </Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <View>
-                <Text style={{ ...typography.caption, color: colors.textSecondary }}>Period End</Text>
-                <Text style={{ ...typography.body, color: colors.textPrimary }}>{periodEnd}</Text>
-              </View>
-              {status.cancel_at_period_end && (
-                <View
-                  style={{
-                    backgroundColor: colors.warning + '20',
-                    borderRadius: radii.full,
-                    paddingHorizontal: spacing.md,
-                    paddingVertical: spacing.xs,
-                    alignSelf: 'center',
-                  }}
-                >
-                  <Text style={{ ...typography.caption, color: colors.warning, fontWeight: '700' }}>
-                    CANCELS AT PERIOD END
-                  </Text>
-                </View>
-              )}
-            </View>
-          </View>
-
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ManageSubscription')}
-            style={{
-              backgroundColor: colors.primary,
-              borderRadius: radii.md,
-              paddingVertical: spacing.md,
-              alignItems: 'center',
-            }}
-            activeOpacity={0.8}
-          >
-            <Text style={{ ...typography.button, color: colors.onPrimary }}>Manage Subscription</Text>
-          </TouchableOpacity>
-        </>
+          </Card>
+        </View>
       )}
-    </ScrollView>
+
+      {/* Actions */}
+      <View style={{ gap: spacing.sm, marginTop: spacing.md }}>
+        <Button
+          title="Change Plan"
+          icon="swap-horizontal"
+          onPress={() => navigation.navigate('ManageSubscription')}
+          variant="primary"
+          accessibilityLabel="Change subscription plan"
+        />
+        {!cancelAtPeriodEnd && billingStatus?.has_subscription && plan !== 'free' && (
+          <Button
+            title="Cancel Subscription"
+            icon="close-circle-outline"
+            onPress={() => setCancelSheetVisible(true)}
+            variant="outline"
+            accessibilityLabel="Cancel your subscription"
+          />
+        )}
+      </View>
+    </ScreenWrapper>
   );
 }

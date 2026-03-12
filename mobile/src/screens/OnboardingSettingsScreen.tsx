@@ -1,339 +1,263 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-  Alert,
-  TextInput,
-  FlatList,
-  Dimensions,
-  StyleSheet,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTheme, useThemeContext } from '../theme/ThemeProvider';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Switch, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ScreenWrapper } from '../components/ui/ScreenWrapper';
+import { Button } from '../components/ui/Button';
+import { Card } from '../components/ui/Card';
+import { TextInput } from '../components/ui/TextInput';
 import { Icon } from '../components/ui/Icon';
-import { GradientView } from '../components/ui/GradientView';
-import { OnboardingProgress } from '../components/ui/OnboardingProgress';
-import { apiClient, extractApiError } from '../api/client';
-import { getDeviceTimezone } from '../utils/formatDate';
+import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { Toast } from '../components/ui/Toast';
+import { PhoneInput } from '../components/ui/PhoneInput';
+import { FadeIn } from '../components/ui/FadeIn';
+import { OnboardingProgress } from '../components/onboarding/OnboardingProgress';
+import { useTheme } from '../theme/ThemeProvider';
+import { useSettingsStore } from '../store/settingsStore';
+import { hapticMedium } from '../utils/haptics';
+import { updateProfile } from '../api/auth';
+import { RootStackParamList } from '../navigation/types';
 
-const { width: SCREEN_W } = Dimensions.get('window');
+type Props = NativeStackScreenProps<RootStackParamList, 'OnboardingSettings'>;
 
-const COMMON_TIMEZONES = [
-  'Pacific/Honolulu', 'America/Anchorage', 'America/Los_Angeles', 'America/Denver',
-  'America/Chicago', 'America/New_York', 'America/Sao_Paulo', 'Atlantic/Reykjavik',
-  'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Europe/Moscow',
-  'Africa/Cairo', 'Asia/Dubai', 'Asia/Kolkata', 'Asia/Bangkok',
-  'Asia/Shanghai', 'Asia/Tokyo', 'Asia/Seoul', 'Asia/Manila',
-  'Australia/Sydney', 'Pacific/Auckland', 'UTC',
+const RETENTION_OPTIONS = [
+  { value: 7, label: '7 days' },
+  { value: 30, label: '30 days' },
+  { value: 90, label: '90 days' },
 ];
 
-function getTimezoneLabel(tz: string): string {
-  try {
-    const now = new Date();
-    const formatter = new Intl.DateTimeFormat('en-US', { timeZone: tz, timeZoneName: 'shortOffset' });
-    const parts = formatter.formatToParts(now);
-    const offset = parts.find(p => p.type === 'timeZoneName')?.value || '';
-    const city = tz.split('/').pop()?.replace(/_/g, ' ') || tz;
-    return `${city} (${offset})`;
-  } catch {
-    return tz;
-  }
-}
-
-function resolveDeviceTimezone(): string {
-  const detected = getDeviceTimezone();
-  if (detected && detected !== 'GMT' && (detected.includes('/') || detected === 'UTC')) {
-    return detected;
-  }
-  return 'UTC';
-}
-
-const LANGUAGES = [
-  { label: 'English', code: 'en' },
-  { label: 'Spanish', code: 'es' },
-  { label: 'French', code: 'fr' },
-  { label: 'German', code: 'de' },
-  { label: 'Portuguese', code: 'pt' },
-  { label: 'Japanese', code: 'ja' },
-  { label: 'Filipino', code: 'fil' },
-];
-
-const THEME_OPTIONS: Array<{ label: string; value: 'light' | 'dark' | 'system'; icon: string }> = [
-  { label: 'Light', value: 'light', icon: 'white-balance-sunny' },
-  { label: 'Dark', value: 'dark', icon: 'moon-waning-crescent' },
-  { label: 'System', value: 'system', icon: 'cellphone' },
-];
-
-export function OnboardingSettingsScreen() {
+export function OnboardingSettingsScreen({ navigation }: Props) {
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
-  const { themeMode, setThemeMode } = useThemeContext();
-  const navigation = useNavigation();
-  const insets = useSafeAreaInsets();
-
-  const [loading, setLoading] = useState(false);
-  const [revision, setRevision] = useState<number>(1);
-  const [timezone, setTimezone] = useState(resolveDeviceTimezone);
-  const [languageCode, setLanguageCode] = useState('en');
-  const [selectedTheme, setSelectedTheme] = useState<'light' | 'dark' | 'system'>(themeMode);
-  const [showLanguagePicker, setShowLanguagePicker] = useState(false);
-  const [showTimezonePicker, setShowTimezonePicker] = useState(false);
-  const [tzSearch, setTzSearch] = useState('');
-
-  const filteredTimezones = useMemo(() => {
-    if (!tzSearch.trim()) return COMMON_TIMEZONES;
-    const q = tzSearch.toLowerCase();
-    return COMMON_TIMEZONES.filter(
-      tz => tz.toLowerCase().includes(q) || getTimezoneLabel(tz).toLowerCase().includes(q),
-    );
-  }, [tzSearch]);
+  const { settings, loading, error, loadSettings, updateSettings, completeStep } = useSettingsStore();
+  const [nickname, setNickname] = useState('');
+  const [memoryEnabled, setMemoryEnabled] = useState(true);
+  const [quietHoursEnabled, setQuietHoursEnabled] = useState(false);
+  const [retentionDays, setRetentionDays] = useState(30);
+  const [personalPhone, setPersonalPhone] = useState('');
+  const [urgentSms, setUrgentSms] = useState(false);
+  const [urgentEmail, setUrgentEmail] = useState(false);
+  const [urgentCall, setUrgentCall] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [toast, setToast] = useState('');
 
   useEffect(() => {
-    apiClient.get('/settings').then(({ data }) => {
-      setRevision(data.revision ?? 1);
-      if (data.timezone) setTimezone(data.timezone);
-      if (data.language_primary) setLanguageCode(data.language_primary);
-    }).catch(() => {});
+    if (!settings) {
+      loadSettings();
+    }
   }, []);
 
   useEffect(() => {
-    setSelectedTheme(themeMode);
-  }, [themeMode]);
+    if (settings) {
+      setMemoryEnabled(settings.memory_enabled);
+      setQuietHoursEnabled(settings.quiet_hours_enabled);
+      setRetentionDays(settings.data_retention_days);
+    }
+  }, [settings]);
 
-  const selectedLanguage = LANGUAGES.find(l => l.code === languageCode) || LANGUAGES[0];
+  const [stepError, setStepError] = useState<string | null>(null);
 
-  function handleThemeSelect(value: 'light' | 'dark' | 'system') {
-    setSelectedTheme(value);
-    setThemeMode(value);
+  async function handleFinish() {
+    setSaving(true);
+    setStepError(null);
+    if (nickname.trim()) {
+      try {
+        await updateProfile({ nickname: nickname.trim() });
+        const { useAuthStore } = await import('../store/authStore');
+        useAuthStore.getState().setProfileName(null, nickname.trim());
+      } catch {
+        // best-effort, non-blocking
+      }
+    }
+    const payload: Record<string, unknown> = {
+      memory_enabled: memoryEnabled,
+      quiet_hours_enabled: quietHoursEnabled,
+      data_retention_days: retentionDays,
+      urgent_notify_sms: urgentSms,
+      urgent_notify_email: urgentEmail,
+      urgent_notify_call: urgentCall,
+    };
+    if (personalPhone) {
+      payload.personal_phone = personalPhone;
+    }
+    const ok = await updateSettings(payload);
+    if (ok) {
+      const step1 = await completeStep('settings_configured');
+      if (step1) {
+        hapticMedium();
+        navigation.navigate('OnboardingAssistantSetup');
+        return;
+      }
+    }
+    setStepError(useSettingsStore.getState().error ?? 'Failed to save. Please try again.');
+    setSaving(false);
   }
 
-  async function handleContinue() {
-    setLoading(true);
-    try {
-      await apiClient.patch('/settings', {
-        expected_revision: revision,
-        changes: {
-          timezone,
-          language_primary: languageCode,
-          theme_preference: selectedTheme,
-        },
-      });
-      await apiClient.post('/onboarding/complete-step', { step: 'settings_configured' });
-      navigation.navigate('OnboardingAssistantSetup' as never);
-    } catch (e) {
-      Alert.alert('Error', extractApiError(e) || 'Failed to save settings');
-    } finally {
-      setLoading(false);
-    }
+  if (!settings && loading) {
+    return (
+      <ScreenWrapper scroll={false}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      </ScreenWrapper>
+    );
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
-      <View style={StyleSheet.absoluteFill} pointerEvents="none">
-        <GradientView
-          colors={[theme.dark ? 'rgba(129,140,248,0.10)' : 'rgba(129,140,248,0.05)', 'transparent']}
-          start={{ x: 0.5, y: 0 }}
-          end={{ x: 0.5, y: 1 }}
-          style={{ position: 'absolute', top: -SCREEN_W * 0.3, left: -SCREEN_W * 0.1, width: SCREEN_W, height: SCREEN_W, borderRadius: SCREEN_W * 0.5 }}
-        />
-      </View>
-      <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          padding: spacing.lg,
-          paddingBottom: insets.bottom + 100,
-        }}
-      >
-        <OnboardingProgress currentStep={3} totalSteps={8} />
+    <ScreenWrapper>
+      <Toast message={toast} type="success" visible={!!toast} onDismiss={() => setToast('')} />
 
-        <View style={{ alignItems: 'center', paddingVertical: spacing.xl }}>
-          <View style={{ width: 80, height: 80, borderRadius: 24, overflow: 'hidden' }}>
-            <GradientView
-              colors={[colors.gradientStart, colors.gradientEnd]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={{ width: 80, height: 80, alignItems: 'center', justifyContent: 'center' }}
-            >
-              <Icon name="cog-outline" size={36} color="#FFFFFF" />
-            </GradientView>
-          </View>
-        </View>
+      <OnboardingProgress current={2} total={6} label="Basic Settings" />
 
-        <Text
-          style={{ ...typography.h1, color: colors.textPrimary, textAlign: 'center' }}
-          allowFontScaling
-        >
-          Quick Setup
-        </Text>
-        <Text
-          style={{
-            ...typography.body,
-            color: colors.textSecondary,
-            textAlign: 'center',
-            marginTop: spacing.sm,
-            marginBottom: spacing.xxl,
-          }}
-          allowFontScaling
-        >
-          Configure your basic preferences
-        </Text>
-
-        {/* Timezone */}
-        <View
-          style={{
-            backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
-            borderWidth: 1,
-            borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
-            borderRadius: radii.xl,
-            padding: spacing.lg,
-            marginBottom: spacing.lg,
-          }}
-        >
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.sm }}>
-            <Icon name="earth" size="md" color={colors.primary} />
-            <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }} allowFontScaling>
-              Timezone
-            </Text>
-          </View>
-          <TouchableOpacity
-            onPress={() => setShowTimezonePicker(true)}
+      {/* Hero */}
+      <FadeIn delay={0} slide="up">
+        <View style={{ alignItems: 'center', marginBottom: spacing.xl }}>
+          <View
             style={{
-              backgroundColor: colors.surface,
-              borderRadius: radii.md,
-              padding: spacing.md,
-              borderWidth: 1,
-              borderColor: colors.border,
-              flexDirection: 'row',
+              width: 72,
+              height: 72,
+              borderRadius: radii.xl,
+              backgroundColor: colors.primary + '14',
               alignItems: 'center',
-              justifyContent: 'space-between',
+              justifyContent: 'center',
+              marginBottom: spacing.lg,
             }}
           >
-            <View style={{ flex: 1 }}>
-              <Text style={{ ...typography.body, color: colors.textPrimary }} allowFontScaling>
-                {getTimezoneLabel(timezone)}
-              </Text>
-            </View>
-            <Icon name="chevron-down" size="md" color={colors.textDisabled} />
-          </TouchableOpacity>
+            <Icon name="cog-outline" size={36} color={colors.primary} />
+          </View>
+          <Text style={{ ...typography.h2, color: colors.textPrimary, textAlign: 'center' }} allowFontScaling>
+            Basic Settings
+          </Text>
+          <Text
+            style={{ ...typography.body, color: colors.textSecondary, textAlign: 'center', marginTop: spacing.sm }}
+            allowFontScaling
+          >
+            Configure how MattBot works for you. You can change these later.
+          </Text>
         </View>
+      </FadeIn>
 
-        {/* Language */}
-        <View
-          style={{
-            backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
-            borderWidth: 1,
-            borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
-            borderRadius: radii.xl,
-            padding: spacing.lg,
-            marginBottom: spacing.lg,
-          }}
-        >
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.sm }}>
-            <Icon name="translate" size="md" color={colors.primary} />
-            <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }} allowFontScaling>
-              Language
+      {(error || stepError) && (
+        <View style={{ marginBottom: spacing.lg }}>
+          <ErrorMessage
+            message={stepError ?? error!}
+            action={error ? 'Retry' : undefined}
+            onAction={error ? loadSettings : undefined}
+          />
+        </View>
+      )}
+
+      {/* Nickname */}
+      <FadeIn delay={60}>
+      <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
+        <View style={{ gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Icon name="account-outline" size="md" color={colors.primary} />
+            <Text style={{ ...typography.h3, color: colors.textPrimary, flex: 1 }} allowFontScaling>
+              What should we call you?
             </Text>
           </View>
-          <TouchableOpacity
-            onPress={() => setShowLanguagePicker(!showLanguagePicker)}
-            style={{
-              backgroundColor: colors.surface,
-              borderRadius: radii.md,
-              padding: spacing.md,
-              borderWidth: 1,
-              borderColor: colors.border,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
+          <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
+            This is optional. Your AI assistant will use this name when greeting callers.
+          </Text>
+          <TextInput
+            placeholder="e.g. Matt"
+            value={nickname}
+            onChangeText={setNickname}
+            autoCapitalize="words"
+          />
+        </View>
+      </Card>
+      </FadeIn>
+
+      {/* Personal phone */}
+      <FadeIn delay={90}>
+      <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
+        <View style={{ gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Icon name="phone-outline" size="md" color={colors.primary} />
+            <Text style={{ ...typography.h3, color: colors.textPrimary, flex: 1 }} allowFontScaling>
+              Your Phone Number
+            </Text>
+          </View>
+          <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
+            Your personal number for live call handoff and urgent alerts. You can update this in Settings later.
+          </Text>
+          <PhoneInput
+            value={personalPhone}
+            onChangeE164={setPersonalPhone}
+            placeholder="Your phone number"
+          />
+        </View>
+      </Card>
+      </FadeIn>
+
+      {/* Memory toggle */}
+      <FadeIn delay={150}>
+      <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
+        <View style={{ gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Icon name="brain" size="md" color={colors.primary} />
+            <Text style={{ ...typography.h3, color: colors.textPrimary, flex: 1 }} allowFontScaling>
+              Memory
+            </Text>
+          </View>
+          <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
+            Allow MattBot to remember context from previous calls to provide smarter responses.
+          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <Text style={{ ...typography.body, color: colors.textPrimary }} allowFontScaling>
-              {selectedLanguage.label}
+              Enable memory
             </Text>
-            <Icon
-              name={showLanguagePicker ? 'chevron-up' : 'chevron-down'}
-              size="md"
-              color={colors.textDisabled}
+            <Switch
+              value={memoryEnabled}
+              onValueChange={setMemoryEnabled}
+              trackColor={{ false: colors.border, true: colors.primary }}
+              accessibilityLabel="Enable memory"
+              accessibilityRole="switch"
+              accessibilityState={{ checked: memoryEnabled }}
             />
-          </TouchableOpacity>
-          {showLanguagePicker && (
-            <View style={{ marginTop: spacing.sm, gap: 2 }}>
-              {LANGUAGES.map((lang) => (
-                <TouchableOpacity
-                  key={lang.code}
-                  onPress={() => {
-                    setLanguageCode(lang.code);
-                    setShowLanguagePicker(false);
-                  }}
-                  style={{
-                    padding: spacing.md,
-                    borderRadius: radii.sm,
-                    backgroundColor: languageCode === lang.code ? colors.primaryContainer : 'transparent',
-                  }}
-                >
-                  <Text
-                    style={{
-                      ...typography.body,
-                      color: languageCode === lang.code ? colors.primary : colors.textPrimary,
-                      fontWeight: languageCode === lang.code ? '600' : '400',
-                    }}
-                    allowFontScaling
-                  >
-                    {lang.label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
+          </View>
         </View>
+      </Card>
+      </FadeIn>
 
-        {/* Theme */}
-        <View
-          style={{
-            backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
-            borderWidth: 1,
-            borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
-            borderRadius: radii.xl,
-            padding: spacing.lg,
-            marginBottom: spacing.lg,
-          }}
-        >
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.md }}>
-            <Icon name="palette-outline" size="md" color={colors.primary} />
-            <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }} allowFontScaling>
-              Theme
+      {/* Data retention */}
+      <FadeIn delay={180}>
+      <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
+        <View style={{ gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Icon name="clock-outline" size="md" color={colors.primary} />
+            <Text style={{ ...typography.h3, color: colors.textPrimary, flex: 1 }} allowFontScaling>
+              Data Retention
             </Text>
           </View>
+          <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
+            How long call data is kept before automatic deletion.
+          </Text>
           <View style={{ flexDirection: 'row', gap: spacing.sm }}>
-            {THEME_OPTIONS.map((opt) => (
+            {RETENTION_OPTIONS.map(opt => (
               <TouchableOpacity
                 key={opt.value}
-                onPress={() => handleThemeSelect(opt.value)}
+                onPress={() => setRetentionDays(opt.value)}
+                activeOpacity={0.7}
                 style={{
                   flex: 1,
                   paddingVertical: spacing.md,
                   borderRadius: radii.md,
-                  backgroundColor: selectedTheme === opt.value ? colors.primary : colors.surface,
-                  borderWidth: selectedTheme === opt.value ? 0 : 1,
-                  borderColor: colors.border,
+                  borderWidth: 1.5,
+                  borderColor: retentionDays === opt.value ? colors.primary : colors.border,
+                  backgroundColor: retentionDays === opt.value ? colors.primary + '14' : 'transparent',
                   alignItems: 'center',
-                  gap: spacing.xs,
                 }}
+                accessibilityRole="radio"
+                accessibilityState={{ checked: retentionDays === opt.value }}
+                accessibilityLabel={`${opt.label} data retention`}
               >
-                <Icon
-                  name={opt.icon}
-                  size="md"
-                  color={selectedTheme === opt.value ? colors.onPrimary : colors.textSecondary}
-                />
                 <Text
                   style={{
-                    ...typography.caption,
-                    fontWeight: '600',
-                    color: selectedTheme === opt.value ? colors.onPrimary : colors.textPrimary,
+                    ...typography.bodySmall,
+                    color: retentionDays === opt.value ? colors.primary : colors.textSecondary,
+                    fontWeight: retentionDays === opt.value ? '600' : '400',
                   }}
                   allowFontScaling
                 >
@@ -343,150 +267,115 @@ export function OnboardingSettingsScreen() {
             ))}
           </View>
         </View>
-      </ScrollView>
+      </Card>
+      </FadeIn>
 
-      {/* Bottom Button */}
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          padding: spacing.lg,
-          paddingBottom: insets.bottom + spacing.lg,
-          backgroundColor: colors.background,
-        }}
-      >
-        <TouchableOpacity
-          onPress={handleContinue}
-          disabled={loading}
-          style={{
-            backgroundColor: colors.primary,
-            borderRadius: radii.lg,
-            paddingVertical: spacing.md + 2,
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'row',
-            gap: spacing.sm,
-            opacity: loading ? 0.6 : 1,
-            minHeight: 52,
-          }}
-        >
-          {loading ? (
-            <ActivityIndicator size="small" color={colors.onPrimary} />
-          ) : (
-            <Text style={{ ...typography.button, color: colors.onPrimary }} allowFontScaling>
-              Continue
+      {/* Quiet hours toggle */}
+      <FadeIn delay={240}>
+      <Card variant="elevated" style={{ marginBottom: spacing.xl }}>
+        <View style={{ gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Icon name="moon-waning-crescent" size="md" color={colors.primary} />
+            <Text style={{ ...typography.h3, color: colors.textPrimary, flex: 1 }} allowFontScaling>
+              Quiet Hours
+            </Text>
+          </View>
+          <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
+            Mute non-urgent notifications during specified hours. You can configure the exact times in Settings later.
+          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text style={{ ...typography.body, color: colors.textPrimary }} allowFontScaling>
+              Enable quiet hours
+            </Text>
+            <Switch
+              value={quietHoursEnabled}
+              onValueChange={setQuietHoursEnabled}
+              trackColor={{ false: colors.border, true: colors.primary }}
+              accessibilityLabel="Enable quiet hours"
+              accessibilityRole="switch"
+              accessibilityState={{ checked: quietHoursEnabled }}
+            />
+          </View>
+        </View>
+      </Card>
+      </FadeIn>
+
+      {/* Urgent call alerts (optional) */}
+      <FadeIn delay={300}>
+      <Card variant="elevated" style={{ marginBottom: spacing.xl }}>
+        <View style={{ gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Icon name="alert-octagon-outline" size="md" color={colors.error} />
+            <Text style={{ ...typography.h3, color: colors.textPrimary, flex: 1 }} allowFontScaling>
+              Urgent Call Alerts
+            </Text>
+          </View>
+          <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
+            Get notified when a call is urgent. All disabled by default. You can add phone/email in Settings later.
+          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text style={{ ...typography.body, color: colors.textPrimary }} allowFontScaling>
+              SMS alert
+            </Text>
+            <Switch
+              value={urgentSms}
+              onValueChange={setUrgentSms}
+              trackColor={{ false: colors.border, true: colors.primary }}
+              accessibilityLabel="Enable urgent SMS alerts"
+            />
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text style={{ ...typography.body, color: colors.textPrimary }} allowFontScaling>
+              Email alert
+            </Text>
+            <Switch
+              value={urgentEmail}
+              onValueChange={setUrgentEmail}
+              trackColor={{ false: colors.border, true: '#F59E0B' }}
+              accessibilityLabel="Enable urgent email alerts"
+            />
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text style={{ ...typography.body, color: colors.textPrimary }} allowFontScaling>
+              Phone call alert
+            </Text>
+            <Switch
+              value={urgentCall}
+              onValueChange={setUrgentCall}
+              trackColor={{ false: colors.border, true: colors.error }}
+              accessibilityLabel="Enable urgent phone call alerts"
+            />
+          </View>
+          {urgentCall && (
+            <View style={{
+              padding: spacing.sm,
+              borderRadius: radii.sm,
+              backgroundColor: colors.error + '08',
+              borderLeftWidth: 3, borderLeftColor: colors.error,
+            }}>
+              <Text style={{ ...typography.caption, color: colors.error }}>
+                Alert calls use your call minutes.
+              </Text>
+            </View>
+          )}
+          {(urgentSms || urgentEmail || urgentCall) && (
+            <Text style={{ ...typography.caption, color: colors.textDisabled }} allowFontScaling>
+              You can configure the phone number and email in Settings after onboarding.
             </Text>
           )}
-        </TouchableOpacity>
-      </View>
-
-      {/* Timezone Picker - full screen overlay */}
-      {showTimezonePicker && (
-        <View
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: colors.background,
-            zIndex: 100,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              paddingTop: insets.top + spacing.sm,
-              paddingHorizontal: spacing.lg,
-              paddingBottom: spacing.md,
-              borderBottomWidth: 1,
-              borderBottomColor: colors.border,
-              gap: spacing.sm,
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => { setShowTimezonePicker(false); setTzSearch(''); }}
-              hitSlop={12}
-            >
-              <Icon name="arrow-left" size="md" color={colors.textPrimary} />
-            </TouchableOpacity>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                backgroundColor: colors.surface,
-                borderRadius: radii.md,
-                borderWidth: 1,
-                borderColor: colors.border,
-                paddingHorizontal: spacing.md,
-                gap: spacing.sm,
-              }}
-            >
-              <Icon name="magnify" size="sm" color={colors.textDisabled} />
-              <TextInput
-                value={tzSearch}
-                onChangeText={setTzSearch}
-                placeholder="Search timezone..."
-                placeholderTextColor={colors.textDisabled}
-                autoFocus
-                style={{
-                  flex: 1,
-                  ...typography.body,
-                  color: colors.textPrimary,
-                  paddingVertical: spacing.sm,
-                }}
-              />
-              {tzSearch.length > 0 && (
-                <TouchableOpacity onPress={() => setTzSearch('')} hitSlop={8}>
-                  <Icon name="close-circle" size="sm" color={colors.textDisabled} />
-                </TouchableOpacity>
-              )}
-            </View>
-          </View>
-          <FlatList
-            data={filteredTimezones}
-            keyExtractor={(item) => item}
-            keyboardShouldPersistTaps="handled"
-            contentContainerStyle={{ paddingBottom: insets.bottom + spacing.lg }}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => {
-                  setTimezone(item);
-                  setShowTimezonePicker(false);
-                  setTzSearch('');
-                }}
-                style={{
-                  paddingVertical: spacing.md + 2,
-                  paddingHorizontal: spacing.lg,
-                  backgroundColor: timezone === item ? colors.primaryContainer : 'transparent',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  borderBottomWidth: 1,
-                  borderBottomColor: colors.border + '40',
-                }}
-              >
-                <Text
-                  style={{
-                    ...typography.body,
-                    color: timezone === item ? colors.primary : colors.textPrimary,
-                    fontWeight: timezone === item ? '600' : '400',
-                  }}
-                >
-                  {getTimezoneLabel(item)}
-                </Text>
-                {timezone === item && (
-                  <Icon name="check" size="md" color={colors.primary} />
-                )}
-              </TouchableOpacity>
-            )}
-          />
         </View>
-      )}
-    </View>
+      </Card>
+      </FadeIn>
+
+      <FadeIn delay={360}>
+        <Button
+          title="Continue"
+          icon="arrow-right"
+          onPress={handleFinish}
+          loading={saving}
+          disabled={saving}
+        />
+      </FadeIn>
+    </ScreenWrapper>
   );
 }

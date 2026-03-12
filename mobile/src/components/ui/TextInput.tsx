@@ -4,7 +4,6 @@ import {
   TextInput as RNTextInput,
   Text,
   TextInputProps as RNTextInputProps,
-  Platform,
 } from 'react-native';
 import { Icon } from './Icon';
 import { IconButton } from './IconButton';
@@ -32,20 +31,7 @@ export function TextInput({
 
   const { colors, spacing, radii, typography } = theme;
 
-  const borderColor = error
-    ? colors.error
-    : focused
-      ? colors.borderFocused
-      : colors.border;
-
-  const focusGlow = focused && !error && Platform.OS === 'ios'
-    ? {
-        shadowColor: colors.primary,
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.2,
-        shadowRadius: 8,
-      }
-    : {};
+  const borderColor = error ? colors.error : focused ? colors.borderFocused : colors.border;
 
   return (
     <View style={[{ marginBottom: spacing.lg }, containerStyle]}>
@@ -66,11 +52,10 @@ export function TextInput({
           alignItems: 'center',
           borderWidth: 1.5,
           borderColor,
-          borderRadius: radii.lg,
+          borderRadius: radii.md,
           backgroundColor: colors.surface,
           paddingHorizontal: spacing.md,
           gap: spacing.sm,
-          ...focusGlow,
         }}
       >
         {leftIcon && (
@@ -95,7 +80,7 @@ export function TextInput({
             flex: 1,
             ...typography.body,
             color: colors.textPrimary,
-            paddingVertical: spacing.md + 2,
+            paddingVertical: spacing.md,
           }}
           placeholderTextColor={colors.textDisabled}
           allowFontScaling

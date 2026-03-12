@@ -1,16 +1,25 @@
 import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { iconSize as defaultSizes } from '../../theme/tokens';
-
-type SizeName = keyof typeof defaultSizes;
+import { useTheme } from '../../theme/ThemeProvider';
 
 interface Props {
   name: string;
-  size?: SizeName | number;
+  size?: 'sm' | 'md' | 'lg' | 'xl' | number;
   color?: string;
+  accessibilityLabel?: string;
 }
 
-export function Icon({ name, size = 'lg', color = '#FFFFFF' }: Props) {
-  const resolved = typeof size === 'number' ? size : defaultSizes[size];
-  return <MaterialCommunityIcons name={name} size={resolved} color={color} />;
+export function Icon({ name, size = 'lg', color, accessibilityLabel }: Props) {
+  const theme = useTheme();
+  const resolvedSize = typeof size === 'number' ? size : theme.iconSize[size];
+  const resolvedColor = color ?? theme.colors.textPrimary;
+
+  return (
+    <MaterialCommunityIcons
+      name={name}
+      size={resolvedSize}
+      color={resolvedColor}
+      accessibilityLabel={accessibilityLabel}
+    />
+  );
 }

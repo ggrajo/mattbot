@@ -1,86 +1,93 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ViewStyle } from 'react-native';
 import { Icon } from './Icon';
 import { Button } from './Button';
 import { useTheme } from '../../theme/ThemeProvider';
-
-interface ActionObject {
-  title: string;
-  onPress: () => void;
-  variant?: 'filled' | 'outline' | 'ghost';
-}
 
 interface Props {
   icon: string;
   iconColor?: string;
   title: string;
-  message?: string;
   subtitle?: string;
-  actionTitle?: string;
-  onAction?: () => void;
-  action?: ActionObject;
+  action?: { title: string; onPress: () => void; variant?: 'primary' | 'outline' | 'ghost' };
+  secondaryAction?: { title: string; onPress: () => void };
+  children?: React.ReactNode;
+  style?: ViewStyle;
 }
 
 export function StatusScreen({
   icon,
   iconColor,
   title,
-  message,
   subtitle,
-  actionTitle,
-  onAction,
   action,
+  secondaryAction,
+  children,
+  style,
 }: Props) {
   const theme = useTheme();
-  const { colors, spacing, typography } = theme;
-
-  const displayMessage = message || subtitle || '';
-  const resolvedActionTitle = actionTitle || action?.title;
-  const resolvedOnAction = onAction || action?.onPress;
-  const resolvedVariant = action?.variant;
+  const { colors, spacing, typography, radii } = theme;
 
   return (
     <View
-      style={{
-        flex: 1,
-        backgroundColor: colors.background,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: spacing.xl,
-      }}
+      style={[
+        {
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingHorizontal: spacing.xl,
+          gap: spacing.lg,
+        },
+        style,
+      ]}
     >
-      <View style={{ marginBottom: spacing.lg }}>
-        <Icon name={icon} size={48} color={iconColor || colors.textSecondary} />
-      </View>
-      <Text
+      <View
         style={{
-          ...typography.h3,
-          color: colors.textPrimary,
-          textAlign: 'center',
+          width: 80,
+          height: 80,
+          borderRadius: 40,
+          backgroundColor: (iconColor ?? colors.primary) + '18',
+          alignItems: 'center',
+          justifyContent: 'center',
           marginBottom: spacing.sm,
         }}
+      >
+        <Icon name={icon} size={40} color={iconColor ?? colors.primary} />
+      </View>
+
+      <Text
+        style={{ ...typography.h2, color: colors.textPrimary, textAlign: 'center' }}
         allowFontScaling
       >
         {title}
       </Text>
-      {displayMessage ? (
+
+      {subtitle && (
         <Text
-          style={{
-            ...typography.body,
-            color: colors.textSecondary,
-            textAlign: 'center',
-            marginBottom: spacing.xl,
-          }}
+          style={{ ...typography.body, color: colors.textSecondary, textAlign: 'center', maxWidth: 320 }}
           allowFontScaling
         >
-          {displayMessage}
+          {subtitle}
         </Text>
-      ) : null}
-      {resolvedActionTitle && resolvedOnAction && (
+      )}
+
+      {children}
+
+      {action && (
         <Button
-          title={resolvedActionTitle}
-          onPress={resolvedOnAction}
-          variant={resolvedVariant}
+          title={action.title}
+          onPress={action.onPress}
+          variant={action.variant ?? 'primary'}
+          style={{ width: '100%', marginTop: spacing.md } as ViewStyle}
+        />
+      )}
+
+      {secondaryAction && (
+        <Button
+          title={secondaryAction.title}
+          onPress={secondaryAction.onPress}
+          variant="ghost"
+          style={{ width: '100%' } as ViewStyle}
         />
       )}
     </View>

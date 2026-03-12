@@ -33,11 +33,9 @@ export function Badge({ label, variant = 'primary' }: Props) {
       style={{
         backgroundColor: bgMap[variant],
         borderRadius: radii.full,
-        paddingHorizontal: spacing.sm + 2,
+        paddingHorizontal: spacing.sm,
         paddingVertical: spacing.xs,
         alignSelf: 'flex-start',
-        borderWidth: 1,
-        borderColor: textMap[variant] + '20',
       }}
     >
       <Text

@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Alert } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Button } from '../components/ui/Button';
-import { OtpInput } from '../components/ui/OtpInput';
-import { Card } from '../components/ui/Card';
+import { TextInput } from '../components/ui/TextInput';
 import { TotpQrCode } from '../components/auth/TotpQrCode';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
-import { StatusScreen } from '../components/ui/StatusScreen';
 import { LoadingOverlay } from '../components/ui/LoadingOverlay';
-import { Icon } from '../components/ui/Icon';
 import { useTheme } from '../theme/ThemeProvider';
 import { useAuthStore } from '../store/authStore';
 import { mfaTotpStart, mfaTotpConfirm } from '../api/auth';
@@ -21,8 +17,8 @@ type Props = NativeStackScreenProps<RootStackParamList, 'MfaEnroll'>;
 
 export function MfaEnrollScreen({ navigation }: Props) {
   const theme = useTheme();
-  const { colors, spacing, typography, radii } = theme;
-  const { partialToken, totpSecret, totpQrUri, mfaSetupToken, setTotpSetup, setRecoveryCodes, setPendingTokens } = useAuthStore();
+  const { colors, spacing, typography } = theme;
+  const { partialToken, totpSecret, totpQrUri, mfaSetupToken, setTotpSetup, setRecoveryCodes } = useAuthStore();
 
   const [code, setCode] = useState('');
   const [codeError, setCodeError] = useState<string>();
@@ -34,21 +30,7 @@ export function MfaEnrollScreen({ navigation }: Props) {
     if (!totpSecret && partialToken) {
       initializeTotp();
     }
-  }, [partialToken]);
-
-  if (!partialToken && !totpSecret) {
-    return (
-      <ScreenWrapper>
-        <StatusScreen
-          icon="alert-circle-outline"
-          title="Session expired"
-          message="Your enrollment session has expired. Please sign in again to set up MFA."
-          actionTitle="Back to Sign In"
-          onAction={() => navigation.navigate('Login')}
-        />
-      </ScreenWrapper>
-    );
-  }
+  }, []);
 
   async function initializeTotp() {
     setInitializing(true);
@@ -72,7 +54,6 @@ export function MfaEnrollScreen({ navigation }: Props) {
     try {
       const data = await mfaTotpConfirm(mfaSetupToken!, code);
       setRecoveryCodes(data.recovery_codes);
-      setPendingTokens(data.access_token, data.refresh_token);
       navigation.replace('RecoveryCodes');
     } catch (error) {
       setApiError(extractApiError(error));
@@ -92,84 +73,55 @@ export function MfaEnrollScreen({ navigation }: Props) {
   }
 
   return (
-    <ScreenWrapper>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <LoadingOverlay visible={initializing} message="Setting up authenticator..." />
-
-      {/* Step indicator */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.xl }}>
-        <View
-          style={{
-            width: 28,
-            height: 28,
-            borderRadius: 14,
-            backgroundColor: colors.primary,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
+        <ScrollView
+          contentContainerStyle={{ padding: spacing.xl, gap: spacing.lg }}
+          keyboardShouldPersistTaps="handled"
         >
-          <Text style={{ ...typography.caption, color: colors.onPrimary, fontWeight: '700' }}>1</Text>
-        </View>
-        <View style={{ flex: 1, height: 2, backgroundColor: colors.primary, borderRadius: 1 }} />
-        <View
-          style={{
-            width: 28,
-            height: 28,
-            borderRadius: 14,
-            backgroundColor: code.length === 6 ? colors.primary : colors.border,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Text style={{ ...typography.caption, color: code.length === 6 ? colors.onPrimary : colors.textDisabled, fontWeight: '700' }}>2</Text>
-        </View>
-      </View>
-
-      <View style={{ gap: spacing.sm, marginBottom: spacing.lg }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
-          <Icon name="shield-lock-outline" size="lg" color={colors.primary} />
           <Text style={{ ...typography.h2, color: colors.textPrimary }} allowFontScaling>
             Set up authenticator
           </Text>
-        </View>
-        <Text style={{ ...typography.body, color: colors.textSecondary }} allowFontScaling>
-          MattBot requires two-factor authentication. Scan the QR code with an authenticator app like Google Authenticator or Authy.
-        </Text>
-      </View>
+          <Text
+            style={{ ...typography.body, color: colors.textSecondary }}
+            allowFontScaling
+          >
+            MattBot requires two-factor authentication for your security.
+            Scan this code with an authenticator app like Google Authenticator or Authy.
+          </Text>
 
-      {apiError && <ErrorMessage message={apiError} />}
+          {apiError && <ErrorMessage message={apiError} />}
 
-      {totpSecret && totpQrUri && (
-        <TotpQrCode
-          uri={totpQrUri}
-          secret={totpSecret}
-          onCopySecret={handleCopySecret}
-        />
-      )}
+          {totpSecret && totpQrUri && (
+            <TotpQrCode
+              uri={totpQrUri}
+              secret={totpSecret}
+              onCopySecret={handleCopySecret}
+            />
+          )}
 
-      <View style={{ marginTop: spacing.xl, gap: spacing.sm }}>
-        <Text style={{ ...typography.bodySmall, color: colors.textSecondary, fontWeight: '500' }} allowFontScaling>
-          Enter the 6-digit code from your authenticator
-        </Text>
-        <OtpInput
-          value={code}
-          onChange={(val) => {
-            setCode(val);
-            setCodeError(undefined);
-          }}
-          error={codeError}
-          autoFocus={false}
-        />
-      </View>
+          <TextInput
+            label="Enter 6-digit code"
+            value={code}
+            onChangeText={setCode}
+            error={codeError}
+            keyboardType="number-pad"
+            maxLength={6}
+            autoComplete="one-time-code"
+          />
 
-      <View style={{ marginTop: spacing.xl }}>
-        <Button
-          title="Verify & Continue"
-          icon="shield-check-outline"
-          onPress={handleConfirm}
-          loading={loading}
-          disabled={code.length !== 6}
-        />
-      </View>
-    </ScreenWrapper>
+          <Button
+            title="Verify & Continue"
+            onPress={handleConfirm}
+            loading={loading}
+            disabled={code.length !== 6}
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }

@@ -1,23 +1,20 @@
 import { create } from 'zustand';
 import {
-  type CalendarStatus,
-  type CalendarEvent,
-  getCalendarStatus,
-  fetchCalendarEvents,
+  CalendarEvent,
+  CalendarStatus,
   disconnectCalendar as apiDisconnect,
+  getCalendarEvents,
+  getCalendarStatus,
 } from '../api/calendar';
-import { extractApiError } from '../api/client';
 
 interface CalendarStore {
   status: CalendarStatus | null;
   events: CalendarEvent[];
   loading: boolean;
   error: string | null;
-
   loadStatus: () => Promise<void>;
-  loadEvents: (daysAhead?: number) => Promise<void>;
+  loadEvents: (start: string, end: string) => Promise<void>;
   disconnect: () => Promise<void>;
-  reset: () => void;
 }
 
 export const useCalendarStore = create<CalendarStore>((set) => ({
@@ -27,36 +24,30 @@ export const useCalendarStore = create<CalendarStore>((set) => ({
   error: null,
 
   loadStatus: async () => {
-    set({ loading: true, error: null });
     try {
       const status = await getCalendarStatus();
-      set({ status, loading: false });
-    } catch (e: unknown) {
-      set({ error: extractApiError(e), loading: false });
+      set({ status, error: null });
+    } catch (e: any) {
+      set({ error: e?.message || 'Failed to load calendar status' });
     }
   },
 
-  loadEvents: async (daysAhead?: number) => {
+  loadEvents: async (start: string, end: string) => {
     set({ loading: true, error: null });
     try {
-      const events = await fetchCalendarEvents(daysAhead);
+      const events = await getCalendarEvents(start, end);
       set({ events, loading: false });
-    } catch (e: unknown) {
-      set({ error: extractApiError(e), loading: false });
+    } catch (e: any) {
+      set({ loading: false, error: e?.message || 'Failed to load events' });
     }
   },
 
   disconnect: async () => {
-    set({ loading: true, error: null });
     try {
       await apiDisconnect();
-      set({ status: { connected: false, email: null, calendar_id: null }, events: [], loading: false });
-    } catch (e: unknown) {
-      set({ error: extractApiError(e), loading: false });
+      set({ status: { connected: false, email: null, calendar_id: null }, events: [], error: null });
+    } catch (e: any) {
+      set({ error: e?.message || 'Failed to disconnect calendar' });
     }
-  },
-
-  reset: () => {
-    set({ status: null, events: [], loading: false, error: null });
   },
 }));

@@ -1,72 +1,96 @@
 import { create } from 'zustand';
-
-export interface Settings {
-  biometric_unlock_enabled: boolean;
-  theme_preference: string;
-  quiet_hours_enabled: boolean;
-  timezone?: string;
-}
-
-export interface Onboarding {
-  is_complete: boolean;
-  steps_completed: string[];
-  completed_steps?: string[];
-}
+import {
+  type UserSettings,
+  getSettings as fetchSettings,
+  patchSettings as apiPatchSettings,
+} from '../api/settings';
+import {
+  type OnboardingState,
+  getOnboarding as fetchOnboarding,
+  completeOnboardingStep as apiCompleteStep,
+} from '../api/onboarding';
 
 interface SettingsStore {
-  settings: Settings | null;
-  onboarding: Onboarding | null;
-  error: string | undefined;
+  settings: UserSettings | null;
+  onboarding: OnboardingState | null;
+  loading: boolean;
+  error: string | null;
+
   loadSettings: () => Promise<void>;
+  updateSettings: (changes: Partial<Omit<UserSettings, 'revision'>>) => Promise<boolean>;
   loadOnboarding: () => Promise<void>;
-  completeStep: (step: string) => Promise<void>;
+  completeStep: (step: string) => Promise<boolean>;
   reset: () => void;
 }
 
 export const useSettingsStore = create<SettingsStore>((set, get) => ({
   settings: null,
   onboarding: null,
-  error: undefined,
+  loading: false,
+  error: null,
 
   loadSettings: async () => {
+    set({ loading: true, error: null });
     try {
-      const { apiClient } = await import('../api/client');
-      const { data } = await apiClient.get('/settings');
-      set({ settings: data, error: undefined });
-      if (data.timezone) {
-        const { setUserTimezone } = await import('../utils/formatDate');
-        setUserTimezone(data.timezone);
+      const settings = await fetchSettings();
+      set({ settings, loading: false });
+    } catch (e: any) {
+      const msg = e?.response?.data?.error?.message || 'Failed to load settings';
+      set({ error: msg, loading: false });
+    }
+  },
+
+  updateSettings: async (changes) => {
+    const current = get().settings;
+    if (!current) return false;
+
+    set({ loading: true, error: null });
+    try {
+      const result = await apiPatchSettings(current.revision, changes);
+      set({ settings: result.settings, loading: false });
+      return true;
+    } catch (e: any) {
+      const code = e?.response?.data?.error?.code;
+      if (code === 'REVISION_CONFLICT') {
+        try {
+          const fresh = await fetchSettings();
+          set({ settings: fresh, loading: false, error: 'Settings were updated on another device. Please review and try again.' });
+        } catch {
+          set({ loading: false, error: 'Settings conflict. Please refresh.' });
+        }
+        return false;
       }
-    } catch {
-      set({ error: undefined });
+      const msg = e?.response?.data?.error?.message || 'Failed to save settings';
+      set({ error: msg, loading: false });
+      return false;
     }
   },
 
   loadOnboarding: async () => {
+    set({ loading: true, error: null });
     try {
-      const { apiClient } = await import('../api/client');
-      const { data } = await apiClient.get('/onboarding');
-      set({ onboarding: data, error: undefined });
+      const onboarding = await fetchOnboarding();
+      set({ onboarding, loading: false });
     } catch (e: any) {
-      const status = e?.response?.status;
-      if (status === 401 || status === 403) {
-        set({ onboarding: { is_complete: true, steps_completed: [] }, error: undefined });
-      }
+      const msg = e?.response?.data?.error?.message || 'Failed to load onboarding state';
+      set({ error: msg, loading: false });
     }
   },
 
   completeStep: async (step: string) => {
+    set({ loading: true, error: null });
     try {
-      const { apiClient } = await import('../api/client');
-      const { data } = await apiClient.post('/onboarding/complete-step', { step });
-      set({ onboarding: data });
-    } catch {
-      // non-blocking
+      const onboarding = await apiCompleteStep(step);
+      set({ onboarding, loading: false });
+      return true;
+    } catch (e: any) {
+      const msg = e?.response?.data?.error?.message || 'Failed to complete step';
+      set({ error: msg, loading: false });
+      return false;
     }
   },
 
   reset: () => {
-    set({ settings: null, onboarding: null, error: undefined });
-    import('../utils/formatDate').then(({ setUserTimezone }) => setUserTimezone(''));
+    set({ settings: null, onboarding: null, loading: false, error: null });
   },
 }));

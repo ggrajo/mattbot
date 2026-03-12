@@ -36,12 +36,6 @@ export const lightTheme: Theme = {
     gradientStart: '#7C3AED',
     gradientEnd: '#A855F7',
     cardGlow: 'rgba(124, 58, 237, 0.08)',
-    inputBackground: '#F8F5FF',
-    inputBorder: '#DDD0F5',
-    badgeBg: '#EDE5FF',
-    badgeText: '#7C3AED',
-    shimmer: '#E8DEFF',
-    cardBorder: 'rgba(124, 58, 237, 0.08)',
   },
   spacing,
   radii,
@@ -49,7 +43,7 @@ export const lightTheme: Theme = {
   iconSize,
   shadows: {
     card: {
-      shadowColor: 'rgba(124, 58, 237, 0.12)',
+      shadowColor: 'rgba(99, 102, 241, 0.10)',
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 1,
       shadowRadius: 12,

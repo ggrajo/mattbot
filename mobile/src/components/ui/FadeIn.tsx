@@ -1,54 +1,61 @@
-import React, { useEffect } from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  withSpring,
-  withDelay,
-  Easing,
-} from 'react-native-reanimated';
+import React, { useEffect, useRef } from 'react';
+import { Animated, ViewStyle } from 'react-native';
 
 interface Props {
   delay?: number;
   duration?: number;
   slide?: 'up' | 'down';
-  scale?: boolean;
-  spring?: boolean;
-  style?: StyleProp<ViewStyle>;
+  style?: ViewStyle;
   children: React.ReactNode;
 }
 
 export function FadeIn({
   delay = 0,
-  duration = 600,
+  duration = 300,
   slide,
-  scale: useScale = false,
-  spring: useSpring = false,
   style,
   children,
 }: Props) {
-  const opacity = useSharedValue(0);
-  const translateY = useSharedValue(slide === 'up' ? 24 : slide === 'down' ? -24 : 0);
-  const scaleVal = useSharedValue(useScale ? 0.85 : 1);
+  const opacity = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(slide === 'down' ? -12 : slide === 'up' ? 12 : 0)).current;
 
   useEffect(() => {
-    const animate = useSpring
-      ? (v: number) => withSpring(v, { damping: 14, stiffness: 90 })
-      : (v: number) => withTiming(v, { duration, easing: Easing.out(Easing.cubic) });
+    const animations = [
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration,
+        delay,
+        useNativeDriver: true,
+      }),
+    ];
 
-    opacity.value = withDelay(delay, animate(1));
-    if (slide) translateY.value = withDelay(delay, animate(0));
-    if (useScale) scaleVal.value = withDelay(delay, animate(1));
-  }, []);
+    if (slide) {
+      animations.push(
+        Animated.timing(translateY, {
+          toValue: 0,
+          duration,
+          delay,
+          useNativeDriver: true,
+        }),
+      );
+    }
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-    transform: [
-      { translateY: translateY.value },
-      { scale: scaleVal.value },
-    ],
-  }));
+    const composite = Animated.parallel(animations);
+    composite.start();
 
-  return <Animated.View style={[animatedStyle, style]}>{children}</Animated.View>;
+    return () => {
+      composite.stop();
+    };
+  }, [delay, duration, opacity, slide, translateY]);
+
+  return (
+    <Animated.View
+      style={[
+        { opacity, transform: [{ translateY }] },
+        style,
+      ]}
+    >
+      {children}
+    </Animated.View>
+  );
 }

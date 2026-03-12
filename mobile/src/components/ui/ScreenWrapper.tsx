@@ -1,37 +1,73 @@
 import React from 'react';
-import { View, ScrollView } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  KeyboardAvoidingView,
+  ScrollView,
+  View,
+  Platform,
+  ViewStyle,
+  ScrollViewProps,
+} from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
 
 interface Props {
   children: React.ReactNode;
-  scrollable?: boolean;
-  padding?: boolean;
+  scroll?: boolean;
+  /** Extra style applied to the content wrapper inside the scroll/view. */
+  contentStyle?: ViewStyle;
+  keyboardAvoiding?: boolean;
+  scrollProps?: ScrollViewProps;
 }
 
-export function ScreenWrapper({ children, scrollable = false, padding = true }: Props) {
+export function ScreenWrapper({
+  children,
+  scroll = true,
+  contentStyle,
+  keyboardAvoiding = true,
+  scrollProps,
+}: Props) {
   const theme = useTheme();
-  const insets = useSafeAreaInsets();
+  const { colors, spacing } = theme;
 
-  const style = {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-    paddingTop: insets.top,
-    paddingBottom: insets.bottom,
-    paddingHorizontal: padding ? theme.spacing.lg : 0,
+  const baseStyle: ViewStyle = {
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.lg,
+    maxWidth: 500,
+    width: '100%',
+    alignSelf: 'center' as const,
   };
 
-  if (scrollable) {
-    return (
-      <ScrollView
-        style={{ flex: 1, backgroundColor: theme.colors.background }}
-        contentContainerStyle={style}
-        showsVerticalScrollIndicator={false}
-      >
+  const body = scroll ? (
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+      {...scrollProps}
+    >
+      <View style={[baseStyle, contentStyle]}>
         {children}
-      </ScrollView>
-    );
-  }
+      </View>
+    </ScrollView>
+  ) : (
+    <View style={[baseStyle, { flex: 1 }, contentStyle]}>
+      {children}
+    </View>
+  );
 
-  return <View style={style}>{children}</View>;
+  const wrapped = keyboardAvoiding ? (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      {body}
+    </KeyboardAvoidingView>
+  ) : (
+    body
+  );
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+      {wrapped}
+    </SafeAreaView>
+  );
 }

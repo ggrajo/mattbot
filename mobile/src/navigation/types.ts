@@ -1,7 +1,16 @@
+export type DrawerParamList = {
+  HomeTab: undefined;
+  SettingsTab: undefined;
+  SubscriptionTab: undefined;
+  CallModesTab: undefined;
+  DevicesTab: undefined;
+  AccountTab: undefined;
+};
+
 export type TabParamList = {
   HomeTab: undefined;
   CallsTab: undefined;
-  CalendarTab: undefined;
+  SettingsTab: undefined;
   AccountTab: undefined;
 };
 
@@ -16,63 +25,30 @@ export type RootStackParamList = {
   RecoveryCodes: undefined;
   MfaVerify: undefined;
   OnboardingPrivacy: undefined;
-  OnboardingProfile: undefined;
   OnboardingSettings: undefined;
-  OnboardingAssistantSetup: undefined;
-  OnboardingCalendarSetup: undefined;
-  OnboardingComplete: undefined;
-  TabRoot: undefined;
-  SubscriptionGate: undefined;
+  DrawerRoot: undefined;
+  Home: undefined;
   DeviceList: undefined;
+  Settings: undefined;
   PrivacySettings: undefined;
   QuietHours: undefined;
   MemorySettings: undefined;
   AccountSettings: undefined;
-  ProfileSettings: undefined;
-  AssistantSettings: undefined;
-  NumberProvision: { onboarding?: boolean } | undefined;
+  NumberProvision: undefined;
   CallModes: { onboarding?: boolean } | undefined;
-  ForwardingSetupGuide: { onboarding?: boolean } | undefined;
+  ForwardingSetupGuide: undefined;
   ForwardingVerify: { onboarding?: boolean } | undefined;
   PlanSelection: { source?: 'onboarding' | 'manage' } | undefined;
-  PaymentMethod: {
-    plan: string;
-    planName?: string;
-    priceUsd?: string;
-    minutesIncluded?: number;
-    description?: string;
-    icon?: string;
-    features?: string[];
-    recommended?: boolean;
-    billingProvider?: string;
-    source?: 'onboarding' | 'manage';
-  };
+  PaymentMethod: { plan: string; source?: 'onboarding' | 'manage' };
   SubscriptionStatus: undefined;
   ManageSubscription: undefined;
+  CallsList: undefined;
   CallDetail: { callId: string };
-  CallerProfile: { phoneHash: string };
-  LiveTranscript: { callId: string };
-  VipList: undefined;
-  BlockList: undefined;
-  RemindersList: undefined;
-  CreateReminder: { callId: string };
-  TextBack: { callId: string; callerId?: string };
-  MemoryList: undefined;
-  BusinessHours: undefined;
-  Temperament: undefined;
-  HandoffSettings: undefined;
   Calendar: undefined;
-  CalendarBookingSettings: undefined;
-  ChangePassword: undefined;
-  PinSetup: undefined;
-  PinLogin: undefined;
-  UrgentNotifications: undefined;
-  PaymentMethodsList: undefined;
-  ContactsList: undefined;
-  ContactDetail: { contactId: string };
   AddContact: undefined;
   CategoryDefaults: undefined;
-  SettingsHub: undefined;
+  HandoffSettings: undefined;
+  PaymentMethodsList: undefined;
 };
 
 declare global {

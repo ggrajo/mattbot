@@ -1,14 +1,16 @@
 import React from 'react';
-import { Pressable } from 'react-native';
+import { TouchableOpacity, ViewStyle } from 'react-native';
 import { Icon } from './Icon';
 import { useTheme } from '../../theme/ThemeProvider';
 
 interface Props {
   icon: string;
   onPress: () => void;
-  size?: number | 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   color?: string;
-  accessibilityLabel?: string;
+  disabled?: boolean;
+  accessibilityLabel: string;
+  style?: ViewStyle;
 }
 
 export function IconButton({
@@ -16,25 +18,24 @@ export function IconButton({
   onPress,
   size = 'lg',
   color,
+  disabled = false,
   accessibilityLabel,
+  style,
 }: Props) {
   const theme = useTheme();
-  const iconColor = color ?? theme.colors.textPrimary;
 
   return (
-    <Pressable
+    <TouchableOpacity
       onPress={onPress}
-      hitSlop={12}
+      disabled={disabled}
+      activeOpacity={0.7}
+      hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
-      style={({ pressed }) => ({
-        opacity: pressed ? 0.7 : 1,
-        padding: 8,
-        alignItems: 'center',
-        justifyContent: 'center',
-      })}
+      accessibilityState={{ disabled }}
+      style={[{ opacity: disabled ? 0.4 : 1, padding: theme.spacing.xs }, style]}
     >
-      <Icon name={icon} size={size} color={iconColor} />
-    </Pressable>
+      <Icon name={icon} size={size} color={color} />
+    </TouchableOpacity>
   );
 }

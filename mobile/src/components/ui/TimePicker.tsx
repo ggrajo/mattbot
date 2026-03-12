@@ -1,173 +1,169 @@
-import React, { useMemo, useRef, useCallback } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  Modal,
-  Dimensions,
-} from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, Modal, TouchableOpacity, FlatList, Pressable } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
+import { Button } from './Button';
 
-interface TimePickerProps {
+interface Props {
   visible: boolean;
   value: string;
-  onConfirm: (time: string) => void;
-  onCancel: () => void;
-  title?: string;
+  onChange: (time: string) => void;
+  onDismiss: () => void;
+  label?: string;
 }
 
-function generateTimeSlots(): string[] {
-  const slots: string[] = [];
+function generateTimeSlots(): { label: string; value: string }[] {
+  const slots: { label: string; value: string }[] = [];
   for (let h = 0; h < 24; h++) {
-    for (let m = 0; m < 60; m += 30) {
-      const hh = String(h).padStart(2, '0');
-      const mm = String(m).padStart(2, '0');
-      slots.push(`${hh}:${mm}`);
+    for (const m of [0, 30]) {
+      const hh = h.toString().padStart(2, '0');
+      const mm = m.toString().padStart(2, '0');
+      const value = `${hh}:${mm}`;
+      const period = h < 12 ? 'AM' : 'PM';
+      const displayH = h === 0 ? 12 : h > 12 ? h - 12 : h;
+      const label = `${displayH}:${mm} ${period}`;
+      slots.push({ label, value });
     }
   }
   return slots;
 }
 
-function formatDisplayTime(time: string): string {
-  const [h, m] = time.split(':').map(Number);
-  const period = h >= 12 ? 'PM' : 'AM';
-  const displayHour = h === 0 ? 12 : h > 12 ? h - 12 : h;
-  return `${displayHour}:${String(m).padStart(2, '0')} ${period}`;
-}
+const TIME_SLOTS = generateTimeSlots();
 
-export function TimePicker({
-  visible,
-  value,
-  onConfirm,
-  onCancel,
-  title = 'Select Time',
-}: TimePickerProps) {
-  const { colors, spacing, typography, radii } = useTheme();
+export function TimePicker({ visible, value, onChange, onDismiss, label }: Props) {
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
+  const [selected, setSelected] = useState(value);
   const listRef = useRef<FlatList>(null);
-  const slots = useMemo(() => generateTimeSlots(), []);
-  const [selected, setSelected] = React.useState(value);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (visible) {
       setSelected(value);
-      const idx = slots.indexOf(value);
-      if (idx >= 0 && listRef.current) {
+      const index = TIME_SLOTS.findIndex((s) => s.value === value);
+      if (index >= 0 && listRef.current) {
         setTimeout(() => {
-          listRef.current?.scrollToIndex({ index: idx, animated: false, viewPosition: 0.4 });
+          listRef.current?.scrollToIndex({ index: Math.max(0, index - 3), animated: false });
         }, 100);
       }
     }
-  }, [visible, value, slots]);
+  }, [visible, value]);
 
-  const renderItem = useCallback(
-    ({ item }: { item: string }) => {
-      const isSelected = item === selected;
-      return (
-        <TouchableOpacity
-          onPress={() => setSelected(item)}
-          activeOpacity={0.7}
-          style={{
-            paddingVertical: spacing.md,
-            paddingHorizontal: spacing.xl,
-            backgroundColor: isSelected ? colors.primary + '14' : 'transparent',
-            borderRadius: radii.md,
-            marginHorizontal: spacing.md,
-            marginVertical: 2,
-          }}
-        >
-          <Text
-            style={{
-              ...typography.body,
-              color: isSelected ? colors.primary : colors.textPrimary,
-              fontWeight: isSelected ? '600' : '400',
-              textAlign: 'center',
-            }}
-          >
-            {formatDisplayTime(item)}
-          </Text>
-        </TouchableOpacity>
-      );
-    },
-    [selected, colors, spacing, typography, radii],
-  );
-
-  const screenHeight = Dimensions.get('window').height;
+  function handleConfirm() {
+    onChange(selected);
+    onDismiss();
+  }
 
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onCancel}>
-      <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.4)' }}>
-        <View
+    <Modal
+      visible={visible}
+      transparent
+      animationType="slide"
+      onRequestClose={onDismiss}
+    >
+      <Pressable
+        style={{ flex: 1, backgroundColor: colors.overlay, justifyContent: 'flex-end' }}
+        onPress={onDismiss}
+      >
+        <Pressable
           style={{
-            backgroundColor: colors.background,
+            backgroundColor: colors.surface,
             borderTopLeftRadius: radii.xl,
             borderTopRightRadius: radii.xl,
-            maxHeight: screenHeight * 0.6,
-            paddingBottom: spacing.xl,
+            maxHeight: '60%',
           }}
+          onPress={() => {}}
         >
+          {/* Header */}
           <View
             style={{
-              paddingVertical: spacing.lg,
               paddingHorizontal: spacing.xl,
+              paddingTop: spacing.xl,
+              paddingBottom: spacing.md,
               borderBottomWidth: 1,
               borderBottomColor: colors.border,
-              alignItems: 'center',
             }}
           >
-            <Text style={{ ...typography.h3, color: colors.textPrimary }}>{title}</Text>
+            <Text
+              style={{ ...typography.h3, color: colors.textPrimary, textAlign: 'center' }}
+              allowFontScaling
+            >
+              {label || 'Select Time'}
+            </Text>
           </View>
 
+          {/* Time list */}
           <FlatList
             ref={listRef}
-            data={slots}
-            keyExtractor={(item) => item}
-            renderItem={renderItem}
+            data={TIME_SLOTS}
+            keyExtractor={(item) => item.value}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingVertical: spacing.sm }}
             getItemLayout={(_, index) => ({
-              length: 48,
-              offset: 48 * index,
+              length: 52,
+              offset: 52 * index,
               index,
             })}
-            style={{ maxHeight: screenHeight * 0.35 }}
-            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => {
+              const isActive = selected === item.value;
+              return (
+                <TouchableOpacity
+                  onPress={() => setSelected(item.value)}
+                  activeOpacity={0.7}
+                  style={{
+                    height: 52,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginHorizontal: spacing.lg,
+                    borderRadius: radii.md,
+                    backgroundColor: isActive ? colors.primary + '14' : 'transparent',
+                  }}
+                  accessibilityRole="radio"
+                  accessibilityState={{ selected: isActive }}
+                >
+                  <Text
+                    style={{
+                      ...typography.body,
+                      color: isActive ? colors.primary : colors.textPrimary,
+                      fontWeight: isActive ? '600' : '400',
+                      fontSize: 18,
+                    }}
+                    allowFontScaling
+                  >
+                    {item.label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            }}
           />
 
+          {/* Actions */}
           <View
             style={{
               flexDirection: 'row',
               gap: spacing.md,
               paddingHorizontal: spacing.xl,
-              paddingTop: spacing.lg,
+              paddingVertical: spacing.lg,
+              borderTopWidth: 1,
+              borderTopColor: colors.border,
             }}
           >
-            <TouchableOpacity
-              onPress={onCancel}
-              style={{
-                flex: 1,
-                paddingVertical: spacing.md,
-                borderRadius: radii.md,
-                borderWidth: 1,
-                borderColor: colors.border,
-                alignItems: 'center',
-              }}
-            >
-              <Text style={{ ...typography.body, color: colors.textSecondary }}>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => onConfirm(selected)}
-              style={{
-                flex: 1,
-                paddingVertical: spacing.md,
-                borderRadius: radii.md,
-                backgroundColor: colors.primary,
-                alignItems: 'center',
-              }}
-            >
-              <Text style={{ ...typography.body, color: '#fff', fontWeight: '600' }}>Confirm</Text>
-            </TouchableOpacity>
+            <View style={{ flex: 1 }}>
+              <Button title="Cancel" onPress={onDismiss} variant="ghost" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Button title="Confirm" onPress={handleConfirm} />
+            </View>
           </View>
-        </View>
-      </View>
+        </Pressable>
+      </Pressable>
     </Modal>
   );
+}
+
+export function formatTime12h(time24: string): string {
+  const [hStr, mStr] = time24.split(':');
+  const h = parseInt(hStr, 10);
+  const period = h < 12 ? 'AM' : 'PM';
+  const displayH = h === 0 ? 12 : h > 12 ? h - 12 : h;
+  return `${displayH}:${mStr} ${period}`;
 }

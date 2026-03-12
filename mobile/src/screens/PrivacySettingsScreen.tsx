@@ -1,306 +1,200 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, ScrollView, Switch, Pressable, ActivityIndicator } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-import { useTheme } from '../theme/ThemeProvider';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Switch, ActivityIndicator } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ScreenWrapper } from '../components/ui/ScreenWrapper';
+import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
-import { apiClient, extractApiError } from '../api/client';
+import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { Toast } from '../components/ui/Toast';
+import { Divider } from '../components/ui/Divider';
+import { useTheme } from '../theme/ThemeProvider';
+import { useSettingsStore } from '../store/settingsStore';
+import { useBiometric } from '../hooks/useBiometric';
+import { RootStackParamList } from '../navigation/types';
 
-const PRIVACY_MODES = [
-  { value: 'preview', label: 'Preview', desc: 'Show caller details in notifications' },
-  { value: 'private', label: 'Private', desc: 'Hide caller details in notifications' },
-];
+type Props = NativeStackScreenProps<RootStackParamList, 'PrivacySettings'>;
 
-const TRANSCRIPT_MODES = [
-  { value: 'ai_says_it', label: 'AI Discloses', desc: 'Assistant tells caller about recording' },
-  { value: 'silent', label: 'Silent', desc: 'No disclosure announcement' },
-  { value: 'beep', label: 'Beep', desc: 'Play a beep to indicate recording' },
-];
-
-const BIOMETRIC_POLICIES = [
-  { value: 'gate_call_details', label: 'Protect Call Details', desc: 'Require biometric to view calls' },
-  { value: 'gate_all', label: 'Protect Everything', desc: 'Require biometric for all access' },
-  { value: 'off', label: 'Off', desc: 'No biometric protection' },
-];
-
-const RETENTION_OPTIONS = [
-  { value: 7, label: '7 days' },
-  { value: 30, label: '30 days' },
-  { value: 90, label: '90 days' },
-];
-
-interface PrivacySettings {
-  notification_privacy_mode: string;
-  recording_enabled: boolean;
-  recording_announcement_required: boolean;
-  biometric_unlock_enabled: boolean;
-  biometric_policy: string;
-  transcript_disclosure_mode: string;
-  data_retention_days: number;
-  revision: number;
-}
-
-const DEFAULTS: PrivacySettings = {
-  notification_privacy_mode: 'preview',
-  recording_enabled: false,
-  recording_announcement_required: true,
-  biometric_unlock_enabled: false,
-  biometric_policy: 'gate_call_details',
-  transcript_disclosure_mode: 'ai_says_it',
-  data_retention_days: 30,
-  revision: 1,
-};
-
-function ToggleRow({ icon, label, subtitle, value, onValueChange, colors, spacing }: any) {
-  return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.md, paddingHorizontal: spacing.lg }}>
-      <Icon name={icon} size="md" color={colors.textSecondary} />
-      <View style={{ flex: 1, marginLeft: spacing.md }}>
-        <Text style={{ fontSize: 16, color: colors.textPrimary }}>{label}</Text>
-        {subtitle && <Text style={{ fontSize: 12, color: colors.textSecondary }}>{subtitle}</Text>}
-      </View>
-      <Switch value={value} onValueChange={onValueChange} trackColor={{ false: colors.border, true: colors.primary }} />
-    </View>
-  );
-}
-
-export function PrivacySettingsScreen() {
+export function PrivacySettingsScreen({}: Props) {
   const theme = useTheme();
-  const { colors, spacing, typography, radii } = theme;
-  const [settings, setSettings] = useState<PrivacySettings>(DEFAULTS);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const { colors, spacing, typography } = theme;
+  const { settings, loading, error, loadSettings, updateSettings } = useSettingsStore();
+  const { available: biometricAvailable, biometryType, loading: biometricLoading } = useBiometric();
+  const [toast, setToast] = useState('');
+  const [toastType, setToastType] = useState<'success' | 'error'>('success');
 
-  useFocusEffect(
-    useCallback(() => {
-      let active = true;
-      setLoading(true);
-      setError('');
-      apiClient
-        .get('/settings')
-        .then((res) => {
-          if (!active) return;
-          const d = res.data;
-          setSettings({
-            notification_privacy_mode: d.notification_privacy_mode ?? DEFAULTS.notification_privacy_mode,
-            recording_enabled: d.recording_enabled ?? DEFAULTS.recording_enabled,
-            recording_announcement_required: d.recording_announcement_required ?? DEFAULTS.recording_announcement_required,
-            biometric_unlock_enabled: d.biometric_unlock_enabled ?? DEFAULTS.biometric_unlock_enabled,
-            biometric_policy: d.biometric_policy ?? DEFAULTS.biometric_policy,
-            transcript_disclosure_mode: d.transcript_disclosure_mode ?? DEFAULTS.transcript_disclosure_mode,
-            data_retention_days: d.data_retention_days ?? DEFAULTS.data_retention_days,
-            revision: d.revision ?? 1,
-          });
-        })
-        .catch((err) => {
-          if (active) setError(extractApiError(err));
-        })
-        .finally(() => {
-          if (active) setLoading(false);
-        });
-      return () => { active = false; };
-    }, []),
-  );
+  useEffect(() => {
+    loadSettings();
+  }, []);
 
-  async function save(changes: Partial<Omit<PrivacySettings, 'revision'>>) {
-    try {
-      const res = await apiClient.patch('/settings', {
-        expected_revision: settings.revision,
-        changes,
-      });
-      if (res.data?.revision) {
-        setSettings((prev) => ({ ...prev, revision: res.data.revision }));
-      }
-    } catch (err) {
-      setError(extractApiError(err));
+  async function handleToggle(key: string, value: boolean | string) {
+    const ok = await updateSettings({ [key]: value });
+    if (ok) {
+      setToastType('success');
+      setToast('Settings saved');
+    } else {
+      setToastType('error');
+      setToast(useSettingsStore.getState().error ?? 'Failed to save setting.');
     }
   }
 
-  function handleToggle(key: 'recording_enabled' | 'recording_announcement_required' | 'biometric_unlock_enabled') {
-    const next = !settings[key];
-    setSettings((prev) => ({ ...prev, [key]: next }));
-    save({ [key]: next }).catch(() => {
-      setSettings((prev) => ({ ...prev, [key]: !next }));
-    });
-  }
-
-  function handlePickerChange(key: string, value: string | number) {
-    setSettings((prev: any) => ({ ...prev, [key]: value }));
-    save({ [key]: value });
-  }
-
-  if (loading) {
+  if (!settings && loading) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
+      <ScreenWrapper scroll={false}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      </ScreenWrapper>
+    );
+  }
+
+  if (!settings && error) {
+    return (
+      <ScreenWrapper scroll={false}>
+        <View style={{ flex: 1, justifyContent: 'center', padding: spacing.xl }}>
+          <ErrorMessage message={error} action="Retry" onAction={loadSettings} />
+        </View>
+      </ScreenWrapper>
     );
   }
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: colors.background }} contentContainerStyle={{ paddingBottom: spacing.xxl }}>
-      {error ? (
-        <View style={{ padding: spacing.lg }}>
-          <Text style={{ fontSize: 14, color: colors.error }}>{error}</Text>
+    <ScreenWrapper>
+      <Toast message={toast} type={toastType} visible={!!toast} onDismiss={() => setToast('')} />
+
+      {error && <ErrorMessage message={error} action="Retry" onAction={loadSettings} />}
+
+      {/* Notification Privacy Mode */}
+      <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
+        <View style={{ gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Icon name="bell-outline" size="md" color={colors.primary} />
+            <Text style={{ ...typography.h3, color: colors.textPrimary, flex: 1 }} allowFontScaling>
+              Notification Privacy
+            </Text>
+          </View>
+          <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
+            Choose how much detail appears in your push notifications.
+          </Text>
+
+          <Divider />
+
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ flex: 1 }}>
+              <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500' }} allowFontScaling>
+                Private
+              </Text>
+              <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+                Shows "New activity" only
+              </Text>
+            </View>
+            <Switch
+              value={settings?.notification_privacy_mode === 'private'}
+              onValueChange={() => handleToggle('notification_privacy_mode', 'private')}
+              trackColor={{ false: colors.border, true: colors.primary }}
+              accessibilityLabel="Private mode"
+              accessibilityRole="radio"
+              accessibilityState={{ checked: settings?.notification_privacy_mode === 'private' }}
+            />
+          </View>
+
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ flex: 1 }}>
+              <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500' }} allowFontScaling>
+                Preview
+              </Text>
+              <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+                Shows limited preview text
+              </Text>
+            </View>
+            <Switch
+              value={settings?.notification_privacy_mode === 'preview'}
+              onValueChange={() => handleToggle('notification_privacy_mode', 'preview')}
+              trackColor={{ false: colors.border, true: colors.primary }}
+              accessibilityLabel="Preview mode"
+              accessibilityRole="radio"
+              accessibilityState={{ checked: settings?.notification_privacy_mode === 'preview' }}
+            />
+          </View>
         </View>
-      ) : null}
+      </Card>
 
-      {/* Recording & Transcripts */}
-      <View style={{ marginTop: spacing.lg, marginHorizontal: spacing.lg, backgroundColor: colors.surface, borderRadius: radii.md, overflow: 'hidden' }}>
-        <ToggleRow
-          icon="record-circle-outline"
-          label="Record Calls"
-          subtitle="Automatically record incoming calls"
-          value={settings.recording_enabled}
-          onValueChange={() => handleToggle('recording_enabled')}
-          colors={colors}
-          spacing={spacing}
-        />
-        <View style={{ height: 1, backgroundColor: colors.border, marginLeft: spacing.lg + 20 + spacing.md }} />
-        <ToggleRow
-          icon="bullhorn-outline"
-          label="Recording Announcement"
-          subtitle="Announce to callers that the call is being recorded"
-          value={settings.recording_announcement_required}
-          onValueChange={() => handleToggle('recording_announcement_required')}
-          colors={colors}
-          spacing={spacing}
-        />
-      </View>
-
-      {/* Notification Privacy */}
-      <View style={{ marginTop: spacing.lg, marginHorizontal: spacing.lg, backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder, borderRadius: radii.md, padding: spacing.lg, borderWidth: 1 }}>
-        <Text style={{ fontSize: 17, fontWeight: '700', color: colors.textPrimary, marginBottom: spacing.xs }}>Notification Privacy</Text>
-        <Text style={{ fontSize: 12, color: colors.textSecondary, marginBottom: spacing.md }}>Control what caller info appears in notifications</Text>
-        {PRIVACY_MODES.map((opt) => {
-          const selected = settings.notification_privacy_mode === opt.value;
-          return (
-            <Pressable
-              key={opt.value}
-              onPress={() => handlePickerChange('notification_privacy_mode', opt.value)}
+      {/* Biometric Unlock */}
+      <Card variant="elevated" style={{ marginBottom: spacing.lg, opacity: biometricAvailable ? 1 : 0.5 }}>
+        <View style={{ gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Icon
+              name={biometryType === 'FaceID' ? 'face-recognition' : 'fingerprint'}
+              size="md"
+              color={biometricAvailable ? colors.primary : colors.textDisabled}
+            />
+            <Text style={{ ...typography.h3, color: colors.textPrimary, flex: 1 }} allowFontScaling>
+              {biometryType === 'FaceID' ? 'Face ID' : biometryType === 'TouchID' ? 'Touch ID' : 'Biometric Unlock'}
+            </Text>
+          </View>
+          {biometricAvailable ? (
+            <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
+              Require {biometryType === 'FaceID' ? 'Face ID' : biometryType === 'TouchID' ? 'Touch ID' : 'biometric'} authentication to view sensitive content like transcripts and recordings.
+            </Text>
+          ) : (
+            <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
+              {biometricLoading
+                ? 'Checking biometric availability...'
+                : 'Biometric authentication is not available on this device. To use this feature, set up biometrics in your device settings.'}
+            </Text>
+          )}
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                padding: spacing.md,
-                borderRadius: radii.md,
-                backgroundColor: selected ? colors.primary + '12' : 'transparent',
-                marginBottom: 4,
+                ...typography.body,
+                color: biometricAvailable ? colors.textPrimary : colors.textDisabled,
               }}
+              allowFontScaling
             >
-              <View style={{ width: 22, height: 22, borderRadius: 11, borderWidth: 2, borderColor: selected ? colors.primary : colors.border, alignItems: 'center', justifyContent: 'center', marginRight: spacing.md }}>
-                {selected && <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: colors.primary }} />}
-              </View>
-              <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: 15, fontWeight: '600', color: selected ? colors.primary : colors.textPrimary }}>{opt.label}</Text>
-                <Text style={{ fontSize: 12, color: colors.textSecondary }}>{opt.desc}</Text>
-              </View>
-            </Pressable>
-          );
-        })}
-      </View>
-
-      {/* Transcript Disclosure */}
-      <View style={{ marginTop: spacing.lg, marginHorizontal: spacing.lg, backgroundColor: colors.surface, borderRadius: radii.md, padding: spacing.lg }}>
-        <Text style={{ fontSize: 17, fontWeight: '700', color: colors.textPrimary, marginBottom: spacing.xs }}>Transcript Disclosure</Text>
-        <Text style={{ fontSize: 12, color: colors.textSecondary, marginBottom: spacing.md }}>How callers are informed about transcription</Text>
-        {TRANSCRIPT_MODES.map((opt) => {
-          const selected = settings.transcript_disclosure_mode === opt.value;
-          return (
-            <Pressable
-              key={opt.value}
-              onPress={() => handlePickerChange('transcript_disclosure_mode', opt.value)}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                padding: spacing.md,
-                borderRadius: radii.md,
-                backgroundColor: selected ? colors.primary + '12' : 'transparent',
-                marginBottom: 4,
+              Enable biometric lock
+            </Text>
+            <Switch
+              value={biometricAvailable ? (settings?.biometric_unlock_enabled ?? false) : false}
+              onValueChange={v => handleToggle('biometric_unlock_enabled', v)}
+              disabled={!biometricAvailable}
+              trackColor={{ false: colors.border, true: colors.primary }}
+              accessibilityLabel="Enable biometric unlock"
+              accessibilityRole="switch"
+              accessibilityState={{
+                checked: biometricAvailable ? (settings?.biometric_unlock_enabled ?? false) : false,
+                disabled: !biometricAvailable,
               }}
-            >
-              <View style={{ width: 22, height: 22, borderRadius: 11, borderWidth: 2, borderColor: selected ? colors.primary : colors.border, alignItems: 'center', justifyContent: 'center', marginRight: spacing.md }}>
-                {selected && <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: colors.primary }} />}
-              </View>
-              <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: 15, fontWeight: '600', color: selected ? colors.primary : colors.textPrimary }}>{opt.label}</Text>
-                <Text style={{ fontSize: 12, color: colors.textSecondary }}>{opt.desc}</Text>
-              </View>
-            </Pressable>
-          );
-        })}
-      </View>
-
-      {/* Biometric Security */}
-      <View style={{ marginTop: spacing.lg, marginHorizontal: spacing.lg, backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder, borderRadius: radii.md, overflow: 'hidden', borderWidth: 1 }}>
-        <ToggleRow
-          icon="fingerprint"
-          label="Biometric Unlock"
-          subtitle="Require fingerprint or face to access the app"
-          value={settings.biometric_unlock_enabled}
-          onValueChange={() => handleToggle('biometric_unlock_enabled')}
-          colors={colors}
-          spacing={spacing}
-        />
-      </View>
-
-      {settings.biometric_unlock_enabled && (
-        <View style={{ marginTop: spacing.md, marginHorizontal: spacing.lg, backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder, borderRadius: radii.md, padding: spacing.lg, borderWidth: 1 }}>
-          <Text style={{ fontSize: 15, fontWeight: '600', color: colors.textPrimary, marginBottom: spacing.sm }}>Biometric Policy</Text>
-          {BIOMETRIC_POLICIES.map((opt) => {
-            const selected = settings.biometric_policy === opt.value;
-            return (
-              <Pressable
-                key={opt.value}
-                onPress={() => handlePickerChange('biometric_policy', opt.value)}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  padding: spacing.md,
-                  borderRadius: radii.md,
-                  backgroundColor: selected ? colors.primary + '12' : 'transparent',
-                  marginBottom: 4,
-                }}
-              >
-                <View style={{ width: 22, height: 22, borderRadius: 11, borderWidth: 2, borderColor: selected ? colors.primary : colors.border, alignItems: 'center', justifyContent: 'center', marginRight: spacing.md }}>
-                  {selected && <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: colors.primary }} />}
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: 15, fontWeight: '600', color: selected ? colors.primary : colors.textPrimary }}>{opt.label}</Text>
-                  <Text style={{ fontSize: 12, color: colors.textSecondary }}>{opt.desc}</Text>
-                </View>
-              </Pressable>
-            );
-          })}
+            />
+          </View>
         </View>
-      )}
+      </Card>
 
-      {/* Data Retention */}
-      <View style={{ marginTop: spacing.lg, marginHorizontal: spacing.lg, backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder, borderRadius: radii.md, padding: spacing.lg, borderWidth: 1 }}>
-        <Text style={{ fontSize: 17, fontWeight: '700', color: colors.textPrimary, marginBottom: spacing.xs }}>Data Retention</Text>
-        <Text style={{ fontSize: 12, color: colors.textSecondary, marginBottom: spacing.md }}>How long call data is kept before automatic deletion</Text>
-        <View style={{ flexDirection: 'row' }}>
-          {RETENTION_OPTIONS.map((opt, idx) => {
-            const selected = settings.data_retention_days === opt.value;
-            return (
-              <Pressable
-                key={opt.value}
-                onPress={() => handlePickerChange('data_retention_days', opt.value)}
-                style={{
-                  flex: 1,
-                  paddingVertical: spacing.md,
-                  borderRadius: radii.md,
-                  backgroundColor: selected ? colors.primary : colors.background,
-                  borderWidth: 1,
-                  borderColor: selected ? colors.primary : colors.border,
-                  alignItems: 'center',
-                  marginRight: idx < RETENTION_OPTIONS.length - 1 ? 8 : 0,
-                }}
-              >
-                <Text style={{ fontSize: 14, fontWeight: '600', color: selected ? '#FFFFFF' : colors.textPrimary }}>{opt.label}</Text>
-              </Pressable>
-            );
-          })}
+      {/* Recording */}
+      <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
+        <View style={{ gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Icon name="microphone-outline" size="md" color={colors.warning} />
+            <Text style={{ ...typography.h3, color: colors.textPrimary, flex: 1 }} allowFontScaling>
+              Call Recording
+            </Text>
+          </View>
+          <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
+            When enabled, MattBot will record screened calls. Recordings are encrypted and subject to your data retention policy.
+          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text style={{ ...typography.body, color: colors.textPrimary }} allowFontScaling>
+              Enable recording
+            </Text>
+            <Switch
+              value={settings?.recording_enabled ?? false}
+              onValueChange={v => handleToggle('recording_enabled', v)}
+              trackColor={{ false: colors.border, true: colors.primary }}
+              accessibilityLabel="Enable call recording"
+              accessibilityRole="switch"
+              accessibilityState={{ checked: settings?.recording_enabled ?? false }}
+            />
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </Card>
+    </ScreenWrapper>
   );
 }

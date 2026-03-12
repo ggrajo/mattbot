@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import { View, Pressable, Text, StyleSheet, Platform } from 'react-native';
+import React from 'react';
+import { View, Text, Pressable, Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, {
@@ -7,187 +7,203 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated';
-import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from '../components/ui/Icon';
-import { hapticLight } from '../utils/haptics';
+import { useTheme } from '../theme/ThemeProvider';
+import { TabParamList } from './types';
+
 import { HomeScreen } from '../screens/HomeScreen';
 import { CallsListScreen } from '../screens/CallsListScreen';
-import { CalendarScreen } from '../screens/CalendarScreen';
-import { AccountHubScreen } from '../screens/AccountHubScreen';
-import { TabParamList } from './types';
+import { SettingsScreen } from '../screens/SettingsScreen';
+import { AccountSettingsScreen } from '../screens/AccountSettingsScreen';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
-const TABS: {
+const TAB_CONFIG: {
   name: keyof TabParamList;
   label: string;
-  iconActive: string;
-  iconInactive: string;
+  iconOutline: string;
+  iconFilled: string;
 }[] = [
-  { name: 'HomeTab', label: 'Home', iconActive: 'home', iconInactive: 'home-outline' },
-  { name: 'CallsTab', label: 'Calls', iconActive: 'phone', iconInactive: 'phone-outline' },
-  { name: 'CalendarTab', label: 'Calendar', iconActive: 'calendar', iconInactive: 'calendar-outline' },
-  { name: 'AccountTab', label: 'Account', iconActive: 'account', iconInactive: 'account-outline' },
+  { name: 'HomeTab', label: 'Home', iconOutline: 'home-outline', iconFilled: 'home' },
+  { name: 'CallsTab', label: 'Calls', iconOutline: 'phone-outline', iconFilled: 'phone' },
+  { name: 'SettingsTab', label: 'Settings', iconOutline: 'cog-outline', iconFilled: 'cog' },
+  { name: 'AccountTab', label: 'Profile', iconOutline: 'account-outline', iconFilled: 'account' },
 ];
 
-function TabBarButton({
-  tab,
-  focused,
-  onPress,
-}: {
-  tab: (typeof TABS)[number];
-  focused: boolean;
-  onPress: () => void;
-}) {
-  const { colors, spacing, typography, radii } = useTheme();
-  const scale = useSharedValue(1);
-
-  const animStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
-  const handlePressIn = useCallback(() => {
-    scale.value = withSpring(0.88, { damping: 15, stiffness: 400 });
-  }, []);
-
-  const handlePressOut = useCallback(() => {
-    scale.value = withSpring(1, { damping: 15, stiffness: 400 });
-  }, []);
-
-  const handlePress = useCallback(() => {
-    hapticLight();
-    onPress();
-  }, [onPress]);
-
-  return (
-    <Pressable
-      onPress={handlePress}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      style={styles.tabButton}
-      accessibilityRole="tab"
-      accessibilityState={{ selected: focused }}
-      accessibilityLabel={tab.label}
-    >
-      <Animated.View
-        style={[
-          styles.tabContent,
-          {
-            backgroundColor: focused
-              ? colors.primary + '1A'
-              : 'transparent',
-            borderRadius: radii.lg,
-            paddingHorizontal: spacing.md,
-            paddingVertical: spacing.xs + 2,
-          },
-          animStyle,
-        ]}
-      >
-        <Icon
-          name={focused ? tab.iconActive : tab.iconInactive}
-          size={22}
-          color={focused ? colors.primary : colors.textSecondary}
-        />
-        <Text
-          style={{
-            ...typography.caption,
-            fontWeight: focused ? '600' : '400',
-            color: focused ? colors.primary : colors.textSecondary,
-            marginTop: 1,
-          }}
-          numberOfLines={1}
-        >
-          {tab.label}
-        </Text>
-      </Animated.View>
-    </Pressable>
-  );
-}
-
-function FloatingTabBar({ state, navigation }: any) {
-  const theme = useTheme();
-  const { colors, radii, shadows } = theme;
-  const insets = useSafeAreaInsets();
-
-  const barStyle = theme.dark
-    ? {
-        backgroundColor: 'rgba(15,8,32,0.85)',
-        borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.08)',
-      }
-    : {
-        backgroundColor: 'rgba(255,255,255,0.95)',
-        borderWidth: 1,
-        borderColor: 'rgba(124,58,237,0.06)',
-        ...Platform.select({
-          ios: { shadowColor: '#7C3AED', shadowOffset: { width: 0, height: -4 }, shadowOpacity: 0.08, shadowRadius: 20 },
-          android: { elevation: 8 },
-        }),
-      };
-
-  return (
-    <View
-      style={[
-        styles.floatingBar,
-        {
-          bottom: Math.max(insets.bottom, 8) + 4,
-          borderRadius: radii.xxl,
-          ...barStyle,
-        },
-      ]}
-    >
-      {TABS.map((tab, idx) => (
-        <TabBarButton
-          key={tab.name}
-          tab={tab}
-          focused={state.index === idx}
-          onPress={() => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: state.routes[idx].key,
-              canPreventDefault: true,
-            });
-            if (!event.defaultPrevented && state.index !== idx) {
-              navigation.navigate(state.routes[idx].name);
-            }
-          }}
-        />
-      ))}
-    </View>
-  );
-}
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export function TabNavigator() {
+  const theme = useTheme();
+
   return (
     <Tab.Navigator
-      tabBar={(props) => <FloatingTabBar {...props} />}
-      screenOptions={{ headerShown: false }}
+      tabBar={(props) => <CustomTabBar {...props} />}
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: theme.colors.surface,
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: theme.colors.textPrimary,
+        headerTitleStyle: {
+          ...theme.typography.h3,
+          color: theme.colors.textPrimary,
+        },
+        sceneContainerStyle: {
+          backgroundColor: theme.colors.background,
+        },
+      }}
     >
-      <Tab.Screen name="HomeTab" component={HomeScreen} />
-      <Tab.Screen name="CallsTab" component={CallsListScreen} />
-      <Tab.Screen name="CalendarTab" component={CalendarScreen} />
-      <Tab.Screen name="AccountTab" component={AccountHubScreen} />
+      <Tab.Screen
+        name="HomeTab"
+        component={HomeScreen}
+        options={{ headerShown: false, title: 'MattBot' }}
+      />
+      <Tab.Screen
+        name="CallsTab"
+        component={CallsListScreen}
+        options={{ title: 'Calls' }}
+      />
+      <Tab.Screen
+        name="SettingsTab"
+        component={SettingsScreen}
+        options={{ title: 'Settings' }}
+      />
+      <Tab.Screen
+        name="AccountTab"
+        component={AccountSettingsScreen}
+        options={{ title: 'Account' }}
+      />
     </Tab.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  floatingBar: {
-    position: 'absolute',
-    left: 16,
-    right: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 6,
-    paddingHorizontal: 8,
-  },
-  tabButton: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  tabContent: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+function TabBarItem({
+  tab,
+  isFocused,
+  onPress,
+}: {
+  tab: typeof TAB_CONFIG[number];
+  isFocused: boolean;
+  onPress: () => void;
+}) {
+  const theme = useTheme();
+  const { colors } = theme;
+  const scale = useSharedValue(1);
+
+  const iconName = isFocused ? tab.iconFilled : tab.iconOutline;
+  const color = isFocused ? colors.primary : colors.textSecondary;
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  return (
+    <AnimatedPressable
+      onPressIn={() => {
+        scale.value = withSpring(0.9, { damping: 15, stiffness: 400 });
+      }}
+      onPressOut={() => {
+        scale.value = withSpring(1, { damping: 15, stiffness: 400 });
+      }}
+      onPress={onPress}
+      accessibilityRole="tab"
+      accessibilityState={{ selected: isFocused }}
+      accessibilityLabel={tab.label}
+      style={[
+        {
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingVertical: 6,
+        },
+        animatedStyle,
+      ]}
+    >
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingHorizontal: 16,
+          paddingVertical: 6,
+          borderRadius: 16,
+          backgroundColor: isFocused ? colors.primary + '14' : 'transparent',
+        }}
+      >
+        <Icon name={iconName} size={22} color={color} />
+      </View>
+      <Text
+        style={{
+          fontSize: 10,
+          fontWeight: isFocused ? '700' : '500',
+          color,
+          marginTop: 2,
+          letterSpacing: 0.3,
+        }}
+        allowFontScaling
+      >
+        {tab.label}
+      </Text>
+    </AnimatedPressable>
+  );
+}
+
+function CustomTabBar({ state, navigation }: any) {
+  const theme = useTheme();
+  const { colors, radii } = theme;
+  const insets = useSafeAreaInsets();
+
+  return (
+    <View
+      style={{
+        marginHorizontal: 16,
+        marginBottom: Platform.OS === 'ios' ? insets.bottom : 12,
+        borderRadius: radii.xxl,
+        backgroundColor: colors.tabBar,
+        flexDirection: 'row',
+        paddingTop: 6,
+        paddingBottom: 6,
+        ...(theme.dark
+          ? {
+              borderWidth: 1,
+              borderColor: 'rgba(255,255,255,0.06)',
+            }
+          : {}),
+        ...Platform.select({
+          ios: {
+            shadowColor: theme.dark ? '#000' : colors.primary,
+            shadowOffset: { width: 0, height: 8 },
+            shadowOpacity: theme.dark ? 0.4 : 0.12,
+            shadowRadius: 24,
+          },
+          android: {
+            elevation: 12,
+          },
+        }),
+      }}
+    >
+      {TAB_CONFIG.map((tab, index) => {
+        const isFocused = state.index === index;
+
+        return (
+          <TabBarItem
+            key={tab.name}
+            tab={tab}
+            isFocused={isFocused}
+            onPress={() => {
+              const event = navigation.emit({
+                type: 'tabPress',
+                target: state.routes[index].key,
+                canPreventDefault: true,
+              });
+              if (!isFocused && !event.defaultPrevented) {
+                navigation.navigate(state.routes[index].name);
+              }
+            }}
+          />
+        );
+      })}
+    </View>
+  );
+}

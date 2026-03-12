@@ -1,85 +1,86 @@
-import React, { useState, useCallback } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  ActivityIndicator,
-  Alert,
-} from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTheme } from '../theme/ThemeProvider';
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, Text, FlatList, Pressable, Alert, Platform, ActivityIndicator } from 'react-native';
+import Config from 'react-native-config';
+import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Icon } from '../components/ui/Icon';
-import { FadeIn } from '../components/ui/FadeIn';
-import { apiClient, extractApiError } from '../api/client';
+import { Button } from '../components/ui/Button';
+import { Toast } from '../components/ui/Toast';
+import { useTheme } from '../theme/ThemeProvider';
+import {
+  listPaymentMethods,
+  addPaymentMethod,
+  removePaymentMethod,
+  setDefaultPaymentMethod,
+  createSetupIntent,
+  type PaymentMethodItem,
+} from '../api/billing';
+import { extractApiError } from '../api/client';
 
-interface PaymentMethod {
-  id: string;
-  brand: string;
-  last4: string;
-  exp_month: number;
-  exp_year: number;
-  is_default: boolean;
-}
+const BRAND_ICONS: Record<string, string> = {
+  visa: 'credit-card-outline',
+  mastercard: 'credit-card-outline',
+  amex: 'credit-card-outline',
+  discover: 'credit-card-outline',
+  card: 'credit-card-outline',
+};
 
-function cardIcon(brand: string): string {
-  switch (brand.toLowerCase()) {
-    case 'visa':
-      return 'credit-card-outline';
-    case 'mastercard':
-      return 'credit-card-outline';
-    case 'amex':
-      return 'credit-card-outline';
-    default:
-      return 'credit-card-outline';
-  }
+function brandLabel(brand: string | null): string {
+  if (!brand) return 'Card';
+  return brand.charAt(0).toUpperCase() + brand.slice(1);
 }
 
 export function PaymentMethodsListScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
-  const insets = useSafeAreaInsets();
-
-  const [methods, setMethods] = useState<PaymentMethod[]>([]);
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
+  const [methods, setMethods] = useState<PaymentMethodItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [adding, setAdding] = useState(false);
+  const [toast, setToast] = useState('');
+  const [toastType, setToastType] = useState<'info' | 'error'>('info');
 
-  const loadMethods = useCallback(async () => {
+  const isDevMode = Config.ENVIRONMENT === 'development' || !Config.STRIPE_PUBLISHABLE_KEY;
+
+  const load = useCallback(async () => {
     try {
-      setLoading(true);
-      setError(null);
-      const { data } = await apiClient.get('/billing/payment-methods');
-      setMethods(data.payment_methods ?? data ?? []);
+      const data = await listPaymentMethods();
+      setMethods(data);
     } catch (e) {
-      setError(extractApiError(e));
+      setToastType('error');
+      setToast(extractApiError(e));
     } finally {
       setLoading(false);
     }
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      loadMethods();
-    }, [loadMethods]),
-  );
+  useEffect(() => { load(); }, [load]);
 
-  async function handleSetDefault(pm: PaymentMethod) {
+  const handleAdd = async () => {
+    setAdding(true);
     try {
-      setActionLoading(pm.id);
-      await apiClient.put(`/billing/payment-methods/${pm.id}/default`);
-      await loadMethods();
+      if (isDevMode) {
+        const pm = await addPaymentMethod('pm_card_visa_dev', true);
+        setMethods(prev => [pm, ...prev.map(m => ({ ...m, is_default: false }))]);
+        setToastType('info');
+        setToast('Card added (dev mode)');
+      } else {
+        const { client_secret } = await createSetupIntent();
+        // In production, the Stripe SDK CardField would be used here.
+        // For now, show a placeholder message.
+        setToastType('info');
+        setToast('Stripe card entry not yet integrated. Use dev mode for testing.');
+      }
     } catch (e) {
-      Alert.alert('Error', extractApiError(e));
+      setToastType('error');
+      setToast(extractApiError(e));
     } finally {
-      setActionLoading(null);
+      setAdding(false);
     }
-  }
+  };
 
-  function handleDelete(pm: PaymentMethod) {
+  const handleRemove = (pm: PaymentMethodItem) => {
     Alert.alert(
       'Remove Card',
-      `Remove card ending in ${pm.last4}?`,
+      `Remove ${brandLabel(pm.brand)} ending in ${pm.last4 ?? '****'}?`,
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -87,186 +88,173 @@ export function PaymentMethodsListScreen() {
           style: 'destructive',
           onPress: async () => {
             try {
-              setActionLoading(pm.id);
-              await apiClient.delete(`/billing/payment-methods/${pm.id}`);
-              await loadMethods();
+              await removePaymentMethod(pm.id);
+              setMethods(prev => {
+                const remaining = prev.filter(m => m.id !== pm.id);
+                if (pm.is_default && remaining.length > 0) {
+                  remaining[0] = { ...remaining[0], is_default: true };
+                }
+                return remaining;
+              });
+              setToastType('info');
+              setToast('Card removed');
             } catch (e) {
-              Alert.alert('Error', extractApiError(e));
-            } finally {
-              setActionLoading(null);
+              setToastType('error');
+              setToast(extractApiError(e));
             }
           },
         },
       ],
     );
-  }
+  };
 
-  function renderItem({ item, index }: { item: PaymentMethod; index: number }) {
-    const isActioning = actionLoading === item.id;
+  const handleSetDefault = async (pm: PaymentMethodItem) => {
+    try {
+      await setDefaultPaymentMethod(pm.id);
+      setMethods(prev =>
+        prev.map(m => ({ ...m, is_default: m.id === pm.id })),
+      );
+      setToastType('info');
+      setToast(`${brandLabel(pm.brand)} ****${pm.last4} set as default`);
+    } catch (e) {
+      setToastType('error');
+      setToast(extractApiError(e));
+    }
+  };
+
+  const renderItem = ({ item }: { item: PaymentMethodItem }) => {
+    const iconName = BRAND_ICONS[item.brand?.toLowerCase() ?? ''] ?? 'credit-card-outline';
     return (
-      <FadeIn delay={index * 40} slide="up">
-        <View
-          style={{
-            backgroundColor: colors.surface,
-            borderRadius: radii.lg,
-            padding: spacing.lg,
-            marginBottom: spacing.sm,
-            borderWidth: item.is_default ? 2 : 1,
-            borderColor: item.is_default ? colors.primary : colors.cardBorder,
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: spacing.md,
-          }}
-        >
-          <View
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          backgroundColor: colors.surface,
+          borderRadius: radii.xl,
+          padding: spacing.lg,
+          marginBottom: spacing.sm,
+          gap: spacing.md,
+          ...(theme.dark
+            ? { borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)' }
+            : Platform.select({
+                ios: {
+                  shadowColor: 'rgba(124, 58, 237, 0.10)',
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 1,
+                  shadowRadius: 8,
+                },
+                android: { elevation: 2 },
+              })),
+        }}
+      >
+        <View style={{
+          width: 44, height: 44, borderRadius: 22,
+          backgroundColor: item.is_default ? colors.primary + '18' : colors.surfaceVariant,
+          alignItems: 'center', justifyContent: 'center',
+        }}>
+          <Icon name={iconName} size={22} color={item.is_default ? colors.primary : colors.textSecondary} />
+        </View>
+
+        <View style={{ flex: 1 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+            <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }}>
+              {brandLabel(item.brand)} ****{item.last4 ?? '----'}
+            </Text>
+            {item.is_default && (
+              <View style={{
+                paddingHorizontal: spacing.sm,
+                paddingVertical: 2,
+                borderRadius: radii.full,
+                backgroundColor: colors.primary + '18',
+              }}>
+                <Text style={{ fontSize: 10, fontWeight: '700', color: colors.primary }}>DEFAULT</Text>
+              </View>
+            )}
+          </View>
+          <Text style={{ ...typography.caption, color: colors.textSecondary, marginTop: 2 }}>
+            {item.exp_month && item.exp_year
+              ? `Expires ${String(item.exp_month).padStart(2, '0')}/${item.exp_year}`
+              : 'No expiry info'}
+          </Text>
+        </View>
+
+        <View style={{ flexDirection: 'row', gap: spacing.xs }}>
+          {!item.is_default && (
+            <Pressable
+              onPress={() => handleSetDefault(item)}
+              hitSlop={8}
+              style={{
+                width: 36, height: 36, borderRadius: 18,
+                backgroundColor: colors.primary + '14',
+                alignItems: 'center', justifyContent: 'center',
+              }}
+            >
+              <Icon name="check-circle-outline" size={18} color={colors.primary} />
+            </Pressable>
+          )}
+          <Pressable
+            onPress={() => handleRemove(item)}
+            hitSlop={8}
             style={{
-              width: 44,
-              height: 44,
-              borderRadius: radii.md,
-              backgroundColor: colors.primaryContainer,
-              alignItems: 'center',
-              justifyContent: 'center',
+              width: 36, height: 36, borderRadius: 18,
+              backgroundColor: colors.error + '14',
+              alignItems: 'center', justifyContent: 'center',
             }}
           >
-            <Icon name={cardIcon(item.brand)} size="lg" color={colors.primary} />
-          </View>
-
-          <View style={{ flex: 1 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
-              <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }}>
-                {item.brand.charAt(0).toUpperCase() + item.brand.slice(1)} ····{item.last4}
-              </Text>
-              {item.is_default && (
-                <View
-                  style={{
-                    backgroundColor: colors.primaryContainer,
-                    borderRadius: radii.full,
-                    paddingHorizontal: spacing.sm,
-                    paddingVertical: 2,
-                  }}
-                >
-                  <Text style={{ ...typography.caption, color: colors.primary, fontWeight: '700' }}>
-                    DEFAULT
-                  </Text>
-                </View>
-              )}
-            </View>
-            <Text style={{ ...typography.caption, color: colors.textSecondary, marginTop: 2 }}>
-              Expires {String(item.exp_month).padStart(2, '0')}/{item.exp_year}
-            </Text>
-          </View>
-
-          {isActioning ? (
-            <ActivityIndicator size="small" color={colors.primary} />
-          ) : (
-            <View style={{ flexDirection: 'row', gap: spacing.sm }}>
-              {!item.is_default && (
-                <TouchableOpacity onPress={() => handleSetDefault(item)} hitSlop={8}>
-                  <Icon name="check-circle-outline" size="lg" color={colors.success} />
-                </TouchableOpacity>
-              )}
-              <TouchableOpacity onPress={() => handleDelete(item)} hitSlop={8}>
-                <Icon name="trash-can-outline" size="lg" color={colors.error} />
-              </TouchableOpacity>
-            </View>
-          )}
+            <Icon name="trash-can-outline" size={18} color={colors.error} />
+          </Pressable>
         </View>
-      </FadeIn>
+      </View>
     );
-  }
+  };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: colors.background,
-        paddingTop: insets.top + spacing.lg,
-        paddingHorizontal: spacing.lg,
-      }}
-    >
-      <FadeIn delay={0} slide="up">
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.lg }}>
-          <Icon name="credit-card-multiple-outline" size="lg" color={colors.primary} />
-          <Text style={{ ...typography.h2, color: colors.textPrimary, flex: 1 }}>Payment Methods</Text>
-        </View>
-      </FadeIn>
+    <ScreenWrapper scroll={false}>
+      <Toast message={toast} type={toastType} visible={!!toast} onDismiss={() => setToast('')} />
 
-      {error && (
-        <View
-          style={{
-            backgroundColor: colors.errorContainer,
-            borderRadius: radii.md,
-            padding: spacing.md,
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: spacing.sm,
-            marginBottom: spacing.md,
-          }}
-        >
-          <Icon name="alert-circle-outline" size="md" color={colors.error} />
-          <Text style={{ ...typography.bodySmall, color: colors.error, flex: 1 }}>{error}</Text>
-          <TouchableOpacity onPress={loadMethods}>
-            <Text style={{ ...typography.button, color: colors.primary }}>Retry</Text>
-          </TouchableOpacity>
+      {loading ? (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color={colors.primary} />
         </View>
-      )}
-
-      <FlatList
-        data={methods}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        refreshing={loading}
-        onRefresh={loadMethods}
-        contentContainerStyle={
-          methods.length === 0
-            ? { flex: 1, justifyContent: 'center', alignItems: 'center' }
-            : { paddingBottom: insets.bottom + spacing.xxl }
-        }
-        ListEmptyComponent={
-          !loading ? (
-            <View style={{ alignItems: 'center', paddingHorizontal: spacing.xl }}>
-              <View
-                style={{
-                  width: 72,
-                  height: 72,
-                  borderRadius: radii.xxl,
-                  backgroundColor: colors.primaryContainer,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: spacing.lg,
-                }}
-              >
-                <Icon name="credit-card-off-outline" size={32} color={colors.primary} />
+      ) : (
+        <FlatList
+          data={methods}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={
+            methods.length === 0
+              ? { flex: 1, justifyContent: 'center', alignItems: 'center', padding: spacing.xl }
+              : { paddingBottom: spacing.xl }
+          }
+          ListEmptyComponent={
+            <View style={{ alignItems: 'center', gap: spacing.md }}>
+              <View style={{
+                width: 72, height: 72, borderRadius: 36,
+                backgroundColor: colors.primary + '14',
+                alignItems: 'center', justifyContent: 'center',
+              }}>
+                <Icon name="credit-card-plus-outline" size={36} color={colors.primary} />
               </View>
-              <Text
-                style={{ ...typography.h3, color: colors.textPrimary, textAlign: 'center', marginBottom: spacing.xs }}
-              >
-                No payment methods
+              <Text style={{ ...typography.h3, color: colors.textPrimary, textAlign: 'center' }}>
+                No Payment Methods
               </Text>
-              <Text
-                style={{ ...typography.bodySmall, color: colors.textSecondary, textAlign: 'center' }}
-              >
-                Add a payment method to manage your subscription
+              <Text style={{ ...typography.body, color: colors.textSecondary, textAlign: 'center' }}>
+                Add a card to manage your subscription and payments.
               </Text>
             </View>
-          ) : null
-        }
-      />
-
-      <FadeIn delay={200} slide="up">
-        <TouchableOpacity
-          style={{
-            backgroundColor: colors.primary,
-            borderRadius: radii.lg,
-            paddingVertical: spacing.md,
-            alignItems: 'center',
-            marginBottom: insets.bottom + spacing.lg,
-          }}
-          activeOpacity={0.8}
-        >
-          <Text style={{ ...typography.button, color: colors.onPrimary }}>Add Payment Method</Text>
-        </TouchableOpacity>
-      </FadeIn>
-    </View>
+          }
+          ListFooterComponent={
+            <View style={{ marginTop: spacing.lg }}>
+              <Button
+                title={adding ? 'Adding...' : 'Add Card'}
+                icon="plus"
+                onPress={handleAdd}
+                disabled={adding}
+              />
+            </View>
+          }
+        />
+      )}
+    </ScreenWrapper>
   );
 }

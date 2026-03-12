@@ -1,187 +1,160 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-  Alert,
-  Dimensions,
-  StyleSheet,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTheme } from '../theme/ThemeProvider';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Switch } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ScreenWrapper } from '../components/ui/ScreenWrapper';
+import { Card } from '../components/ui/Card';
+import { Button } from '../components/ui/Button';
 import { Icon } from '../components/ui/Icon';
-import { GradientView } from '../components/ui/GradientView';
-import { FadeIn } from '../components/ui/FadeIn';
-import { OnboardingProgress } from '../components/ui/OnboardingProgress';
-import { apiClient, extractApiError } from '../api/client';
+import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { Toast } from '../components/ui/Toast';
+import { useTheme } from '../theme/ThemeProvider';
+import { useSettingsStore } from '../store/settingsStore';
+import { RootStackParamList } from '../navigation/types';
 
-const { width: SCREEN_W } = Dimensions.get('window');
+type Props = NativeStackScreenProps<RootStackParamList, 'OnboardingPrivacy'>;
 
-const PRIVACY_POINTS = [
-  { icon: 'lock-outline', text: 'Calls are encrypted' },
-  { icon: 'shield-check-outline', text: 'Transcripts stored securely' },
-  { icon: 'brain', text: 'You control what AI remembers' },
-  { icon: 'delete-outline', text: 'Data can be deleted anytime' },
-];
+export function OnboardingPrivacyScreen({ navigation }: Props) {
+  const { colors, spacing, typography, radii } = useTheme();
+  const { settings, loading, error, loadSettings, updateSettings, completeStep } = useSettingsStore();
 
-export function OnboardingPrivacyScreen() {
-  const theme = useTheme();
-  const { colors, spacing, typography, radii } = theme;
-  const navigation = useNavigation();
-  const insets = useSafeAreaInsets();
-  const [loading, setLoading] = useState(false);
+  const [recordingEnabled, setRecordingEnabled] = useState(false);
+  const [transcriptDisclosure, setTranscriptDisclosure] = useState(false);
+  const [analyticsOptIn, setAnalyticsOptIn] = useState(false);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+
+  useEffect(() => {
+    if (!settings) {
+      loadSettings();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (settings) {
+      setRecordingEnabled(settings.recording_enabled);
+      setTranscriptDisclosure(settings.transcript_disclosure_mode === 'always');
+      setAnalyticsOptIn(false);
+    }
+  }, [settings]);
 
   async function handleContinue() {
-    setLoading(true);
-    try {
-      await apiClient.post('/onboarding/complete-step', { step: 'privacy_review' });
-      navigation.navigate('OnboardingProfile' as never);
-    } catch (e) {
-      Alert.alert('Error', extractApiError(e) || 'Failed to complete step');
-    } finally {
-      setLoading(false);
+    const ok = await updateSettings({
+      recording_enabled: recordingEnabled,
+      transcript_disclosure_mode: transcriptDisclosure ? 'always' : 'never',
+    });
+
+    if (!ok) return;
+
+    const stepOk = await completeStep('privacy_review');
+    if (stepOk) {
+      navigation.navigate('OnboardingSettings');
+    } else {
+      setToastMessage('Failed to save progress');
+      setToastVisible(true);
     }
   }
 
-  return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
-      {/* Ambient glow */}
-      <View style={StyleSheet.absoluteFill} pointerEvents="none">
-        <GradientView
-          colors={[theme.dark ? 'rgba(129,140,248,0.10)' : 'rgba(129,140,248,0.05)', 'transparent']}
-          start={{ x: 0.5, y: 0 }}
-          end={{ x: 0.5, y: 1 }}
-          style={{ position: 'absolute', top: -SCREEN_W * 0.3, left: -SCREEN_W * 0.1, width: SCREEN_W * 1.2, height: SCREEN_W, borderRadius: SCREEN_W * 0.5 }}
-        />
-      </View>
-      <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          padding: spacing.lg,
-          paddingBottom: insets.bottom + 100,
-        }}
-      >
-        <OnboardingProgress currentStep={1} totalSteps={8} />
+  const toggleCards: Array<{
+    key: string;
+    icon: string;
+    title: string;
+    description: string;
+    value: boolean;
+    onToggle: (v: boolean) => void;
+  }> = [
+    {
+      key: 'recording',
+      icon: 'microphone-outline',
+      title: 'Call Recording',
+      description: 'Allow MattBot to record calls for transcription and quality improvement.',
+      value: recordingEnabled,
+      onToggle: setRecordingEnabled,
+    },
+    {
+      key: 'transcript',
+      icon: 'text-box-outline',
+      title: 'Transcript Disclosure',
+      description: 'Inform callers that calls may be transcribed by an AI assistant.',
+      value: transcriptDisclosure,
+      onToggle: setTranscriptDisclosure,
+    },
+    {
+      key: 'analytics',
+      icon: 'chart-bar',
+      title: 'Analytics',
+      description: 'Share anonymous usage data to help us improve MattBot.',
+      value: analyticsOptIn,
+      onToggle: setAnalyticsOptIn,
+    },
+  ];
 
-        {/* Illustration Area */}
-        <View style={{ alignItems: 'center', paddingVertical: spacing.xxl }}>
-          <View
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: 24,
-              overflow: 'hidden',
-            }}
-          >
-            <GradientView
-              colors={[colors.gradientStart, colors.gradientEnd]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={{ width: 80, height: 80, alignItems: 'center', justifyContent: 'center' }}
-            >
-              <Icon name="shield-lock-outline" size={36} color="#FFFFFF" />
-            </GradientView>
-          </View>
+  return (
+    <ScreenWrapper>
+      <Toast
+        message={toastMessage}
+        type="error"
+        visible={toastVisible}
+        onDismiss={() => setToastVisible(false)}
+      />
+
+      <View style={{ gap: spacing.lg }}>
+        <View style={{ gap: spacing.xs }}>
+          <Text style={{ ...typography.h2, color: colors.textPrimary }} allowFontScaling>
+            Privacy & Permissions
+          </Text>
+          <Text style={{ ...typography.body, color: colors.textSecondary }} allowFontScaling>
+            Review how MattBot handles your data. You can change these anytime in Settings.
+          </Text>
         </View>
 
-        {/* Title & Description */}
-        <Text
-          style={{ ...typography.h1, color: colors.textPrimary, textAlign: 'center' }}
-          allowFontScaling
-        >
-          Privacy & Data
-        </Text>
-        <Text
-          style={{
-            ...typography.body,
-            color: colors.textSecondary,
-            textAlign: 'center',
-            marginTop: spacing.sm,
-            marginBottom: spacing.xxl,
-          }}
-          allowFontScaling
-        >
-          Review how MattBot handles your data
-        </Text>
+        {error && <ErrorMessage message={error} />}
 
-        {/* Privacy Points */}
-        <View style={{ gap: spacing.md }}>
-          {PRIVACY_POINTS.map((point) => (
-            <View
-              key={point.text}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: spacing.md,
-                backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
-                borderRadius: radii.lg,
-                padding: spacing.lg,
-                borderWidth: 1,
-                borderColor: theme.dark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
-              }}
-            >
+        {toggleCards.map((item) => (
+          <Card key={item.key} variant="elevated" style={{ gap: spacing.sm }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
               <View
                 style={{
-                  width: 40,
-                  height: 40,
+                  width: 44,
+                  height: 44,
                   borderRadius: radii.md,
-                  backgroundColor: colors.successContainer,
+                  backgroundColor: colors.primary + '14',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
               >
-                <Icon name="check" size="md" color={colors.success} />
+                <Icon name={item.icon} size="lg" color={colors.primary} />
               </View>
-              <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
-                <Icon name={point.icon} size="md" color={colors.textSecondary} />
-                <Text style={{ ...typography.body, color: colors.textPrimary, flex: 1 }} allowFontScaling>
-                  {point.text}
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }}
+                  allowFontScaling
+                >
+                  {item.title}
+                </Text>
+                <Text
+                  style={{ ...typography.caption, color: colors.textSecondary, marginTop: spacing.xs }}
+                  allowFontScaling
+                >
+                  {item.description}
                 </Text>
               </View>
+              <Switch
+                value={item.value}
+                onValueChange={item.onToggle}
+                trackColor={{ false: colors.border, true: colors.primary + '80' }}
+                thumbColor={item.value ? colors.primary : colors.surface}
+              />
             </View>
-          ))}
-        </View>
-      </ScrollView>
+          </Card>
+        ))}
 
-      {/* Bottom Button */}
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          padding: spacing.lg,
-          paddingBottom: insets.bottom + spacing.lg,
-          backgroundColor: colors.background,
-        }}
-      >
-        <TouchableOpacity
+        <Button
+          title="Continue"
           onPress={handleContinue}
-          disabled={loading}
-          style={{
-            backgroundColor: colors.primary,
-            borderRadius: radii.lg,
-            paddingVertical: spacing.md + 2,
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'row',
-            gap: spacing.sm,
-            opacity: loading ? 0.6 : 1,
-            minHeight: 52,
-          }}
-        >
-          {loading ? (
-            <ActivityIndicator size="small" color={colors.onPrimary} />
-          ) : (
-            <Text style={{ ...typography.button, color: colors.onPrimary }} allowFontScaling>
-              I Understand — Continue
-            </Text>
-          )}
-        </TouchableOpacity>
+          loading={loading}
+          style={{ marginTop: spacing.md }}
+        />
       </View>
-    </View>
+    </ScreenWrapper>
   );
 }

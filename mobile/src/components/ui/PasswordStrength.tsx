@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
 
@@ -6,54 +6,69 @@ interface Props {
   password: string;
 }
 
-function getStrength(password: string): { score: number; label: string; color: string } {
-  if (!password) return { score: 0, label: 'Weak', color: '#EF4444' };
-  let score = 0;
-  if (password.length >= 8) score++;
-  if (password.length >= 12) score++;
-  if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score++;
-  if (/\d/.test(password)) score++;
-  if (/[^A-Za-z0-9]/.test(password)) score++;
+type Strength = 'weak' | 'fair' | 'good' | 'strong';
 
-  if (score <= 2) return { score: 0.33, label: 'Weak', color: '#EF4444' };
-  if (score <= 4) return { score: 0.66, label: 'Fair', color: '#F59E0B' };
-  return { score: 1, label: 'Strong', color: '#10B981' };
+function evaluateStrength(password: string): { level: Strength; score: number } {
+  if (!password) return { level: 'weak', score: 0 };
+
+  let score = 0;
+  if (password.length >= 12) score++;
+  if (password.length >= 16) score++;
+  if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
+  if (/\d/.test(password)) score++;
+  if (/[^a-zA-Z0-9]/.test(password)) score++;
+
+  if (score <= 1) return { level: 'weak', score: 1 };
+  if (score <= 2) return { level: 'fair', score: 2 };
+  if (score <= 3) return { level: 'good', score: 3 };
+  return { level: 'strong', score: 4 };
 }
 
 export function PasswordStrength({ password }: Props) {
   const theme = useTheme();
-  const { colors, spacing, typography } = theme;
-  const { score, label, color } = getStrength(password);
+  const { colors, spacing, typography, radii } = theme;
+
+  const { level, score } = useMemo(() => evaluateStrength(password), [password]);
 
   if (!password) return null;
 
+  const colorMap: Record<Strength, string> = {
+    weak: colors.error,
+    fair: colors.warning,
+    good: colors.accent,
+    strong: colors.success,
+  };
+
+  const labelMap: Record<Strength, string> = {
+    weak: 'Weak',
+    fair: 'Fair',
+    good: 'Good',
+    strong: 'Strong',
+  };
+
+  const barColor = colorMap[level];
+
   return (
-    <View style={{ marginTop: spacing.sm }}>
-      <View
-        style={{
-          height: 4,
-          backgroundColor: colors.surfaceVariant,
-          borderRadius: 2,
-          overflow: 'hidden',
-        }}
-      >
-        <View
-          style={{
-            height: '100%',
-            width: `${score * 100}%`,
-            backgroundColor: color,
-            borderRadius: 2,
-          }}
-        />
+    <View style={{ gap: spacing.xs, marginTop: -spacing.sm, marginBottom: spacing.sm }}>
+      <View style={{ flexDirection: 'row', gap: spacing.xs }}>
+        {[1, 2, 3, 4].map((i) => (
+          <View
+            key={i}
+            style={{
+              flex: 1,
+              height: 4,
+              borderRadius: 2,
+              backgroundColor: i <= score ? barColor : colors.border,
+            }}
+          />
+        ))}
       </View>
       <Text
-        style={{
-          ...typography.caption,
-          color: colors.textSecondary,
-          marginTop: spacing.xs,
-        }}
+        style={{ ...typography.caption, color: barColor }}
+        allowFontScaling
+        accessibilityLabel={`Password strength: ${labelMap[level]}`}
       >
-        {label}
+        {labelMap[level]}
       </Text>
     </View>
   );

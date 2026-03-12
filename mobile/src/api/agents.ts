@@ -62,11 +62,6 @@ export async function createDefaultAgent(body?: {
   return data;
 }
 
-export async function syncDefaultAgent(): Promise<AgentResponse> {
-  const { data } = await apiClient.post('/agents/default/sync');
-  return data;
-}
-
 export async function updateAgent(
   agentId: string,
   patch: {

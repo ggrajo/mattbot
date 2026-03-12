@@ -1,122 +1,123 @@
 import React from 'react';
-import { Modal, View, Text, Pressable, StyleSheet } from 'react-native';
+import {
+  Modal,
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+} from 'react-native';
 import { Icon } from './Icon';
+import { Button } from './Button';
 import { useTheme } from '../../theme/ThemeProvider';
 
 interface Props {
   visible: boolean;
+  onDismiss: () => void;
   title: string;
-  message: string;
-  onConfirm: () => void;
-  onCancel?: () => void;
-  onDismiss?: () => void;
+  message?: string;
   icon?: string;
   iconColor?: string;
   confirmLabel?: string;
   cancelLabel?: string;
   destructive?: boolean;
+  onConfirm: () => void;
   loading?: boolean;
 }
 
 export function ConfirmSheet({
   visible,
+  onDismiss,
   title,
   message,
-  onConfirm,
-  onCancel,
-  onDismiss,
   icon,
   iconColor,
   confirmLabel = 'Confirm',
   cancelLabel = 'Cancel',
   destructive = false,
+  onConfirm,
   loading = false,
 }: Props) {
   const theme = useTheme();
-  const { colors, spacing, radii, typography } = theme;
-  const handleDismiss = onDismiss || onCancel || (() => {});
+  const { colors, spacing, radii, typography, shadows } = theme;
 
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={handleDismiss}>
+    <Modal
+      visible={visible}
+      transparent
+      animationType="slide"
+      onRequestClose={onDismiss}
+    >
       <Pressable
-        style={[styles.overlay, { backgroundColor: 'rgba(0,0,0,0.6)', padding: spacing.xl }]}
-        onPress={handleDismiss}
+        style={{ flex: 1, backgroundColor: colors.overlay, justifyContent: 'flex-end' }}
+        onPress={onDismiss}
       >
         <Pressable
-          onPress={(e) => e.stopPropagation()}
           style={{
             backgroundColor: colors.surface,
-            borderRadius: radii.lg,
+            borderTopLeftRadius: radii.xl,
+            borderTopRightRadius: radii.xl,
             padding: spacing.xl,
-            width: '100%',
-            maxWidth: 340,
-            borderWidth: 1,
-            borderColor: colors.border,
+            paddingBottom: spacing.xxxl,
+            gap: spacing.lg,
+            ...shadows.modal,
           }}
+          onPress={(e) => e.stopPropagation()}
         >
+          <View style={{ width: 36, height: 4, borderRadius: 2, backgroundColor: colors.border, alignSelf: 'center', marginBottom: spacing.sm }} />
+
           {icon && (
-            <View style={{ alignItems: 'center', marginBottom: spacing.md }}>
-              <Icon name={icon} size="xl" color={iconColor || (destructive ? colors.error : colors.primary)} />
+            <View style={{ alignSelf: 'center' }}>
+              <View
+                style={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: 28,
+                  backgroundColor: (iconColor ?? (destructive ? colors.error : colors.primary)) + '18',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Icon
+                  name={icon}
+                  size="xl"
+                  color={iconColor ?? (destructive ? colors.error : colors.primary)}
+                />
+              </View>
             </View>
           )}
+
           <Text
-            style={{
-              ...typography.h3,
-              color: colors.textPrimary,
-              marginBottom: spacing.sm,
-              textAlign: icon ? 'center' : 'left',
-            }}
+            style={{ ...typography.h3, color: colors.textPrimary, textAlign: 'center' }}
+            allowFontScaling
           >
             {title}
           </Text>
-          <Text
-            style={{
-              ...typography.body,
-              color: colors.textSecondary,
-              marginBottom: spacing.xl,
-              textAlign: icon ? 'center' : 'left',
-              lineHeight: 22,
-            }}
-          >
-            {message}
-          </Text>
-          <View style={{ gap: spacing.sm }}>
-            <Pressable
+
+          {message && (
+            <Text
+              style={{ ...typography.body, color: colors.textSecondary, textAlign: 'center' }}
+              allowFontScaling
+            >
+              {message}
+            </Text>
+          )}
+
+          <View style={{ gap: spacing.sm, marginTop: spacing.sm }}>
+            <Button
+              title={confirmLabel}
               onPress={onConfirm}
+              variant={destructive ? 'destructive' : 'primary'}
+              loading={loading}
+            />
+            <Button
+              title={cancelLabel}
+              onPress={onDismiss}
+              variant="ghost"
               disabled={loading}
-              style={{
-                paddingVertical: spacing.md,
-                borderRadius: radii.md,
-                backgroundColor: destructive ? colors.error : colors.primary,
-                alignItems: 'center',
-                opacity: loading ? 0.6 : 1,
-              }}
-            >
-              <Text style={{ ...typography.button, color: colors.onPrimary }}>
-                {loading ? 'Please wait…' : confirmLabel}
-              </Text>
-            </Pressable>
-            <Pressable
-              onPress={handleDismiss}
-              style={{
-                paddingVertical: spacing.md,
-                borderRadius: radii.md,
-                alignItems: 'center',
-              }}
-            >
-              <Text style={{ ...typography.button, color: colors.textSecondary }}>{cancelLabel}</Text>
-            </Pressable>
+            />
           </View>
         </Pressable>
       </Pressable>
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

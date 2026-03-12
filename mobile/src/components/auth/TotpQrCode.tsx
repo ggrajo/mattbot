@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import { Icon } from '../ui/Icon';
-import { Card } from '../ui/Card';
 import { useTheme } from '../../theme/ThemeProvider';
 
 interface Props {
@@ -17,30 +15,24 @@ export function TotpQrCode({ uri, secret, onCopySecret }: Props) {
 
   return (
     <View style={{ alignItems: 'center', gap: spacing.lg }}>
-      <Card
-        variant="elevated"
+      <View
         style={{
-          alignItems: 'center',
-          padding: spacing.xl,
           backgroundColor: '#FFFFFF',
+          padding: spacing.lg,
+          borderRadius: radii.lg,
         }}
       >
         <QRCode value={uri} size={200} />
-      </Card>
-
+      </View>
       <Text
         style={{ ...typography.bodySmall, color: colors.textSecondary, textAlign: 'center' }}
         allowFontScaling
       >
         Scan this QR code with your authenticator app
       </Text>
-
       <TouchableOpacity
         onPress={onCopySecret}
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: spacing.sm,
           backgroundColor: colors.surfaceVariant,
           paddingHorizontal: spacing.lg,
           paddingVertical: spacing.md,
@@ -48,20 +40,17 @@ export function TotpQrCode({ uri, secret, onCopySecret }: Props) {
         }}
         accessibilityLabel="Copy secret key to clipboard"
         accessibilityRole="button"
-        activeOpacity={0.7}
       >
-        <Text style={{ ...typography.mono, color: colors.textPrimary, flex: 1 }} allowFontScaling>
+        <Text style={{ ...typography.mono, color: colors.textPrimary }} allowFontScaling>
           {secret}
         </Text>
-        <Icon name="content-copy" size="md" color={colors.primary} />
+        <Text
+          style={{ ...typography.caption, color: colors.textSecondary, textAlign: 'center', marginTop: spacing.xs }}
+          allowFontScaling
+        >
+          Tap to copy secret key
+        </Text>
       </TouchableOpacity>
-
-      <Text
-        style={{ ...typography.caption, color: colors.textSecondary, textAlign: 'center' }}
-        allowFontScaling
-      >
-        Can't scan? Tap the code above to copy it
-      </Text>
     </View>
   );
 }

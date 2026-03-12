@@ -1,159 +1,179 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, ScrollView, Switch, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-import { useTheme } from '../theme/ThemeProvider';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Switch } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ScreenWrapper } from '../components/ui/ScreenWrapper';
+import { Card } from '../components/ui/Card';
+import { Button } from '../components/ui/Button';
 import { Icon } from '../components/ui/Icon';
+import { Toast } from '../components/ui/Toast';
+import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { ConfirmSheet } from '../components/ui/ConfirmSheet';
+import { useTheme } from '../theme/ThemeProvider';
+import { useSettingsStore } from '../store/settingsStore';
 import { apiClient, extractApiError } from '../api/client';
+import { RootStackParamList } from '../navigation/types';
 
-function ToggleRow({ icon, label, subtitle, value, onValueChange, colors, spacing }: any) {
-  return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.md, paddingHorizontal: spacing.lg }}>
-      <Icon name={icon} size="md" color={colors.textSecondary} />
-      <View style={{ flex: 1, marginLeft: spacing.md }}>
-        <Text style={{ fontSize: 16, color: colors.textPrimary }}>{label}</Text>
-        {subtitle && <Text style={{ fontSize: 12, color: colors.textSecondary }}>{subtitle}</Text>}
-      </View>
-      <Switch value={value} onValueChange={onValueChange} trackColor={{ false: colors.border, true: colors.primary }} />
-    </View>
-  );
-}
+type Props = NativeStackScreenProps<RootStackParamList, 'MemorySettings'>;
 
-interface MemorySettings {
-  memory_enabled: boolean;
-  revision: number;
-}
-
-const DEFAULTS: MemorySettings = {
-  memory_enabled: true,
-  revision: 1,
-};
-
-export function MemorySettingsScreen() {
+export function MemorySettingsScreen({}: Props) {
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
-  const [settings, setSettings] = useState<MemorySettings>(DEFAULTS);
-  const [loading, setLoading] = useState(true);
+  const { settings, loading, error, loadSettings, updateSettings } = useSettingsStore();
+
+  const [memoryEnabled, setMemoryEnabled] = useState(true);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [clearing, setClearing] = useState(false);
-  const [error, setError] = useState('');
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [dirty, setDirty] = useState(false);
 
-  useFocusEffect(
-    useCallback(() => {
-      let active = true;
-      setLoading(true);
-      setError('');
-      apiClient
-        .get('/settings')
-        .then((res) => {
-          if (!active) return;
-          const d = res.data;
-          setSettings({
-            memory_enabled: d.memory_enabled ?? DEFAULTS.memory_enabled,
-            revision: d.revision ?? 1,
-          });
-        })
-        .catch((err) => {
-          if (active) setError(extractApiError(err));
-        })
-        .finally(() => {
-          if (active) setLoading(false);
-        });
-      return () => { active = false; };
-    }, []),
-  );
+  useEffect(() => {
+    loadSettings();
+  }, []);
 
-  async function handleToggle() {
-    const next = !settings.memory_enabled;
-    setSettings((prev) => ({ ...prev, memory_enabled: next }));
-    try {
-      const res = await apiClient.patch('/settings', {
-        expected_revision: settings.revision,
-        changes: { memory_enabled: next },
-      });
-      if (res.data?.revision) {
-        setSettings((prev) => ({ ...prev, revision: res.data.revision }));
-      }
-    } catch (err) {
-      setSettings((prev) => ({ ...prev, memory_enabled: !next }));
-      setError(extractApiError(err));
+  useEffect(() => {
+    if (settings) {
+      setMemoryEnabled(settings.memory_enabled);
+    }
+  }, [settings]);
+
+  async function handleSave() {
+    const ok = await updateSettings({ memory_enabled: memoryEnabled });
+    if (ok) {
+      setDirty(false);
+      setToast({ message: 'Memory settings saved', type: 'success' });
+    } else {
+      setToast({ message: 'Failed to save settings', type: 'error' });
     }
   }
 
-  function handleClearMemory() {
-    Alert.alert(
-      'Clear All Memory',
-      'This will permanently delete all AI memory data. This action cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Clear',
-          style: 'destructive',
-          onPress: async () => {
-            setClearing(true);
-            try {
-              await apiClient.delete('/memory');
-              Alert.alert('Done', 'All memory has been cleared.');
-            } catch (err) {
-              Alert.alert('Error', extractApiError(err));
-            } finally {
-              setClearing(false);
-            }
-          },
-        },
-      ],
-    );
-  }
-
-  if (loading) {
-    return (
-      <View style={{ flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
+  async function handleClearAll() {
+    setClearing(true);
+    try {
+      await apiClient.delete('/memory/all');
+      setShowClearConfirm(false);
+      setToast({ message: 'All memories cleared', type: 'success' });
+    } catch (e) {
+      setToast({ message: extractApiError(e), type: 'error' });
+    } finally {
+      setClearing(false);
+    }
   }
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: colors.background }} contentContainerStyle={{ paddingBottom: spacing.xxl }}>
-      {error ? (
-        <View style={{ padding: spacing.lg }}>
-          <Text style={{ fontSize: 14, color: colors.error }}>{error}</Text>
+    <ScreenWrapper>
+      <Toast
+        message={toast?.message ?? ''}
+        type={toast?.type}
+        visible={!!toast}
+        onDismiss={() => setToast(null)}
+      />
+
+      <ConfirmSheet
+        visible={showClearConfirm}
+        onDismiss={() => setShowClearConfirm(false)}
+        title="Clear All Memories"
+        message="This will permanently delete all stored memories. Your AI assistant will lose all learned context about your callers. This cannot be undone."
+        icon="brain"
+        destructive
+        confirmLabel="Clear All"
+        onConfirm={handleClearAll}
+        loading={clearing}
+      />
+
+      <Text
+        style={{ ...typography.h2, color: colors.textPrimary, marginBottom: spacing.lg }}
+        allowFontScaling
+      >
+        AI Memory
+      </Text>
+
+      {error && (
+        <View style={{ marginBottom: spacing.lg }}>
+          <ErrorMessage message={error} action="Retry" onAction={loadSettings} />
         </View>
-      ) : null}
+      )}
 
-      <View style={{ marginTop: spacing.lg, marginHorizontal: spacing.lg, backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', borderRadius: radii.md, overflow: 'hidden' }}>
-        <ToggleRow
-          icon="brain"
-          label="Enable AI Memory"
-          subtitle="Allow the assistant to remember context between calls"
-          value={settings.memory_enabled}
-          onValueChange={handleToggle}
-          colors={colors}
-          spacing={spacing}
-        />
-      </View>
+      {/* Info card */}
+      <Card variant="flat" style={{ marginBottom: spacing.lg }}>
+        <View style={{ flexDirection: 'row', gap: spacing.md }}>
+          <View
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: radii.md,
+              backgroundColor: colors.primary + '14',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Icon name="brain" size="lg" color={colors.primary} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600', marginBottom: spacing.xs }} allowFontScaling>
+              How AI Memory Works
+            </Text>
+            <Text style={{ ...typography.bodySmall, color: colors.textSecondary, lineHeight: 20 }} allowFontScaling>
+              Your AI assistant remembers key details from previous calls — names, preferences,
+              and conversation context — to provide more personalized responses. Memories are
+              stored securely and only used to improve your experience.
+            </Text>
+          </View>
+        </View>
+      </Card>
 
-      <View style={{ marginTop: spacing.xl, marginHorizontal: spacing.lg }}>
-        <TouchableOpacity
-          onPress={handleClearMemory}
-          disabled={clearing}
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: colors.errorContainer,
-            borderRadius: radii.md,
-            paddingVertical: spacing.md,
-            paddingHorizontal: spacing.lg,
-            opacity: clearing ? 0.6 : 1,
-          }}
-        >
-          {clearing ? (
-            <ActivityIndicator size="small" color={colors.error} />
-          ) : (
+      {/* Memory toggle */}
+      <Card style={{ marginBottom: spacing.lg }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md, flex: 1 }}>
+            <Icon name="database-outline" size="md" color={colors.primary} />
+            <View style={{ flex: 1 }}>
+              <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500' }} allowFontScaling>
+                Enable Memory
+              </Text>
+              <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+                Allow the assistant to remember caller details
+              </Text>
+            </View>
+          </View>
+          <Switch
+            value={memoryEnabled}
+            onValueChange={(v) => { setMemoryEnabled(v); setDirty(true); }}
+            trackColor={{ false: colors.surfaceVariant, true: colors.primary + '66' }}
+            thumbColor={memoryEnabled ? colors.primary : colors.textDisabled}
+          />
+        </View>
+      </Card>
+
+      {/* Clear all memories */}
+      <Card style={{ marginBottom: spacing.xl }}>
+        <View style={{ gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
             <Icon name="delete-sweep-outline" size="md" color={colors.error} />
-          )}
-          <Text style={{ fontSize: 15, fontWeight: '700', color: colors.error, marginLeft: spacing.sm }}>Clear All Memory</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+            <View style={{ flex: 1 }}>
+              <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500' }} allowFontScaling>
+                Clear All Memories
+              </Text>
+              <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+                Permanently erase all stored memories
+              </Text>
+            </View>
+          </View>
+          <Button
+            title="Clear All Memories"
+            onPress={() => setShowClearConfirm(true)}
+            variant="destructive"
+            icon="delete-outline"
+          />
+        </View>
+      </Card>
+
+      <Button
+        title="Save Changes"
+        onPress={handleSave}
+        loading={loading}
+        disabled={!dirty}
+        icon="content-save-outline"
+      />
+    </ScreenWrapper>
   );
 }

@@ -7,17 +7,12 @@ export interface OnboardingState {
   next_step: string | null;
 }
 
-export async function fetchOnboarding(): Promise<OnboardingState> {
-  const { data } = await apiClient.get<OnboardingState>('/onboarding');
+export async function getOnboarding(): Promise<OnboardingState> {
+  const { data } = await apiClient.get('/onboarding');
   return data;
 }
 
-export async function completeOnboardingStep(
-  step: string,
-): Promise<OnboardingState> {
-  const { data } = await apiClient.post<OnboardingState>(
-    '/onboarding/complete-step',
-    { step },
-  );
+export async function completeOnboardingStep(step: string): Promise<OnboardingState> {
+  const { data } = await apiClient.post('/onboarding/complete-step', { step });
   return data;
 }

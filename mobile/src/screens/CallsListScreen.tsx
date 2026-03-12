@@ -1,617 +1,1250 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useCallback, useRef, useState, useMemo } from 'react';
 import {
   View,
   Text,
-  TextInput,
   FlatList,
-  Pressable,
-  ActivityIndicator,
-  RefreshControl,
-  Platform,
-  ScrollView,
   TouchableOpacity,
-  TouchableWithoutFeedback,
+  ActivityIndicator,
+  TextInput as RNTextInput,
+  Modal,
+  Pressable,
+  ScrollView,
 } from 'react-native';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTheme } from '../theme/ThemeProvider';
+import { useNavigation } from '@react-navigation/native';
+import { ScreenWrapper } from '../components/ui/ScreenWrapper';
+import { Card } from '../components/ui/Card';
+import { Badge } from '../components/ui/Badge';
 import { Icon } from '../components/ui/Icon';
+import { StatusScreen } from '../components/ui/StatusScreen';
+import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { FadeIn } from '../components/ui/FadeIn';
-import { hapticLight } from '../utils/haptics';
-import { apiClient } from '../api/client';
+import { CallListSkeleton } from '../components/ui/SkeletonLoader';
+import { Button } from '../components/ui/Button';
+import { useTheme } from '../theme/ThemeProvider';
+import { useCallStore } from '../store/callStore';
+import { useRealtimeStore } from '../store/realtimeStore';
+import { useSettingsStore } from '../store/settingsStore';
+import { getDeviceTimezone } from '../utils/formatDate';
+import { fetchCallerPhone } from '../api/calls';
+import type { CallListItem, CallFilters } from '../api/calls';
 
-type FilterKey = 'all' | 'missed' | 'vip' | 'spam' | 'urgent';
-
-interface AdvancedFilters {
-  has_recording: boolean | null;
-  sort_by: 'started_at' | 'created_at';
-  sort_dir: 'desc' | 'asc';
-  duration_min: string;
-  duration_max: string;
-}
-
-const FILTERS: { key: FilterKey; label: string; icon: string }[] = [
-  { key: 'all', label: 'All', icon: 'phone-outline' },
-  { key: 'urgent', label: 'Urgent', icon: 'alert-circle-outline' },
-  { key: 'vip', label: 'VIP', icon: 'star-outline' },
-  { key: 'spam', label: 'Spam', icon: 'shield-off-outline' },
-  { key: 'missed', label: 'Missed', icon: 'phone-missed-outline' },
-];
-
-function statusIcon(status: string): { name: string; color: string } {
-  switch (status) {
-    case 'completed':
-      return { name: 'phone-check', color: '#10B981' };
-    case 'failed':
-    case 'canceled':
-      return { name: 'phone-missed', color: '#EF4444' };
-    case 'in_progress':
-      return { name: 'phone-in-talk', color: '#F59E0B' };
-    case 'partial':
-      return { name: 'phone-alert', color: '#F59E0B' };
-    default:
-      return { name: 'phone-outline', color: '#6B7280' };
-  }
-}
-
-function statusBadgeColor(status: string): { bg: string; text: string } {
-  switch (status) {
-    case 'completed':
-      return { bg: '#10B98120', text: '#10B981' };
-    case 'failed':
-    case 'canceled':
-      return { bg: '#EF444420', text: '#EF4444' };
-    case 'in_progress':
-    case 'partial':
-      return { bg: '#F59E0B20', text: '#F59E0B' };
-    default:
-      return { bg: '#6B728020', text: '#6B7280' };
-  }
-}
-
-function statusDisplayLabel(status: string): string {
-  switch (status) {
-    case 'completed': return 'Completed';
-    case 'failed': return 'Missed';
-    case 'canceled': return 'Cancelled';
-    case 'in_progress': return 'In Progress';
-    case 'partial': return 'Partial';
-    case 'inbound_received': return 'Ringing';
-    case 'twiml_responded': return 'Connecting';
-    case 'created': return 'Created';
-    default: return status.replace(/_/g, ' ');
-  }
-}
-
-function timeAgo(dateStr: string): string {
+function timeAgo(dateStr: string, tz?: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
   if (mins < 1) return 'Just now';
   if (mins < 60) return `${mins}m ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  const days = Math.floor(hrs / 24);
-  if (days < 7) return `${days}d ago`;
-  return new Date(dateStr).toLocaleDateString();
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
+  const opts: Intl.DateTimeFormatOptions = {};
+  if (tz) opts.timeZone = tz;
+  return new Date(dateStr).toLocaleDateString(undefined, opts);
 }
 
 function formatDuration(seconds: number | null): string {
-  if (!seconds) return '--';
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `${m}:${s.toString().padStart(2, '0')}`;
+  if (seconds == null) return '';
+  if (seconds < 60) return `${seconds}s`;
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return secs > 0 ? `${mins}m ${secs}s` : `${mins}m`;
 }
+
+type StatusBadge = { label: string; variant: 'primary' | 'success' | 'warning' | 'error' | 'info' };
+
+function statusBadge(status: string): StatusBadge {
+  switch (status) {
+    case 'completed':
+      return { label: 'Completed', variant: 'success' };
+    case 'in_progress':
+      return { label: 'In Progress', variant: 'primary' };
+    case 'failed':
+      return { label: 'Failed', variant: 'error' };
+    case 'canceled':
+      return { label: 'Canceled', variant: 'warning' };
+    case 'twiml_responded':
+      return { label: 'Answered', variant: 'info' };
+    case 'inbound_received':
+      return { label: 'Received', variant: 'info' };
+    default:
+      return { label: status, variant: 'info' };
+  }
+}
+
+function callSubtitle(item: CallListItem): string {
+  if (item.status === 'completed') return 'Call ended';
+  if (item.status === 'failed') return 'Call failed';
+  if (item.status === 'canceled') return 'Call canceled';
+  return 'Call captured';
+}
+
+type ArtifactBadge = { label: string; variant: 'primary' | 'success' | 'warning' | 'error' | 'info' };
+
+function artifactBadge(item: CallListItem): ArtifactBadge | null {
+  if (item.status === 'in_progress' || item.status === 'twiml_responded' || item.status === 'inbound_received') {
+    return null;
+  }
+
+  const status = item.artifact_status;
+  if (status === 'ready') return { label: 'Ready', variant: 'success' };
+  if (status === 'partial') return { label: 'Partial', variant: 'warning' };
+  if (status === 'failed') return { label: 'Failed', variant: 'error' };
+
+  if (!item.missing_summary && !item.missing_transcript && !item.missing_labels) {
+    return { label: 'Ready', variant: 'success' };
+  }
+  if (!item.missing_summary) {
+    return { label: 'Partial', variant: 'warning' };
+  }
+  if (item.missing_summary && item.missing_transcript && item.missing_labels) {
+    if (item.status === 'completed') return { label: 'Processing', variant: 'info' };
+    return null;
+  }
+  return { label: 'Processing', variant: 'info' };
+}
+
+// ---- Quick-filter presets (top row chips) ----
+
+type QuickFilterKey = 'all' | 'important' | 'vip' | 'spam' | 'missed' | 'recorded';
+
+interface QuickPreset {
+  key: QuickFilterKey;
+  label: string;
+  icon: string;
+  filter: CallFilters;
+}
+
+const QUICK_PRESETS: QuickPreset[] = [
+  { key: 'all', label: 'All', icon: 'phone-log', filter: {} },
+  { key: 'important', label: 'Urgent', icon: 'alert-circle-outline', filter: { label: 'urgent' } },
+  { key: 'vip', label: 'VIP', icon: 'star-outline', filter: { label: 'vip' } },
+  { key: 'spam', label: 'Spam', icon: 'alert-octagon-outline', filter: { label: 'spam' } },
+  { key: 'missed', label: 'Missed', icon: 'phone-missed', filter: { status: 'failed' } },
+  { key: 'recorded', label: 'Recorded', icon: 'microphone-outline', filter: { has_recording: true } },
+];
+
+// ---- Country prefix options ----
+
+interface CountryOption {
+  code: string;
+  label: string;
+  prefix: string;
+}
+
+const COUNTRY_OPTIONS: CountryOption[] = [
+  { code: 'all', label: 'All Countries', prefix: '' },
+  { code: 'us', label: 'United States (+1)', prefix: '+1' },
+  { code: 'gb', label: 'United Kingdom (+44)', prefix: '+44' },
+  { code: 'ca', label: 'Canada (+1)', prefix: '+1' },
+  { code: 'au', label: 'Australia (+61)', prefix: '+61' },
+  { code: 'de', label: 'Germany (+49)', prefix: '+49' },
+  { code: 'fr', label: 'France (+33)', prefix: '+33' },
+  { code: 'in', label: 'India (+91)', prefix: '+91' },
+  { code: 'jp', label: 'Japan (+81)', prefix: '+81' },
+  { code: 'br', label: 'Brazil (+55)', prefix: '+55' },
+  { code: 'mx', label: 'Mexico (+52)', prefix: '+52' },
+  { code: 'ph', label: 'Philippines (+63)', prefix: '+63' },
+  { code: 'ng', label: 'Nigeria (+234)', prefix: '+234' },
+  { code: 'za', label: 'South Africa (+27)', prefix: '+27' },
+  { code: 'ae', label: 'UAE (+971)', prefix: '+971' },
+  { code: 'sg', label: 'Singapore (+65)', prefix: '+65' },
+  { code: 'kr', label: 'South Korea (+82)', prefix: '+82' },
+  { code: 'it', label: 'Italy (+39)', prefix: '+39' },
+  { code: 'es', label: 'Spain (+34)', prefix: '+34' },
+  { code: 'nl', label: 'Netherlands (+31)', prefix: '+31' },
+];
+
+// ---- Date preset helpers ----
+
+interface DatePreset {
+  key: string;
+  label: string;
+  getRange: () => { from: string; to: string };
+}
+
+function startOfDay(d: Date): Date {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+
+const DATE_PRESETS: DatePreset[] = [
+  {
+    key: 'today',
+    label: 'Today',
+    getRange: () => {
+      const now = new Date();
+      return { from: startOfDay(now).toISOString(), to: now.toISOString() };
+    },
+  },
+  {
+    key: 'yesterday',
+    label: 'Yesterday',
+    getRange: () => {
+      const y = new Date();
+      y.setDate(y.getDate() - 1);
+      const start = startOfDay(y);
+      const end = new Date(start);
+      end.setDate(end.getDate() + 1);
+      return { from: start.toISOString(), to: end.toISOString() };
+    },
+  },
+  {
+    key: '7d',
+    label: 'Last 7 days',
+    getRange: () => {
+      const now = new Date();
+      const past = new Date();
+      past.setDate(past.getDate() - 7);
+      return { from: past.toISOString(), to: now.toISOString() };
+    },
+  },
+  {
+    key: '30d',
+    label: 'Last 30 days',
+    getRange: () => {
+      const now = new Date();
+      const past = new Date();
+      past.setDate(past.getDate() - 30);
+      return { from: past.toISOString(), to: now.toISOString() };
+    },
+  },
+  {
+    key: '90d',
+    label: 'Last 90 days',
+    getRange: () => {
+      const now = new Date();
+      const past = new Date();
+      past.setDate(past.getDate() - 90);
+      return { from: past.toISOString(), to: now.toISOString() };
+    },
+  },
+];
+
+// ---- Duration presets ----
+
+interface DurationPreset {
+  key: string;
+  label: string;
+  min?: number;
+  max?: number;
+}
+
+const DURATION_PRESETS: DurationPreset[] = [
+  { key: 'any', label: 'Any' },
+  { key: 'short', label: '< 30s', max: 30 },
+  { key: 'medium', label: '30s – 2m', min: 30, max: 120 },
+  { key: 'long', label: '2m – 5m', min: 120, max: 300 },
+  { key: 'vlong', label: '5m+', min: 300 },
+];
+
+// ---- Status options ----
+
+interface StatusOption {
+  key: string;
+  label: string;
+  value: string;
+}
+
+const STATUS_OPTIONS: StatusOption[] = [
+  { key: 'all', label: 'All', value: '' },
+  { key: 'completed', label: 'Completed', value: 'completed' },
+  { key: 'failed', label: 'Failed', value: 'failed' },
+  { key: 'canceled', label: 'Canceled', value: 'canceled' },
+  { key: 'in_progress', label: 'In Progress', value: 'in_progress' },
+];
+
+// ---- Sort options ----
+
+interface SortOption {
+  key: string;
+  label: string;
+  sort_by: string;
+  sort_dir: string;
+}
+
+const SORT_OPTIONS: SortOption[] = [
+  { key: 'newest', label: 'Newest first', sort_by: 'created_at', sort_dir: 'desc' },
+  { key: 'oldest', label: 'Oldest first', sort_by: 'created_at', sort_dir: 'asc' },
+  { key: 'recent_start', label: 'Recently started', sort_by: 'started_at', sort_dir: 'desc' },
+];
+
+function countActiveFilters(f: CallFilters): number {
+  let count = 0;
+  if (f.status) count++;
+  if (f.source_type) count++;
+  if (f.date_from || f.date_to) count++;
+  if (f.duration_min != null || f.duration_max != null) count++;
+  if (f.country_prefix) count++;
+  if (f.has_recording === true) count++;
+  if (f.label) count++;
+  if (f.sort_by && f.sort_by !== 'created_at') count++;
+  if (f.sort_dir && f.sort_dir !== 'desc') count++;
+  return count;
+}
+
 
 export function CallsListScreen() {
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
-  const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();
+  const { calls, loading, loadingMore, error, hasMore, loadCalls, loadMore } = useCallStore();
+  const userTz = useSettingsStore(s => s.settings?.timezone) || getDeviceTimezone();
+  const activeCallId = useRealtimeStore(s => s.activeCallId);
+  const isInitialLoad = useRef(true);
+  const [activeQuick, setActiveQuick] = useState<QuickFilterKey>('all');
+  const [searchText, setSearchText] = useState('');
+  const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const [calls, setCalls] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string>();
-  const [refreshing, setRefreshing] = useState(false);
-  const [filter, setFilter] = useState<FilterKey>('all');
-  const [search, setSearch] = useState('');
-  const [showFilterModal, setShowFilterModal] = useState(false);
-  const [advancedFilters, setAdvancedFilters] = useState<AdvancedFilters>({
-    has_recording: null,
-    sort_by: 'started_at',
-    sort_dir: 'desc',
-    duration_min: '',
-    duration_max: '',
-  });
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
 
-  async function load() {
-    setLoading(true);
-    try {
-      const params: Record<string, any> = {
-        limit: 50,
-        sort_by: advancedFilters.sort_by,
-        sort_dir: advancedFilters.sort_dir,
-      };
-      if (filter === 'missed') params.status = 'failed';
-      if (filter === 'urgent') params.label = 'urgent';
-      if (filter === 'spam') params.label = 'spam';
-      if (search.trim()) params.search = search.trim();
-      if (advancedFilters.has_recording === true) params.has_recording = true;
-      if (advancedFilters.duration_min) params.duration_min = parseInt(advancedFilters.duration_min, 10);
-      if (advancedFilters.duration_max) params.duration_max = parseInt(advancedFilters.duration_max, 10);
+  // Advanced filter state (mirrors what's in the modal)
+  const [advFilters, setAdvFilters] = useState<CallFilters>({});
+  // Staging copy for the modal so cancel doesn't apply
+  const [stagingFilters, setStagingFilters] = useState<CallFilters>({});
 
-      const { data: res } = await apiClient.get('/calls', { params });
-      let items = res.items ?? res.data ?? res ?? [];
+  // Track which date/duration preset is selected in the modal
+  const [stagingDatePreset, setStagingDatePreset] = useState('');
+  const [stagingDurationPreset, setStagingDurationPreset] = useState('any');
+  const [stagingStatus, setStagingStatus] = useState('all');
+  const [stagingSourceType, setStagingSourceType] = useState('');
+  const [stagingCountry, setStagingCountry] = useState('all');
+  const [stagingHasRecording, setStagingHasRecording] = useState(false);
+  const [stagingSort, setStagingSort] = useState('newest');
 
-      if (filter === 'vip') items = items.filter((c: any) => c.is_vip);
+  const [revealedPhones, setRevealedPhones] = useState<Record<string, string>>({});
+  const [revealingIds, setRevealingIds] = useState<Set<string>>(new Set());
 
-      setCalls(items);
-      setError(undefined);
-    } catch (e: any) {
-      const msg = e?.response?.data?.error?.message
-        || e?.response?.data?.detail
-        || e?.message
-        || 'Failed to load calls';
-      setError(msg);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    loadCalls();
+  }, []);
+
+  useEffect(() => {
+    if (calls.length > 0 && isInitialLoad.current) {
+      isInitialLoad.current = false;
     }
-  }
+  }, [calls]);
 
-  useFocusEffect(useCallback(() => { load(); }, []));
+  const buildFilters = useCallback((): CallFilters => {
+    const f: CallFilters = { ...advFilters };
+    const quickPreset = QUICK_PRESETS.find((p) => p.key === activeQuick);
+    if (quickPreset) Object.assign(f, quickPreset.filter);
+    if (searchText.trim()) f.search = searchText.trim();
+    return f;
+  }, [advFilters, activeQuick, searchText]);
 
-  useEffect(() => { load(); }, [filter, advancedFilters]);
+  const applyFilters = useCallback((filters: CallFilters) => {
+    loadCalls(filters);
+  }, [loadCalls]);
 
-  async function handleRefresh() {
-    setRefreshing(true);
-    await load();
-    setRefreshing(false);
-  }
+  const handleQuickChange = useCallback((preset: QuickPreset) => {
+    setActiveQuick(preset.key);
+    const f: CallFilters = { ...advFilters, ...preset.filter };
+    if (searchText.trim()) f.search = searchText.trim();
+    // Clear label if switching to non-label presets
+    if (!preset.filter.label) delete f.label;
+    if (!preset.filter.status) delete f.status;
+    if (preset.filter.has_recording == null) delete f.has_recording;
+    loadCalls(f);
+  }, [advFilters, searchText, loadCalls]);
 
-  const filtered = calls.filter((c) => {
-    if (!search.trim()) return true;
-    const q = search.toLowerCase();
-    const name = (c.caller_display_name || c.from_masked || '').toLowerCase();
-    return name.includes(q);
-  });
+  const handleSearchChange = useCallback((text: string) => {
+    setSearchText(text);
+    if (searchTimeout.current) clearTimeout(searchTimeout.current);
+    searchTimeout.current = setTimeout(() => {
+      const f = buildFilters();
+      if (text.trim()) f.search = text.trim();
+      else delete f.search;
+      loadCalls(f);
+    }, 400);
+  }, [buildFilters, loadCalls]);
 
-  const searchBarStyle = isDark
-    ? { backgroundColor: 'rgba(255,255,255,0.04)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)' }
-    : {
-        backgroundColor: '#FFFFFF',
-        borderWidth: 1,
-        borderColor: colors.cardBorder,
-        ...Platform.select({
-          ios: { shadowColor: colors.primary, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 10 },
-          android: { elevation: 1 },
-        }),
-      };
+  const handleRefresh = useCallback(() => {
+    const f = buildFilters();
+    loadCalls(f);
+  }, [buildFilters, loadCalls]);
 
-  function renderItem({ item, index }: { item: any; index: number }) {
-    const si = statusIcon(item.status);
-    const badge = statusBadgeColor(item.status);
-    const relationship = item.caller_relationship || item.relationship;
-    const isReady = item.notification_status === 'ready' || item.artifacts_status === 'ready';
-    return (
-      <FadeIn delay={Math.min(index * 40, 200)}>
-        <Pressable
-          onPress={() => {
-            hapticLight();
+  const handleEndReached = useCallback(() => {
+    if (hasMore && !loadingMore) loadMore();
+  }, [hasMore, loadingMore, loadMore]);
+
+  // Open advanced filter modal
+  const openFilterModal = useCallback(() => {
+    setStagingFilters({ ...advFilters });
+    setFilterModalVisible(true);
+  }, [advFilters]);
+
+  const handleApplyAdvanced = useCallback(() => {
+    const f: CallFilters = {};
+
+    // Status
+    const statusOpt = STATUS_OPTIONS.find((s) => s.key === stagingStatus);
+    if (statusOpt && statusOpt.value) f.status = statusOpt.value;
+
+    // Source type
+    if (stagingSourceType) f.source_type = stagingSourceType;
+
+    // Date
+    if (stagingDatePreset) {
+      const dp = DATE_PRESETS.find((d) => d.key === stagingDatePreset);
+      if (dp) {
+        const range = dp.getRange();
+        f.date_from = range.from;
+        f.date_to = range.to;
+      }
+    }
+
+    // Duration
+    const durPreset = DURATION_PRESETS.find((d) => d.key === stagingDurationPreset);
+    if (durPreset) {
+      if (durPreset.min != null) f.duration_min = durPreset.min;
+      if (durPreset.max != null) f.duration_max = durPreset.max;
+    }
+
+    // Country
+    const countryOpt = COUNTRY_OPTIONS.find((c) => c.code === stagingCountry);
+    if (countryOpt && countryOpt.prefix) f.country_prefix = countryOpt.prefix;
+
+    // Recording
+    if (stagingHasRecording) f.has_recording = true;
+
+    // Sort (only store non-default)
+    const sortOpt = SORT_OPTIONS.find((s) => s.key === stagingSort);
+    if (sortOpt && (sortOpt.sort_by !== 'created_at' || sortOpt.sort_dir !== 'desc')) {
+      f.sort_by = sortOpt.sort_by;
+      f.sort_dir = sortOpt.sort_dir;
+    }
+
+    setAdvFilters(f);
+    setActiveQuick('all');
+    setFilterModalVisible(false);
+
+    // Merge with search
+    const merged: CallFilters = { ...f };
+    if (searchText.trim()) merged.search = searchText.trim();
+    loadCalls(merged);
+  }, [
+    stagingStatus, stagingSourceType, stagingDatePreset, stagingDurationPreset,
+    stagingCountry, stagingHasRecording, stagingSort, searchText, loadCalls,
+  ]);
+
+  const handleResetAdvanced = useCallback(() => {
+    setStagingDatePreset('');
+    setStagingDurationPreset('any');
+    setStagingStatus('all');
+    setStagingSourceType('');
+    setStagingCountry('all');
+    setStagingHasRecording(false);
+    setStagingSort('newest');
+  }, []);
+
+  const activeFilterCount = useMemo(() => countActiveFilters(advFilters), [advFilters]);
+
+  function renderItem({ item, index }: { item: CallListItem; index: number }) {
+    const badge = statusBadge(item.status);
+    const shouldAnimate = isInitialLoad.current;
+    const delay = shouldAnimate ? Math.min(index * 40, 200) : 0;
+    const isLive = item.status === 'in_progress' && activeCallId === item.id;
+
+    const row = (
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => {
+          if (isLive) {
+            navigation.navigate('LiveTranscript', { callId: item.id });
+          } else {
             navigation.navigate('CallDetail', { callId: item.id });
-          }}
-          style={({ pressed }) => ({
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingVertical: 14,
-            paddingHorizontal: spacing.lg,
-            marginHorizontal: spacing.lg,
-            marginBottom: spacing.sm,
-            backgroundColor: pressed
-              ? (isDark ? 'rgba(255,255,255,0.06)' : colors.surfaceVariant)
-              : (isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF'),
-            borderRadius: radii.xl,
-            borderWidth: 1,
-            borderColor: isDark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
-          })}
-        >
-          <View
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: 14,
-              backgroundColor: si.color + '15',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Icon name={si.name} size={20} color={si.color} />
-          </View>
-          <View style={{ flex: 1, marginLeft: spacing.md }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-              <Text
-                style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }}
-                numberOfLines={1}
-              >
-                {item.caller_display_name || item.from_masked || 'Unknown'}
-              </Text>
-              {!!relationship && (
-                <Text style={{ fontSize: 12, color: colors.textDisabled }}>
-                  {relationship}
-                </Text>
-              )}
-              {item.is_vip && (
-                <Icon name="star" size={14} color="#FBBF24" />
-              )}
-              <View
-                style={{
-                  backgroundColor: badge.bg,
-                  borderRadius: 10,
-                  paddingHorizontal: 8,
-                  paddingVertical: 2,
-                }}
-              >
-                <Text style={{ fontSize: 10, fontWeight: '700', color: badge.text }}>
-                  {statusDisplayLabel(item.status || 'unknown')}
-                </Text>
-              </View>
+          }
+        }}
+        accessibilityRole="button"
+        accessibilityLabel={`Call from ${item.from_masked}, ${badge.label}${isLive ? ', live' : ''}`}
+      >
+        <Card variant="elevated" style={{
+          marginBottom: spacing.sm,
+          borderLeftWidth: 3,
+          borderLeftColor:
+            badge.variant === 'success' ? colors.success + '60' :
+            badge.variant === 'error' ? colors.error + '60' :
+            badge.variant === 'warning' ? colors.warning + '60' :
+            colors.primary + '40',
+        }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
+            <View
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: radii.md,
+                backgroundColor: colors.primary + '14',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Icon
+                name={item.source_type === 'forwarded' ? 'phone-forward' : 'phone-incoming'}
+                size="lg"
+                color={colors.primary}
+              />
             </View>
 
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 3 }}>
-              <Text style={{ ...typography.caption, color: colors.textSecondary }}>
-                Call ended · {formatDuration(item.duration_seconds)}
-              </Text>
-              <Text style={{ ...typography.caption, color: colors.textSecondary }}>
-                {timeAgo(item.started_at || item.created_at)}
-              </Text>
+            <View style={{ flex: 1 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+                <TouchableOpacity
+                  onPress={async (e) => {
+                    e.stopPropagation();
+                    if (item.caller_display_name) return;
+                    if (revealedPhones[item.id]) {
+                      setRevealedPhones(prev => {
+                        const next = { ...prev };
+                        delete next[item.id];
+                        return next;
+                      });
+                      return;
+                    }
+                    if (revealingIds.has(item.id)) return;
+                    setRevealingIds(prev => new Set(prev).add(item.id));
+                    try {
+                      const phone = await fetchCallerPhone(item.id);
+                      setRevealedPhones(prev => ({ ...prev, [item.id]: phone }));
+                    } catch {
+                      // silently fail - number stays masked
+                    } finally {
+                      setRevealingIds(prev => {
+                        const next = new Set(prev);
+                        next.delete(item.id);
+                        return next;
+                      });
+                    }
+                  }}
+                  style={{ flex: 1 }}
+                  accessibilityRole="button"
+                  accessibilityLabel={item.caller_display_name || (revealedPhones[item.id] ? 'Tap to hide number' : 'Tap to reveal number')}
+                  accessibilityHint={item.caller_display_name ? undefined : (revealedPhones[item.id] ? 'Hide the full phone number' : 'Reveal the full phone number')}
+                >
+                  {item.caller_display_name ? (
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+                      <Text
+                        style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }}
+                        numberOfLines={1}
+                        allowFontScaling
+                      >
+                        {item.caller_display_name}
+                      </Text>
+                      {item.caller_relationship && (
+                        <Text
+                          style={{ ...typography.caption, color: colors.textSecondary, fontStyle: 'italic' }}
+                          numberOfLines={1}
+                          allowFontScaling
+                        >
+                          · {item.caller_relationship}
+                        </Text>
+                      )}
+                    </View>
+                  ) : (
+                    <Text
+                      style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }}
+                      numberOfLines={1}
+                      allowFontScaling
+                    >
+                      {revealingIds.has(item.id) ? '...' : (revealedPhones[item.id] || item.from_masked)}
+                    </Text>
+                  )}
+                </TouchableOpacity>
+                {item.is_vip && (
+                  <Icon name="star" size="sm" color={colors.warning} />
+                )}
+                {item.is_blocked && (
+                  <Icon name="block-helper" size="sm" color={colors.error} />
+                )}
+                <Badge label={badge.label} variant={badge.variant} />
+                {isLive && (
+                  <View style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 3,
+                    backgroundColor: colors.error + '18',
+                    paddingVertical: 2,
+                    paddingHorizontal: spacing.xs,
+                    borderRadius: radii.xl,
+                  }}>
+                    <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: colors.error }} />
+                    <Text style={{ ...typography.caption, fontSize: 10, color: colors.error, fontWeight: '700' }}>LIVE</Text>
+                  </View>
+                )}
+              </View>
+
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginTop: 2 }}>
+                <Text
+                  style={{ ...typography.caption, color: colors.textSecondary }}
+                  allowFontScaling
+                >
+                  {callSubtitle(item)}
+                </Text>
+                {item.duration_seconds != null && item.duration_seconds > 0 && (
+                  <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+                    {' · '}{formatDuration(item.duration_seconds)}
+                  </Text>
+                )}
+                <Text style={{ ...typography.caption, color: colors.textSecondary, marginLeft: 'auto' }} allowFontScaling>
+                  {timeAgo(item.started_at, userTz)}
+                </Text>
+              </View>
+
+              {(() => {
+                const ab = artifactBadge(item);
+                if (!ab) return null;
+                return (
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginTop: spacing.xs }}>
+                    <Icon
+                      name={
+                        ab.variant === 'success' ? 'check-circle-outline' :
+                        ab.variant === 'error' ? 'alert-circle' :
+                        ab.variant === 'warning' ? 'alert-circle-outline' :
+                        'progress-clock'
+                      }
+                      size="sm"
+                      color={
+                        ab.variant === 'success' ? colors.success :
+                        ab.variant === 'error' ? colors.error :
+                        ab.variant === 'warning' ? colors.warning :
+                        colors.primary
+                      }
+                    />
+                    <Text
+                      style={{
+                        ...typography.caption,
+                        color: ab.variant === 'success' ? colors.success :
+                               ab.variant === 'error' ? colors.error :
+                               ab.variant === 'warning' ? colors.warning :
+                               colors.primary,
+                      }}
+                      allowFontScaling
+                    >
+                      {ab.label}
+                    </Text>
+                  </View>
+                );
+              })()}
+
+              {item.booked_calendar_event_id && (
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginTop: spacing.xs }}>
+                  <Icon name="calendar-check" size="sm" color={colors.primary} />
+                  <Text
+                    style={{ ...typography.caption, color: colors.primary, fontWeight: '500' }}
+                    numberOfLines={1}
+                    allowFontScaling
+                  >
+                    {item.booked_calendar_event_summary || 'Appointment booked'}
+                  </Text>
+                </View>
+              )}
             </View>
 
-            {isReady && (
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 }}>
-                <Icon name="check-circle" size={14} color="#10B981" />
-                <Text style={{ fontSize: 12, color: '#10B981', fontWeight: '600' }}>Ready</Text>
-              </View>
-            )}
+            <Icon name="chevron-right" size="md" color={colors.textDisabled} />
           </View>
-          <Icon name="chevron-right" size={20} color={colors.textSecondary} style={{ marginLeft: spacing.sm }} />
-        </Pressable>
-      </FadeIn>
+        </Card>
+      </TouchableOpacity>
     );
-  }
 
-  const isDark = theme.dark;
+    if (shouldAnimate && index < 6) {
+      return <FadeIn delay={delay}>{row}</FadeIn>;
+    }
+    return row;
+  }
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background, paddingTop: insets.top }}>
-      <View style={{ paddingHorizontal: spacing.lg, paddingTop: spacing.lg, paddingBottom: spacing.sm }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Text style={{ fontSize: 28, fontWeight: '800', color: colors.textPrimary, letterSpacing: -0.5 }}>Calls</Text>
-          <View style={{ backgroundColor: colors.primary + '15', borderRadius: 20, paddingHorizontal: 12, paddingVertical: 4 }}>
-            <Text style={{ fontSize: 13, fontWeight: '700', color: colors.primary }}>
-              {filtered.length} {filtered.length === 1 ? 'call' : 'calls'}
-            </Text>
-          </View>
-        </View>
+    <ScreenWrapper scroll={false} keyboardAvoiding={false}>
+      {/* Header */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.lg }}>
+        <Icon name="phone-log" size="lg" color={colors.primary} />
+        <Text style={{ ...typography.h2, color: colors.textPrimary, flex: 1 }} allowFontScaling>
+          Calls
+        </Text>
+        {calls.length > 0 && (
+          <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+            {calls.length} call{calls.length !== 1 ? 's' : ''}
+          </Text>
+        )}
       </View>
 
-      {/* Search bar */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: spacing.lg, marginBottom: spacing.md, gap: spacing.sm }}>
+      {/* Search + Advanced filter button */}
+      <View style={{ flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.md }}>
         <View
           style={{
             flex: 1,
             flexDirection: 'row',
             alignItems: 'center',
+            backgroundColor: colors.surface,
             borderRadius: radii.xl,
-            paddingHorizontal: spacing.md,
-            ...searchBarStyle,
+            paddingHorizontal: spacing.lg,
+            gap: spacing.sm,
+            minHeight: 48,
+            ...(theme.dark
+              ? { borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)' }
+              : {
+                  shadowColor: colors.primary,
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.06,
+                  shadowRadius: 8,
+                  elevation: 2,
+                }),
           }}
         >
-          <Icon name="magnify" size={20} color={colors.textDisabled} />
-          <TextInput
-            value={search}
-            onChangeText={setSearch}
-            onSubmitEditing={load}
-            placeholder="Search by name or number..."
+          <Icon name="magnify" size="md" color={colors.textDisabled} />
+          <RNTextInput
+            value={searchText}
+            onChangeText={handleSearchChange}
+            placeholder="Search by name or number"
             placeholderTextColor={colors.textDisabled}
+            style={{ flex: 1, ...typography.body, color: colors.textPrimary, paddingVertical: spacing.md }}
             returnKeyType="search"
-            style={{
-              flex: 1,
-              ...typography.body,
-              color: colors.textPrimary,
-              paddingVertical: spacing.sm + 2,
-              paddingHorizontal: spacing.sm,
-            }}
+            allowFontScaling
+            accessibilityLabel="Search calls"
           />
-          {search.length > 0 && (
-            <Pressable onPress={() => setSearch('')} hitSlop={8}>
-              <Icon name="close-circle" size={18} color={colors.textDisabled} />
-            </Pressable>
+          {searchText.length > 0 && (
+            <TouchableOpacity onPress={() => handleSearchChange('')} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+              <Icon name="close-circle" size="sm" color={colors.textDisabled} />
+            </TouchableOpacity>
           )}
         </View>
-        <Pressable
-          onPress={() => { hapticLight(); setShowFilterModal(true); }}
+
+        {/* Advanced filters button */}
+        <TouchableOpacity
+          onPress={openFilterModal}
+          activeOpacity={0.7}
           style={{
-            width: 42,
-            height: 42,
-            borderRadius: 14,
-            backgroundColor: isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
-            borderWidth: 1,
-            borderColor: isDark ? 'rgba(255,255,255,0.08)' : colors.cardBorder,
+            width: 48,
+            height: 48,
+            borderRadius: radii.xl,
+            backgroundColor: activeFilterCount > 0 ? colors.primary : colors.surface,
             alignItems: 'center',
             justifyContent: 'center',
+            ...(theme.dark
+              ? {
+                  borderWidth: 1,
+                  borderColor: activeFilterCount > 0 ? colors.primary : 'rgba(255,255,255,0.06)',
+                }
+              : {
+                  shadowColor: activeFilterCount > 0 ? colors.primary : '#000',
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: activeFilterCount > 0 ? 0.25 : 0.06,
+                  shadowRadius: 8,
+                  elevation: 2,
+                }),
           }}
+          accessibilityLabel="Advanced filters"
         >
-          <Icon name="tune-variant" size={20} color={colors.primary} />
-        </Pressable>
+          <Icon name="tune-variant" size="md" color={activeFilterCount > 0 ? colors.onPrimary : colors.textSecondary} />
+          {activeFilterCount > 0 && (
+            <View
+              style={{
+                position: 'absolute',
+                top: -4,
+                right: -4,
+                width: 18,
+                height: 18,
+                borderRadius: 9,
+                backgroundColor: colors.error,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Text style={{ color: '#fff', fontSize: 10, fontWeight: '700' }}>{activeFilterCount}</Text>
+            </View>
+          )}
+        </TouchableOpacity>
       </View>
 
-      {/* Filter chips */}
-      <View style={{ height: 40, marginBottom: spacing.sm }}>
+      {/* Quick filter chips (horizontally scrollable) */}
+      <View style={{ flexDirection: 'row', marginBottom: spacing.md }}>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingHorizontal: spacing.lg,
-            alignItems: 'center',
-          }}
+          contentContainerStyle={{ gap: spacing.xs, alignItems: 'center' }}
         >
-          {FILTERS.map((f, idx) => {
-            const active = filter === f.key;
+          {QUICK_PRESETS.map((preset) => {
+            const active = activeQuick === preset.key;
             return (
-              <Pressable
-                key={f.key}
-                onPress={() => {
-                  hapticLight();
-                  setFilter(f.key);
-                }}
+              <TouchableOpacity
+                key={preset.key}
+                onPress={() => handleQuickChange(preset)}
+                activeOpacity={0.7}
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
-                  height: 32,
-                  paddingHorizontal: 12,
-                  borderRadius: 16,
-                  backgroundColor: active ? colors.primary : colors.surfaceVariant,
+                  gap: 4,
+                  height: 36,
+                  paddingHorizontal: spacing.md,
+                  borderRadius: radii.xl,
+                  backgroundColor: active ? colors.primary : colors.surface,
                   borderWidth: 1,
                   borderColor: active ? colors.primary : colors.border,
-                  marginRight: idx < FILTERS.length - 1 ? 8 : 0,
                 }}
+                accessibilityRole="radio"
+                accessibilityState={{ selected: active }}
+                accessibilityLabel={`Filter ${preset.label}`}
               >
-                <Icon name={f.icon} size={15} color={active ? '#FFFFFF' : colors.textSecondary} />
+                <Icon name={preset.icon} size="sm" color={active ? colors.onPrimary : colors.textSecondary} />
                 <Text
                   style={{
-                    fontSize: 13,
+                    ...typography.caption,
+                    color: active ? colors.onPrimary : colors.textSecondary,
                     fontWeight: '600',
-                    color: active ? '#FFFFFF' : colors.textSecondary,
-                    marginLeft: 5,
                   }}
+                  allowFontScaling
                 >
-                  {f.label}
+                  {preset.label}
                 </Text>
-              </Pressable>
+              </TouchableOpacity>
             );
           })}
         </ScrollView>
       </View>
 
-      {loading && !refreshing ? (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} />
-        </View>
-      ) : error ? (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.xl }}>
-          <Icon name="alert-circle-outline" size={48} color={colors.error} />
-          <Text style={{ ...typography.body, color: colors.error, marginTop: spacing.md, textAlign: 'center' }}>
-            {error}
+      {/* Active filter summary + Reset */}
+      {(activeFilterCount > 0 || activeQuick !== 'all') && (
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: colors.primary + '10',
+            borderRadius: radii.md,
+            paddingVertical: spacing.xs + 2,
+            paddingHorizontal: spacing.sm,
+            marginBottom: spacing.sm,
+            gap: spacing.sm,
+          }}
+        >
+          <Icon name="filter-outline" size="sm" color={colors.primary} />
+          <Text style={{ ...typography.caption, color: colors.primary, flex: 1, fontWeight: '500' }} allowFontScaling>
+            {activeFilterCount > 0
+              ? `${activeFilterCount} filter${activeFilterCount !== 1 ? 's' : ''} active`
+              : `Showing: ${QUICK_PRESETS.find((p) => p.key === activeQuick)?.label ?? 'All'}`}
           </Text>
-          <Pressable onPress={load} style={{ marginTop: spacing.md }}>
-            <Text style={{ ...typography.button, color: colors.primary }}>Retry</Text>
-          </Pressable>
-        </View>
-      ) : filtered.length === 0 ? (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.xl }}>
-          <View
+          <TouchableOpacity
+            onPress={() => {
+              setAdvFilters({});
+              setActiveQuick('all');
+              setSearchText('');
+              handleResetAdvanced();
+              loadCalls({});
+            }}
+            activeOpacity={0.7}
             style={{
-              width: 72,
-              height: 72,
-              borderRadius: 22,
-              backgroundColor: colors.primary + '15',
+              flexDirection: 'row',
               alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: spacing.lg,
+              gap: 4,
+              paddingVertical: 4,
+              paddingHorizontal: spacing.sm,
+              borderRadius: radii.md,
+              backgroundColor: colors.error + '18',
             }}
           >
-            <Icon name="phone-outline" size={32} color={colors.primary} />
-          </View>
-          <Text style={{ ...typography.h3, color: colors.textPrimary, marginBottom: spacing.sm }}>
-            No calls yet
-          </Text>
-          <Text style={{ ...typography.bodySmall, color: colors.textSecondary, textAlign: 'center' }}>
-            Your AI assistant is ready. Calls will appear here once your number starts receiving them.
-          </Text>
+            <Icon name="filter-remove-outline" size="sm" color={colors.error} />
+            <Text style={{ ...typography.caption, color: colors.error, fontWeight: '700' }} allowFontScaling>
+              Reset
+            </Text>
+          </TouchableOpacity>
         </View>
-      ) : (
-        <FlatList
-          data={filtered}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={handleRefresh}
-              tintColor={colors.primary}
-              progressBackgroundColor={colors.surface}
+      )}
+
+      {error && <ErrorMessage message={error} action="Retry" onAction={handleRefresh} />}
+
+      <FlatList
+        data={calls}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        refreshing={loading}
+        onRefresh={handleRefresh}
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.3}
+        contentContainerStyle={
+          calls.length === 0
+            ? { flex: 1, justifyContent: 'center', alignItems: 'center' }
+            : { paddingBottom: spacing.xl }
+        }
+        ListEmptyComponent={
+          loading ? (
+            <View style={{ width: '100%' }}>
+              <CallListSkeleton />
+            </View>
+          ) : (
+            <StatusScreen
+              icon="phone-off"
+              iconColor={colors.textDisabled}
+              title="No calls found"
+              subtitle={
+                activeFilterCount > 0 || searchText.trim()
+                  ? 'Try adjusting your filters or search query.'
+                  : 'Your AI assistant is ready. Calls will appear here once your number starts receiving them.'
+              }
+              action={{ title: 'Refresh', onPress: handleRefresh, variant: 'outline' }}
             />
-          }
-          contentContainerStyle={{ paddingBottom: insets.bottom + 100 }}
-        />
-      )}
+          )
+        }
+        ListFooterComponent={
+          loadingMore ? (
+            <View style={{ paddingVertical: spacing.lg, alignItems: 'center' }}>
+              <ActivityIndicator color={colors.primary} />
+            </View>
+          ) : null
+        }
+      />
 
-      {/* Advanced Filter Modal */}
-      {showFilterModal && (
-        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 100 }}>
-          <TouchableWithoutFeedback onPress={() => setShowFilterModal(false)}>
-            <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)' }} />
-          </TouchableWithoutFeedback>
-          <View
+      {/* ============ Advanced Filters Modal ============ */}
+      <Modal
+        visible={filterModalVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setFilterModalVisible(false)}
+      >
+        <Pressable
+          style={{ flex: 1, backgroundColor: colors.overlay, justifyContent: 'flex-end' }}
+          onPress={() => setFilterModalVisible(false)}
+        >
+          <Pressable
             style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              backgroundColor: isDark ? '#160D2E' : colors.background,
-              borderTopLeftRadius: 28,
-              borderTopRightRadius: 28,
-              paddingHorizontal: 20,
-              paddingTop: 16,
-              paddingBottom: insets.bottom + 20,
-              ...(isDark ? { borderWidth: 1, borderBottomWidth: 0, borderColor: 'rgba(255,255,255,0.08)' } : {}),
+              backgroundColor: colors.surface,
+              borderTopLeftRadius: radii.xl,
+              borderTopRightRadius: radii.xl,
+              maxHeight: '85%',
             }}
+            onPress={(e) => e.stopPropagation()}
           >
-            {/* Handle bar */}
-            <View style={{ alignItems: 'center', marginBottom: 16 }}>
-              <View style={{ width: 40, height: 4, borderRadius: 2, backgroundColor: colors.textDisabled }} />
-            </View>
+            <ScrollView
+              contentContainerStyle={{ padding: spacing.xl, paddingBottom: spacing.xxxl }}
+              showsVerticalScrollIndicator={false}
+            >
+              {/* Modal header */}
+              <View style={{ width: 36, height: 4, borderRadius: 2, backgroundColor: colors.border, alignSelf: 'center', marginBottom: spacing.md }} />
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.xl }}>
+                <Icon name="tune-variant" size="lg" color={colors.primary} />
+                <Text style={{ ...typography.h3, color: colors.textPrimary, flex: 1, marginLeft: spacing.sm }} allowFontScaling>
+                  Advanced Filters
+                </Text>
+                <TouchableOpacity onPress={handleResetAdvanced}>
+                  <Text style={{ ...typography.caption, color: colors.error, fontWeight: '600' }} allowFontScaling>
+                    Reset
+                  </Text>
+                </TouchableOpacity>
+              </View>
 
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-              <Text style={{ fontSize: 18, fontWeight: '700', color: colors.textPrimary }}>Filters</Text>
-              <TouchableOpacity onPress={() => setShowFilterModal(false)} hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
-                <Icon name="close" size={24} color={colors.textSecondary} />
-              </TouchableOpacity>
-            </View>
-
-            {/* Sort By */}
-            <Text style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>Sort By</Text>
-            <View style={{ flexDirection: 'row', marginBottom: 16 }}>
-              {[{ key: 'started_at' as const, label: 'Call Time' }, { key: 'created_at' as const, label: 'Created' }].map((opt, i) => {
-                const sel = advancedFilters.sort_by === opt.key;
-                return (
-                  <TouchableOpacity
+              {/* --- Group: Status --- */}
+              <FilterGroupHeader icon="information-outline" label="Call Status" colors={colors} typography={typography} spacing={spacing} />
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs, marginBottom: spacing.lg }}>
+                {STATUS_OPTIONS.map((opt) => (
+                  <FilterChip
                     key={opt.key}
-                    activeOpacity={0.7}
-                    onPress={() => setAdvancedFilters(p => ({ ...p, sort_by: opt.key }))}
-                    style={{
-                      flex: 1,
-                      height: 40,
-                      borderRadius: 10,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      backgroundColor: sel ? colors.primary : colors.surface,
-                      borderWidth: 1,
-                      borderColor: sel ? colors.primary : colors.border,
-                      marginLeft: i > 0 ? 8 : 0,
-                    }}
-                  >
-                    <Text style={{ fontSize: 14, fontWeight: '600', color: sel ? '#FFFFFF' : colors.textPrimary }}>{opt.label}</Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
+                    label={opt.label}
+                    active={stagingStatus === opt.key}
+                    onPress={() => setStagingStatus(opt.key)}
+                    colors={colors}
+                    typography={typography}
+                    spacing={spacing}
+                    radii={radii}
+                  />
+                ))}
+              </View>
 
-            {/* Order */}
-            <Text style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>Order</Text>
-            <View style={{ flexDirection: 'row', marginBottom: 16 }}>
-              {[{ key: 'desc' as const, label: 'Newest First' }, { key: 'asc' as const, label: 'Oldest First' }].map((opt, i) => {
-                const sel = advancedFilters.sort_dir === opt.key;
-                return (
-                  <TouchableOpacity
+              {/* --- Group: Date Range --- */}
+              <FilterGroupHeader icon="calendar-range" label="Date Range" colors={colors} typography={typography} spacing={spacing} />
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs, marginBottom: spacing.lg }}>
+                <FilterChip
+                  label="Any time"
+                  active={!stagingDatePreset}
+                  onPress={() => setStagingDatePreset('')}
+                  colors={colors}
+                  typography={typography}
+                  spacing={spacing}
+                  radii={radii}
+                />
+                {DATE_PRESETS.map((dp) => (
+                  <FilterChip
+                    key={dp.key}
+                    label={dp.label}
+                    active={stagingDatePreset === dp.key}
+                    onPress={() => setStagingDatePreset(dp.key)}
+                    colors={colors}
+                    typography={typography}
+                    spacing={spacing}
+                    radii={radii}
+                  />
+                ))}
+              </View>
+
+              {/* --- Group: Duration --- */}
+              <FilterGroupHeader icon="timer-outline" label="Call Duration" colors={colors} typography={typography} spacing={spacing} />
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs, marginBottom: spacing.lg }}>
+                {DURATION_PRESETS.map((dp) => (
+                  <FilterChip
+                    key={dp.key}
+                    label={dp.label}
+                    active={stagingDurationPreset === dp.key}
+                    onPress={() => setStagingDurationPreset(dp.key)}
+                    colors={colors}
+                    typography={typography}
+                    spacing={spacing}
+                    radii={radii}
+                  />
+                ))}
+              </View>
+
+              {/* --- Group: Call Type --- */}
+              <FilterGroupHeader icon="phone-forward" label="Call Type" colors={colors} typography={typography} spacing={spacing} />
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs, marginBottom: spacing.lg }}>
+                <FilterChip
+                  label="All types"
+                  active={!stagingSourceType}
+                  onPress={() => setStagingSourceType('')}
+                  colors={colors}
+                  typography={typography}
+                  spacing={spacing}
+                  radii={radii}
+                />
+                <FilterChip
+                  label="Direct"
+                  active={stagingSourceType === 'dedicated_number'}
+                  onPress={() => setStagingSourceType('dedicated_number')}
+                  colors={colors}
+                  typography={typography}
+                  spacing={spacing}
+                  radii={radii}
+                  icon="phone-incoming"
+                />
+                <FilterChip
+                  label="Forwarded"
+                  active={stagingSourceType === 'forwarded'}
+                  onPress={() => setStagingSourceType('forwarded')}
+                  colors={colors}
+                  typography={typography}
+                  spacing={spacing}
+                  radii={radii}
+                  icon="phone-forward"
+                />
+              </View>
+
+              {/* --- Group: Country / Region --- */}
+              <FilterGroupHeader icon="earth" label="Country / Region" colors={colors} typography={typography} spacing={spacing} />
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs, marginBottom: spacing.lg }}>
+                {COUNTRY_OPTIONS.slice(0, 10).map((opt) => (
+                  <FilterChip
+                    key={opt.code}
+                    label={opt.label}
+                    active={stagingCountry === opt.code}
+                    onPress={() => setStagingCountry(opt.code)}
+                    colors={colors}
+                    typography={typography}
+                    spacing={spacing}
+                    radii={radii}
+                  />
+                ))}
+                {COUNTRY_OPTIONS.length > 10 && (
+                  <ExpandableCountries
+                    options={COUNTRY_OPTIONS.slice(10)}
+                    activeCode={stagingCountry}
+                    onSelect={setStagingCountry}
+                    colors={colors}
+                    typography={typography}
+                    spacing={spacing}
+                    radii={radii}
+                  />
+                )}
+              </View>
+
+              {/* --- Group: Recording --- */}
+              <FilterGroupHeader icon="microphone-outline" label="Recording" colors={colors} typography={typography} spacing={spacing} />
+              <View style={{ flexDirection: 'row', gap: spacing.xs, marginBottom: spacing.lg }}>
+                <FilterChip
+                  label="All calls"
+                  active={!stagingHasRecording}
+                  onPress={() => setStagingHasRecording(false)}
+                  colors={colors}
+                  typography={typography}
+                  spacing={spacing}
+                  radii={radii}
+                />
+                <FilterChip
+                  label="With recording"
+                  active={stagingHasRecording}
+                  onPress={() => setStagingHasRecording(true)}
+                  colors={colors}
+                  typography={typography}
+                  spacing={spacing}
+                  radii={radii}
+                  icon="microphone"
+                />
+              </View>
+
+              {/* --- Group: Sort --- */}
+              <FilterGroupHeader icon="sort" label="Sort Order" colors={colors} typography={typography} spacing={spacing} />
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs, marginBottom: spacing.xl }}>
+                {SORT_OPTIONS.map((opt) => (
+                  <FilterChip
                     key={opt.key}
-                    activeOpacity={0.7}
-                    onPress={() => setAdvancedFilters(p => ({ ...p, sort_dir: opt.key }))}
-                    style={{
-                      flex: 1,
-                      height: 40,
-                      borderRadius: 10,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      backgroundColor: sel ? colors.primary : colors.surface,
-                      borderWidth: 1,
-                      borderColor: sel ? colors.primary : colors.border,
-                      marginLeft: i > 0 ? 8 : 0,
-                    }}
-                  >
-                    <Text style={{ fontSize: 14, fontWeight: '600', color: sel ? '#FFFFFF' : colors.textPrimary }}>{opt.label}</Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
+                    label={opt.label}
+                    active={stagingSort === opt.key}
+                    onPress={() => setStagingSort(opt.key)}
+                    colors={colors}
+                    typography={typography}
+                    spacing={spacing}
+                    radii={radii}
+                  />
+                ))}
+              </View>
 
-            {/* Recording */}
-            <Text style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>Recording</Text>
-            <View style={{ flexDirection: 'row', marginBottom: 16 }}>
-              {[{ key: null, label: 'Any' }, { key: true, label: 'Has Recording' }].map((opt, i) => {
-                const sel = advancedFilters.has_recording === opt.key;
-                return (
-                  <TouchableOpacity
-                    key={String(opt.key)}
-                    activeOpacity={0.7}
-                    onPress={() => setAdvancedFilters(p => ({ ...p, has_recording: opt.key as boolean | null }))}
-                    style={{
-                      flex: 1,
-                      height: 40,
-                      borderRadius: 10,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      backgroundColor: sel ? colors.primary : colors.surface,
-                      borderWidth: 1,
-                      borderColor: sel ? colors.primary : colors.border,
-                      marginLeft: i > 0 ? 8 : 0,
-                    }}
-                  >
-                    <Text style={{ fontSize: 14, fontWeight: '600', color: sel ? '#FFFFFF' : colors.textPrimary }}>{opt.label}</Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
+              {/* Action buttons */}
+              <View style={{ gap: spacing.sm }}>
+                <Button title="Apply Filters" onPress={handleApplyAdvanced} variant="primary" />
+                <Button title="Cancel" onPress={() => setFilterModalVisible(false)} variant="ghost" />
+              </View>
+            </ScrollView>
+          </Pressable>
+        </Pressable>
+      </Modal>
+    </ScreenWrapper>
+  );
+}
 
-            {/* Duration */}
-            <Text style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>Duration (seconds)</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
-              <TextInput
-                value={advancedFilters.duration_min}
-                onChangeText={(v) => setAdvancedFilters(p => ({ ...p, duration_min: v.replace(/[^0-9]/g, '') }))}
-                placeholder="Min"
-                placeholderTextColor={colors.textDisabled}
-                keyboardType="number-pad"
-                style={{
-                  flex: 1, height: 44, backgroundColor: colors.surface, borderRadius: 10, paddingHorizontal: 12,
-                  borderWidth: 1, borderColor: colors.border, color: colors.textPrimary, fontSize: 14, textAlign: 'center',
-                }}
-              />
-              <Text style={{ fontSize: 14, color: colors.textSecondary, marginHorizontal: 8 }}>to</Text>
-              <TextInput
-                value={advancedFilters.duration_max}
-                onChangeText={(v) => setAdvancedFilters(p => ({ ...p, duration_max: v.replace(/[^0-9]/g, '') }))}
-                placeholder="Max"
-                placeholderTextColor={colors.textDisabled}
-                keyboardType="number-pad"
-                style={{
-                  flex: 1, height: 44, backgroundColor: colors.surface, borderRadius: 10, paddingHorizontal: 12,
-                  borderWidth: 1, borderColor: colors.border, color: colors.textPrimary, fontSize: 14, textAlign: 'center',
-                }}
-              />
-            </View>
+// ---- Reusable sub-components ----
 
-            {/* Actions */}
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => {
-                  setAdvancedFilters({ has_recording: null, sort_by: 'started_at', sort_dir: 'desc', duration_min: '', duration_max: '' });
-                }}
-                style={{ flex: 1, height: 48, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border }}
-              >
-                <Text style={{ fontSize: 15, fontWeight: '700', color: colors.textPrimary }}>Reset</Text>
-              </TouchableOpacity>
-              <View style={{ width: 10 }} />
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => { setShowFilterModal(false); load(); }}
-                style={{ flex: 1, height: 48, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.primary }}
-              >
-                <Text style={{ fontSize: 15, fontWeight: '700', color: '#FFFFFF' }}>Apply</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      )}
+function FilterGroupHeader({
+  icon,
+  label,
+  colors,
+  typography,
+  spacing,
+}: {
+  icon: string;
+  label: string;
+  colors: any;
+  typography: any;
+  spacing: any;
+}) {
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginBottom: spacing.sm }}>
+      <Icon name={icon} size="sm" color={colors.primary} />
+      <Text style={{ ...typography.bodySmall, color: colors.textPrimary, fontWeight: '600' }} allowFontScaling>
+        {label}
+      </Text>
     </View>
+  );
+}
+
+function FilterChip({
+  label,
+  active,
+  onPress,
+  colors,
+  typography,
+  spacing,
+  radii,
+  icon,
+}: {
+  label: string;
+  active: boolean;
+  onPress: () => void;
+  colors: any;
+  typography: any;
+  spacing: any;
+  radii: any;
+  icon?: string;
+}) {
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.7}
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 4,
+        paddingVertical: spacing.xs + 2,
+        paddingHorizontal: spacing.md,
+        borderRadius: radii.xl,
+        backgroundColor: active ? colors.primary : colors.surface,
+        borderWidth: 1,
+        borderColor: active ? colors.primary : colors.border,
+      }}
+    >
+      {icon && <Icon name={icon} size="sm" color={active ? colors.onPrimary : colors.textSecondary} />}
+      {active && !icon && <Icon name="check" size="sm" color={colors.onPrimary} />}
+      <Text
+        style={{
+          ...typography.caption,
+          color: active ? colors.onPrimary : colors.textPrimary,
+          fontWeight: active ? '700' : '500',
+        }}
+        allowFontScaling
+      >
+        {label}
+      </Text>
+    </TouchableOpacity>
+  );
+}
+
+function ExpandableCountries({
+  options,
+  activeCode,
+  onSelect,
+  colors,
+  typography,
+  spacing,
+  radii,
+}: {
+  options: CountryOption[];
+  activeCode: string;
+  onSelect: (code: string) => void;
+  colors: any;
+  typography: any;
+  spacing: any;
+  radii: any;
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  if (!expanded) {
+    const hasActiveInHidden = options.some((o) => o.code === activeCode);
+    return (
+      <TouchableOpacity
+        onPress={() => setExpanded(true)}
+        activeOpacity={0.7}
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 4,
+          paddingVertical: spacing.xs + 2,
+          paddingHorizontal: spacing.md,
+          borderRadius: radii.lg,
+          backgroundColor: hasActiveInHidden ? colors.primary + '20' : colors.background,
+          borderWidth: 1,
+          borderColor: hasActiveInHidden ? colors.primary : colors.border,
+          borderStyle: 'dashed',
+        }}
+      >
+        <Icon name="dots-horizontal" size="sm" color={hasActiveInHidden ? colors.primary : colors.textSecondary} />
+        <Text
+          style={{
+            ...typography.caption,
+            color: hasActiveInHidden ? colors.primary : colors.textSecondary,
+            fontWeight: '500',
+          }}
+          allowFontScaling
+        >
+          +{options.length} more
+        </Text>
+      </TouchableOpacity>
+    );
+  }
+
+  return (
+    <>
+      {options.map((opt) => (
+        <FilterChip
+          key={opt.code}
+          label={opt.label}
+          active={activeCode === opt.code}
+          onPress={() => onSelect(opt.code)}
+          colors={colors}
+          typography={typography}
+          spacing={spacing}
+          radii={radii}
+        />
+      ))}
+    </>
   );
 }

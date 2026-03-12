@@ -1,77 +1,118 @@
 import React from 'react';
-import { Pressable, Text, View, ViewStyle } from 'react-native';
-import { useTheme } from '../../theme/ThemeProvider';
+import { View, Text, ViewStyle } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from 'react-native-reanimated';
+import { Pressable } from 'react-native';
 import { Icon } from './Icon';
+import { useTheme } from '../../theme/ThemeProvider';
 
 interface Props {
-  icon: string;
-  label: string;
-  onPress?: () => void;
-  chevron?: boolean;
-  rightLabel?: string;
+  icon?: string;
   iconColor?: string;
-  labelColor?: string;
-  disabled?: boolean;
-  destructive?: boolean;
-  isLast?: boolean;
+  title: string;
+  subtitle?: string;
+  right?: React.ReactNode;
+  onPress?: () => void;
   style?: ViewStyle;
+  accessibilityLabel?: string;
 }
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export function ListRow({
   icon,
-  label,
-  onPress,
-  chevron = true,
-  rightLabel,
   iconColor,
-  labelColor,
-  disabled = false,
-  destructive = false,
-  isLast = false,
+  title,
+  subtitle,
+  right,
+  onPress,
   style,
+  accessibilityLabel,
 }: Props) {
-  const { colors, spacing, typography } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing, radii, typography } = theme;
 
-  const resolvedIconColor = destructive ? colors.error : iconColor ?? colors.primary;
-  const resolvedLabelColor = destructive ? colors.error : labelColor ?? colors.textPrimary;
+  const resolvedIconColor = iconColor ?? colors.primary;
 
-  return (
-    <Pressable
-      onPress={onPress}
-      disabled={disabled || !onPress}
-      style={({ pressed }) => [
+  const inner = (
+    <View
+      style={[
         {
           flexDirection: 'row',
           alignItems: 'center',
-          paddingVertical: spacing.md,
-          paddingHorizontal: spacing.lg,
-          backgroundColor: pressed ? colors.surfaceVariant : 'transparent',
-          borderBottomWidth: isLast ? 0 : 1,
-          borderBottomColor: colors.border,
+          backgroundColor: colors.surface,
+          borderRadius: radii.xl,
+          padding: spacing.lg,
+          gap: spacing.md,
+          borderLeftWidth: 3,
+          borderLeftColor: resolvedIconColor + '20',
         },
         style,
       ]}
     >
-      <Icon name={icon} size={20} color={resolvedIconColor} />
-      <Text
-        style={{
-          ...typography.body,
-          color: resolvedLabelColor,
-          flex: 1,
-          marginLeft: spacing.md,
-        }}
-        numberOfLines={1}
-      >
-        {label}
-      </Text>
-      {rightLabel ? (
-        <Text style={{ ...typography.bodySmall, color: colors.textSecondary, marginRight: spacing.xs }}>
-          {rightLabel}
+      {icon && (
+        <View
+          style={{
+            width: 44,
+            height: 44,
+            borderRadius: radii.md,
+            backgroundColor: resolvedIconColor + '14',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Icon name={icon} size="md" color={resolvedIconColor} />
+        </View>
+      )}
+      <View style={{ flex: 1 }}>
+        <Text
+          style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500' }}
+          numberOfLines={1}
+          allowFontScaling
+        >
+          {title}
         </Text>
-      ) : null}
-      {chevron && !disabled && onPress ? (
-        <Icon name="chevron-right" size={20} color={colors.textSecondary} />
-      ) : null}
-    </Pressable>
+        {subtitle && (
+          <Text
+            style={{ ...typography.caption, color: colors.textSecondary, marginTop: 2 }}
+            numberOfLines={1}
+            allowFontScaling
+          >
+            {subtitle}
+          </Text>
+        )}
+      </View>
+      {right}
+    </View>
   );
+
+  if (onPress) {
+    const scale = useSharedValue(1);
+
+    const animatedStyle = useAnimatedStyle(() => ({
+      transform: [{ scale: scale.value }],
+    }));
+
+    return (
+      <AnimatedPressable
+        onPressIn={() => {
+          scale.value = withSpring(0.97, { damping: 15, stiffness: 400 });
+        }}
+        onPressOut={() => {
+          scale.value = withSpring(1, { damping: 15, stiffness: 400 });
+        }}
+        onPress={onPress}
+        accessibilityRole="button"
+        accessibilityLabel={accessibilityLabel ?? title}
+        style={animatedStyle}
+      >
+        {inner}
+      </AnimatedPressable>
+    );
+  }
+
+  return inner;
 }

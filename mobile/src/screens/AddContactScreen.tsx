@@ -1,273 +1,292 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TextInput,
-  Pressable,
-  ActivityIndicator,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, Switch } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTheme } from '../theme/ThemeProvider';
-import { Icon } from '../components/ui/Icon';
-import { FadeIn } from '../components/ui/FadeIn';
+import { ScreenWrapper } from '../components/ui/ScreenWrapper';
+import { Card } from '../components/ui/Card';
+import { TextInput } from '../components/ui/TextInput';
 import { PhoneInput } from '../components/ui/PhoneInput';
-import { apiClient } from '../api/client';
+import { Button } from '../components/ui/Button';
+import { Icon } from '../components/ui/Icon';
+import { Toast } from '../components/ui/Toast';
+import { ContactPicker, type SelectedContact } from '../components/ContactPicker';
+import { useTheme } from '../theme/ThemeProvider';
+import { useContactsStore } from '../store/contactsStore';
+import type { ContactCreateParams } from '../api/contacts';
 
-const CATEGORIES: { slug: string; label: string }[] = [
-  { slug: 'friends', label: 'Friends' },
-  { slug: 'family', label: 'Family' },
-  { slug: 'business', label: 'Business' },
-  { slug: 'clients', label: 'Clients' },
-  { slug: 'colleagues', label: 'Colleagues' },
-  { slug: 'healthcare', label: 'Healthcare' },
-  { slug: 'vendors', label: 'Vendors' },
-  { slug: 'acquaintances', label: 'Acquaintances' },
-  { slug: 'other', label: 'Other' },
+const TEMPERAMENT_OPTIONS = [
+  { value: '', label: 'Use Default' },
+  { value: 'professional_polite', label: 'Professional & Polite' },
+  { value: 'casual_friendly', label: 'Friendly & Casual' },
+  { value: 'short_and_direct', label: 'Short & Direct' },
+  { value: 'warm_and_supportive', label: 'Warm & Supportive' },
+];
+
+const SWEARING_OPTIONS = [
+  { value: '', label: 'Use Default' },
+  { value: 'no_swearing', label: 'No Swearing' },
+  { value: 'mirror_caller', label: 'Mirror Caller' },
+  { value: 'allow', label: 'Allow' },
+];
+
+const GREETING_OPTIONS = [
+  { value: '', label: 'Use Default' },
+  { value: 'standard', label: 'Standard' },
+  { value: 'brief', label: 'Brief' },
+  { value: 'formal', label: 'Formal' },
+  { value: 'custom', label: 'Custom' },
 ];
 
 export function AddContactScreen() {
-  const { colors, spacing, typography, radii } = useTheme();
-  const insets = useSafeAreaInsets();
+  const theme = useTheme();
+  const { colors, spacing, typography, radii } = theme;
   const navigation = useNavigation<any>();
+  const { categories, addContact, loadCategories } = useContactsStore();
 
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+  const [phoneE164, setPhoneE164] = useState('');
+  const [displayName, setDisplayName] = useState('');
   const [company, setCompany] = useState('');
   const [relationship, setRelationship] = useState('');
-  const [category, setCategory] = useState('other');
+  const [email, setEmail] = useState('');
   const [notes, setNotes] = useState('');
+  const [category, setCategory] = useState('other');
+  const [isVip, setIsVip] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [showAi, setShowAi] = useState(false);
+  const [aiTemperament, setAiTemperament] = useState('');
+  const [aiSwearing, setAiSwearing] = useState('');
+  const [aiGreeting, setAiGreeting] = useState('');
+  const [aiCustomInstructions, setAiCustomInstructions] = useState('');
+  const [aiMaxCall, setAiMaxCall] = useState('');
+  const [aiGreetingInstructions, setAiGreetingInstructions] = useState('');
   const [saving, setSaving] = useState(false);
+  const [toast, setToast] = useState('');
+  const [toastType, setToastType] = useState<'success' | 'error'>('success');
+  const [contactPickerVisible, setContactPickerVisible] = useState(false);
+
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
+  const handleContactPick = useCallback((selected: SelectedContact) => {
+    if (selected.phoneNumber) setPhoneE164(selected.phoneNumber);
+    if (selected.displayName) setDisplayName(selected.displayName);
+    if (selected.company) setCompany(selected.company);
+    if (selected.email) setEmail(selected.email);
+    setContactPickerVisible(false);
+  }, []);
 
   async function handleSave() {
-    if (!name.trim()) {
-      Alert.alert('Error', 'Name is required');
+    if (!phoneE164.trim()) {
+      setToastType('error');
+      setToast('Phone number is required');
       return;
     }
-    if (!phone.trim()) {
-      Alert.alert('Error', 'Phone number is required');
-      return;
-    }
-
     setSaving(true);
-    try {
-      await apiClient.post('/contacts', {
-        phone_number: phone.trim(),
-        display_name: name.trim(),
-        email: email.trim() || undefined,
-        company: company.trim() || undefined,
-        relationship: relationship.trim() || undefined,
-        category,
-        notes: notes.trim() || undefined,
-      });
+    const params: ContactCreateParams = {
+      phone_number: phoneE164.trim(),
+      display_name: displayName.trim() || undefined,
+      company: company.trim() || undefined,
+      relationship: relationship.trim() || undefined,
+      email: email.trim() || undefined,
+      notes: notes.trim() || undefined,
+      category,
+      is_vip: isVip,
+      is_blocked: isBlocked,
+    };
+    if (aiTemperament) params.ai_temperament_preset = aiTemperament;
+    if (aiGreeting) params.ai_greeting_template = aiGreeting;
+    if (aiSwearing) params.ai_swearing_rule = aiSwearing;
+    if (aiMaxCall && Number(aiMaxCall) >= 60) params.ai_max_call_length_seconds = Number(aiMaxCall);
+    if (aiGreetingInstructions.trim()) params.ai_greeting_instructions = aiGreetingInstructions.trim();
+    if (aiCustomInstructions.trim()) params.ai_custom_instructions = aiCustomInstructions.trim();
+
+    const ok = await addContact(params);
+    if (ok) {
       navigation.goBack();
-    } catch (e: any) {
-      Alert.alert('Error', e?.response?.data?.detail || e?.response?.data?.error?.message || 'Failed to create contact');
-    } finally {
-      setSaving(false);
+    } else {
+      setToastType('error');
+      setToast(useContactsStore.getState().error ?? 'Failed to add contact');
     }
+    setSaving(false);
+  }
+
+  function renderPicker(
+    label: string,
+    options: { value: string; label: string }[],
+    selected: string,
+    onSelect: (v: string) => void,
+  ) {
+    return (
+      <View style={{ marginBottom: spacing.md }}>
+        <Text style={{ ...typography.caption, color: colors.textSecondary, marginBottom: spacing.xs }}>
+          {label}
+        </Text>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs }}>
+          {options.map((opt) => {
+            const active = selected === opt.value;
+            return (
+              <TouchableOpacity
+                key={opt.value}
+                onPress={() => onSelect(opt.value)}
+                style={{
+                  paddingHorizontal: spacing.md,
+                  paddingVertical: spacing.xs + 2,
+                  borderRadius: radii.full,
+                  borderWidth: 1.5,
+                  borderColor: active ? colors.primary : colors.border,
+                  backgroundColor: active ? colors.primary + '14' : 'transparent',
+                }}
+              >
+                <Text style={{ ...typography.caption, color: active ? colors.primary : colors.textSecondary, fontWeight: active ? '600' : '400' }}>
+                  {opt.label}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
+    );
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background, paddingTop: insets.top }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}>
-        <Pressable onPress={() => navigation.goBack()} hitSlop={12}>
-          <Icon name="close" size={24} color={colors.textPrimary} />
-        </Pressable>
-        <Text style={{ ...typography.h3, color: colors.textPrimary, marginLeft: spacing.md, flex: 1 }}>
-          Add Contact
-        </Text>
-        <Pressable
-          onPress={handleSave}
-          disabled={saving || !name.trim() || !phone.trim()}
-          style={{
-            paddingHorizontal: spacing.lg,
-            paddingVertical: spacing.sm,
-            backgroundColor: (!name.trim() || !phone.trim()) ? colors.textDisabled : colors.primary,
-            borderRadius: radii.full,
-          }}
-        >
-          {saving ? (
-            <ActivityIndicator size="small" color="#FFFFFF" />
-          ) : (
-            <Text style={{ fontSize: 14, fontWeight: '700', color: '#FFFFFF' }}>Save</Text>
-          )}
-        </Pressable>
-      </View>
+    <ScreenWrapper>
+      <Toast message={toast} type={toastType} visible={!!toast} onDismiss={() => setToast('')} />
+      <ContactPicker visible={contactPickerVisible} onSelect={handleContactPick} onClose={() => setContactPickerVisible(false)} />
 
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ padding: spacing.lg, paddingBottom: insets.bottom + 40 }}
-          keyboardShouldPersistTaps="handled"
-        >
-          <FadeIn delay={0}>
-            <Text style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginBottom: spacing.xs }}>
-              Name *
-            </Text>
-            <TextInput
-              value={name}
-              onChangeText={setName}
-              placeholder="Contact name"
-              placeholderTextColor={colors.textDisabled}
-              style={{
-                backgroundColor: colors.surface,
-                borderRadius: radii.lg,
-                borderWidth: 1,
-                borderColor: colors.border,
-                padding: spacing.md,
-                fontSize: 16,
-                color: colors.textPrimary,
-              }}
-            />
-          </FadeIn>
+      <Text style={{ ...typography.h2, color: colors.textPrimary, marginBottom: spacing.lg }}>Add Contact</Text>
 
-          <FadeIn delay={30}>
-            <View style={{ marginTop: spacing.lg }}>
-              <PhoneInput
-                value={phone}
-                onChangeValue={setPhone}
-                label="Phone Number *"
-                placeholder="(555) 123-4567"
-              />
-            </View>
-          </FadeIn>
+      <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
+        <View style={{ gap: spacing.md }}>
+          <PhoneInput value={phoneE164} onChangeE164={setPhoneE164} label="Phone Number" />
 
-          <FadeIn delay={60}>
-            <Text style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginBottom: spacing.xs }}>
-              Email
-            </Text>
-            <TextInput
-              value={email}
-              onChangeText={setEmail}
-              placeholder="Email address"
-              placeholderTextColor={colors.textDisabled}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              style={{
-                backgroundColor: colors.surface,
-                borderRadius: radii.lg,
-                borderWidth: 1,
-                borderColor: colors.border,
-                padding: spacing.md,
-                fontSize: 16,
-                color: colors.textPrimary,
-              }}
-            />
-          </FadeIn>
+          <TouchableOpacity
+            onPress={() => setContactPickerVisible(true)}
+            activeOpacity={0.7}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: spacing.sm,
+              paddingVertical: spacing.md,
+              paddingHorizontal: spacing.lg,
+              borderRadius: radii.md,
+              borderWidth: 1.5,
+              borderColor: colors.primary,
+              backgroundColor: colors.primary + '0A',
+            }}
+          >
+            <Icon name="contacts" size="sm" color={colors.primary} />
+            <Text style={{ ...typography.body, color: colors.primary, fontWeight: '600' }}>Pick from Contacts</Text>
+          </TouchableOpacity>
 
-          <FadeIn delay={70}>
-            <Text style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginTop: spacing.lg, marginBottom: spacing.xs }}>
-              Company
-            </Text>
-            <TextInput
-              value={company}
-              onChangeText={setCompany}
-              placeholder="Company name"
-              placeholderTextColor={colors.textDisabled}
-              style={{
-                backgroundColor: colors.surface,
-                borderRadius: radii.lg,
-                borderWidth: 1,
-                borderColor: colors.border,
-                padding: spacing.md,
-                fontSize: 16,
-                color: colors.textPrimary,
-              }}
-            />
-          </FadeIn>
+          <TextInput label="Display Name" value={displayName} onChangeText={setDisplayName} placeholder="John Smith" />
+          <TextInput label="Company" value={company} onChangeText={setCompany} placeholder="Acme Corp" />
+          <TextInput label="Relationship" value={relationship} onChangeText={setRelationship} placeholder="e.g. Client, Vendor" />
+          <TextInput label="Email" value={email} onChangeText={setEmail} placeholder="email@example.com" keyboardType="email-address" />
+          <TextInput label="Notes" value={notes} onChangeText={setNotes} placeholder="Additional notes..." multiline numberOfLines={2} />
 
-          <FadeIn delay={80}>
-            <Text style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginTop: spacing.lg, marginBottom: spacing.xs }}>
-              Relationship
-            </Text>
-            <TextInput
-              value={relationship}
-              onChangeText={setRelationship}
-              placeholder="e.g., Client, Friend, Manager"
-              placeholderTextColor={colors.textDisabled}
-              style={{
-                backgroundColor: colors.surface,
-                borderRadius: radii.lg,
-                borderWidth: 1,
-                borderColor: colors.border,
-                padding: spacing.md,
-                fontSize: 16,
-                color: colors.textPrimary,
-              }}
-            />
-          </FadeIn>
-
-          <FadeIn delay={90}>
-            <Text style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginTop: spacing.xl, marginBottom: spacing.sm }}>
-              Category
-            </Text>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-              {CATEGORIES.map((cat, idx) => {
-                const isSelected = category === cat.slug;
+          <Text style={{ ...typography.caption, color: colors.textSecondary, marginBottom: spacing.xs }}>
+            Category
+          </Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0 }}>
+            <View style={{ flexDirection: 'row', gap: spacing.xs }}>
+              {categories.map((cat) => {
+                const active = category === cat.slug;
                 return (
-                  <Pressable
+                  <TouchableOpacity
                     key={cat.slug}
-                    onPress={() => setCategory(isSelected ? 'other' : cat.slug)}
+                    onPress={() => setCategory(cat.slug)}
                     style={{
                       paddingHorizontal: spacing.md,
-                      paddingVertical: spacing.sm,
-                      borderRadius: 20,
-                      backgroundColor: isSelected ? colors.primary : colors.surface,
-                      borderWidth: 1,
-                      borderColor: isSelected ? colors.primary : colors.border,
-                      marginRight: 8,
-                      marginBottom: 8,
+                      paddingVertical: spacing.xs + 2,
+                      borderRadius: radii.full,
+                      borderWidth: 1.5,
+                      borderColor: active ? colors.primary : colors.border,
+                      backgroundColor: active ? colors.primary + '14' : 'transparent',
                     }}
                   >
-                    <Text
-                      style={{
-                        fontSize: 13,
-                        fontWeight: '600',
-                        color: isSelected ? '#FFFFFF' : colors.textPrimary,
-                      }}
-                    >
+                    <Text style={{ ...typography.caption, color: active ? colors.primary : colors.textSecondary, fontWeight: active ? '600' : '400' }}>
                       {cat.label}
                     </Text>
-                  </Pressable>
+                  </TouchableOpacity>
                 );
               })}
             </View>
-          </FadeIn>
+          </ScrollView>
 
-          <FadeIn delay={120}>
-            <Text style={{ fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginTop: spacing.xl, marginBottom: spacing.xs }}>
-              Notes
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: spacing.sm }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+              <Icon name="star" size="sm" color="#F59E0B" />
+              <Text style={{ ...typography.body, color: colors.textPrimary }}>VIP</Text>
+            </View>
+            <Switch value={isVip} onValueChange={setIsVip} trackColor={{ true: colors.primary }} />
+          </View>
+
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+              <Icon name="shield-off-outline" size="sm" color={colors.error} />
+              <Text style={{ ...typography.body, color: colors.textPrimary }}>Blocked</Text>
+            </View>
+            <Switch value={isBlocked} onValueChange={setIsBlocked} trackColor={{ true: colors.error }} />
+          </View>
+        </View>
+      </Card>
+
+      {/* AI Overrides (collapsible) */}
+      <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
+        <TouchableOpacity
+          onPress={() => setShowAi(!showAi)}
+          activeOpacity={0.7}
+          style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Icon name="robot-outline" size="md" color={colors.accent} />
+            <Text style={{ ...typography.h3, color: colors.textPrimary }}>AI Overrides</Text>
+          </View>
+          <Icon name={showAi ? 'chevron-up' : 'chevron-down'} size="sm" color={colors.textSecondary} />
+        </TouchableOpacity>
+
+        {showAi && (
+          <View style={{ marginTop: spacing.lg, gap: spacing.sm }}>
+            <Text style={{ ...typography.caption, color: colors.textSecondary, marginBottom: spacing.xs }}>
+              Leave blank to use category or global defaults
             </Text>
+            {renderPicker('Temperament', TEMPERAMENT_OPTIONS, aiTemperament, setAiTemperament)}
+            {renderPicker('Greeting Style', GREETING_OPTIONS, aiGreeting, setAiGreeting)}
+            {renderPicker('Swearing Rule', SWEARING_OPTIONS, aiSwearing, setAiSwearing)}
             <TextInput
-              value={notes}
-              onChangeText={setNotes}
-              placeholder="Add any notes..."
-              placeholderTextColor={colors.textDisabled}
-              multiline
-              style={{
-                backgroundColor: colors.surface,
-                borderRadius: radii.lg,
-                borderWidth: 1,
-                borderColor: colors.border,
-                padding: spacing.md,
-                minHeight: 100,
-                fontSize: 16,
-                color: colors.textPrimary,
-                textAlignVertical: 'top',
-              }}
+              label="Max Call Length (seconds)"
+              value={aiMaxCall}
+              onChangeText={setAiMaxCall}
+              placeholder="e.g. 180 (leave empty for default)"
+              keyboardType="numeric"
             />
-          </FadeIn>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </View>
+            <TextInput
+              label="Custom Greeting Instructions"
+              value={aiGreetingInstructions}
+              onChangeText={setAiGreetingInstructions}
+              placeholder="How the AI should greet this caller..."
+              multiline
+              numberOfLines={3}
+            />
+            <TextInput
+              label="Custom AI Instructions"
+              value={aiCustomInstructions}
+              onChangeText={setAiCustomInstructions}
+              placeholder="Extra context about this contact..."
+              multiline
+              numberOfLines={3}
+            />
+          </View>
+        )}
+      </Card>
+
+      <Button
+        title={saving ? 'Adding...' : 'Add Contact'}
+        onPress={handleSave}
+        disabled={saving || !phoneE164.trim()}
+        style={{ marginBottom: spacing.xxl }}
+      />
+    </ScreenWrapper>
   );
 }

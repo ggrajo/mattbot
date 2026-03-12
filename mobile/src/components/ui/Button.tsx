@@ -1,24 +1,17 @@
-import React from 'react';
+import React, { useRef, useCallback } from 'react';
 import {
+  Animated,
   Text,
   ActivityIndicator,
   StyleSheet,
   ViewStyle,
   TextStyle,
   View,
-  Platform,
+  Pressable,
 } from 'react-native';
-import { GradientView } from './GradientView';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-} from 'react-native-reanimated';
-import { Pressable } from 'react-native';
 import { Icon } from './Icon';
 import { useTheme } from '../../theme/ThemeProvider';
 import { Theme } from '../../theme/tokens';
-import { hapticLight } from '../../utils/haptics';
 
 type Variant = 'primary' | 'secondary' | 'outline' | 'destructive' | 'ghost';
 
@@ -32,8 +25,6 @@ interface Props {
   style?: ViewStyle;
   accessibilityLabel?: string;
 }
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export function Button({
   title,
@@ -52,76 +43,49 @@ export function Button({
       ? theme.colors.primary
       : theme.colors.onPrimary;
 
-  const scale = useSharedValue(1);
+  const scale = useRef(new Animated.Value(1)).current;
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
+  const handlePressIn = useCallback(() => {
+    Animated.spring(scale, {
+      toValue: 0.97,
+      useNativeDriver: true,
+      speed: 50,
+      bounciness: 4,
+    }).start();
+  }, [scale]);
 
-  const content = loading ? (
-    <ActivityIndicator size="small" color={spinnerColor} />
-  ) : (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-      {icon && <Icon name={icon} size="md" color={styles.text.color as string} />}
-      <Text style={styles.text} allowFontScaling>
-        {title}
-      </Text>
-    </View>
-  );
-
-  const isPrimary = variant === 'primary';
+  const handlePressOut = useCallback(() => {
+    Animated.spring(scale, {
+      toValue: 1,
+      useNativeDriver: true,
+      speed: 50,
+      bounciness: 4,
+    }).start();
+  }, [scale]);
 
   return (
-    <AnimatedPressable
-      onPressIn={() => {
-        scale.value = withSpring(0.96, { damping: 15, stiffness: 400 });
-      }}
-      onPressOut={() => {
-        scale.value = withSpring(1, { damping: 15, stiffness: 400 });
-      }}
-      onPress={() => {
-        hapticLight();
-        onPress();
-      }}
+    <Pressable
+      onPress={onPress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
       disabled={disabled || loading}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel || title}
       accessibilityState={{ disabled: disabled || loading, busy: loading }}
-      style={[animatedStyle, style]}
     >
-      {isPrimary ? (
-        <GradientView
-          colors={[theme.colors.gradientStart, theme.colors.gradientEnd]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={[
-            styles.container,
-            Platform.OS === 'ios' && {
-              shadowColor: theme.colors.primary,
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.35,
-              shadowRadius: 12,
-            },
-          ]}
-        >
-          {content}
-        </GradientView>
-      ) : (
-        <View
-          style={[
-            styles.container,
-            variant === 'destructive' && Platform.OS === 'ios' && {
-              shadowColor: theme.colors.error,
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.25,
-              shadowRadius: 10,
-            },
-          ]}
-        >
-          {content}
-        </View>
-      )}
-    </AnimatedPressable>
+      <Animated.View style={[styles.container, { transform: [{ scale }] }, style]}>
+        {loading ? (
+          <ActivityIndicator size="small" color={spinnerColor} />
+        ) : (
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            {icon && <Icon name={icon} size="md" color={styles.text.color as string} />}
+            <Text style={styles.text} allowFontScaling>
+              {title}
+            </Text>
+          </View>
+        )}
+      </Animated.View>
+    </Pressable>
   );
 }
 
@@ -131,10 +95,10 @@ function makeStyles(theme: Theme, variant: Variant, isDisabled: boolean) {
   const base: ViewStyle = {
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.xl,
-    borderRadius: radii.lg,
+    borderRadius: radii.md,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 52,
+    minHeight: 48,
     opacity: isDisabled ? 0.5 : 1,
   };
 
@@ -144,7 +108,7 @@ function makeStyles(theme: Theme, variant: Variant, isDisabled: boolean) {
 
   const variantStyles: Record<Variant, { container: ViewStyle; text: TextStyle }> = {
     primary: {
-      container: { ...base },
+      container: { ...base, backgroundColor: colors.primary },
       text: { ...textBase, color: colors.onPrimary },
     },
     secondary: {
@@ -152,12 +116,7 @@ function makeStyles(theme: Theme, variant: Variant, isDisabled: boolean) {
       text: { ...textBase, color: colors.secondary },
     },
     outline: {
-      container: {
-        ...base,
-        backgroundColor: 'transparent',
-        borderWidth: 1.5,
-        borderColor: colors.border,
-      },
+      container: { ...base, backgroundColor: 'transparent', borderWidth: 1.5, borderColor: colors.border },
       text: { ...textBase, color: colors.textPrimary },
     },
     destructive: {

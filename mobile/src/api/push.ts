@@ -8,7 +8,3 @@ export async function registerPushToken(deviceId: string, token: string) {
   });
   return data;
 }
-
-export async function sendTestNotification(): Promise<void> {
-  await apiClient.post('/push/test');
-}

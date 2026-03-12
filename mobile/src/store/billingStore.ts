@@ -1,63 +1,93 @@
 import { create } from 'zustand';
-
-export interface BillingStatus {
-  plan: string;
-  minutes_used: number;
-  minutes_included: number;
-  minutes_carried_over: number;
-  current_period_end: string | null;
-}
-
-export interface BillingPlan {
-  code: string;
-  name: string;
-  price_usd: string;
-  limited: boolean;
-  minutes_included: number;
-}
+import {
+  type BillingPlan,
+  type BillingStatus,
+  getPlans,
+  getBillingStatus,
+  subscribe as apiSubscribe,
+  changePlan as apiChangePlan,
+  cancelSubscription as apiCancel,
+} from '../api/billing';
+import { extractApiError } from '../api/client';
 
 interface BillingStore {
-  billingStatus: BillingStatus | null;
   plans: BillingPlan[];
-  error: string | undefined;
-  loadBillingStatus: () => Promise<void>;
+  billingStatus: BillingStatus | null;
+  loading: boolean;
+  error: string | null;
+
   loadPlans: () => Promise<void>;
+  loadBillingStatus: () => Promise<void>;
+  subscribe: (plan: string, paymentMethodId?: string) => Promise<boolean>;
+  changePlan: (newPlan: string) => Promise<boolean>;
+  cancelSubscription: () => Promise<boolean>;
   reset: () => void;
 }
 
 export const useBillingStore = create<BillingStore>((set) => ({
-  billingStatus: null,
   plans: [],
-  error: undefined,
-
-  loadBillingStatus: async () => {
-    try {
-      const { apiClient } = await import('../api/client');
-      const { data } = await apiClient.get('/billing/status');
-      set({ billingStatus: data, error: undefined });
-    } catch {
-      set({ billingStatus: null, error: undefined });
-    }
-  },
+  billingStatus: null,
+  loading: false,
+  error: null,
 
   loadPlans: async () => {
+    set({ loading: true, error: null });
     try {
-      const { apiClient } = await import('../api/client');
-      const { data } = await apiClient.get('/billing/plans');
-      set({ plans: data?.plans ?? data ?? [], error: undefined });
-    } catch {
-      set({ plans: [], error: undefined });
+      const { plans } = await getPlans();
+      set({ plans, loading: false });
+    } catch (e: unknown) {
+      set({ error: extractApiError(e), loading: false });
     }
   },
 
-  reset: () => {
-    set({ billingStatus: null, plans: [], error: undefined });
+  loadBillingStatus: async () => {
+    set({ loading: true, error: null });
+    try {
+      const billingStatus = await getBillingStatus();
+      set({ billingStatus, loading: false });
+    } catch (e: unknown) {
+      set({ error: extractApiError(e), loading: false });
+    }
   },
-}));
 
-export function useIsSubscriptionActive(): boolean {
-  return useBillingStore((s) => {
-    if (s.billingStatus == null) return true;
-    return s.billingStatus.plan !== 'free';
-  });
-}
+  subscribe: async (plan, paymentMethodId) => {
+    set({ loading: true, error: null });
+    try {
+      await apiSubscribe(plan, paymentMethodId ?? '');
+      const billingStatus = await getBillingStatus();
+      set({ billingStatus, loading: false });
+      return true;
+    } catch (e: unknown) {
+      set({ error: extractApiError(e), loading: false });
+      return false;
+    }
+  },
+
+  changePlan: async (newPlan) => {
+    set({ loading: true, error: null });
+    try {
+      await apiChangePlan(newPlan);
+      const billingStatus = await getBillingStatus();
+      set({ billingStatus, loading: false });
+      return true;
+    } catch (e: unknown) {
+      set({ error: extractApiError(e), loading: false });
+      return false;
+    }
+  },
+
+  cancelSubscription: async () => {
+    set({ loading: true, error: null });
+    try {
+      await apiCancel();
+      const billingStatus = await getBillingStatus();
+      set({ billingStatus, loading: false });
+      return true;
+    } catch (e: unknown) {
+      set({ error: extractApiError(e), loading: false });
+      return false;
+    }
+  },
+
+  reset: () => set({ plans: [], billingStatus: null, loading: false, error: null }),
+}));

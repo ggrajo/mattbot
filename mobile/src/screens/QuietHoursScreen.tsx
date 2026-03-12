@@ -1,306 +1,265 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, ScrollView, Switch, Pressable, ActivityIndicator, Platform } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { useFocusEffect } from '@react-navigation/native';
-import { useTheme } from '../theme/ThemeProvider';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Switch, TouchableOpacity } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ScreenWrapper } from '../components/ui/ScreenWrapper';
+import { Card } from '../components/ui/Card';
+import { Button } from '../components/ui/Button';
 import { Icon } from '../components/ui/Icon';
-import { apiClient, extractApiError } from '../api/client';
+import { Toast } from '../components/ui/Toast';
+import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { TimePicker, formatTime12h } from '../components/ui/TimePicker';
+import { useTheme } from '../theme/ThemeProvider';
+import { useSettingsStore } from '../store/settingsStore';
+import { RootStackParamList } from '../navigation/types';
 
-const DAYS: { label: string; short: string; value: number }[] = [
-  { label: 'Sunday', short: 'Sun', value: 0 },
-  { label: 'Monday', short: 'Mon', value: 1 },
-  { label: 'Tuesday', short: 'Tue', value: 2 },
-  { label: 'Wednesday', short: 'Wed', value: 3 },
-  { label: 'Thursday', short: 'Thu', value: 4 },
-  { label: 'Friday', short: 'Fri', value: 5 },
-  { label: 'Saturday', short: 'Sat', value: 6 },
+type Props = NativeStackScreenProps<RootStackParamList, 'QuietHours'>;
+
+const DAYS = [
+  { label: 'Mon', value: 1 },
+  { label: 'Tue', value: 2 },
+  { label: 'Wed', value: 3 },
+  { label: 'Thu', value: 4 },
+  { label: 'Fri', value: 5 },
+  { label: 'Sat', value: 6 },
+  { label: 'Sun', value: 0 },
 ];
 
-interface QuietHoursSettings {
-  quiet_hours_enabled: boolean;
-  quiet_hours_start: string;
-  quiet_hours_end: string;
-  quiet_hours_days: number[];
-  quiet_hours_allow_vip: boolean;
-  revision: number;
-}
-
-const DEFAULTS: QuietHoursSettings = {
-  quiet_hours_enabled: false,
-  quiet_hours_start: '22:00',
-  quiet_hours_end: '07:00',
-  quiet_hours_days: [0, 1, 2, 3, 4, 5, 6],
-  quiet_hours_allow_vip: false,
-  revision: 1,
-};
-
-function parseHHMM(s: string): Date {
-  const [h, m] = s.split(':').map(Number);
-  const d = new Date();
-  d.setHours(h || 0, m || 0, 0, 0);
-  return d;
-}
-
-function formatHHMM(d: Date): string {
-  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-}
-
-function formatDisplay(hhmm: string): string {
-  const d = parseHHMM(hhmm);
-  const h = d.getHours();
-  const m = d.getMinutes();
-  const ampm = h >= 12 ? 'PM' : 'AM';
-  const h12 = h % 12 || 12;
-  return `${h12}:${String(m).padStart(2, '0')} ${ampm}`;
-}
-
-export function QuietHoursScreen() {
+export function QuietHoursScreen({}: Props) {
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
-  const [settings, setSettings] = useState<QuietHoursSettings>(DEFAULTS);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
+  const { settings, loading, error, loadSettings, updateSettings } = useSettingsStore();
 
+  const [enabled, setEnabled] = useState(false);
+  const [startTime, setStartTime] = useState('22:00');
+  const [endTime, setEndTime] = useState('07:00');
+  const [days, setDays] = useState<number[]>([0, 1, 2, 3, 4, 5, 6]);
+  const [allowVip, setAllowVip] = useState(true);
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [dirty, setDirty] = useState(false);
 
-  useFocusEffect(
-    useCallback(() => {
-      let active = true;
-      setLoading(true);
-      setError('');
-      apiClient
-        .get('/settings')
-        .then((res) => {
-          if (!active) return;
-          const d = res.data;
-          setSettings({
-            quiet_hours_enabled: d.quiet_hours_enabled ?? DEFAULTS.quiet_hours_enabled,
-            quiet_hours_start: d.quiet_hours_start ?? DEFAULTS.quiet_hours_start,
-            quiet_hours_end: d.quiet_hours_end ?? DEFAULTS.quiet_hours_end,
-            quiet_hours_days: d.quiet_hours_days ?? DEFAULTS.quiet_hours_days,
-            quiet_hours_allow_vip: d.quiet_hours_allow_vip ?? DEFAULTS.quiet_hours_allow_vip,
-            revision: d.revision ?? 1,
-          });
-        })
-        .catch((err) => {
-          if (active) setError(extractApiError(err));
-        })
-        .finally(() => {
-          if (active) setLoading(false);
-        });
-      return () => { active = false; };
-    }, []),
-  );
+  useEffect(() => {
+    loadSettings();
+  }, []);
 
-  async function save(changes: Partial<Omit<QuietHoursSettings, 'revision'>>) {
-    setSaving(true);
-    try {
-      const res = await apiClient.patch('/settings', {
-        expected_revision: settings.revision,
-        changes,
-      });
-      if (res.data?.revision) {
-        setSettings((prev) => ({ ...prev, revision: res.data.revision }));
-      }
-    } catch (err) {
-      setError(extractApiError(err));
-    } finally {
-      setSaving(false);
+  useEffect(() => {
+    if (settings) {
+      setEnabled(settings.quiet_hours_enabled);
+      setStartTime(settings.quiet_hours_start ?? '22:00');
+      setEndTime(settings.quiet_hours_end ?? '07:00');
+      setDays(settings.quiet_hours_days ?? [0, 1, 2, 3, 4, 5, 6]);
+      setAllowVip(settings.quiet_hours_allow_vip);
     }
+  }, [settings]);
+
+  function toggleDay(day: number) {
+    setDirty(true);
+    setDays((prev) => (prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]));
   }
 
-  function handleToggleEnabled(val: boolean) {
-    setSettings((prev) => ({ ...prev, quiet_hours_enabled: val }));
-    save({ quiet_hours_enabled: val });
-  }
-
-  function handleToggleVip(val: boolean) {
-    setSettings((prev) => ({ ...prev, quiet_hours_allow_vip: val }));
-    save({ quiet_hours_allow_vip: val });
-  }
-
-  function handleStartTimeChange(_: any, selected?: Date) {
-    setShowStartPicker(false);
-    if (selected) {
-      const hhmm = formatHHMM(selected);
-      setSettings((prev) => ({ ...prev, quiet_hours_start: hhmm }));
-      save({ quiet_hours_start: hhmm });
+  async function handleSave() {
+    const ok = await updateSettings({
+      quiet_hours_enabled: enabled,
+      quiet_hours_start: startTime,
+      quiet_hours_end: endTime,
+      quiet_hours_days: days,
+      quiet_hours_allow_vip: allowVip,
+    });
+    if (ok) {
+      setDirty(false);
+      setToast({ message: 'Quiet hours saved', type: 'success' });
+    } else {
+      setToast({ message: 'Failed to save settings', type: 'error' });
     }
-  }
-
-  function handleEndTimeChange(_: any, selected?: Date) {
-    setShowEndPicker(false);
-    if (selected) {
-      const hhmm = formatHHMM(selected);
-      setSettings((prev) => ({ ...prev, quiet_hours_end: hhmm }));
-      save({ quiet_hours_end: hhmm });
-    }
-  }
-
-  function toggleDay(dayValue: number) {
-    const days = settings.quiet_hours_days.includes(dayValue)
-      ? settings.quiet_hours_days.filter((d) => d !== dayValue)
-      : [...settings.quiet_hours_days, dayValue];
-    setSettings((prev) => ({ ...prev, quiet_hours_days: days }));
-    save({ quiet_hours_days: days });
-  }
-
-  if (loading) {
-    return (
-      <View style={{ flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
   }
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: colors.background }} contentContainerStyle={{ paddingBottom: spacing.xxl }}>
-      {error ? (
-        <View style={{ padding: spacing.lg }}>
-          <Text style={{ fontSize: 14, color: colors.error }}>{error}</Text>
-        </View>
-      ) : null}
+    <ScreenWrapper>
+      <Toast
+        message={toast?.message ?? ''}
+        type={toast?.type}
+        visible={!!toast}
+        onDismiss={() => setToast(null)}
+      />
 
-      <View style={{ marginTop: spacing.lg, marginHorizontal: spacing.lg, backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', borderRadius: radii.md, overflow: 'hidden' }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.md, paddingHorizontal: spacing.lg }}>
-          <Icon name="moon-waning-crescent" size="md" color={colors.textSecondary} />
-          <View style={{ flex: 1, marginLeft: spacing.md }}>
-            <Text style={{ fontSize: 16, color: colors.textPrimary }}>Enable Quiet Hours</Text>
-            <Text style={{ fontSize: 12, color: colors.textSecondary }}>Silence notifications during set times</Text>
-          </View>
-          <Switch
-            value={settings.quiet_hours_enabled}
-            onValueChange={handleToggleEnabled}
-            trackColor={{ false: colors.border, true: colors.primary }}
-          />
-        </View>
-      </View>
+      <TimePicker
+        visible={showStartPicker}
+        value={startTime}
+        onChange={(t) => { setStartTime(t); setDirty(true); }}
+        onDismiss={() => setShowStartPicker(false)}
+        label="Start Time"
+      />
+      <TimePicker
+        visible={showEndPicker}
+        value={endTime}
+        onChange={(t) => { setEndTime(t); setDirty(true); }}
+        onDismiss={() => setShowEndPicker(false)}
+        label="End Time"
+      />
 
-      {settings.quiet_hours_enabled && (
-        <>
-          {/* Time Schedule */}
-          <View style={{ marginTop: spacing.lg, marginHorizontal: spacing.lg, backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', borderRadius: radii.md, padding: spacing.lg }}>
-            <Text style={{ fontSize: 17, fontWeight: '700', color: colors.textPrimary, marginBottom: spacing.md }}>Schedule</Text>
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ flex: 1, marginRight: spacing.sm }}>
-                <Text style={{ fontSize: 12, color: colors.textSecondary, marginBottom: spacing.xs }}>Start Time</Text>
-                <Pressable
-                  onPress={() => setShowStartPicker(true)}
-                  style={{
-                    backgroundColor: colors.background,
-                    borderRadius: radii.md,
-                    borderWidth: 1,
-                    borderColor: colors.border,
-                    paddingVertical: spacing.md,
-                    paddingHorizontal: spacing.md,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Icon name="clock-outline" size={16} color={colors.primary} />
-                  <Text style={{ fontSize: 16, fontWeight: '600', color: colors.textPrimary, marginLeft: spacing.xs }}>
-                    {formatDisplay(settings.quiet_hours_start)}
-                  </Text>
-                </Pressable>
-              </View>
-              <View style={{ flex: 1, marginLeft: spacing.sm }}>
-                <Text style={{ fontSize: 12, color: colors.textSecondary, marginBottom: spacing.xs }}>End Time</Text>
-                <Pressable
-                  onPress={() => setShowEndPicker(true)}
-                  style={{
-                    backgroundColor: colors.background,
-                    borderRadius: radii.md,
-                    borderWidth: 1,
-                    borderColor: colors.border,
-                    paddingVertical: spacing.md,
-                    paddingHorizontal: spacing.md,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Icon name="clock-outline" size={16} color={colors.primary} />
-                  <Text style={{ fontSize: 16, fontWeight: '600', color: colors.textPrimary, marginLeft: spacing.xs }}>
-                    {formatDisplay(settings.quiet_hours_end)}
-                  </Text>
-                </Pressable>
-              </View>
+      <Text
+        style={{ ...typography.h2, color: colors.textPrimary, marginBottom: spacing.lg }}
+        allowFontScaling
+      >
+        Quiet Hours
+      </Text>
+
+      {error && (
+        <View style={{ marginBottom: spacing.lg }}>
+          <ErrorMessage message={error} action="Retry" onAction={loadSettings} />
+        </View>
+      )}
+
+      {/* Enable toggle */}
+      <Card style={{ marginBottom: spacing.lg }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md, flex: 1 }}>
+            <Icon name="moon-waning-crescent" size="md" color={colors.primary} />
+            <View style={{ flex: 1 }}>
+              <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500' }} allowFontScaling>
+                Enable Quiet Hours
+              </Text>
+              <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+                Silence non-VIP calls during set times
+              </Text>
             </View>
           </View>
+          <Switch
+            value={enabled}
+            onValueChange={(v) => { setEnabled(v); setDirty(true); }}
+            trackColor={{ false: colors.surfaceVariant, true: colors.primary + '66' }}
+            thumbColor={enabled ? colors.primary : colors.textDisabled}
+          />
+        </View>
+      </Card>
 
-          {/* Days Selection */}
-          <View style={{ marginTop: spacing.lg, marginHorizontal: spacing.lg, backgroundColor: colors.surface, borderRadius: radii.md, padding: spacing.lg }}>
-            <Text style={{ fontSize: 17, fontWeight: '700', color: colors.textPrimary, marginBottom: spacing.md }}>Days</Text>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-              {DAYS.map((day, idx) => {
-                const selected = settings.quiet_hours_days.includes(day.value);
+      {enabled && (
+        <>
+          {/* Time pickers */}
+          <Card style={{ marginBottom: spacing.lg }}>
+            <Text
+              style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600', marginBottom: spacing.md }}
+              allowFontScaling
+            >
+              Schedule
+            </Text>
+            <View style={{ flexDirection: 'row', gap: spacing.md }}>
+              <TouchableOpacity
+                onPress={() => setShowStartPicker(true)}
+                activeOpacity={0.7}
+                style={{
+                  flex: 1,
+                  backgroundColor: colors.surfaceVariant,
+                  borderRadius: radii.md,
+                  padding: spacing.md,
+                  alignItems: 'center',
+                }}
+                accessibilityLabel="Select start time"
+              >
+                <Text style={{ ...typography.caption, color: colors.textSecondary, marginBottom: spacing.xs }} allowFontScaling>
+                  Start
+                </Text>
+                <Text style={{ ...typography.h3, color: colors.textPrimary }} allowFontScaling>
+                  {formatTime12h(startTime)}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setShowEndPicker(true)}
+                activeOpacity={0.7}
+                style={{
+                  flex: 1,
+                  backgroundColor: colors.surfaceVariant,
+                  borderRadius: radii.md,
+                  padding: spacing.md,
+                  alignItems: 'center',
+                }}
+                accessibilityLabel="Select end time"
+              >
+                <Text style={{ ...typography.caption, color: colors.textSecondary, marginBottom: spacing.xs }} allowFontScaling>
+                  End
+                </Text>
+                <Text style={{ ...typography.h3, color: colors.textPrimary }} allowFontScaling>
+                  {formatTime12h(endTime)}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </Card>
+
+          {/* Day chips */}
+          <Card style={{ marginBottom: spacing.lg }}>
+            <Text
+              style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600', marginBottom: spacing.md }}
+              allowFontScaling
+            >
+              Active Days
+            </Text>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }}>
+              {DAYS.map((d) => {
+                const active = days.includes(d.value);
                 return (
-                  <Pressable
-                    key={day.value}
-                    onPress={() => toggleDay(day.value)}
+                  <TouchableOpacity
+                    key={d.value}
+                    onPress={() => toggleDay(d.value)}
+                    activeOpacity={0.7}
                     style={{
-                      paddingVertical: spacing.sm,
                       paddingHorizontal: spacing.md,
-                      borderRadius: 20,
-                      backgroundColor: selected ? colors.primary : colors.background,
-                      borderWidth: 1,
-                      borderColor: selected ? colors.primary : colors.border,
-                      marginRight: idx < DAYS.length - 1 ? 8 : 0,
-                      marginBottom: 8,
+                      paddingVertical: spacing.sm,
+                      borderRadius: radii.full,
+                      backgroundColor: active ? colors.primary : colors.surfaceVariant,
                     }}
+                    accessibilityRole="checkbox"
+                    accessibilityState={{ checked: active }}
+                    accessibilityLabel={d.label}
                   >
-                    <Text style={{ fontSize: 13, fontWeight: '600', color: selected ? '#FFFFFF' : colors.textPrimary }}>{day.short}</Text>
-                  </Pressable>
+                    <Text
+                      style={{
+                        ...typography.bodySmall,
+                        color: active ? colors.onPrimary : colors.textPrimary,
+                        fontWeight: '600',
+                      }}
+                      allowFontScaling
+                    >
+                      {d.label}
+                    </Text>
+                  </TouchableOpacity>
                 );
               })}
             </View>
-          </View>
+          </Card>
 
           {/* Allow VIP */}
-          <View style={{ marginTop: spacing.lg, marginHorizontal: spacing.lg, backgroundColor: theme.dark ? 'rgba(255,255,255,0.04)' : '#FFFFFF', borderRadius: radii.md, overflow: 'hidden' }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.md, paddingHorizontal: spacing.lg }}>
-              <Icon name="star-outline" size="md" color={colors.textSecondary} />
-              <View style={{ flex: 1, marginLeft: spacing.md }}>
-                <Text style={{ fontSize: 16, color: colors.textPrimary }}>Allow VIP Calls</Text>
-                <Text style={{ fontSize: 12, color: colors.textSecondary }}>VIP contacts can still reach you during quiet hours</Text>
+          <Card style={{ marginBottom: spacing.xl }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md, flex: 1 }}>
+                <Icon name="star-outline" size="md" color={colors.warning} />
+                <View style={{ flex: 1 }}>
+                  <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500' }} allowFontScaling>
+                    Allow VIP Calls
+                  </Text>
+                  <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+                    VIP contacts can still reach you
+                  </Text>
+                </View>
               </View>
               <Switch
-                value={settings.quiet_hours_allow_vip}
-                onValueChange={handleToggleVip}
-                trackColor={{ false: colors.border, true: colors.primary }}
+                value={allowVip}
+                onValueChange={(v) => { setAllowVip(v); setDirty(true); }}
+                trackColor={{ false: colors.surfaceVariant, true: colors.primary + '66' }}
+                thumbColor={allowVip ? colors.primary : colors.textDisabled}
               />
             </View>
-          </View>
+          </Card>
         </>
       )}
 
-      {saving && (
-        <View style={{ marginTop: spacing.lg, alignItems: 'center' }}>
-          <ActivityIndicator size="small" color={colors.primary} />
-        </View>
-      )}
-
-      {showStartPicker && (
-        <DateTimePicker
-          value={parseHHMM(settings.quiet_hours_start)}
-          mode="time"
-          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-          minuteInterval={5}
-          onChange={handleStartTimeChange}
-        />
-      )}
-      {showEndPicker && (
-        <DateTimePicker
-          value={parseHHMM(settings.quiet_hours_end)}
-          mode="time"
-          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-          minuteInterval={5}
-          onChange={handleEndTimeChange}
-        />
-      )}
-    </ScrollView>
+      <Button
+        title="Save Changes"
+        onPress={handleSave}
+        loading={loading}
+        disabled={!dirty}
+        icon="content-save-outline"
+      />
+    </ScreenWrapper>
   );
 }
