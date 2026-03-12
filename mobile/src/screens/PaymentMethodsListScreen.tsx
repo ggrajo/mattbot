@@ -43,7 +43,7 @@ export function PaymentMethodsListScreen() {
   const load = useCallback(async () => {
     try {
       const data = await listPaymentMethods();
-      setMethods(data);
+      setMethods(data.items);
     } catch (e) {
       setToastType('error');
       setToast(extractApiError(e));
@@ -58,7 +58,7 @@ export function PaymentMethodsListScreen() {
     setAdding(true);
     try {
       if (isDevMode) {
-        const pm = await addPaymentMethod('pm_card_visa_dev', true);
+        const pm = await addPaymentMethod('pm_card_visa_dev');
         setMethods(prev => [pm, ...prev.map(m => ({ ...m, is_default: false }))]);
         setToastType('info');
         setToast('Card added (dev mode)');

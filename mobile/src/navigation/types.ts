@@ -34,9 +34,9 @@ export type RootStackParamList = {
   QuietHours: undefined;
   MemorySettings: undefined;
   AccountSettings: undefined;
-  NumberProvision: undefined;
+  NumberProvision: { onboarding?: boolean } | undefined;
   CallModes: { onboarding?: boolean } | undefined;
-  ForwardingSetupGuide: undefined;
+  ForwardingSetupGuide: { onboarding?: boolean } | undefined;
   ForwardingVerify: { onboarding?: boolean } | undefined;
   PlanSelection: { source?: 'onboarding' | 'manage' } | undefined;
   PaymentMethod: { plan: string; source?: 'onboarding' | 'manage' };
@@ -44,10 +44,16 @@ export type RootStackParamList = {
   ManageSubscription: undefined;
   CallsList: undefined;
   CallDetail: { callId: string };
+  LiveTranscript: { callId: string };
   Calendar: undefined;
   AddContact: undefined;
+  ContactsList: undefined;
+  ContactDetail: { contactId: string };
+  BlockList: undefined;
+  VipList: undefined;
   CategoryDefaults: undefined;
   HandoffSettings: undefined;
+  AssistantSettings: undefined;
   PaymentMethodsList: undefined;
 };
 

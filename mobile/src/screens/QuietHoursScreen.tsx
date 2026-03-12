@@ -7,9 +7,11 @@ import { Button } from '../components/ui/Button';
 import { Icon } from '../components/ui/Icon';
 import { Toast } from '../components/ui/Toast';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { Divider } from '../components/ui/Divider';
 import { TimePicker, formatTime12h } from '../components/ui/TimePicker';
 import { useTheme } from '../theme/ThemeProvider';
 import { useSettingsStore } from '../store/settingsStore';
+import { hapticLight } from '../utils/haptics';
 import { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'QuietHours'>;
@@ -22,6 +24,38 @@ const DAYS = [
   { label: 'Fri', value: 5 },
   { label: 'Sat', value: 6 },
   { label: 'Sun', value: 0 },
+];
+
+interface QuickPattern {
+  label: string;
+  icon: string;
+  start: string;
+  end: string;
+  days: number[];
+}
+
+const QUICK_PATTERNS: QuickPattern[] = [
+  {
+    label: 'Weekday Nights',
+    icon: 'briefcase-clock-outline',
+    start: '22:00',
+    end: '07:00',
+    days: [1, 2, 3, 4, 5],
+  },
+  {
+    label: 'Weekend',
+    icon: 'calendar-weekend',
+    start: '00:00',
+    end: '23:59',
+    days: [0, 6],
+  },
+  {
+    label: 'Every Night',
+    icon: 'weather-night',
+    start: '22:00',
+    end: '07:00',
+    days: [0, 1, 2, 3, 4, 5, 6],
+  },
 ];
 
 export function QuietHoursScreen({}: Props) {
@@ -54,8 +88,25 @@ export function QuietHoursScreen({}: Props) {
   }, [settings]);
 
   function toggleDay(day: number) {
+    hapticLight();
     setDirty(true);
     setDays((prev) => (prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]));
+  }
+
+  function applyPattern(pattern: QuickPattern) {
+    hapticLight();
+    setStartTime(pattern.start);
+    setEndTime(pattern.end);
+    setDays(pattern.days);
+    setEnabled(true);
+    setDirty(true);
+  }
+
+  function isPatternActive(pattern: QuickPattern): boolean {
+    if (!enabled) return false;
+    if (startTime !== pattern.start || endTime !== pattern.end) return false;
+    if (pattern.days.length !== days.length) return false;
+    return pattern.days.every((d) => days.includes(d));
   }
 
   async function handleSave() {
@@ -127,7 +178,7 @@ export function QuietHoursScreen({}: Props) {
           </View>
           <Switch
             value={enabled}
-            onValueChange={(v) => { setEnabled(v); setDirty(true); }}
+            onValueChange={(v) => { hapticLight(); setEnabled(v); setDirty(true); }}
             trackColor={{ false: colors.surfaceVariant, true: colors.primary + '66' }}
             thumbColor={enabled ? colors.primary : colors.textDisabled}
           />
@@ -136,6 +187,60 @@ export function QuietHoursScreen({}: Props) {
 
       {enabled && (
         <>
+          {/* Quick Patterns */}
+          <Card style={{ marginBottom: spacing.lg }}>
+            <Text
+              style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600', marginBottom: spacing.md }}
+              allowFontScaling
+            >
+              Quick Patterns
+            </Text>
+            <View style={{ flexDirection: 'row', gap: spacing.sm }}>
+              {QUICK_PATTERNS.map((pattern) => {
+                const active = isPatternActive(pattern);
+                return (
+                  <TouchableOpacity
+                    key={pattern.label}
+                    onPress={() => applyPattern(pattern)}
+                    activeOpacity={0.7}
+                    style={{
+                      flex: 1,
+                      paddingVertical: spacing.md,
+                      paddingHorizontal: spacing.sm,
+                      borderRadius: radii.md,
+                      borderWidth: 1.5,
+                      borderColor: active ? colors.primary : colors.border,
+                      backgroundColor: active ? colors.primary + '14' : 'transparent',
+                      alignItems: 'center',
+                      gap: spacing.xs,
+                    }}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Apply ${pattern.label} pattern`}
+                  >
+                    <Icon
+                      name={pattern.icon}
+                      size="md"
+                      color={active ? colors.primary : colors.textSecondary}
+                    />
+                    <Text
+                      style={{
+                        ...typography.caption,
+                        color: active ? colors.primary : colors.textSecondary,
+                        fontWeight: active ? '600' : '400',
+                        textAlign: 'center',
+                      }}
+                      allowFontScaling
+                    >
+                      {pattern.label}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </Card>
+
+          <Divider style={{ marginBottom: spacing.lg }} />
+
           {/* Time pickers */}
           <Card style={{ marginBottom: spacing.lg }}>
             <Text
@@ -244,7 +349,7 @@ export function QuietHoursScreen({}: Props) {
               </View>
               <Switch
                 value={allowVip}
-                onValueChange={(v) => { setAllowVip(v); setDirty(true); }}
+                onValueChange={(v) => { hapticLight(); setAllowVip(v); setDirty(true); }}
                 trackColor={{ false: colors.surfaceVariant, true: colors.primary + '66' }}
                 thumbColor={allowVip ? colors.primary : colors.textDisabled}
               />

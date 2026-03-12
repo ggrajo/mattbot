@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import {
   type UserSettings,
-  getSettings as fetchSettings,
+  fetchSettings,
   patchSettings as apiPatchSettings,
 } from '../api/settings';
 import {

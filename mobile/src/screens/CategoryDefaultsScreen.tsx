@@ -15,7 +15,6 @@ import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { Toast } from '../components/ui/Toast';
 import { useTheme } from '../theme/ThemeProvider';
 import { useContactsStore } from '../store/contactsStore';
-import type { CategoryDefaults } from '../api/contacts';
 
 const TEMPERAMENT_OPTIONS = [
   { value: '', label: 'Global Default' },
@@ -54,7 +53,7 @@ export function CategoryDefaultsScreen() {
     removeCategory,
   } = useContactsStore();
 
-  const [localDefaults, setLocalDefaults] = useState<CategoryDefaults>({});
+  const [localDefaults, setLocalDefaults] = useState<Record<string, Record<string, unknown>>>({});
   const [expandedSlug, setExpandedSlug] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState('');

@@ -122,6 +122,15 @@ export async function verifyEmailOtp(email: string, otpCode: string, password?: 
   return data;
 }
 
+export async function deleteAccount(): Promise<void> {
+  await apiClient.delete('/me');
+}
+
+export async function updateProfile(data: { display_name?: string; nickname?: string }): Promise<any> {
+  const { data: resp } = await apiClient.patch('/me', data);
+  return resp;
+}
+
 export async function stepUp(password?: string, totpCode?: string) {
   const { data } = await apiClient.post('/auth/step-up', { password, totp_code: totpCode });
   return data;

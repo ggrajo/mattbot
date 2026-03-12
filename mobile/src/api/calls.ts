@@ -29,6 +29,12 @@ export interface CallListItem {
   missing_labels: boolean;
   started_at: string;
   artifact_status: string | null;
+  caller_display_name?: string | null;
+  caller_relationship?: string | null;
+  is_vip?: boolean;
+  is_blocked?: boolean;
+  booked_calendar_event_id?: string | null;
+  booked_calendar_event_summary?: string | null;
 }
 
 export interface CallListResponse {
@@ -99,6 +105,15 @@ export interface CallFilters {
   label?: string;
   search?: string;
   status?: string;
+  source_type?: string;
+  date_from?: string;
+  date_to?: string;
+  duration_min?: number;
+  duration_max?: number;
+  country_prefix?: string;
+  has_recording?: boolean;
+  sort_by?: string;
+  sort_dir?: string;
 }
 
 export async function fetchCalls(cursor?: string, filters?: CallFilters): Promise<CallListResponse> {
@@ -107,7 +122,21 @@ export async function fetchCalls(cursor?: string, filters?: CallFilters): Promis
   if (filters?.label) params.label = filters.label;
   if (filters?.search) params.search = filters.search;
   if (filters?.status) params.status = filters.status;
+  if (filters?.source_type) params.source_type = filters.source_type;
+  if (filters?.date_from) params.date_from = filters.date_from;
+  if (filters?.date_to) params.date_to = filters.date_to;
+  if (filters?.duration_min != null) params.duration_min = String(filters.duration_min);
+  if (filters?.duration_max != null) params.duration_max = String(filters.duration_max);
+  if (filters?.country_prefix) params.country_prefix = filters.country_prefix;
+  if (filters?.has_recording === true) params.has_recording = 'true';
+  if (filters?.sort_by) params.sort_by = filters.sort_by;
+  if (filters?.sort_dir) params.sort_dir = filters.sort_dir;
   const { data } = await apiClient.get('/calls', { params });
+  return data;
+}
+
+export async function fetchCallerPhone(callId: string): Promise<{ phone: string }> {
+  const { data } = await apiClient.get(`/calls/${callId}/caller-phone`);
   return data;
 }
 

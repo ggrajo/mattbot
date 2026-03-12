@@ -147,8 +147,8 @@ export function AccountSettingsScreen() {
     setShowDeleteAccount(false);
     setDeleting(true);
     try {
-      const stepUpData = await stepUp(undefined, undefined);
-      await deleteAccount(stepUpData.step_up_token);
+      await stepUp(undefined, undefined);
+      await deleteAccount();
       await signOut();
     } catch (e: unknown) {
       setToastType('error');
@@ -182,7 +182,7 @@ export function AccountSettingsScreen() {
           }}
         >
           <GradientView
-            colors={[colors.gradientStart, colors.gradientEnd]}
+            colors={[colors.gradientStart ?? colors.primary, colors.gradientEnd ?? colors.secondary]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={{

@@ -22,6 +22,12 @@ export function BiometricGate({
   const [unlocked, setUnlocked] = useState(false);
   const [error, setError] = useState<string>();
 
+  const handleAppState = useCallback((state: AppStateStatus) => {
+    if (state === 'background' || state === 'inactive') {
+      setUnlocked(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (!enabled) {
       setUnlocked(true);
@@ -30,12 +36,6 @@ export function BiometricGate({
     const sub = AppState.addEventListener('change', handleAppState);
     return () => sub.remove();
   }, [enabled, handleAppState]);
-
-  const handleAppState = useCallback((state: AppStateStatus) => {
-    if (state === 'background' || state === 'inactive') {
-      setUnlocked(false);
-    }
-  }, []);
 
   async function handleUnlock() {
     setError(undefined);

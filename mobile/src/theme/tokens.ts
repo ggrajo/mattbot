@@ -39,6 +39,7 @@ export interface ColorTokens {
   background: string;
   surface: string;
   surfaceVariant: string;
+  surfaceElevated?: string;
   primary: string;
   primaryContainer: string;
   onPrimary: string;
@@ -60,11 +61,14 @@ export interface ColorTokens {
   borderFocused: string;
   overlay: string;
   skeleton: string;
-  headerBackground: string;
-  headerText: string;
-  tabBar: string;
-  tabBarBorder: string;
-  gridIconBg: string;
+  headerBackground?: string;
+  headerText?: string;
+  tabBar?: string;
+  tabBarBorder?: string;
+  gridIconBg?: string;
+  gradientStart?: string;
+  gradientEnd?: string;
+  cardGlow?: string;
 }
 
 export interface ShadowTokens {

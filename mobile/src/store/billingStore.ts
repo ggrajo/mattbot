@@ -20,6 +20,7 @@ interface BillingStore {
   loadBillingStatus: () => Promise<void>;
   subscribe: (plan: string, paymentMethodId?: string) => Promise<boolean>;
   changePlan: (newPlan: string) => Promise<boolean>;
+  cancel: () => Promise<boolean>;
   cancelSubscription: () => Promise<boolean>;
   reset: () => void;
 }
@@ -33,7 +34,7 @@ export const useBillingStore = create<BillingStore>((set) => ({
   loadPlans: async () => {
     set({ loading: true, error: null });
     try {
-      const { plans } = await getPlans();
+      const plans = await getPlans();
       set({ plans, loading: false });
     } catch (e: unknown) {
       set({ error: extractApiError(e), loading: false });
@@ -67,6 +68,19 @@ export const useBillingStore = create<BillingStore>((set) => ({
     set({ loading: true, error: null });
     try {
       await apiChangePlan(newPlan);
+      const billingStatus = await getBillingStatus();
+      set({ billingStatus, loading: false });
+      return true;
+    } catch (e: unknown) {
+      set({ error: extractApiError(e), loading: false });
+      return false;
+    }
+  },
+
+  cancel: async () => {
+    set({ loading: true, error: null });
+    try {
+      await apiCancel();
       const billingStatus = await getBillingStatus();
       set({ billingStatus, loading: false });
       return true;

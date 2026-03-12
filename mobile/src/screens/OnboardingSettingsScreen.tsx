@@ -63,7 +63,7 @@ export function OnboardingSettingsScreen({ navigation }: Props) {
       try {
         await updateProfile({ nickname: nickname.trim() });
         const { useAuthStore } = await import('../store/authStore');
-        useAuthStore.getState().setProfileName(null, nickname.trim());
+        useAuthStore.getState().loadProfile();
       } catch {
         // best-effort, non-blocking
       }
@@ -84,7 +84,7 @@ export function OnboardingSettingsScreen({ navigation }: Props) {
       const step1 = await completeStep('settings_configured');
       if (step1) {
         hapticMedium();
-        navigation.navigate('OnboardingAssistantSetup');
+        navigation.navigate('PlanSelection', { source: 'onboarding' });
         return;
       }
     }
@@ -106,7 +106,7 @@ export function OnboardingSettingsScreen({ navigation }: Props) {
     <ScreenWrapper>
       <Toast message={toast} type="success" visible={!!toast} onDismiss={() => setToast('')} />
 
-      <OnboardingProgress current={2} total={6} label="Basic Settings" />
+      <OnboardingProgress currentStep={2} totalSteps={6} label="Basic Settings" />
 
       {/* Hero */}
       <FadeIn delay={0} slide="up">
@@ -160,6 +160,7 @@ export function OnboardingSettingsScreen({ navigation }: Props) {
             This is optional. Your AI assistant will use this name when greeting callers.
           </Text>
           <TextInput
+            label="Nickname"
             placeholder="e.g. Matt"
             value={nickname}
             onChangeText={setNickname}

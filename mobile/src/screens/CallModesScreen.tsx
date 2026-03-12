@@ -282,7 +282,7 @@ export function CallModesScreen({ navigation, route }: Props) {
           <View
             style={{
               flexDirection: 'row',
-              alignItems: 'row',
+              alignItems: 'center',
               gap: spacing.sm,
             }}
           >

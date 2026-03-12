@@ -6,6 +6,8 @@ type AuthState = 'loading' | 'unauthenticated' | 'mfa_required' | 'mfa_enrollmen
 interface AuthStore {
   state: AuthState;
   accessToken: string | null;
+  nickname: string | null;
+  displayName: string | null;
   mfaChallengeToken: string | null;
   partialToken: string | null;
   recoveryCodes: string[] | null;
@@ -24,11 +26,14 @@ interface AuthStore {
   setRecoveryCodes: (codes: string[]) => void;
   signOut: () => Promise<void>;
   tryRestoreSession: () => Promise<boolean>;
+  loadProfile: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthStore>((set, get) => ({
   state: 'loading',
   accessToken: null,
+  nickname: null,
+  displayName: null,
   mfaChallengeToken: null,
   partialToken: null,
   recoveryCodes: null,
@@ -125,6 +130,19 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       await clearTokens();
       set({ state: 'unauthenticated' });
       return false;
+    }
+  },
+
+  loadProfile: async () => {
+    try {
+      const { apiClient } = await import('../api/client');
+      const { data } = await apiClient.get('/me');
+      set({
+        nickname: data.nickname ?? null,
+        displayName: data.display_name ?? data.email ?? null,
+      });
+    } catch {
+      // profile load failure is non-critical
     }
   },
 }));

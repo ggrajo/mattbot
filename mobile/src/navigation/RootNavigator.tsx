@@ -40,6 +40,12 @@ import { AddContactScreen } from '../screens/AddContactScreen';
 import { CategoryDefaultsScreen } from '../screens/CategoryDefaultsScreen';
 import { HandoffSettingsScreen } from '../screens/HandoffSettingsScreen';
 import { PaymentMethodsListScreen } from '../screens/PaymentMethodsListScreen';
+import { AssistantSettingsScreen } from '../screens/AssistantSettingsScreen';
+import { ContactsListScreen } from '../screens/ContactsListScreen';
+import { ContactDetailScreen } from '../screens/ContactDetailScreen';
+import { BlockListScreen } from '../screens/BlockListScreen';
+import { VipListScreen } from '../screens/VipListScreen';
+import { LiveTranscriptScreen } from '../screens/LiveTranscriptScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -241,6 +247,36 @@ export function RootNavigator() {
               name="PaymentMethodsList"
               component={PaymentMethodsListScreen}
               options={{ headerShown: true, title: 'Payment Methods' }}
+            />
+            <Stack.Screen
+              name="AssistantSettings"
+              component={AssistantSettingsScreen}
+              options={{ headerShown: true, title: 'AI Assistant' }}
+            />
+            <Stack.Screen
+              name="ContactsList"
+              component={ContactsListScreen}
+              options={{ headerShown: true, title: 'Contacts' }}
+            />
+            <Stack.Screen
+              name="ContactDetail"
+              component={ContactDetailScreen}
+              options={{ headerShown: true, title: 'Contact' }}
+            />
+            <Stack.Screen
+              name="BlockList"
+              component={BlockListScreen}
+              options={{ headerShown: true, title: 'Blocked Numbers' }}
+            />
+            <Stack.Screen
+              name="VipList"
+              component={VipListScreen}
+              options={{ headerShown: true, title: 'VIP List' }}
+            />
+            <Stack.Screen
+              name="LiveTranscript"
+              component={LiveTranscriptScreen}
+              options={{ headerShown: true, title: 'Live Transcript' }}
             />
           </>
         ) : (

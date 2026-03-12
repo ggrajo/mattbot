@@ -39,7 +39,7 @@ export function HandoffSettingsScreen({}: Props) {
   useEffect(() => {
     if (settings) {
       setEnabled(settings.handoff_enabled);
-      if (settings.handoff_trigger) setTrigger(settings.handoff_trigger);
+      if (settings.handoff_trigger) setTrigger(settings.handoff_trigger as HandoffTrigger);
     }
   }, [settings]);
 

@@ -167,10 +167,11 @@ export function CallDetailScreen() {
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   const callerNumber = selectedCall?.from_masked ?? '';
-  const isVip = vipStore.items.some((v) => v.phone_number === callerNumber);
-  const isBlocked = blockStore.items.some((b) => b.phone_number === callerNumber);
-  const vipEntry = vipStore.items.find((v) => v.phone_number === callerNumber);
-  const blockEntry = blockStore.items.find((b) => b.phone_number === callerNumber);
+  const callerLast4 = callerNumber.slice(-4);
+  const isVip = vipStore.items.some((v) => callerLast4 && v.phone_last4 === callerLast4);
+  const isBlocked = blockStore.items.some((b) => callerLast4 && b.phone_last4 === callerLast4);
+  const vipEntry = vipStore.items.find((v) => callerLast4 && v.phone_last4 === callerLast4);
+  const blockEntry = blockStore.items.find((b) => callerLast4 && b.phone_last4 === callerLast4);
 
   useEffect(() => {
     loadCallDetail(callId);
@@ -188,7 +189,7 @@ export function CallDetailScreen() {
       const ok = await vipStore.removeVip(vipEntry.id);
       setToast(ok ? 'Removed from VIP' : vipStore.error ?? 'Failed');
     } else {
-      const ok = await vipStore.addVip(callerNumber);
+      const ok = await vipStore.addVip({ phone_number: callerNumber });
       setToast(ok ? 'Added to VIP' : vipStore.error ?? 'Failed');
     }
     setActionLoading(null);
@@ -201,7 +202,7 @@ export function CallDetailScreen() {
       const ok = await blockStore.removeBlock(blockEntry.id);
       setToast(ok ? 'Number unblocked' : blockStore.error ?? 'Failed');
     } else {
-      const ok = await blockStore.addBlock(callerNumber);
+      const ok = await blockStore.addBlock({ phone_number: callerNumber });
       setToast(ok ? 'Number blocked' : blockStore.error ?? 'Failed');
     }
     setActionLoading(null);
@@ -210,7 +211,7 @@ export function CallDetailScreen() {
   const handleMarkSpam = useCallback(async () => {
     setSpamSheetVisible(false);
     setActionLoading('spam');
-    const ok = await blockStore.addBlock(callerNumber, undefined, 'spam');
+    const ok = await blockStore.addBlock({ phone_number: callerNumber, reason: 'spam' });
     setToast(ok ? 'Marked as spam & blocked' : blockStore.error ?? 'Failed');
     setActionLoading(null);
   }, [callerNumber]);

@@ -7,6 +7,11 @@ export interface CalendarEvent {
   end: string;
   description?: string;
   location?: string;
+  status: string;
+  is_mattbot_booked: boolean;
+  caller_name: string | null;
+  caller_phone: string | null;
+  call_id: string | null;
 }
 
 export interface CalendarStatus {

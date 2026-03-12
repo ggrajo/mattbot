@@ -55,17 +55,17 @@ export function DrawerNavigator() {
       />
       <Drawer.Screen
         name="SubscriptionTab"
-        component={SubscriptionStatusScreen}
+        component={SubscriptionStatusScreen as any}
         options={{ title: 'Subscription' }}
       />
       <Drawer.Screen
         name="CallModesTab"
-        component={CallModesScreen}
+        component={CallModesScreen as any}
         options={{ title: 'Call Modes' }}
       />
       <Drawer.Screen
         name="DevicesTab"
-        component={DeviceListScreen}
+        component={DeviceListScreen as any}
         options={{ title: 'Devices' }}
       />
       <Drawer.Screen

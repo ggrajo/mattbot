@@ -113,8 +113,8 @@ class RealtimeSocket {
 
   private async handleTokenRefresh() {
     try {
-      const { refreshSession } = useAuthStore.getState();
-      await refreshSession();
+      const { tryRestoreSession } = useAuthStore.getState();
+      await tryRestoreSession();
       this.reconnectDelay = WS_RECONNECT_INITIAL_MS;
       this.doConnect();
     } catch {

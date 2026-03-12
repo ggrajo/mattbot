@@ -501,8 +501,8 @@ export function CallsListScreen() {
                     if (revealingIds.has(item.id)) return;
                     setRevealingIds(prev => new Set(prev).add(item.id));
                     try {
-                      const phone = await fetchCallerPhone(item.id);
-                      setRevealedPhones(prev => ({ ...prev, [item.id]: phone }));
+                      const result = await fetchCallerPhone(item.id);
+                      setRevealedPhones(prev => ({ ...prev, [item.id]: result.phone }));
                     } catch {
                       // silently fail - number stays masked
                     } finally {

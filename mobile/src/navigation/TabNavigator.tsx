@@ -50,9 +50,7 @@ export function TabNavigator() {
           ...theme.typography.h3,
           color: theme.colors.textPrimary,
         },
-        sceneContainerStyle: {
-          backgroundColor: theme.colors.background,
-        },
+        lazy: true,
       }}
     >
       <Tab.Screen
