@@ -872,14 +872,19 @@ async def mark_call_vip(
     db: AsyncSession = Depends(get_db),
 ) -> MarkStatusResponse:
     from app.models.vip_entry import VipEntry
+    from app.models.block_entry import BlockEntry
+    from app.models.spam_entry import SpamEntry
+    from app.models.contact_profile import ContactProfile
+    from sqlalchemy import delete as sql_delete, update as sql_update
 
     call = await _get_call_owned(db, current_user.user.id, call_id)
     phone_hash = call.caller_phone_hash
+    uid = current_user.user.id
 
     existing = (
         await db.execute(
             select(VipEntry).where(
-                VipEntry.owner_user_id == current_user.user.id,
+                VipEntry.owner_user_id == uid,
                 VipEntry.phone_hash == phone_hash,
             )
         )
@@ -887,10 +892,10 @@ async def mark_call_vip(
 
     if existing is None:
         memory_name, memory_rel = await _get_caller_memory_hints(
-            db, current_user.user.id, phone_hash
+            db, uid, phone_hash
         )
         entry = VipEntry(
-            owner_user_id=current_user.user.id,
+            owner_user_id=uid,
             phone_ciphertext=call.caller_phone_ciphertext,
             phone_nonce=call.caller_phone_nonce,
             phone_key_version=call.caller_phone_key_version,
@@ -902,13 +907,25 @@ async def mark_call_vip(
         db.add(entry)
         await audit_service.log_event(
             db,
-            owner_user_id=current_user.user.id,
+            owner_user_id=uid,
             event_type="vip_added",
-            actor_id=current_user.user.id,
+            actor_id=uid,
             target_type="vip_entry",
             target_id=entry.id,
         )
-        await db.commit()
+
+    await db.execute(
+        sql_delete(BlockEntry).where(BlockEntry.owner_user_id == uid, BlockEntry.phone_hash == phone_hash)
+    )
+    await db.execute(
+        sql_delete(SpamEntry).where(SpamEntry.owner_user_id == uid, SpamEntry.phone_hash == phone_hash)
+    )
+    await db.execute(
+        sql_update(ContactProfile)
+        .where(ContactProfile.owner_user_id == uid, ContactProfile.phone_hash == phone_hash)
+        .values(is_vip=True, is_blocked=False, block_reason=None)
+    )
+    await db.commit()
 
     return MarkStatusResponse(is_vip=True, is_blocked=False)
 
@@ -920,14 +937,17 @@ async def unmark_call_vip(
     db: AsyncSession = Depends(get_db),
 ) -> MarkStatusResponse:
     from app.models.vip_entry import VipEntry
+    from app.models.contact_profile import ContactProfile
+    from sqlalchemy import update as sql_update
 
     call = await _get_call_owned(db, current_user.user.id, call_id)
     phone_hash = call.caller_phone_hash
+    uid = current_user.user.id
 
     existing = (
         await db.execute(
             select(VipEntry).where(
-                VipEntry.owner_user_id == current_user.user.id,
+                VipEntry.owner_user_id == uid,
                 VipEntry.phone_hash == phone_hash,
             )
         )
@@ -936,14 +956,20 @@ async def unmark_call_vip(
     if existing is not None:
         await audit_service.log_event(
             db,
-            owner_user_id=current_user.user.id,
+            owner_user_id=uid,
             event_type="vip_removed",
-            actor_id=current_user.user.id,
+            actor_id=uid,
             target_type="vip_entry",
             target_id=existing.id,
         )
         await db.delete(existing)
-        await db.commit()
+
+    await db.execute(
+        sql_update(ContactProfile)
+        .where(ContactProfile.owner_user_id == uid, ContactProfile.phone_hash == phone_hash)
+        .values(is_vip=False)
+    )
+    await db.commit()
 
     return MarkStatusResponse(is_vip=False, is_blocked=False)
 
@@ -956,14 +982,20 @@ async def mark_call_blocked(
     db: AsyncSession = Depends(get_db),
 ) -> MarkStatusResponse:
     from app.models.block_entry import BlockEntry
+    from app.models.vip_entry import VipEntry
+    from app.models.spam_entry import SpamEntry
+    from app.models.contact_profile import ContactProfile
+    from sqlalchemy import delete as sql_delete, update as sql_update
 
     call = await _get_call_owned(db, current_user.user.id, call_id)
     phone_hash = call.caller_phone_hash
+    uid = current_user.user.id
+    reason = body.reason if body else None
 
     existing = (
         await db.execute(
             select(BlockEntry).where(
-                BlockEntry.owner_user_id == current_user.user.id,
+                BlockEntry.owner_user_id == uid,
                 BlockEntry.phone_hash == phone_hash,
             )
         )
@@ -971,29 +1003,42 @@ async def mark_call_blocked(
 
     if existing is None:
         memory_name, memory_rel = await _get_caller_memory_hints(
-            db, current_user.user.id, phone_hash
+            db, uid, phone_hash
         )
         entry = BlockEntry(
-            owner_user_id=current_user.user.id,
+            owner_user_id=uid,
             phone_ciphertext=call.caller_phone_ciphertext,
             phone_nonce=call.caller_phone_nonce,
             phone_key_version=call.caller_phone_key_version,
             phone_hash=phone_hash,
             phone_last4=call.caller_phone_last4,
-            reason=body.reason if body else None,
+            reason=reason,
             display_name=memory_name or None,
             relationship=memory_rel or None,
         )
         db.add(entry)
         await audit_service.log_event(
             db,
-            owner_user_id=current_user.user.id,
+            owner_user_id=uid,
             event_type="block_added",
-            actor_id=current_user.user.id,
+            actor_id=uid,
             target_type="block_entry",
             target_id=entry.id,
         )
-        await db.commit()
+
+    await db.execute(
+        sql_delete(VipEntry).where(VipEntry.owner_user_id == uid, VipEntry.phone_hash == phone_hash)
+    )
+    if reason != "spam":
+        await db.execute(
+            sql_delete(SpamEntry).where(SpamEntry.owner_user_id == uid, SpamEntry.phone_hash == phone_hash)
+        )
+    await db.execute(
+        sql_update(ContactProfile)
+        .where(ContactProfile.owner_user_id == uid, ContactProfile.phone_hash == phone_hash)
+        .values(is_blocked=True, block_reason=reason, is_vip=False)
+    )
+    await db.commit()
 
     return MarkStatusResponse(is_vip=False, is_blocked=True)
 
@@ -1005,14 +1050,18 @@ async def unmark_call_blocked(
     db: AsyncSession = Depends(get_db),
 ) -> MarkStatusResponse:
     from app.models.block_entry import BlockEntry
+    from app.models.spam_entry import SpamEntry
+    from app.models.contact_profile import ContactProfile
+    from sqlalchemy import delete as sql_delete, update as sql_update
 
     call = await _get_call_owned(db, current_user.user.id, call_id)
     phone_hash = call.caller_phone_hash
+    uid = current_user.user.id
 
     existing = (
         await db.execute(
             select(BlockEntry).where(
-                BlockEntry.owner_user_id == current_user.user.id,
+                BlockEntry.owner_user_id == uid,
                 BlockEntry.phone_hash == phone_hash,
             )
         )
@@ -1021,14 +1070,23 @@ async def unmark_call_blocked(
     if existing is not None:
         await audit_service.log_event(
             db,
-            owner_user_id=current_user.user.id,
+            owner_user_id=uid,
             event_type="block_removed",
-            actor_id=current_user.user.id,
+            actor_id=uid,
             target_type="block_entry",
             target_id=existing.id,
         )
         await db.delete(existing)
-        await db.commit()
+
+    await db.execute(
+        sql_delete(SpamEntry).where(SpamEntry.owner_user_id == uid, SpamEntry.phone_hash == phone_hash)
+    )
+    await db.execute(
+        sql_update(ContactProfile)
+        .where(ContactProfile.owner_user_id == uid, ContactProfile.phone_hash == phone_hash)
+        .values(is_blocked=False, block_reason=None)
+    )
+    await db.commit()
 
     return MarkStatusResponse(is_vip=False, is_blocked=False)
 

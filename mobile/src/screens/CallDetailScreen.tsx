@@ -261,6 +261,8 @@ export function CallDetailScreen() {
       } else {
         await markCallVip(callId);
         setIsVip(true);
+        setIsBlocked(false);
+        setIsSpam(false);
         setToast('Added to VIP');
       }
     } catch {
@@ -281,6 +283,7 @@ export function CallDetailScreen() {
       } else {
         await markCallBlocked(callId);
         setIsBlocked(true);
+        setIsVip(false);
         setToast('Number blocked');
       }
     } catch {
@@ -296,6 +299,7 @@ export function CallDetailScreen() {
       await markCallBlocked(callId, 'spam');
       setIsBlocked(true);
       setIsSpam(true);
+      setIsVip(false);
       setToast('Marked as spam & blocked');
     } catch {
       setToast('Could not complete action. Please try again.');
