@@ -321,8 +321,11 @@ export function PrivacySettingsScreen({ navigation }: Props) {
       setPinEntry('');
       setPinFirst('');
       setPendingPin('');
-      const devId = await getSecureItem('mattbot_device_id');
-      if (devId) await setSecureItem(`mattbot_pin_enabled_${devId}`, 'true');
+      const email = profile?.email;
+      if (email) {
+        const devId = await getSecureItem('mattbot_device_id');
+        if (devId) await setSecureItem(`mattbot_pin_device_${email}`, devId);
+      }
       await loadProfileAndPin();
     } catch (e) {
       setToastType('error');
@@ -340,8 +343,8 @@ export function PrivacySettingsScreen({ navigation }: Props) {
       await apiClient.delete('/auth/pin');
       setToastType('success');
       setToast('PIN disabled.');
-      const devId = await getSecureItem('mattbot_device_id');
-      if (devId) await removeSecureItem(`mattbot_pin_enabled_${devId}`);
+      const email = profile?.email;
+      if (email) await removeSecureItem(`mattbot_pin_device_${email}`);
       await loadProfileAndPin();
     } catch (e) {
       setToastType('error');

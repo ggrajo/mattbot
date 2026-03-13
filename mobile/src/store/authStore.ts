@@ -179,6 +179,11 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         displayName: data.display_name ?? data.email ?? null,
       });
 
+      if (data.email) {
+        const { setSecureItem } = await import('../utils/secureStorage');
+        await setSecureItem('mattbot_last_email', data.email);
+      }
+
       const { Platform } = await import('react-native');
       let deviceName = Platform.OS;
       let osVersion = Platform.OS;

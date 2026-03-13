@@ -44,6 +44,7 @@ export function LoginScreen({ navigation }: Props) {
   const [pinLoading, setPinLoading] = useState(false);
   const [hasDevicePin, setHasDevicePin] = useState(false);
   const [storedDeviceId, setStoredDeviceId] = useState<string | null>(null);
+  const [lastEmail, setLastEmail] = useState<string | null>(null);
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -54,13 +55,14 @@ export function LoginScreen({ navigation }: Props) {
   }, []);
 
   async function checkPinAvailability() {
-    const deviceId = await getSecureItem('mattbot_device_id');
-    if (deviceId) {
-      setStoredDeviceId(deviceId);
-      const pinEnabled = await getSecureItem(`mattbot_pin_enabled_${deviceId}`);
-      if (pinEnabled === 'true') {
-        setHasDevicePin(true);
-      }
+    const email = await getSecureItem('mattbot_last_email');
+    if (!email) return;
+    setLastEmail(email);
+
+    const pinDeviceId = await getSecureItem(`mattbot_pin_device_${email}`);
+    if (pinDeviceId) {
+      setStoredDeviceId(pinDeviceId);
+      setHasDevicePin(true);
     }
   }
 
@@ -159,7 +161,7 @@ export function LoginScreen({ navigation }: Props) {
   }
 
   async function handleBiometricLogin() {
-    if (!storedDeviceId) return;
+    if (!lastEmail) return;
     hapticMedium();
     setApiError(undefined);
     const success = await authenticate('Authenticate to sign in');
@@ -208,9 +210,14 @@ export function LoginScreen({ navigation }: Props) {
           <Text style={{ ...typography.h2, color: colors.textPrimary, marginBottom: spacing.xs }} allowFontScaling>
             Enter PIN
           </Text>
-          <Text style={{ ...typography.bodySmall, color: colors.textSecondary, marginBottom: spacing.xl }} allowFontScaling>
+          <Text style={{ ...typography.bodySmall, color: colors.textSecondary, marginBottom: spacing.xs }} allowFontScaling>
             Use your 6-digit PIN to sign in
           </Text>
+          {lastEmail && (
+            <Text style={{ ...typography.caption, color: colors.textSecondary, marginBottom: spacing.xl }} allowFontScaling>
+              {lastEmail}
+            </Text>
+          )}
 
           {apiError && (
             <Animated.View entering={FadeInDown.duration(200)} style={{ marginBottom: spacing.md, paddingHorizontal: spacing.lg }}>
@@ -357,33 +364,40 @@ export function LoginScreen({ navigation }: Props) {
       )}
 
       {/* Quick auth options (PIN + Biometric) */}
-      {hasDevicePin && (
+      {(hasDevicePin || (lastEmail && biometricAvailable)) && (
         <Animated.View entering={FadeInDown.duration(400).delay(150)} style={{ marginBottom: spacing.lg }}>
+          {lastEmail && (
+            <Text style={{ ...typography.caption, color: colors.textSecondary, textAlign: 'center', marginBottom: spacing.sm }} allowFontScaling>
+              Welcome back, {lastEmail}
+            </Text>
+          )}
           <View style={{ flexDirection: 'row', gap: spacing.sm }}>
-            <TouchableOpacity
-              onPress={() => { setMode('pin'); setApiError(undefined); }}
-              activeOpacity={0.7}
-              style={{
-                flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-                gap: spacing.sm, paddingVertical: spacing.md,
-                borderRadius: radii.lg, borderWidth: 1, borderColor: colors.border,
-                backgroundColor: colors.surface,
-              }}
-              accessibilityLabel="Sign in with PIN"
-            >
-              <View style={{
-                width: 36, height: 36, borderRadius: 18,
-                backgroundColor: colors.primary + '14',
-                alignItems: 'center', justifyContent: 'center',
-              }}>
-                <Icon name="dialpad" size={20} color={colors.primary} />
-              </View>
-              <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }} allowFontScaling>
-                Use PIN
-              </Text>
-            </TouchableOpacity>
+            {hasDevicePin && (
+              <TouchableOpacity
+                onPress={() => { setMode('pin'); setApiError(undefined); }}
+                activeOpacity={0.7}
+                style={{
+                  flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+                  gap: spacing.sm, paddingVertical: spacing.md,
+                  borderRadius: radii.lg, borderWidth: 1, borderColor: colors.border,
+                  backgroundColor: colors.surface,
+                }}
+                accessibilityLabel="Sign in with PIN"
+              >
+                <View style={{
+                  width: 36, height: 36, borderRadius: 18,
+                  backgroundColor: colors.primary + '14',
+                  alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <Icon name="dialpad" size={20} color={colors.primary} />
+                </View>
+                <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }} allowFontScaling>
+                  Use PIN
+                </Text>
+              </TouchableOpacity>
+            )}
 
-            {biometricAvailable && (
+            {lastEmail && biometricAvailable && (
               <TouchableOpacity
                 onPress={handleBiometricLogin}
                 activeOpacity={0.7}
