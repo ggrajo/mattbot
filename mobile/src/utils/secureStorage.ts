@@ -50,4 +50,5 @@ export async function getStoredTokens(): Promise<{ accessToken: string | null; r
 export async function clearTokens(): Promise<void> {
   await removeSecureItem(TOKEN_KEYS.ACCESS_TOKEN);
   await removeSecureItem(TOKEN_KEYS.REFRESH_TOKEN);
+  await removeSecureItem(TOKEN_KEYS.BIOMETRIC_REFRESH_TOKEN);
 }
