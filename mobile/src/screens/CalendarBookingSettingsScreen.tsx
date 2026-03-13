@@ -14,15 +14,17 @@ import { useTheme } from '../theme/ThemeProvider';
 import { useSettingsStore } from '../store/settingsStore';
 import { useCalendarStore } from '../store/calendarStore';
 import { getCalendarAuthUrl } from '../api/calendar';
-import { hapticLight } from '../utils/haptics';
+import { hapticLight, hapticMedium } from '../utils/haptics';
+import { OnboardingProgress } from '../components/onboarding/OnboardingProgress';
 import { RootStackParamList } from '../navigation/types';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'CalendarBookingSettings'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'CalendarBookingSettings' | 'OnboardingCalendarSetup'>;
 
-export function CalendarBookingSettingsScreen({ navigation }: Props) {
+export function CalendarBookingSettingsScreen({ navigation, route }: Props) {
+  const isOnboarding = route.name === 'OnboardingCalendarSetup';
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
-  const { settings, saving, error, loadSettings, updateSettings } = useSettingsStore();
+  const { settings, saving, error, loadSettings, updateSettings, completeStep } = useSettingsStore();
   const { status, loadStatus, disconnect } = useCalendarStore();
 
   const [enabled, setEnabled] = useState(false);
@@ -98,6 +100,33 @@ export function CalendarBookingSettingsScreen({ navigation }: Props) {
   const isConnected = status?.connected === true;
   const needsReauth = status?.needs_reauth === true;
 
+  async function handleOnboardingContinue() {
+    const ok = await updateSettings({
+      calendar_booking_enabled: enabled,
+      calendar_default_duration_minutes: clamp(durationMinutes, 15, 120),
+      calendar_booking_window_days: clamp(windowDays, 1, 60),
+    });
+    if (ok) {
+      const stepOk = await completeStep('calendar_setup');
+      if (stepOk) {
+        hapticMedium();
+        navigation.navigate('PlanSelection', { source: 'onboarding' });
+        return;
+      }
+    }
+    setToast({ message: 'Failed to save progress', type: 'error' });
+  }
+
+  async function handleOnboardingSkip() {
+    const ok = await completeStep('calendar_setup');
+    if (ok) {
+      hapticMedium();
+      navigation.navigate('PlanSelection', { source: 'onboarding' });
+    } else {
+      setToast({ message: 'Failed to save progress', type: 'error' });
+    }
+  }
+
   return (
     <ScreenWrapper>
       <Toast
@@ -107,6 +136,10 @@ export function CalendarBookingSettingsScreen({ navigation }: Props) {
         onDismiss={() => setToast(null)}
       />
       <SuccessModal visible={!!successModal} title={successModal?.title ?? ''} message={successModal?.message} onDismiss={() => setSuccessModal(null)} />
+
+      {isOnboarding && (
+        <OnboardingProgress currentStep={4} totalSteps={7} label="Calendar" />
+      )}
 
       <Text
         style={{ ...typography.h2, color: colors.textPrimary, marginBottom: spacing.lg }}
@@ -330,13 +363,31 @@ export function CalendarBookingSettingsScreen({ navigation }: Props) {
         </>
       )}
 
-      <Button
-        title="Save Changes"
-        onPress={handleSave}
-        loading={saving}
-        disabled={!dirty}
-        icon="content-save-outline"
-      />
+      {isOnboarding ? (
+        <View style={{ gap: spacing.sm }}>
+          <Button
+            title="Continue"
+            icon="arrow-right"
+            onPress={handleOnboardingContinue}
+            loading={saving}
+            disabled={saving}
+          />
+          <Button
+            title="Skip for Now"
+            variant="ghost"
+            onPress={handleOnboardingSkip}
+            disabled={saving}
+          />
+        </View>
+      ) : (
+        <Button
+          title="Save Changes"
+          onPress={handleSave}
+          loading={saving}
+          disabled={!dirty}
+          icon="content-save-outline"
+        />
+      )}
     </ScreenWrapper>
   );
 }

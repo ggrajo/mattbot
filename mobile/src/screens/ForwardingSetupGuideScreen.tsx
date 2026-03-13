@@ -15,6 +15,7 @@ import {
 } from '../api/telephony';
 import { extractApiError } from '../api/client';
 import { hapticLight } from '../utils/haptics';
+import { OnboardingProgress } from '../components/onboarding/OnboardingProgress';
 import { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ForwardingSetupGuide'>;
@@ -62,6 +63,10 @@ export function ForwardingSetupGuideScreen({ route, navigation }: Props) {
 
   return (
     <ScreenWrapper>
+      {isOnboarding && (
+        <OnboardingProgress currentStep={7} totalSteps={7} label="Call Setup" />
+      )}
+
       <View style={{ alignItems: 'center', marginBottom: spacing.xl }}>
         <View
           style={{

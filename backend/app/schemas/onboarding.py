@@ -13,6 +13,7 @@ ONBOARDING_STEPS = [
     "plan_selected",
     "payment_method_added",
     "number_provisioned",
+    "forwarding_configured",
     "call_modes_configured",
     "onboarding_complete",
 ]
@@ -25,6 +26,7 @@ COMPLETABLE_STEPS = {
     "plan_selected",
     "payment_method_added",
     "number_provisioned",
+    "forwarding_configured",
     "call_modes_configured",
     "onboarding_complete",
 }

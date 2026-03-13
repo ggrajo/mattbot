@@ -84,7 +84,7 @@ export function OnboardingSettingsScreen({ navigation }: Props) {
       const step1 = await completeStep('settings_configured');
       if (step1) {
         hapticMedium();
-        navigation.navigate('PlanSelection', { source: 'onboarding' });
+        navigation.navigate('OnboardingAssistantSetup');
         return;
       }
     }
@@ -106,7 +106,7 @@ export function OnboardingSettingsScreen({ navigation }: Props) {
     <ScreenWrapper>
       <Toast message={toast} type="success" visible={!!toast} onDismiss={() => setToast('')} />
 
-      <OnboardingProgress currentStep={2} totalSteps={6} label="Basic Settings" />
+      <OnboardingProgress currentStep={2} totalSteps={7} label="Basic Settings" />
 
       {/* Hero */}
       <FadeIn delay={0} slide="up">

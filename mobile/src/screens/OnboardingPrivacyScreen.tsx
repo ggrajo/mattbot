@@ -128,7 +128,7 @@ export function OnboardingPrivacyScreen({ navigation }: Props) {
     <ScreenWrapper>
       <Toast message={toast} type={toastType} visible={!!toast} onDismiss={() => setToast('')} />
 
-      <OnboardingProgress currentStep={1} totalSteps={6} label="Privacy & Permissions" />
+      <OnboardingProgress currentStep={1} totalSteps={7} label="Privacy & Permissions" />
 
       {/* Hero */}
       <FadeIn delay={0} slide="up">

@@ -11,6 +11,7 @@ import { SuccessModal } from '../components/ui/SuccessModal';
 import { useTheme } from '../theme/ThemeProvider';
 import { useTelephonyStore } from '../store/telephonyStore';
 import { useSettingsStore } from '../store/settingsStore';
+import { OnboardingProgress } from '../components/onboarding/OnboardingProgress';
 import { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'CallModes'>;
@@ -81,7 +82,7 @@ export function CallModesScreen({ navigation, route }: Props) {
         return;
       }
       requestAnimationFrame(() => {
-        navigation.reset({ index: 0, routes: [{ name: 'DrawerRoot' }] });
+        navigation.navigate('OnboardingComplete');
       });
       return;
     } else {
@@ -120,6 +121,10 @@ export function CallModesScreen({ navigation, route }: Props) {
         message={successModal?.message}
         onDismiss={() => setSuccessModal(null)}
       />
+
+      {isOnboarding && (
+        <OnboardingProgress currentStep={7} totalSteps={7} label="Call Setup" />
+      )}
 
       <View style={{ alignItems: 'center', marginBottom: spacing.xl }}>
         <View

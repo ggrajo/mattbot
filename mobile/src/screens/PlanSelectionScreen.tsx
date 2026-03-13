@@ -12,6 +12,7 @@ import { useTheme } from '../theme/ThemeProvider';
 import { useBillingStore } from '../store/billingStore';
 import { useSettingsStore } from '../store/settingsStore';
 import type { BillingPlan, BillingStatus } from '../api/billing';
+import { OnboardingProgress } from '../components/onboarding/OnboardingProgress';
 import { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'PlanSelection'>;
@@ -151,7 +152,7 @@ export function PlanSelectionScreen({ route, navigation }: Props) {
     setProcessingPlan(null);
     if (ok && isOnboarding) {
       await completeStep('plan_selected');
-      navigation.navigate('NumberProvision');
+      navigation.navigate('NumberProvision', { onboarding: true });
     } else if (ok) {
       navigation.navigate('SubscriptionStatus');
     } else {
@@ -185,7 +186,7 @@ export function PlanSelectionScreen({ route, navigation }: Props) {
 
     if (ok && isOnboarding) {
       await completeStep('plan_selected');
-      navigation.navigate('NumberProvision');
+      navigation.navigate('NumberProvision', { onboarding: true });
     } else if (ok) {
       showToast(`Switched to ${planName}`, 'success');
       navigation.goBack();
@@ -226,6 +227,10 @@ export function PlanSelectionScreen({ route, navigation }: Props) {
           visible={!!toastMsg}
           onDismiss={() => setToastMsg(null)}
         />
+      )}
+
+      {isOnboarding && (
+        <OnboardingProgress currentStep={5} totalSteps={7} label="Plan & Payment" />
       )}
 
       <ConfirmSheet

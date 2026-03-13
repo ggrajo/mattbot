@@ -19,6 +19,7 @@ import {
 } from '../api/telephony';
 import { extractApiError } from '../api/client';
 import { hapticLight, hapticMedium } from '../utils/haptics';
+import { OnboardingProgress } from '../components/onboarding/OnboardingProgress';
 import { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'NumberProvision'>;
@@ -99,6 +100,10 @@ export function NumberProvisionScreen({ route, navigation }: Props) {
   return (
     <ScreenWrapper>
       <Toast message={toast} type={toastType} visible={!!toast} onDismiss={() => setToast('')} />
+
+      {isOnboarding && (
+        <OnboardingProgress currentStep={6} totalSteps={7} label="Phone Number" />
+      )}
 
       <View style={{ alignItems: 'center', marginBottom: spacing.xl }}>
         <View

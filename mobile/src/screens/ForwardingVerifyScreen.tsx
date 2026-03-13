@@ -13,6 +13,7 @@ import { useSettingsStore } from '../store/settingsStore';
 import { verifyForwarding, getForwardingVerifyStatus } from '../api/telephony';
 import { extractApiError } from '../api/client';
 import { hapticLight, hapticMedium, hapticError } from '../utils/haptics';
+import { OnboardingProgress } from '../components/onboarding/OnboardingProgress';
 import { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ForwardingVerify'>;
@@ -72,16 +73,8 @@ export function ForwardingVerifyScreen({ route, navigation }: Props) {
 
   async function handleVerificationSuccess() {
     if (isOnboarding) {
-      const fwdOk = await completeStep('forwarding_configured');
-      if (fwdOk) {
-        const doneOk = await completeStep('onboarding_complete');
-        if (doneOk) {
-          requestAnimationFrame(() => {
-            navigation.reset({ index: 0, routes: [{ name: 'DrawerRoot' }] });
-          });
-          return;
-        }
-      }
+      await completeStep('forwarding_configured');
+      navigation.navigate('CallModes', { onboarding: true });
     }
   }
 
@@ -117,7 +110,7 @@ export function ForwardingVerifyScreen({ route, navigation }: Props) {
   function handleContinue() {
     hapticLight();
     if (isOnboarding) {
-      navigation.reset({ index: 0, routes: [{ name: 'DrawerRoot' }] });
+      navigation.navigate('CallModes', { onboarding: true });
     } else {
       navigation.goBack();
     }
@@ -159,6 +152,10 @@ export function ForwardingVerifyScreen({ route, navigation }: Props) {
   return (
     <ScreenWrapper>
       <Toast message={toast} type={toastType} visible={!!toast} onDismiss={() => setToast('')} />
+
+      {isOnboarding && (
+        <OnboardingProgress currentStep={7} totalSteps={7} label="Call Setup" />
+      )}
 
       <View style={{ alignItems: 'center', marginBottom: spacing.xl }}>
         <View

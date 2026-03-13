@@ -54,6 +54,7 @@ import { UrgentNotificationsScreen } from '../screens/UrgentNotificationsScreen'
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { BusinessHoursScreen } from '../screens/BusinessHoursScreen';
 import { KnowledgeBaseScreen } from '../screens/KnowledgeBaseScreen';
+import { OnboardingCompleteScreen } from '../screens/OnboardingCompleteScreen';
 import { RemindersListScreen } from '../screens/RemindersListScreen';
 import { TextBackScreen } from '../screens/TextBackScreen';
 import { CreateReminderScreen } from '../screens/CreateReminderScreen';
@@ -328,6 +329,11 @@ export function RootNavigator() {
               name="KnowledgeBase"
               component={KnowledgeBaseScreen}
               options={{ headerShown: true, title: 'Knowledge Base' }}
+            />
+            <Stack.Screen
+              name="OnboardingComplete"
+              component={OnboardingCompleteScreen}
+              options={{ headerShown: false, gestureEnabled: false }}
             />
             <Stack.Screen
               name="RemindersList"

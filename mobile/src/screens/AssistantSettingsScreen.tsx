@@ -17,10 +17,11 @@ import { Divider } from '../components/ui/Divider';
 import { useTheme } from '../theme/ThemeProvider';
 import { useSettingsStore } from '../store/settingsStore';
 import { apiClient, extractApiError } from '../api/client';
-import { hapticLight } from '../utils/haptics';
+import { hapticLight, hapticMedium } from '../utils/haptics';
+import { OnboardingProgress } from '../components/onboarding/OnboardingProgress';
 import { RootStackParamList } from '../navigation/types';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'AssistantSettings'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'AssistantSettings' | 'OnboardingAssistantSetup'>;
 
 interface VoiceOption {
   id: string;
@@ -88,10 +89,11 @@ const LANGUAGES = [
   { code: 'hu', label: 'Hungarian' },
 ];
 
-export function AssistantSettingsScreen({}: Props) {
+export function AssistantSettingsScreen({ navigation, route }: Props) {
+  const isOnboarding = route.name === 'OnboardingAssistantSetup';
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
-  const { settings, loading, error, loadSettings, updateSettings } = useSettingsStore();
+  const { settings, loading, error, loadSettings, updateSettings, completeStep } = useSettingsStore();
 
   const [assistantName, setAssistantName] = useState('');
   const [selectedVoice, setSelectedVoice] = useState('');
@@ -209,10 +211,61 @@ export function AssistantSettingsScreen({}: Props) {
     if (!dirty) setDirty(true);
   }
 
+  async function handleOnboardingContinue() {
+    setSaving(true);
+    try {
+      await updateSettings({
+        assistant_name: assistantName.trim() || undefined,
+        temperament_preset: temperament,
+        swearing_rule: swearingRule,
+        language_primary: primaryLanguage,
+      });
+
+      if (agentId) {
+        const agentPatch: Record<string, unknown> = {};
+        if (selectedVoice) agentPatch.voice_id = selectedVoice;
+        agentPatch.user_instructions = customInstructions.trim() || null;
+        agentPatch.greeting_instructions = customGreeting.trim() || null;
+        await apiClient.patch(`/agents/${agentId}`, agentPatch);
+      }
+
+      const ok = await completeStep('assistant_setup');
+      if (ok) {
+        hapticMedium();
+        navigation.navigate('OnboardingCalendarSetup');
+        return;
+      }
+      setToastType('error');
+      setToast('Failed to save progress');
+    } catch (e: any) {
+      setToastType('error');
+      setToast(extractApiError(e));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleOnboardingSkip() {
+    setSaving(true);
+    const ok = await completeStep('assistant_setup');
+    if (ok) {
+      hapticMedium();
+      navigation.navigate('OnboardingCalendarSetup');
+    } else {
+      setToastType('error');
+      setToast('Failed to save progress');
+    }
+    setSaving(false);
+  }
+
   return (
     <ScreenWrapper>
       <Toast message={toast} type={toastType} visible={!!toast} onDismiss={() => setToast('')} />
       <SuccessModal visible={!!successModal} title={successModal?.title ?? ''} message={successModal?.message} onDismiss={() => setSuccessModal(null)} />
+
+      {isOnboarding && (
+        <OnboardingProgress currentStep={3} totalSteps={7} label="AI Assistant" />
+      )}
 
       <Text
         style={{ ...typography.h2, color: colors.textPrimary, marginBottom: spacing.sm }}
@@ -224,7 +277,9 @@ export function AssistantSettingsScreen({}: Props) {
         style={{ ...typography.body, color: colors.textSecondary, marginBottom: spacing.xl }}
         allowFontScaling
       >
-        Configure your assistant's personality, voice, and behavior.
+        {isOnboarding
+          ? "Set up your assistant's personality and voice. You can fine-tune this later."
+          : "Configure your assistant's personality, voice, and behavior."}
       </Text>
 
       {error && (
@@ -607,13 +662,31 @@ export function AssistantSettingsScreen({}: Props) {
         </View>
       </Card>
 
-      <Button
-        title="Save Settings"
-        icon="content-save-outline"
-        onPress={handleSave}
-        loading={saving}
-        disabled={!dirty || saving}
-      />
+      {isOnboarding ? (
+        <View style={{ gap: spacing.sm }}>
+          <Button
+            title="Continue"
+            icon="arrow-right"
+            onPress={handleOnboardingContinue}
+            loading={saving}
+            disabled={saving}
+          />
+          <Button
+            title="Skip for Now"
+            variant="ghost"
+            onPress={handleOnboardingSkip}
+            disabled={saving}
+          />
+        </View>
+      ) : (
+        <Button
+          title="Save Settings"
+          icon="content-save-outline"
+          onPress={handleSave}
+          loading={saving}
+          disabled={!dirty || saving}
+        />
+      )}
     </ScreenWrapper>
   );
 }

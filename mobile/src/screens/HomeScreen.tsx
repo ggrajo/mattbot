@@ -343,6 +343,8 @@ export function HomeScreen() {
           navigation.navigate('PlanSelection', { source: 'onboarding' });
         } else if (!state.steps_completed.includes('number_provisioned')) {
           navigation.navigate('NumberProvision', { onboarding: true });
+        } else if (!state.steps_completed.includes('forwarding_configured')) {
+          navigation.navigate('ForwardingSetupGuide', { onboarding: true });
         } else if (!state.steps_completed.includes('call_modes_configured')) {
           navigation.navigate('CallModes', { onboarding: true });
         } else if (!state.steps_completed.includes('onboarding_complete')) {
