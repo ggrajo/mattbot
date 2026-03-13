@@ -150,6 +150,7 @@ class PinStatusResponse(BaseModel):
     pin_set_at: str | None = None
     pin_expired: bool = False
     days_until_expiry: int | None = None
+    expires_at: str | None = None
 
 
 class PasswordChangeRequest(BaseModel):

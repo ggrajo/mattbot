@@ -35,6 +35,7 @@ interface PinStatus {
   pin_set_at: string | null;
   pin_expired: boolean;
   days_until_expiry: number | null;
+  expires_at: string | null;
 }
 
 interface UserProfile {
@@ -165,6 +166,14 @@ export function PrivacySettingsScreen({ navigation }: Props) {
   const [savingPin, setSavingPin] = useState(false);
   const shakeAnim = useRef(new Animated.Value(0)).current;
 
+  // Step-up (2FA verification) flow
+  const [stepUpAction, setStepUpAction] = useState<null | 'pin' | 'password'>(null);
+  const [totpCode, setTotpCode] = useState('');
+  const [stepUpError, setStepUpError] = useState('');
+  const [verifyingStepUp, setVerifyingStepUp] = useState(false);
+  const [pendingPin, setPendingPin] = useState('');
+  const totpInputRef = useRef<RNTextInput>(null);
+
   useEffect(() => {
     loadSettings();
     loadProfileAndPin();
@@ -209,7 +218,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
     handleToggle('biometric_unlock_enabled', enabled);
   }
 
-  async function handlePasswordSave() {
+  function handlePasswordSave() {
     if (newPassword !== confirmPassword) {
       setToastType('error');
       setToast('Passwords do not match.');
@@ -220,13 +229,21 @@ export function PrivacySettingsScreen({ navigation }: Props) {
       setToast('Password must be at least 12 characters.');
       return;
     }
+    setStepUpAction('password');
+    setTotpCode('');
+    setStepUpError('');
+  }
+
+  async function executePasswordChange(stepUpToken: string) {
     setSavingPassword(true);
     try {
       const payload: Record<string, string> = { new_password: newPassword };
       if (profile?.has_password && currentPassword) {
         payload.current_password = currentPassword;
       }
-      await apiClient.post('/auth/password/change', payload);
+      await apiClient.post('/auth/password/change', payload, {
+        headers: { 'X-Step-Up-Token': stepUpToken },
+      });
       setToastType('success');
       setToast(profile?.has_password ? 'Password changed successfully.' : 'Password created successfully.');
       setShowPasswordForm(false);
@@ -283,22 +300,32 @@ export function PrivacySettingsScreen({ navigation }: Props) {
     setPinError('');
   }
 
-  async function submitPin(pin: string) {
+  function submitPin(pin: string) {
+    setPendingPin(pin);
+    setPinMode(null);
+    setStepUpAction('pin');
+    setTotpCode('');
+    setStepUpError('');
+  }
+
+  async function executePinSetup(stepUpToken: string) {
     setSavingPin(true);
     try {
-      await apiClient.post('/auth/pin/setup', { pin });
+      await apiClient.post('/auth/pin/setup', { pin: pendingPin }, {
+        headers: { 'X-Step-Up-Token': stepUpToken },
+      });
       setToastType('success');
       setToast('PIN set up successfully.');
-      setPinMode(null);
       setPinEntry('');
       setPinFirst('');
+      setPendingPin('');
       await loadProfileAndPin();
     } catch (e) {
       setToastType('error');
       setToast(extractApiError(e));
-      setPinMode('setup');
       setPinEntry('');
       setPinFirst('');
+      setPendingPin('');
     } finally {
       setSavingPin(false);
     }
@@ -314,6 +341,121 @@ export function PrivacySettingsScreen({ navigation }: Props) {
       setToastType('error');
       setToast(extractApiError(e));
     }
+  }
+
+  async function handleStepUpVerify() {
+    if (totpCode.length < 6) return;
+    setVerifyingStepUp(true);
+    setStepUpError('');
+    try {
+      const { data } = await apiClient.post('/auth/step-up', { totp_code: totpCode });
+      const token = data.step_up_token as string;
+      const action = stepUpAction;
+      setStepUpAction(null);
+      setTotpCode('');
+      if (action === 'pin') {
+        await executePinSetup(token);
+      } else if (action === 'password') {
+        await executePasswordChange(token);
+      }
+    } catch (e) {
+      setStepUpError(extractApiError(e));
+    } finally {
+      setVerifyingStepUp(false);
+    }
+  }
+
+  function cancelStepUp() {
+    setStepUpAction(null);
+    setTotpCode('');
+    setStepUpError('');
+    if (pendingPin) {
+      setPinMode('setup');
+      setPinEntry('');
+      setPinFirst('');
+      setPendingPin('');
+    }
+  }
+
+  // Step-Up (2FA) Verification Full-Screen UI
+  if (stepUpAction) {
+    return (
+      <ScreenWrapper scroll={false}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={{ flex: 1 }}
+        >
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: spacing.xl }}>
+            <View style={{
+              width: 72,
+              height: 72,
+              borderRadius: 36,
+              backgroundColor: colors.accent + '1A',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: spacing.lg,
+            }}>
+              <Icon name="two-factor-authentication" size={36} color={colors.accent} />
+            </View>
+
+            <Text style={{ ...typography.h2, color: colors.textPrimary, textAlign: 'center', marginBottom: spacing.sm }} allowFontScaling>
+              Verify Your Identity
+            </Text>
+            <Text style={{ ...typography.bodySmall, color: colors.textSecondary, textAlign: 'center', marginBottom: spacing.xl }} allowFontScaling>
+              Enter your 6-digit authenticator code to{' '}
+              {stepUpAction === 'pin' ? 'set your PIN' : 'change your password'}
+            </Text>
+
+            <View style={{ width: '100%', maxWidth: 280, marginBottom: spacing.lg }}>
+              <RNTextInput
+                ref={totpInputRef}
+                value={totpCode}
+                onChangeText={(t) => setTotpCode(t.replace(/\D/g, '').slice(0, 6))}
+                keyboardType="number-pad"
+                maxLength={6}
+                autoFocus
+                style={{
+                  fontSize: 32,
+                  fontWeight: '700',
+                  letterSpacing: 12,
+                  textAlign: 'center',
+                  color: colors.textPrimary,
+                  paddingVertical: spacing.md,
+                  borderBottomWidth: 2,
+                  borderBottomColor: stepUpError ? colors.error : colors.primary,
+                }}
+                placeholder="000000"
+                placeholderTextColor={colors.textDisabled}
+              />
+            </View>
+
+            {stepUpError ? (
+              <Text style={{ ...typography.bodySmall, color: colors.error, textAlign: 'center', marginBottom: spacing.md }} allowFontScaling>
+                {stepUpError}
+              </Text>
+            ) : null}
+
+            <View style={{ width: '100%', maxWidth: 280, gap: spacing.sm }}>
+              <Button
+                title="Verify & Continue"
+                onPress={handleStepUpVerify}
+                loading={verifyingStepUp}
+                disabled={totpCode.length < 6}
+                icon="check"
+              />
+              <TouchableOpacity
+                onPress={cancelStepUp}
+                style={{ alignItems: 'center', paddingVertical: spacing.md }}
+              >
+                <Text style={{ ...typography.body, color: colors.textSecondary, fontWeight: '500' }} allowFontScaling>
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </ScreenWrapper>
+    );
   }
 
   // PIN Setup Full-Screen UI
@@ -555,6 +697,16 @@ export function PrivacySettingsScreen({ navigation }: Props) {
                       {pinStatus.pin_expired
                         ? 'PIN expired — please rotate your PIN'
                         : `Expires in ${pinStatus.days_until_expiry} days`}
+                    </Text>
+                  )}
+                  {pinStatus.expires_at && !pinStatus.pin_expired && (
+                    <Text style={{ ...typography.caption, color: colors.textSecondary, marginTop: 2 }} allowFontScaling>
+                      {new Date(pinStatus.expires_at).toLocaleDateString(undefined, {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                      })}
                     </Text>
                   )}
                 </View>

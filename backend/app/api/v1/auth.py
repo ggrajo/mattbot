@@ -565,6 +565,7 @@ async def password_reset_confirm(
 async def password_change(
     body: PasswordChangeRequest,
     current_user: CurrentUser = Depends(get_current_user),
+    step_up: dict = Depends(require_step_up),
     db: AsyncSession = Depends(get_db),
     ip: str = Depends(get_client_ip),
 ) -> PasswordChangeResponse:
@@ -681,7 +682,10 @@ async def pin_status(
     pin_expired = False
     days_until_expiry = None
 
+    expires_at_str = None
+
     if enabled and device.pin_set_at:
+        from datetime import timedelta
         set_at = device.pin_set_at
         if set_at.tzinfo:
             set_at = set_at.replace(tzinfo=None)
@@ -690,12 +694,14 @@ async def pin_status(
         remaining = PIN_ROTATION_DAYS - age_days
         pin_expired = remaining <= 0
         days_until_expiry = max(0, remaining)
+        expires_at_str = (set_at + timedelta(days=PIN_ROTATION_DAYS)).isoformat()
 
     return PinStatusResponse(
         pin_enabled=enabled,
         pin_set_at=pin_set_at_str,
         pin_expired=pin_expired,
         days_until_expiry=days_until_expiry,
+        expires_at=expires_at_str,
     )
 
 
