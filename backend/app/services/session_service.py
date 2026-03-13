@@ -94,11 +94,14 @@ async def refresh_session(
 
     now = utcnow()
     refresh_exp = session.refresh_expires_at
-    if refresh_exp < now:
-        raise AppError("TOKEN_EXPIRED", "Refresh token has expired", 401)
+    if refresh_exp is not None:
+        exp_naive = refresh_exp.replace(tzinfo=None) if refresh_exp.tzinfo else refresh_exp
+        if exp_naive < now:
+            raise AppError("TOKEN_EXPIRED", "Refresh token has expired", 401)
 
     created = session.created_at
-    absolute_age = (now - created).days
+    created_naive = created.replace(tzinfo=None) if created and created.tzinfo else created
+    absolute_age = (now - created_naive).days
     if absolute_age > settings.ABSOLUTE_SESSION_DAYS:
         raise AppError("SESSION_EXPIRED", "Session exceeded maximum age", 401)
 

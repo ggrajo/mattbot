@@ -79,6 +79,11 @@ class CallDetailResponse(BaseModel):
     voice_id: str | None = None
     booked_calendar_event_id: str | None = None
     booked_calendar_event_summary: str | None = None
+    booked_appointment_date: str | None = None
+    booked_appointment_time: str | None = None
+    booked_appointment_duration_minutes: int | None = None
+    booked_appointment_caller_name: str | None = None
+    booked_appointment_reason: str | None = None
 
     model_config = {"from_attributes": True}
 

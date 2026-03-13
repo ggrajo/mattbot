@@ -13,6 +13,7 @@ class CalendarStatusResponse(BaseModel):
     connected: bool
     email: str | None = None
     calendar_id: str | None = None
+    needs_reauth: bool = False
 
 
 class CalendarEvent(BaseModel):

@@ -4,7 +4,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { TextInput } from '../components/ui/TextInput';
 import { Icon } from '../components/ui/Icon';
 import { Toast } from '../components/ui/Toast';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
@@ -16,16 +15,14 @@ import { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'UrgentNotifications'>;
 
-export function UrgentNotificationsScreen({}: Props) {
+export function UrgentNotificationsScreen({ navigation }: Props) {
   const theme = useTheme();
   const { colors, spacing, typography } = theme;
-  const { settings, error, loadSettings, updateSettings } = useSettingsStore();
+  const { settings, saving, error, loadSettings, updateSettings } = useSettingsStore();
 
   const [smsEnabled, setSmsEnabled] = useState(false);
   const [emailEnabled, setEmailEnabled] = useState(false);
   const [callEnabled, setCallEnabled] = useState(false);
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [dirty, setDirty] = useState(false);
 
@@ -38,36 +35,25 @@ export function UrgentNotificationsScreen({}: Props) {
       setSmsEnabled(settings.urgent_notify_sms);
       setEmailEnabled(settings.urgent_notify_email);
       setCallEnabled(settings.urgent_notify_call);
-      // Don't populate phone from last4 - user must enter full number to avoid corrupting data
-      setEmail(settings.urgent_notify_email_address ?? '');
     }
   }, [settings]);
 
-  const showPhoneInput = smsEnabled || callEnabled;
-  const showEmailInput = emailEnabled;
-
   async function handleSave() {
-    setSaving(true);
-    try {
-      const changes: Record<string, unknown> = {
-        urgent_notify_sms: smsEnabled,
-        urgent_notify_email: emailEnabled,
-        urgent_notify_call: callEnabled,
-      };
-      if (showPhoneInput) changes.urgent_notify_phone = phone;
-      if (showEmailInput) changes.urgent_notify_email_address = email;
-
-      const ok = await updateSettings(changes as any);
-      if (ok) {
-        setDirty(false);
-        setToast({ message: 'Notification settings saved', type: 'success' });
-      } else {
-        setToast({ message: 'Failed to save settings', type: 'error' });
-      }
-    } finally {
-      setSaving(false);
+    const ok = await updateSettings({
+      urgent_notify_sms: smsEnabled,
+      urgent_notify_email: emailEnabled,
+      urgent_notify_call: callEnabled,
+    } as any);
+    if (ok) {
+      setDirty(false);
+      setToast({ message: 'Notification settings saved', type: 'success' });
+    } else {
+      setToast({ message: 'Failed to save settings', type: 'error' });
     }
   }
+
+  const hasPhone = !!settings?.personal_phone_last4;
+  const needsPhone = (smsEnabled || callEnabled) && !hasPhone;
 
   return (
     <ScreenWrapper>
@@ -97,8 +83,8 @@ export function UrgentNotificationsScreen({}: Props) {
           <View style={{ flex: 1 }}>
             <Text style={{ ...typography.bodySmall, color: colors.textSecondary, lineHeight: 20 }} allowFontScaling>
               When the AI assistant determines a call is urgent, it can notify you
-              immediately through one or more channels. Configure which channels
-              to use below.
+              immediately through one or more channels. Your phone number and email
+              from your profile will be used.
             </Text>
           </View>
         </View>
@@ -177,57 +163,25 @@ export function UrgentNotificationsScreen({}: Props) {
         </View>
       </Card>
 
-      {showPhoneInput && (
-        <Card style={{ marginBottom: spacing.lg }}>
-          <View style={{ gap: spacing.md }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
-              <Icon name="phone-outline" size="md" color={colors.primary} />
-              <View style={{ flex: 1 }}>
-                <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500' }} allowFontScaling>
-                  Phone Number
-                </Text>
-                <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
-                  {settings?.urgent_notify_phone_last4
-                    ? 'Enter full phone number (••••' + settings.urgent_notify_phone_last4 + ' on file)'
-                    : 'Used for SMS and call-back notifications'}
-                </Text>
-              </View>
+      {needsPhone && (
+        <Card variant="flat" style={{ marginBottom: spacing.lg, borderColor: colors.warning + '66' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Icon name="information-outline" size="md" color={colors.warning} />
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{ ...typography.bodySmall, color: colors.warning, fontWeight: '500' }}
+                allowFontScaling
+              >
+                Add your phone number in Profile Settings to enable SMS/call notifications.
+              </Text>
+              <Text
+                style={{ ...typography.caption, color: colors.primary, marginTop: spacing.xs }}
+                allowFontScaling
+                onPress={() => navigation.navigate('ProfileSettings')}
+              >
+                Go to Profile Settings →
+              </Text>
             </View>
-            <TextInput
-              label="Phone Number"
-              value={phone}
-              onChangeText={(v) => { setPhone(v); setDirty(true); }}
-              keyboardType="phone-pad"
-              leftIcon="phone-outline"
-              placeholder="+1 (555) 123-4567"
-            />
-          </View>
-        </Card>
-      )}
-
-      {showEmailInput && (
-        <Card style={{ marginBottom: spacing.lg }}>
-          <View style={{ gap: spacing.md }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
-              <Icon name="email-outline" size="md" color={colors.primary} />
-              <View style={{ flex: 1 }}>
-                <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500' }} allowFontScaling>
-                  Email Address
-                </Text>
-                <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
-                  Used for urgent email notifications
-                </Text>
-              </View>
-            </View>
-            <TextInput
-              label="Email Address"
-              value={email}
-              onChangeText={(v) => { setEmail(v); setDirty(true); }}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              leftIcon="email-outline"
-              placeholder="you@example.com"
-            />
           </View>
         </Card>
       )}

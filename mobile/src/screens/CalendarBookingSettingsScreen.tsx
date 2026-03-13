@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Switch } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, Text, Switch, Linking, ActivityIndicator } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useFocusEffect } from '@react-navigation/native';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -10,6 +11,8 @@ import { Toast } from '../components/ui/Toast';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { useTheme } from '../theme/ThemeProvider';
 import { useSettingsStore } from '../store/settingsStore';
+import { useCalendarStore } from '../store/calendarStore';
+import { getCalendarAuthUrl } from '../api/calendar';
 import { hapticLight } from '../utils/haptics';
 import { RootStackParamList } from '../navigation/types';
 
@@ -19,16 +22,22 @@ export function CalendarBookingSettingsScreen({ navigation }: Props) {
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
   const { settings, saving, error, loadSettings, updateSettings } = useSettingsStore();
+  const { status, loadStatus, disconnect } = useCalendarStore();
 
   const [enabled, setEnabled] = useState(false);
   const [durationMinutes, setDurationMinutes] = useState('30');
   const [windowDays, setWindowDays] = useState('14');
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [dirty, setDirty] = useState(false);
+  const [connecting, setConnecting] = useState(false);
+  const [disconnecting, setDisconnecting] = useState(false);
 
-  useEffect(() => {
-    loadSettings();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadSettings();
+      loadStatus();
+    }, []),
+  );
 
   useEffect(() => {
     if (settings) {
@@ -44,6 +53,32 @@ export function CalendarBookingSettingsScreen({ navigation }: Props) {
     return Math.max(min, Math.min(max, n));
   }
 
+  async function handleConnect() {
+    setConnecting(true);
+    try {
+      const { auth_url } = await getCalendarAuthUrl();
+      await Linking.openURL(auth_url);
+    } catch {
+      setToast({ message: 'Could not open Google sign-in', type: 'error' });
+    } finally {
+      setConnecting(false);
+    }
+  }
+
+  async function handleDisconnect() {
+    hapticLight();
+    setDisconnecting(true);
+    try {
+      await disconnect();
+      await loadStatus();
+      setToast({ message: 'Google Calendar disconnected', type: 'success' });
+    } catch {
+      setToast({ message: 'Failed to disconnect calendar', type: 'error' });
+    } finally {
+      setDisconnecting(false);
+    }
+  }
+
   async function handleSave() {
     const ok = await updateSettings({
       calendar_booking_enabled: enabled,
@@ -57,6 +92,9 @@ export function CalendarBookingSettingsScreen({ navigation }: Props) {
       setToast({ message: 'Failed to save settings', type: 'error' });
     }
   }
+
+  const isConnected = status?.connected === true;
+  const needsReauth = status?.needs_reauth === true;
 
   return (
     <ScreenWrapper>
@@ -79,6 +117,100 @@ export function CalendarBookingSettingsScreen({ navigation }: Props) {
           <ErrorMessage message={error} action="Retry" onAction={loadSettings} />
         </View>
       )}
+
+      <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
+        <View style={{ gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
+            <View
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: radii.md,
+                backgroundColor: (isConnected && !needsReauth) ? colors.success + '1A' : colors.warning + '1A',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Icon
+                name="google"
+                size="lg"
+                color={(isConnected && !needsReauth) ? colors.success : colors.warning}
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={{ ...typography.h3, color: colors.textPrimary }} allowFontScaling>
+                Google Calendar
+              </Text>
+              {isConnected && !needsReauth ? (
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+                  <Icon name="check-circle" size="sm" color={colors.success} />
+                  <Text
+                    style={{ ...typography.bodySmall, color: colors.success, fontWeight: '500' }}
+                    numberOfLines={1}
+                    allowFontScaling
+                  >
+                    {status.email ?? 'Connected'}
+                  </Text>
+                </View>
+              ) : needsReauth ? (
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+                  <Icon name="alert-circle" size="sm" color={colors.warning} />
+                  <Text
+                    style={{ ...typography.bodySmall, color: colors.warning, fontWeight: '500' }}
+                    numberOfLines={1}
+                    allowFontScaling
+                  >
+                    Session expired - reconnect required
+                  </Text>
+                </View>
+              ) : (
+                <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+                  Not connected
+                </Text>
+              )}
+            </View>
+          </View>
+
+          {needsReauth ? (
+            <View style={{ gap: spacing.sm }}>
+              <View style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: spacing.sm,
+                padding: spacing.sm,
+                borderRadius: radii.sm,
+                backgroundColor: colors.warning + '14',
+              }}>
+                <Icon name="alert-outline" size="sm" color={colors.warning} />
+                <Text style={{ ...typography.caption, color: colors.warning, flex: 1 }} allowFontScaling>
+                  Your Google Calendar access expired. Please reconnect to sync events.
+                </Text>
+              </View>
+              <Button
+                title="Reconnect Google Calendar"
+                icon="google"
+                onPress={handleConnect}
+                loading={connecting}
+              />
+            </View>
+          ) : isConnected ? (
+            <Button
+              title="Disconnect"
+              variant="outline"
+              icon="link-off"
+              onPress={handleDisconnect}
+              loading={disconnecting}
+            />
+          ) : (
+            <Button
+              title="Connect Google Calendar"
+              icon="google"
+              onPress={handleConnect}
+              loading={connecting}
+            />
+          )}
+        </View>
+      </Card>
 
       <Card variant="flat" style={{ marginBottom: spacing.lg }}>
         <View style={{ flexDirection: 'row', gap: spacing.md }}>
@@ -128,6 +260,20 @@ export function CalendarBookingSettingsScreen({ navigation }: Props) {
           />
         </View>
       </Card>
+
+      {enabled && !isConnected && (
+        <Card variant="flat" style={{ marginBottom: spacing.lg, borderColor: colors.primary + '44' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Icon name="information-outline" size="md" color={colors.primary} />
+            <Text
+              style={{ ...typography.bodySmall, color: colors.textSecondary, flex: 1 }}
+              allowFontScaling
+            >
+              Booking works without Google Calendar. Connect it optionally to sync events to your calendar.
+            </Text>
+          </View>
+        </Card>
+      )}
 
       {enabled && (
         <>

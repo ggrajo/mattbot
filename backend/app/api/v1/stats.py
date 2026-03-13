@@ -4,12 +4,14 @@ from __future__ import annotations
 
 import logging
 import uuid
+from datetime import timedelta
 
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from sqlalchemy import case, distinct, func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.clock import utcnow
 from app.core.dependencies import CurrentUser, get_current_user
 from app.database import get_db
 from app.models.call import Call
@@ -28,6 +30,12 @@ class DashboardStatsResponse(BaseModel):
     spam_blocked: int
     avg_duration_seconds: float | None
     vip_calls: int
+    calls_this_week: int
+    calls_last_week: int
+    calls_today: int
+    appointments_booked: int
+    longest_call_seconds: int | None
+    total_talk_minutes: int
 
 
 async def _get_dashboard_stats(
@@ -92,6 +100,52 @@ async def _get_dashboard_stats(
     if avg_dur is not None:
         avg_dur = round(float(avg_dur), 1)
 
+    now = utcnow()
+    week_start = now - timedelta(days=7)
+    prev_week_start = now - timedelta(days=14)
+    today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    this_week_q = select(func.count(Call.id)).where(
+        Call.owner_user_id == user_id,
+        Call.deleted_at.is_(None),
+        Call.created_at >= week_start,
+    )
+    last_week_q = select(func.count(Call.id)).where(
+        Call.owner_user_id == user_id,
+        Call.deleted_at.is_(None),
+        Call.created_at >= prev_week_start,
+        Call.created_at < week_start,
+    )
+    today_q = select(func.count(Call.id)).where(
+        Call.owner_user_id == user_id,
+        Call.deleted_at.is_(None),
+        Call.created_at >= today_start,
+    )
+    booked_q = select(func.count(Call.id)).where(
+        Call.owner_user_id == user_id,
+        Call.deleted_at.is_(None),
+        Call.booked_calendar_event_id.isnot(None),
+    )
+    longest_q = select(func.max(Call.duration_seconds)).where(
+        Call.owner_user_id == user_id,
+        Call.deleted_at.is_(None),
+        Call.status.in_(["completed", "partial"]),
+    )
+    total_talk_q = select(
+        func.coalesce(func.sum(Call.duration_seconds), 0)
+    ).where(
+        Call.owner_user_id == user_id,
+        Call.deleted_at.is_(None),
+        Call.status.in_(["completed", "partial"]),
+    )
+
+    calls_this_week = (await db.execute(this_week_q)).scalar() or 0
+    calls_last_week = (await db.execute(last_week_q)).scalar() or 0
+    calls_today = (await db.execute(today_q)).scalar() or 0
+    appointments_booked = (await db.execute(booked_q)).scalar() or 0
+    longest_call = (await db.execute(longest_q)).scalar()
+    total_talk_secs = (await db.execute(total_talk_q)).scalar() or 0
+
     return DashboardStatsResponse(
         total_calls=row.total_calls,
         completed_calls=row.completed_calls,
@@ -99,6 +153,12 @@ async def _get_dashboard_stats(
         spam_blocked=spam_blocked,
         avg_duration_seconds=avg_dur,
         vip_calls=vip_calls,
+        calls_this_week=calls_this_week,
+        calls_last_week=calls_last_week,
+        calls_today=calls_today,
+        appointments_booked=appointments_booked,
+        longest_call_seconds=int(longest_call) if longest_call else None,
+        total_talk_minutes=int(total_talk_secs) // 60,
     )
 
 

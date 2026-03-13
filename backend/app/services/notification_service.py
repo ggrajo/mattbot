@@ -58,6 +58,8 @@ def _build_preview_body(notification_type: str, data: dict) -> str:
         "voicemail": "New voicemail received",
         "call_summary": "Call summary ready",
         "call_screened": "Call was screened",
+        "reminder_created": "Reminder set",
+        "reminder_due": "Reminder is due",
     }
     return previews.get(notification_type, "New activity")
 

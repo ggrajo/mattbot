@@ -1,18 +1,23 @@
 import logging
+import re
 from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.clock import utcnow
 from app.core.dependencies import CurrentUser, get_current_user, require_step_up
 from app.database import get_db
+from app.middleware.error_handler import AppError
 from app.models.user import User
 from app.schemas.common import MessageResponse
 from app.services import audit_service, mfa_service, telephony_service
 from app.services.billing_service import _get_subscription, cancel_subscription
 from app.services.session_service import revoke_all_user_sessions
+
+USERNAME_PATTERN = re.compile(r"^[a-z][a-z0-9_]{2,29}$")
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +71,19 @@ async def update_profile(
     if body.display_name is not None:
         user.display_name = body.display_name
     if body.nickname is not None:
-        user.nickname = body.nickname
+        username = body.nickname.strip().lower()
+        if not USERNAME_PATTERN.match(username):
+            raise AppError(
+                "INVALID_USERNAME",
+                "Username must be 3-30 characters, start with a letter, and contain only lowercase letters, numbers, and underscores.",
+                400,
+            )
+        existing = await db.execute(
+            select(User.id).where(User.nickname == username, User.id != current_user.user_id)
+        )
+        if existing.scalar_one_or_none() is not None:
+            raise AppError("USERNAME_TAKEN", "This username is already taken.", 409)
+        user.nickname = username
     if body.company_name is not None:
         user.company_name = body.company_name
     if body.role_title is not None:

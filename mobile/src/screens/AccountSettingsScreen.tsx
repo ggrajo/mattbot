@@ -183,6 +183,11 @@ export function AccountSettingsScreen() {
         <Text style={{ ...typography.h2, color: colors.textPrimary }} allowFontScaling>
           {userName ?? 'User'}
         </Text>
+        {nickname ? (
+          <Text style={{ ...typography.bodySmall, color: colors.textSecondary, marginTop: -4 }} allowFontScaling>
+            @{nickname}
+          </Text>
+        ) : null}
 
         {/* AI Number */}
         {activeNumber ? (
@@ -243,7 +248,7 @@ export function AccountSettingsScreen() {
             icon="account-edit-outline"
             iconColor={colors.primary}
             title="Profile"
-            subtitle="Name, nickname, company info, phone"
+            subtitle="Name, username, company, phone, email"
             onPress={() => navigation.navigate('ProfileSettings')}
             right={<Icon name="chevron-right" size="md" color={colors.textDisabled} />}
             accessibilityLabel="Edit profile"
@@ -312,10 +317,19 @@ export function AccountSettingsScreen() {
             icon="shield-lock-outline"
             iconColor={colors.warning}
             title="Privacy & Security"
-            subtitle="Password, PIN, MFA, devices, biometrics, recording"
+            subtitle="Password, PIN, MFA, biometrics, recording"
             onPress={() => navigation.navigate('PrivacySettings')}
             right={<Icon name="chevron-right" size="md" color={colors.textDisabled} />}
             accessibilityLabel="Privacy and security settings"
+          />
+          <ListRow
+            icon="cellphone-link"
+            iconColor={colors.warning}
+            title="Devices"
+            subtitle="Manage your signed-in devices"
+            onPress={() => navigation.navigate('DeviceList')}
+            right={<Icon name="chevron-right" size="md" color={colors.textDisabled} />}
+            accessibilityLabel="Manage devices"
           />
         </View>
       </View>

@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
-import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, RefreshControl, Modal, Pressable, TextInput as RNTextInput } from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, RefreshControl, Modal, Pressable, TextInput as RNTextInput, Platform, StatusBar } from 'react-native';
 import Video from 'react-native-video';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
@@ -9,17 +9,18 @@ import { Icon } from '../components/ui/Icon';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { Button } from '../components/ui/Button';
 import { FadeIn } from '../components/ui/FadeIn';
+import { GradientView } from '../components/ui/GradientView';
 import { ConfirmSheet } from '../components/ui/ConfirmSheet';
 import { Toast } from '../components/ui/Toast';
 import { useTheme } from '../theme/ThemeProvider';
 import { useCallStore } from '../store/callStore';
-import { useVipStore } from '../store/vipStore';
-import { useBlockStore } from '../store/blockStore';
 import { useSettingsStore } from '../store/settingsStore';
-import { patchCallNotes, getCallRecordingUrl } from '../api/calls';
+import { patchCallNotes, getCallRecordingUrl, markCallVip, unmarkCallVip, markCallBlocked, unmarkCallBlocked } from '../api/calls';
 import { getSecureItem, TOKEN_KEYS } from '../utils/secureStorage';
 import { getTimezoneAbbr } from '../utils/timezones';
 import type { CallEvent, CallLabel, TranscriptTurn } from '../api/calls';
+import { listMemoryItems } from '../api/memory';
+import type { MemoryItem } from '../api/memory';
 
 function formatDateTime(iso: string): string {
   const d = new Date(iso);
@@ -184,8 +185,6 @@ export function CallDetailScreen() {
     loadTranscript,
     retryTranscript,
   } = useCallStore();
-  const vipStore = useVipStore();
-  const blockStore = useBlockStore();
   const userTz = useSettingsStore((s) => s.settings?.timezone);
 
   const [toast, setToast] = useState('');
@@ -201,19 +200,22 @@ export function CallDetailScreen() {
   const [audioProgress, setAudioProgress] = useState(0);
   const [audioLoading, setAudioLoading] = useState(false);
   const videoRef = useRef<any>(null);
+  const [callerMemories, setCallerMemories] = useState<MemoryItem[]>([]);
+  const [isVip, setIsVip] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [isSpam, setIsSpam] = useState(false);
 
   const callerNumber = selectedCall?.from_masked ?? '';
-  const callerLast4 = callerNumber.slice(-4);
-  const isVip = vipStore.items.some((v) => callerLast4 && v.phone_last4 === callerLast4);
-  const isBlocked = blockStore.items.some((b) => callerLast4 && b.phone_last4 === callerLast4);
-  const isSpam = blockStore.items.some((b) => callerLast4 && b.phone_last4 === callerLast4 && b.reason === 'spam');
-  const vipEntry = vipStore.items.find((v) => callerLast4 && v.phone_last4 === callerLast4);
-  const blockEntry = blockStore.items.find((b) => callerLast4 && b.phone_last4 === callerLast4);
+
+  useEffect(() => {
+    if (selectedCall) {
+      setIsVip(selectedCall.is_vip ?? false);
+      setIsBlocked(selectedCall.is_blocked ?? false);
+    }
+  }, [selectedCall?.id]);
 
   useEffect(() => {
     loadCallDetail(callId);
-    vipStore.loadVip();
-    blockStore.loadBlocks();
   }, [callId]);
 
   useEffect(() => {
@@ -227,51 +229,82 @@ export function CallDetailScreen() {
     }
   }, [selectedCall?.transcript_status, transcript, transcriptLoading, transcriptError, callId, loadTranscript]);
 
+  useEffect(() => {
+    if (selectedCall) {
+      listMemoryItems()
+        .then(data => setCallerMemories(data.items || []))
+        .catch(() => {});
+    }
+  }, [selectedCall?.id]);
+
   const handleRefreshTranscript = useCallback(() => {
     loadTranscript(callId);
   }, [callId, loadTranscript]);
 
   const handleToggleVip = useCallback(async () => {
     setActionLoading('vip');
-    if (isVip && vipEntry) {
-      const ok = await vipStore.removeVip(vipEntry.id);
-      setToast(ok ? 'Removed from VIP' : 'Could not complete action. Please try again.');
-    } else {
-      const ok = await vipStore.addVip({ phone_number: callerNumber });
-      setToast(ok ? 'Added to VIP' : 'Could not complete action. Please try again.');
+    try {
+      if (isVip) {
+        await unmarkCallVip(callId);
+        setIsVip(false);
+        setToast('Removed from VIP');
+      } else {
+        await markCallVip(callId);
+        setIsVip(true);
+        setToast('Added to VIP');
+      }
+    } catch {
+      setToast('Could not complete action. Please try again.');
     }
     setActionLoading(null);
-  }, [isVip, vipEntry, callerNumber]);
+  }, [isVip, callId]);
 
   const handleToggleBlock = useCallback(async () => {
     setBlockConfirmVisible(false);
     setActionLoading('block');
-    if (isBlocked && blockEntry) {
-      const ok = await blockStore.removeBlock(blockEntry.id);
-      setToast(ok ? 'Number unblocked' : 'Could not complete action. Please try again.');
-    } else {
-      const ok = await blockStore.addBlock({ phone_number: callerNumber });
-      setToast(ok ? 'Number blocked' : 'Could not complete action. Please try again.');
+    try {
+      if (isBlocked) {
+        await unmarkCallBlocked(callId);
+        setIsBlocked(false);
+        setIsSpam(false);
+        setToast('Number unblocked');
+      } else {
+        await markCallBlocked(callId);
+        setIsBlocked(true);
+        setToast('Number blocked');
+      }
+    } catch {
+      setToast('Could not complete action. Please try again.');
     }
     setActionLoading(null);
-  }, [isBlocked, blockEntry, callerNumber]);
+  }, [isBlocked, callId]);
 
   const handleMarkSpam = useCallback(async () => {
     setSpamSheetVisible(false);
     setActionLoading('spam');
-    const ok = await blockStore.addBlock({ phone_number: callerNumber, reason: 'spam' });
-    setToast(ok ? 'Marked as spam & blocked' : 'Could not complete action. Please try again.');
+    try {
+      await markCallBlocked(callId, 'spam');
+      setIsBlocked(true);
+      setIsSpam(true);
+      setToast('Marked as spam & blocked');
+    } catch {
+      setToast('Could not complete action. Please try again.');
+    }
     setActionLoading(null);
-  }, [callerNumber]);
+  }, [callId]);
 
   const handleRemoveSpam = useCallback(async () => {
     setActionLoading('spam');
-    if (blockEntry) {
-      const ok = await blockStore.removeBlock(blockEntry.id);
-      setToast(ok ? 'Removed from spam' : 'Could not complete action. Please try again.');
+    try {
+      await unmarkCallBlocked(callId);
+      setIsBlocked(false);
+      setIsSpam(false);
+      setToast('Removed from spam');
+    } catch {
+      setToast('Could not complete action. Please try again.');
     }
     setActionLoading(null);
-  }, [blockEntry]);
+  }, [callId]);
 
   const handleSaveNote = useCallback(async () => {
     if (!noteText.trim()) return;
@@ -387,43 +420,60 @@ export function CallDetailScreen() {
     (a, b) => (LABEL_PRIORITY[a.label_name] ?? 99) - (LABEL_PRIORITY[b.label_name] ?? 99)
   );
 
-  return (
-    <ScreenWrapper scroll>
-      {/* Back button */}
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginBottom: spacing.md, paddingVertical: spacing.xs }}
-      >
-        <Icon name="arrow-left" size="md" color={colors.primary} />
-        <Text style={{ ...typography.body, color: colors.primary }}>Back</Text>
-      </TouchableOpacity>
+  const statusBarH = Platform.OS === 'android' ? (StatusBar.currentHeight ?? 40) : 50;
 
-      {/* Header */}
-      <FadeIn delay={0}>
-      <Card variant="elevated" style={{ marginBottom: spacing.lg, borderTopWidth: 3, borderTopColor: colors.primary }}>
-        <View style={{ alignItems: 'center', gap: spacing.md }}>
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
+      {/* Gradient Hero */}
+      <GradientView
+        colors={[colors.gradientStart ?? colors.primary, colors.gradientEnd ?? colors.secondary]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{ paddingTop: statusBarH, paddingBottom: spacing.xxl + 20, paddingHorizontal: spacing.lg }}
+      >
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.lg }}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            activeOpacity={0.7}
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: 18,
+              backgroundColor: 'rgba(255,255,255,0.15)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Icon name="arrow-left" size="md" color="#fff" />
+          </TouchableOpacity>
+          <Text style={{ ...typography.bodySmall, color: 'rgba(255,255,255,0.8)', marginLeft: spacing.sm, fontWeight: '500' }} allowFontScaling>
+            Call Details
+          </Text>
+        </View>
+
+        <View style={{ alignItems: 'center', gap: spacing.sm }}>
           <View
             style={{
-              width: 64,
-              height: 64,
-              borderRadius: 32,
-              backgroundColor: colors.primary + '18',
+              width: 56,
+              height: 56,
+              borderRadius: 28,
+              backgroundColor: 'rgba(255,255,255,0.18)',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
             <Icon
               name={selectedCall.source_type === 'forwarded' ? 'phone-forward' : 'phone-incoming'}
-              size="xl"
-              color={colors.primary}
+              size={28}
+              color="#fff"
             />
           </View>
 
-          <Text style={{ ...typography.h2, color: colors.textPrimary, textAlign: 'center' }} allowFontScaling>
+          <Text style={{ fontSize: 22, fontWeight: '700', color: '#fff', textAlign: 'center', letterSpacing: 0.5 }} allowFontScaling>
             {selectedCall.from_masked}
           </Text>
 
-          <View style={{ flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap', justifyContent: 'center' }}>
+          <View style={{ flexDirection: 'row', gap: spacing.xs, flexWrap: 'wrap', justifyContent: 'center' }}>
             <Badge label={badge.label} variant={badge.variant} />
             {sortedLabels.length > 0 && sortedLabels.map((lbl) => (
               <Badge
@@ -433,56 +483,35 @@ export function CallDetailScreen() {
               />
             ))}
           </View>
-
-          <View style={{ flexDirection: 'row', gap: spacing.xl, marginTop: spacing.sm }}>
-            <DetailItem
-              icon="clock-outline"
-              label="Started"
-              value={formatDateTimeWithTz(selectedCall.started_at, userTz)}
-              colors={colors}
-              typography={typography}
-              spacing={spacing}
-            />
-            {selectedCall.ended_at && (
-              <DetailItem
-                icon="clock-check-outline"
-                label="Ended"
-                value={formatDateTimeWithTz(selectedCall.ended_at, userTz)}
-                colors={colors}
-                typography={typography}
-                spacing={spacing}
-              />
-            )}
-          </View>
-
-          <View style={{ flexDirection: 'row', gap: spacing.xl }}>
-            <DetailItem
-              icon="timer-outline"
-              label="Duration"
-              value={formatDuration(selectedCall.duration_seconds)}
-              colors={colors}
-              typography={typography}
-              spacing={spacing}
-            />
-            <DetailItem
-              icon="arrow-collapse-right"
-              label="Type"
-              value={selectedCall.source_type === 'forwarded' ? 'Forwarded' : 'Direct'}
-              colors={colors}
-              typography={typography}
-              spacing={spacing}
-            />
-          </View>
         </View>
-      </Card>
-      </FadeIn>
+      </GradientView>
+
+      {/* Floating info strip */}
+      <View style={{ marginTop: -(spacing.xxl), marginHorizontal: spacing.md, marginBottom: spacing.md, zIndex: 2 }}>
+        <FadeIn delay={0}>
+        <Card variant="elevated" style={{ borderRadius: radii.lg }}>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+            <InfoCell icon="clock-outline" label="Started" value={formatDateTimeWithTz(selectedCall.started_at, userTz)} colors={colors} typography={typography} spacing={spacing} />
+            {selectedCall.ended_at && (
+              <InfoCell icon="clock-check-outline" label="Ended" value={formatDateTimeWithTz(selectedCall.ended_at, userTz)} colors={colors} typography={typography} spacing={spacing} />
+            )}
+            <InfoCell icon="timer-outline" label="Duration" value={formatDuration(selectedCall.duration_seconds)} colors={colors} typography={typography} spacing={spacing} />
+            <InfoCell icon="arrow-collapse-right" label="Type" value={selectedCall.source_type === 'forwarded' ? 'Forwarded' : 'Direct'} colors={colors} typography={typography} spacing={spacing} />
+          </View>
+        </Card>
+        </FadeIn>
+      </View>
+
+      <ScrollView
+        contentContainerStyle={{ paddingHorizontal: spacing.lg, paddingBottom: spacing.xxl }}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
 
       {/* Summary Section */}
       <FadeIn delay={60}>
       <View style={{ marginBottom: spacing.lg }}>
-        <Text style={{ ...typography.h3, color: colors.textPrimary, marginBottom: spacing.md }} allowFontScaling>
-          Summary
-        </Text>
+        <SectionHeader icon="text-box-outline" label="Summary" colors={colors} typography={typography} spacing={spacing} />
         <Card variant="flat" style={{ borderLeftWidth: 3, borderLeftColor: colors.primary }}>
           {selectedCall.summary_status === 'ready' && selectedCall.summary ? (
             <Text style={{ ...typography.body, color: colors.textPrimary, lineHeight: 22 }} allowFontScaling>
@@ -511,11 +540,102 @@ export function CallDetailScreen() {
       </View>
       </FadeIn>
 
+      {/* Appointment Booked */}
+      {selectedCall.booked_calendar_event_id && (
+        <FadeIn delay={65}>
+        <View style={{ marginBottom: spacing.lg }}>
+          <SectionHeader icon="calendar-check" label="Appointment Booked" colors={colors} typography={typography} spacing={spacing} />
+          <Card variant="elevated" style={{ borderLeftWidth: 3, borderLeftColor: colors.success ?? '#22C55E' }}>
+            <View style={{ gap: spacing.sm }}>
+              {selectedCall.booked_calendar_event_summary && (
+                <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }} allowFontScaling>
+                  {selectedCall.booked_calendar_event_summary}
+                </Text>
+              )}
+              <View style={{ gap: spacing.xs }}>
+                {selectedCall.booked_appointment_date && (
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+                    <Icon name="calendar-outline" size="sm" color={colors.textSecondary} />
+                    <Text style={{ ...typography.bodySmall, color: colors.textPrimary }} allowFontScaling>
+                      {(() => {
+                        try {
+                          const d = new Date(selectedCall.booked_appointment_date + 'T00:00:00');
+                          return d.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+                        } catch { return selectedCall.booked_appointment_date; }
+                      })()}
+                    </Text>
+                  </View>
+                )}
+                {selectedCall.booked_appointment_time && (
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+                    <Icon name="clock-outline" size="sm" color={colors.textSecondary} />
+                    <Text style={{ ...typography.bodySmall, color: colors.textPrimary }} allowFontScaling>
+                      {(() => {
+                        try {
+                          const [h, m] = selectedCall.booked_appointment_time.split(':').map(Number);
+                          const ampm = h >= 12 ? 'PM' : 'AM';
+                          const h12 = h % 12 || 12;
+                          return `${h12}:${String(m).padStart(2, '0')} ${ampm}`;
+                        } catch { return selectedCall.booked_appointment_time; }
+                      })()}
+                      {selectedCall.booked_appointment_duration_minutes
+                        ? ` (${selectedCall.booked_appointment_duration_minutes} min)`
+                        : ''}
+                      {userTz ? ` ${getTimezoneAbbr(userTz)}` : ''}
+                    </Text>
+                  </View>
+                )}
+                {selectedCall.booked_appointment_caller_name && (
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+                    <Icon name="account-outline" size="sm" color={colors.textSecondary} />
+                    <Text style={{ ...typography.bodySmall, color: colors.textPrimary }} allowFontScaling>
+                      {selectedCall.booked_appointment_caller_name}
+                    </Text>
+                  </View>
+                )}
+                {selectedCall.booked_appointment_reason && (
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+                    <Icon name="text-short" size="sm" color={colors.textSecondary} />
+                    <Text style={{ ...typography.bodySmall, color: colors.textPrimary }} allowFontScaling>
+                      {selectedCall.booked_appointment_reason}
+                    </Text>
+                  </View>
+                )}
+              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  const dateParam = selectedCall.booked_appointment_date ?? undefined;
+                  navigation.navigate('Calendar', dateParam ? { date: dateParam } : undefined);
+                }}
+                activeOpacity={0.7}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: spacing.sm,
+                  paddingVertical: spacing.md,
+                  paddingHorizontal: spacing.lg,
+                  borderRadius: radii.lg,
+                  backgroundColor: colors.primary,
+                  marginTop: spacing.sm,
+                }}
+              >
+                <Icon name="calendar-arrow-right" size="sm" color="#fff" />
+                <Text style={{ ...typography.bodySmall, color: '#fff', fontWeight: '700' }} allowFontScaling>
+                  View in Calendar
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </Card>
+        </View>
+        </FadeIn>
+      )}
+
       {/* Recording */}
       {selectedCall.recording_available && (
         <FadeIn delay={75}>
         <View style={{ marginBottom: spacing.lg }}>
-          <Text style={{ ...typography.h3, color: colors.textPrimary, marginBottom: spacing.md }}>Recording</Text>
+          <SectionHeader icon="microphone-outline" label="Recording" colors={colors} typography={typography} spacing={spacing} />
           <Card variant="flat">
             {recordingUrl && (
               <Video
@@ -585,9 +705,7 @@ export function CallDetailScreen() {
       {/* Actions */}
       <FadeIn delay={90}>
       <View style={{ marginBottom: spacing.lg }}>
-        <Text style={{ ...typography.h3, color: colors.textPrimary, marginBottom: spacing.md }} allowFontScaling>
-          Actions
-        </Text>
+        <SectionHeader icon="gesture-tap" label="Actions" colors={colors} typography={typography} spacing={spacing} />
         <Card variant="flat">
           <View style={{ gap: spacing.md }}>
             <View>
@@ -685,9 +803,7 @@ export function CallDetailScreen() {
       {selectedCall.notes && (
         <FadeIn delay={95}>
         <View style={{ marginBottom: spacing.lg }}>
-          <Text style={{ ...typography.h3, color: colors.textPrimary, marginBottom: spacing.md }} allowFontScaling>
-            Notes
-          </Text>
+          <SectionHeader icon="note-text-outline" label="Notes" colors={colors} typography={typography} spacing={spacing} />
           <Card variant="flat" style={{ borderLeftWidth: 3, borderLeftColor: colors.warning ?? '#F59E0B' }}>
             <Text style={{ ...typography.body, color: colors.textPrimary, lineHeight: 22 }} allowFontScaling>
               {selectedCall.notes}
@@ -701,9 +817,7 @@ export function CallDetailScreen() {
       {sortedLabels.length > 0 && (
         <FadeIn delay={120}>
         <View style={{ marginBottom: spacing.lg }}>
-          <Text style={{ ...typography.h3, color: colors.textPrimary, marginBottom: spacing.md }} allowFontScaling>
-            Labels
-          </Text>
+          <SectionHeader icon="label-outline" label="Labels" colors={colors} typography={typography} spacing={spacing} />
           <Card variant="flat">
             <View style={{ gap: spacing.md }}>
               {sortedLabels.map((label: CallLabel) => {
@@ -752,13 +866,81 @@ export function CallDetailScreen() {
         </FadeIn>
       )}
 
+      {/* Caller Memories */}
+      <FadeIn delay={150}>
+      <View style={{ marginBottom: spacing.lg }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.md }}>
+          <Icon name="brain" size="md" color={colors.primary} />
+          <Text style={{ ...typography.h3, color: colors.textPrimary }} allowFontScaling>
+            Caller Memories
+          </Text>
+        </View>
+        {callerMemories.length === 0 ? (
+          <Card variant="flat">
+            <Text style={{ ...typography.body, color: colors.textSecondary }} allowFontScaling>
+              No memories for this caller
+            </Text>
+          </Card>
+        ) : (
+          <View style={{ gap: spacing.sm }}>
+            {Object.values(
+              callerMemories.reduce<Record<string, MemoryItem>>((acc, m) => {
+                const key = m.subject ?? m.id;
+                if (!acc[key] || new Date(m.created_at) > new Date(acc[key].created_at)) {
+                  acc[key] = m;
+                }
+                return acc;
+              }, {})
+            ).map((mem) => (
+              <Card key={mem.id} variant="flat" style={{ gap: spacing.xs }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+                  <View
+                    style={{
+                      paddingHorizontal: 8,
+                      paddingVertical: 2,
+                      borderRadius: radii.sm,
+                      backgroundColor: colors.primary + '20',
+                    }}
+                  >
+                    <Text style={{ ...typography.caption, color: colors.primary, fontWeight: '600' }}>
+                      {mem.memory_type}
+                    </Text>
+                  </View>
+                  {mem.subject && (
+                    <Text
+                      style={{ ...typography.bodySmall, color: colors.textPrimary, fontWeight: '600', flex: 1 }}
+                      numberOfLines={1}
+                      allowFontScaling
+                    >
+                      {mem.subject}
+                    </Text>
+                  )}
+                </View>
+                {mem.value && (
+                  <Text style={{ ...typography.body, color: colors.textPrimary }} allowFontScaling>
+                    {mem.value}
+                  </Text>
+                )}
+                <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+                  {formatDateTime(mem.created_at)}
+                </Text>
+              </Card>
+            ))}
+          </View>
+        )}
+      </View>
+      </FadeIn>
+
       {/* Transcript Section */}
       <FadeIn delay={180}>
       <View style={{ marginBottom: spacing.lg }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.md }}>
-          <Text style={{ ...typography.h3, color: colors.textPrimary }} allowFontScaling>
-            Transcript
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Icon name="script-text-outline" size="md" color={colors.primary} />
+            <Text style={{ ...typography.h3, color: colors.textPrimary }} allowFontScaling>
+              Transcript
+            </Text>
+          </View>
           <View style={{ flexDirection: 'row', gap: spacing.md }}>
             {transcript && transcript.turns.length > 0 && (
               <TouchableOpacity onPress={() => setShowTranscript(!showTranscript)}>
@@ -869,9 +1051,7 @@ export function CallDetailScreen() {
       {selectedCall.events.length > 0 && (
         <FadeIn delay={240}>
         <View style={{ marginBottom: spacing.lg }}>
-          <Text style={{ ...typography.h3, color: colors.textPrimary, marginBottom: spacing.md }} allowFontScaling>
-            Timeline
-          </Text>
+          <SectionHeader icon="timeline-clock-outline" label="Timeline" colors={colors} typography={typography} spacing={spacing} />
           <Card variant="flat" style={{ borderLeftWidth: 3, borderLeftColor: colors.primary + '30' }}>
             {selectedCall.events.map((event: CallEvent, index: number) => (
               <View key={event.id}>
@@ -927,7 +1107,7 @@ export function CallDetailScreen() {
         </FadeIn>
       )}
 
-      <View style={{ height: spacing.xl }} />
+    </ScrollView>
 
       <Toast message={toast} type="info" visible={!!toast} onDismiss={() => setToast('')} />
 
@@ -955,7 +1135,6 @@ export function CallDetailScreen() {
         onConfirm={handleMarkSpam}
       />
 
-      {/* Note Modal */}
       <Modal visible={noteModalVisible} transparent animationType="slide" onRequestClose={() => setNoteModalVisible(false)}>
         <Pressable
           style={{ flex: 1, backgroundColor: colors.overlay, justifyContent: 'flex-end' }}
@@ -1001,7 +1180,7 @@ export function CallDetailScreen() {
           </Pressable>
         </Pressable>
       </Modal>
-    </ScreenWrapper>
+    </View>
   );
 }
 
@@ -1058,7 +1237,7 @@ function ActionChip({
   );
 }
 
-function DetailItem({
+function InfoCell({
   icon,
   label,
   value,
@@ -1074,17 +1253,42 @@ function DetailItem({
   spacing: any;
 }) {
   return (
-    <View style={{ alignItems: 'center', gap: 2, minWidth: 100 }}>
-      <Icon name={icon} size="sm" color={colors.textSecondary} />
-      <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
-        {label}
-      </Text>
+    <View style={{ width: '50%', paddingVertical: spacing.sm, paddingHorizontal: spacing.xs }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 2 }}>
+        <Icon name={icon} size={14} color={colors.textSecondary} />
+        <Text style={{ ...typography.caption, color: colors.textSecondary, fontSize: 11 }} allowFontScaling>
+          {label}
+        </Text>
+      </View>
       <Text
-        style={{ ...typography.bodySmall, color: colors.textPrimary, fontWeight: '500', textAlign: 'center' }}
-        numberOfLines={1}
+        style={{ ...typography.bodySmall, color: colors.textPrimary, fontWeight: '600' }}
+        numberOfLines={2}
         allowFontScaling
       >
         {value}
+      </Text>
+    </View>
+  );
+}
+
+function SectionHeader({
+  icon,
+  label,
+  colors,
+  typography,
+  spacing,
+}: {
+  icon: string;
+  label: string;
+  colors: any;
+  typography: any;
+  spacing: any;
+}) {
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.md }}>
+      <Icon name={icon} size="md" color={colors.primary} />
+      <Text style={{ ...typography.h3, color: colors.textPrimary }} allowFontScaling>
+        {label}
       </Text>
     </View>
   );

@@ -24,6 +24,7 @@ from app.schemas.reminders import (
     ReminderUpdateRequest,
 )
 from app.services import audit_service
+from app.services.notification_service import create_and_enqueue_notification
 
 router = APIRouter()
 
@@ -149,6 +150,18 @@ async def create_reminder(
         target_id=reminder.id,
         details={"call_id": str(call_id)},
     )
+
+    try:
+        await create_and_enqueue_notification(
+            db,
+            owner_user_id=current_user.user.id,
+            notification_type="reminder_created",
+            priority="normal",
+            source_entity_type="reminder",
+            source_entity_id=reminder.id,
+        )
+    except Exception:
+        pass
 
     await db.commit()
     await db.refresh(reminder)

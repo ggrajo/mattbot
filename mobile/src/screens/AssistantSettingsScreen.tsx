@@ -40,7 +40,6 @@ type Temperament =
   | 'custom';
 
 type SwearingRule = 'no_swearing' | 'mirror_caller' | 'allow';
-type GreetingTemplate = 'standard' | 'brief' | 'formal' | 'custom';
 
 const TEMPERAMENT_OPTIONS: { value: Temperament; label: string; icon: string }[] = [
   { value: 'professional_polite', label: 'Professional', icon: 'briefcase-outline' },
@@ -57,11 +56,37 @@ const SWEARING_OPTIONS: { value: SwearingRule; label: string; desc: string }[] =
   { value: 'allow', label: 'Allow', desc: 'No restrictions on language' },
 ];
 
-const GREETING_OPTIONS: { value: GreetingTemplate; label: string; desc: string }[] = [
-  { value: 'standard', label: 'Standard', desc: '"Hi, you\'ve reached [name]\'s assistant"' },
-  { value: 'brief', label: 'Brief', desc: '"[Name]\'s line, how can I help?"' },
-  { value: 'formal', label: 'Formal', desc: '"Good [time], thank you for calling..."' },
-  { value: 'custom', label: 'Custom', desc: 'Write your own greeting' },
+const LANGUAGES = [
+  { code: 'en', label: 'English' },
+  { code: 'es', label: 'Spanish' },
+  { code: 'fr', label: 'French' },
+  { code: 'de', label: 'German' },
+  { code: 'it', label: 'Italian' },
+  { code: 'pt', label: 'Portuguese' },
+  { code: 'nl', label: 'Dutch' },
+  { code: 'ru', label: 'Russian' },
+  { code: 'zh', label: 'Chinese' },
+  { code: 'ja', label: 'Japanese' },
+  { code: 'ko', label: 'Korean' },
+  { code: 'ar', label: 'Arabic' },
+  { code: 'hi', label: 'Hindi' },
+  { code: 'tl', label: 'Filipino' },
+  { code: 'vi', label: 'Vietnamese' },
+  { code: 'th', label: 'Thai' },
+  { code: 'tr', label: 'Turkish' },
+  { code: 'pl', label: 'Polish' },
+  { code: 'uk', label: 'Ukrainian' },
+  { code: 'sv', label: 'Swedish' },
+  { code: 'da', label: 'Danish' },
+  { code: 'no', label: 'Norwegian' },
+  { code: 'fi', label: 'Finnish' },
+  { code: 'el', label: 'Greek' },
+  { code: 'he', label: 'Hebrew' },
+  { code: 'id', label: 'Indonesian' },
+  { code: 'ms', label: 'Malay' },
+  { code: 'cs', label: 'Czech' },
+  { code: 'ro', label: 'Romanian' },
+  { code: 'hu', label: 'Hungarian' },
 ];
 
 export function AssistantSettingsScreen({}: Props) {
@@ -74,9 +99,9 @@ export function AssistantSettingsScreen({}: Props) {
   const [temperament, setTemperament] = useState<Temperament>('professional_polite');
   const [swearingRule, setSwearingRule] = useState<SwearingRule>('no_swearing');
   const [primaryLanguage, setPrimaryLanguage] = useState('en');
-  const [secondaryLanguage, setSecondaryLanguage] = useState('');
-  const [greetingTemplate, setGreetingTemplate] = useState<GreetingTemplate>('standard');
+  const [customGreeting, setCustomGreeting] = useState('');
   const [customInstructions, setCustomInstructions] = useState('');
+  const [agentId, setAgentId] = useState<string | null>(null);
 
   const [voices, setVoices] = useState<VoiceOption[]>([]);
   const [voicesLoading, setVoicesLoading] = useState(false);
@@ -103,9 +128,6 @@ export function AssistantSettingsScreen({}: Props) {
       setTemperament((settings.temperament_preset as Temperament) ?? 'professional_polite');
       setSwearingRule((settings.swearing_rule as SwearingRule) ?? 'no_swearing');
       setPrimaryLanguage(settings.language_primary ?? 'en');
-      setSecondaryLanguage(settings.language_secondary ?? '');
-      setGreetingTemplate((settings.greeting_template as GreetingTemplate) ?? 'standard');
-      // custom_instructions lives on the agent, not settings - loaded via loadAgent
     }
   }, [settings]);
 
@@ -125,11 +147,15 @@ export function AssistantSettingsScreen({}: Props) {
 
   async function loadAgent() {
     try {
-      const { data } = await apiClient.get('/agents/default');
+      const { data } = await apiClient.post('/agents/default');
+      if (data?.id) setAgentId(data.id);
       if (data?.voice?.voice_id) setSelectedVoice(data.voice.voice_id);
       else if (data?.voice_id) setSelectedVoice(data.voice_id);
       if (data?.user_instructions) setCustomInstructions(data.user_instructions);
-    } catch {}
+      if (data?.greeting_instructions) setCustomGreeting(data.greeting_instructions);
+    } catch (e) {
+      console.warn('Failed to load agent:', e);
+    }
   }
 
   function handlePlayPreview(voice: VoiceOption) {
@@ -143,6 +169,11 @@ export function AssistantSettingsScreen({}: Props) {
   }
 
   async function handleSave() {
+    if (!agentId) {
+      setToastType('error');
+      setToast('Agent not loaded yet. Please wait and try again.');
+      return;
+    }
     setSaving(true);
     try {
       const ok = await updateSettings({
@@ -150,14 +181,13 @@ export function AssistantSettingsScreen({}: Props) {
         temperament_preset: temperament,
         swearing_rule: swearingRule,
         language_primary: primaryLanguage,
-        language_secondary: secondaryLanguage || undefined,
-        greeting_template: greetingTemplate,
       });
 
       const agentPatch: Record<string, unknown> = {};
       if (selectedVoice) agentPatch.voice_id = selectedVoice;
       agentPatch.user_instructions = customInstructions.trim() || null;
-      await apiClient.patch('/agents/default', agentPatch);
+      agentPatch.greeting_instructions = customGreeting.trim() || null;
+      await apiClient.patch(`/agents/${agentId}`, agentPatch);
 
       if (ok) {
         setDirty(false);
@@ -167,7 +197,8 @@ export function AssistantSettingsScreen({}: Props) {
         setToastType('error');
         setToast(useSettingsStore.getState().error ?? 'Failed to save settings');
       }
-    } catch (e) {
+    } catch (e: any) {
+      console.error('AssistantSettings save error:', e?.response?.status, e?.response?.data, e?.message);
       setToastType('error');
       setToast(extractApiError(e));
     } finally {
@@ -456,24 +487,44 @@ export function AssistantSettingsScreen({}: Props) {
               Language
             </Text>
           </View>
-          <TextInput
-            label="Primary Language"
-            placeholder="e.g. en"
-            value={primaryLanguage}
-            onChangeText={(t) => { setPrimaryLanguage(t); markDirty(); }}
-            autoCapitalize="none"
-          />
-          <TextInput
-            label="Secondary Language (optional)"
-            placeholder="e.g. es"
-            value={secondaryLanguage}
-            onChangeText={(t) => { setSecondaryLanguage(t); markDirty(); }}
-            autoCapitalize="none"
-          />
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }}>
+            {LANGUAGES.map((lang) => {
+              const selected = primaryLanguage === lang.code;
+              return (
+                <TouchableOpacity
+                  key={lang.code}
+                  onPress={() => { hapticLight(); setPrimaryLanguage(lang.code); markDirty(); }}
+                  activeOpacity={0.7}
+                  style={{
+                    paddingVertical: spacing.sm,
+                    paddingHorizontal: spacing.md,
+                    borderRadius: radii.full,
+                    borderWidth: 1.5,
+                    borderColor: selected ? colors.primary : colors.border,
+                    backgroundColor: selected ? colors.primary + '14' : 'transparent',
+                  }}
+                  accessibilityRole="radio"
+                  accessibilityState={{ checked: selected }}
+                  accessibilityLabel={`${lang.label} language`}
+                >
+                  <Text
+                    style={{
+                      ...typography.bodySmall,
+                      color: selected ? colors.primary : colors.textPrimary,
+                      fontWeight: selected ? '600' : '400',
+                    }}
+                    allowFontScaling
+                  >
+                    {lang.label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
         </View>
       </Card>
 
-      {/* Greeting Template */}
+      {/* Custom Greeting */}
       <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
         <View style={{ gap: spacing.md }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
@@ -482,41 +533,34 @@ export function AssistantSettingsScreen({}: Props) {
               Greeting
             </Text>
           </View>
-          {GREETING_OPTIONS.map((opt) => {
-            const selected = greetingTemplate === opt.value;
-            return (
-              <TouchableOpacity
-                key={opt.value}
-                onPress={() => { hapticLight(); setGreetingTemplate(opt.value); markDirty(); }}
-                activeOpacity={0.7}
-                style={{
-                  paddingVertical: spacing.md,
-                  paddingHorizontal: spacing.md,
-                  borderRadius: radii.md,
-                  borderWidth: 1.5,
-                  borderColor: selected ? colors.primary : colors.border,
-                  backgroundColor: selected ? colors.primary + '14' : 'transparent',
-                }}
-                accessibilityRole="radio"
-                accessibilityState={{ checked: selected }}
-                accessibilityLabel={`${opt.label} greeting`}
-              >
-                <Text
-                  style={{
-                    ...typography.body,
-                    color: colors.textPrimary,
-                    fontWeight: selected ? '600' : '400',
-                  }}
-                  allowFontScaling
-                >
-                  {opt.label}
-                </Text>
-                <Text style={{ ...typography.caption, color: colors.textSecondary, marginTop: spacing.xs }} allowFontScaling>
-                  {opt.desc}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
+          <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
+            Write how your assistant should greet callers.
+          </Text>
+          <View
+            style={{
+              borderWidth: 1.5,
+              borderColor: colors.border,
+              borderRadius: radii.md,
+              backgroundColor: colors.surface,
+              padding: spacing.md,
+            }}
+          >
+            <RNTextInput
+              value={customGreeting}
+              onChangeText={(t) => { setCustomGreeting(t); markDirty(); }}
+              placeholder="e.g. Hi, you've reached Matt's assistant. How can I help you today?"
+              placeholderTextColor={colors.textDisabled}
+              multiline
+              numberOfLines={3}
+              textAlignVertical="top"
+              style={{
+                ...typography.body,
+                color: colors.textPrimary,
+                minHeight: 80,
+              }}
+              accessibilityLabel="Custom greeting"
+            />
+          </View>
         </View>
       </Card>
 

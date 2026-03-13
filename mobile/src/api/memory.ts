@@ -8,6 +8,7 @@ export interface MemoryItem {
   confidence: number | null;
   user_confirmed: boolean;
   source_call_id: string | null;
+  caller_phone_hash: string | null;
   created_at: string;
 }
 

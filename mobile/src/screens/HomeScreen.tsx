@@ -417,10 +417,21 @@ export function HomeScreen() {
                         <Text style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>This month</Text>
                       </View>
                     </View>
-                    <View style={{ backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 4, flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                      <Icon name="trending-up" size={14} color="#4ADE80" />
-                      <Text style={{ fontSize: 12, fontWeight: '700', color: '#4ADE80' }}>vs last week</Text>
-                    </View>
+                    {(() => {
+                      const thisW = stats?.calls_this_week ?? 0;
+                      const lastW = stats?.calls_last_week ?? 0;
+                      if (lastW === 0 && thisW === 0) return null;
+                      const pct = lastW > 0 ? Math.round(((thisW - lastW) / lastW) * 100) : 100;
+                      const up = pct >= 0;
+                      const color = up ? '#4ADE80' : '#FB7185';
+                      const icon = up ? 'trending-up' : 'trending-down';
+                      return (
+                        <View style={{ backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 4, flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                          <Icon name={icon} size={14} color={color} />
+                          <Text style={{ fontSize: 12, fontWeight: '700', color }}>{up ? '+' : ''}{pct}% vs last week</Text>
+                        </View>
+                      );
+                    })()}
                   </View>
 
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: spacing.lg }}>
@@ -487,139 +498,123 @@ export function HomeScreen() {
                 </View>
               </FadeIn>
 
-              {/* Screened — Full Width */}
-              <FadeIn delay={80} scale>
+              {/* Today Strip */}
+              <FadeIn delay={70}>
                 <View
                   style={{
-                    borderRadius: radii.xl,
-                    padding: spacing.lg,
-                    minHeight: 130,
-                    backgroundColor: isDark ? '#2E1065' : '#DDD6FE',
-                    overflow: 'hidden',
-                    ...(isDark
-                      ? { borderWidth: 1, borderColor: 'rgba(139,92,246,0.15)' }
-                      : Platform.select({
-                          ios: { shadowColor: '#7C3AED', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.12, shadowRadius: 10 },
-                          android: { elevation: 3 },
-                        })),
+                    borderRadius: radii.lg,
+                    paddingHorizontal: spacing.lg,
+                    paddingVertical: spacing.md,
+                    backgroundColor: isDark ? 'rgba(16,185,129,0.12)' : '#D1FAE5',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    ...(isDark ? { borderWidth: 1, borderColor: 'rgba(16,185,129,0.2)' } : {}),
                   }}
                 >
-                  <View style={{ position: 'absolute', right: 16, top: 16, opacity: 0.12 }}>
-                    <Icon name="shield-check-outline" size={64} color={isDark ? '#A78BFA' : '#6366F1'} />
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <Icon name="lightning-bolt" size={18} color="#10B981" />
+                    <Text style={{ fontSize: 14, fontWeight: '700', color: '#10B981' }}>Today</Text>
                   </View>
-                  <View style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: '#10B981', alignItems: 'center', justifyContent: 'center' }}>
-                    <Icon name="check-circle-outline" size={18} color="#FFFFFF" />
-                  </View>
-                  <Text style={{ fontSize: 40, fontWeight: '800', color: colors.textPrimary, marginTop: 12, letterSpacing: -1 }}>
-                    {stats?.completed_calls ?? 0}
-                  </Text>
-                  <Text style={{ fontSize: 14, fontWeight: '500', color: colors.textSecondary, marginTop: 2 }}>Screened</Text>
+                  <Text style={{ fontSize: 22, fontWeight: '800', color: '#10B981' }}>{stats?.calls_today ?? 0} calls</Text>
                 </View>
               </FadeIn>
 
-              {/* Callers + Spam — 2 columns */}
+              {/* Screened + Callers — 2 columns */}
               <View style={{ flexDirection: 'row', gap: 12 }}>
-                <FadeIn delay={120} scale style={{ flex: 1 }}>
-                  <View
-                    style={{
-                      borderRadius: radii.xl,
-                      padding: spacing.lg,
-                      minHeight: 120,
-                      backgroundColor: isDark ? '#1E2A5E' : '#BFDBFE',
-                      ...(isDark
-                        ? { borderWidth: 1, borderColor: 'rgba(59,130,246,0.15)' }
-                        : Platform.select({
-                            ios: { shadowColor: '#3B82F6', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.12, shadowRadius: 10 },
-                            android: { elevation: 3 },
-                          })),
-                    }}
-                  >
-                    <View style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: '#0EA5E9', alignItems: 'center', justifyContent: 'center' }}>
-                      <Icon name="account-group-outline" size={18} color="#FFFFFF" />
-                    </View>
-                    <Text style={{ fontSize: 32, fontWeight: '800', color: colors.textPrimary, marginTop: 10, letterSpacing: -0.5 }}>
-                      {stats?.unique_callers ?? 0}
-                    </Text>
-                    <Text style={{ fontSize: 13, fontWeight: '500', color: colors.textSecondary, marginTop: 2 }}>Callers</Text>
-                  </View>
+                <FadeIn delay={80} scale style={{ flex: 1 }}>
+                  <KpiTile
+                    icon="check-circle-outline" iconBg="#10B981" bgDark="#1A3D2E" bgLight="#D1FAE5"
+                    borderDark="rgba(16,185,129,0.15)" value={stats?.completed_calls ?? 0} label="Screened"
+                    isDark={isDark} colors={colors} radii={radii} spacing={spacing}
+                  />
                 </FadeIn>
-                <FadeIn delay={150} scale style={{ flex: 1 }}>
-                  <View
-                    style={{
-                      borderRadius: radii.xl,
-                      padding: spacing.lg,
-                      minHeight: 120,
-                      backgroundColor: isDark ? '#4A1942' : '#FBCFE8',
-                      ...(isDark
-                        ? { borderWidth: 1, borderColor: 'rgba(236,72,153,0.15)' }
-                        : Platform.select({
-                            ios: { shadowColor: '#EC4899', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.12, shadowRadius: 10 },
-                            android: { elevation: 3 },
-                          })),
-                    }}
-                  >
-                    <View style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: '#EF4444', alignItems: 'center', justifyContent: 'center' }}>
-                      <Icon name="shield-check-outline" size={18} color="#FFFFFF" />
-                    </View>
-                    <Text style={{ fontSize: 32, fontWeight: '800', color: colors.textPrimary, marginTop: 10, letterSpacing: -0.5 }}>
-                      {stats?.spam_blocked ?? 0}
-                    </Text>
-                    <Text style={{ fontSize: 13, fontWeight: '500', color: colors.textSecondary, marginTop: 2 }}>Spam</Text>
-                  </View>
+                <FadeIn delay={100} scale style={{ flex: 1 }}>
+                  <KpiTile
+                    icon="account-group-outline" iconBg="#0EA5E9" bgDark="#1E2A5E" bgLight="#BFDBFE"
+                    borderDark="rgba(59,130,246,0.15)" value={stats?.unique_callers ?? 0} label="Callers"
+                    isDark={isDark} colors={colors} radii={radii} spacing={spacing}
+                  />
                 </FadeIn>
               </View>
 
-              {/* Avg Call + VIP Calls — 2 columns */}
+              {/* Spam + Missed — 2 columns */}
               <View style={{ flexDirection: 'row', gap: 12 }}>
-                <FadeIn delay={180} scale style={{ flex: 1 }}>
-                  <View
-                    style={{
-                      borderRadius: radii.xl,
-                      padding: spacing.lg,
-                      minHeight: 120,
-                      backgroundColor: isDark ? '#422006' : '#FDE68A',
-                      ...(isDark
-                        ? { borderWidth: 1, borderColor: 'rgba(245,158,11,0.15)' }
-                        : Platform.select({
-                            ios: { shadowColor: '#F59E0B', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.12, shadowRadius: 10 },
-                            android: { elevation: 3 },
-                          })),
-                    }}
-                  >
-                    <View style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: '#F59E0B', alignItems: 'center', justifyContent: 'center' }}>
-                      <Icon name="timer-outline" size={18} color="#FFFFFF" />
-                    </View>
-                    <Text style={{ fontSize: 32, fontWeight: '800', color: colors.textPrimary, marginTop: 10, letterSpacing: -0.5 }}>
-                      {formatDurationCompact(stats?.avg_duration_seconds ?? null)}
-                    </Text>
-                    <Text style={{ fontSize: 13, fontWeight: '500', color: colors.textSecondary, marginTop: 2 }}>Avg Call</Text>
-                  </View>
+                <FadeIn delay={120} scale style={{ flex: 1 }}>
+                  <KpiTile
+                    icon="shield-check-outline" iconBg="#EF4444" bgDark="#4A1942" bgLight="#FBCFE8"
+                    borderDark="rgba(236,72,153,0.15)" value={stats?.spam_blocked ?? 0} label="Spam"
+                    isDark={isDark} colors={colors} radii={radii} spacing={spacing}
+                  />
                 </FadeIn>
-                <FadeIn delay={210} scale style={{ flex: 1 }}>
-                  <View
-                    style={{
-                      borderRadius: radii.xl,
-                      padding: spacing.lg,
-                      minHeight: 120,
-                      backgroundColor: isDark ? '#3B1320' : '#FFE4E6',
-                      ...(isDark
-                        ? { borderWidth: 1, borderColor: 'rgba(244,63,94,0.15)' }
-                        : Platform.select({
-                            ios: { shadowColor: '#F43F5E', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.12, shadowRadius: 10 },
-                            android: { elevation: 3 },
-                          })),
-                    }}
-                  >
-                    <View style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: '#F43F5E', alignItems: 'center', justifyContent: 'center' }}>
-                      <Icon name="phone-missed" size={18} color="#FFFFFF" />
-                    </View>
-                    <Text style={{ fontSize: 32, fontWeight: '800', color: colors.textPrimary, marginTop: 10, letterSpacing: -0.5 }}>
-                      {Math.max(0, (stats?.total_calls ?? 0) - (stats?.completed_calls ?? 0))}
-                    </Text>
-                    <Text style={{ fontSize: 13, fontWeight: '500', color: colors.textSecondary, marginTop: 2 }}>Missed</Text>
-                  </View>
+                <FadeIn delay={140} scale style={{ flex: 1 }}>
+                  <KpiTile
+                    icon="phone-missed" iconBg="#F43F5E" bgDark="#3B1320" bgLight="#FFE4E6"
+                    borderDark="rgba(244,63,94,0.15)" value={Math.max(0, (stats?.total_calls ?? 0) - (stats?.completed_calls ?? 0))} label="Missed"
+                    isDark={isDark} colors={colors} radii={radii} spacing={spacing}
+                  />
                 </FadeIn>
               </View>
+
+              {/* Avg Call + Longest — 2 columns */}
+              <View style={{ flexDirection: 'row', gap: 12 }}>
+                <FadeIn delay={160} scale style={{ flex: 1 }}>
+                  <KpiTile
+                    icon="timer-outline" iconBg="#F59E0B" bgDark="#422006" bgLight="#FDE68A"
+                    borderDark="rgba(245,158,11,0.15)" value={formatDurationCompact(stats?.avg_duration_seconds ?? null)} label="Avg Call"
+                    isDark={isDark} colors={colors} radii={radii} spacing={spacing}
+                  />
+                </FadeIn>
+                <FadeIn delay={180} scale style={{ flex: 1 }}>
+                  <KpiTile
+                    icon="trophy-outline" iconBg="#8B5CF6" bgDark="#2E1065" bgLight="#DDD6FE"
+                    borderDark="rgba(139,92,246,0.15)" value={formatDurationCompact(stats?.longest_call_seconds ?? null)} label="Longest"
+                    isDark={isDark} colors={colors} radii={radii} spacing={spacing}
+                  />
+                </FadeIn>
+              </View>
+
+              {/* VIP + Booked — 2 columns */}
+              <View style={{ flexDirection: 'row', gap: 12 }}>
+                <FadeIn delay={200} scale style={{ flex: 1 }}>
+                  <KpiTile
+                    icon="star" iconBg="#FBBF24" bgDark="#422006" bgLight="#FEF3C7"
+                    borderDark="rgba(251,191,36,0.15)" value={stats?.vip_calls ?? 0} label="VIP Calls"
+                    isDark={isDark} colors={colors} radii={radii} spacing={spacing}
+                  />
+                </FadeIn>
+                <FadeIn delay={220} scale style={{ flex: 1 }}>
+                  <KpiTile
+                    icon="calendar-check" iconBg="#14B8A6" bgDark="#134E4A" bgLight="#CCFBF1"
+                    borderDark="rgba(20,184,166,0.15)" value={stats?.appointments_booked ?? 0} label="Booked"
+                    isDark={isDark} colors={colors} radii={radii} spacing={spacing}
+                  />
+                </FadeIn>
+              </View>
+
+              {/* Total Talk Time — full width */}
+              <FadeIn delay={240}>
+                <View
+                  style={{
+                    borderRadius: radii.lg,
+                    paddingHorizontal: spacing.lg,
+                    paddingVertical: spacing.md,
+                    backgroundColor: isDark ? 'rgba(139,92,246,0.10)' : '#EDE9FE',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    ...(isDark ? { borderWidth: 1, borderColor: 'rgba(139,92,246,0.18)' } : {}),
+                  }}
+                >
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <Icon name="clock-check-outline" size={18} color="#8B5CF6" />
+                    <Text style={{ fontSize: 14, fontWeight: '600', color: isDark ? '#C4B5FD' : '#6D28D9' }}>Total Talk Time</Text>
+                  </View>
+                  <Text style={{ fontSize: 20, fontWeight: '800', color: isDark ? '#C4B5FD' : '#6D28D9' }}>
+                    {stats?.total_talk_minutes ?? 0} min
+                  </Text>
+                </View>
+              </FadeIn>
             </View>
           )}
 
@@ -746,6 +741,57 @@ export function HomeScreen() {
           </View>
         )}
       </ScrollView>
+    </View>
+  );
+}
+
+function KpiTile({
+  icon,
+  iconBg,
+  bgDark,
+  bgLight,
+  borderDark,
+  value,
+  label,
+  isDark,
+  colors,
+  radii,
+  spacing,
+}: {
+  icon: string;
+  iconBg: string;
+  bgDark: string;
+  bgLight: string;
+  borderDark: string;
+  value: string | number;
+  label: string;
+  isDark: boolean;
+  colors: any;
+  radii: any;
+  spacing: any;
+}) {
+  return (
+    <View
+      style={{
+        borderRadius: radii.xl,
+        padding: spacing.md,
+        minHeight: 100,
+        backgroundColor: isDark ? bgDark : bgLight,
+        ...(isDark
+          ? { borderWidth: 1, borderColor: borderDark }
+          : Platform.select({
+              ios: { shadowColor: iconBg, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.10, shadowRadius: 8 },
+              android: { elevation: 2 },
+            })),
+      }}
+    >
+      <View style={{ width: 32, height: 32, borderRadius: 10, backgroundColor: iconBg, alignItems: 'center', justifyContent: 'center' }}>
+        <Icon name={icon} size={16} color="#FFFFFF" />
+      </View>
+      <Text style={{ fontSize: 28, fontWeight: '800', color: colors.textPrimary, marginTop: 8, letterSpacing: -0.5 }}>
+        {value}
+      </Text>
+      <Text style={{ fontSize: 12, fontWeight: '500', color: colors.textSecondary, marginTop: 1 }}>{label}</Text>
     </View>
   );
 }

@@ -18,6 +18,7 @@ export interface CalendarStatus {
   connected: boolean;
   email: string | null;
   calendar_id: string | null;
+  needs_reauth?: boolean;
 }
 
 export interface AvailableSlot {

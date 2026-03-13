@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Calendar, DateData } from 'react-native-calendars';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Icon } from '../components/ui/Icon';
@@ -195,10 +195,12 @@ export function CalendarScreen() {
   const theme = useTheme();
   const { colors, spacing, typography, radii, shadows } = theme;
   const navigation = useNavigation<NavProp>();
+  const route = useRoute<any>();
   const { status, events, loading, error, loadStatus, loadEvents } = useCalendarStore();
   const userTz = useSettingsStore(s => s.settings?.timezone) || getDeviceTimezone();
 
-  const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const initialDate = route.params?.date;
+  const [selectedDate, setSelectedDate] = useState(() => initialDate || new Date().toISOString().split('T')[0]);
   const [refreshing, setRefreshing] = useState(false);
   const [connecting, setConnecting] = useState(false);
   const [toast, setToast] = useState('');
@@ -207,6 +209,12 @@ export function CalendarScreen() {
   const [searchText, setSearchText] = useState('');
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [revealedCallerPhones, setRevealedCallerPhones] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (initialDate && initialDate !== selectedDate) {
+      setSelectedDate(initialDate);
+    }
+  }, [initialDate]);
 
   const statusColors: Record<DisplayStatus, string> = useMemo(() => ({
     upcoming: colors.primary,
@@ -223,6 +231,9 @@ export function CalendarScreen() {
     cancelled: 'Cancelled',
     tentative: 'Tentative',
   };
+
+  const isConnected = status?.connected ?? false;
+  const needsReauth = status?.needs_reauth === true;
 
   // --- Data loading ---
   const loadEventsForRange = useCallback(() => {
@@ -287,16 +298,14 @@ export function CalendarScreen() {
   }, [loadEventsForRange]);
 
   useLayoutEffect(() => {
-    if (status?.connected) {
-      navigation.setOptions({
-        headerRight: () => (
-          <Pressable onPress={handleRefresh} style={{ paddingHorizontal: 16 }}>
-            <Icon name="refresh" size={22} color={colors.textPrimary} />
-          </Pressable>
-        ),
-      });
-    }
-  }, [navigation, handleRefresh, status?.connected, colors]);
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable onPress={handleRefresh} style={{ paddingHorizontal: 16 }}>
+          <Icon name="refresh" size={22} color={colors.textPrimary} />
+        </Pressable>
+      ),
+    });
+  }, [navigation, handleRefresh, colors]);
 
   const handleConnect = async () => {
     setConnecting(true);
@@ -818,33 +827,46 @@ export function CalendarScreen() {
   };
 
   // ================================================================
-  // DISCONNECTED STATE
+  // CONNECT BANNER (shown inline when Google Calendar is not connected)
   // ================================================================
-  if (!status?.connected) {
+  const renderConnectBanner = () => {
+    if (isConnected && !needsReauth) return null;
     return (
-      <ScreenWrapper>
-        <View style={{ flex: 1, padding: spacing.xl, alignItems: 'center', justifyContent: 'center', gap: spacing.lg }}>
-          <View style={{
-            width: 88, height: 88, borderRadius: 44,
-            backgroundColor: colors.gridIconBg,
-            alignItems: 'center', justifyContent: 'center',
-          }}>
-            <Icon name="calendar-outline" size={44} color={colors.primary} />
-          </View>
-          <Text style={{ ...typography.h2, color: colors.textPrimary, textAlign: 'center' }}>
-            Connect Your Calendar
-          </Text>
-          <Text style={{ ...typography.body, color: colors.textSecondary, textAlign: 'center', paddingHorizontal: spacing.lg }}>
-            Link your Google Calendar to view appointments and let your assistant book meetings.
-          </Text>
-          <View style={{ width: '100%', maxWidth: 300, marginTop: spacing.xl }}>
-            <Button title={connecting ? 'Opening...' : 'Connect Google Calendar'} onPress={handleConnect} disabled={connecting} />
-          </View>
+      <Pressable
+        onPress={handleConnect}
+        disabled={connecting}
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: spacing.sm,
+          marginHorizontal: spacing.lg,
+          marginBottom: spacing.sm,
+          backgroundColor: colors.primaryContainer + '60',
+          borderRadius: radii.md,
+          padding: spacing.md,
+          borderWidth: 1,
+          borderColor: colors.primary + '30',
+        }}
+      >
+        <View style={{
+          width: 36, height: 36, borderRadius: 18,
+          backgroundColor: colors.primary + '20',
+          alignItems: 'center', justifyContent: 'center',
+        }}>
+          <Icon name="google" size={18} color={colors.primary} />
         </View>
-        <Toast message={toast} visible={!!toast} onDismiss={() => setToast('')} />
-      </ScreenWrapper>
+        <View style={{ flex: 1 }}>
+          <Text style={{ ...typography.bodySmall, color: colors.textPrimary, fontWeight: '600' }}>
+            {needsReauth ? 'Reconnect Google Calendar' : 'Connect Google Calendar'}
+          </Text>
+          <Text style={{ ...typography.caption, color: needsReauth ? colors.warning : colors.textSecondary }}>
+            {needsReauth ? 'Session expired - tap to reconnect' : 'Sync your events and let your assistant book meetings'}
+          </Text>
+        </View>
+        <Icon name="chevron-right" size={18} color={colors.textSecondary} />
+      </Pressable>
     );
-  }
+  };
 
   // ================================================================
   // WEEK VIEW - timeline with 7 columns
@@ -868,6 +890,7 @@ export function CalendarScreen() {
             </View>
           </View>
           {renderViewToggle()}
+          {renderConnectBanner()}
 
           {/* Week day headers */}
           <View style={{ flexDirection: 'row', paddingLeft: 50 }}>
@@ -984,6 +1007,7 @@ export function CalendarScreen() {
           </View>
 
           {renderFilterChips()}
+          {renderConnectBanner()}
         </View>
 
         <ScrollView
@@ -1057,6 +1081,7 @@ export function CalendarScreen() {
           </View>
 
           {renderFilterChips()}
+          {renderConnectBanner()}
         </View>
 
         <SectionList
@@ -1125,6 +1150,7 @@ export function CalendarScreen() {
               </View>
             </View>
             {renderViewToggle()}
+            {renderConnectBanner()}
 
             <Calendar
               current={selectedDate}
@@ -1180,7 +1206,7 @@ export function CalendarScreen() {
         ListEmptyComponent={
           <View style={{ padding: spacing.xl, alignItems: 'center' }}>
             <Icon name="calendar-blank-outline" size={32} color={colors.textDisabled} />
-            <Text style={{ ...typography.body, color: colors.textSecondary, marginTop: spacing.sm }}>
+            <Text style={{ ...typography.body, color: colors.textSecondary, marginTop: spacing.sm, textAlign: 'center' }}>
               No events on this day
             </Text>
           </View>

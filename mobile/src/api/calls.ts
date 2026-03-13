@@ -66,6 +66,17 @@ export interface CallDetail {
   transcript_status: string | null;
   notes: string | null;
   recording_available?: boolean;
+  is_vip?: boolean;
+  is_blocked?: boolean;
+  caller_display_name?: string | null;
+  caller_relationship?: string | null;
+  booked_calendar_event_id?: string | null;
+  booked_calendar_event_summary?: string | null;
+  booked_appointment_date?: string | null;
+  booked_appointment_time?: string | null;
+  booked_appointment_duration_minutes?: number | null;
+  booked_appointment_caller_name?: string | null;
+  booked_appointment_reason?: string | null;
 }
 
 export interface CallArtifacts {

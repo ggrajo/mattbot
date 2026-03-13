@@ -26,7 +26,7 @@ const TAB_CONFIG: {
 }[] = [
   { name: 'HomeTab', label: 'Home', iconOutline: 'home-outline', iconFilled: 'home' },
   { name: 'CallsTab', label: 'Calls', iconOutline: 'phone-outline', iconFilled: 'phone' },
-  { name: 'CalendarTab', label: 'Calendar', iconOutline: 'calendar-outline', iconFilled: 'calendar' },
+  { name: 'CalendarTab', label: 'Calendar', iconOutline: 'calendar-month-outline', iconFilled: 'calendar-month' },
   { name: 'AccountTab', label: 'Account', iconOutline: 'account-outline', iconFilled: 'account' },
 ];
 

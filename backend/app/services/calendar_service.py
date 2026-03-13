@@ -161,7 +161,8 @@ async def get_valid_access_token(db: object, user_id: uuid.UUID) -> str | None:
         row.key_version,
     ).decode()
 
-    if row.token_expiry and row.token_expiry < utcnow() + timedelta(minutes=2):
+    expiry = row.token_expiry.replace(tzinfo=None) if row.token_expiry else None
+    if expiry and expiry < utcnow() + timedelta(minutes=2):
         refresh_token = decrypt_field(
             row.refresh_token_ciphertext,
             row.refresh_token_nonce,
@@ -169,8 +170,13 @@ async def get_valid_access_token(db: object, user_id: uuid.UUID) -> str | None:
         ).decode()
         try:
             new_tokens = await _refresh_access_token(refresh_token)
-        except httpx.HTTPStatusError:
+        except httpx.HTTPStatusError as exc:
             logger.warning("Failed to refresh Google token for user %s", str(user_id)[:8])
+            if exc.response.status_code == 400:
+                row.token_expiry = datetime(1970, 1, 1)
+                row.updated_at = utcnow()
+                await session.flush()
+                logger.warning("Marked Google token as needing re-auth for user %s", str(user_id)[:8])
             return None
 
         access_token = new_tokens["access_token"]
@@ -201,12 +207,19 @@ async def get_calendar_status(db: object, user_id: uuid.UUID) -> dict:
     session = db
     row = await session.get(GoogleCalendarToken, user_id)
     if row is None:
-        return {"connected": False, "email": None, "calendar_id": None}
+        return {"connected": False, "email": None, "calendar_id": None, "needs_reauth": False}
+
+    needs_reauth = False
+    if row.token_expiry:
+        exp = row.token_expiry.replace(tzinfo=None) if row.token_expiry.tzinfo else row.token_expiry
+        if exp <= datetime(1970, 1, 2):
+            needs_reauth = True
 
     return {
         "connected": True,
         "email": row.google_email,
         "calendar_id": row.calendar_id,
+        "needs_reauth": needs_reauth,
     }
 
 
@@ -226,6 +239,97 @@ def _parse_caller_from_description(description: str, field: str) -> str | None:
 # ── calendar CRUD ────────────────────────────────────────────────────
 
 
+async def _get_local_bookings(
+    db: object,
+    user_id: uuid.UUID,
+    time_min: str,
+    time_max: str,
+    timezone: str = "UTC",
+) -> list[dict]:
+    """Return MattBot-booked appointments from audit events.
+
+    These are stored locally when the AI books an appointment during a call,
+    so they remain available even when Google Calendar is disconnected.
+    """
+    from datetime import datetime as dt_cls
+    from zoneinfo import ZoneInfo
+
+    from sqlalchemy import select, cast, String
+    from sqlalchemy.ext.asyncio import AsyncSession
+
+    from app.models.audit_event import AuditEvent
+
+    session: AsyncSession = db  # type: ignore[assignment]
+
+    try:
+        range_start = dt_cls.fromisoformat(time_min.replace("Z", "+00:00"))
+        range_end = dt_cls.fromisoformat(time_max.replace("Z", "+00:00"))
+    except (ValueError, TypeError):
+        return []
+
+    stmt = (
+        select(AuditEvent)
+        .where(
+            AuditEvent.owner_user_id == user_id,
+            AuditEvent.event_type == "calendar.appointment_booked",
+        )
+        .order_by(AuditEvent.event_at.desc())
+        .limit(500)
+    )
+    result = await session.execute(stmt)
+    rows = result.scalars().all()
+
+    tz = ZoneInfo(timezone) if timezone else ZoneInfo("UTC")
+    events: list[dict] = []
+
+    for row in rows:
+        details = row.details or {}
+        date_str = details.get("date", "")
+        time_str = details.get("time", "")
+        duration = int(details.get("duration_minutes", 30))
+        if not date_str or not time_str:
+            continue
+
+        try:
+            naive = dt_cls.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M")
+            start_dt = naive.replace(tzinfo=tz)
+            end_dt = start_dt + timedelta(minutes=duration)
+        except (ValueError, TypeError):
+            continue
+
+        if end_dt.astimezone(ZoneInfo("UTC")) < range_start.astimezone(ZoneInfo("UTC")):
+            continue
+        if start_dt.astimezone(ZoneInfo("UTC")) > range_end.astimezone(ZoneInfo("UTC")):
+            continue
+
+        caller_name = details.get("caller_name")
+        caller_phone = details.get("caller_phone")
+        reason = details.get("reason", "Appointment")
+        event_id = details.get("event_id", str(row.id))
+        call_id = details.get("call_id")
+        summary = f"{reason} - {caller_name}" if caller_name else reason
+
+        events.append(
+            {
+                "id": event_id or str(row.id),
+                "summary": summary,
+                "start": start_dt.isoformat(),
+                "end": end_dt.isoformat(),
+                "description": f"Caller: {caller_name}\nPhone: {caller_phone}" if caller_name else "",
+                "location": "",
+                "status": "confirmed",
+                "organizer_email": "",
+                "attendees_count": 0,
+                "call_id": call_id,
+                "is_mattbot_booked": True,
+                "caller_name": caller_name,
+                "caller_phone": caller_phone,
+            }
+        )
+
+    return events
+
+
 async def list_events(
     db: object,
     user_id: uuid.UUID,
@@ -233,61 +337,74 @@ async def list_events(
     time_max: str,
     timezone: str = "UTC",
 ) -> list[dict]:
-    """List events from the user's primary Google Calendar.
+    """List events from the user's Google Calendar merged with local bookings.
 
     All returned ``start`` / ``end`` ISO strings are normalised to the
     caller-supplied *timezone* so the mobile app can display them
     without knowing the user's timezone itself.
+
+    When Google Calendar is disconnected or the token is expired, locally
+    tracked MattBot-booked appointments are still returned.
     """
+    google_events: list[dict] = []
     token = await get_valid_access_token(db, user_id)
-    if not token:
-        return []
-
-    params = {
-        "timeMin": time_min,
-        "timeMax": time_max,
-        "singleEvents": "true",
-        "orderBy": "startTime",
-        "maxResults": "250",
-        "timeZone": timezone,
-    }
-    async with httpx.AsyncClient(timeout=_TIMEOUT) as client:
-        resp = await client.get(
-            f"{_GOOGLE_CALENDAR_API}/calendars/primary/events",
-            headers={"Authorization": f"Bearer {token}"},
-            params=params,
-        )
-        if resp.status_code != 200:
-            logger.error("Google Calendar list_events failed: %d", resp.status_code)
-            return []
-        data = resp.json()
-        items = data.get("items", [])
-        results = []
-        for ev in items:
-            ext_private = ev.get("extendedProperties", {}).get("private", {})
-            mattbot_call_id = ext_private.get("mattbot_call_id")
-            desc = ev.get("description", "")
-            results.append(
-                {
-                    "id": ev.get("id", ""),
-                    "summary": ev.get("summary", "(No title)"),
-                    "start": (
-                        ev.get("start", {}).get("dateTime") or ev.get("start", {}).get("date", "")
-                    ),
-                    "end": (ev.get("end", {}).get("dateTime") or ev.get("end", {}).get("date", "")),
-                    "description": desc,
-                    "location": ev.get("location", ""),
-                    "status": ev.get("status", "confirmed"),
-                    "organizer_email": ev.get("organizer", {}).get("email", ""),
-                    "attendees_count": len(ev.get("attendees", [])),
-                    "call_id": mattbot_call_id,
-                    "is_mattbot_booked": bool(mattbot_call_id),
-                    "caller_name": _parse_caller_from_description(desc, "name"),
-                    "caller_phone": _parse_caller_from_description(desc, "phone"),
-                }
+    if token:
+        params = {
+            "timeMin": time_min,
+            "timeMax": time_max,
+            "singleEvents": "true",
+            "orderBy": "startTime",
+            "maxResults": "250",
+            "timeZone": timezone,
+        }
+        async with httpx.AsyncClient(timeout=_TIMEOUT) as client:
+            resp = await client.get(
+                f"{_GOOGLE_CALENDAR_API}/calendars/primary/events",
+                headers={"Authorization": f"Bearer {token}"},
+                params=params,
             )
+            if resp.status_code == 200:
+                data = resp.json()
+                items = data.get("items", [])
+                for ev in items:
+                    ext_private = ev.get("extendedProperties", {}).get("private", {})
+                    mattbot_call_id = ext_private.get("mattbot_call_id")
+                    desc = ev.get("description", "")
+                    google_events.append(
+                        {
+                            "id": ev.get("id", ""),
+                            "summary": ev.get("summary", "(No title)"),
+                            "start": (
+                                ev.get("start", {}).get("dateTime")
+                                or ev.get("start", {}).get("date", "")
+                            ),
+                            "end": (
+                                ev.get("end", {}).get("dateTime")
+                                or ev.get("end", {}).get("date", "")
+                            ),
+                            "description": desc,
+                            "location": ev.get("location", ""),
+                            "status": ev.get("status", "confirmed"),
+                            "organizer_email": ev.get("organizer", {}).get("email", ""),
+                            "attendees_count": len(ev.get("attendees", [])),
+                            "call_id": mattbot_call_id,
+                            "is_mattbot_booked": bool(mattbot_call_id),
+                            "caller_name": _parse_caller_from_description(desc, "name"),
+                            "caller_phone": _parse_caller_from_description(desc, "phone"),
+                        }
+                    )
+            else:
+                logger.error("Google Calendar list_events failed: %d", resp.status_code)
 
-    return results
+    local_bookings = await _get_local_bookings(db, user_id, time_min, time_max, timezone)
+
+    google_event_ids = {e["id"] for e in google_events if e["id"]}
+    for booking in local_bookings:
+        if booking["id"] not in google_event_ids:
+            google_events.append(booking)
+
+    google_events.sort(key=lambda e: e.get("start", ""))
+    return google_events
 
 
 async def create_event(

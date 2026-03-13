@@ -1,20 +1,144 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Switch, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  View,
+  Text,
+  Switch,
+  TouchableOpacity,
+  ActivityIndicator,
+  Animated,
+  TextInput as RNTextInput,
+  Vibration,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Card } from '../components/ui/Card';
+import { Button } from '../components/ui/Button';
+import { TextInput } from '../components/ui/TextInput';
 import { Icon } from '../components/ui/Icon';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { Toast } from '../components/ui/Toast';
 import { Divider } from '../components/ui/Divider';
 import { useTheme } from '../theme/ThemeProvider';
 import { useSettingsStore } from '../store/settingsStore';
+import { useAuthStore } from '../store/authStore';
 import { useBiometric } from '../hooks/useBiometric';
+import { apiClient, extractApiError } from '../api/client';
+import { hapticLight } from '../utils/haptics';
 import { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'PrivacySettings'>;
 
-export function PrivacySettingsScreen({}: Props) {
+interface PinStatus {
+  pin_enabled: boolean;
+  pin_set_at: string | null;
+  pin_expired: boolean;
+  days_until_expiry: number | null;
+}
+
+interface UserProfile {
+  has_password: boolean;
+  mfa_enabled: boolean;
+  email: string | null;
+}
+
+const PIN_LENGTH = 6;
+
+function PinDots({
+  length,
+  filled,
+  shake,
+  colors,
+}: {
+  length: number;
+  filled: number;
+  shake: Animated.Value;
+  colors: any;
+}) {
+  return (
+    <Animated.View
+      style={{
+        flexDirection: 'row',
+        gap: 14,
+        justifyContent: 'center',
+        transform: [{ translateX: shake }],
+      }}
+    >
+      {Array.from({ length }).map((_, i) => (
+        <View
+          key={i}
+          style={{
+            width: 18,
+            height: 18,
+            borderRadius: 9,
+            borderWidth: 2,
+            borderColor: i < filled ? colors.primary : colors.border,
+            backgroundColor: i < filled ? colors.primary : 'transparent',
+          }}
+        />
+      ))}
+    </Animated.View>
+  );
+}
+
+function PinKeypad({
+  onDigit,
+  onDelete,
+  colors,
+  typography,
+}: {
+  onDigit: (d: string) => void;
+  onDelete: () => void;
+  colors: any;
+  typography: any;
+}) {
+  const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'del'];
+  return (
+    <View style={{ gap: 12 }}>
+      {[0, 1, 2, 3].map((row) => (
+        <View key={row} style={{ flexDirection: 'row', justifyContent: 'center', gap: 20 }}>
+          {keys.slice(row * 3, row * 3 + 3).map((key, idx) => {
+            if (key === '') return <View key={idx} style={{ width: 72, height: 72 }} />;
+            if (key === 'del') {
+              return (
+                <TouchableOpacity
+                  key="del"
+                  onPress={onDelete}
+                  activeOpacity={0.6}
+                  style={{ width: 72, height: 72, alignItems: 'center', justifyContent: 'center' }}
+                >
+                  <Icon name="backspace-outline" size={28} color={colors.textSecondary} />
+                </TouchableOpacity>
+              );
+            }
+            return (
+              <TouchableOpacity
+                key={key}
+                onPress={() => { hapticLight(); onDigit(key); }}
+                activeOpacity={0.6}
+                style={{
+                  width: 72,
+                  height: 72,
+                  borderRadius: 36,
+                  backgroundColor: colors.surfaceVariant,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Text style={{ fontSize: 28, fontWeight: '600', color: colors.textPrimary }}>
+                  {key}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      ))}
+    </View>
+  );
+}
+
+export function PrivacySettingsScreen({ navigation }: Props) {
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
   const { settings, loading, error, loadSettings, updateSettings } = useSettingsStore();
@@ -22,9 +146,45 @@ export function PrivacySettingsScreen({}: Props) {
   const [toast, setToast] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
 
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [pinStatus, setPinStatus] = useState<PinStatus | null>(null);
+  const [loadingProfile, setLoadingProfile] = useState(true);
+
+  // Password section
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [savingPassword, setSavingPassword] = useState(false);
+
+  // PIN setup flow
+  const [pinMode, setPinMode] = useState<null | 'setup' | 'confirm'>(null);
+  const [pinEntry, setPinEntry] = useState('');
+  const [pinFirst, setPinFirst] = useState('');
+  const [pinError, setPinError] = useState('');
+  const [savingPin, setSavingPin] = useState(false);
+  const shakeAnim = useRef(new Animated.Value(0)).current;
+
   useEffect(() => {
     loadSettings();
+    loadProfileAndPin();
   }, []);
+
+  async function loadProfileAndPin() {
+    setLoadingProfile(true);
+    try {
+      const [meRes, pinRes] = await Promise.all([
+        apiClient.get<UserProfile>('/me'),
+        apiClient.get<PinStatus>('/auth/pin/status'),
+      ]);
+      setProfile(meRes.data);
+      setPinStatus(pinRes.data);
+    } catch {
+      // non-critical
+    } finally {
+      setLoadingProfile(false);
+    }
+  }
 
   async function handleToggle(key: string, value: boolean | string) {
     const ok = await updateSettings({ [key]: value });
@@ -42,11 +202,179 @@ export function PrivacySettingsScreen({}: Props) {
       const success = await authenticate('Verify your identity');
       if (!success) {
         setToastType('error');
-        setToast('Biometric verification failed. Setting was not changed.');
+        setToast('Biometric verification failed.');
         return;
       }
     }
     handleToggle('biometric_unlock_enabled', enabled);
+  }
+
+  async function handlePasswordSave() {
+    if (newPassword !== confirmPassword) {
+      setToastType('error');
+      setToast('Passwords do not match.');
+      return;
+    }
+    if (newPassword.length < 12) {
+      setToastType('error');
+      setToast('Password must be at least 12 characters.');
+      return;
+    }
+    setSavingPassword(true);
+    try {
+      const payload: Record<string, string> = { new_password: newPassword };
+      if (profile?.has_password && currentPassword) {
+        payload.current_password = currentPassword;
+      }
+      await apiClient.post('/auth/password/change', payload);
+      setToastType('success');
+      setToast(profile?.has_password ? 'Password changed successfully.' : 'Password created successfully.');
+      setShowPasswordForm(false);
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      setProfile((p) => p ? { ...p, has_password: true } : p);
+    } catch (e) {
+      setToastType('error');
+      setToast(extractApiError(e));
+    } finally {
+      setSavingPassword(false);
+    }
+  }
+
+  function triggerShake() {
+    Vibration.vibrate(80);
+    Animated.sequence([
+      Animated.timing(shakeAnim, { toValue: 15, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnim, { toValue: -15, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnim, { toValue: 10, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnim, { toValue: -10, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnim, { toValue: 0, duration: 50, useNativeDriver: true }),
+    ]).start();
+  }
+
+  function handlePinDigit(digit: string) {
+    if (pinEntry.length >= PIN_LENGTH) return;
+    const next = pinEntry + digit;
+    setPinEntry(next);
+    setPinError('');
+
+    if (next.length === PIN_LENGTH) {
+      if (pinMode === 'setup') {
+        setPinFirst(next);
+        setPinEntry('');
+        setPinMode('confirm');
+      } else if (pinMode === 'confirm') {
+        if (next === pinFirst) {
+          submitPin(next);
+        } else {
+          triggerShake();
+          setPinError('PINs do not match. Try again.');
+          setPinEntry('');
+          setPinMode('setup');
+          setPinFirst('');
+        }
+      }
+    }
+  }
+
+  function handlePinDelete() {
+    setPinEntry((prev) => prev.slice(0, -1));
+    setPinError('');
+  }
+
+  async function submitPin(pin: string) {
+    setSavingPin(true);
+    try {
+      await apiClient.post('/auth/pin/setup', { pin });
+      setToastType('success');
+      setToast('PIN set up successfully.');
+      setPinMode(null);
+      setPinEntry('');
+      setPinFirst('');
+      await loadProfileAndPin();
+    } catch (e) {
+      setToastType('error');
+      setToast(extractApiError(e));
+      setPinMode('setup');
+      setPinEntry('');
+      setPinFirst('');
+    } finally {
+      setSavingPin(false);
+    }
+  }
+
+  async function handleDisablePin() {
+    try {
+      await apiClient.delete('/auth/pin');
+      setToastType('success');
+      setToast('PIN disabled.');
+      await loadProfileAndPin();
+    } catch (e) {
+      setToastType('error');
+      setToast(extractApiError(e));
+    }
+  }
+
+  // PIN Setup Full-Screen UI
+  if (pinMode) {
+    const isConfirm = pinMode === 'confirm';
+    return (
+      <ScreenWrapper scroll={false}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={{ flex: 1 }}
+        >
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: spacing.xl }}>
+            <View style={{
+              width: 72,
+              height: 72,
+              borderRadius: 36,
+              backgroundColor: colors.primary + '1A',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: spacing.lg,
+            }}>
+              <Icon name="lock-outline" size={36} color={colors.primary} />
+            </View>
+
+            <Text style={{ ...typography.h2, color: colors.textPrimary, textAlign: 'center', marginBottom: spacing.sm }} allowFontScaling>
+              {isConfirm ? 'Confirm Your PIN' : pinStatus?.pin_enabled ? 'Set New PIN' : 'Create a PIN'}
+            </Text>
+            <Text style={{ ...typography.bodySmall, color: colors.textSecondary, textAlign: 'center', marginBottom: spacing.xl }} allowFontScaling>
+              {isConfirm
+                ? 'Enter the same 6-digit PIN to confirm'
+                : 'Choose a secure 6-digit PIN for quick sign-in'}
+            </Text>
+
+            <View style={{ marginBottom: spacing.xl }}>
+              <PinDots length={PIN_LENGTH} filled={pinEntry.length} shake={shakeAnim} colors={colors} />
+            </View>
+
+            {pinError ? (
+              <Text style={{ ...typography.bodySmall, color: colors.error, textAlign: 'center', marginBottom: spacing.md }} allowFontScaling>
+                {pinError}
+              </Text>
+            ) : null}
+
+            {savingPin ? (
+              <ActivityIndicator size="large" color={colors.primary} />
+            ) : (
+              <PinKeypad onDigit={handlePinDigit} onDelete={handlePinDelete} colors={colors} typography={typography} />
+            )}
+
+            <TouchableOpacity
+              onPress={() => { setPinMode(null); setPinEntry(''); setPinFirst(''); setPinError(''); }}
+              style={{ marginTop: spacing.xl }}
+            >
+              <Text style={{ ...typography.body, color: colors.textSecondary, fontWeight: '500' }} allowFontScaling>
+                Cancel
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </ScreenWrapper>
+    );
   }
 
   if (!settings && loading) {
@@ -75,6 +403,254 @@ export function PrivacySettingsScreen({}: Props) {
 
       {error && <ErrorMessage message={error} action="Retry" onAction={loadSettings} />}
 
+      {/* Password & Account Security */}
+      <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
+        <View style={{ gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Icon name="shield-lock-outline" size="md" color={colors.primary} />
+            <Text style={{ ...typography.h3, color: colors.textPrimary, flex: 1 }} allowFontScaling>
+              Account Security
+            </Text>
+          </View>
+
+          {loadingProfile ? (
+            <ActivityIndicator size="small" color={colors.primary} />
+          ) : (
+            <>
+              {/* Password */}
+              <View style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                paddingVertical: spacing.sm,
+              }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md, flex: 1 }}>
+                  <Icon name="key-outline" size="md" color={colors.accent} />
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500' }} allowFontScaling>
+                      Password
+                    </Text>
+                    <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+                      {profile?.has_password ? 'Password is set' : 'No password set (signed in with Google)'}
+                    </Text>
+                  </View>
+                </View>
+                <TouchableOpacity
+                  onPress={() => setShowPasswordForm(!showPasswordForm)}
+                  style={{
+                    paddingHorizontal: spacing.md,
+                    paddingVertical: spacing.xs,
+                    borderRadius: radii.full,
+                    backgroundColor: colors.primary + '14',
+                  }}
+                >
+                  <Text style={{ ...typography.caption, color: colors.primary, fontWeight: '600' }} allowFontScaling>
+                    {profile?.has_password ? 'Change' : 'Set Up'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              {showPasswordForm && (
+                <View style={{ gap: spacing.sm, paddingTop: spacing.xs }}>
+                  {profile?.has_password && (
+                    <TextInput
+                      label="Current Password"
+                      value={currentPassword}
+                      onChangeText={setCurrentPassword}
+                      secureTextEntry
+                      leftIcon="lock-outline"
+                      placeholder="Enter current password"
+                    />
+                  )}
+                  <TextInput
+                    label="New Password"
+                    value={newPassword}
+                    onChangeText={setNewPassword}
+                    secureTextEntry
+                    leftIcon="lock-plus-outline"
+                    placeholder="Min 12 characters"
+                  />
+                  <TextInput
+                    label="Confirm Password"
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
+                    secureTextEntry
+                    leftIcon="lock-check-outline"
+                    placeholder="Re-enter new password"
+                  />
+                  <Button
+                    title={profile?.has_password ? 'Change Password' : 'Set Password'}
+                    onPress={handlePasswordSave}
+                    loading={savingPassword}
+                    disabled={!newPassword || !confirmPassword}
+                    icon="check"
+                  />
+                </View>
+              )}
+
+              <Divider />
+
+              {/* MFA Status */}
+              <TouchableOpacity
+                onPress={() => navigation.navigate('MfaEnroll')}
+                activeOpacity={0.7}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  paddingVertical: spacing.sm,
+                }}
+              >
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md, flex: 1 }}>
+                  <Icon name="two-factor-authentication" size="md" color={colors.accent} />
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500' }} allowFontScaling>
+                      Two-Factor Authentication
+                    </Text>
+                    <Text style={{ ...typography.caption, color: profile?.mfa_enabled ? colors.success : colors.warning }} allowFontScaling>
+                      {profile?.mfa_enabled ? 'Enabled' : 'Not enabled — recommended'}
+                    </Text>
+                  </View>
+                </View>
+                <Icon name="chevron-right" size="md" color={colors.textSecondary} />
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
+      </Card>
+
+      {/* PIN Login */}
+      <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
+        <View style={{ gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Icon name="dialpad" size="md" color={colors.primary} />
+            <Text style={{ ...typography.h3, color: colors.textPrimary, flex: 1 }} allowFontScaling>
+              PIN Login
+            </Text>
+          </View>
+          <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
+            Use a 6-digit PIN for quick sign-in on this device. 2FA is still required after PIN login for security.
+          </Text>
+
+          {loadingProfile ? (
+            <ActivityIndicator size="small" color={colors.primary} />
+          ) : pinStatus?.pin_enabled ? (
+            <View style={{ gap: spacing.sm }}>
+              <View style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: spacing.sm,
+                padding: spacing.md,
+                borderRadius: radii.md,
+                backgroundColor: colors.success + '14',
+              }}>
+                <Icon name="check-circle" size="md" color={colors.success} />
+                <View style={{ flex: 1 }}>
+                  <Text style={{ ...typography.body, color: colors.success, fontWeight: '600' }} allowFontScaling>
+                    PIN is active
+                  </Text>
+                  {pinStatus.days_until_expiry != null && (
+                    <Text style={{
+                      ...typography.caption,
+                      color: pinStatus.pin_expired ? colors.error : pinStatus.days_until_expiry <= 14 ? colors.warning : colors.textSecondary,
+                    }} allowFontScaling>
+                      {pinStatus.pin_expired
+                        ? 'PIN expired — please rotate your PIN'
+                        : `Expires in ${pinStatus.days_until_expiry} days`}
+                    </Text>
+                  )}
+                </View>
+              </View>
+
+              {pinStatus.pin_expired && (
+                <View style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: spacing.sm,
+                  padding: spacing.sm,
+                  borderRadius: radii.sm,
+                  backgroundColor: colors.warning + '14',
+                }}>
+                  <Icon name="alert-outline" size="sm" color={colors.warning} />
+                  <Text style={{ ...typography.caption, color: colors.warning, flex: 1 }} allowFontScaling>
+                    Your PIN has expired. Set a new PIN or continue using it for one more cycle.
+                  </Text>
+                </View>
+              )}
+
+              <View style={{ flexDirection: 'row', gap: spacing.sm }}>
+                <View style={{ flex: 1 }}>
+                  <Button
+                    title="Rotate PIN"
+                    variant="outline"
+                    icon="refresh"
+                    onPress={() => setPinMode('setup')}
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Button
+                    title="Disable"
+                    variant="outline"
+                    icon="close"
+                    onPress={handleDisablePin}
+                  />
+                </View>
+              </View>
+            </View>
+          ) : (
+            <Button
+              title="Set Up PIN"
+              icon="dialpad"
+              onPress={() => setPinMode('setup')}
+            />
+          )}
+        </View>
+      </Card>
+
+      {/* Biometric Unlock */}
+      <Card variant="elevated" style={{ marginBottom: spacing.lg, opacity: biometricAvailable ? 1 : 0.5 }}>
+        <View style={{ gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Icon
+              name={biometryType === 'FaceID' ? 'face-recognition' : 'fingerprint'}
+              size="md"
+              color={biometricAvailable ? colors.primary : colors.textDisabled}
+            />
+            <Text style={{ ...typography.h3, color: colors.textPrimary, flex: 1 }} allowFontScaling>
+              {biometryType === 'FaceID' ? 'Face ID' : biometryType === 'TouchID' ? 'Touch ID' : 'Biometric Unlock'}
+            </Text>
+          </View>
+          {biometricAvailable ? (
+            <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
+              Quick unlock with biometrics. 2FA verification is required on first use each session.
+            </Text>
+          ) : (
+            <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
+              {biometricLoading
+                ? 'Checking biometric availability...'
+                : 'Biometric authentication is not available on this device.'}
+            </Text>
+          )}
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text
+              style={{
+                ...typography.body,
+                color: biometricAvailable ? colors.textPrimary : colors.textDisabled,
+              }}
+              allowFontScaling
+            >
+              Enable biometric lock
+            </Text>
+            <Switch
+              value={biometricAvailable ? (settings?.biometric_unlock_enabled ?? false) : false}
+              onValueChange={handleBiometricToggle}
+              disabled={!biometricAvailable}
+              trackColor={{ false: colors.border, true: colors.primary }}
+            />
+          </View>
+        </View>
+      </Card>
+
       {/* Notification Privacy Mode */}
       <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
         <View style={{ gap: spacing.md }}>
@@ -91,9 +667,9 @@ export function PrivacySettingsScreen({}: Props) {
           <Divider />
 
           {[
-            { value: 'private' as const, label: 'Private', desc: 'Hide notification content' },
-            { value: 'preview' as const, label: 'Preview', desc: 'Show caller info in notifications' },
-            { value: 'full' as const, label: 'Full', desc: 'Show all details in notifications' },
+            { value: 'private' as const, label: 'Private', desc: 'Hide notification content', icon: 'eye-off-outline' },
+            { value: 'preview' as const, label: 'Preview', desc: 'Show caller info in notifications', icon: 'eye-outline' },
+            { value: 'full' as const, label: 'Full', desc: 'Show all details in notifications', icon: 'text-box-outline' },
           ].map((opt) => {
             const selected = settings?.notification_privacy_mode === opt.value;
             return (
@@ -114,8 +690,8 @@ export function PrivacySettingsScreen({}: Props) {
                 }}
                 accessibilityRole="radio"
                 accessibilityState={{ checked: selected }}
-                accessibilityLabel={opt.label}
               >
+                <Icon name={opt.icon} size="md" color={selected ? colors.primary : colors.textSecondary} />
                 <View style={{ flex: 1 }}>
                   <Text
                     style={{
@@ -159,57 +735,7 @@ export function PrivacySettingsScreen({}: Props) {
         </View>
       </Card>
 
-      {/* Biometric Unlock */}
-      <Card variant="elevated" style={{ marginBottom: spacing.lg, opacity: biometricAvailable ? 1 : 0.5 }}>
-        <View style={{ gap: spacing.md }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
-            <Icon
-              name={biometryType === 'FaceID' ? 'face-recognition' : 'fingerprint'}
-              size="md"
-              color={biometricAvailable ? colors.primary : colors.textDisabled}
-            />
-            <Text style={{ ...typography.h3, color: colors.textPrimary, flex: 1 }} allowFontScaling>
-              {biometryType === 'FaceID' ? 'Face ID' : biometryType === 'TouchID' ? 'Touch ID' : 'Biometric Unlock'}
-            </Text>
-          </View>
-          {biometricAvailable ? (
-            <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
-              Require {biometryType === 'FaceID' ? 'Face ID' : biometryType === 'TouchID' ? 'Touch ID' : 'biometric'} authentication to view sensitive content like transcripts and recordings.
-            </Text>
-          ) : (
-            <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
-              {biometricLoading
-                ? 'Checking biometric availability...'
-                : 'Biometric authentication is not available on this device. To use this feature, set up biometrics in your device settings.'}
-            </Text>
-          )}
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Text
-              style={{
-                ...typography.body,
-                color: biometricAvailable ? colors.textPrimary : colors.textDisabled,
-              }}
-              allowFontScaling
-            >
-              Enable biometric lock
-            </Text>
-            <Switch
-              value={biometricAvailable ? (settings?.biometric_unlock_enabled ?? false) : false}
-              onValueChange={handleBiometricToggle}
-              disabled={!biometricAvailable}
-              trackColor={{ false: colors.border, true: colors.primary }}
-              accessibilityLabel="Enable biometric unlock"
-              accessibilityRole="switch"
-              accessibilityState={{
-                checked: biometricAvailable ? (settings?.biometric_unlock_enabled ?? false) : false,
-                disabled: !biometricAvailable,
-              }}
-            />
-          </View>
-        </View>
-      </Card>
-
-      {/* Recording */}
+      {/* Call Recording */}
       <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
         <View style={{ gap: spacing.md }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
@@ -229,9 +755,6 @@ export function PrivacySettingsScreen({}: Props) {
               value={settings?.recording_enabled ?? false}
               onValueChange={v => handleToggle('recording_enabled', v)}
               trackColor={{ false: colors.border, true: colors.primary }}
-              accessibilityLabel="Enable call recording"
-              accessibilityRole="switch"
-              accessibilityState={{ checked: settings?.recording_enabled ?? false }}
             />
           </View>
         </View>

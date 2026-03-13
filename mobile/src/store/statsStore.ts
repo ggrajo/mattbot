@@ -8,6 +8,12 @@ export interface DashboardStats {
   spam_blocked: number;
   avg_duration_seconds: number | null;
   vip_calls: number;
+  calls_this_week: number;
+  calls_last_week: number;
+  calls_today: number;
+  appointments_booked: number;
+  longest_call_seconds: number | null;
+  total_talk_minutes: number;
 }
 
 interface StatsStore {

@@ -701,6 +701,32 @@ async def _build_call_detail(
             if mem_rel and not caller_relationship:
                 caller_relationship = mem_rel
 
+    booking_details: dict = {}
+    if call.booked_calendar_event_id:
+        from app.models.audit_event import AuditEvent
+
+        audit_row = (
+            await db.execute(
+                select(AuditEvent)
+                .where(
+                    AuditEvent.owner_user_id == user_id,
+                    AuditEvent.event_type == "calendar.appointment_booked",
+                    AuditEvent.details["call_id"].as_string() == str(call.id),
+                )
+                .order_by(AuditEvent.created_at.desc())
+                .limit(1)
+            )
+        ).scalar_one_or_none()
+        if audit_row and audit_row.details:
+            d = audit_row.details
+            booking_details = {
+                "booked_appointment_date": d.get("date"),
+                "booked_appointment_time": d.get("time"),
+                "booked_appointment_duration_minutes": d.get("duration_minutes"),
+                "booked_appointment_caller_name": d.get("caller_name"),
+                "booked_appointment_reason": d.get("reason"),
+            }
+
     return CallDetailResponse(
         **{
             "id": str(call.id),
@@ -733,6 +759,7 @@ async def _build_call_detail(
             "voice_id": str(call.voice_id) if call.voice_id else None,
             "booked_calendar_event_id": call.booked_calendar_event_id,
             "booked_calendar_event_summary": call.booked_calendar_event_summary,
+            **booking_details,
         }
     )
 

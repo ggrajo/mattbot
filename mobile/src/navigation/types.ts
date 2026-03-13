@@ -38,7 +38,7 @@ export type RootStackParamList = {
   CallsList: undefined;
   CallDetail: { callId: string };
   LiveTranscript: { callId: string };
-  Calendar: undefined;
+  Calendar: { date?: string } | undefined;
   AddContact: undefined;
   ContactsList: undefined;
   ContactDetail: { contactId: string };

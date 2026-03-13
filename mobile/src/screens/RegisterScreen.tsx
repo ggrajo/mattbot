@@ -86,15 +86,20 @@ export function RegisterScreen({ navigation }: Props) {
     setApiError(undefined);
     setSuccessMessage(undefined);
     try {
-      await GoogleSignin.hasPlayServices();
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
       const response = await GoogleSignin.signIn();
+
+      if (response.type === 'cancelled') return;
+
       const idToken = response.data?.idToken;
-      if (!idToken) throw new Error('No ID token received from Google');
+      if (!idToken) {
+        setApiError('Google sign-in did not return credentials. Please try again.');
+        return;
+      }
 
       const data = await oauthGoogle(idToken);
       handleLoginResponse(data);
     } catch (error: any) {
-      if (error?.code === statusCodes.SIGN_IN_CANCELLED) return;
       if (error?.code === statusCodes.IN_PROGRESS) return;
       setApiError(extractApiError(error));
     } finally {

@@ -1,6 +1,8 @@
+import logging
 import uuid
 from datetime import UTC, datetime
 
+import httpx
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -9,6 +11,25 @@ from app.models.device import Device
 from app.models.push_token import PushToken
 from app.models.session import Session
 from app.services import audit_service
+
+logger = logging.getLogger(__name__)
+
+
+async def _geolocate_ip(ip: str | None) -> str | None:
+    """Best-effort IP geolocation via ip-api.com (free, no key needed)."""
+    if not ip or ip.startswith("127.") or ip.startswith("10.") or ip.startswith("192.168.") or ip == "::1":
+        return None
+    try:
+        async with httpx.AsyncClient(timeout=3) as client:
+            resp = await client.get(f"http://ip-api.com/json/{ip}?fields=status,city,regionName,country")
+            if resp.status_code == 200:
+                data = resp.json()
+                if data.get("status") == "success":
+                    parts = [p for p in [data.get("city"), data.get("regionName"), data.get("country")] if p]
+                    return ", ".join(parts) if parts else None
+    except Exception:
+        logger.debug("IP geolocation failed for %s", ip, exc_info=True)
+    return None
 
 
 async def create_or_get_device(
@@ -21,6 +42,7 @@ async def create_or_get_device(
     os_version: str | None = None,
     last_ip: str | None = None,
 ) -> Device:
+    location = await _geolocate_ip(last_ip)
     device = Device(
         owner_user_id=owner_user_id,
         platform=platform,
@@ -28,6 +50,7 @@ async def create_or_get_device(
         app_version=app_version,
         os_version=os_version,
         last_ip=last_ip,
+        last_location=location,
         last_seen_at=utcnow(),
     )
     db.add(device)
@@ -61,6 +84,9 @@ async def update_device(
         device.os_version = os_version
     if last_ip is not None:
         device.last_ip = last_ip
+        location = await _geolocate_ip(last_ip)
+        if location:
+            device.last_location = location
     device.last_seen_at = utcnow()
     await db.flush()
     return device

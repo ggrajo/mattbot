@@ -671,10 +671,32 @@ async def pin_status(
     db: AsyncSession = Depends(get_db),
 ) -> PinStatusResponse:
     from app.models.device import Device
+    from app.core.clock import utcnow
+
+    PIN_ROTATION_DAYS = 90
 
     device = await db.get(Device, current_user.device_id)
     enabled = device is not None and device.pin_hash is not None
-    return PinStatusResponse(pin_enabled=enabled)
+    pin_set_at_str = None
+    pin_expired = False
+    days_until_expiry = None
+
+    if enabled and device.pin_set_at:
+        set_at = device.pin_set_at
+        if set_at.tzinfo:
+            set_at = set_at.replace(tzinfo=None)
+        pin_set_at_str = device.pin_set_at.isoformat()
+        age_days = (utcnow() - set_at).days
+        remaining = PIN_ROTATION_DAYS - age_days
+        pin_expired = remaining <= 0
+        days_until_expiry = max(0, remaining)
+
+    return PinStatusResponse(
+        pin_enabled=enabled,
+        pin_set_at=pin_set_at_str,
+        pin_expired=pin_expired,
+        days_until_expiry=days_until_expiry,
+    )
 
 
 @router.post("/step-up", response_model=StepUpResponse)

@@ -38,7 +38,11 @@ export const useCalendarStore = create<CalendarStore>((set) => ({
       const events = await getCalendarEvents(start, end);
       set({ events: Array.isArray(events) ? events : [], loading: false });
     } catch {
-      set({ loading: false, error: 'Could not load events. Please try again.' });
+      const isConnected = useCalendarStore.getState().status?.connected;
+      set({
+        loading: false,
+        error: isConnected ? 'Could not load events. Please try again.' : null,
+      });
     }
   },
 
