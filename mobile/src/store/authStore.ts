@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { storeTokens, clearTokens, getStoredTokens } from '../utils/secureStorage';
 
+let _profileLock: Promise<void> | null = null;
+
 type AuthState = 'loading' | 'unauthenticated' | 'mfa_required' | 'mfa_enrollment' | 'authenticated';
 
 interface AuthStore {
@@ -176,6 +178,11 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   },
 
   loadProfile: async () => {
+    if (_profileLock) {
+      await _profileLock;
+      return;
+    }
+    const run = async () => {
     try {
       const { apiClient } = await import('../api/client');
       const { data } = await apiClient.get('/me');
@@ -264,6 +271,9 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     } catch {
       // profile load failure is non-critical
     }
+    };
+    _profileLock = run();
+    try { await _profileLock; } finally { _profileLock = null; }
   },
 
   reset: () => {

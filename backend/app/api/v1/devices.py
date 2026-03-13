@@ -79,6 +79,22 @@ async def register_or_update_device(
     )
     if not allowed:
         raise AppError("RATE_LIMITED", "Too many requests. Please try again later.", 429)
+
+    if current_user.device_id:
+        session_device = await device_service.get_device(
+            db, current_user.device_id, current_user.user_id
+        )
+        if session_device:
+            session_device = await device_service.update_device(
+                db,
+                session_device,
+                device_name=body.device_name,
+                app_version=body.app_version,
+                os_version=body.os_version,
+                last_ip=ip,
+            )
+            return _device_to_response(session_device, current_user.device_id)
+
     if body.device_id:
         device = await device_service.get_device(
             db, uuid.UUID(body.device_id), current_user.user_id

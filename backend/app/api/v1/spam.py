@@ -105,6 +105,20 @@ async def add_spam_entry(
     )
     db.add(entry)
 
+    from app.models.vip_entry import VipEntry
+    from app.models.contact_profile import ContactProfile
+    from sqlalchemy import delete as sql_delete, update as sql_update
+
+    uid = current_user.user.id
+    await db.execute(
+        sql_delete(VipEntry).where(VipEntry.owner_user_id == uid, VipEntry.phone_hash == ph)
+    )
+    await db.execute(
+        sql_update(ContactProfile)
+        .where(ContactProfile.owner_user_id == uid, ContactProfile.phone_hash == ph)
+        .values(is_vip=False)
+    )
+
     await log_event(
         db,
         owner_user_id=current_user.user.id,
@@ -142,21 +156,36 @@ async def remove_spam_entry(
     if not allowed:
         raise AppError(code="RATE_LIMITED", message="Too many requests", status_code=429)
 
+    uid = current_user.user.id
+
     entry = (await db.execute(
         select(SpamEntry).where(
             SpamEntry.id == spam_id,
-            SpamEntry.owner_user_id == current_user.user.id,
+            SpamEntry.owner_user_id == uid,
         )
     )).scalar_one_or_none()
 
     if entry is None:
         raise AppError(code="SPAM_NOT_FOUND", message="Spam entry not found", status_code=404)
 
+    from app.models.block_entry import BlockEntry
+    from app.models.contact_profile import ContactProfile
+    from sqlalchemy import delete as sql_delete, update as sql_update
+
+    await db.execute(
+        sql_delete(BlockEntry).where(BlockEntry.owner_user_id == uid, BlockEntry.phone_hash == entry.phone_hash)
+    )
+    await db.execute(
+        sql_update(ContactProfile)
+        .where(ContactProfile.owner_user_id == uid, ContactProfile.phone_hash == entry.phone_hash)
+        .values(is_blocked=False, block_reason=None)
+    )
+
     await log_event(
         db,
-        owner_user_id=current_user.user.id,
+        owner_user_id=uid,
         event_type="spam_removed",
-        actor_id=current_user.user.id,
+        actor_id=uid,
         target_type="spam_entry",
         target_id=entry.id,
     )

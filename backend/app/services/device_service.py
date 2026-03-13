@@ -42,6 +42,28 @@ async def create_or_get_device(
     os_version: str | None = None,
     last_ip: str | None = None,
 ) -> Device:
+    existing = (
+        await db.execute(
+            select(Device)
+            .where(
+                Device.owner_user_id == owner_user_id,
+                Device.platform == platform,
+                Device.revoked_at.is_(None),
+            )
+            .order_by(Device.last_seen_at.desc())
+            .limit(1)
+        )
+    ).scalar_one_or_none()
+
+    if existing is not None:
+        return await update_device(
+            db, existing,
+            device_name=device_name,
+            app_version=app_version,
+            os_version=os_version,
+            last_ip=last_ip,
+        )
+
     location = await _geolocate_ip(last_ip)
     device = Device(
         owner_user_id=owner_user_id,

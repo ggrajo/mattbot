@@ -139,22 +139,25 @@ async def add_block_entry(
     db.add(entry)
 
     from app.models.contact_profile import ContactProfile
-    from sqlalchemy import update as sql_update
+    from app.models.vip_entry import VipEntry
+    from sqlalchemy import delete as sql_delete, update as sql_update
+
+    uid = current_user.user.id
 
     await db.execute(
+        sql_delete(VipEntry).where(VipEntry.owner_user_id == uid, VipEntry.phone_hash == ph)
+    )
+    await db.execute(
         sql_update(ContactProfile)
-        .where(
-            ContactProfile.owner_user_id == current_user.user.id,
-            ContactProfile.phone_hash == ph,
-        )
-        .values(is_blocked=True, block_reason=body.reason)
+        .where(ContactProfile.owner_user_id == uid, ContactProfile.phone_hash == ph)
+        .values(is_blocked=True, block_reason=body.reason, is_vip=False)
     )
 
     await log_event(
         db,
-        owner_user_id=current_user.user.id,
+        owner_user_id=uid,
         event_type="block_added",
-        actor_id=current_user.user.id,
+        actor_id=uid,
         target_type="block_entry",
         target_id=entry.id,
     )
@@ -188,41 +191,41 @@ async def remove_block_entry(
     if not allowed:
         raise AppError(code="RATE_LIMITED", message="Too many requests", status_code=429)
 
-    entry = await db.execute(
-        select(BlockEntry).where(
-            BlockEntry.id == block_id,
-            BlockEntry.owner_user_id == current_user.user.id,
-        )
-    )
-
-    entry_obj = entry.scalar_one_or_none()
-    if entry_obj is None:
-        raise AppError(
-            code="BLOCK_NOT_FOUND",
-            message="Block entry not found",
-            status_code=404,
-        )
-
-    await log_event(
-        db,
-        owner_user_id=current_user.user.id,
-        event_type="block_removed",
-        actor_id=current_user.user.id,
-        target_type="block_entry",
-        target_id=entry_obj.id,
-    )
-
     from app.models.contact_profile import ContactProfile
     from sqlalchemy import update as sql_update
 
-    await db.execute(
-        sql_update(ContactProfile)
-        .where(
-            ContactProfile.owner_user_id == current_user.user.id,
-            ContactProfile.phone_hash == entry_obj.phone_hash,
-        )
-        .values(is_blocked=False, block_reason=None)
-    )
+    uid = current_user.user.id
 
-    await db.delete(entry_obj)
-    return {"deleted": True}
+    entry_obj = (
+        await db.execute(
+            select(BlockEntry).where(BlockEntry.id == block_id, BlockEntry.owner_user_id == uid)
+        )
+    ).scalar_one_or_none()
+
+    if entry_obj is not None:
+        await log_event(db, owner_user_id=uid, event_type="block_removed", actor_id=uid, target_type="block_entry", target_id=entry_obj.id)
+        await db.execute(
+            sql_update(ContactProfile)
+            .where(ContactProfile.owner_user_id == uid, ContactProfile.phone_hash == entry_obj.phone_hash)
+            .values(is_blocked=False, block_reason=None)
+        )
+        await db.delete(entry_obj)
+        return {"deleted": True}
+
+    contact = (
+        await db.execute(
+            select(ContactProfile).where(
+                ContactProfile.id == block_id,
+                ContactProfile.owner_user_id == uid,
+                ContactProfile.is_blocked == True,
+            )
+        )
+    ).scalar_one_or_none()
+
+    if contact is not None:
+        contact.is_blocked = False
+        contact.block_reason = None
+        await log_event(db, owner_user_id=uid, event_type="block_removed", actor_id=uid, target_type="contact_profile", target_id=contact.id)
+        return {"deleted": True}
+
+    raise AppError(code="BLOCK_NOT_FOUND", message="Block entry not found", status_code=404)

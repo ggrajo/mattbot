@@ -43,22 +43,48 @@ async def list_vip_entries(
 
     result = await db.execute(stmt)
     entries = list(result.scalars().all())
+    seen_hashes = {e.phone_hash for e in entries}
 
-    return VipListResponse(
-        items=[
-            VipEntryResponse(
-                id=str(e.id),
-                phone_last4=e.phone_last4,
-                display_name=e.display_name,
-                company=e.company,
-                relationship=e.relationship,
-                email=e.email,
-                notes=e.notes,
-                created_at=e.created_at,
-            )
-            for e in entries
-        ]
+    from app.models.contact_profile import ContactProfile
+    contact_result = await db.execute(
+        select(ContactProfile).where(
+            ContactProfile.owner_user_id == current_user.user.id,
+            ContactProfile.is_vip == True,
+            ContactProfile.deleted_at.is_(None),
+            ContactProfile.phone_hash.notin_(seen_hashes) if seen_hashes else True,
+        )
     )
+    vip_contacts = list(contact_result.scalars().all())
+
+    items = [
+        VipEntryResponse(
+            id=str(e.id),
+            phone_last4=e.phone_last4,
+            display_name=e.display_name,
+            company=e.company,
+            relationship=e.relationship,
+            email=e.email,
+            notes=e.notes,
+            created_at=e.created_at,
+        )
+        for e in entries
+    ]
+
+    for c in vip_contacts:
+        items.append(
+            VipEntryResponse(
+                id=str(c.id),
+                phone_last4=c.phone_last4,
+                display_name=c.display_name,
+                company=c.company,
+                relationship=c.relationship,
+                email=c.email,
+                notes=c.notes,
+                created_at=c.created_at,
+            )
+        )
+
+    return VipListResponse(items=items)
 
 
 @router.post("", response_model=VipEntryResponse, status_code=201)
@@ -110,22 +136,29 @@ async def add_vip_entry(
     db.add(entry)
 
     from app.models.contact_profile import ContactProfile
-    from sqlalchemy import update as sql_update
+    from app.models.block_entry import BlockEntry
+    from app.models.spam_entry import SpamEntry
+    from sqlalchemy import delete as sql_delete, update as sql_update
+
+    uid = current_user.user.id
 
     await db.execute(
+        sql_delete(BlockEntry).where(BlockEntry.owner_user_id == uid, BlockEntry.phone_hash == ph)
+    )
+    await db.execute(
+        sql_delete(SpamEntry).where(SpamEntry.owner_user_id == uid, SpamEntry.phone_hash == ph)
+    )
+    await db.execute(
         sql_update(ContactProfile)
-        .where(
-            ContactProfile.owner_user_id == current_user.user.id,
-            ContactProfile.phone_hash == ph,
-        )
-        .values(is_vip=True)
+        .where(ContactProfile.owner_user_id == uid, ContactProfile.phone_hash == ph)
+        .values(is_vip=True, is_blocked=False, block_reason=None)
     )
 
     await log_event(
         db,
-        owner_user_id=current_user.user.id,
+        owner_user_id=uid,
         event_type="vip_added",
-        actor_id=current_user.user.id,
+        actor_id=uid,
         target_type="vip_entry",
         target_id=entry.id,
     )
@@ -158,37 +191,40 @@ async def remove_vip_entry(
     if not allowed:
         raise AppError(code="RATE_LIMITED", message="Too many requests", status_code=429)
 
-    entry = await db.execute(
-        select(VipEntry).where(
-            VipEntry.id == vip_id,
-            VipEntry.owner_user_id == current_user.user.id,
-        )
-    )
-
-    entry_obj = entry.scalar_one_or_none()
-    if entry_obj is None:
-        raise AppError(code="VIP_NOT_FOUND", message="VIP entry not found", status_code=404)
-
-    await log_event(
-        db,
-        owner_user_id=current_user.user.id,
-        event_type="vip_removed",
-        actor_id=current_user.user.id,
-        target_type="vip_entry",
-        target_id=entry_obj.id,
-    )
-
     from app.models.contact_profile import ContactProfile
     from sqlalchemy import update as sql_update
 
-    await db.execute(
-        sql_update(ContactProfile)
-        .where(
-            ContactProfile.owner_user_id == current_user.user.id,
-            ContactProfile.phone_hash == entry_obj.phone_hash,
-        )
-        .values(is_vip=False)
-    )
+    uid = current_user.user.id
 
-    await db.delete(entry_obj)
-    return {"deleted": True}
+    entry_obj = (
+        await db.execute(
+            select(VipEntry).where(VipEntry.id == vip_id, VipEntry.owner_user_id == uid)
+        )
+    ).scalar_one_or_none()
+
+    if entry_obj is not None:
+        await log_event(db, owner_user_id=uid, event_type="vip_removed", actor_id=uid, target_type="vip_entry", target_id=entry_obj.id)
+        await db.execute(
+            sql_update(ContactProfile)
+            .where(ContactProfile.owner_user_id == uid, ContactProfile.phone_hash == entry_obj.phone_hash)
+            .values(is_vip=False)
+        )
+        await db.delete(entry_obj)
+        return {"deleted": True}
+
+    contact = (
+        await db.execute(
+            select(ContactProfile).where(
+                ContactProfile.id == vip_id,
+                ContactProfile.owner_user_id == uid,
+                ContactProfile.is_vip == True,
+            )
+        )
+    ).scalar_one_or_none()
+
+    if contact is not None:
+        contact.is_vip = False
+        await log_event(db, owner_user_id=uid, event_type="vip_removed", actor_id=uid, target_type="contact_profile", target_id=contact.id)
+        return {"deleted": True}
+
+    raise AppError(code="VIP_NOT_FOUND", message="VIP entry not found", status_code=404)
