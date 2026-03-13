@@ -26,6 +26,7 @@ from app.models.forwarding_verification_attempt import ForwardingVerificationAtt
 from app.models.google_calendar_token import GoogleCalendarToken
 from app.models.handoff_offer import HandoffOffer
 from app.models.handoff_suppression import HandoffSuppression
+from app.models.knowledge_base_doc import KnowledgeBaseDoc
 from app.models.mfa_method import MfaMethod
 from app.models.notification import Notification
 from app.models.notification_delivery import NotificationDelivery
@@ -91,5 +92,6 @@ __all__ = [
     "HandoffOffer",
     "HandoffSuppression",
     "GoogleCalendarToken",
+    "KnowledgeBaseDoc",
     "SpamEntry",
 ]

@@ -54,6 +54,7 @@ export type RootStackParamList = {
   MemoryList: undefined;
   UrgentNotifications: undefined;
   BusinessHours: undefined;
+  KnowledgeBase: undefined;
   RemindersList: undefined;
   TextBack: { callId: string };
   CreateReminder: { callId: string };

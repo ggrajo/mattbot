@@ -174,6 +174,15 @@ export function SettingsScreen() {
           right={chevron}
           accessibilityLabel="Category AI defaults"
         />
+        <ListRow
+          icon="book-open-outline"
+          iconColor={colors.accent}
+          title="Knowledge Base"
+          subtitle="Documents, text, and links for your AI"
+          onPress={() => navigation.navigate('KnowledgeBase')}
+          right={chevron}
+          accessibilityLabel="Knowledge Base"
+        />
       </View>
 
       <Divider />

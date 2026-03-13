@@ -53,6 +53,7 @@ import { MemoryListScreen } from '../screens/MemoryListScreen';
 import { UrgentNotificationsScreen } from '../screens/UrgentNotificationsScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { BusinessHoursScreen } from '../screens/BusinessHoursScreen';
+import { KnowledgeBaseScreen } from '../screens/KnowledgeBaseScreen';
 import { RemindersListScreen } from '../screens/RemindersListScreen';
 import { TextBackScreen } from '../screens/TextBackScreen';
 import { CreateReminderScreen } from '../screens/CreateReminderScreen';
@@ -322,6 +323,11 @@ export function RootNavigator() {
               name="BusinessHours"
               component={BusinessHoursScreen}
               options={{ headerShown: true, title: 'Business Hours' }}
+            />
+            <Stack.Screen
+              name="KnowledgeBase"
+              component={KnowledgeBaseScreen}
+              options={{ headerShown: true, title: 'Knowledge Base' }}
             />
             <Stack.Screen
               name="RemindersList"

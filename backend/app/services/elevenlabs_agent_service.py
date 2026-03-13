@@ -255,6 +255,72 @@ async def ensure_booking_tools(
     return [avail_id, book_id]
 
 
+async def create_kb_doc_from_text(name: str, text: str) -> str:
+    """Create a knowledge-base document from plain text. Returns the EL doc ID."""
+    async with httpx.AsyncClient(timeout=_TIMEOUT) as client:
+        resp = await client.post(
+            f"{_API_BASE}/convai/knowledge-base/text",
+            json={"text": text, "name": name},
+            headers=_headers(),
+        )
+        if resp.status_code not in (200, 201):
+            logger.error("ElevenLabs KB text create failed: %d %s", resp.status_code, resp.text[:500])
+            resp.raise_for_status()
+        data = resp.json()
+        doc_id = data.get("id", "")
+        logger.info("ElevenLabs KB doc created from text: id=%s name=%s", doc_id, name)
+        return doc_id
+
+
+async def create_kb_doc_from_url(name: str, url: str) -> str:
+    """Create a knowledge-base document by scraping a URL. Returns the EL doc ID."""
+    async with httpx.AsyncClient(timeout=60.0) as client:
+        resp = await client.post(
+            f"{_API_BASE}/convai/knowledge-base/url",
+            json={"url": url, "name": name},
+            headers=_headers(),
+        )
+        if resp.status_code not in (200, 201):
+            logger.error("ElevenLabs KB url create failed: %d %s", resp.status_code, resp.text[:500])
+            resp.raise_for_status()
+        data = resp.json()
+        doc_id = data.get("id", "")
+        logger.info("ElevenLabs KB doc created from url: id=%s name=%s", doc_id, name)
+        return doc_id
+
+
+async def create_kb_doc_from_file(name: str, file_bytes: bytes, filename: str) -> str:
+    """Upload a file as a knowledge-base document. Returns the EL doc ID."""
+    async with httpx.AsyncClient(timeout=120.0) as client:
+        resp = await client.post(
+            f"{_API_BASE}/convai/knowledge-base",
+            data={"name": name},
+            files={"file": (filename, file_bytes, "application/octet-stream")},
+            headers=_headers(),
+        )
+        if resp.status_code not in (200, 201):
+            logger.error("ElevenLabs KB file create failed: %d %s", resp.status_code, resp.text[:500])
+            resp.raise_for_status()
+        data = resp.json()
+        doc_id = data.get("id", "")
+        logger.info("ElevenLabs KB doc created from file: id=%s name=%s", doc_id, name)
+        return doc_id
+
+
+async def delete_kb_doc(el_document_id: str) -> bool:
+    """Delete a knowledge-base document from ElevenLabs."""
+    async with httpx.AsyncClient(timeout=_TIMEOUT) as client:
+        resp = await client.delete(
+            f"{_API_BASE}/convai/knowledge-base/{el_document_id}",
+            headers=_headers(),
+        )
+        if resp.status_code in (200, 204):
+            logger.info("ElevenLabs KB doc deleted: %s", el_document_id)
+            return True
+        logger.warning("ElevenLabs KB delete %s: %d", el_document_id, resp.status_code)
+        return False
+
+
 def build_booking_tool_config(webhook_base_url: str, tool_secret: str) -> dict:
     """Deprecated — use ensure_booking_tools() instead."""
     return _booking_tool_body(f"{webhook_base_url}/webhooks/elevenlabs/tool")
@@ -280,6 +346,7 @@ async def create_agent(
     silence_end_call_timeout: float = 30.0,
     custom_tools: list[dict] | None = None,
     tool_ids: list[str] | None = None,
+    knowledge_base_ids: list[dict] | None = None,
 ) -> dict:
     """Create an ElevenLabs conversational agent. Returns the raw API response dict."""
     turn_eagerness = TURN_EAGERNESS_MAP.get(temperament_preset, "normal")
@@ -287,6 +354,8 @@ async def create_agent(
     prompt_cfg: dict = {"prompt": system_prompt}
     if tool_ids:
         prompt_cfg["tool_ids"] = tool_ids
+    if knowledge_base_ids:
+        prompt_cfg["knowledge_base"] = knowledge_base_ids
 
     payload = {
         "name": name,
@@ -352,6 +421,7 @@ async def update_agent(
     enable_end_call_tool: bool = False,
     custom_tools: list[dict] | None = None,
     tool_ids: list[str] | None = None,
+    knowledge_base_ids: list[dict] | None = None,
 ) -> dict:
     """Patch an existing ElevenLabs agent. Only non-None fields are sent."""
     payload: dict = {"conversation_config": {}}
@@ -365,6 +435,8 @@ async def update_agent(
         prompt_cfg["prompt"] = system_prompt
     if tool_ids is not None:
         prompt_cfg["tool_ids"] = tool_ids
+    if knowledge_base_ids is not None:
+        prompt_cfg["knowledge_base"] = knowledge_base_ids
     if prompt_cfg:
         agent_cfg["prompt"] = prompt_cfg
 

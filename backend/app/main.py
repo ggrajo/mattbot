@@ -195,6 +195,7 @@ def create_app() -> FastAPI:
         webhooks,
     )
     from app.api.v1 import calendar as calendar_api
+    from app.api.v1 import knowledge_base as knowledge_base_api
     from app.api.v1 import settings as settings_api
 
     application.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
@@ -235,6 +236,11 @@ def create_app() -> FastAPI:
     )
     application.include_router(handoff.router, prefix="/api/v1/calls", tags=["handoff"])
     application.include_router(calendar_api.router, prefix="/api/v1/calendar", tags=["calendar"])
+    application.include_router(
+        knowledge_base_api.router,
+        prefix="/api/v1/knowledge-base",
+        tags=["knowledge-base"],
+    )
     application.include_router(stats.router, prefix="/api/v1/stats", tags=["stats"])
     application.include_router(webhooks.router, prefix="/webhooks", tags=["webhooks"])
     application.include_router(internal.router, prefix="/internal", tags=["internal"])

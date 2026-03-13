@@ -267,6 +267,18 @@ async def ensure_elevenlabs_agent(
             app_settings.ELEVENLABS_TOOL_WEBHOOK_SECRET,
         )
 
+    from app.models.knowledge_base_doc import KnowledgeBaseDoc
+
+    kb_rows = (
+        await db.execute(
+            select(KnowledgeBaseDoc).where(KnowledgeBaseDoc.owner_user_id == user_id)
+        )
+    ).scalars().all()
+    kb_entries = [
+        {"type": "file", "name": row.name, "id": row.el_document_id}
+        for row in kb_rows
+    ] if kb_rows else None
+
     try:
         if agent.elevenlabs_agent_id:
             await elevenlabs_agent_service.update_agent(
@@ -282,6 +294,7 @@ async def ensure_elevenlabs_agent(
                     settings_row.temperament_preset if settings_row else "professional_polite"
                 ),
                 tool_ids=booking_tool_ids,
+                knowledge_base_ids=kb_entries,
             )
             logger.info(
                 "ElevenLabs agent updated for user %s: %s",
@@ -301,6 +314,7 @@ async def ensure_elevenlabs_agent(
                 settings_row.temperament_preset if settings_row else "professional_polite"
             ),
             tool_ids=booking_tool_ids,
+            knowledge_base_ids=kb_entries,
         )
         new_id = el_resp.get("agent_id", "")
         if new_id:

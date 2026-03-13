@@ -17,7 +17,12 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
     set({ loading: true, error: null });
     try {
       const result = await listDevices();
-      set({ devices: result.items, loading: false });
+      const sorted = [...result.items].sort((a, b) => {
+        if (a.is_current && !b.is_current) return -1;
+        if (!a.is_current && b.is_current) return 1;
+        return 0;
+      });
+      set({ devices: sorted, loading: false });
     } catch (e) {
       set({ error: 'Failed to load devices', loading: false });
     }

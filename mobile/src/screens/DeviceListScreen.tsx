@@ -1,9 +1,12 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   View,
   Text,
   FlatList,
   RefreshControl,
+  KeyboardAvoidingView,
+  Platform,
+  TextInput as RNTextInput,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
@@ -21,7 +24,7 @@ import { useTheme } from '../theme/ThemeProvider';
 import { useSettingsStore } from '../store/settingsStore';
 import { useDeviceStore } from '../store/deviceStore';
 import { revokeDevice, DeviceInfo } from '../api/devices';
-import { extractApiError } from '../api/client';
+import { apiClient, extractApiError } from '../api/client';
 import { formatRelativeTime, formatDate } from '../utils/formatDate';
 import { hapticLight, hapticMedium } from '../utils/haptics';
 import type { RootStackParamList } from '../navigation/types';
@@ -68,6 +71,12 @@ export function DeviceListScreen({ navigation }: Props) {
   const [toast, setToast] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
 
+  const [stepUpAction, setStepUpAction] = useState<null | 'remove'>(null);
+  const [totpCode, setTotpCode] = useState('');
+  const [stepUpError, setStepUpError] = useState('');
+  const [verifyingStepUp, setVerifyingStepUp] = useState(false);
+  const totpInputRef = useRef<RNTextInput>(null);
+
   useEffect(() => {
     fetchDevices();
   }, []);
@@ -76,12 +85,36 @@ export function DeviceListScreen({ navigation }: Props) {
     fetchDevices();
   }, [fetchDevices]);
 
-  async function handleRemove() {
+  function handleRemove() {
     if (!removeTarget) return;
     hapticMedium();
+    setStepUpAction('remove');
+    setTotpCode('');
+    setStepUpError('');
+  }
+
+  async function handleStepUpVerify() {
+    if (totpCode.length < 6) return;
+    setVerifyingStepUp(true);
+    setStepUpError('');
+    try {
+      const { data } = await apiClient.post('/auth/step-up', { totp_code: totpCode });
+      const token = data.step_up_token as string;
+      setStepUpAction(null);
+      setTotpCode('');
+      await executeRemove(token);
+    } catch (e) {
+      setStepUpError(extractApiError(e));
+    } finally {
+      setVerifyingStepUp(false);
+    }
+  }
+
+  async function executeRemove(stepUpToken: string) {
+    if (!removeTarget) return;
     setRemoving(true);
     try {
-      await revokeDevice(removeTarget.id, '');
+      await revokeDevice(removeTarget.id, stepUpToken);
       setToastType('success');
       setToast('Device removed');
       await fetchDevices();
@@ -92,6 +125,13 @@ export function DeviceListScreen({ navigation }: Props) {
       setRemoving(false);
       setRemoveTarget(null);
     }
+  }
+
+  function cancelStepUp() {
+    setStepUpAction(null);
+    setTotpCode('');
+    setStepUpError('');
+    setRemoveTarget(null);
   }
 
   function renderDetailRow(icon: string, label: string, value: string) {
@@ -266,6 +306,78 @@ export function DeviceListScreen({ navigation }: Props) {
       return <FadeIn delay={Math.min(index * 50, 250)}>{card}</FadeIn>;
     }
     return card;
+  }
+
+  if (stepUpAction) {
+    return (
+      <ScreenWrapper scroll={false}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={{ flex: 1 }}
+        >
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: spacing.xl }}>
+            <View style={{
+              width: 72, height: 72, borderRadius: 36,
+              backgroundColor: colors.accent + '18',
+              alignItems: 'center', justifyContent: 'center',
+              marginBottom: spacing.lg,
+            }}>
+              <Icon name="two-factor-authentication" size={36} color={colors.accent} />
+            </View>
+
+            <Text style={{ ...typography.h2, color: colors.textPrimary, textAlign: 'center', marginBottom: spacing.sm }} allowFontScaling>
+              Verify Your Identity
+            </Text>
+            <Text style={{ ...typography.bodySmall, color: colors.textSecondary, textAlign: 'center', marginBottom: spacing.xl }} allowFontScaling>
+              Enter your 6-digit authenticator code to remove this device
+            </Text>
+
+            <View style={{ width: '100%', maxWidth: 280, marginBottom: spacing.lg }}>
+              <RNTextInput
+                ref={totpInputRef}
+                value={totpCode}
+                onChangeText={(t) => setTotpCode(t.replace(/\D/g, '').slice(0, 6))}
+                keyboardType="number-pad"
+                maxLength={6}
+                autoFocus
+                style={{
+                  fontSize: 32,
+                  fontWeight: '700',
+                  letterSpacing: 12,
+                  textAlign: 'center',
+                  color: colors.textPrimary,
+                  paddingVertical: spacing.md,
+                  borderBottomWidth: 2,
+                  borderBottomColor: stepUpError ? colors.error : colors.primary,
+                }}
+                placeholder="000000"
+                placeholderTextColor={colors.textDisabled}
+              />
+            </View>
+
+            {stepUpError ? (
+              <Text style={{ ...typography.bodySmall, color: colors.error, textAlign: 'center', marginBottom: spacing.md }} allowFontScaling>
+                {stepUpError}
+              </Text>
+            ) : null}
+
+            <View style={{ width: '100%', maxWidth: 280, gap: spacing.sm }}>
+              <Button
+                title="Verify & Continue"
+                onPress={handleStepUpVerify}
+                loading={verifyingStepUp}
+                disabled={totpCode.length < 6}
+              />
+              <Button
+                title="Cancel"
+                variant="secondary"
+                onPress={cancelStepUp}
+              />
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </ScreenWrapper>
+    );
   }
 
   return (
