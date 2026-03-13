@@ -137,6 +137,7 @@ async def create_reminder(
         call_id=call_id,
         title=body.title,
         due_at=due,
+        status="scheduled",
         timezone_at_creation=body.timezone,
         created_by_device_id=current_user.device_id,
     )

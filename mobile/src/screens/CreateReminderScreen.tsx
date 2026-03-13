@@ -85,17 +85,6 @@ export function CreateReminderScreen({ route, navigation }: Props) {
   return (
     <ScreenWrapper>
       <ScrollView contentContainerStyle={{ padding: spacing.lg, flexGrow: 1 }} keyboardShouldPersistTaps="handled">
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginBottom: spacing.lg }}
-        >
-          <Icon name="arrow-left" size="md" color={colors.primary} />
-          <Text style={{ ...typography.body, color: colors.primary }}>Back</Text>
-        </TouchableOpacity>
-
-        <Text style={{ ...typography.h2, color: colors.textPrimary, marginBottom: spacing.lg }}>
-          Create Reminder
-        </Text>
 
         <Card style={{ padding: spacing.lg, marginBottom: spacing.lg, gap: spacing.lg }}>
           <TextInput
