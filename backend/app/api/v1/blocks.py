@@ -43,23 +43,50 @@ async def list_block_entries(
 
     result = await db.execute(stmt)
     entries = list(result.scalars().all())
+    seen_hashes = {e.phone_hash for e in entries}
 
-    return BlockListResponse(
-        items=[
-            BlockEntryResponse(
-                id=str(e.id),
-                phone_last4=e.phone_last4,
-                display_name=e.display_name,
-                reason=e.reason,
-                company=e.company,
-                relationship=e.relationship,
-                email=e.email,
-                notes=e.notes,
-                created_at=e.created_at,
-            )
-            for e in entries
-        ]
+    from app.models.contact_profile import ContactProfile
+    contact_result = await db.execute(
+        select(ContactProfile).where(
+            ContactProfile.owner_user_id == current_user.user.id,
+            ContactProfile.is_blocked == True,
+            ContactProfile.deleted_at.is_(None),
+            ContactProfile.phone_hash.notin_(seen_hashes) if seen_hashes else True,
+        )
     )
+    blocked_contacts = list(contact_result.scalars().all())
+
+    items = [
+        BlockEntryResponse(
+            id=str(e.id),
+            phone_last4=e.phone_last4,
+            display_name=e.display_name,
+            reason=e.reason,
+            company=e.company,
+            relationship=e.relationship,
+            email=e.email,
+            notes=e.notes,
+            created_at=e.created_at,
+        )
+        for e in entries
+    ]
+
+    for c in blocked_contacts:
+        items.append(
+            BlockEntryResponse(
+                id=str(c.id),
+                phone_last4=c.phone_last4,
+                display_name=c.display_name,
+                reason=c.block_reason,
+                company=c.company,
+                relationship=c.relationship,
+                email=c.email,
+                notes=c.notes,
+                created_at=c.created_at,
+            )
+        )
+
+    return BlockListResponse(items=items)
 
 
 @router.post("", response_model=BlockEntryResponse, status_code=201)
@@ -110,6 +137,18 @@ async def add_block_entry(
     )
 
     db.add(entry)
+
+    from app.models.contact_profile import ContactProfile
+    from sqlalchemy import update as sql_update
+
+    await db.execute(
+        sql_update(ContactProfile)
+        .where(
+            ContactProfile.owner_user_id == current_user.user.id,
+            ContactProfile.phone_hash == ph,
+        )
+        .values(is_blocked=True, block_reason=body.reason)
+    )
 
     await log_event(
         db,
@@ -171,6 +210,18 @@ async def remove_block_entry(
         actor_id=current_user.user.id,
         target_type="block_entry",
         target_id=entry_obj.id,
+    )
+
+    from app.models.contact_profile import ContactProfile
+    from sqlalchemy import update as sql_update
+
+    await db.execute(
+        sql_update(ContactProfile)
+        .where(
+            ContactProfile.owner_user_id == current_user.user.id,
+            ContactProfile.phone_hash == entry_obj.phone_hash,
+        )
+        .values(is_blocked=False, block_reason=None)
     )
 
     await db.delete(entry_obj)

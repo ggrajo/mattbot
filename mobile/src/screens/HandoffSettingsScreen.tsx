@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Switch, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, Switch, TouchableOpacity } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Card } from '../components/ui/Card';
@@ -7,6 +7,7 @@ import { Icon } from '../components/ui/Icon';
 import { Button } from '../components/ui/Button';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { Toast } from '../components/ui/Toast';
+import { BotLoader } from '../components/ui/BotLoader';
 import { useTheme } from '../theme/ThemeProvider';
 import { useSettingsStore } from '../store/settingsStore';
 import { RootStackParamList } from '../navigation/types';
@@ -61,7 +62,7 @@ export function HandoffSettingsScreen({ navigation }: Props) {
     return (
       <ScreenWrapper scroll={false}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <BotLoader color={colors.primary} />
         </View>
       </ScreenWrapper>
     );

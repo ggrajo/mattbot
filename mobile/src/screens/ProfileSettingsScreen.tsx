@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   SectionList,
   ScrollView,
-  ActivityIndicator,
   Modal,
   FlatList,
   TextInput as RNTextInput,
@@ -18,6 +17,7 @@ import { TextInput } from '../components/ui/TextInput';
 import { Icon } from '../components/ui/Icon';
 import { Toast } from '../components/ui/Toast';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { BotLoader } from '../components/ui/BotLoader';
 import { useTheme } from '../theme/ThemeProvider';
 import { apiClient, extractApiError } from '../api/client';
 import { useSettingsStore } from '../store/settingsStore';
@@ -261,7 +261,7 @@ export function ProfileSettingsScreen({}: Props) {
     return (
       <ScreenWrapper scroll={false}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <BotLoader color={colors.primary} />
         </View>
       </ScreenWrapper>
     );

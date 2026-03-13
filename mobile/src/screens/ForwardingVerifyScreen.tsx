@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Icon } from '../components/ui/Icon';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { BotLoader } from '../components/ui/BotLoader';
 import { Toast } from '../components/ui/Toast';
 import { FadeIn } from '../components/ui/FadeIn';
 import { useTheme } from '../theme/ThemeProvider';
@@ -170,7 +171,7 @@ export function ForwardingVerifyScreen({ route, navigation }: Props) {
           }}
         >
           {status === 'verifying' ? (
-            <ActivityIndicator size="large" color={config.iconColor} />
+            <BotLoader color={config.iconColor} />
           ) : (
             <Icon name={config.icon} size={36} color={config.iconColor} />
           )}
@@ -207,7 +208,7 @@ export function ForwardingVerifyScreen({ route, navigation }: Props) {
             }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
-              <ActivityIndicator size="small" color={colors.primary} />
+              <BotLoader size="small" color={colors.primary} />
               <View style={{ flex: 1 }}>
                 <Text
                   style={{ ...typography.body, color: colors.primary, fontWeight: '500' }}

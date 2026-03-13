@@ -4,7 +4,6 @@ import {
   Text,
   ScrollView,
   Switch,
-  ActivityIndicator,
   TouchableOpacity,
   RefreshControl,
 } from 'react-native';
@@ -20,6 +19,7 @@ import { Divider } from '../components/ui/Divider';
 import { ConfirmSheet } from '../components/ui/ConfirmSheet';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { FadeIn } from '../components/ui/FadeIn';
+import { BotLoader } from '../components/ui/BotLoader';
 import { useTheme } from '../theme/ThemeProvider';
 import { useSettingsStore } from '../store/settingsStore';
 import { useContactsStore } from '../store/contactsStore';
@@ -242,7 +242,7 @@ export function ContactDetailScreen({ navigation, route }: Props) {
         <View
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         >
-          <ActivityIndicator size="large" color={colors.primary} />
+          <BotLoader color={colors.primary} />
         </View>
       </ScreenWrapper>
     );

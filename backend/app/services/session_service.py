@@ -30,6 +30,12 @@ async def create_session(
 ) -> TokenPair:
     now = utcnow()
 
+    await db.execute(
+        update(Session)
+        .where(Session.owner_user_id == user_id, Session.revoked_at.is_(None))
+        .values(revoked_at=now, revoke_reason="new_device_login")
+    )
+
     refresh_raw = generate_token(32)
     refresh_hash = hash_token(refresh_raw)
     access_expires = now + timedelta(minutes=settings.JWT_ACCESS_TOKEN_MINUTES)

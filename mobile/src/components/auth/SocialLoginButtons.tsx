@@ -7,27 +7,30 @@ interface Props {
   onGooglePress: () => void;
   onApplePress: () => void;
   loading?: boolean;
+  mode?: 'signin' | 'signup';
 }
 
-export function SocialLoginButtons({ onGooglePress, onApplePress, loading }: Props) {
+export function SocialLoginButtons({ onGooglePress, onApplePress, loading, mode = 'signin' }: Props) {
   const theme = useTheme();
+  const googleLabel = mode === 'signup' ? 'Sign up with Google' : 'Sign in with Google';
+  const appleLabel = mode === 'signup' ? 'Sign up with Apple' : 'Sign in with Apple';
 
   return (
     <View style={{ gap: theme.spacing.sm }}>
       <Button
-        title="Continue with Google"
+        title={googleLabel}
         variant="outline"
         onPress={onGooglePress}
         loading={loading}
-        accessibilityLabel="Sign in with Google"
+        accessibilityLabel={googleLabel}
       />
       {Platform.OS === 'ios' && (
         <Button
-          title="Continue with Apple"
+          title={appleLabel}
           variant="outline"
           onPress={onApplePress}
           loading={loading}
-          accessibilityLabel="Sign in with Apple"
+          accessibilityLabel={appleLabel}
         />
       )}
     </View>

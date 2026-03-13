@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  ActivityIndicator,
   Alert,
   TextInput as RNTextInput,
 } from 'react-native';
@@ -14,6 +13,7 @@ import { Button } from '../components/ui/Button';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { Toast } from '../components/ui/Toast';
 import { SuccessModal } from '../components/ui/SuccessModal';
+import { BotLoader } from '../components/ui/BotLoader';
 import { useTheme } from '../theme/ThemeProvider';
 import { useContactsStore } from '../store/contactsStore';
 
@@ -192,7 +192,7 @@ export function CategoryDefaultsScreen() {
     return (
       <ScreenWrapper scroll={false}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <BotLoader color={colors.primary} />
         </View>
       </ScreenWrapper>
     );

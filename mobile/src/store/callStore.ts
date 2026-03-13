@@ -89,7 +89,14 @@ export const useCallStore = create<CallStore>((set, get) => ({
   },
 
   loadCallDetail: async (callId) => {
-    set({ detailLoading: true, detailError: null, selectedCall: null });
+    set({
+      detailLoading: true,
+      detailError: null,
+      selectedCall: null,
+      transcript: null,
+      transcriptError: null,
+      transcriptLoading: false,
+    });
     try {
       const detail = await apiFetchDetail(callId);
       set({ selectedCall: detail, detailLoading: false });

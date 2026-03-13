@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Switch, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, Switch, TouchableOpacity } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Button } from '../components/ui/Button';
@@ -7,6 +7,7 @@ import { Card } from '../components/ui/Card';
 import { TextInput } from '../components/ui/TextInput';
 import { Icon } from '../components/ui/Icon';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { BotLoader } from '../components/ui/BotLoader';
 import { Toast } from '../components/ui/Toast';
 import { PhoneInput } from '../components/ui/PhoneInput';
 import { FadeIn } from '../components/ui/FadeIn';
@@ -96,7 +97,7 @@ export function OnboardingSettingsScreen({ navigation }: Props) {
     return (
       <ScreenWrapper scroll={false}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <BotLoader color={colors.primary} />
         </View>
       </ScreenWrapper>
     );

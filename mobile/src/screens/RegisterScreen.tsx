@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, Modal } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
@@ -59,6 +59,7 @@ export function RegisterScreen({ navigation }: Props) {
   const [successMessage, setSuccessMessage] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [googleConfirm, setGoogleConfirm] = useState<{ email: string; name: string; idToken: string } | null>(null);
 
   const strength = useMemo(() => getPasswordStrength(password), [password]);
 
@@ -97,11 +98,31 @@ export function RegisterScreen({ navigation }: Props) {
         return;
       }
 
-      const data = await oauthGoogle(idToken);
-      handleLoginResponse(data);
+      const user = response.data?.user;
+      setGoogleConfirm({
+        email: user?.email ?? '',
+        name: user?.name ?? '',
+        idToken,
+      });
     } catch (error: any) {
       if (error?.code === statusCodes.IN_PROGRESS) return;
       setApiError(extractApiError(error));
+    } finally {
+      setGoogleLoading(false);
+    }
+  }
+
+  async function confirmGoogleSignUp() {
+    if (!googleConfirm) return;
+    setGoogleLoading(true);
+    setApiError(undefined);
+    try {
+      const data = await oauthGoogle(googleConfirm.idToken);
+      setGoogleConfirm(null);
+      handleLoginResponse(data);
+    } catch (error: any) {
+      setApiError(extractApiError(error));
+      setGoogleConfirm(null);
     } finally {
       setGoogleLoading(false);
     }
@@ -337,8 +358,67 @@ export function RegisterScreen({ navigation }: Props) {
           onGooglePress={handleGoogleSignIn}
           onApplePress={() => { /* Apple Sign-In — iOS only, implement later */ }}
           loading={googleLoading}
+          mode="signup"
         />
       </Animated.View>
+
+      {/* Google sign-up confirmation modal */}
+      <Modal visible={!!googleConfirm} transparent animationType="fade">
+        <Pressable
+          style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' }}
+          onPress={() => setGoogleConfirm(null)}
+        >
+          <Pressable
+            onPress={() => {}}
+            style={{
+              backgroundColor: colors.surface,
+              borderRadius: radii.xl,
+              padding: spacing.xl,
+              marginHorizontal: spacing.xl,
+              width: '85%',
+              maxWidth: 400,
+              alignItems: 'center',
+              gap: spacing.md,
+            }}
+          >
+            <View style={{
+              width: 56, height: 56, borderRadius: radii.full,
+              backgroundColor: colors.primaryContainer,
+              alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Icon name="account-plus-outline" size="xl" color={colors.primary} />
+            </View>
+            <Text style={{ ...typography.h3, color: colors.textPrimary, textAlign: 'center' }} allowFontScaling>
+              Create Account
+            </Text>
+            <Text style={{ ...typography.body, color: colors.textSecondary, textAlign: 'center' }} allowFontScaling>
+              You're signing up with:
+            </Text>
+            {googleConfirm?.name ? (
+              <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }} allowFontScaling>
+                {googleConfirm.name}
+              </Text>
+            ) : null}
+            <Text style={{ ...typography.bodySmall, color: colors.primary, fontWeight: '500' }} allowFontScaling>
+              {googleConfirm?.email}
+            </Text>
+            <View style={{ flexDirection: 'row', gap: spacing.md, marginTop: spacing.md, width: '100%' }}>
+              <Button
+                title="Cancel"
+                variant="outline"
+                onPress={() => setGoogleConfirm(null)}
+                style={{ flex: 1 }}
+              />
+              <Button
+                title="Create Account"
+                onPress={confirmGoogleSignUp}
+                loading={googleLoading}
+                style={{ flex: 1 }}
+              />
+            </View>
+          </Pressable>
+        </Pressable>
+      </Modal>
 
       {/* Footer nav */}
       <Animated.View

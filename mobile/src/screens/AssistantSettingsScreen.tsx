@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  View, Text, TouchableOpacity, ScrollView, ActivityIndicator,
+  View, Text, TouchableOpacity, ScrollView,
   TextInput as RNTextInput,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
@@ -12,6 +12,7 @@ import { Icon } from '../components/ui/Icon';
 import { Toast } from '../components/ui/Toast';
 import { SuccessModal } from '../components/ui/SuccessModal';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { BotLoader } from '../components/ui/BotLoader';
 import { TextInput } from '../components/ui/TextInput';
 import { Divider } from '../components/ui/Divider';
 import { useTheme } from '../theme/ThemeProvider';
@@ -19,6 +20,7 @@ import { useSettingsStore } from '../store/settingsStore';
 import { apiClient, extractApiError } from '../api/client';
 import { hapticLight, hapticMedium } from '../utils/haptics';
 import { OnboardingProgress } from '../components/onboarding/OnboardingProgress';
+import Video from 'react-native-video';
 import { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AssistantSettings' | 'OnboardingAssistantSetup'>;
@@ -115,6 +117,7 @@ export function AssistantSettingsScreen({ navigation, route }: Props) {
   const [dirty, setDirty] = useState(false);
 
   const audioRef = useRef<any>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -164,10 +167,11 @@ export function AssistantSettingsScreen({ navigation, route }: Props) {
     hapticLight();
     if (playingVoiceId === voice.id) {
       setPlayingVoiceId(null);
+      setPreviewUrl(null);
       return;
     }
     setPlayingVoiceId(voice.id);
-    setTimeout(() => setPlayingVoiceId(null), 3000);
+    setPreviewUrl(voice.preview_url ?? null);
   }
 
   async function handleSave() {
@@ -260,6 +264,17 @@ export function AssistantSettingsScreen({ navigation, route }: Props) {
 
   return (
     <ScreenWrapper>
+      {previewUrl && (
+        <Video
+          ref={audioRef}
+          source={{ uri: previewUrl }}
+          paused={!playingVoiceId}
+          playInBackground={false}
+          onEnd={() => { setPlayingVoiceId(null); setPreviewUrl(null); }}
+          onError={() => { setPlayingVoiceId(null); setPreviewUrl(null); }}
+          style={{ width: 0, height: 0, position: 'absolute' }}
+        />
+      )}
       <Toast message={toast} type={toastType} visible={!!toast} onDismiss={() => setToast('')} />
       <SuccessModal visible={!!successModal} title={successModal?.title ?? ''} message={successModal?.message} onDismiss={() => setSuccessModal(null)} />
 
@@ -321,7 +336,7 @@ export function AssistantSettingsScreen({ navigation, route }: Props) {
           </Text>
 
           {voicesLoading ? (
-            <ActivityIndicator size="small" color={colors.primary} />
+            <BotLoader size="small" color={colors.primary} />
           ) : voicesError ? (
             <ErrorMessage message={voicesError} action="Retry" onAction={loadVoices} />
           ) : (

@@ -17,6 +17,7 @@ from app.models.notification_delivery import NotificationDelivery
 from app.models.push_token import PushToken
 from app.models.user_settings import UserSettings
 from app.services.event_emitter import emit_event
+from app.services.fcm_service import send_push_notification
 
 logger = logging.getLogger(__name__)
 
@@ -180,12 +181,25 @@ async def notify_call_screened(
         return
 
     for token in tokens:
-        logger.info(
-            "Would send push to device %s for call %s (provider=%s)",
-            str(token.device_id)[:8] if hasattr(token, "device_id") else "unknown",
-            str(call_id)[:8],
-            getattr(token, "provider", "unknown"),
-        )
+        try:
+            await send_push_notification(
+                fcm_token=token.token,
+                title=_payload["title"],
+                body=_payload["body"],
+                data=_payload.get("data"),
+            )
+            logger.info(
+                "Push sent to device %s for call %s (provider=%s)",
+                str(token.device_id)[:8] if hasattr(token, "device_id") else "unknown",
+                str(call_id)[:8],
+                getattr(token, "provider", "unknown"),
+            )
+        except Exception:
+            logger.exception(
+                "Failed to push to device %s for call %s",
+                str(token.device_id)[:8] if hasattr(token, "device_id") else "unknown",
+                str(call_id)[:8],
+            )
 
     uid = str(user_id)
     cid = str(call_id)
@@ -276,6 +290,7 @@ async def create_and_enqueue_notification(
 
     tokens = list(tokens_result.scalars().all())
 
+    deliveries: list[NotificationDelivery] = []
     for token in tokens:
         delivery = NotificationDelivery(
             notification_id=notification.id,
@@ -283,6 +298,7 @@ async def create_and_enqueue_notification(
             provider=token.provider,
         )
         db.add(delivery)
+        deliveries.append(delivery)
 
     await db.flush()
 
@@ -294,6 +310,36 @@ async def create_and_enqueue_notification(
         len(tokens),
     )
 
+    if quiet_hours_value == "suppressed":
+        logger.info("Suppressing push delivery for notification %s (quiet hours)", str(notification.id)[:8])
+        return notification
+
+    payload = build_push_payload(
+        notification_type=notification_type,
+        data={
+            "notification_id": str(notification.id),
+            "event_type": notification_type,
+            "timestamp": utcnow().isoformat(),
+            **({"source_entity_id": str(source_entity_id)} if source_entity_id else {}),
+        },
+        privacy_mode=privacy_mode,
+    )
+
+    for token, delivery in zip(tokens, deliveries):
+        try:
+            ok = await send_push_notification(
+                fcm_token=token.token,
+                title=payload["title"],
+                body=payload["body"],
+                data=payload.get("data"),
+            )
+            delivery.status = "delivered" if ok else "failed"
+            delivery.delivered_at = utcnow() if ok else None
+        except Exception:
+            logger.exception("Push delivery failed for device %s", str(token.device_id)[:8])
+            delivery.status = "failed"
+
+    await db.flush()
     return notification
 
 

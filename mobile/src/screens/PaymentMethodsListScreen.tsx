@@ -6,7 +6,6 @@ import {
   Pressable,
   Alert,
   Platform,
-  ActivityIndicator,
   RefreshControl,
 } from 'react-native';
 import Config from 'react-native-config';
@@ -14,6 +13,7 @@ import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Icon } from '../components/ui/Icon';
 import { Button } from '../components/ui/Button';
 import { Toast } from '../components/ui/Toast';
+import { BotLoader } from '../components/ui/BotLoader';
 import { useTheme } from '../theme/ThemeProvider';
 import {
   listPaymentMethods,
@@ -232,7 +232,7 @@ export function PaymentMethodsListScreen() {
 
       {loading && !refreshing ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <BotLoader color={colors.primary} />
         </View>
       ) : (
         <FlatList

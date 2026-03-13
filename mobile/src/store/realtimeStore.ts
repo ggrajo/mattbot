@@ -25,6 +25,8 @@ interface RealtimeStore {
 }
 
 let ws: WebSocket | null = null;
+let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+let reconnectDelay = 2000;
 
 export const useRealtimeStore = create<RealtimeStore>((set, get) => ({
   connected: false,
@@ -43,12 +45,17 @@ export const useRealtimeStore = create<RealtimeStore>((set, get) => ({
     ws = new WebSocket(`${wsUrl}?token=${token}`);
 
     ws.onopen = () => {
+      reconnectDelay = 2000;
       set({ connected: true });
     };
 
     ws.onclose = () => {
       ws = null;
       set({ connected: false });
+      reconnectTimer = setTimeout(() => {
+        reconnectDelay = Math.min(reconnectDelay * 1.5, 30000);
+        get().connect();
+      }, reconnectDelay);
     };
 
     ws.onerror = () => {
@@ -57,7 +64,8 @@ export const useRealtimeStore = create<RealtimeStore>((set, get) => ({
 
     ws.onmessage = (event) => {
       try {
-        const msg = JSON.parse(event.data);
+        const raw = JSON.parse(event.data);
+        const msg = { ...raw, ...(raw.payload ?? {}) };
         const type = msg.event_type ?? msg.type;
 
         switch (type) {
@@ -107,6 +115,10 @@ export const useRealtimeStore = create<RealtimeStore>((set, get) => ({
   },
 
   disconnect: () => {
+    if (reconnectTimer) {
+      clearTimeout(reconnectTimer);
+      reconnectTimer = null;
+    }
     ws?.close();
     ws = null;
     set({ connected: false, activeCallId: null, liveTranscript: null });

@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  SafeAreaView,
   KeyboardAvoidingView,
   ScrollView,
   View,
@@ -8,6 +7,7 @@ import {
   ViewStyle,
   ScrollViewProps,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../../theme/ThemeProvider';
 
 interface Props {
@@ -39,7 +39,7 @@ export function ScreenWrapper({
 
   const body = scroll ? (
     <ScrollView
-      contentContainerStyle={{ flexGrow: 1 }}
+      contentContainerStyle={{ flexGrow: 1, paddingBottom: spacing.xxxl ?? 48 }}
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
       {...scrollProps}

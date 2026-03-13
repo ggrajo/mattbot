@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { View, Text, SectionList, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, SectionList, TouchableOpacity } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Card } from '../components/ui/Card';
@@ -7,6 +7,7 @@ import { Icon } from '../components/ui/Icon';
 import { Toast } from '../components/ui/Toast';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { ConfirmSheet } from '../components/ui/ConfirmSheet';
+import { BotLoader } from '../components/ui/BotLoader';
 import { useTheme } from '../theme/ThemeProvider';
 import { useSettingsStore } from '../store/settingsStore';
 import { listMemoryItems, deleteMemoryItem, type MemoryItem } from '../api/memory';
@@ -398,7 +399,7 @@ export function MemoryListScreen({}: Props) {
 
       {loading && items.length === 0 ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <BotLoader color={colors.primary} />
         </View>
       ) : items.length === 0 ? (
         <View

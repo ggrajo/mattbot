@@ -13,7 +13,7 @@ import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Card } from '../components/ui/Card';
 import { useTheme } from '../theme/ThemeProvider';
 import { useAuthStore } from '../store/authStore';
-import { login, oauthGoogle, pinLogin, refreshToken as refreshTokenApi } from '../api/auth';
+import { login, oauthGoogle, pinLogin, refreshToken as refreshTokenApi, checkPinAvailable } from '../api/auth';
 import { extractApiError } from '../api/client';
 import { validateField, emailSchema, passwordSchema } from '../utils/validation';
 import { getSecureItem } from '../utils/secureStorage';
@@ -45,6 +45,7 @@ export function LoginScreen({ navigation }: Props) {
   const [hasDevicePin, setHasDevicePin] = useState(false);
   const [storedDeviceId, setStoredDeviceId] = useState<string | null>(null);
   const [lastEmail, setLastEmail] = useState<string | null>(null);
+  const [hasBiometricToken, setHasBiometricToken] = useState(false);
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -59,16 +60,13 @@ export function LoginScreen({ navigation }: Props) {
     if (!email) return;
     setLastEmail(email);
 
-    const pinDeviceId = await getSecureItem(`mattbot_pin_device_${email}`);
-    if (pinDeviceId) {
+    const hasPinOnAccount = await checkPinAvailable(email);
+    if (hasPinOnAccount) {
       setHasDevicePin(true);
-      return;
     }
 
-    const deviceId = await getSecureItem('mattbot_device_id');
-    if (deviceId) {
-      setHasDevicePin(true);
-    }
+    const bioToken = await getSecureItem('mattbot_biometric_refresh_token');
+    setHasBiometricToken(!!bioToken);
   }
 
   function handleLoginResponse(data: any) {
@@ -172,7 +170,8 @@ export function LoginScreen({ navigation }: Props) {
     setApiError(undefined);
     const success = await authenticate('Authenticate to sign in');
     if (success) {
-      const storedRefresh = await getSecureItem('refresh_token');
+      const { removeSecureItem } = await import('../utils/secureStorage');
+      const storedRefresh = await getSecureItem('mattbot_biometric_refresh_token');
       if (storedRefresh) {
         try {
           const data = await refreshTokenApi(storedRefresh);
@@ -181,9 +180,12 @@ export function LoginScreen({ navigation }: Props) {
             return;
           }
         } catch {
+          await removeSecureItem('mattbot_biometric_refresh_token');
+          setHasBiometricToken(false);
           setApiError('Session expired. Please sign in with email or PIN.');
         }
       } else {
+        setHasBiometricToken(false);
         setApiError('No saved session. Please sign in with email or PIN first.');
       }
     }
@@ -253,7 +255,7 @@ export function LoginScreen({ navigation }: Props) {
               <View key={ri} style={{ flexDirection: 'row', gap: spacing.lg }}>
                 {row.map((key) => {
                   if (key === 'bio') {
-                    if (!biometricAvailable) return <View key="bio" style={{ width: 72, height: 72 }} />;
+                    if (!biometricAvailable || !hasBiometricToken) return <View key="bio" style={{ width: 72, height: 72 }} />;
                     const bioIcon = biometryType === 'FaceID' ? 'face-recognition' : 'fingerprint';
                     return (
                       <TouchableOpacity
@@ -370,7 +372,7 @@ export function LoginScreen({ navigation }: Props) {
       )}
 
       {/* Quick auth options (PIN + Biometric) */}
-      {(hasDevicePin || (lastEmail && biometricAvailable)) && (
+      {(hasDevicePin || (lastEmail && biometricAvailable && hasBiometricToken)) && (
         <Animated.View entering={FadeInDown.duration(400).delay(150)} style={{ marginBottom: spacing.lg }}>
           {lastEmail && (
             <Text style={{ ...typography.caption, color: colors.textSecondary, textAlign: 'center', marginBottom: spacing.sm }} allowFontScaling>
@@ -403,7 +405,7 @@ export function LoginScreen({ navigation }: Props) {
               </TouchableOpacity>
             )}
 
-            {lastEmail && biometricAvailable && (
+            {lastEmail && biometricAvailable && hasBiometricToken && (
               <TouchableOpacity
                 onPress={handleBiometricLogin}
                 activeOpacity={0.7}
@@ -509,6 +511,7 @@ export function LoginScreen({ navigation }: Props) {
           onGooglePress={handleGoogleSignIn}
           onApplePress={() => { /* Apple Sign-In — iOS only, implement later */ }}
           loading={googleLoading}
+          mode="signin"
         />
       </Animated.View>
 

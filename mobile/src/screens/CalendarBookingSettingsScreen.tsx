@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, Switch, Linking, ActivityIndicator } from 'react-native';
+import { View, Text, Switch, Linking } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';

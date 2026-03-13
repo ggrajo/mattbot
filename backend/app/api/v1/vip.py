@@ -109,6 +109,18 @@ async def add_vip_entry(
 
     db.add(entry)
 
+    from app.models.contact_profile import ContactProfile
+    from sqlalchemy import update as sql_update
+
+    await db.execute(
+        sql_update(ContactProfile)
+        .where(
+            ContactProfile.owner_user_id == current_user.user.id,
+            ContactProfile.phone_hash == ph,
+        )
+        .values(is_vip=True)
+    )
+
     await log_event(
         db,
         owner_user_id=current_user.user.id,
@@ -164,6 +176,18 @@ async def remove_vip_entry(
         actor_id=current_user.user.id,
         target_type="vip_entry",
         target_id=entry_obj.id,
+    )
+
+    from app.models.contact_profile import ContactProfile
+    from sqlalchemy import update as sql_update
+
+    await db.execute(
+        sql_update(ContactProfile)
+        .where(
+            ContactProfile.owner_user_id == current_user.user.id,
+            ContactProfile.phone_hash == entry_obj.phone_hash,
+        )
+        .values(is_vip=False)
     )
 
     await db.delete(entry_obj)

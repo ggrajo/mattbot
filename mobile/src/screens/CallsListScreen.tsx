@@ -4,7 +4,6 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  ActivityIndicator,
   TextInput as RNTextInput,
   Modal,
   Pressable,
@@ -20,6 +19,7 @@ import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { FadeIn } from '../components/ui/FadeIn';
 import { CallListSkeleton } from '../components/ui/SkeletonLoader';
 import { Button } from '../components/ui/Button';
+import { BotLoader } from '../components/ui/BotLoader';
 import { useTheme } from '../theme/ThemeProvider';
 import { useCallStore } from '../store/callStore';
 import { useRealtimeStore } from '../store/realtimeStore';
@@ -917,7 +917,7 @@ export function CallsListScreen() {
         ListFooterComponent={
           loadingMore ? (
             <View style={{ paddingVertical: spacing.lg, alignItems: 'center' }}>
-              <ActivityIndicator color={colors.primary} />
+              <BotLoader size="small" color={colors.primary} />
             </View>
           ) : null
         }

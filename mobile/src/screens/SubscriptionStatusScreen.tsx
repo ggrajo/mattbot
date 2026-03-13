@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, ActivityIndicator, Switch } from 'react-native';
+import { View, Text, Switch } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
@@ -9,6 +9,7 @@ import { Icon } from '../components/ui/Icon';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { ConfirmSheet } from '../components/ui/ConfirmSheet';
 import { Toast } from '../components/ui/Toast';
+import { BotLoader } from '../components/ui/BotLoader';
 import { useTheme } from '../theme/ThemeProvider';
 import { useBillingStore } from '../store/billingStore';
 import { useSettingsStore } from '../store/settingsStore';
@@ -91,7 +92,7 @@ export function SubscriptionStatusScreen({ navigation }: Props) {
     return (
       <ScreenWrapper scroll={false}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} accessibilityLabel="Loading subscription status" />
+          <BotLoader color={colors.primary} />
         </View>
       </ScreenWrapper>
     );

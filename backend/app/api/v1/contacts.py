@@ -547,6 +547,69 @@ async def update_contact(
         contact.ai_custom_instructions_nonce = None
         contact.ai_custom_instructions_key_version = None
 
+    if data.get("is_blocked") is True:
+        from app.models.block_entry import BlockEntry
+        existing_block = (
+            await db.execute(
+                select(BlockEntry).where(
+                    BlockEntry.owner_user_id == current_user.user.id,
+                    BlockEntry.phone_hash == contact.phone_hash,
+                )
+            )
+        ).scalar_one_or_none()
+        if existing_block is None:
+            block = BlockEntry(
+                owner_user_id=current_user.user.id,
+                phone_ciphertext=contact.phone_ciphertext,
+                phone_nonce=contact.phone_nonce,
+                phone_key_version=contact.phone_key_version,
+                phone_hash=contact.phone_hash,
+                phone_last4=contact.phone_last4,
+                display_name=contact.display_name,
+                reason=data.get("block_reason"),
+            )
+            db.add(block)
+    elif data.get("is_blocked") is False:
+        from app.models.block_entry import BlockEntry
+        from sqlalchemy import delete as sql_delete
+        await db.execute(
+            sql_delete(BlockEntry).where(
+                BlockEntry.owner_user_id == current_user.user.id,
+                BlockEntry.phone_hash == contact.phone_hash,
+            )
+        )
+
+    if data.get("is_vip") is True:
+        from app.models.vip_entry import VipEntry
+        existing_vip = (
+            await db.execute(
+                select(VipEntry).where(
+                    VipEntry.owner_user_id == current_user.user.id,
+                    VipEntry.phone_hash == contact.phone_hash,
+                )
+            )
+        ).scalar_one_or_none()
+        if existing_vip is None:
+            vip = VipEntry(
+                owner_user_id=current_user.user.id,
+                phone_ciphertext=contact.phone_ciphertext,
+                phone_nonce=contact.phone_nonce,
+                phone_key_version=contact.phone_key_version,
+                phone_hash=contact.phone_hash,
+                phone_last4=contact.phone_last4,
+                display_name=contact.display_name,
+            )
+            db.add(vip)
+    elif data.get("is_vip") is False:
+        from app.models.vip_entry import VipEntry
+        from sqlalchemy import delete as sql_delete
+        await db.execute(
+            sql_delete(VipEntry).where(
+                VipEntry.owner_user_id == current_user.user.id,
+                VipEntry.phone_hash == contact.phone_hash,
+            )
+        )
+
     await db.flush()
     return _to_response(contact)
 

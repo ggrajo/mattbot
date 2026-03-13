@@ -5,7 +5,6 @@ import {
   FlatList,
   RefreshControl,
   TouchableOpacity,
-  ActivityIndicator,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -19,6 +18,7 @@ import { SuccessModal } from '../components/ui/SuccessModal';
 import { ConfirmSheet } from '../components/ui/ConfirmSheet';
 import { TextInput } from '../components/ui/TextInput';
 import { StatusScreen } from '../components/ui/StatusScreen';
+import { BotLoader } from '../components/ui/BotLoader';
 import { LoadingOverlay } from '../components/ui/LoadingOverlay';
 import { useTheme } from '../theme/ThemeProvider';
 import { extractApiError } from '../api/client';
@@ -475,7 +475,7 @@ export function KnowledgeBaseScreen({ navigation }: Props) {
         }
         ListEmptyComponent={
           loading ? (
-            <ActivityIndicator color={colors.primary} style={{ marginTop: spacing.xl }} />
+            <BotLoader color={colors.primary} style={{ marginTop: spacing.xl }} />
           ) : (
             <StatusScreen
               icon="book-open-outline"

@@ -28,11 +28,17 @@ export async function removeSecureItem(key: string): Promise<void> {
 export const TOKEN_KEYS = {
   ACCESS_TOKEN: 'access_token',
   REFRESH_TOKEN: 'refresh_token',
+  BIOMETRIC_REFRESH_TOKEN: 'mattbot_biometric_refresh_token',
 } as const;
 
 export async function storeTokens(accessToken: string, refreshToken: string): Promise<void> {
   await setSecureItem(TOKEN_KEYS.ACCESS_TOKEN, accessToken);
   await setSecureItem(TOKEN_KEYS.REFRESH_TOKEN, refreshToken);
+
+  const existingBioToken = await getSecureItem(TOKEN_KEYS.BIOMETRIC_REFRESH_TOKEN);
+  if (existingBioToken) {
+    await setSecureItem(TOKEN_KEYS.BIOMETRIC_REFRESH_TOKEN, refreshToken);
+  }
 }
 
 export async function getStoredTokens(): Promise<{ accessToken: string | null; refreshToken: string | null }> {

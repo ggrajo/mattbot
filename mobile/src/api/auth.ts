@@ -149,3 +149,12 @@ export async function pinLogin(email: string, pin: string) {
   const { data } = await apiClient.post('/auth/pin/login', { email, pin });
   return data;
 }
+
+export async function checkPinAvailable(email: string): Promise<boolean> {
+  try {
+    const { data } = await apiClient.get('/auth/pin/check', { params: { email } });
+    return !!data?.has_pin;
+  } catch {
+    return false;
+  }
+}

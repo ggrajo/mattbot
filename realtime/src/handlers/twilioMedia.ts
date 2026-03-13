@@ -162,6 +162,15 @@ export function handleTwilioConnection(
       timestamp: new Date().toISOString(),
     }).catch(() => {});
 
+    fanOutToUser(userId, {
+      type: "CALL_STARTED",
+      payload: {
+        call_id: callId,
+        caller_phone: sessionCtx.callerPhone,
+        timestamp: new Date().toISOString(),
+      },
+    });
+
     const dynamicVars: Record<string, string> = {
       caller_phone: sessionCtx.callerPhone,
       user_timezone: sessionCtx.userTimezone,

@@ -45,27 +45,44 @@ export function OnboardingPrivacyScreen({ navigation }: Props) {
 
   async function handleRequestNotifications() {
     hapticLight();
-    if (Platform.OS === 'ios') {
-      try {
+    try {
+      let granted = false;
+
+      if (Platform.OS === 'ios') {
         const { default: messaging } = await import('@react-native-firebase/messaging');
         const authStatus = await messaging().requestPermission();
-        const granted =
+        granted =
           authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
           authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-        if (granted) {
-          setToastType('success');
-          setToast('Notifications enabled');
+      } else if (Platform.OS === 'android') {
+        if (Platform.Version >= 33) {
+          const { PermissionsAndroid } = require('react-native');
+          const result = await PermissionsAndroid.request(
+            'android.permission.POST_NOTIFICATIONS',
+            {
+              title: 'Notification Permission',
+              message:
+                'MattBot needs notifications to alert you about incoming calls, messages, and reminders.',
+              buttonPositive: 'Allow',
+              buttonNegative: 'Deny',
+            },
+          );
+          granted = result === PermissionsAndroid.RESULTS.GRANTED;
         } else {
-          setToastType('error');
-          setToast('Notification permission denied. Enable in device settings.');
+          granted = true;
         }
-      } catch {
-        setToastType('error');
-        setToast('Failed to request notification permission');
       }
-    } else {
-      setToastType('success');
-      setToast('Notifications enabled');
+
+      if (granted) {
+        setToastType('success');
+        setToast('Notifications enabled');
+      } else {
+        setToastType('error');
+        setToast('Notification permission denied. Enable in device settings.');
+      }
+    } catch {
+      setToastType('error');
+      setToast('Failed to request notification permission');
     }
   }
 

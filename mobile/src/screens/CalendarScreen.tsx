@@ -1153,6 +1153,7 @@ export function CalendarScreen() {
             {renderConnectBanner()}
 
             <Calendar
+              key={theme.dark ? 'dark' : 'light'}
               current={selectedDate}
               onDayPress={(day: DateData) => setSelectedDate(day.dateString)}
               markedDates={markedDates}

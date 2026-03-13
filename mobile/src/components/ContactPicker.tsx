@@ -5,13 +5,13 @@ import {
   Pressable,
   Modal,
   FlatList,
-  ActivityIndicator,
   Alert,
   Platform,
   PermissionsAndroid,
 } from 'react-native';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icon } from './ui/Icon';
+import { BotLoader } from './ui/BotLoader';
 
 interface DeviceContact {
   recordID: string;
@@ -36,18 +36,31 @@ interface Props {
 }
 
 async function requestPermission(): Promise<boolean> {
-  if (Platform.OS === 'ios') return true;
+  if (Platform.OS === 'android') {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+        {
+          title: 'Contacts Permission',
+          message: 'MattBot needs access to your contacts to add phone numbers.',
+          buttonPositive: 'Allow',
+          buttonNegative: 'Deny',
+        },
+      );
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } catch {
+      return false;
+    }
+  }
+
+  // iOS – use react-native-contacts native permission API
   try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
-      {
-        title: 'Contacts Permission',
-        message: 'MattBot needs access to your contacts to add phone numbers.',
-        buttonPositive: 'Allow',
-        buttonNegative: 'Deny',
-      },
-    );
-    return granted === PermissionsAndroid.RESULTS.GRANTED;
+    const Contacts = require('react-native-contacts').default;
+    const status = await Contacts.checkPermission();
+    if (status === 'authorized') return true;
+    if (status === 'denied') return false;
+    const requested = await Contacts.requestPermission();
+    return requested === 'authorized';
   } catch {
     return false;
   }
@@ -186,7 +199,7 @@ export function ContactPicker({ visible: controlledVisible, onSelect, onClose, b
 
           {loading ? (
             <View style={{ padding: spacing.xxl, alignItems: 'center' }}>
-              <ActivityIndicator size="large" color={colors.primary} />
+              <BotLoader color={colors.primary} />
             </View>
           ) : (
             <FlatList

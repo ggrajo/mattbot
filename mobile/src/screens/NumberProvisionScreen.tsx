@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, TextInput, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
@@ -7,6 +7,7 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Icon } from '../components/ui/Icon';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { BotLoader } from '../components/ui/BotLoader';
 import { Toast } from '../components/ui/Toast';
 import { FadeIn } from '../components/ui/FadeIn';
 import { useTheme } from '../theme/ThemeProvider';
@@ -91,7 +92,7 @@ export function NumberProvisionScreen({ route, navigation }: Props) {
     return (
       <ScreenWrapper scroll={false}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} accessibilityLabel="Loading numbers" />
+          <BotLoader color={colors.primary} />
         </View>
       </ScreenWrapper>
     );

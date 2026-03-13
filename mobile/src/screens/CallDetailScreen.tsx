@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
-import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, RefreshControl, Modal, Pressable, TextInput as RNTextInput, Platform, StatusBar } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, RefreshControl, Modal, Pressable, TextInput as RNTextInput, Platform, StatusBar } from 'react-native';
 import Video from 'react-native-video';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
@@ -12,6 +12,7 @@ import { FadeIn } from '../components/ui/FadeIn';
 import { GradientView } from '../components/ui/GradientView';
 import { ConfirmSheet } from '../components/ui/ConfirmSheet';
 import { Toast } from '../components/ui/Toast';
+import { BotLoader } from '../components/ui/BotLoader';
 import { useTheme } from '../theme/ThemeProvider';
 import { useCallStore } from '../store/callStore';
 import { useSettingsStore } from '../store/settingsStore';
@@ -398,7 +399,7 @@ export function CallDetailScreen() {
     return (
       <ScreenWrapper>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <BotLoader color={colors.primary} />
         </View>
       </ScreenWrapper>
     );
@@ -534,7 +535,7 @@ export function CallDetailScreen() {
             </Text>
           ) : selectedCall.summary_status === 'processing' || selectedCall.summary_status === 'pending' ? (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
-              <ActivityIndicator size="small" color={colors.primary} />
+              <BotLoader size="small" color={colors.primary} />
               <Text style={{ ...typography.body, color: colors.textSecondary }} allowFontScaling>
                 Processing summary...
               </Text>
@@ -679,7 +680,7 @@ export function CallDetailScreen() {
                   }}
                 >
                   {audioLoading ? (
-                    <ActivityIndicator size="small" color={colors.primary} />
+                    <BotLoader size="small" color={colors.primary} />
                   ) : (
                     <Icon name={isPlaying ? 'pause' : 'play'} size="md" color={isPlaying ? colors.error : colors.primary} />
                   )}
@@ -1089,7 +1090,7 @@ export function CallDetailScreen() {
               </View>
             ) : transcriptLoading ? (
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
-                <ActivityIndicator size="small" color={colors.primary} />
+                <BotLoader size="small" color={colors.primary} />
                 <Text style={{ ...typography.body, color: colors.textSecondary }} allowFontScaling>
                   Loading transcript...
                 </Text>
@@ -1115,7 +1116,7 @@ export function CallDetailScreen() {
             )
           ) : selectedCall.transcript_status === 'processing' || selectedCall.transcript_status === 'pending' ? (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
-              <ActivityIndicator size="small" color={colors.primary} />
+              <BotLoader size="small" color={colors.primary} />
               <Text style={{ ...typography.body, color: colors.textSecondary }} allowFontScaling>
                 Processing transcript...
               </Text>
@@ -1322,7 +1323,7 @@ function ActionChip({
       accessibilityLabel={label}
     >
       {loading ? (
-        <ActivityIndicator size="small" color={colors.primary} />
+        <BotLoader size="small" color={colors.primary} />
       ) : (
         <Icon name={icon} size="sm" color={highlight ? colors.primary : colors.textSecondary} />
       )}

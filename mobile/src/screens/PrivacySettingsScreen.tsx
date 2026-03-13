@@ -4,7 +4,6 @@ import {
   Text,
   Switch,
   TouchableOpacity,
-  ActivityIndicator,
   Animated,
   TextInput as RNTextInput,
   Vibration,
@@ -21,6 +20,7 @@ import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { Toast } from '../components/ui/Toast';
 import { SuccessModal } from '../components/ui/SuccessModal';
 import { Divider } from '../components/ui/Divider';
+import { BotLoader } from '../components/ui/BotLoader';
 import { useTheme } from '../theme/ThemeProvider';
 import { useSettingsStore } from '../store/settingsStore';
 import { useAuthStore } from '../store/authStore';
@@ -217,6 +217,14 @@ export function PrivacySettingsScreen({ navigation }: Props) {
         setToast('Biometric verification failed.');
         return;
       }
+      const { TOKEN_KEYS } = await import('../utils/secureStorage');
+      const refreshTok = await getSecureItem(TOKEN_KEYS.REFRESH_TOKEN);
+      if (refreshTok) {
+        await setSecureItem(TOKEN_KEYS.BIOMETRIC_REFRESH_TOKEN, refreshTok);
+      }
+    } else {
+      const { TOKEN_KEYS } = await import('../utils/secureStorage');
+      await removeSecureItem(TOKEN_KEYS.BIOMETRIC_REFRESH_TOKEN);
     }
     handleToggle('biometric_unlock_enabled', enabled);
   }
@@ -507,7 +515,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
             ) : null}
 
             {savingPin ? (
-              <ActivityIndicator size="large" color={colors.primary} />
+              <BotLoader color={colors.primary} />
             ) : (
               <PinKeypad onDigit={handlePinDigit} onDelete={handlePinDelete} colors={colors} typography={typography} />
             )}
@@ -530,7 +538,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
     return (
       <ScreenWrapper scroll={false}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <BotLoader color={colors.primary} />
         </View>
       </ScreenWrapper>
     );
@@ -564,7 +572,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
           </View>
 
           {loadingProfile ? (
-            <ActivityIndicator size="small" color={colors.primary} />
+            <BotLoader size="small" color={colors.primary} />
           ) : (
             <>
               {/* Password */}
@@ -681,7 +689,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
           </Text>
 
           {loadingProfile ? (
-            <ActivityIndicator size="small" color={colors.primary} />
+            <BotLoader size="small" color={colors.primary} />
           ) : pinStatus?.pin_enabled ? (
             <View style={{ gap: spacing.sm }}>
               <View style={{

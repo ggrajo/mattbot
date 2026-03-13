@@ -290,6 +290,15 @@ export function SettingsScreen() {
           right={chevron}
           accessibilityLabel="Block list"
         />
+        <ListRow
+          icon="alert-octagon-outline"
+          iconColor="#DC2626"
+          title="Spam Callers"
+          subtitle="View and manage spam-flagged callers"
+          onPress={() => navigation.navigate('SpamList')}
+          right={chevron}
+          accessibilityLabel="Spam callers"
+        />
       </View>
 
       <Divider />

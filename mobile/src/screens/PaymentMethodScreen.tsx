@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Card } from '../components/ui/Card';
@@ -7,6 +7,7 @@ import { Button } from '../components/ui/Button';
 import { Icon } from '../components/ui/Icon';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { Toast } from '../components/ui/Toast';
+import { BotLoader } from '../components/ui/BotLoader';
 import { useTheme } from '../theme/ThemeProvider';
 import { useBillingStore } from '../store/billingStore';
 import { useSettingsStore } from '../store/settingsStore';
@@ -20,7 +21,7 @@ export function PaymentMethodScreen({ route, navigation }: Props) {
   const { colors, spacing, typography, radii } = useTheme();
   const { plan, source } = route.params;
   const { completeStep } = useSettingsStore();
-  const { billingStatus, loadBillingStatus, subscribe } = useBillingStore();
+  const { billingStatus, loadBillingStatus, subscribe, paymentMethods, loadPaymentMethods } = useBillingStore();
 
   const [checking, setChecking] = useState(true);
   const [alreadyActive, setAlreadyActive] = useState(false);
@@ -37,6 +38,7 @@ export function PaymentMethodScreen({ route, navigation }: Props) {
     setChecking(true);
     try {
       await loadBillingStatus();
+      await loadPaymentMethods();
       const status = useBillingStore.getState().billingStatus;
       if (status?.has_subscription && status.status === 'active' && status.plan === plan) {
         setAlreadyActive(true);
@@ -53,7 +55,9 @@ export function PaymentMethodScreen({ route, navigation }: Props) {
     setSubscribing(true);
     setError(null);
     try {
-      const ok = await subscribe(plan);
+      const defaultPm = paymentMethods.find(m => m.is_default) ?? paymentMethods[0];
+      const pmId = defaultPm?.id ?? 'pm_card_visa';
+      const ok = await subscribe(plan, pmId);
       if (!ok) {
         setError(useBillingStore.getState().error ?? 'Subscription failed');
         setSubscribing(false);
@@ -89,7 +93,7 @@ export function PaymentMethodScreen({ route, navigation }: Props) {
     return (
       <ScreenWrapper scroll={false}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} accessibilityLabel="Checking subscription" />
+          <BotLoader color={colors.primary} />
         </View>
       </ScreenWrapper>
     );
@@ -187,31 +191,54 @@ export function PaymentMethodScreen({ route, navigation }: Props) {
             </View>
           </Card>
 
-          {/* Stripe placeholder */}
+          {/* Payment method info */}
           <Card
             variant="flat"
             style={{
               marginBottom: spacing.xl,
-              borderStyle: 'dashed',
               borderWidth: 1.5,
-              borderColor: colors.border,
+              borderColor: paymentMethods.length > 0 ? colors.success : colors.border,
+              borderStyle: paymentMethods.length > 0 ? 'solid' : 'dashed',
             }}
           >
-            <View style={{ alignItems: 'center', paddingVertical: spacing.xl, gap: spacing.md }}>
-              <Icon name="lock-outline" size={28} color={colors.textDisabled} />
-              <Text
-                style={{ ...typography.body, color: colors.textSecondary, textAlign: 'center' }}
-                allowFontScaling
-              >
-                Stripe payment form will appear here
-              </Text>
-              <Text
-                style={{ ...typography.caption, color: colors.textDisabled, textAlign: 'center' }}
-                allowFontScaling
-              >
-                Secure payments powered by Stripe
-              </Text>
-            </View>
+            {paymentMethods.length > 0 ? (
+              <View style={{ gap: spacing.md, paddingVertical: spacing.sm }}>
+                {paymentMethods
+                  .filter(m => m.is_default)
+                  .concat(paymentMethods.filter(m => !m.is_default))
+                  .slice(0, 1)
+                  .map(pm => (
+                    <View key={pm.id} style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
+                      <Icon name="credit-card-outline" size={24} color={colors.success} />
+                      <View style={{ flex: 1 }}>
+                        <Text style={{ ...typography.body, color: colors.textPrimary }} allowFontScaling>
+                          {pm.brand ? `${pm.brand} ••••${pm.last4}` : `Card ••••${pm.last4 ?? '????'}`}
+                        </Text>
+                        <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+                          {pm.is_default ? 'Default payment method' : 'Payment method on file'}
+                        </Text>
+                      </View>
+                      <Icon name="check-circle" size={20} color={colors.success} />
+                    </View>
+                  ))}
+              </View>
+            ) : (
+              <View style={{ alignItems: 'center', paddingVertical: spacing.xl, gap: spacing.md }}>
+                <Icon name="credit-card-outline" size={28} color={colors.primary} />
+                <Text
+                  style={{ ...typography.body, color: colors.textSecondary, textAlign: 'center' }}
+                  allowFontScaling
+                >
+                  Using default test payment method
+                </Text>
+                <Text
+                  style={{ ...typography.caption, color: colors.textDisabled, textAlign: 'center' }}
+                  allowFontScaling
+                >
+                  Secure payments powered by Stripe
+                </Text>
+              </View>
+            )}
           </Card>
         </>
       )}

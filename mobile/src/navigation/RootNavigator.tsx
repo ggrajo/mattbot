@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Linking, View } from 'react-native';
+import { Linking, View } from 'react-native';
 import { NavigationContainer, LinkingOptions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from '../theme/ThemeProvider';
 import { useAuthStore } from '../store/authStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { BiometricGate } from '../components/ui/BiometricGate';
+import { BotLoader } from '../components/ui/BotLoader';
+import { useAutoPermissions } from '../hooks/useAutoPermissions';
+import { useNotificationHandler } from '../hooks/useNotificationHandler';
+import { useRealtimeStore } from '../store/realtimeStore';
 import { RootStackParamList } from './types';
 import { TabNavigator } from './TabNavigator';
 
@@ -61,6 +65,25 @@ import { CreateReminderScreen } from '../screens/CreateReminderScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+function AuthenticatedHome({ biometricEnabled }: { biometricEnabled: boolean }) {
+  useAutoPermissions();
+  useNotificationHandler();
+
+  useEffect(() => {
+    useRealtimeStore.getState().connect();
+    return () => useRealtimeStore.getState().disconnect();
+  }, []);
+
+  return (
+    <BiometricGate
+      enabled={biometricEnabled}
+      promptMessage="Authenticate to access MattBot"
+    >
+      <TabNavigator />
+    </BiometricGate>
+  );
+}
+
 const linking: LinkingOptions<RootStackParamList> = {
   prefixes: ['mattbot://'],
   config: {
@@ -108,7 +131,7 @@ export function RootNavigator() {
           justifyContent: 'center',
         }}
       >
-        <ActivityIndicator size="large" color={theme.colors.primary} />
+        <BotLoader color={theme.colors.primary} />
       </View>
     );
   }
@@ -139,14 +162,7 @@ export function RootNavigator() {
         {state === 'authenticated' ? (
           <>
             <Stack.Screen name="DrawerRoot">
-              {() => (
-                <BiometricGate
-                  enabled={biometricEnabled}
-                  promptMessage="Authenticate to access MattBot"
-                >
-                  <TabNavigator />
-                </BiometricGate>
-              )}
+              {() => <AuthenticatedHome biometricEnabled={biometricEnabled} />}
             </Stack.Screen>
             {/* Sub-screens accessible from within drawer screens */}
             <Stack.Screen

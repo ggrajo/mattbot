@@ -18,15 +18,15 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     op.create_table(
         'knowledge_base_docs',
-        sa.Column('id', sa.UUID(), nullable=False),
-        sa.Column('owner_user_id', sa.UUID(), nullable=False),
-        sa.Column('el_document_id', sa.String(length=100), nullable=False),
-        sa.Column('name', sa.String(length=255), nullable=False),
-        sa.Column('source_type', sa.String(length=20), nullable=False),
-        sa.Column('source_ref', sa.Text(), nullable=True),
-        sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
-        sa.ForeignKeyConstraint(['owner_user_id'], ['users.id'], ondelete='CASCADE'),
-        sa.PrimaryKeyConstraint('id'),
+    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('owner_user_id', sa.UUID(), nullable=False),
+    sa.Column('el_document_id', sa.String(length=100), nullable=False),
+    sa.Column('name', sa.String(length=255), nullable=False),
+    sa.Column('source_type', sa.String(length=20), nullable=False),
+    sa.Column('source_ref', sa.Text(), nullable=True),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.ForeignKeyConstraint(['owner_user_id'], ['users.id'], ondelete='CASCADE'),
+    sa.PrimaryKeyConstraint('id'),
         sa.UniqueConstraint('el_document_id'),
     )
     op.create_index(

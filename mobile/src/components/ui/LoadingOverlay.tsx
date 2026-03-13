@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, ActivityIndicator, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
+import { BotLoader } from './BotLoader';
 
 interface Props {
   visible: boolean;
@@ -25,7 +26,7 @@ export function LoadingOverlay({ visible, message }: Props) {
       accessibilityRole="progressbar"
       accessibilityLabel={message || 'Loading'}
     >
-      <ActivityIndicator size="large" color={colors.primary} />
+      <BotLoader color={colors.textInverse} />
       {message && (
         <Text
           style={{

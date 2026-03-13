@@ -640,6 +640,47 @@ async def pin_login(
     return LoginResponse(**result)
 
 
+@router.get("/pin/check")
+async def pin_check(
+    email: str = Query(...),
+    db: AsyncSession = Depends(get_db),
+    ip: str = Depends(get_client_ip),
+):
+    """Unauthenticated check: does this email account have any PIN set?"""
+    from sqlalchemy import select
+    from app.models.device import Device
+    from app.models.user import User
+
+    allowed, _ = await check_rate_limit(
+        f"ip:pin_check:{ip}",
+        settings.RATE_LIMIT_AUTH_SENSITIVE_MAX,
+        settings.RATE_LIMIT_AUTH_SENSITIVE_WINDOW,
+    )
+    if not allowed:
+        raise AppError("RATE_LIMITED", "Too many requests. Please try again later.", 429)
+
+    user = (
+        await db.execute(
+            select(User).where(User.email == email.strip().lower())
+        )
+    ).scalar_one_or_none()
+    if user is None:
+        return {"has_pin": False}
+
+    device = (
+        await db.execute(
+            select(Device)
+            .where(
+                Device.owner_user_id == user.id,
+                Device.pin_hash.isnot(None),
+                Device.revoked_at.is_(None),
+            )
+            .limit(1)
+        )
+    ).scalar_one_or_none()
+    return {"has_pin": device is not None}
+
+
 @router.delete("/pin", response_model=PinSetupResponse)
 async def pin_disable(
     current_user: CurrentUser = Depends(get_current_user),

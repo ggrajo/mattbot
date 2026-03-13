@@ -58,6 +58,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       pendingAccessToken: null,
       pendingRefreshToken: null,
     });
+    get().loadProfile().catch(() => {});
   },
 
   setPendingTokens: (accessToken, refreshToken) => {
@@ -100,6 +101,8 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   },
 
   signOut: async () => {
+    const { useRealtimeStore } = await import('./realtimeStore');
+    useRealtimeStore.getState().disconnect();
     await clearTokens();
     set({
       state: 'unauthenticated',
@@ -135,6 +138,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
           timeout: 5000,
         });
         set({ state: 'authenticated', accessToken });
+        get().loadProfile().catch(() => {});
         return true;
       } catch {
         // Token expired or invalid, fall through to refresh
@@ -149,6 +153,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       });
       await storeTokens(data.access_token, data.refresh_token);
       set({ state: 'authenticated', accessToken: data.access_token });
+      get().loadProfile().catch(() => {});
       return true;
     } catch (err: any) {
       const status = err?.response?.status;
@@ -185,19 +190,10 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       }
 
       const { Platform } = await import('react-native');
-      let deviceName = Platform.OS;
-      let osVersion = Platform.OS;
-      let appVersion = '0.1.0';
+      const deviceName = `${Platform.OS} device`;
+      const osVersion = `${Platform.OS} ${Platform.Version}`;
+      const appVersion = '0.1.0';
       let storedId: string | undefined;
-      try {
-        const DeviceInfo = (await import('react-native-device-info')).default;
-        deviceName = await DeviceInfo.getDeviceName();
-        osVersion = `${Platform.OS} ${DeviceInfo.getSystemVersion()}`;
-        appVersion = DeviceInfo.getVersion();
-        storedId = await DeviceInfo.getUniqueId();
-      } catch {
-        // native module not available — use defaults
-      }
 
       const { getSecureItem, setSecureItem } = await import('../utils/secureStorage');
       let deviceId: string | undefined = await getSecureItem('mattbot_device_id') ?? undefined;
@@ -230,12 +226,28 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
           }
 
           try {
+            const { Platform, PermissionsAndroid } = require('react-native');
             const messagingModule = await import('@react-native-firebase/messaging');
             const messaging = messagingModule.default;
-            const authStatus = await messaging().requestPermission();
-            const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED
-              || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-            if (enabled) {
+
+            let permissionGranted = false;
+            if (Platform.OS === 'ios') {
+              const authStatus = await messaging().requestPermission();
+              permissionGranted =
+                authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+                authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+            } else if (Platform.OS === 'android') {
+              if (Platform.Version >= 33) {
+                const result = await PermissionsAndroid.request(
+                  'android.permission.POST_NOTIFICATIONS',
+                );
+                permissionGranted = result === PermissionsAndroid.RESULTS.GRANTED;
+              } else {
+                permissionGranted = true;
+              }
+            }
+
+            if (permissionGranted) {
               const fcmToken = await messaging().getToken();
               if (fcmToken) {
                 const { registerPushToken } = await import('../api/push');

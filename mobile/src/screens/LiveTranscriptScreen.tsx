@@ -3,13 +3,12 @@ import {
   View,
   Text,
   FlatList,
-  Animated,
-  Easing,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Icon } from '../components/ui/Icon';
 import { FadeIn } from '../components/ui/FadeIn';
+import { PulsingDot } from '../components/ui/PulsingDot';
 import { useTheme } from '../theme/ThemeProvider';
 import { useRealtimeStore } from '../store/realtimeStore';
 import { useSettingsStore } from '../store/settingsStore';
@@ -21,43 +20,6 @@ interface TranscriptTurn {
   role: 'user' | 'agent';
   text: string;
   ts: string;
-}
-
-function PulsingDot({ color }: { color: string }) {
-  const opacity = useRef(new Animated.Value(1)).current;
-
-  useEffect(() => {
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(opacity, {
-          toValue: 0.3,
-          duration: 800,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-        Animated.timing(opacity, {
-          toValue: 1,
-          duration: 800,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-      ]),
-    );
-    animation.start();
-    return () => animation.stop();
-  }, [opacity]);
-
-  return (
-    <Animated.View
-      style={{
-        width: 8,
-        height: 8,
-        borderRadius: 4,
-        backgroundColor: color,
-        opacity,
-      }}
-    />
-  );
 }
 
 export function LiveTranscriptScreen({ navigation, route }: Props) {

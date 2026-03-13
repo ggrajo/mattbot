@@ -3,6 +3,7 @@ import {
   View,
   Text,
   Pressable,
+  TouchableOpacity,
   StatusBar,
   ScrollView,
   Platform,
@@ -31,6 +32,8 @@ import { useSettingsStore } from '../store/settingsStore';
 import { useBillingStore } from '../store/billingStore';
 import { useTelephonyStore } from '../store/telephonyStore';
 import { useStatsStore } from '../store/statsStore';
+import { PulsingDot } from '../components/ui/PulsingDot';
+import { useRealtimeStore } from '../store/realtimeStore';
 import { hapticLight } from '../utils/haptics';
 import { getDeviceTimezone } from '../utils/formatDate';
 import { getTimezoneAbbr } from '../utils/timezones';
@@ -397,6 +400,7 @@ export function HomeScreen() {
   const isApproachingLimit = minutesPercent >= 0.8;
   const isAtLimit = minutesPercent >= 1;
 
+  const activeCallId = useRealtimeStore(s => s.activeCallId);
   const userName = displayName ? displayName.split(' ')[0] : (nickname || null);
   const isDark = theme.dark;
   const isStatsLoaded = stats !== null;
@@ -459,6 +463,38 @@ export function HomeScreen() {
             </View>
           </FadeIn>
         </View>
+
+        {/* Live Call Banner */}
+        {activeCallId && (
+          <View style={{ paddingHorizontal: H_PAD, marginBottom: spacing.md }}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('LiveTranscript', { callId: activeCallId })}
+              activeOpacity={0.8}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: spacing.sm,
+                backgroundColor: colors.error + '14',
+                borderRadius: radii.lg,
+                padding: spacing.md,
+                borderWidth: 1,
+                borderColor: colors.error + '30',
+              }}
+            >
+              <PulsingDot color={colors.error} />
+              <Icon name="phone-in-talk" size="md" color={colors.error} />
+              <View style={{ flex: 1 }}>
+                <Text style={{ ...typography.body, color: colors.error, fontWeight: '700' }}>
+                  Live Call In Progress
+                </Text>
+                <Text style={{ ...typography.caption, color: colors.textSecondary }}>
+                  Tap to view live transcript
+                </Text>
+              </View>
+              <Icon name="chevron-right" size="md" color={colors.error} />
+            </TouchableOpacity>
+          </View>
+        )}
 
         {/* Main Content */}
         <View style={{ paddingHorizontal: H_PAD }}>
