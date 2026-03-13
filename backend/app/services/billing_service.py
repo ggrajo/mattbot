@@ -184,6 +184,13 @@ async def subscribe(
     existing = await _get_subscription(db, user_id)
     if existing and existing.status == "active":
         if existing.plan == plan:
+            now_renew = utcnow()
+            existing.current_period_start = now_renew
+            existing.current_period_end = now_renew + timedelta(days=app_settings.BILLING_PERIOD_DAYS)
+            existing.cancel_at_period_end = False
+            existing.canceled_at = None
+            await db.flush()
+            await db.refresh(existing)
             return SubscribeResponse(
                 plan=existing.plan,
                 status=existing.status,
@@ -426,8 +433,10 @@ async def change_plan(
     sub.cancel_at_period_end = False
     sub.canceled_at = None
 
-    if app_settings.BILLING_PROVIDER != "stripe" and sub.current_period_end is None:
-        sub.current_period_end = now + timedelta(days=app_settings.BILLING_PERIOD_DAYS)
+    if app_settings.BILLING_PROVIDER != "stripe":
+        if sub.current_period_end is None or now >= sub.current_period_end:
+            sub.current_period_start = now
+            sub.current_period_end = now + timedelta(days=app_settings.BILLING_PERIOD_DAYS)
 
     await audit_service.log_event(
         db=db,
