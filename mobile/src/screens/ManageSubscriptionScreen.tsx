@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useFocusEffect } from '@react-navigation/native';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -33,9 +34,11 @@ export function ManageSubscriptionScreen({ navigation }: Props) {
   const [canceling, setCanceling] = useState(false);
   const [toastMsg, setToastMsg] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
-  useEffect(() => {
-    loadBillingStatus();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadBillingStatus();
+    }, []),
+  );
 
   async function handleCancel() {
     hapticMedium();

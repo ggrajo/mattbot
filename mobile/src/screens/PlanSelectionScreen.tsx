@@ -112,6 +112,7 @@ export function PlanSelectionScreen({ route, navigation }: Props) {
     setProcessingPlan(null);
     if (ok) {
       showToast(`Resubscribed to ${plan.name}`, 'success');
+      navigation.goBack();
     } else {
       showToast(
         useBillingStore.getState().error ?? 'Resubscription failed',
@@ -187,6 +188,7 @@ export function PlanSelectionScreen({ route, navigation }: Props) {
       navigation.navigate('NumberProvision');
     } else if (ok) {
       showToast(`Switched to ${planName}`, 'success');
+      navigation.goBack();
     } else {
       showToast(
         useBillingStore.getState().error ?? 'Plan change failed',

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, ActivityIndicator, Switch } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useFocusEffect } from '@react-navigation/native';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -37,11 +38,13 @@ export function SubscriptionStatusScreen({ navigation }: Props) {
   const [togglingRenewal, setTogglingRenewal] = useState(false);
   const [toastMsg, setToastMsg] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
-  useEffect(() => {
-    loadPlans();
-    loadBillingStatus();
-    loadPaymentMethods();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadPlans();
+      loadBillingStatus();
+      loadPaymentMethods();
+    }, []),
+  );
 
   async function handleToggleRenewal(newValue: boolean) {
     if (togglingRenewal) return;
