@@ -105,6 +105,7 @@ class LabelResponse(BaseModel):
     reason_text: str
     evidence_snippets: list[str] = []
     confidence: float = 0.0
+    spam_score: float | None = None
     produced_by: str = "deterministic"
 
 

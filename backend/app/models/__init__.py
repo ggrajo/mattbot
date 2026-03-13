@@ -37,6 +37,7 @@ from app.models.push_token import PushToken
 from app.models.recovery_code import RecoveryCode
 from app.models.reminder import Reminder
 from app.models.session import Session
+from app.models.spam_entry import SpamEntry
 from app.models.text_back_template import TextBackTemplate
 from app.models.text_send_attempt import TextSendAttempt
 from app.models.user import User
@@ -90,4 +91,5 @@ __all__ = [
     "HandoffOffer",
     "HandoffSuppression",
     "GoogleCalendarToken",
+    "SpamEntry",
 ]

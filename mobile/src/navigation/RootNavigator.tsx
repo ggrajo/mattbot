@@ -44,6 +44,7 @@ import { AssistantSettingsScreen } from '../screens/AssistantSettingsScreen';
 import { ContactsListScreen } from '../screens/ContactsListScreen';
 import { ContactDetailScreen } from '../screens/ContactDetailScreen';
 import { BlockListScreen } from '../screens/BlockListScreen';
+import { SpamListScreen } from '../screens/SpamListScreen';
 import { VipListScreen } from '../screens/VipListScreen';
 import { LiveTranscriptScreen } from '../screens/LiveTranscriptScreen';
 import { CalendarBookingSettingsScreen } from '../screens/CalendarBookingSettingsScreen';
@@ -281,6 +282,11 @@ export function RootNavigator() {
               name="BlockList"
               component={BlockListScreen}
               options={{ headerShown: true, title: 'Blocked Numbers' }}
+            />
+            <Stack.Screen
+              name="SpamList"
+              component={SpamListScreen}
+              options={{ headerShown: true, title: 'Spam Callers' }}
             />
             <Stack.Screen
               name="VipList"

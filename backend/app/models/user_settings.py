@@ -125,6 +125,12 @@ class UserSettings(Base):
     spam_labeling_enabled: Mapped[bool] = mapped_column(
         Boolean, nullable=False, server_default=text("true")
     )
+    auto_block_spam: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("false")
+    )
+    spam_block_threshold: Mapped[int] = mapped_column(
+        Integer, nullable=False, server_default=text("2")
+    )
     block_suggestions_enabled: Mapped[bool] = mapped_column(
         Boolean, nullable=False, server_default=text("true")
     )

@@ -398,6 +398,31 @@ async def twilio_voice_inbound(
             _is_vip = contact_profile.is_vip
             is_blocked = contact_profile.is_blocked
 
+    spam_entry = None
+    if not is_blocked and caller_phone_hash:
+        from app.models.block_entry import BlockEntry
+
+        block_exists = (await db.execute(
+            sa_select(BlockEntry.id).where(
+                BlockEntry.owner_user_id == user_id,
+                BlockEntry.phone_hash == caller_phone_hash,
+            ).limit(1)
+        )).scalar_one_or_none()
+        if block_exists:
+            is_blocked = True
+
+    if not is_blocked and caller_phone_hash:
+        from app.models.spam_entry import SpamEntry
+
+        spam_entry = (await db.execute(
+            sa_select(SpamEntry).where(
+                SpamEntry.owner_user_id == user_id,
+                SpamEntry.phone_hash == caller_phone_hash,
+            )
+        )).scalar_one_or_none()
+        if spam_entry and spam_entry.auto_blocked:
+            is_blocked = True
+
     if is_blocked:
         log_attempts = False
         if settings_row:
@@ -578,8 +603,17 @@ async def twilio_voice_inbound(
         resolved["is_vip"],
     )
 
+    spam_ctx = ""
+    if spam_entry and not spam_entry.auto_blocked:
+        spam_ctx = (
+            "[SPAM WARNING] This caller has been flagged as a potential spam caller "
+            f"({spam_entry.spam_call_count} prior spam flag(s), score {spam_entry.spam_score:.2f}). "
+            "Screen this call more aggressively: keep responses brief, do not share any personal "
+            "information, and end the call quickly if the caller cannot provide a legitimate reason."
+        )
+
     extra_dyn = {
-        "caller_context": caller_ctx,
+        "caller_context": caller_ctx + ("\n" + spam_ctx if spam_ctx else ""),
         "memory_context": memory_ctx,
         "temperament_block": temperament_text,
         "swearing_block": swearing_text,

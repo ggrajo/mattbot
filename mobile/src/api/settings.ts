@@ -37,6 +37,8 @@ export interface UserSettings {
   log_blocked_attempts: boolean;
   notify_on_blocked: boolean;
   spam_labeling_enabled: boolean;
+  auto_block_spam: boolean;
+  spam_block_threshold: number;
   block_suggestions_enabled: boolean;
   repeat_caller_threshold: number;
   text_approval_mode: string;

@@ -105,6 +105,7 @@ const QUICK_ACTIONS = [
   { icon: 'bell-outline', label: 'Alerts', route: 'RemindersList', color: '#F472B6' },
   { icon: 'brain', label: 'Memory', route: 'MemoryList', color: '#0EA5E9' },
   { icon: 'star-outline', label: 'VIP', route: 'VipList', color: '#F59E0B' },
+  { icon: 'alert-octagon-outline', label: 'Spam', route: 'SpamList', color: '#EF4444' },
 ] as const;
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);

@@ -887,6 +887,90 @@ export function PrivacySettingsScreen({ navigation }: Props) {
         </View>
       </Card>
 
+      {/* Spam Protection */}
+      <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
+        <View style={{ gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <View style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: (colors.warning ?? '#F59E0B') + '18', alignItems: 'center', justifyContent: 'center' }}>
+              <Icon name="alert-octagon-outline" size="md" color={colors.warning ?? '#F59E0B'} />
+            </View>
+            <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600', flex: 1 }} allowFontScaling>
+              Spam Protection
+            </Text>
+          </View>
+
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ flex: 1, marginRight: spacing.sm }}>
+              <Text style={{ ...typography.body, color: colors.textPrimary }} allowFontScaling>Auto-block repeat spam</Text>
+              <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+                Automatically block callers flagged multiple times
+              </Text>
+            </View>
+            <Switch
+              value={settings?.auto_block_spam ?? false}
+              onValueChange={(val) => handleToggle('auto_block_spam', val)}
+              trackColor={{ false: colors.border, true: colors.primary + '60' }}
+              thumbColor={settings?.auto_block_spam ? colors.primary : colors.textDisabled}
+            />
+          </View>
+
+          {settings?.auto_block_spam && (
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Text style={{ ...typography.body, color: colors.textPrimary }} allowFontScaling>
+                Block after
+              </Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+                {[2, 3, 4, 5].map((n) => (
+                  <TouchableOpacity
+                    key={n}
+                    onPress={() => updateSettings({ spam_block_threshold: n })}
+                    style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 18,
+                      backgroundColor: (settings?.spam_block_threshold ?? 2) === n ? colors.primary : colors.surface,
+                      borderWidth: 1,
+                      borderColor: (settings?.spam_block_threshold ?? 2) === n ? colors.primary : colors.border,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Block after ${n} spam flags`}
+                  >
+                    <Text style={{
+                      ...typography.body,
+                      fontWeight: '700',
+                      color: (settings?.spam_block_threshold ?? 2) === n ? colors.onPrimary : colors.textPrimary,
+                    }} allowFontScaling>
+                      {n}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+                <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+                  flags
+                </Text>
+              </View>
+            </View>
+          )}
+
+          <Divider />
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SpamList')}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}
+            activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel="View spam callers list"
+          >
+            <Icon name="format-list-bulleted" size="md" color={colors.textSecondary} />
+            <Text style={{ ...typography.body, color: colors.primary, flex: 1 }} allowFontScaling>
+              View Spam Callers
+            </Text>
+            <Icon name="chevron-right" size="md" color={colors.textSecondary} />
+          </TouchableOpacity>
+        </View>
+      </Card>
+
       {/* Call Recording — always on */}
       <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>

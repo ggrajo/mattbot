@@ -188,6 +188,7 @@ def create_app() -> FastAPI:
         prompt_suggestions,
         push,
         reminders,
+        spam,
         stats,
         vip,
         voices,
@@ -218,6 +219,7 @@ def create_app() -> FastAPI:
     application.include_router(contacts.router, prefix="/api/v1/contacts", tags=["contacts"])
     application.include_router(vip.router, prefix="/api/v1/vip", tags=["vip"])
     application.include_router(blocks.router, prefix="/api/v1/blocks", tags=["blocks"])
+    application.include_router(spam.router, prefix="/api/v1/spam", tags=["spam"])
     application.include_router(agents.router, prefix="/api/v1/agents", tags=["agents"])
     application.include_router(voices.router, prefix="/api/v1/voices", tags=["voices"])
     application.include_router(

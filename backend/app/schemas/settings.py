@@ -101,6 +101,8 @@ class SettingsResponse(BaseModel):
     notify_on_blocked: bool = False
 
     spam_labeling_enabled: bool = True
+    auto_block_spam: bool = False
+    spam_block_threshold: int = 2
     block_suggestions_enabled: bool = True
     repeat_caller_threshold: int = 3
 
@@ -174,6 +176,8 @@ class SettingsChanges(BaseModel):
     notify_on_blocked: bool | None = None
 
     spam_labeling_enabled: bool | None = None
+    auto_block_spam: bool | None = None
+    spam_block_threshold: int | None = None
     block_suggestions_enabled: bool | None = None
     repeat_caller_threshold: int | None = None
 

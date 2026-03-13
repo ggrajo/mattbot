@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable } from 'react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, Pressable, TouchableOpacity } from 'react-native';
+import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import Config from 'react-native-config';
@@ -13,18 +13,25 @@ import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Card } from '../components/ui/Card';
 import { useTheme } from '../theme/ThemeProvider';
 import { useAuthStore } from '../store/authStore';
-import { login, oauthGoogle } from '../api/auth';
+import { login, oauthGoogle, pinLogin, refreshToken as refreshTokenApi } from '../api/auth';
 import { extractApiError } from '../api/client';
 import { validateField, emailSchema, passwordSchema } from '../utils/validation';
+import { getSecureItem } from '../utils/secureStorage';
+import { useBiometric } from '../hooks/useBiometric';
+import { hapticLight, hapticMedium } from '../utils/haptics';
 import { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
+
+type LoginMode = 'email' | 'pin';
 
 export function LoginScreen({ navigation }: Props) {
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
   const { setAuthenticated, setMfaRequired, setMfaEnrollment } = useAuthStore();
+  const { available: biometricAvailable, biometryType, authenticate } = useBiometric();
 
+  const [mode, setMode] = useState<LoginMode>('email');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState<string>();
@@ -33,12 +40,26 @@ export function LoginScreen({ navigation }: Props) {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
+  const [pin, setPin] = useState('');
+  const [pinLoading, setPinLoading] = useState(false);
+  const [hasDevicePin, setHasDevicePin] = useState(false);
+  const [storedDeviceId, setStoredDeviceId] = useState<string | null>(null);
+
   useEffect(() => {
     GoogleSignin.configure({
       webClientId: Config.GOOGLE_WEB_CLIENT_ID,
       offlineAccess: false,
     });
+    checkPinAvailability();
   }, []);
+
+  async function checkPinAvailability() {
+    const deviceId = await getSecureItem('mattbot_device_id');
+    if (deviceId) {
+      setStoredDeviceId(deviceId);
+      setHasDevicePin(true);
+    }
+  }
 
   function handleLoginResponse(data: any) {
     if (data.requires_mfa) {
@@ -98,6 +119,199 @@ export function LoginScreen({ navigation }: Props) {
     }
   }
 
+  const handlePinDigit = useCallback((digit: string) => {
+    hapticLight();
+    setPin(prev => {
+      if (prev.length >= 6) return prev;
+      const next = prev + digit;
+      if (next.length === 6) {
+        setTimeout(() => submitPin(next), 100);
+      }
+      return next;
+    });
+  }, [storedDeviceId]);
+
+  const handlePinDelete = useCallback(() => {
+    hapticLight();
+    setPin(prev => prev.slice(0, -1));
+  }, []);
+
+  async function submitPin(pinValue: string) {
+    if (!storedDeviceId) {
+      setApiError('No device registered. Please sign in with email first.');
+      return;
+    }
+    hapticMedium();
+    setPinLoading(true);
+    setApiError(undefined);
+    try {
+      const data = await pinLogin(storedDeviceId, pinValue);
+      handleLoginResponse(data);
+    } catch (error) {
+      setApiError(extractApiError(error));
+      setPin('');
+    } finally {
+      setPinLoading(false);
+    }
+  }
+
+  async function handleBiometricLogin() {
+    if (!storedDeviceId) return;
+    hapticMedium();
+    setApiError(undefined);
+    const success = await authenticate('Authenticate to sign in');
+    if (success) {
+      const storedRefresh = await getSecureItem('refresh_token');
+      if (storedRefresh) {
+        try {
+          const data = await refreshTokenApi(storedRefresh);
+          if (data.access_token) {
+            setAuthenticated(data.access_token, data.refresh_token);
+            return;
+          }
+        } catch {
+          setApiError('Session expired. Please sign in with email or PIN.');
+        }
+      } else {
+        setApiError('No saved session. Please sign in with email or PIN first.');
+      }
+    }
+  }
+
+  const pinDots = Array.from({ length: 6 }, (_, i) => i < pin.length);
+  const pinKeys = [
+    ['1', '2', '3'],
+    ['4', '5', '6'],
+    ['7', '8', '9'],
+    ['bio', '0', 'del'],
+  ];
+
+  if (mode === 'pin') {
+    return (
+      <ScreenWrapper>
+        <Animated.View
+          entering={FadeInDown.duration(400)}
+          style={{ alignItems: 'center', paddingTop: spacing.xl, flex: 1 }}
+        >
+          <View
+            style={{
+              width: 56, height: 56, borderRadius: radii.full,
+              backgroundColor: colors.primaryContainer,
+              alignItems: 'center', justifyContent: 'center', marginBottom: spacing.md,
+            }}
+          >
+            <Icon name="lock-outline" size="xl" color={colors.primary} />
+          </View>
+          <Text style={{ ...typography.h2, color: colors.textPrimary, marginBottom: spacing.xs }} allowFontScaling>
+            Enter PIN
+          </Text>
+          <Text style={{ ...typography.bodySmall, color: colors.textSecondary, marginBottom: spacing.xl }} allowFontScaling>
+            Use your 6-digit PIN to sign in
+          </Text>
+
+          {apiError && (
+            <Animated.View entering={FadeInDown.duration(200)} style={{ marginBottom: spacing.md, paddingHorizontal: spacing.lg }}>
+              <ErrorMessage message={apiError} />
+            </Animated.View>
+          )}
+
+          {/* PIN dots */}
+          <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.xxl }}>
+            {pinDots.map((filled, i) => (
+              <Animated.View
+                key={i}
+                entering={FadeInDown.duration(200).delay(i * 50)}
+                style={{
+                  width: 16, height: 16, borderRadius: 8,
+                  backgroundColor: filled ? colors.primary : 'transparent',
+                  borderWidth: 2,
+                  borderColor: filled ? colors.primary : colors.border,
+                }}
+              />
+            ))}
+          </View>
+
+          {/* PIN keypad */}
+          <View style={{ gap: spacing.md, alignItems: 'center' }}>
+            {pinKeys.map((row, ri) => (
+              <View key={ri} style={{ flexDirection: 'row', gap: spacing.lg }}>
+                {row.map((key) => {
+                  if (key === 'bio') {
+                    if (!biometricAvailable) return <View key="bio" style={{ width: 72, height: 72 }} />;
+                    const bioIcon = biometryType === 'FaceID' ? 'face-recognition' : 'fingerprint';
+                    return (
+                      <TouchableOpacity
+                        key="bio"
+                        onPress={handleBiometricLogin}
+                        style={{
+                          width: 72, height: 72, borderRadius: 36,
+                          backgroundColor: colors.primaryContainer + '60',
+                          alignItems: 'center', justifyContent: 'center',
+                        }}
+                        activeOpacity={0.7}
+                        accessibilityLabel="Sign in with biometrics"
+                      >
+                        <Icon name={bioIcon} size={28} color={colors.primary} />
+                      </TouchableOpacity>
+                    );
+                  }
+                  if (key === 'del') {
+                    return (
+                      <TouchableOpacity
+                        key="del"
+                        onPress={handlePinDelete}
+                        onLongPress={() => { hapticLight(); setPin(''); }}
+                        style={{
+                          width: 72, height: 72, borderRadius: 36,
+                          alignItems: 'center', justifyContent: 'center',
+                        }}
+                        activeOpacity={0.7}
+                        accessibilityLabel="Delete last digit"
+                      >
+                        <Icon name="backspace-outline" size={24} color={colors.textSecondary} />
+                      </TouchableOpacity>
+                    );
+                  }
+                  return (
+                    <TouchableOpacity
+                      key={key}
+                      onPress={() => handlePinDigit(key)}
+                      disabled={pinLoading}
+                      style={{
+                        width: 72, height: 72, borderRadius: 36,
+                        backgroundColor: colors.surface,
+                        borderWidth: 1, borderColor: colors.border,
+                        alignItems: 'center', justifyContent: 'center',
+                      }}
+                      activeOpacity={0.7}
+                      accessibilityLabel={`Digit ${key}`}
+                    >
+                      <Text style={{ ...typography.h2, color: colors.textPrimary, fontWeight: '500' }} allowFontScaling>
+                        {key}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            ))}
+          </View>
+
+          {/* Switch to email */}
+          <TouchableOpacity
+            onPress={() => { setMode('email'); setApiError(undefined); setPin(''); }}
+            style={{ marginTop: spacing.xl, flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+            activeOpacity={0.7}
+          >
+            <Icon name="email-outline" size={18} color={colors.primary} />
+            <Text style={{ ...typography.bodySmall, color: colors.primary, fontWeight: '600' }} allowFontScaling>
+              Sign in with email instead
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
+      </ScreenWrapper>
+    );
+  }
+
   return (
     <ScreenWrapper>
       {/* Header */}
@@ -136,6 +350,65 @@ export function LoginScreen({ navigation }: Props) {
       {apiError && (
         <Animated.View entering={FadeInDown.duration(300)} style={{ marginBottom: spacing.md }}>
           <ErrorMessage message={apiError} />
+        </Animated.View>
+      )}
+
+      {/* Quick auth options (PIN + Biometric) */}
+      {hasDevicePin && (
+        <Animated.View entering={FadeInDown.duration(400).delay(150)} style={{ marginBottom: spacing.lg }}>
+          <View style={{ flexDirection: 'row', gap: spacing.sm }}>
+            <TouchableOpacity
+              onPress={() => { setMode('pin'); setApiError(undefined); }}
+              activeOpacity={0.7}
+              style={{
+                flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+                gap: spacing.sm, paddingVertical: spacing.md,
+                borderRadius: radii.lg, borderWidth: 1, borderColor: colors.border,
+                backgroundColor: colors.surface,
+              }}
+              accessibilityLabel="Sign in with PIN"
+            >
+              <View style={{
+                width: 36, height: 36, borderRadius: 18,
+                backgroundColor: colors.primary + '14',
+                alignItems: 'center', justifyContent: 'center',
+              }}>
+                <Icon name="dialpad" size={20} color={colors.primary} />
+              </View>
+              <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }} allowFontScaling>
+                Use PIN
+              </Text>
+            </TouchableOpacity>
+
+            {biometricAvailable && (
+              <TouchableOpacity
+                onPress={handleBiometricLogin}
+                activeOpacity={0.7}
+                style={{
+                  flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+                  gap: spacing.sm, paddingVertical: spacing.md,
+                  borderRadius: radii.lg, borderWidth: 1, borderColor: colors.border,
+                  backgroundColor: colors.surface,
+                }}
+                accessibilityLabel={`Sign in with ${biometryType === 'FaceID' ? 'Face ID' : 'fingerprint'}`}
+              >
+                <View style={{
+                  width: 36, height: 36, borderRadius: 18,
+                  backgroundColor: colors.success + '14',
+                  alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <Icon
+                    name={biometryType === 'FaceID' ? 'face-recognition' : 'fingerprint'}
+                    size={20}
+                    color={colors.success ?? '#22C55E'}
+                  />
+                </View>
+                <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }} allowFontScaling>
+                  {biometryType === 'FaceID' ? 'Face ID' : 'Fingerprint'}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </Animated.View>
       )}
 

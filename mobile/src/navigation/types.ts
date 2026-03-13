@@ -43,6 +43,7 @@ export type RootStackParamList = {
   ContactsList: undefined;
   ContactDetail: { contactId: string };
   BlockList: undefined;
+  SpamList: undefined;
   VipList: undefined;
   CategoryDefaults: undefined;
   HandoffSettings: undefined;

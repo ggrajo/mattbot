@@ -116,17 +116,20 @@ function eventLabel(eventType: string, providerStatus: string | null): string {
 
 const LABEL_PRIORITY: Record<string, number> = {
   spam: 0,
-  urgent: 1,
-  vip: 2,
-  sales: 3,
-  normal: 4,
-  unknown: 5,
+  possible_spam: 1,
+  urgent: 2,
+  vip: 3,
+  sales: 4,
+  normal: 5,
+  unknown: 6,
 };
 
 function labelBadgeVariant(name: string): 'primary' | 'success' | 'warning' | 'error' | 'info' {
   switch (name) {
     case 'spam':
       return 'error';
+    case 'possible_spam':
+      return 'warning';
     case 'urgent':
       return 'warning';
     case 'vip':
@@ -142,6 +145,8 @@ function labelColor(name: string, colors: any): string {
   switch (name) {
     case 'spam':
       return colors.error;
+    case 'possible_spam':
+      return colors.warning ?? '#F59E0B';
     case 'urgent':
       return colors.warning ?? '#F59E0B';
     case 'vip':
@@ -157,6 +162,8 @@ function labelDisplayName(name: string): string {
   switch (name) {
     case 'spam':
       return 'Spam';
+    case 'possible_spam':
+      return 'Possible Spam';
     case 'urgent':
       return 'Urgent';
     case 'vip':
@@ -400,7 +407,13 @@ export function CallDetailScreen() {
   if (detailError && !selectedCall) {
     return (
       <ScreenWrapper>
-        <ErrorMessage message="Could not load call details. Please try again." action="Retry" onAction={() => loadCallDetail(callId)} />
+        <View style={{ paddingTop: spacing.lg, paddingHorizontal: spacing.md }}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.lg }}>
+            <Icon name="arrow-left" size={24} color={colors.textPrimary} />
+            <Text style={{ ...typography.body, color: colors.textPrimary, marginLeft: spacing.xs }}>Back</Text>
+          </TouchableOpacity>
+        </View>
+        <ErrorMessage message={detailError || 'Could not load call details.'} action="Retry" onAction={() => loadCallDetail(callId)} />
       </ScreenWrapper>
     );
   }
@@ -865,6 +878,87 @@ export function CallDetailScreen() {
             </View>
           </Card>
         </View>
+        </FadeIn>
+      )}
+
+      {/* Spam Analysis Card */}
+      {sortedLabels.some((l) => l.label_name === 'spam' || l.label_name === 'possible_spam') && (
+        <FadeIn delay={130}>
+          <View style={{ marginBottom: spacing.lg }}>
+            <Card variant="flat" style={{ borderLeftWidth: 3, borderLeftColor: colors.error }}>
+              <View style={{ gap: spacing.sm }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+                  <Icon name="alert-octagon" size="md" color={colors.error} />
+                  <Text style={{ ...typography.h3, color: colors.error, flex: 1 }} allowFontScaling>
+                    Spam Analysis
+                  </Text>
+                  {(() => {
+                    const spamLabel = sortedLabels.find((l) => l.label_name === 'spam' || l.label_name === 'possible_spam');
+                    const score = spamLabel?.spam_score ?? spamLabel?.confidence ?? 0;
+                    return (
+                      <View style={{
+                        paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8,
+                        backgroundColor: (score >= 0.7 ? colors.error : (colors.warning ?? '#F59E0B')) + '18',
+                      }}>
+                        <Text style={{
+                          ...typography.caption, fontWeight: '700',
+                          color: score >= 0.7 ? colors.error : (colors.warning ?? '#F59E0B'),
+                        }} allowFontScaling>
+                          {Math.round(score * 100)}% confidence
+                        </Text>
+                      </View>
+                    );
+                  })()}
+                </View>
+                {sortedLabels
+                  .filter((l) => l.label_name === 'spam' || l.label_name === 'possible_spam')
+                  .map((l) => (
+                    <View key={l.label_name}>
+                      <Text style={{ ...typography.bodySmall, color: colors.textPrimary }} allowFontScaling>
+                        {l.reason_text}
+                      </Text>
+                      {l.evidence_snippets.length > 0 && l.evidence_snippets.map((s, i) => (
+                        <Text key={i} style={{ ...typography.caption, color: colors.textSecondary, fontStyle: 'italic', marginTop: 2 }} numberOfLines={2} allowFontScaling>
+                          "{s}"
+                        </Text>
+                      ))}
+                    </View>
+                  ))}
+                <View style={{ flexDirection: 'row', gap: spacing.sm, marginTop: spacing.xs }}>
+                  {!isSpam && (
+                    <TouchableOpacity
+                      onPress={() => setSpamSheetVisible(true)}
+                      style={{
+                        flex: 1, paddingVertical: spacing.sm, borderRadius: radii.md,
+                        backgroundColor: colors.error + '14', alignItems: 'center',
+                      }}
+                      accessibilityRole="button"
+                      accessibilityLabel="Block caller"
+                    >
+                      <Text style={{ ...typography.bodySmall, color: colors.error, fontWeight: '600' }} allowFontScaling>
+                        Block Caller
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                  {isSpam && (
+                    <TouchableOpacity
+                      onPress={handleRemoveSpam}
+                      style={{
+                        flex: 1, paddingVertical: spacing.sm, borderRadius: radii.md,
+                        backgroundColor: colors.success + '14', alignItems: 'center',
+                      }}
+                      accessibilityRole="button"
+                      accessibilityLabel="Mark as not spam"
+                    >
+                      <Text style={{ ...typography.bodySmall, color: colors.success, fontWeight: '600' }} allowFontScaling>
+                        Not Spam
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+            </Card>
+          </View>
         </FadeIn>
       )}
 

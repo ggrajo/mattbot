@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     ENCRYPTION_MASTER_KEY: str = "CHANGE_ME"
 
     GOOGLE_CLIENT_ID: str = ""
+    GOOGLE_ANDROID_CLIENT_ID: str = ""
     APPLE_BUNDLE_ID: str = "com.mattbot.app"
     APPLE_TEAM_ID: str = ""
 

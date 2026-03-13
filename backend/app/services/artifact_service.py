@@ -461,12 +461,139 @@ def _classify_urgency(urgency_text: str, transcript_turns: list[dict]) -> str:
 # ---------------------------------------------------------------------------
 
 
-def compute_labels(
+_SPAM_KEYWORDS = [
+    "warranty", "you have been selected", "press 1", "robo",
+    "congratulations you've won", "free offer", "irs", "social security",
+    "auto warranty", "extended warranty", "your account has been",
+    "you've been chosen", "claim your prize", "act now", "limited time",
+    "final notice", "this is an automated", "press one", "press nine",
+    "do not hang up", "your car's warranty", "debt relief",
+    "credit card rate", "lower your interest", "free vacation",
+    "you have won", "verify your account", "suspicious activity on your",
+    "we are calling about your", "this call is being recorded for quality",
+]
+
+_SALES_KEYWORDS = [
+    "special offer", "discount", "promotion", "subscription",
+    "service we offer", "quote for you", "pricing", "package deal",
+    "sign up today", "free trial", "no obligation",
+]
+
+_GENERIC_CALLER_NAMES = {
+    "representative", "agent", "customer service", "department",
+    "support", "operator", "associate", "specialist", "",
+}
+
+
+def _compute_spam_score(
+    all_text: str,
+    transcript_turns: list[dict],
+    structured_extraction: dict,
+    el_data: dict | None,
+    call_duration_seconds: int | None,
+    prior_spam_count: int,
+    is_vip: bool,
+) -> tuple[float, list[str], list[str]]:
+    """Multi-signal spam scorer. Returns (score, reasons, evidence_snippets).
+
+    Signals and weights:
+      - Keyword patterns:    0.30
+      - Behavioral signals:  0.25
+      - AI extraction:       0.25
+      - Repeat offender:     0.20
+    """
+    if is_vip:
+        return 0.0, [], []
+
+    keyword_score = 0.0
+    behavior_score = 0.0
+    ai_score = 0.0
+    repeat_score = 0.0
+    reasons: list[str] = []
+    evidence: list[str] = []
+
+    # --- Keyword patterns (weight 0.30) ---
+    spam_hits = [kw for kw in _SPAM_KEYWORDS if kw in all_text]
+    if spam_hits:
+        keyword_score = min(1.0, len(spam_hits) * 0.35)
+        reasons.append(f"Matched {len(spam_hits)} spam keyword(s): {', '.join(spam_hits[:3])}")
+        evidence.extend(
+            t["text"][:120] for t in transcript_turns
+            if any(kw in t["text"].lower() for kw in spam_hits)
+        )
+
+    # --- Behavioral signals (weight 0.25) ---
+    caller_name = (structured_extraction.get("caller_name") or "").strip().lower()
+    reason_for_call = (structured_extraction.get("reason") or structured_extraction.get("reason_for_call") or "").strip()
+    no_name = not caller_name or caller_name in _GENERIC_CALLER_NAMES
+    no_reason = len(reason_for_call) < 5
+
+    if no_name and no_reason:
+        behavior_score = 0.9
+        reasons.append("Caller refused to provide name and reason")
+    elif no_name:
+        behavior_score = 0.5
+        reasons.append("Caller did not provide a name")
+    elif no_reason:
+        behavior_score = 0.3
+        reasons.append("Caller did not provide a clear reason")
+
+    if call_duration_seconds is not None and call_duration_seconds < 15 and no_name:
+        behavior_score = max(behavior_score, 0.8)
+        reasons.append(f"Very short call ({call_duration_seconds}s) with no identification")
+
+    user_turns = [t for t in transcript_turns if t.get("role") == "user"]
+    if not user_turns and len(transcript_turns) > 2:
+        behavior_score = max(behavior_score, 0.7)
+        reasons.append("No caller speech detected (possible robocall)")
+
+    # --- AI extraction signals (weight 0.25) ---
+    el_analysis = {}
+    if el_data and isinstance(el_data.get("analysis"), dict):
+        el_analysis = el_data["analysis"]
+        dc = el_analysis.get("data_collection_results") or {}
+        if isinstance(dc, dict):
+            ai_reason = (dc.get("reason_for_call") or dc.get("reason") or "").strip().lower()
+            ai_name = (dc.get("caller_name") or "").strip().lower()
+            if (not ai_name or ai_name in _GENERIC_CALLER_NAMES) and not ai_reason:
+                ai_score = 0.7
+                reasons.append("AI could not extract caller identity or purpose")
+            elif not ai_reason:
+                ai_score = 0.3
+
+    urgency = structured_extraction.get("urgency_level", "normal")
+    if urgency == "normal" and no_name and no_reason:
+        ai_score = max(ai_score, 0.6)
+
+    # --- Repeat offender (weight 0.20) ---
+    if prior_spam_count >= 3:
+        repeat_score = 1.0
+        reasons.append(f"Repeat spam caller ({prior_spam_count} prior flags)")
+    elif prior_spam_count >= 1:
+        repeat_score = 0.6 + (prior_spam_count * 0.15)
+        reasons.append(f"Previously flagged as spam ({prior_spam_count}x)")
+
+    weighted = (
+        keyword_score * 0.30
+        + behavior_score * 0.25
+        + ai_score * 0.25
+        + repeat_score * 0.20
+    )
+
+    return round(min(1.0, weighted), 3), reasons[:5], evidence[:3]
+
+
+async def compute_labels(
+    db: AsyncSession,
+    caller_phone_hash: str,
+    owner_user_id: uuid.UUID,
     transcript_turns: list[dict],
     structured_extraction: dict,
     el_data: dict | None = None,
+    call_duration_seconds: int | None = None,
+    spam_labeling_enabled: bool = True,
 ) -> list[dict]:
-    """Compute call labels with reasons and evidence."""
+    """Compute call labels with reasons and evidence, including multi-signal spam scoring."""
     labels: list[dict] = []
     urgency = structured_extraction.get("urgency_level", "normal")
 
@@ -488,66 +615,82 @@ def compute_labels(
             }
         )
 
-    spam_keywords = [
-        "warranty",
-        "you have been selected",
-        "press 1",
-        "robo",
-        "congratulations you've won",
-        "free offer",
-    ]
+    # --- Spam scoring ---
+    if spam_labeling_enabled:
+        from app.models.vip_entry import VipEntry
 
-    if any(kw in all_text for kw in spam_keywords):
-        evidence = [
-            t["text"][:100]
-            for t in transcript_turns
-            if any(kw in t["text"].lower() for kw in spam_keywords)
-        ][:3]
-        labels.append(
-            {
-                "label_name": "spam",
-                "reason_text": "Call matches spam patterns",
-                "evidence_snippets": evidence,
-                "confidence": 0.75,
-                "produced_by": "deterministic",
-            }
+        is_vip = False
+        prior_spam_count = 0
+
+        if caller_phone_hash:
+            vip_row = (await db.execute(
+                select(VipEntry.id).where(
+                    VipEntry.owner_user_id == owner_user_id,
+                    VipEntry.phone_hash == caller_phone_hash,
+                ).limit(1)
+            )).scalar_one_or_none()
+            is_vip = vip_row is not None
+
+            try:
+                from app.models.spam_entry import SpamEntry
+                spam_row = (await db.execute(
+                    select(SpamEntry.spam_call_count).where(
+                        SpamEntry.owner_user_id == owner_user_id,
+                        SpamEntry.phone_hash == caller_phone_hash,
+                    )
+                )).scalar_one_or_none()
+                prior_spam_count = spam_row or 0
+            except Exception:
+                pass
+
+        spam_score, spam_reasons, spam_evidence = _compute_spam_score(
+            all_text, transcript_turns, structured_extraction, el_data,
+            call_duration_seconds, prior_spam_count, is_vip,
         )
 
-    sales_keywords = [
-        "special offer",
-        "discount",
-        "promotion",
-        "subscription",
-        "service we offer",
-        "quote for you",
-    ]
+        if spam_score >= 0.7:
+            labels.append({
+                "label_name": "spam",
+                "reason_text": "; ".join(spam_reasons) or "Call matches spam patterns",
+                "evidence_snippets": spam_evidence,
+                "confidence": spam_score,
+                "spam_score": spam_score,
+                "produced_by": "ai_assisted",
+            })
+        elif spam_score >= 0.4:
+            labels.append({
+                "label_name": "possible_spam",
+                "reason_text": "; ".join(spam_reasons) or "Call shows some spam indicators",
+                "evidence_snippets": spam_evidence,
+                "confidence": spam_score,
+                "spam_score": spam_score,
+                "produced_by": "ai_assisted",
+            })
 
-    if any(kw in all_text for kw in sales_keywords):
-        evidence = [
-            t["text"][:100]
-            for t in transcript_turns
-            if any(kw in t["text"].lower() for kw in sales_keywords)
-        ][:3]
-        labels.append(
-            {
+    # --- Sales detection ---
+    if not any(l["label_name"] in ("spam", "possible_spam") for l in labels):
+        if any(kw in all_text for kw in _SALES_KEYWORDS):
+            evidence = [
+                t["text"][:100]
+                for t in transcript_turns
+                if any(kw in t["text"].lower() for kw in _SALES_KEYWORDS)
+            ][:3]
+            labels.append({
                 "label_name": "sales",
                 "reason_text": "Caller appears to be selling a product or service",
                 "evidence_snippets": evidence,
                 "confidence": 0.7,
                 "produced_by": "deterministic",
-            }
-        )
+            })
 
     if not labels:
-        labels.append(
-            {
-                "label_name": "normal",
-                "reason_text": "Standard call with no special classification",
-                "evidence_snippets": [],
-                "confidence": 0.9,
-                "produced_by": "deterministic",
-            }
-        )
+        labels.append({
+            "label_name": "normal",
+            "reason_text": "Standard call with no special classification",
+            "evidence_snippets": [],
+            "confidence": 0.9,
+            "produced_by": "deterministic",
+        })
 
     return labels
 
@@ -801,6 +944,93 @@ async def create_memory_items(
 
 
 # ---------------------------------------------------------------------------
+# Spam registration
+# ---------------------------------------------------------------------------
+
+
+async def _register_spam_caller(
+    db: AsyncSession,
+    user_id: uuid.UUID,
+    caller_phone_hash: str,
+    from_masked: str,
+    spam_score: float,
+) -> None:
+    """Upsert a SpamEntry and optionally auto-block if threshold reached."""
+    try:
+        from app.models.spam_entry import SpamEntry
+    except ImportError:
+        logger.debug("SpamEntry model not yet available, skipping registration")
+        return
+
+    existing = (await db.execute(
+        select(SpamEntry).where(
+            SpamEntry.owner_user_id == user_id,
+            SpamEntry.phone_hash == caller_phone_hash,
+        )
+    )).scalar_one_or_none()
+
+    now = utcnow()
+    if existing:
+        existing.spam_call_count += 1
+        existing.spam_score = round(
+            (existing.spam_score * (existing.spam_call_count - 1) + spam_score)
+            / existing.spam_call_count, 3
+        )
+        existing.last_flagged_at = now
+    else:
+        phone_last4 = from_masked[-4:] if len(from_masked) >= 4 else from_masked
+        entry = SpamEntry(
+            owner_user_id=user_id,
+            phone_hash=caller_phone_hash,
+            phone_last4=phone_last4,
+            spam_score=spam_score,
+            spam_call_count=1,
+            first_flagged_at=now,
+            last_flagged_at=now,
+            auto_blocked=False,
+            source="auto",
+        )
+        db.add(entry)
+        existing = entry
+
+    await db.flush()
+
+    settings_row = (
+        await db.execute(select(UserSettings).where(UserSettings.owner_user_id == user_id))
+    ).scalar_one_or_none()
+
+    if (
+        settings_row
+        and getattr(settings_row, "auto_block_spam", False)
+        and existing.spam_call_count >= getattr(settings_row, "spam_block_threshold", 2)
+        and not existing.auto_blocked
+    ):
+        from app.models.block_entry import BlockEntry
+
+        already_blocked = (await db.execute(
+            select(BlockEntry.id).where(
+                BlockEntry.owner_user_id == user_id,
+                BlockEntry.phone_hash == caller_phone_hash,
+            ).limit(1)
+        )).scalar_one_or_none()
+
+        if not already_blocked:
+            block = BlockEntry(
+                owner_user_id=user_id,
+                phone_hash=caller_phone_hash,
+                phone_last4=existing.phone_last4,
+                reason="auto_spam",
+            )
+            db.add(block)
+        existing.auto_blocked = True
+        await db.flush()
+        logger.info(
+            "Auto-blocked spam caller %s for user %s (count=%d)",
+            caller_phone_hash[:8], str(user_id)[:8], existing.spam_call_count,
+        )
+
+
+# ---------------------------------------------------------------------------
 # Main processing pipeline
 # ---------------------------------------------------------------------------
 
@@ -872,10 +1102,38 @@ async def process_call_artifacts(
     if artifact.labels_status in ("processing", "pending"):
         if transcript_turns or artifact.structured_extraction:
             extraction = artifact.structured_extraction or {}
-            labels = compute_labels(transcript_turns, extraction, el_data)
+            settings_row = (
+                await db.execute(select(UserSettings).where(UserSettings.owner_user_id == user_id))
+            ).scalar_one_or_none()
+            spam_enabled = settings_row.spam_labeling_enabled if settings_row else True
+            labels = await compute_labels(
+                db,
+                caller_phone_hash=call.caller_phone_hash or "",
+                owner_user_id=user_id,
+                transcript_turns=transcript_turns,
+                structured_extraction=extraction,
+                el_data=el_data,
+                call_duration_seconds=call.duration_seconds,
+                spam_labeling_enabled=spam_enabled,
+            )
             artifact.labels_json = labels
             artifact.labels_status = "ready"
             call.missing_labels = False
+
+            is_spam = any(
+                lbl.get("label_name") in ("spam", "possible_spam") for lbl in labels
+            )
+            if is_spam and call.caller_phone_hash:
+                spam_score = max(
+                    (l.get("spam_score") or l.get("confidence", 0))
+                    for l in labels
+                    if l["label_name"] in ("spam", "possible_spam")
+                )
+                await _register_spam_caller(
+                    db, user_id, call.caller_phone_hash,
+                    call.from_masked or "",
+                    spam_score=spam_score,
+                )
         elif artifact.transcript_status == "failed":
             artifact.labels_status = "failed"
 

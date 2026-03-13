@@ -14,7 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.call_artifact import CallArtifact
 from app.services import artifact_service
 from app.services.event_emitter import emit_event
-from app.services.notification_service import notify_call_screened
+from app.services.notification_service import notify_call_screened, notify_spam_detected
 
 logger = logging.getLogger(__name__)
 
@@ -69,6 +69,14 @@ async def process_pending_artifacts(db: AsyncSession) -> int:
                     user_id=artifact.owner_user_id,
                     labels=artifact.labels_json,
                 )
+
+                if any(
+                    lbl.get("label_name") == "spam"
+                    for lbl in (artifact.labels_json or [])
+                ):
+                    await notify_spam_detected(
+                        db, artifact.call_id, artifact.owner_user_id
+                    )
 
             processed += 1
         except Exception:

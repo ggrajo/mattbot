@@ -12,6 +12,7 @@ export interface CallLabel {
   reason_text: string;
   evidence_snippets: string[];
   confidence: number;
+  spam_score?: number;
   produced_by: string;
 }
 

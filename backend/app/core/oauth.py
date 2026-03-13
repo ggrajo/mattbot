@@ -19,13 +19,29 @@ class OAuthUserInfo:
 
 
 async def verify_google_id_token(token: str) -> OAuthUserInfo:
-    """Validate a Google OIDC ID token server-side."""
-    try:
-        idinfo = google_id_token.verify_oauth2_token(
-            token, google_requests.Request(), settings.GOOGLE_CLIENT_ID
-        )
-    except Exception as e:
-        raise ValueError(f"Invalid Google token: {e}") from e
+    """Validate a Google OIDC ID token server-side.
+
+    Accepts tokens issued for either the web client or the Android client.
+    """
+    audiences = [settings.GOOGLE_CLIENT_ID]
+    if settings.GOOGLE_ANDROID_CLIENT_ID:
+        audiences.append(settings.GOOGLE_ANDROID_CLIENT_ID)
+
+    last_exc: Exception | None = None
+    idinfo: dict | None = None
+    for aud in audiences:
+        if not aud:
+            continue
+        try:
+            idinfo = google_id_token.verify_oauth2_token(
+                token, google_requests.Request(), aud
+            )
+            break
+        except Exception as e:
+            last_exc = e
+
+    if idinfo is None:
+        raise ValueError(f"Invalid Google token: {last_exc}") from last_exc
 
     return OAuthUserInfo(
         provider="google",

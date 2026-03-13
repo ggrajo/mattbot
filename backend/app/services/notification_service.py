@@ -215,6 +215,21 @@ async def notify_call_screened(
     )
 
 
+async def notify_spam_detected(
+    db: AsyncSession,
+    call_id: uuid.UUID,
+    user_id: uuid.UUID,
+) -> None:
+    """Emit a SPAM_DETECTED event so the mobile app can show a spam alert."""
+    await emit_event(
+        user_id=str(user_id),
+        event_type="SPAM_DETECTED",
+        call_id=str(call_id),
+        seq=4,
+        payload={"call_id": str(call_id)},
+    )
+
+
 async def create_and_enqueue_notification(
     db: AsyncSession,
     owner_user_id: uuid.UUID,
