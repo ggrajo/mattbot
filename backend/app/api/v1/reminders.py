@@ -142,6 +142,7 @@ async def create_reminder(
         created_by_device_id=current_user.device_id,
     )
     db.add(reminder)
+    await db.flush()
 
     await audit_service.log_event(
         db,
