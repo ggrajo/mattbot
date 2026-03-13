@@ -275,7 +275,7 @@ async def ensure_elevenlabs_agent(
         )
     ).scalars().all()
     kb_entries = [
-        {"type": "file", "name": row.name, "id": row.el_document_id}
+        {"type": row.source_type, "name": row.name, "id": row.el_document_id}
         for row in kb_rows
     ] if kb_rows else None
 

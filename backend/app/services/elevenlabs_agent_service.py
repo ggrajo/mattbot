@@ -293,7 +293,7 @@ async def create_kb_doc_from_file(name: str, file_bytes: bytes, filename: str) -
     """Upload a file as a knowledge-base document. Returns the EL doc ID."""
     async with httpx.AsyncClient(timeout=120.0) as client:
         resp = await client.post(
-            f"{_API_BASE}/convai/knowledge-base",
+            f"{_API_BASE}/convai/knowledge-base/file",
             data={"name": name},
             files={"file": (filename, file_bytes, "application/octet-stream")},
             headers=_headers(),
@@ -312,6 +312,7 @@ async def delete_kb_doc(el_document_id: str) -> bool:
     async with httpx.AsyncClient(timeout=_TIMEOUT) as client:
         resp = await client.delete(
             f"{_API_BASE}/convai/knowledge-base/{el_document_id}",
+            params={"force": "true"},
             headers=_headers(),
         )
         if resp.status_code in (200, 204):
