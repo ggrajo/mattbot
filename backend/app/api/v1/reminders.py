@@ -132,6 +132,8 @@ async def create_reminder(
     if call is None:
         raise AppError(code="CALL_NOT_FOUND", message="Call not found", status_code=404)
 
+    from_masked = call.from_masked
+
     reminder = Reminder(
         owner_user_id=current_user.user.id,
         call_id=call_id,
@@ -155,6 +157,8 @@ async def create_reminder(
     await db.commit()
     await db.refresh(reminder)
 
+    response = _to_response(reminder, call_from_masked=from_masked)
+
     try:
         await create_and_enqueue_notification(
             db,
@@ -168,7 +172,7 @@ async def create_reminder(
     except Exception:
         await db.rollback()
 
-    return _to_response(reminder, call_from_masked=call.from_masked)
+    return response
 
 
 @router.patch("/{reminder_id}", response_model=ReminderResponse)

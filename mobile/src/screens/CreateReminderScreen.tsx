@@ -27,7 +27,7 @@ export function CreateReminderScreen({ route, navigation }: Props) {
   const [notes, setNotes] = useState('');
   const [dueDate, setDueDate] = useState(() => {
     const d = new Date();
-    d.setHours(d.getHours() + 1, 0, 0, 0);
+    d.setHours(d.getHours() + 2, 0, 0, 0);
     return d;
   });
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -54,10 +54,10 @@ export function CreateReminderScreen({ route, navigation }: Props) {
   };
 
   const formatDate = (d: Date) =>
-    d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+    d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', timeZone: userTz });
 
   const formatTime = (d: Date) =>
-    d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+    d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', timeZone: userTz });
 
   const isPastDue = dueDate.getTime() <= Date.now();
 

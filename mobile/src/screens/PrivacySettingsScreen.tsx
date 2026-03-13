@@ -143,6 +143,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
   const { settings, loading, error, loadSettings, updateSettings } = useSettingsStore();
+  const userTz = settings?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
   const { available: biometricAvailable, biometryType, loading: biometricLoading, authenticate } = useBiometric();
   const [toast, setToast] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
@@ -706,6 +707,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
                         month: 'short',
                         day: 'numeric',
                         year: 'numeric',
+                        timeZone: userTz,
                       })}
                     </Text>
                   )}

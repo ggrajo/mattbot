@@ -21,6 +21,7 @@ import { StatusScreen } from '../components/ui/StatusScreen';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { ContactPicker } from '../components/ContactPicker';
 import { useTheme } from '../theme/ThemeProvider';
+import { useSettingsStore } from '../store/settingsStore';
 import { useBlockStore } from '../store/blockStore';
 import { extractApiError } from '../api/client';
 import { hapticLight, hapticMedium } from '../utils/haptics';
@@ -32,6 +33,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'BlockList'>;
 
 export function BlockListScreen({ navigation }: Props) {
   const { colors, spacing, typography, radii } = useTheme();
+  const userTz = useSettingsStore((s) => s.settings?.timezone) || Intl.DateTimeFormat().resolvedOptions().timeZone;
   const { items, loading, error, loadBlocks, addBlock, removeBlock } =
     useBlockStore();
 
@@ -168,7 +170,7 @@ export function BlockListScreen({ navigation }: Props) {
                 }}
                 allowFontScaling
               >
-                {formatRelative(item.created_at)}
+                {formatRelative(item.created_at, userTz)}
               </Text>
             </View>
           </View>

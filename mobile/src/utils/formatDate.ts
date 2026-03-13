@@ -106,7 +106,7 @@ export function formatTime(date: string | Date, timezone?: string): string {
   }
 }
 
-export function formatRelativeTime(date: string | Date): string {
+export function formatRelativeTime(date: string | Date, timezone?: string): string {
   const d = typeof date === 'string' ? new Date(date) : date;
   const diff = Date.now() - d.getTime();
   const minutes = Math.floor(diff / 60000);
@@ -116,7 +116,7 @@ export function formatRelativeTime(date: string | Date): string {
   if (hours < 24) return `${hours}h ago`;
   const days = Math.floor(hours / 24);
   if (days < 7) return `${days}d ago`;
-  return formatDateTime(date);
+  return formatDateTime(date, timezone);
 }
 
 /** @deprecated Use formatRelativeTime instead */

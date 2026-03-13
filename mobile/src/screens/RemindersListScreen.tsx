@@ -10,6 +10,7 @@ import { Toast } from '../components/ui/Toast';
 import { ConfirmSheet } from '../components/ui/ConfirmSheet';
 import { useTheme } from '../theme/ThemeProvider';
 import { useReminderStore } from '../store/reminderStore';
+import { useSettingsStore } from '../store/settingsStore';
 import { hapticLight } from '../utils/haptics';
 import { RootStackParamList } from '../navigation/types';
 import { fetchCallerPhone } from '../api/calls';
@@ -36,6 +37,7 @@ function classifyReminder(item: Reminder): TabKey {
 export function RemindersListScreen({}: Props) {
   const { colors, spacing, typography, radii } = useTheme();
   const { items, loading, error, loadReminders, completeReminder, cancelReminder, removeReminder: deleteReminder } = useReminderStore();
+  const userTz = useSettingsStore((s) => s.settings?.timezone) || Intl.DateTimeFormat().resolvedOptions().timeZone;
   const [toast, setToast] = useState('');
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabKey>('upcoming');
@@ -97,8 +99,8 @@ export function RemindersListScreen({}: Props) {
     const suffix = diffMs < 0 ? ' ago' : '';
 
     return {
-      dateStr: d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }),
-      timeStr: d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }),
+      dateStr: d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric', timeZone: userTz }),
+      timeStr: d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', timeZone: userTz }),
       relativeStr: `${prefix}${relative}${suffix}`,
     };
   };

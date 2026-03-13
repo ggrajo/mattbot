@@ -20,6 +20,7 @@ import { ConfirmSheet } from '../components/ui/ConfirmSheet';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { FadeIn } from '../components/ui/FadeIn';
 import { useTheme } from '../theme/ThemeProvider';
+import { useSettingsStore } from '../store/settingsStore';
 import { useContactsStore } from '../store/contactsStore';
 import { getContact } from '../api/contacts';
 import { extractApiError } from '../api/client';
@@ -56,6 +57,7 @@ const GREETING_OPTIONS = [
 export function ContactDetailScreen({ navigation, route }: Props) {
   const { contactId } = route.params;
   const { colors, spacing, typography, radii } = useTheme();
+  const userTz = useSettingsStore((s) => s.settings?.timezone) || Intl.DateTimeFormat().resolvedOptions().timeZone;
   const { categories, updateContact, removeContact, loadCategories } =
     useContactsStore();
 
@@ -332,7 +334,7 @@ export function ContactDetailScreen({ navigation, route }: Props) {
             }}
             allowFontScaling
           >
-            ••{contact.phone_last4} · Added {formatRelative(contact.created_at)}
+            ••{contact.phone_last4} · Added {formatRelative(contact.created_at, userTz)}
           </Text>
         </View>
       </FadeIn>

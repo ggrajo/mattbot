@@ -12,6 +12,7 @@ import { Icon } from '../components/ui/Icon';
 import { FadeIn } from '../components/ui/FadeIn';
 import { useTheme } from '../theme/ThemeProvider';
 import { useRealtimeStore } from '../store/realtimeStore';
+import { useSettingsStore } from '../store/settingsStore';
 import type { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'LiveTranscript'>;
@@ -62,6 +63,7 @@ function PulsingDot({ color }: { color: string }) {
 export function LiveTranscriptScreen({ navigation, route }: Props) {
   const { callId } = route.params;
   const { colors, spacing, typography, radii } = useTheme();
+  const userTz = useSettingsStore((s) => s.settings?.timezone) || Intl.DateTimeFormat().resolvedOptions().timeZone;
   const liveTranscript = useRealtimeStore((s) => s.liveTranscript);
   const activeCallId = useRealtimeStore((s) => s.activeCallId);
   const flatListRef = useRef<FlatList>(null);
@@ -88,6 +90,7 @@ export function LiveTranscriptScreen({ navigation, route }: Props) {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
+        timeZone: userTz,
       });
     } catch {
       return '';

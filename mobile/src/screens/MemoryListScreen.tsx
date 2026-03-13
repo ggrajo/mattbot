@@ -8,6 +8,7 @@ import { Toast } from '../components/ui/Toast';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { ConfirmSheet } from '../components/ui/ConfirmSheet';
 import { useTheme } from '../theme/ThemeProvider';
+import { useSettingsStore } from '../store/settingsStore';
 import { listMemoryItems, deleteMemoryItem, type MemoryItem } from '../api/memory';
 import { extractApiError } from '../api/client';
 import { RootStackParamList } from '../navigation/types';
@@ -91,6 +92,7 @@ function buildSections(
 export function MemoryListScreen({}: Props) {
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
+  const userTz = useSettingsStore((s) => s.settings?.timezone) || Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const [items, setItems] = useState<MemoryItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -152,7 +154,7 @@ export function MemoryListScreen({}: Props) {
   function formatDate(iso: string): string {
     try {
       const d = new Date(iso);
-      return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+      return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric', timeZone: userTz });
     } catch {
       return iso;
     }

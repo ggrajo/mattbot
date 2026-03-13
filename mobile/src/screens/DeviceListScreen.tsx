@@ -20,6 +20,7 @@ import { StatusScreen } from '../components/ui/StatusScreen';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { LoadingOverlay } from '../components/ui/LoadingOverlay';
 import { useTheme } from '../theme/ThemeProvider';
+import { useSettingsStore } from '../store/settingsStore';
 import { useDeviceStore } from '../store/deviceStore';
 import { deleteDevice, updateDevice, DeviceInfo } from '../api/devices';
 import { extractApiError } from '../api/client';
@@ -61,6 +62,7 @@ function platformLabel(platform: string): string {
 
 export function DeviceListScreen({ navigation }: Props) {
   const { colors, spacing, typography, radii } = useTheme();
+  const userTz = useSettingsStore((s) => s.settings?.timezone) || Intl.DateTimeFormat().resolvedOptions().timeZone;
   const { devices, loading, error, fetchDevices } = useDeviceStore();
 
   const [removing, setRemoving] = useState(false);
@@ -244,12 +246,12 @@ export function DeviceListScreen({ navigation }: Props) {
               renderDetailRow(
                 'clock-outline',
                 'Last Seen',
-                formatRelativeTime(item.last_seen_at),
+                formatRelativeTime(item.last_seen_at, userTz),
               )}
             {renderDetailRow(
               'calendar-outline',
               'Registered',
-              formatDate(item.created_at),
+              formatDate(item.created_at, userTz),
             )}
           </View>
 

@@ -22,19 +22,21 @@ import type { CallEvent, CallLabel, TranscriptTurn } from '../api/calls';
 import { listMemoryItems } from '../api/memory';
 import type { MemoryItem } from '../api/memory';
 
-function formatDateTime(iso: string): string {
+function formatDateTime(iso: string, tz?: string): string {
   const d = new Date(iso);
-  return d.toLocaleString(undefined, {
+  const opts: Intl.DateTimeFormatOptions = {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-  });
+    ...(tz ? { timeZone: tz } : {}),
+  };
+  return d.toLocaleString(undefined, opts);
 }
 
 function formatDateTimeWithTz(iso: string, tz: string | undefined): string {
-  const base = formatDateTime(iso);
+  const base = formatDateTime(iso, tz);
   if (!tz) return base;
   const abbr = getTimezoneAbbr(tz);
   return `${base} ${abbr}`;
@@ -560,7 +562,7 @@ export function CallDetailScreen() {
                       {(() => {
                         try {
                           const d = new Date(selectedCall.booked_appointment_date + 'T00:00:00');
-                          return d.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+                          return d.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', ...(userTz ? { timeZone: userTz } : {}) });
                         } catch { return selectedCall.booked_appointment_date; }
                       })()}
                     </Text>
@@ -922,7 +924,7 @@ export function CallDetailScreen() {
                   </Text>
                 )}
                 <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
-                  {formatDateTime(mem.created_at)}
+                  {formatDateTime(mem.created_at, userTz)}
                 </Text>
               </Card>
             ))}

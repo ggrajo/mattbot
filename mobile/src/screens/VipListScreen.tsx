@@ -20,6 +20,7 @@ import { StatusScreen } from '../components/ui/StatusScreen';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { ContactPicker } from '../components/ContactPicker';
 import { useTheme } from '../theme/ThemeProvider';
+import { useSettingsStore } from '../store/settingsStore';
 import { useVipStore } from '../store/vipStore';
 import { extractApiError } from '../api/client';
 import { hapticLight, hapticMedium } from '../utils/haptics';
@@ -31,6 +32,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'VipList'>;
 
 export function VipListScreen({ navigation }: Props) {
   const { colors, spacing, typography, radii } = useTheme();
+  const userTz = useSettingsStore((s) => s.settings?.timezone) || Intl.DateTimeFormat().resolvedOptions().timeZone;
   const { items, loading, error, loadVip, addVip, removeVip } = useVipStore();
 
   const [phoneE164, setPhoneE164] = useState('');
@@ -188,7 +190,7 @@ export function VipListScreen({ navigation }: Props) {
                 }}
                 allowFontScaling
               >
-                {formatRelative(item.created_at)}
+                {formatRelative(item.created_at, userTz)}
               </Text>
             </View>
           </View>
