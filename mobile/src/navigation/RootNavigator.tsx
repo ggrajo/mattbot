@@ -246,7 +246,7 @@ export function RootNavigator() {
             <Stack.Screen
               name="AddContact"
               component={AddContactScreen}
-              options={{ headerShown: false }}
+              options={{ headerShown: true, title: 'Add Contact' }}
             />
             <Stack.Screen
               name="CategoryDefaults"

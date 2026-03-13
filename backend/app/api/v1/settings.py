@@ -98,6 +98,8 @@ def _settings_to_response(s: UserSettings) -> SettingsResponse:
             "urgent_notify_call": s.urgent_notify_call,
             "urgent_notify_phone_last4": s.urgent_notify_phone_last4,
             "urgent_notify_email_address": s.urgent_notify_email_address,
+            "auto_block_spam": s.auto_block_spam,
+            "spam_block_threshold": s.spam_block_threshold,
             "revision": s.revision,
         }
     )

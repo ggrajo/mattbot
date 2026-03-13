@@ -12,7 +12,7 @@ export interface DeviceInfo {
   last_seen_at: string | null;
   created_at: string;
   is_current: boolean;
-  remembered: boolean;
+  is_remembered: boolean;
 }
 
 export async function listDevices(): Promise<{ items: DeviceInfo[] }> {
@@ -27,10 +27,6 @@ export async function revokeDevice(deviceId: string, stepUpToken: string) {
     { headers: { 'X-Step-Up-Token': stepUpToken } }
   );
   return data;
-}
-
-export async function deleteDevice(deviceId: string) {
-  await apiClient.delete(`/devices/${deviceId}`);
 }
 
 export async function updateDevice(

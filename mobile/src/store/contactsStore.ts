@@ -125,9 +125,14 @@ export const useContactsStore = create<ContactsStore>((set) => ({
     set({ error: null });
     try {
       await apiDeleteCategory(slug);
-      set((state) => ({
-        categories: state.categories.filter((c) => c.slug !== slug),
-      }));
+      set((state) => {
+        const newDefaults = { ...state.categoryDefaults };
+        delete newDefaults[slug];
+        return {
+          categories: state.categories.filter((c) => c.slug !== slug),
+          categoryDefaults: newDefaults,
+        };
+      });
       return true;
     } catch (e: unknown) {
       set({ error: extractApiError(e) });

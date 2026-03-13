@@ -13,6 +13,7 @@ import { Icon } from '../components/ui/Icon';
 import { Button } from '../components/ui/Button';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { Toast } from '../components/ui/Toast';
+import { SuccessModal } from '../components/ui/SuccessModal';
 import { useTheme } from '../theme/ThemeProvider';
 import { useContactsStore } from '../store/contactsStore';
 
@@ -22,6 +23,7 @@ const TEMPERAMENT_OPTIONS = [
   { value: 'casual_friendly', label: 'Friendly & Casual' },
   { value: 'short_and_direct', label: 'Short & Direct' },
   { value: 'warm_and_supportive', label: 'Warm & Supportive' },
+  { value: 'formal', label: 'Formal' },
 ];
 
 const SWEARING_OPTIONS = [
@@ -58,6 +60,7 @@ export function CategoryDefaultsScreen() {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
+  const [successModal, setSuccessModal] = useState<{ title: string; message: string } | null>(null);
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [newSlug, setNewSlug] = useState('');
   const [newLabel, setNewLabel] = useState('');
@@ -89,10 +92,13 @@ export function CategoryDefaultsScreen() {
 
   async function handleSave() {
     setSaving(true);
-    const ok = await saveCategoryDefaults(localDefaults);
+    const validSlugs = new Set(categories.map(c => c.slug));
+    const filtered = Object.fromEntries(
+      Object.entries(localDefaults).filter(([slug]) => validSlugs.has(slug))
+    );
+    const ok = await saveCategoryDefaults(filtered);
     if (ok) {
-      setToastType('success');
-      setToast('Category defaults saved');
+      setSuccessModal({ title: 'Saved', message: 'Category defaults saved successfully.' });
     } else {
       setToastType('error');
       setToast(useContactsStore.getState().error ?? 'Failed to save');
@@ -113,8 +119,7 @@ export function CategoryDefaultsScreen() {
       setNewSlug('');
       setNewLabel('');
       setShowAddCategory(false);
-      setToastType('success');
-      setToast(`Category "${label}" created`);
+      setSuccessModal({ title: 'Created', message: 'Category "' + label + '" created successfully.' });
     } else {
       setToastType('error');
       setToast(useContactsStore.getState().error ?? 'Failed to create category');
@@ -133,8 +138,7 @@ export function CategoryDefaultsScreen() {
           onPress: async () => {
             const ok = await removeCategory(slug);
             if (ok) {
-              setToastType('success');
-              setToast(`"${label}" deleted`);
+              setSuccessModal({ title: 'Deleted', message: '"' + label + '" deleted successfully.' });
             } else {
               setToastType('error');
               setToast('Failed to delete category');
@@ -197,6 +201,12 @@ export function CategoryDefaultsScreen() {
   return (
     <ScreenWrapper>
       <Toast message={toast} type={toastType} visible={!!toast} onDismiss={() => setToast('')} />
+      <SuccessModal
+        visible={!!successModal}
+        title={successModal?.title ?? ''}
+        message={successModal?.message}
+        onDismiss={() => setSuccessModal(null)}
+      />
 
       <Text style={{ ...typography.h2, color: colors.textPrimary, marginBottom: spacing.xs }}>
         Category AI Defaults

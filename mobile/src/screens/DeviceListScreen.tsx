@@ -3,9 +3,7 @@ import {
   View,
   Text,
   FlatList,
-  Switch,
   RefreshControl,
-  TouchableOpacity,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
@@ -22,7 +20,7 @@ import { LoadingOverlay } from '../components/ui/LoadingOverlay';
 import { useTheme } from '../theme/ThemeProvider';
 import { useSettingsStore } from '../store/settingsStore';
 import { useDeviceStore } from '../store/deviceStore';
-import { deleteDevice, updateDevice, DeviceInfo } from '../api/devices';
+import { revokeDevice, DeviceInfo } from '../api/devices';
 import { extractApiError } from '../api/client';
 import { formatRelativeTime, formatDate } from '../utils/formatDate';
 import { hapticLight, hapticMedium } from '../utils/haptics';
@@ -67,7 +65,6 @@ export function DeviceListScreen({ navigation }: Props) {
 
   const [removing, setRemoving] = useState(false);
   const [removeTarget, setRemoveTarget] = useState<DeviceInfo | null>(null);
-  const [togglingId, setTogglingId] = useState<string | null>(null);
   const [toast, setToast] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
 
@@ -84,7 +81,7 @@ export function DeviceListScreen({ navigation }: Props) {
     hapticMedium();
     setRemoving(true);
     try {
-      await deleteDevice(removeTarget.id);
+      await revokeDevice(removeTarget.id, '');
       setToastType('success');
       setToast('Device removed');
       await fetchDevices();
@@ -94,20 +91,6 @@ export function DeviceListScreen({ navigation }: Props) {
     } finally {
       setRemoving(false);
       setRemoveTarget(null);
-    }
-  }
-
-  async function handleToggleRemembered(device: DeviceInfo) {
-    hapticLight();
-    setTogglingId(device.id);
-    try {
-      await updateDevice(device.id, { remembered: !device.remembered });
-      await fetchDevices();
-    } catch (err) {
-      setToastType('error');
-      setToast(extractApiError(err));
-    } finally {
-      setTogglingId(null);
     }
   }
 
@@ -255,55 +238,14 @@ export function DeviceListScreen({ navigation }: Props) {
             )}
           </View>
 
-          {/* Remember toggle + Remove button */}
-          <View
-            style={{
-              borderTopWidth: 1,
-              borderTopColor: colors.border,
-              paddingTop: spacing.sm,
-              gap: spacing.sm,
-            }}
-          >
+          {!item.is_current && (
             <View
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
+                borderTopWidth: 1,
+                borderTopColor: colors.border,
+                paddingTop: spacing.sm,
               }}
             >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: spacing.sm,
-                }}
-              >
-                <Icon
-                  name="shield-check-outline"
-                  size="sm"
-                  color={colors.textSecondary}
-                />
-                <Text
-                  style={{ ...typography.bodySmall, color: colors.textPrimary }}
-                  allowFontScaling
-                >
-                  Remember this device
-                </Text>
-              </View>
-              <Switch
-                value={item.remembered}
-                onValueChange={() => handleToggleRemembered(item)}
-                disabled={togglingId === item.id}
-                trackColor={{
-                  false: colors.border,
-                  true: colors.primary + '66',
-                }}
-                thumbColor={item.remembered ? colors.primary : colors.surface}
-                accessibilityLabel="Remember this device"
-              />
-            </View>
-
-            {!item.is_current && (
               <Button
                 title="Remove Device"
                 variant="destructive"
@@ -314,8 +256,8 @@ export function DeviceListScreen({ navigation }: Props) {
                 }}
                 accessibilityLabel={`Remove ${deviceName}`}
               />
-            )}
-          </View>
+            </View>
+          )}
         </View>
       </Card>
     );

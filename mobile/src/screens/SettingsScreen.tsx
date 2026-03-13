@@ -6,6 +6,7 @@ import { ListRow } from '../components/ui/ListRow';
 import { Icon } from '../components/ui/Icon';
 import { Divider } from '../components/ui/Divider';
 import { Toast } from '../components/ui/Toast';
+import { SuccessModal } from '../components/ui/SuccessModal';
 import { Card } from '../components/ui/Card';
 import { useTheme, useThemeContext, type ThemeMode } from '../theme/ThemeProvider';
 import { useSettingsStore } from '../store/settingsStore';
@@ -74,6 +75,7 @@ export function SettingsScreen() {
   const navigation = useNavigation<any>();
   const chevron = <Icon name="chevron-right" size="md" color={colors.textDisabled} />;
   const [toast, setToast] = useState('');
+  const [successModal, setSuccessModal] = useState<{ title: string; message: string } | null>(null);
   const [numberRevealed, setNumberRevealed] = useState(false);
 
   useEffect(() => {
@@ -94,6 +96,7 @@ export function SettingsScreen() {
   return (
     <ScreenWrapper>
       <Toast message={toast} type="error" visible={!!toast} onDismiss={() => setToast('')} />
+      <SuccessModal visible={!!successModal} title={successModal?.title ?? ''} message={successModal?.message} onDismiss={() => setSuccessModal(null)} />
 
       {/* Theme Selection */}
       <View style={{ marginBottom: spacing.xl }}>

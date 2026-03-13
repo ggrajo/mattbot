@@ -7,6 +7,7 @@ import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { Toast } from '../components/ui/Toast';
+import { SuccessModal } from '../components/ui/SuccessModal';
 import { useTheme } from '../theme/ThemeProvider';
 import { useTelephonyStore } from '../store/telephonyStore';
 import { useSettingsStore } from '../store/settingsStore';
@@ -16,8 +17,8 @@ type Props = NativeStackScreenProps<RootStackParamList, 'CallModes'>;
 
 const ACCESS_OPTIONS = [
   { value: 'everyone', label: 'Everyone' },
-  { value: 'contacts_only', label: 'Contacts Only' },
-  { value: 'vip_only', label: 'VIP Only' },
+  { value: 'contacts', label: 'Contacts Only' },
+  { value: 'vip', label: 'VIP Only' },
 ] as const;
 
 export function CallModesScreen({ navigation, route }: Props) {
@@ -33,6 +34,7 @@ export function CallModesScreen({ navigation, route }: Props) {
   const [accessControl, setAccessControl] = useState('everyone');
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState('');
+  const [successModal, setSuccessModal] = useState<{ title: string; message: string } | null>(null);
 
   useEffect(() => {
     loadCallModes();
@@ -111,6 +113,12 @@ export function CallModesScreen({ navigation, route }: Props) {
         type="success"
         visible={!!toast}
         onDismiss={() => setToast('')}
+      />
+      <SuccessModal
+        visible={!!successModal}
+        title={successModal?.title ?? ''}
+        message={successModal?.message}
+        onDismiss={() => setSuccessModal(null)}
       />
 
       <View style={{ alignItems: 'center', marginBottom: spacing.xl }}>

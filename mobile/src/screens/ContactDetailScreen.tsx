@@ -15,6 +15,7 @@ import { TextInput } from '../components/ui/TextInput';
 import { Button } from '../components/ui/Button';
 import { Icon } from '../components/ui/Icon';
 import { Toast } from '../components/ui/Toast';
+import { SuccessModal } from '../components/ui/SuccessModal';
 import { Divider } from '../components/ui/Divider';
 import { ConfirmSheet } from '../components/ui/ConfirmSheet';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
@@ -37,6 +38,7 @@ const TEMPERAMENT_OPTIONS = [
   { value: 'casual_friendly', label: 'Friendly & Casual' },
   { value: 'short_and_direct', label: 'Short & Direct' },
   { value: 'warm_and_supportive', label: 'Warm & Supportive' },
+  { value: 'formal', label: 'Formal' },
 ];
 
 const SWEARING_OPTIONS = [
@@ -51,7 +53,6 @@ const GREETING_OPTIONS = [
   { value: 'standard', label: 'Standard' },
   { value: 'brief', label: 'Brief' },
   { value: 'formal', label: 'Formal' },
-  { value: 'custom', label: 'Custom' },
 ];
 
 export function ContactDetailScreen({ navigation, route }: Props) {
@@ -69,6 +70,7 @@ export function ContactDetailScreen({ navigation, route }: Props) {
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [toast, setToast] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
+  const [successModal, setSuccessModal] = useState<{ title: string; message: string } | null>(null);
 
   const [displayName, setDisplayName] = useState('');
   const [company, setCompany] = useState('');
@@ -150,8 +152,7 @@ export function ContactDetailScreen({ navigation, route }: Props) {
 
     const ok = await updateContact(contactId, params);
     if (ok) {
-      setToastType('success');
-      setToast('Contact updated');
+      setSuccessModal({ title: 'Saved', message: 'Contact updated successfully.' });
       loadContact();
     } else {
       setToastType('error');
@@ -284,6 +285,12 @@ export function ContactDetailScreen({ navigation, route }: Props) {
         visible={!!toast}
         onDismiss={() => setToast('')}
       />
+      <SuccessModal
+        visible={!!successModal}
+        title={successModal?.title ?? ''}
+        message={successModal?.message}
+        onDismiss={() => setSuccessModal(null)}
+      />
 
       {/* Profile Header */}
       <FadeIn delay={0}>
@@ -346,7 +353,7 @@ export function ContactDetailScreen({ navigation, route }: Props) {
             <TextInput
               label="Display Name"
               value={displayName}
-              onChangeText={setDisplayName}
+              onChangeText={(v) => setDisplayName(v.replace(/[^a-zA-Z\s\-'\.]/g, ''))}
               placeholder="John Smith"
             />
             <TextInput
@@ -364,7 +371,7 @@ export function ContactDetailScreen({ navigation, route }: Props) {
             <TextInput
               label="Email"
               value={email}
-              onChangeText={setEmail}
+              onChangeText={(v) => setEmail(v.toLowerCase())}
               placeholder="email@example.com"
               keyboardType="email-address"
             />
@@ -403,6 +410,9 @@ export function ContactDetailScreen({ navigation, route }: Props) {
                       onPress={() => {
                         hapticLight();
                         setCategory(cat.slug);
+                        if (!relationship || categories.some(c => c.label === relationship)) {
+                          setRelationship(cat.label);
+                        }
                       }}
                       style={{
                         paddingHorizontal: spacing.md,
@@ -461,6 +471,7 @@ export function ContactDetailScreen({ navigation, route }: Props) {
                 onValueChange={(v) => {
                   hapticLight();
                   setIsVip(v);
+                  if (v) setIsBlocked(false);
                 }}
                 trackColor={{ true: colors.primary }}
                 accessibilityLabel="Toggle VIP status"
@@ -498,6 +509,7 @@ export function ContactDetailScreen({ navigation, route }: Props) {
                 onValueChange={(v) => {
                   hapticLight();
                   setIsBlocked(v);
+                  if (v) setIsVip(false);
                 }}
                 trackColor={{ true: colors.error }}
                 accessibilityLabel="Toggle blocked status"
@@ -581,7 +593,7 @@ export function ContactDetailScreen({ navigation, route }: Props) {
               <TextInput
                 label="Max Call Length (seconds)"
                 value={aiMaxCall}
-                onChangeText={setAiMaxCall}
+                onChangeText={(v) => setAiMaxCall(v.replace(/[^0-9]/g, ''))}
                 placeholder="e.g. 180 (leave empty for default)"
                 keyboardType="numeric"
               />

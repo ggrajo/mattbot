@@ -19,6 +19,7 @@ import { TextInput } from '../components/ui/TextInput';
 import { Icon } from '../components/ui/Icon';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { Toast } from '../components/ui/Toast';
+import { SuccessModal } from '../components/ui/SuccessModal';
 import { Divider } from '../components/ui/Divider';
 import { useTheme } from '../theme/ThemeProvider';
 import { useSettingsStore } from '../store/settingsStore';
@@ -148,6 +149,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
   const { available: biometricAvailable, biometryType, loading: biometricLoading, authenticate } = useBiometric();
   const [toast, setToast] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
+  const [successModal, setSuccessModal] = useState<{ title: string; message: string } | null>(null);
 
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [pinStatus, setPinStatus] = useState<PinStatus | null>(null);
@@ -200,8 +202,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
   async function handleToggle(key: string, value: boolean | string) {
     const ok = await updateSettings({ [key]: value });
     if (ok) {
-      setToastType('success');
-      setToast('Settings saved');
+      setSuccessModal({ title: 'Saved', message: 'Settings saved' });
     } else {
       setToastType('error');
       setToast(useSettingsStore.getState().error ?? 'Failed to save setting.');
@@ -246,8 +247,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
       await apiClient.post('/auth/password/change', payload, {
         headers: { 'X-Step-Up-Token': stepUpToken },
       });
-      setToastType('success');
-      setToast(profile?.has_password ? 'Password changed successfully.' : 'Password created successfully.');
+      setSuccessModal({ title: 'Saved', message: profile?.has_password ? 'Password changed successfully.' : 'Password created successfully.' });
       setShowPasswordForm(false);
       setCurrentPassword('');
       setNewPassword('');
@@ -316,8 +316,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
       await apiClient.post('/auth/pin/setup', { pin: pendingPin }, {
         headers: { 'X-Step-Up-Token': stepUpToken },
       });
-      setToastType('success');
-      setToast('PIN set up successfully.');
+      setSuccessModal({ title: 'Saved', message: 'PIN set up successfully.' });
       setPinEntry('');
       setPinFirst('');
       setPendingPin('');
@@ -341,8 +340,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
   async function handleDisablePin() {
     try {
       await apiClient.delete('/auth/pin');
-      setToastType('success');
-      setToast('PIN disabled.');
+      setSuccessModal({ title: 'Saved', message: 'PIN disabled.' });
       const email = profile?.email;
       if (email) await removeSecureItem(`mattbot_pin_device_${email}`);
       await loadProfileAndPin();
@@ -551,6 +549,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
   return (
     <ScreenWrapper>
       <Toast message={toast} type={toastType} visible={!!toast} onDismiss={() => setToast('')} />
+      <SuccessModal visible={!!successModal} title={successModal?.title ?? ''} message={successModal?.message} onDismiss={() => setSuccessModal(null)} />
 
       {error && <ErrorMessage message={error} action="Retry" onAction={loadSettings} />}
 
@@ -608,7 +607,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
                       label="Current Password"
                       value={currentPassword}
                       onChangeText={setCurrentPassword}
-                      secureTextEntry
+                      isPassword
                       leftIcon="lock-outline"
                       placeholder="Enter current password"
                     />
@@ -617,7 +616,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
                     label="New Password"
                     value={newPassword}
                     onChangeText={setNewPassword}
-                    secureTextEntry
+                    isPassword
                     leftIcon="lock-plus-outline"
                     placeholder="Min 12 characters"
                   />
@@ -625,7 +624,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
                     label="Confirm Password"
                     value={confirmPassword}
                     onChangeText={setConfirmPassword}
-                    secureTextEntry
+                    isPassword
                     leftIcon="lock-check-outline"
                     placeholder="Re-enter new password"
                   />

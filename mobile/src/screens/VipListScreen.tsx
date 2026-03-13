@@ -256,24 +256,24 @@ export function VipListScreen({ navigation }: Props) {
         <TouchableOpacity
           onPress={() => {
             hapticLight();
-            setShowForm(!showForm);
+            navigation.navigate('AddContact', { autoVip: true });
           }}
           activeOpacity={0.7}
           style={{
             width: 40,
             height: 40,
             borderRadius: radii.xl,
-            backgroundColor: showForm ? '#F59E0B' : '#F59E0B' + '18',
+            backgroundColor: '#F59E0B' + '18',
             alignItems: 'center',
             justifyContent: 'center',
           }}
           accessibilityRole="button"
-          accessibilityLabel={showForm ? 'Close add form' : 'Add VIP number'}
+          accessibilityLabel="Add VIP number"
         >
           <Icon
-            name={showForm ? 'close' : 'plus'}
+            name="plus"
             size="md"
-            color={showForm ? '#fff' : '#F59E0B'}
+            color="#F59E0B"
           />
         </TouchableOpacity>
       </View>

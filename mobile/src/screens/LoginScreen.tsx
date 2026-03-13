@@ -441,7 +441,7 @@ export function LoginScreen({ navigation }: Props) {
           <TextInput
             label="Email"
             value={email}
-            onChangeText={setEmail}
+            onChangeText={(v) => setEmail(v.toLowerCase())}
             error={emailError}
             leftIcon="email-outline"
             keyboardType="email-address"

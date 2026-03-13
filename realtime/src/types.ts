@@ -72,4 +72,14 @@ export interface AgentRuntime {
   final_prompt: string;
   greeting_text: string;
   dynamic_variables?: Record<string, string>;
+  business_hours_enabled: boolean;
+  business_hours_start: string | null;
+  business_hours_end: string | null;
+  business_hours_days: number[];
+  quiet_hours_enabled: boolean;
+  quiet_hours_start: string | null;
+  quiet_hours_end: string | null;
+  quiet_hours_days: number[];
+  quiet_hours_allow_vip: boolean;
+  timezone: string;
 }

@@ -583,6 +583,32 @@ async def get_agent_runtime_config(
         "calendar_booking_enabled": (
             settings_row.calendar_booking_enabled if settings_row else False
         ),
+        "business_hours_enabled": settings_row.business_hours_enabled if settings_row else False,
+        "business_hours_start": (
+            settings_row.business_hours_start.strftime("%H:%M")
+            if settings_row and settings_row.business_hours_start
+            else None
+        ),
+        "business_hours_end": (
+            settings_row.business_hours_end.strftime("%H:%M")
+            if settings_row and settings_row.business_hours_end
+            else None
+        ),
+        "business_hours_days": settings_row.business_hours_days if settings_row else [],
+        "quiet_hours_enabled": settings_row.quiet_hours_enabled if settings_row else False,
+        "quiet_hours_start": (
+            settings_row.quiet_hours_start.strftime("%H:%M")
+            if settings_row and settings_row.quiet_hours_start
+            else None
+        ),
+        "quiet_hours_end": (
+            settings_row.quiet_hours_end.strftime("%H:%M")
+            if settings_row and settings_row.quiet_hours_end
+            else None
+        ),
+        "quiet_hours_days": settings_row.quiet_hours_days if settings_row else [],
+        "quiet_hours_allow_vip": settings_row.quiet_hours_allow_vip if settings_row else True,
+        "timezone": settings_row.timezone if settings_row else "UTC",
         "dynamic_variables": {
             "caller_context": caller_ctx,
             "memory_context": memory_ctx,

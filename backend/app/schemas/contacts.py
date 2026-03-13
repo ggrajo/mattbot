@@ -23,7 +23,6 @@ _SLUG_RE = re.compile(r"^[a-z][a-z0-9_]{0,49}$")
 
 _TEMPERAMENTS = {
     "casual_friendly",
-    "custom",
     "formal",
     "professional_polite",
     "short_and_direct",

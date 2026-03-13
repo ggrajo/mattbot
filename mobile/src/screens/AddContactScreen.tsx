@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Switch } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '../navigation/types';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
 import { Card } from '../components/ui/Card';
 import { TextInput } from '../components/ui/TextInput';
@@ -8,6 +9,7 @@ import { PhoneInput } from '../components/ui/PhoneInput';
 import { Button } from '../components/ui/Button';
 import { Icon } from '../components/ui/Icon';
 import { Toast } from '../components/ui/Toast';
+import { SuccessModal } from '../components/ui/SuccessModal';
 import { ContactPicker, type SelectedContact } from '../components/ContactPicker';
 import { useTheme } from '../theme/ThemeProvider';
 import { useContactsStore } from '../store/contactsStore';
@@ -19,6 +21,7 @@ const TEMPERAMENT_OPTIONS = [
   { value: 'casual_friendly', label: 'Friendly & Casual' },
   { value: 'short_and_direct', label: 'Short & Direct' },
   { value: 'warm_and_supportive', label: 'Warm & Supportive' },
+  { value: 'formal', label: 'Formal' },
 ];
 
 const SWEARING_OPTIONS = [
@@ -33,13 +36,15 @@ const GREETING_OPTIONS = [
   { value: 'standard', label: 'Standard' },
   { value: 'brief', label: 'Brief' },
   { value: 'formal', label: 'Formal' },
-  { value: 'custom', label: 'Custom' },
 ];
 
-export function AddContactScreen() {
+type Props = NativeStackScreenProps<RootStackParamList, 'AddContact'>;
+export function AddContactScreen({ route, navigation }: Props) {
+  const autoVip = route.params?.autoVip ?? false;
+  const autoBlocked = route.params?.autoBlocked ?? false;
+
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
-  const navigation = useNavigation<any>();
   const { categories, addContact, loadCategories } = useContactsStore();
 
   const [phoneE164, setPhoneE164] = useState('');
@@ -49,8 +54,8 @@ export function AddContactScreen() {
   const [email, setEmail] = useState('');
   const [notes, setNotes] = useState('');
   const [category, setCategory] = useState('other');
-  const [isVip, setIsVip] = useState(false);
-  const [isBlocked, setIsBlocked] = useState(false);
+  const [isVip, setIsVip] = useState(autoVip);
+  const [isBlocked, setIsBlocked] = useState(autoBlocked);
   const [showAi, setShowAi] = useState(false);
   const [aiTemperament, setAiTemperament] = useState('');
   const [aiSwearing, setAiSwearing] = useState('');
@@ -61,6 +66,7 @@ export function AddContactScreen() {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
+  const [successModal, setSuccessModal] = useState<{ title: string; message: string } | null>(null);
   const [contactPickerVisible, setContactPickerVisible] = useState(false);
 
   useEffect(() => {
@@ -151,6 +157,7 @@ export function AddContactScreen() {
   return (
     <ScreenWrapper>
       <Toast message={toast} type={toastType} visible={!!toast} onDismiss={() => setToast('')} />
+      <SuccessModal visible={!!successModal} title={successModal?.title ?? ''} message={successModal?.message} onDismiss={() => setSuccessModal(null)} />
       <ContactPicker visible={contactPickerVisible} onSelect={handleContactPick} onClose={() => setContactPickerVisible(false)} />
 
       <Text style={{ ...typography.h2, color: colors.textPrimary, marginBottom: spacing.lg }}>Add Contact</Text>
@@ -179,10 +186,10 @@ export function AddContactScreen() {
             <Text style={{ ...typography.body, color: colors.primary, fontWeight: '600' }}>Pick from Contacts</Text>
           </TouchableOpacity>
 
-          <TextInput label="Display Name" value={displayName} onChangeText={setDisplayName} placeholder="John Smith" />
+          <TextInput label="Display Name" value={displayName} onChangeText={(v) => setDisplayName(v.replace(/[^a-zA-Z\s\-'\.]/g, ''))} placeholder="John Smith" />
           <TextInput label="Company" value={company} onChangeText={setCompany} placeholder="Acme Corp" />
           <TextInput label="Relationship" value={relationship} onChangeText={setRelationship} placeholder="e.g. Client, Vendor" />
-          <TextInput label="Email" value={email} onChangeText={setEmail} placeholder="email@example.com" keyboardType="email-address" />
+          <TextInput label="Email" value={email} onChangeText={(v) => setEmail(v.toLowerCase())} placeholder="email@example.com" keyboardType="email-address" />
           <TextInput label="Notes" value={notes} onChangeText={setNotes} placeholder="Additional notes..." multiline numberOfLines={2} />
 
           <Text style={{ ...typography.caption, color: colors.textSecondary, marginBottom: spacing.xs }}>
@@ -195,7 +202,12 @@ export function AddContactScreen() {
                 return (
                   <TouchableOpacity
                     key={cat.slug}
-                    onPress={() => setCategory(cat.slug)}
+                    onPress={() => {
+                      setCategory(cat.slug);
+                      if (!relationship || categories.some(c => c.label === relationship)) {
+                        setRelationship(cat.label);
+                      }
+                    }}
                     style={{
                       paddingHorizontal: spacing.md,
                       paddingVertical: spacing.xs + 2,
@@ -219,7 +231,7 @@ export function AddContactScreen() {
               <Icon name="star" size="sm" color="#F59E0B" />
               <Text style={{ ...typography.body, color: colors.textPrimary }}>VIP</Text>
             </View>
-            <Switch value={isVip} onValueChange={setIsVip} trackColor={{ true: colors.primary }} />
+            <Switch value={isVip} onValueChange={(v) => { setIsVip(v); if (v) setIsBlocked(false); }} trackColor={{ true: colors.primary }} />
           </View>
 
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -227,7 +239,7 @@ export function AddContactScreen() {
               <Icon name="shield-off-outline" size="sm" color={colors.error} />
               <Text style={{ ...typography.body, color: colors.textPrimary }}>Blocked</Text>
             </View>
-            <Switch value={isBlocked} onValueChange={setIsBlocked} trackColor={{ true: colors.error }} />
+            <Switch value={isBlocked} onValueChange={(v) => { setIsBlocked(v); if (v) setIsVip(false); }} trackColor={{ true: colors.error }} />
           </View>
         </View>
       </Card>
@@ -257,7 +269,7 @@ export function AddContactScreen() {
             <TextInput
               label="Max Call Length (seconds)"
               value={aiMaxCall}
-              onChangeText={setAiMaxCall}
+              onChangeText={(v) => setAiMaxCall(v.replace(/[^0-9]/g, ''))}
               placeholder="e.g. 180 (leave empty for default)"
               keyboardType="numeric"
             />

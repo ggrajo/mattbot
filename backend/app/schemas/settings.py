@@ -16,7 +16,6 @@ VALID_TEMPERAMENT_PRESETS = (
     "short_and_direct",
     "warm_and_supportive",
     "formal",
-    "custom",
 )
 VALID_SWEARING_RULES = ("no_swearing", "mirror_caller", "allow")
 VALID_VIP_NOTIFICATION_INTENSITIES = ("normal", "high", "urgent")

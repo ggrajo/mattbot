@@ -6,6 +6,7 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Icon } from '../components/ui/Icon';
 import { Toast } from '../components/ui/Toast';
+import { SuccessModal } from '../components/ui/SuccessModal';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { Divider } from '../components/ui/Divider';
 import { TimePicker, formatTime12h } from '../components/ui/TimePicker';
@@ -77,6 +78,7 @@ export function QuietHoursScreen({ navigation }: Props) {
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [successModal, setSuccessModal] = useState<{ title: string; message: string } | null>(null);
   const [dirty, setDirty] = useState(false);
 
   const startTime = editingInterval != null ? intervals[editingInterval]?.start ?? '22:00' : '22:00';
@@ -165,8 +167,7 @@ export function QuietHoursScreen({ navigation }: Props) {
     });
     if (ok) {
       setDirty(false);
-      setToast({ message: 'Quiet hours saved', type: 'success' });
-      setTimeout(() => navigation.goBack(), 500);
+      setSuccessModal({ title: 'Saved', message: 'Quiet hours saved successfully.' });
     } else {
       setToast({ message: 'Failed to save settings', type: 'error' });
     }
@@ -179,6 +180,12 @@ export function QuietHoursScreen({ navigation }: Props) {
         type={toast?.type}
         visible={!!toast}
         onDismiss={() => setToast(null)}
+      />
+      <SuccessModal
+        visible={!!successModal}
+        title={successModal?.title ?? ''}
+        message={successModal?.message}
+        onDismiss={() => { setSuccessModal(null); navigation.goBack(); }}
       />
 
       <TimePicker

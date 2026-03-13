@@ -10,6 +10,7 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Icon } from '../components/ui/Icon';
 import { Toast } from '../components/ui/Toast';
+import { SuccessModal } from '../components/ui/SuccessModal';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { TextInput } from '../components/ui/TextInput';
 import { Divider } from '../components/ui/Divider';
@@ -36,8 +37,7 @@ type Temperament =
   | 'casual_friendly'
   | 'short_and_direct'
   | 'warm_and_supportive'
-  | 'formal'
-  | 'custom';
+  | 'formal';
 
 type SwearingRule = 'no_swearing' | 'mirror_caller' | 'allow';
 
@@ -47,7 +47,6 @@ const TEMPERAMENT_OPTIONS: { value: Temperament; label: string; icon: string }[]
   { value: 'short_and_direct', label: 'Direct', icon: 'flash-outline' },
   { value: 'warm_and_supportive', label: 'Warm', icon: 'heart-outline' },
   { value: 'formal', label: 'Formal', icon: 'school-outline' },
-  { value: 'custom', label: 'Custom', icon: 'tune' },
 ];
 
 const SWEARING_OPTIONS: { value: SwearingRule; label: string; desc: string }[] = [
@@ -110,6 +109,7 @@ export function AssistantSettingsScreen({}: Props) {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
+  const [successModal, setSuccessModal] = useState<{ title: string; message: string } | null>(null);
   const [dirty, setDirty] = useState(false);
 
   const audioRef = useRef<any>(null);
@@ -191,8 +191,7 @@ export function AssistantSettingsScreen({}: Props) {
 
       if (ok) {
         setDirty(false);
-        setToastType('success');
-        setToast('Assistant settings saved');
+        setSuccessModal({ title: 'Saved', message: 'Assistant settings saved successfully.' });
       } else {
         setToastType('error');
         setToast(useSettingsStore.getState().error ?? 'Failed to save settings');
@@ -213,6 +212,7 @@ export function AssistantSettingsScreen({}: Props) {
   return (
     <ScreenWrapper>
       <Toast message={toast} type={toastType} visible={!!toast} onDismiss={() => setToast('')} />
+      <SuccessModal visible={!!successModal} title={successModal?.title ?? ''} message={successModal?.message} onDismiss={() => setSuccessModal(null)} />
 
       <Text
         style={{ ...typography.h2, color: colors.textPrimary, marginBottom: spacing.sm }}

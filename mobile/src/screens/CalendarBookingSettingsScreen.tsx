@@ -8,6 +8,7 @@ import { Button } from '../components/ui/Button';
 import { TextInput } from '../components/ui/TextInput';
 import { Icon } from '../components/ui/Icon';
 import { Toast } from '../components/ui/Toast';
+import { SuccessModal } from '../components/ui/SuccessModal';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { useTheme } from '../theme/ThemeProvider';
 import { useSettingsStore } from '../store/settingsStore';
@@ -28,6 +29,7 @@ export function CalendarBookingSettingsScreen({ navigation }: Props) {
   const [durationMinutes, setDurationMinutes] = useState('30');
   const [windowDays, setWindowDays] = useState('14');
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [successModal, setSuccessModal] = useState<{ title: string; message: string } | null>(null);
   const [dirty, setDirty] = useState(false);
   const [connecting, setConnecting] = useState(false);
   const [disconnecting, setDisconnecting] = useState(false);
@@ -71,7 +73,7 @@ export function CalendarBookingSettingsScreen({ navigation }: Props) {
     try {
       await disconnect();
       await loadStatus();
-      setToast({ message: 'Google Calendar disconnected', type: 'success' });
+      setSuccessModal({ title: 'Saved', message: 'Google Calendar disconnected' });
     } catch {
       setToast({ message: 'Failed to disconnect calendar', type: 'error' });
     } finally {
@@ -87,7 +89,7 @@ export function CalendarBookingSettingsScreen({ navigation }: Props) {
     });
     if (ok) {
       setDirty(false);
-      setToast({ message: 'Calendar booking settings saved', type: 'success' });
+      setSuccessModal({ title: 'Saved', message: 'Calendar booking settings saved' });
     } else {
       setToast({ message: 'Failed to save settings', type: 'error' });
     }
@@ -104,6 +106,7 @@ export function CalendarBookingSettingsScreen({ navigation }: Props) {
         visible={!!toast}
         onDismiss={() => setToast(null)}
       />
+      <SuccessModal visible={!!successModal} title={successModal?.title ?? ''} message={successModal?.message} onDismiss={() => setSuccessModal(null)} />
 
       <Text
         style={{ ...typography.h2, color: colors.textPrimary, marginBottom: spacing.lg }}

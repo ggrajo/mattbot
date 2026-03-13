@@ -1,6 +1,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import Config from 'react-native-config';
 import { getSecureItem, storeTokens, clearTokens, TOKEN_KEYS } from '../utils/secureStorage';
+import { friendlyError } from '../utils/friendlyError';
 
 export const API_BASE_URL = Config.API_BASE_URL || 'http://localhost:8000/api/v1';
 
@@ -99,11 +100,11 @@ export function extractApiError(error: unknown): string {
   if (axios.isAxiosError(error)) {
     const apiError = error.response?.data?.error as ApiError | undefined;
     if (apiError?.message) {
-      return apiError.message;
+      return friendlyError(apiError.message);
     }
     if (!error.response) {
       return 'Network error. Please check your connection and try again.';
     }
   }
-  return 'An unexpected error occurred. Please try again.';
+  return 'Something went wrong. Please try again.';
 }

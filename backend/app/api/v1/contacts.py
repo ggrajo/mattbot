@@ -159,6 +159,9 @@ async def create_contact(
 
     await _validate_contact_category(db, current_user.user.id, body.category)
 
+    if getattr(body, 'is_vip', False) and getattr(body, 'is_blocked', False):
+        body.is_blocked = False
+
     ph = hash_phone(body.phone_number)
     existing = (
         await db.execute(
@@ -478,6 +481,9 @@ async def update_contact(
             message="Contact not found",
             status_code=404,
         )
+
+    if getattr(body, 'is_vip', False) and getattr(body, 'is_blocked', False):
+        body.is_blocked = False
 
     data = body.model_dump(exclude_unset=True)
 

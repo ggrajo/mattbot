@@ -134,7 +134,7 @@ export function PhoneInput({
   );
 
   React.useEffect(() => {
-    if (value && !localDigits) {
+    if (value) {
       for (const c of COUNTRIES) {
         if (value.startsWith(c.dial)) {
           setCountry(c);
@@ -142,8 +142,9 @@ export function PhoneInput({
           return;
         }
       }
+      setLocalDigits(value.replace(/^\+/, ''));
     }
-  }, []);
+  }, [value]);
 
   const displayValue = formatNational(localDigits, country.dial);
 

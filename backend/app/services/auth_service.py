@@ -1,6 +1,7 @@
 """Core authentication service: registration, login, OAuth, email verify, password reset."""
 
 import json
+import logging
 import uuid
 from datetime import UTC, datetime, timedelta
 
@@ -27,6 +28,8 @@ from app.services import audit_service, email_service
 from app.services.device_service import create_or_get_device
 from app.services.mfa_service import has_active_totp
 from app.services.session_service import create_session, revoke_all_user_sessions
+
+logger = logging.getLogger(__name__)
 
 _VERIFY_PREFIX = "verify_token:"
 _RESET_PREFIX = "reset_token:"
@@ -522,11 +525,14 @@ async def change_password(
     )
 
     if user.email:
-        await email_service.send_security_notification(
-            user.email,
-            "Your password has been changed. If you did not make this change, "
-            "please reset your password immediately.",
-        )
+        try:
+            await email_service.send_security_notification(
+                user.email,
+                "Your password has been changed. If you did not make this change, "
+                "please reset your password immediately.",
+            )
+        except Exception:
+            logger.warning("Failed to send password change email to %s", user.email, exc_info=True)
 
     await db.flush()
 
