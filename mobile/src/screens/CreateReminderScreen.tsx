@@ -77,7 +77,8 @@ export function CreateReminderScreen({ route, navigation }: Props) {
       setToast({ message: 'Reminder created', type: 'success' });
       setTimeout(() => navigation.goBack(), 500);
     } else {
-      setToast({ message: 'Could not create reminder. Please try again.', type: 'error' });
+      const storeError = useReminderStore.getState().error;
+      setToast({ message: storeError || 'Could not create reminder. Please try again.', type: 'error' });
     }
     setSaving(false);
   };

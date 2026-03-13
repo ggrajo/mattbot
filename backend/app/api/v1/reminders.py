@@ -142,7 +142,6 @@ async def create_reminder(
         created_by_device_id=current_user.device_id,
     )
     db.add(reminder)
-    await db.flush()
 
     await audit_service.log_event(
         db,
@@ -153,6 +152,9 @@ async def create_reminder(
         details={"call_id": str(call_id)},
     )
 
+    await db.commit()
+    await db.refresh(reminder)
+
     try:
         await create_and_enqueue_notification(
             db,
@@ -162,11 +164,10 @@ async def create_reminder(
             source_entity_type="reminder",
             source_entity_id=reminder.id,
         )
+        await db.commit()
     except Exception:
-        pass
+        await db.rollback()
 
-    await db.commit()
-    await db.refresh(reminder)
     return _to_response(reminder, call_from_masked=call.from_masked)
 
 
