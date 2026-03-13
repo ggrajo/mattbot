@@ -218,6 +218,17 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         if (dev?.id) {
           await setSecureItem('mattbot_device_id', dev.id);
 
+          if (data.email) {
+            try {
+              const { data: pinData } = await apiClient.get('/auth/pin/status');
+              if (pinData?.pin_enabled) {
+                await setSecureItem(`mattbot_pin_device_${data.email}`, dev.id);
+              }
+            } catch {
+              // PIN status check is non-critical
+            }
+          }
+
           try {
             const messagingModule = await import('@react-native-firebase/messaging');
             const messaging = messagingModule.default;

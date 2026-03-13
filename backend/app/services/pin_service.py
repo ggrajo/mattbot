@@ -177,6 +177,51 @@ async def verify_pin_and_login(
     }
 
 
+async def verify_pin_by_email(
+    db: AsyncSession,
+    email: str,
+    pin: str,
+    *,
+    ip: str | None = None,
+    user_agent: str | None = None,
+) -> dict:
+    """Look up user by email, find their device with a PIN, and verify."""
+    from sqlalchemy import select
+
+    user = (
+        await db.execute(
+            select(User).where(User.email == email.strip().lower())
+        )
+    ).scalar_one_or_none()
+    if user is None or user.status in ("deleted", "locked"):
+        hash_password("dummy-timing-defense")
+        raise AppError("INVALID_CREDENTIALS", "Invalid credentials", 401)
+
+    device = (
+        await db.execute(
+            select(Device)
+            .where(
+                Device.owner_user_id == user.id,
+                Device.pin_hash.isnot(None),
+                Device.revoked_at.is_(None),
+            )
+            .order_by(Device.pin_set_at.desc())
+            .limit(1)
+        )
+    ).scalar_one_or_none()
+    if device is None:
+        hash_password("dummy-timing-defense")
+        raise AppError("INVALID_CREDENTIALS", "No PIN configured for this account", 401)
+
+    return await verify_pin_and_login(
+        db,
+        device_id=device.id,
+        pin=pin,
+        ip=ip,
+        user_agent=user_agent,
+    )
+
+
 async def _permanently_lock_pin(
     db: AsyncSession,
     *,

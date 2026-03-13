@@ -61,7 +61,12 @@ export function LoginScreen({ navigation }: Props) {
 
     const pinDeviceId = await getSecureItem(`mattbot_pin_device_${email}`);
     if (pinDeviceId) {
-      setStoredDeviceId(pinDeviceId);
+      setHasDevicePin(true);
+      return;
+    }
+
+    const deviceId = await getSecureItem('mattbot_device_id');
+    if (deviceId) {
       setHasDevicePin(true);
     }
   }
@@ -142,15 +147,16 @@ export function LoginScreen({ navigation }: Props) {
   }, []);
 
   async function submitPin(pinValue: string) {
-    if (!storedDeviceId) {
-      setApiError('No device registered. Please sign in with email first.');
+    const pinEmail = lastEmail ?? await getSecureItem('mattbot_last_email');
+    if (!pinEmail) {
+      setApiError('No account found. Please sign in with email first.');
       return;
     }
     hapticMedium();
     setPinLoading(true);
     setApiError(undefined);
     try {
-      const data = await pinLogin(storedDeviceId, pinValue);
+      const data = await pinLogin(pinEmail, pinValue);
       handleLoginResponse(data);
     } catch (error) {
       setApiError(extractApiError(error));

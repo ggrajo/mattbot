@@ -145,7 +145,7 @@ export async function stepUp(password?: string, totpCode?: string) {
   return data;
 }
 
-export async function pinLogin(deviceId: string, pin: string) {
-  const { data } = await apiClient.post('/auth/pin/login', { device_id: deviceId, pin });
+export async function pinLogin(email: string, pin: string) {
+  const { data } = await apiClient.post('/auth/pin/login', { email, pin });
   return data;
 }

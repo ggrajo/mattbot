@@ -629,15 +629,10 @@ async def pin_login(
     if not allowed:
         raise AppError("RATE_LIMITED", "Too many requests. Please try again later.", 429)
 
-    try:
-        device_id = uuid.UUID(body.device_id)
-    except ValueError:
-        raise AppError("INVALID_CREDENTIALS", "Invalid credentials", 401) from None
-
     ua = request.headers.get("user-agent", "")
-    result = await pin_service.verify_pin_and_login(
+    result = await pin_service.verify_pin_by_email(
         db,
-        device_id=device_id,
+        email=body.email,
         pin=body.pin,
         ip=ip,
         user_agent=ua,

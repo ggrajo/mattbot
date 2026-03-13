@@ -141,7 +141,7 @@ class PinSetupResponse(BaseModel):
 
 
 class PinLoginRequest(BaseModel):
-    device_id: str
+    email: str
     pin: str = Field(..., min_length=6, max_length=6, pattern=r"^\d{6}$")
 
 
