@@ -229,6 +229,86 @@ function EmptyDashboard({ colors, spacing, isDark }: { colors: any; spacing: any
   );
 }
 
+function StatCell({
+  icon,
+  iconColor,
+  value,
+  label,
+  isDark,
+  colors,
+}: {
+  icon: string;
+  iconColor: string;
+  value: string | number;
+  label: string;
+  isDark: boolean;
+  colors: any;
+}) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', paddingVertical: 14, paddingHorizontal: 4 }}>
+      <View
+        style={{
+          width: 28,
+          height: 28,
+          borderRadius: 8,
+          backgroundColor: iconColor + (isDark ? '20' : '15'),
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Icon name={icon} size={14} color={iconColor} />
+      </View>
+      <Text
+        style={{
+          fontSize: 20,
+          fontWeight: '800',
+          color: colors.textPrimary,
+          marginTop: 6,
+          letterSpacing: -0.5,
+        }}
+        numberOfLines={1}
+      >
+        {value}
+      </Text>
+      <Text
+        style={{
+          fontSize: 10,
+          fontWeight: '600',
+          color: colors.textSecondary,
+          marginTop: 1,
+          textTransform: 'uppercase',
+          letterSpacing: 0.5,
+        }}
+        numberOfLines={1}
+      >
+        {label}
+      </Text>
+    </View>
+  );
+}
+
+function CellDivider({ vertical, isDark, colors }: { vertical?: boolean; isDark: boolean; colors: any }) {
+  if (vertical) {
+    return (
+      <View
+        style={{
+          width: 1,
+          alignSelf: 'stretch',
+          backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+        }}
+      />
+    );
+  }
+  return (
+    <View
+      style={{
+        height: 1,
+        backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+      }}
+    />
+  );
+}
+
 export function HomeScreen() {
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
@@ -679,82 +759,3 @@ export function HomeScreen() {
   );
 }
 
-function StatCell({
-  icon,
-  iconColor,
-  value,
-  label,
-  isDark,
-  colors,
-}: {
-  icon: string;
-  iconColor: string;
-  value: string | number;
-  label: string;
-  isDark: boolean;
-  colors: any;
-}) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', paddingVertical: 14, paddingHorizontal: 4 }}>
-      <View
-        style={{
-          width: 28,
-          height: 28,
-          borderRadius: 8,
-          backgroundColor: iconColor + (isDark ? '20' : '15'),
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Icon name={icon} size={14} color={iconColor} />
-      </View>
-      <Text
-        style={{
-          fontSize: 20,
-          fontWeight: '800',
-          color: colors.textPrimary,
-          marginTop: 6,
-          letterSpacing: -0.5,
-        }}
-        numberOfLines={1}
-      >
-        {value}
-      </Text>
-      <Text
-        style={{
-          fontSize: 10,
-          fontWeight: '600',
-          color: colors.textSecondary,
-          marginTop: 1,
-          textTransform: 'uppercase',
-          letterSpacing: 0.5,
-        }}
-        numberOfLines={1}
-      >
-        {label}
-      </Text>
-    </View>
-  );
-}
-
-function CellDivider({ vertical, isDark, colors }: { vertical?: boolean; isDark: boolean; colors: any }) {
-  if (vertical) {
-    return (
-      <View
-        style={{
-          width: 1,
-          alignSelf: 'stretch',
-          backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
-        }}
-      />
-    );
-  }
-  return (
-    <View
-      style={{
-        height: 1,
-        backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
-      }}
-    />
-  );
-}

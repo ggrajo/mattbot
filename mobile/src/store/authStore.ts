@@ -180,11 +180,19 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       });
 
       const { Platform } = await import('react-native');
-      const DeviceInfo = await import('react-native-device-info').then(m => m.default).catch(() => null);
-      const deviceName = DeviceInfo ? await DeviceInfo.getDeviceName() : Platform.OS;
-      const osVersion = DeviceInfo ? `${Platform.OS} ${DeviceInfo.getSystemVersion()}` : Platform.OS;
-      const appVersion = DeviceInfo ? DeviceInfo.getVersion() : '0.1.0';
-      const storedId = DeviceInfo ? await DeviceInfo.getUniqueId() : undefined;
+      let deviceName = Platform.OS;
+      let osVersion = Platform.OS;
+      let appVersion = '0.1.0';
+      let storedId: string | undefined;
+      try {
+        const DeviceInfo = (await import('react-native-device-info')).default;
+        deviceName = await DeviceInfo.getDeviceName();
+        osVersion = `${Platform.OS} ${DeviceInfo.getSystemVersion()}`;
+        appVersion = DeviceInfo.getVersion();
+        storedId = await DeviceInfo.getUniqueId();
+      } catch {
+        // native module not available — use defaults
+      }
 
       const { getSecureItem, setSecureItem } = await import('../utils/secureStorage');
       let deviceId: string | undefined = await getSecureItem('mattbot_device_id') ?? undefined;
@@ -206,21 +214,20 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
           await setSecureItem('mattbot_device_id', dev.id);
 
           try {
-            const messaging = await import('@react-native-firebase/messaging').then(m => m.default).catch(() => null);
-            if (messaging) {
-              const authStatus = await messaging().requestPermission();
-              const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED
-                || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-              if (enabled) {
-                const fcmToken = await messaging().getToken();
-                if (fcmToken) {
-                  const { registerPushToken } = await import('../api/push');
-                  await registerPushToken(dev.id, fcmToken);
-                }
+            const messagingModule = await import('@react-native-firebase/messaging');
+            const messaging = messagingModule.default;
+            const authStatus = await messaging().requestPermission();
+            const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED
+              || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+            if (enabled) {
+              const fcmToken = await messaging().getToken();
+              if (fcmToken) {
+                const { registerPushToken } = await import('../api/push');
+                await registerPushToken(dev.id, fcmToken);
               }
             }
           } catch {
-            // push registration failure is non-critical
+            // Firebase native module not available or push registration failed
           }
         }
       } catch {
