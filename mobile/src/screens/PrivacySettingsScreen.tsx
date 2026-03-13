@@ -93,13 +93,13 @@ function PinKeypad({
   colors: any;
   typography: any;
 }) {
-  const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'del'];
+  const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'empty', '0', 'del'];
   return (
     <View style={{ gap: 12 }}>
       {[0, 1, 2, 3].map((row) => (
         <View key={row} style={{ flexDirection: 'row', justifyContent: 'center', gap: 20 }}>
-          {keys.slice(row * 3, row * 3 + 3).map((key, idx) => {
-            if (key === '') return <View key={idx} style={{ width: 72, height: 72 }} />;
+          {keys.slice(row * 3, row * 3 + 3).map((key) => {
+            if (key === 'empty') return <View key="empty" style={{ width: 72, height: 72 }} />;
             if (key === 'del') {
               return (
                 <TouchableOpacity
@@ -490,10 +490,8 @@ export function PrivacySettingsScreen({ navigation }: Props) {
 
               <Divider />
 
-              {/* MFA Status */}
-              <TouchableOpacity
-                onPress={() => navigation.navigate('MfaEnroll')}
-                activeOpacity={0.7}
+              {/* MFA Status (always set during onboarding, display-only) */}
+              <View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
@@ -502,18 +500,18 @@ export function PrivacySettingsScreen({ navigation }: Props) {
                 }}
               >
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md, flex: 1 }}>
-                  <Icon name="two-factor-authentication" size="md" color={colors.accent} />
+                  <Icon name="two-factor-authentication" size="md" color={profile?.mfa_enabled ? colors.success : colors.accent} />
                   <View style={{ flex: 1 }}>
                     <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '500' }} allowFontScaling>
                       Two-Factor Authentication
                     </Text>
                     <Text style={{ ...typography.caption, color: profile?.mfa_enabled ? colors.success : colors.warning }} allowFontScaling>
-                      {profile?.mfa_enabled ? 'Enabled' : 'Not enabled — recommended'}
+                      {profile?.mfa_enabled ? 'Enabled — set during onboarding' : 'Not enabled'}
                     </Text>
                   </View>
                 </View>
-                <Icon name="chevron-right" size="md" color={colors.textSecondary} />
-              </TouchableOpacity>
+                <Icon name={profile?.mfa_enabled ? 'check-circle' : 'alert-circle-outline'} size="md" color={profile?.mfa_enabled ? colors.success : colors.warning} />
+              </View>
             </>
           )}
         </View>
@@ -735,28 +733,21 @@ export function PrivacySettingsScreen({ navigation }: Props) {
         </View>
       </Card>
 
-      {/* Call Recording */}
+      {/* Call Recording — always on */}
       <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
-        <View style={{ gap: spacing.md }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
-            <Icon name="microphone-outline" size="md" color={colors.warning} />
-            <Text style={{ ...typography.h3, color: colors.textPrimary, flex: 1 }} allowFontScaling>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+          <View style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: colors.success + '18', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name="microphone" size="md" color={colors.success} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }} allowFontScaling>
               Call Recording
             </Text>
-          </View>
-          <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
-            When enabled, MattBot will record screened calls. Recordings are encrypted and subject to your data retention policy.
-          </Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Text style={{ ...typography.body, color: colors.textPrimary }} allowFontScaling>
-              Enable recording
+            <Text style={{ ...typography.caption, color: colors.success }} allowFontScaling>
+              Always enabled — recordings are encrypted
             </Text>
-            <Switch
-              value={settings?.recording_enabled ?? false}
-              onValueChange={v => handleToggle('recording_enabled', v)}
-              trackColor={{ false: colors.border, true: colors.primary }}
-            />
           </View>
+          <Icon name="check-circle" size="md" color={colors.success} />
         </View>
       </Card>
     </ScreenWrapper>

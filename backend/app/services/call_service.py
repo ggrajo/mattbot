@@ -248,6 +248,8 @@ async def list_calls_for_user(
     has_recording: bool | None = None,
     search: str | None = None,
     label: str | None = None,
+    is_vip: bool | None = None,
+    is_blocked: bool | None = None,
     sort_by: str | None = None,
     sort_dir: str | None = None,
 ) -> tuple[list[Call], str | None, bool]:
@@ -297,6 +299,20 @@ async def list_calls_for_user(
             CallArtifact.labels_status == "ready",
             cast(CallArtifact.labels_json, JSONB).op("@>")(type_coerce(target, JSONB)),
         )
+
+    if is_vip is True:
+        from app.models.vip_entry import VipEntry
+        vip_hashes = select(VipEntry.phone_hash).where(VipEntry.owner_user_id == user_id)
+        stmt = stmt.where(Call.caller_phone_hash.in_(vip_hashes))
+    elif is_vip is False:
+        from app.models.vip_entry import VipEntry
+        vip_hashes = select(VipEntry.phone_hash).where(VipEntry.owner_user_id == user_id)
+        stmt = stmt.where(Call.caller_phone_hash.notin_(vip_hashes))
+
+    if is_blocked is True:
+        from app.models.block_entry import BlockEntry
+        block_hashes = select(BlockEntry.phone_hash).where(BlockEntry.owner_user_id == user_id)
+        stmt = stmt.where(Call.caller_phone_hash.in_(block_hashes))
 
     order_col = Call.started_at if sort_by == "started_at" else Call.created_at
 

@@ -78,6 +78,8 @@ async def list_calls(
     has_recording: bool | None = Query(default=None),
     search: str | None = Query(default=None),
     label: str | None = Query(default=None),
+    is_vip: bool | None = Query(default=None),
+    is_blocked: bool | None = Query(default=None),
     sort_by: str | None = Query(default=None),
     sort_dir: str | None = Query(default=None),
 ) -> CallListResponse:
@@ -116,6 +118,8 @@ async def list_calls(
         has_recording=has_recording,
         search=search,
         label=label,
+        is_vip=is_vip,
+        is_blocked=is_blocked,
         sort_by=sort_by,
         sort_dir=sort_dir,
     )

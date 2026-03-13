@@ -214,7 +214,7 @@ export function RemindersListScreen({}: Props) {
         )}
       </Card>
     );
-  }, [colors, spacing, typography, radii, handleComplete, handleCancel]);
+  }, [colors, spacing, typography, radii, handleComplete, handleCancel, revealedPhones, revealingIds]);
 
   return (
     <ScreenWrapper scroll={false}>

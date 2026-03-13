@@ -105,7 +105,7 @@ function artifactBadge(item: CallListItem): ArtifactBadge | null {
 
 // ---- Quick-filter presets (top row chips) ----
 
-type QuickFilterKey = 'all' | 'important' | 'vip' | 'spam' | 'missed' | 'recorded';
+type QuickFilterKey = 'all' | 'important' | 'vip' | 'spam' | 'blocked' | 'missed' | 'recorded';
 
 interface QuickPreset {
   key: QuickFilterKey;
@@ -117,8 +117,9 @@ interface QuickPreset {
 const QUICK_PRESETS: QuickPreset[] = [
   { key: 'all', label: 'All', icon: 'phone-log', filter: {} },
   { key: 'important', label: 'Urgent', icon: 'alert-circle-outline', filter: { label: 'urgent' } },
-  { key: 'vip', label: 'VIP', icon: 'star-outline', filter: { label: 'vip' } },
+  { key: 'vip', label: 'VIP', icon: 'star-outline', filter: { is_vip: true } },
   { key: 'spam', label: 'Spam', icon: 'alert-octagon-outline', filter: { label: 'spam' } },
+  { key: 'blocked', label: 'Blocked', icon: 'block-helper', filter: { is_blocked: true } },
   { key: 'missed', label: 'Missed', icon: 'phone-missed', filter: { status: 'failed' } },
   { key: 'recorded', label: 'Recorded', icon: 'microphone-outline', filter: { has_recording: true } },
 ];
@@ -276,6 +277,8 @@ function countActiveFilters(f: CallFilters): number {
   if (f.country_prefix) count++;
   if (f.has_recording === true) count++;
   if (f.label) count++;
+  if (f.is_vip === true) count++;
+  if (f.is_blocked === true) count++;
   if (f.sort_by && f.sort_by !== 'created_at') count++;
   if (f.sort_dir && f.sort_dir !== 'desc') count++;
   return count;
@@ -339,10 +342,11 @@ export function CallsListScreen() {
     setActiveQuick(preset.key);
     const f: CallFilters = { ...advFilters, ...preset.filter };
     if (searchText.trim()) f.search = searchText.trim();
-    // Clear label if switching to non-label presets
     if (!preset.filter.label) delete f.label;
     if (!preset.filter.status) delete f.status;
     if (preset.filter.has_recording == null) delete f.has_recording;
+    if (preset.filter.is_vip == null) delete f.is_vip;
+    if (preset.filter.is_blocked == null) delete f.is_blocked;
     loadCalls(f);
   }, [advFilters, searchText, loadCalls]);
 

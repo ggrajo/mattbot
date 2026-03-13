@@ -117,6 +117,8 @@ export interface CallFilters {
   duration_max?: number;
   country_prefix?: string;
   has_recording?: boolean;
+  is_vip?: boolean;
+  is_blocked?: boolean;
   sort_by?: string;
   sort_dir?: string;
 }
@@ -134,6 +136,8 @@ export async function fetchCalls(cursor?: string, filters?: CallFilters): Promis
   if (filters?.duration_max != null) params.duration_max = String(filters.duration_max);
   if (filters?.country_prefix) params.country_prefix = filters.country_prefix;
   if (filters?.has_recording === true) params.has_recording = 'true';
+  if (filters?.is_vip === true) params.is_vip = 'true';
+  if (filters?.is_blocked === true) params.is_blocked = 'true';
   if (filters?.sort_by) params.sort_by = filters.sort_by;
   if (filters?.sort_dir) params.sort_dir = filters.sort_dir;
   const { data } = await apiClient.get('/calls', { params });
