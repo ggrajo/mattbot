@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
-import ReactNativeBiometrics from 'react-native-biometrics';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 type BiometryType = 'FaceID' | 'TouchID' | 'Biometrics' | null;
 
@@ -14,9 +13,8 @@ interface UseBiometricReturn extends BiometricState {
   authenticate: (promptMessage?: string) => Promise<boolean>;
 }
 
-const rnBiometrics = new ReactNativeBiometrics();
-
 export function useBiometric(): UseBiometricReturn {
+  const rnBiometricsRef = useRef<any>(null);
   const [state, setState] = useState<BiometricState>({
     available: false,
     biometryType: null,
@@ -30,7 +28,10 @@ export function useBiometric(): UseBiometricReturn {
 
   async function checkBiometricAvailability() {
     try {
-      const { available, biometryType } = await rnBiometrics.isSensorAvailable();
+      const ReactNativeBiometrics = (await import('react-native-biometrics')).default;
+      const instance = new ReactNativeBiometrics();
+      rnBiometricsRef.current = instance;
+      const { available, biometryType } = await instance.isSensorAvailable();
       setState({
         available,
         biometryType: (biometryType as BiometryType) ?? null,
@@ -42,19 +43,19 @@ export function useBiometric(): UseBiometricReturn {
         available: false,
         biometryType: null,
         loading: false,
-        error: 'Failed to check biometric availability',
+        error: null,
       });
     }
   }
 
   const authenticate = useCallback(
     async (promptMessage = 'Authenticate to continue'): Promise<boolean> => {
-      if (!state.available) {
+      if (!state.available || !rnBiometricsRef.current) {
         return false;
       }
 
       try {
-        const { success } = await rnBiometrics.simplePrompt({ promptMessage });
+        const { success } = await rnBiometricsRef.current.simplePrompt({ promptMessage });
         return success;
       } catch {
         return false;

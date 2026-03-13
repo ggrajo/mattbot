@@ -760,6 +760,8 @@ async def _build_call_detail(
 
     booking_details: dict = {}
     if call.booked_calendar_event_id:
+        from sqlalchemy import type_coerce
+        from sqlalchemy.dialects.postgresql import JSONB
         from app.models.audit_event import AuditEvent
 
         audit_row = (
@@ -768,7 +770,7 @@ async def _build_call_detail(
                 .where(
                     AuditEvent.owner_user_id == user_id,
                     AuditEvent.event_type == "calendar.appointment_booked",
-                    AuditEvent.details["call_id"].as_string() == str(call.id),
+                    type_coerce(AuditEvent.details, JSONB)["call_id"].as_string() == str(call.id),
                 )
                 .order_by(AuditEvent.created_at.desc())
                 .limit(1)
