@@ -114,6 +114,11 @@ nginx/certbot/
 .cache/
 .DS_Store
 
+# One-off scripts that may contain credentials
+test_call*.py
+check_twilio*.py
+fix_twilio*.py
+
 DEPLOY_GUIDE.md
 backend/.env.dev
 mobile/.env.dev

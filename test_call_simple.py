@@ -13,18 +13,19 @@ When you answer, the backend webhook fires and connects you to the AI agent.
 import argparse
 import base64
 import json
+import os
 import sys
 import urllib.request
 import urllib.parse
 import urllib.error
 
-TWILIO_ACCOUNT_SID = "***TWILIO_SID_REDACTED***"
-TWILIO_AUTH_TOKEN = "***TWILIO_TOKEN_REDACTED***"
+TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", "")
+TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN", "")
 
-CYCLOAAA_AI_NUMBER = "***PHONE_REDACTED***"
-RAGRAJO_NUMBER = "***PHONE_REDACTED***"
+CYCLOAAA_AI_NUMBER = os.environ.get("TEST_AI_NUMBER", "")
+RAGRAJO_NUMBER = os.environ.get("TEST_FROM_NUMBER", "")
 
-BACKEND_BASE_URL = "http://3.238.82.209"
+BACKEND_BASE_URL = os.environ.get("BACKEND_BASE_URL", "http://localhost:8000")
 WEBHOOK_URL = f"{BACKEND_BASE_URL}/webhooks/twilio/voice/inbound"
 STATUS_CALLBACK_URL = f"{BACKEND_BASE_URL}/webhooks/twilio/voice/status"
 
@@ -34,17 +35,27 @@ def main():
     parser.add_argument(
         "--to",
         default=CYCLOAAA_AI_NUMBER,
-        help="AI number to call (default: cycloaaa's ***PHONE_REDACTED***)",
+        help="AI number to call (default: TEST_AI_NUMBER env var)",
     )
     parser.add_argument(
         "--from-number",
         default=RAGRAJO_NUMBER,
-        help="Caller ID (default: ragrajo04's ***PHONE_REDACTED***)",
+        help="Caller ID (default: TEST_FROM_NUMBER env var)",
     )
     args = parser.parse_args()
 
     to_number = args.to
     from_number = args.from_number
+
+    if not TWILIO_ACCOUNT_SID or not TWILIO_AUTH_TOKEN:
+        print("ERROR: Set TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN environment variables")
+        sys.exit(1)
+    if not to_number:
+        print("ERROR: Provide --to or set TEST_AI_NUMBER environment variable")
+        sys.exit(1)
+    if not from_number:
+        print("ERROR: Provide --from-number or set TEST_FROM_NUMBER environment variable")
+        sys.exit(1)
 
     url = f"https://api.twilio.com/2010-04-01/Accounts/{TWILIO_ACCOUNT_SID}/Calls.json"
 
