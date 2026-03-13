@@ -7,7 +7,7 @@ import {
   ViewStyle,
   ScrollViewProps,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
 import { useTheme } from '../../theme/ThemeProvider';
 
 interface Props {
@@ -17,6 +17,8 @@ interface Props {
   contentStyle?: ViewStyle;
   keyboardAvoiding?: boolean;
   scrollProps?: ScrollViewProps;
+  /** Safe area edges. Defaults to bottom/left/right (no top) since React Navigation headers handle the top. */
+  safeEdges?: readonly Edge[];
 }
 
 export function ScreenWrapper({
@@ -25,6 +27,7 @@ export function ScreenWrapper({
   contentStyle,
   keyboardAvoiding = true,
   scrollProps,
+  safeEdges = ['bottom', 'left', 'right'],
 }: Props) {
   const theme = useTheme();
   const { colors, spacing } = theme;
@@ -66,7 +69,7 @@ export function ScreenWrapper({
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={safeEdges}>
       {wrapped}
     </SafeAreaView>
   );

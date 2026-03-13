@@ -67,7 +67,7 @@ export function OnboardingCompleteScreen({ navigation }: Props) {
   });
 
   return (
-    <ScreenWrapper scroll={false} keyboardAvoiding={false}>
+    <ScreenWrapper scroll={false} keyboardAvoiding={false} safeEdges={['top', 'bottom', 'left', 'right']}>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: spacing.xl }}>
 
         <Animated.View

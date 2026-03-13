@@ -115,7 +115,7 @@ async def register_with_email(
 
     existing = await db.execute(select(User).where(User.email == email.lower()))
     if existing.scalar_one_or_none() is not None:
-        raise AppError("INVALID_CREDENTIALS", "Invalid credentials", 400)
+        raise AppError("EMAIL_TAKEN", "An account with this email already exists. Please sign in instead.", 409)
 
     user = User(
         email=email.lower(),
@@ -156,7 +156,10 @@ async def register_with_email(
 
     await db.flush()
 
-    await email_service.send_verification_email(email, verification_token)
+    try:
+        await email_service.send_verification_email(email, verification_token)
+    except Exception:
+        logger.exception("Failed to send verification email to %s – registration still committed", email)
 
     return {
         "user_id": str(user.id),
