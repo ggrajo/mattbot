@@ -434,12 +434,8 @@ async def change_plan(
     sub.canceled_at = None
 
     if app_settings.BILLING_PROVIDER != "stripe":
-        pe = sub.current_period_end
-        if pe and pe.tzinfo:
-            pe = pe.replace(tzinfo=None)
-        if pe is None or now >= pe:
-            sub.current_period_start = now
-            sub.current_period_end = now + timedelta(days=app_settings.BILLING_PERIOD_DAYS)
+        sub.current_period_start = now
+        sub.current_period_end = now + timedelta(days=app_settings.BILLING_PERIOD_DAYS)
 
     await audit_service.log_event(
         db=db,
