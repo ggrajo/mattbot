@@ -55,9 +55,12 @@ export function LoginScreen({ navigation }: Props) {
 
   async function checkPinAvailability() {
     const deviceId = await getSecureItem('mattbot_device_id');
+    const pinEnabled = await getSecureItem('mattbot_pin_enabled');
     if (deviceId) {
       setStoredDeviceId(deviceId);
-      setHasDevicePin(true);
+      if (pinEnabled === 'true') {
+        setHasDevicePin(true);
+      }
     }
   }
 

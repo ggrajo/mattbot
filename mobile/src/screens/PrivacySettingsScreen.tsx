@@ -26,6 +26,7 @@ import { useAuthStore } from '../store/authStore';
 import { useBiometric } from '../hooks/useBiometric';
 import { apiClient, extractApiError } from '../api/client';
 import { hapticLight } from '../utils/haptics';
+import { setSecureItem, removeSecureItem } from '../utils/secureStorage';
 import { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'PrivacySettings'>;
@@ -320,6 +321,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
       setPinEntry('');
       setPinFirst('');
       setPendingPin('');
+      await setSecureItem('mattbot_pin_enabled', 'true');
       await loadProfileAndPin();
     } catch (e) {
       setToastType('error');
@@ -337,6 +339,7 @@ export function PrivacySettingsScreen({ navigation }: Props) {
       await apiClient.delete('/auth/pin');
       setToastType('success');
       setToast('PIN disabled.');
+      await removeSecureItem('mattbot_pin_enabled');
       await loadProfileAndPin();
     } catch (e) {
       setToastType('error');
