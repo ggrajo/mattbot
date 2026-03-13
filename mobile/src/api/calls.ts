@@ -33,6 +33,9 @@ export interface CallListItem {
   caller_relationship?: string | null;
   is_vip?: boolean;
   is_blocked?: boolean;
+  has_notes?: boolean;
+  has_reminder?: boolean;
+  labels?: string[];
   booked_calendar_event_id?: string | null;
   booked_calendar_event_summary?: string | null;
 }

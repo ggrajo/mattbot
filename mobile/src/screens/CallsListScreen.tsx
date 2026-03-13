@@ -623,18 +623,49 @@ export function CallsListScreen() {
                 );
               })()}
 
-              {item.booked_calendar_event_id && (
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginTop: spacing.xs }}>
-                  <Icon name="calendar-check" size="sm" color={colors.primary} />
-                  <Text
-                    style={{ ...typography.caption, color: colors.primary, fontWeight: '500' }}
-                    numberOfLines={1}
-                    allowFontScaling
-                  >
-                    {item.booked_calendar_event_summary || 'Appointment booked'}
-                  </Text>
-                </View>
-              )}
+              {/* Indicator pills row */}
+              {(() => {
+                const pills: { icon: string; label: string; color: string; bg: string }[] = [];
+                const labels = item.labels ?? [];
+
+                if (labels.includes('urgent'))
+                  pills.push({ icon: 'alert-circle', label: 'Urgent', color: colors.error, bg: colors.error + '14' });
+                if (labels.includes('spam'))
+                  pills.push({ icon: 'alert-octagon', label: 'Spam', color: '#EF4444', bg: '#EF444414' });
+                if (labels.includes('sales'))
+                  pills.push({ icon: 'tag-outline', label: 'Sales', color: '#F97316', bg: '#F9731614' });
+                if (item.booked_calendar_event_id)
+                  pills.push({ icon: 'calendar-star', label: item.booked_calendar_event_summary || 'Booked', color: colors.primary, bg: colors.primary + '14' });
+                if (item.has_reminder)
+                  pills.push({ icon: 'bell-ring-outline', label: 'Reminder', color: '#F59E0B', bg: '#F59E0B14' });
+                if (item.has_notes)
+                  pills.push({ icon: 'note-text-outline', label: 'Notes', color: '#8B5CF6', bg: '#8B5CF614' });
+
+                if (pills.length === 0) return null;
+                return (
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: spacing.xs }}>
+                    {pills.map((p, i) => (
+                      <View
+                        key={i}
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          gap: 3,
+                          paddingVertical: 2,
+                          paddingHorizontal: 6,
+                          borderRadius: radii.sm,
+                          backgroundColor: p.bg,
+                        }}
+                      >
+                        <Icon name={p.icon} size={12} color={p.color} />
+                        <Text style={{ fontSize: 10, fontWeight: '600', color: p.color }} numberOfLines={1}>
+                          {p.label}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                );
+              })()}
             </View>
 
             <Icon name="chevron-right" size="md" color={colors.textDisabled} />

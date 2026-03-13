@@ -38,6 +38,9 @@ class CallListItem(BaseModel):
     caller_relationship: str | None = None
     is_vip: bool = False
     is_blocked: bool = False
+    has_notes: bool = False
+    has_reminder: bool = False
+    labels: list[str] = []
 
     model_config = {"from_attributes": True}
 

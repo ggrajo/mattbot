@@ -201,12 +201,7 @@ function KpiSkeleton({ colors, radii }: { colors: any; radii: any }) {
     <View style={{ gap: 12 }}>
       <View style={{ backgroundColor: bg, borderRadius: radii.xl, height: 180 }} />
       <View style={{ backgroundColor: bg, borderRadius: radii.lg, height: 60 }} />
-      <View style={{ backgroundColor: bg, borderRadius: radii.lg, height: 140 }} />
-      <View style={{ flexDirection: 'row', gap: 12 }}>
-        <View style={{ flex: 1, backgroundColor: bg, borderRadius: radii.lg, height: 120 }} />
-        <View style={{ flex: 1, backgroundColor: bg, borderRadius: radii.lg, height: 120 }} />
-      </View>
-      <View style={{ backgroundColor: bg, borderRadius: radii.lg, height: 120, width: '48%' }} />
+      <View style={{ backgroundColor: bg, borderRadius: radii.xl, height: 300 }} />
     </View>
   );
 }
@@ -498,121 +493,60 @@ export function HomeScreen() {
                 </View>
               </FadeIn>
 
-              {/* Today Strip */}
+              {/* Compact stats grid — 3 columns */}
               <FadeIn delay={70}>
                 <View
                   style={{
-                    borderRadius: radii.lg,
-                    paddingHorizontal: spacing.lg,
-                    paddingVertical: spacing.md,
-                    backgroundColor: isDark ? 'rgba(16,185,129,0.12)' : '#D1FAE5',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    ...(isDark ? { borderWidth: 1, borderColor: 'rgba(16,185,129,0.2)' } : {}),
+                    borderRadius: radii.xl,
+                    overflow: 'hidden',
+                    backgroundColor: isDark ? colors.surfaceVariant : '#FFFFFF',
+                    ...(isDark
+                      ? { borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)' }
+                      : Platform.select({
+                          ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 12 },
+                          android: { elevation: 3 },
+                        })),
                   }}
                 >
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                    <Icon name="lightning-bolt" size={18} color="#10B981" />
-                    <Text style={{ fontSize: 14, fontWeight: '700', color: '#10B981' }}>Today</Text>
+                  {/* Row 1 */}
+                  <View style={{ flexDirection: 'row' }}>
+                    <StatCell icon="lightning-bolt" iconColor="#10B981" value={stats?.calls_today ?? 0} label="Today" isDark={isDark} colors={colors} />
+                    <CellDivider vertical isDark={isDark} colors={colors} />
+                    <StatCell icon="check-circle-outline" iconColor="#10B981" value={stats?.completed_calls ?? 0} label="Screened" isDark={isDark} colors={colors} />
+                    <CellDivider vertical isDark={isDark} colors={colors} />
+                    <StatCell icon="account-group-outline" iconColor="#0EA5E9" value={stats?.unique_callers ?? 0} label="Callers" isDark={isDark} colors={colors} />
                   </View>
-                  <Text style={{ fontSize: 22, fontWeight: '800', color: '#10B981' }}>{stats?.calls_today ?? 0} calls</Text>
-                </View>
-              </FadeIn>
-
-              {/* Screened + Callers — 2 columns */}
-              <View style={{ flexDirection: 'row', gap: 12 }}>
-                <FadeIn delay={80} scale style={{ flex: 1 }}>
-                  <KpiTile
-                    icon="check-circle-outline" iconBg="#10B981" bgDark="#1A3D2E" bgLight="#D1FAE5"
-                    borderDark="rgba(16,185,129,0.15)" value={stats?.completed_calls ?? 0} label="Screened"
-                    isDark={isDark} colors={colors} radii={radii} spacing={spacing}
-                  />
-                </FadeIn>
-                <FadeIn delay={100} scale style={{ flex: 1 }}>
-                  <KpiTile
-                    icon="account-group-outline" iconBg="#0EA5E9" bgDark="#1E2A5E" bgLight="#BFDBFE"
-                    borderDark="rgba(59,130,246,0.15)" value={stats?.unique_callers ?? 0} label="Callers"
-                    isDark={isDark} colors={colors} radii={radii} spacing={spacing}
-                  />
-                </FadeIn>
-              </View>
-
-              {/* Spam + Missed — 2 columns */}
-              <View style={{ flexDirection: 'row', gap: 12 }}>
-                <FadeIn delay={120} scale style={{ flex: 1 }}>
-                  <KpiTile
-                    icon="shield-check-outline" iconBg="#EF4444" bgDark="#4A1942" bgLight="#FBCFE8"
-                    borderDark="rgba(236,72,153,0.15)" value={stats?.spam_blocked ?? 0} label="Spam"
-                    isDark={isDark} colors={colors} radii={radii} spacing={spacing}
-                  />
-                </FadeIn>
-                <FadeIn delay={140} scale style={{ flex: 1 }}>
-                  <KpiTile
-                    icon="phone-missed" iconBg="#F43F5E" bgDark="#3B1320" bgLight="#FFE4E6"
-                    borderDark="rgba(244,63,94,0.15)" value={Math.max(0, (stats?.total_calls ?? 0) - (stats?.completed_calls ?? 0))} label="Missed"
-                    isDark={isDark} colors={colors} radii={radii} spacing={spacing}
-                  />
-                </FadeIn>
-              </View>
-
-              {/* Avg Call + Longest — 2 columns */}
-              <View style={{ flexDirection: 'row', gap: 12 }}>
-                <FadeIn delay={160} scale style={{ flex: 1 }}>
-                  <KpiTile
-                    icon="timer-outline" iconBg="#F59E0B" bgDark="#422006" bgLight="#FDE68A"
-                    borderDark="rgba(245,158,11,0.15)" value={formatDurationCompact(stats?.avg_duration_seconds ?? null)} label="Avg Call"
-                    isDark={isDark} colors={colors} radii={radii} spacing={spacing}
-                  />
-                </FadeIn>
-                <FadeIn delay={180} scale style={{ flex: 1 }}>
-                  <KpiTile
-                    icon="trophy-outline" iconBg="#8B5CF6" bgDark="#2E1065" bgLight="#DDD6FE"
-                    borderDark="rgba(139,92,246,0.15)" value={formatDurationCompact(stats?.longest_call_seconds ?? null)} label="Longest"
-                    isDark={isDark} colors={colors} radii={radii} spacing={spacing}
-                  />
-                </FadeIn>
-              </View>
-
-              {/* VIP + Booked — 2 columns */}
-              <View style={{ flexDirection: 'row', gap: 12 }}>
-                <FadeIn delay={200} scale style={{ flex: 1 }}>
-                  <KpiTile
-                    icon="star" iconBg="#FBBF24" bgDark="#422006" bgLight="#FEF3C7"
-                    borderDark="rgba(251,191,36,0.15)" value={stats?.vip_calls ?? 0} label="VIP Calls"
-                    isDark={isDark} colors={colors} radii={radii} spacing={spacing}
-                  />
-                </FadeIn>
-                <FadeIn delay={220} scale style={{ flex: 1 }}>
-                  <KpiTile
-                    icon="calendar-check" iconBg="#14B8A6" bgDark="#134E4A" bgLight="#CCFBF1"
-                    borderDark="rgba(20,184,166,0.15)" value={stats?.appointments_booked ?? 0} label="Booked"
-                    isDark={isDark} colors={colors} radii={radii} spacing={spacing}
-                  />
-                </FadeIn>
-              </View>
-
-              {/* Total Talk Time — full width */}
-              <FadeIn delay={240}>
-                <View
-                  style={{
-                    borderRadius: radii.lg,
-                    paddingHorizontal: spacing.lg,
-                    paddingVertical: spacing.md,
-                    backgroundColor: isDark ? 'rgba(139,92,246,0.10)' : '#EDE9FE',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    ...(isDark ? { borderWidth: 1, borderColor: 'rgba(139,92,246,0.18)' } : {}),
-                  }}
-                >
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                    <Icon name="clock-check-outline" size={18} color="#8B5CF6" />
-                    <Text style={{ fontSize: 14, fontWeight: '600', color: isDark ? '#C4B5FD' : '#6D28D9' }}>Total Talk Time</Text>
+                  <CellDivider isDark={isDark} colors={colors} />
+                  {/* Row 2 */}
+                  <View style={{ flexDirection: 'row' }}>
+                    <StatCell icon="shield-check-outline" iconColor="#EF4444" value={stats?.spam_blocked ?? 0} label="Spam" isDark={isDark} colors={colors} />
+                    <CellDivider vertical isDark={isDark} colors={colors} />
+                    <StatCell icon="phone-missed" iconColor="#F43F5E" value={Math.max(0, (stats?.total_calls ?? 0) - (stats?.completed_calls ?? 0))} label="Missed" isDark={isDark} colors={colors} />
+                    <CellDivider vertical isDark={isDark} colors={colors} />
+                    <StatCell icon="star" iconColor="#FBBF24" value={stats?.vip_calls ?? 0} label="VIP" isDark={isDark} colors={colors} />
                   </View>
-                  <Text style={{ fontSize: 20, fontWeight: '800', color: isDark ? '#C4B5FD' : '#6D28D9' }}>
-                    {stats?.total_talk_minutes ?? 0} min
-                  </Text>
+                  <CellDivider isDark={isDark} colors={colors} />
+                  {/* Row 3 */}
+                  <View style={{ flexDirection: 'row' }}>
+                    <StatCell icon="timer-outline" iconColor="#F59E0B" value={formatDurationCompact(stats?.avg_duration_seconds ?? null)} label="Avg Call" isDark={isDark} colors={colors} />
+                    <CellDivider vertical isDark={isDark} colors={colors} />
+                    <StatCell icon="trophy-outline" iconColor="#8B5CF6" value={formatDurationCompact(stats?.longest_call_seconds ?? null)} label="Longest" isDark={isDark} colors={colors} />
+                    <CellDivider vertical isDark={isDark} colors={colors} />
+                    <StatCell icon="calendar-check" iconColor="#14B8A6" value={stats?.appointments_booked ?? 0} label="Booked" isDark={isDark} colors={colors} />
+                  </View>
+                  <CellDivider isDark={isDark} colors={colors} />
+                  {/* Bottom summary row */}
+                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                      <Icon name="clock-check-outline" size={16} color="#8B5CF6" />
+                      <Text style={{ fontSize: 13, fontWeight: '600', color: isDark ? '#C4B5FD' : '#6D28D9' }}>
+                        Total talk time
+                      </Text>
+                    </View>
+                    <Text style={{ fontSize: 18, fontWeight: '800', color: isDark ? '#C4B5FD' : '#6D28D9', letterSpacing: -0.5 }}>
+                      {stats?.total_talk_minutes ?? 0} min
+                    </Text>
+                  </View>
                 </View>
               </FadeIn>
             </View>
@@ -745,53 +679,82 @@ export function HomeScreen() {
   );
 }
 
-function KpiTile({
+function StatCell({
   icon,
-  iconBg,
-  bgDark,
-  bgLight,
-  borderDark,
+  iconColor,
   value,
   label,
   isDark,
   colors,
-  radii,
-  spacing,
 }: {
   icon: string;
-  iconBg: string;
-  bgDark: string;
-  bgLight: string;
-  borderDark: string;
+  iconColor: string;
   value: string | number;
   label: string;
   isDark: boolean;
   colors: any;
-  radii: any;
-  spacing: any;
 }) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', paddingVertical: 14, paddingHorizontal: 4 }}>
+      <View
+        style={{
+          width: 28,
+          height: 28,
+          borderRadius: 8,
+          backgroundColor: iconColor + (isDark ? '20' : '15'),
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Icon name={icon} size={14} color={iconColor} />
+      </View>
+      <Text
+        style={{
+          fontSize: 20,
+          fontWeight: '800',
+          color: colors.textPrimary,
+          marginTop: 6,
+          letterSpacing: -0.5,
+        }}
+        numberOfLines={1}
+      >
+        {value}
+      </Text>
+      <Text
+        style={{
+          fontSize: 10,
+          fontWeight: '600',
+          color: colors.textSecondary,
+          marginTop: 1,
+          textTransform: 'uppercase',
+          letterSpacing: 0.5,
+        }}
+        numberOfLines={1}
+      >
+        {label}
+      </Text>
+    </View>
+  );
+}
+
+function CellDivider({ vertical, isDark, colors }: { vertical?: boolean; isDark: boolean; colors: any }) {
+  if (vertical) {
+    return (
+      <View
+        style={{
+          width: 1,
+          alignSelf: 'stretch',
+          backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+        }}
+      />
+    );
+  }
   return (
     <View
       style={{
-        borderRadius: radii.xl,
-        padding: spacing.md,
-        minHeight: 100,
-        backgroundColor: isDark ? bgDark : bgLight,
-        ...(isDark
-          ? { borderWidth: 1, borderColor: borderDark }
-          : Platform.select({
-              ios: { shadowColor: iconBg, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.10, shadowRadius: 8 },
-              android: { elevation: 2 },
-            })),
+        height: 1,
+        backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
       }}
-    >
-      <View style={{ width: 32, height: 32, borderRadius: 10, backgroundColor: iconBg, alignItems: 'center', justifyContent: 'center' }}>
-        <Icon name={icon} size={16} color="#FFFFFF" />
-      </View>
-      <Text style={{ fontSize: 28, fontWeight: '800', color: colors.textPrimary, marginTop: 8, letterSpacing: -0.5 }}>
-        {value}
-      </Text>
-      <Text style={{ fontSize: 12, fontWeight: '500', color: colors.textSecondary, marginTop: 1 }}>{label}</Text>
-    </View>
+    />
   );
 }

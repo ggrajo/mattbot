@@ -121,6 +121,7 @@ async def list_calls(
     )
 
     caller_info = await _batch_caller_info(db, current_user.user.id, calls)
+    call_extras = await _batch_call_extras(db, current_user.user.id, calls)
 
     items = [
         CallListItem(
@@ -143,6 +144,7 @@ async def list_calls(
                 "booked_calendar_event_id": c.booked_calendar_event_id,
                 "booked_calendar_event_summary": c.booked_calendar_event_summary,
                 **caller_info.get(c.caller_phone_hash, {}),
+                **call_extras.get(str(c.id), {}),
             }
         )
         for c in calls
@@ -607,6 +609,57 @@ async def _batch_caller_info(db: AsyncSession, user_id: uuid.UUID, calls: list) 
             entry["caller_relationship"] = mem_data["relationship"]
         result[ph] = entry
 
+    return result
+
+
+async def _batch_call_extras(
+    db: AsyncSession, user_id: uuid.UUID, calls: list
+) -> dict[str, dict]:
+    """Batch-fetch notes, labels, and reminder existence for call list items."""
+    from app.models.call_artifact import CallArtifact
+    from app.models.reminder import Reminder
+
+    call_ids = [c.id for c in calls]
+    if not call_ids:
+        return {}
+
+    art_stmt = select(
+        CallArtifact.call_id,
+        CallArtifact.notes_ciphertext,
+        CallArtifact.labels_json,
+    ).where(CallArtifact.call_id.in_(call_ids))
+    art_rows = (await db.execute(art_stmt)).all()
+
+    art_map: dict[str, dict] = {}
+    for call_id, notes_ct, labels_json in art_rows:
+        cid = str(call_id)
+        has_notes = notes_ct is not None and len(notes_ct) > 0
+        label_names: list[str] = []
+        if labels_json and isinstance(labels_json, list):
+            for lbl in labels_json:
+                if isinstance(lbl, dict) and "label_name" in lbl:
+                    label_names.append(lbl["label_name"])
+                elif isinstance(lbl, str):
+                    label_names.append(lbl)
+        art_map[cid] = {"has_notes": has_notes, "labels": label_names}
+
+    rem_stmt = select(Reminder.call_id).where(
+        Reminder.owner_user_id == user_id,
+        Reminder.call_id.in_(call_ids),
+        Reminder.status.in_(["scheduled", "triggered"]),
+    ).distinct()
+    rem_rows = (await db.execute(rem_stmt)).all()
+    rem_set = {str(row[0]) for row in rem_rows}
+
+    result: dict[str, dict] = {}
+    for c in calls:
+        cid = str(c.id)
+        art = art_map.get(cid, {})
+        result[cid] = {
+            "has_notes": art.get("has_notes", False),
+            "labels": art.get("labels", []),
+            "has_reminder": cid in rem_set,
+        }
     return result
 
 
