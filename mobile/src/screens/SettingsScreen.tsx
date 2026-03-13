@@ -179,6 +179,15 @@ export function SettingsScreen() {
       <View style={{ gap: spacing.sm, marginTop: spacing.xl, marginBottom: spacing.xl }}>
         <SectionHeader icon="phone-outline" label="Phone & Calls" />
         <ListRow
+          icon="phone-settings-outline"
+          iconColor="#6366F1"
+          title="Call Modes"
+          subtitle="Switch screening modes (work, personal, DND)"
+          onPress={() => navigation.navigate('CallModes')}
+          right={chevron}
+          accessibilityLabel="Call modes"
+        />
+        <ListRow
           icon="phone-outline"
           iconColor={colors.primary}
           title={activeNumber ? (numberRevealed ? activeNumber.e164 : maskPhone(activeNumber.e164)) : 'No number provisioned'}
@@ -226,17 +235,6 @@ export function SettingsScreen() {
           right={chevron}
           accessibilityLabel="Quiet Hours settings"
         />
-        {/* Handoff settings hidden until feature is fully wired up
-        <ListRow
-          icon="phone-forward-outline"
-          iconColor={colors.primary}
-          title="Handoff Settings"
-          subtitle="Live call takeover rules"
-          onPress={() => navigation.navigate('HandoffSettings')}
-          right={chevron}
-          accessibilityLabel="Handoff settings"
-        />
-        */}
         <ListRow
           icon="alert-octagon-outline"
           iconColor={colors.error}
@@ -262,6 +260,24 @@ export function SettingsScreen() {
           right={chevron}
           accessibilityLabel="Contacts list"
         />
+        <ListRow
+          icon="star-outline"
+          iconColor="#F59E0B"
+          title="VIP Contacts"
+          subtitle="Priority callers that always get through"
+          onPress={() => navigation.navigate('VipList')}
+          right={chevron}
+          accessibilityLabel="VIP contacts"
+        />
+        <ListRow
+          icon="cancel"
+          iconColor="#EF4444"
+          title="Block List"
+          subtitle="Blocked numbers and callers"
+          onPress={() => navigation.navigate('BlockList')}
+          right={chevron}
+          accessibilityLabel="Block list"
+        />
       </View>
 
       <Divider />
@@ -272,7 +288,7 @@ export function SettingsScreen() {
         <ListRow
           icon="calendar-check-outline"
           iconColor={colors.primary}
-          title="Calendar & Booking"
+          title="Calendar & Booking Settings"
           subtitle={calendarStatus?.connected ? `Connected · ${calendarStatus.email ?? ''}` : 'Not connected'}
           onPress={() => navigation.navigate('CalendarBookingSettings')}
           right={chevron}

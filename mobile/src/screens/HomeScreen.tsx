@@ -100,12 +100,11 @@ function CircularProgress({
 
 const QUICK_ACTIONS = [
   { icon: 'phone-settings-outline', label: 'Modes', route: 'CallModes', color: '#6366F1', hasIndicator: true },
+  { icon: 'account-group-outline', label: 'Contacts', route: 'ContactsList', color: '#0EA5E9' },
   { icon: 'robot-outline', label: 'AI', route: 'AssistantSettings', color: '#8B5CF6' },
-  { icon: 'calendar-outline', label: 'Schedule', route: 'Calendar', color: '#14B8A6' },
-  { icon: 'bell-outline', label: 'Alerts', route: 'RemindersList', color: '#F472B6' },
-  { icon: 'brain', label: 'Memory', route: 'MemoryList', color: '#0EA5E9' },
   { icon: 'star-outline', label: 'VIP', route: 'VipList', color: '#F59E0B' },
-  { icon: 'alert-octagon-outline', label: 'Spam', route: 'SpamList', color: '#EF4444' },
+  { icon: 'cancel', label: 'Block', route: 'BlockList', color: '#EF4444' },
+  { icon: 'credit-card-outline', label: 'Billing', route: 'SubscriptionStatus', color: '#F472B6' },
 ] as const;
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
