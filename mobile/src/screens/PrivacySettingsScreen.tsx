@@ -986,23 +986,6 @@ export function PrivacySettingsScreen({ navigation }: Props) {
         </View>
       </Card>
 
-      {/* Call Recording — always on */}
-      <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
-          <View style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: colors.success + '18', alignItems: 'center', justifyContent: 'center' }}>
-            <Icon name="microphone" size="md" color={colors.success} />
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text style={{ ...typography.body, color: colors.textPrimary, fontWeight: '600' }} allowFontScaling>
-              Call Recording
-            </Text>
-            <Text style={{ ...typography.caption, color: colors.success }} allowFontScaling>
-              Always enabled — recordings are encrypted
-            </Text>
-          </View>
-          <Icon name="check-circle" size="md" color={colors.success} />
-        </View>
-      </Card>
     </ScreenWrapper>
   );
 }

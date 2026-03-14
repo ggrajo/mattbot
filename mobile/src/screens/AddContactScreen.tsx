@@ -42,13 +42,15 @@ type Props = NativeStackScreenProps<RootStackParamList, 'AddContact'>;
 export function AddContactScreen({ route, navigation }: Props) {
   const autoVip = route.params?.autoVip ?? false;
   const autoBlocked = route.params?.autoBlocked ?? false;
+  const prefillPhone = route.params?.prefillPhone ?? '';
+  const prefillName = route.params?.prefillName ?? '';
 
   const theme = useTheme();
   const { colors, spacing, typography, radii } = theme;
   const { categories, addContact, loadCategories } = useContactsStore();
 
-  const [phoneE164, setPhoneE164] = useState('');
-  const [displayName, setDisplayName] = useState('');
+  const [phoneE164, setPhoneE164] = useState(prefillPhone);
+  const [displayName, setDisplayName] = useState(prefillName);
   const [company, setCompany] = useState('');
   const [relationship, setRelationship] = useState('');
   const [email, setEmail] = useState('');

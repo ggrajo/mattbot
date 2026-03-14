@@ -723,6 +723,8 @@ async def _build_call_detail(
     is_blocked = False
     caller_display_name = None
     caller_relationship = None
+    caller_category = None
+    caller_contact_id = None
     if caller_hash:
         vip_row = (
             await db.execute(
@@ -757,6 +759,23 @@ async def _build_call_detail(
                 caller_display_name = mem_name
             if mem_rel and not caller_relationship:
                 caller_relationship = mem_rel
+
+        from app.models.contact_profile import ContactProfile as CP
+        contact_row = (
+            await db.execute(
+                select(CP).where(
+                    CP.owner_user_id == user_id,
+                    CP.phone_hash == caller_hash,
+                    CP.deleted_at.is_(None),
+                )
+            )
+        ).scalar_one_or_none()
+        if contact_row:
+            caller_contact_id = str(contact_row.id)
+            if contact_row.display_name and not caller_display_name:
+                caller_display_name = contact_row.display_name
+            if contact_row.category and contact_row.category != "other":
+                caller_category = contact_row.category
 
     booking_details: dict = {}
     if call.booked_calendar_event_id:
@@ -814,6 +833,8 @@ async def _build_call_detail(
             "is_blocked": is_blocked,
             "caller_display_name": caller_display_name,
             "caller_relationship": caller_relationship,
+            "caller_category": caller_category,
+            "caller_contact_id": caller_contact_id,
             "agent_id": str(call.agent_id) if call.agent_id else None,
             "voice_id": str(call.voice_id) if call.voice_id else None,
             "booked_calendar_event_id": call.booked_calendar_event_id,

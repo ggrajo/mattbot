@@ -72,16 +72,12 @@ export function CallModesScreen({ navigation, route }: Props) {
   async function handleContinue() {
     setSaving(true);
     if (isOnboarding) {
+      const fwdOk = await completeStep('forwarding_configured');
+      if (!fwdOk) { setSaving(false); return; }
       const ok = await completeStep('call_modes_configured');
-      if (!ok) {
-        setSaving(false);
-        return;
-      }
+      if (!ok) { setSaving(false); return; }
       const doneOk = await completeStep('onboarding_complete');
-      if (!doneOk) {
-        setSaving(false);
-        return;
-      }
+      if (!doneOk) { setSaving(false); return; }
       requestAnimationFrame(() => {
         navigation.navigate('OnboardingComplete');
       });
@@ -124,7 +120,7 @@ export function CallModesScreen({ navigation, route }: Props) {
       />
 
       {isOnboarding && (
-        <OnboardingProgress currentStep={7} totalSteps={7} label="Call Setup" />
+        <OnboardingProgress currentStep={6} totalSteps={6} label="Call Setup" />
       )}
 
       <View style={{ alignItems: 'center', marginBottom: spacing.xl }}>

@@ -102,7 +102,7 @@ export function OnboardingCompleteScreen({ navigation }: Props) {
           </Animated.View>
         </Animated.View>
 
-        <FadeIn delay={400} slide="up">
+        <FadeIn delay={400} slide="up" style={{ alignSelf: 'stretch' }}>
           <Text
             style={{
               ...typography.h1,
@@ -116,7 +116,7 @@ export function OnboardingCompleteScreen({ navigation }: Props) {
           </Text>
         </FadeIn>
 
-        <FadeIn delay={600} slide="up">
+        <FadeIn delay={600} slide="up" style={{ alignSelf: 'stretch' }}>
           <Text
             style={{
               ...typography.body,
@@ -131,10 +131,9 @@ export function OnboardingCompleteScreen({ navigation }: Props) {
           </Text>
         </FadeIn>
 
-        <FadeIn delay={800}>
+        <FadeIn delay={800} style={{ alignSelf: 'stretch' }}>
           <View
             style={{
-              width: '100%',
               backgroundColor: colors.surface,
               borderRadius: radii.lg,
               padding: spacing.lg,
@@ -181,12 +180,11 @@ export function OnboardingCompleteScreen({ navigation }: Props) {
           </View>
         </FadeIn>
 
-        <FadeIn delay={1000}>
+        <FadeIn delay={1000} style={{ alignSelf: 'stretch' }}>
           <Button
             title="Get Started"
             icon="rocket-launch-outline"
             onPress={handleGetStarted}
-            style={{ width: '100%' }}
           />
         </FadeIn>
       </View>

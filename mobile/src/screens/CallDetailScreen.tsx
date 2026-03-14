@@ -22,6 +22,7 @@ import { getTimezoneAbbr } from '../utils/timezones';
 import type { CallEvent, CallLabel, TranscriptTurn } from '../api/calls';
 import { listMemoryItems } from '../api/memory';
 import type { MemoryItem } from '../api/memory';
+import { useContactsStore } from '../store/contactsStore';
 
 function formatDateTime(iso: string, tz?: string): string {
   const d = new Date(iso);
@@ -214,8 +215,11 @@ export function CallDetailScreen() {
   const [isVip, setIsVip] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const [isSpam, setIsSpam] = useState(false);
+  const [deleteContactConfirm, setDeleteContactConfirm] = useState(false);
+  const { removeContact } = useContactsStore();
 
   const callerNumber = selectedCall?.from_masked ?? '';
+  const callerContactId = selectedCall?.caller_contact_id ?? null;
 
   useEffect(() => {
     if (selectedCall) {
@@ -489,9 +493,27 @@ export function CallDetailScreen() {
             />
           </View>
 
-          <Text style={{ fontSize: 22, fontWeight: '700', color: '#fff', textAlign: 'center', letterSpacing: 0.5 }} allowFontScaling>
-            {selectedCall.from_masked}
-          </Text>
+          {selectedCall.caller_display_name ? (
+            <View style={{ alignItems: 'center', gap: 2 }}>
+              <Text style={{ fontSize: 22, fontWeight: '700', color: '#fff', textAlign: 'center', letterSpacing: 0.5 }} allowFontScaling>
+                {selectedCall.caller_display_name}
+                {selectedCall.caller_category ? (
+                  <Text style={{ fontSize: 16, fontWeight: '400', color: 'rgba(255,255,255,0.7)' }}>
+                    {' · '}{selectedCall.caller_category.charAt(0).toUpperCase() + selectedCall.caller_category.slice(1)}
+                  </Text>
+                ) : null}
+              </Text>
+              <Text style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', textAlign: 'center' }} allowFontScaling>
+                {selectedCall.caller_relationship
+                  ? `${selectedCall.from_masked} · ${selectedCall.caller_relationship}`
+                  : selectedCall.from_masked}
+              </Text>
+            </View>
+          ) : (
+            <Text style={{ fontSize: 22, fontWeight: '700', color: '#fff', textAlign: 'center', letterSpacing: 0.5 }} allowFontScaling>
+              {selectedCall.from_masked}
+            </Text>
+          )}
 
           <View style={{ flexDirection: 'row', gap: spacing.xs, flexWrap: 'wrap', justifyContent: 'center' }}>
             <Badge label={badge.label} variant={badge.variant} />
@@ -752,6 +774,31 @@ export function CallDetailScreen() {
                   radii={radii}
                   onPress={() => navigation.navigate('CreateReminder', { callId })}
                 />
+                {callerContactId ? (
+                  <ActionChip
+                    icon="account-remove-outline"
+                    label="Remove Contact"
+                    colors={colors}
+                    typography={typography}
+                    spacing={spacing}
+                    radii={radii}
+                    onPress={() => setDeleteContactConfirm(true)}
+                  />
+                ) : (
+                  <ActionChip
+                    icon="account-plus-outline"
+                    label="Save to Contacts"
+                    colors={colors}
+                    typography={typography}
+                    spacing={spacing}
+                    radii={radii}
+                    onPress={() => {
+                      navigation.navigate('AddContact', {
+                        prefillName: selectedCall?.caller_display_name || '',
+                      });
+                    }}
+                  />
+                )}
               </View>
             </View>
 
@@ -1234,6 +1281,28 @@ export function CallDetailScreen() {
         destructive
         confirmLabel="Mark spam"
         onConfirm={handleMarkSpam}
+      />
+
+      <ConfirmSheet
+        visible={deleteContactConfirm}
+        onDismiss={() => setDeleteContactConfirm(false)}
+        title="Remove from contacts?"
+        message={`${selectedCall?.caller_display_name || 'This caller'} will be removed from your contacts.`}
+        icon="account-remove-outline"
+        destructive
+        confirmLabel="Remove"
+        onConfirm={async () => {
+          setDeleteContactConfirm(false);
+          if (callerContactId) {
+            const ok = await removeContact(callerContactId);
+            if (ok) {
+              setToast('Contact removed');
+              loadCall(callId);
+            } else {
+              setToast('Failed to remove contact');
+            }
+          }
+        }}
       />
 
       <Modal visible={noteModalVisible} transparent animationType="slide" onRequestClose={() => setNoteModalVisible(false)}>

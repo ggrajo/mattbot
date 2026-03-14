@@ -78,6 +78,8 @@ class CallDetailResponse(BaseModel):
     is_blocked: bool = False
     caller_display_name: str | None = None
     caller_relationship: str | None = None
+    caller_category: str | None = None
+    caller_contact_id: str | None = None
     agent_id: str | None = None
     voice_id: str | None = None
     booked_calendar_event_id: str | None = None

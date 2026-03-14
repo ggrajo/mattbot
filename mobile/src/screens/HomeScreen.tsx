@@ -331,10 +331,10 @@ export function HomeScreen() {
     loadOnboarding().then(async () => {
       const state = useSettingsStore.getState().onboarding;
       if (state && !state.is_complete) {
-        if (!state.steps_completed.includes('privacy_review')) {
-          navigation.navigate('OnboardingPrivacy');
-        } else if (!state.steps_completed.includes('settings_configured')) {
+        if (!state.steps_completed.includes('settings_configured')) {
           navigation.navigate('OnboardingSettings');
+        } else if (!state.steps_completed.includes('privacy_review')) {
+          navigation.navigate('OnboardingPrivacy');
         } else if (!state.steps_completed.includes('assistant_setup')) {
           navigation.navigate('OnboardingAssistantSetup');
         } else if (!state.steps_completed.includes('calendar_setup')) {
@@ -346,9 +346,10 @@ export function HomeScreen() {
           navigation.navigate('PlanSelection', { source: 'onboarding' });
         } else if (!state.steps_completed.includes('number_provisioned')) {
           navigation.navigate('NumberProvision', { onboarding: true });
-        } else if (!state.steps_completed.includes('forwarding_configured')) {
-          navigation.navigate('ForwardingSetupGuide', { onboarding: true });
-        } else if (!state.steps_completed.includes('call_modes_configured')) {
+        } else if (
+          !state.steps_completed.includes('forwarding_configured') ||
+          !state.steps_completed.includes('call_modes_configured')
+        ) {
           navigation.navigate('CallModes', { onboarding: true });
         } else if (!state.steps_completed.includes('onboarding_complete')) {
           await completeStep('onboarding_complete');

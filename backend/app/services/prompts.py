@@ -569,7 +569,16 @@ def build_contact_instructions_block(
     if not contact_custom_instructions or not contact_custom_instructions.strip():
         return ""
 
-    return f"\n=== CONTACT-SPECIFIC INSTRUCTIONS ===\n\n{contact_custom_instructions.strip()}\n"
+    return (
+        "\n=== OWNER-PROVIDED CONTACT INSTRUCTIONS (HIGHEST PRIORITY) ===\n\n"
+        "The owner of this phone line has left specific instructions for "
+        "how to handle calls from THIS caller. These instructions OVERRIDE "
+        "all default behaviors, screening rules, and general guidelines above. "
+        "You MUST follow them precisely.\n\n"
+        f"{contact_custom_instructions.strip()}\n\n"
+        "Remember: the above instructions come directly from the phone owner "
+        "and take absolute priority over any conflicting default behavior.\n"
+    )
 
 
 def build_screening_flow_block(

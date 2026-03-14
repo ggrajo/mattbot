@@ -122,6 +122,8 @@ async def register_with_email(
         email_verified=False,
         password_hash=hash_password(password),
         status="pending_verification",
+        default_timezone="UTC",
+        language_code="en",
     )
     db.add(user)
     await db.flush()

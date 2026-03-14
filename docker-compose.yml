@@ -48,6 +48,12 @@ services:
     networks:
       - mattbot-net
     command: ["python", "-m", "app.workers.run"]
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "app.workers.run"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   redis:
     image: redis:7-alpine

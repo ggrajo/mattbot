@@ -252,6 +252,36 @@ _NAME_FROM_SUMMARY_RE = _re.compile(
     r"^([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s*[,.]",
 )
 
+_BAD_CALLER_NAMES = {
+    "a", "an", "the", "this", "that", "our", "their", "we", "my", "me",
+    "caller", "unknown", "someone", "person", "customer", "user", "guest",
+    "related to", "calling about", "calling for", "looking for", "asking about",
+    "interested in", "inquiring about", "reaching out", "following up",
+    "not provided", "n/a", "na", "none", "null", "undefined", "anonymous",
+}
+
+
+def _is_valid_caller_name(name: str) -> bool:
+    """Check if extracted text looks like a real person name."""
+    if not name or len(name) < 2 or len(name) > 60:
+        return False
+    lowered = name.strip().lower()
+    if lowered in _BAD_CALLER_NAMES:
+        return False
+    if any(lowered.startswith(phrase) for phrase in (
+        "related to", "calling about", "calling for", "looking for",
+        "asking about", "interested in", "inquiring about", "reaching out",
+        "following up", "not provided",
+    )):
+        return False
+    words = name.split()
+    if len(words) > 4:
+        return False
+    if not any(c.isalpha() for c in name):
+        return False
+    return True
+
+
 _REASON_FROM_SUMMARY_RE = _re.compile(
     r"(?:regarding|about|because of|reason(?::\s*|\s+(?:is|was)\s+))\s*(.{5,120}?)(?:\.|$)",
     _re.IGNORECASE,
@@ -282,15 +312,16 @@ def _extract_from_transcript(
         m = _NAME_FROM_TRANSCRIPT_RE.search(txt)
         if not m:
             continue
-        result["caller_name"] = m.group(1).strip()
-        break
+        candidate = m.group(1).strip()
+        if _is_valid_caller_name(candidate):
+            result["caller_name"] = candidate
+            break
 
     if "caller_name" not in result and summary_text:
         m = _NAME_FROM_SUMMARY_RE.search(summary_text.strip())
         if m:
-            skip_words = {"a", "an", "the", "this", "that", "our", "their", "we"}
             candidate = m.group(1).strip()
-            if candidate.lower() not in skip_words:
+            if _is_valid_caller_name(candidate):
                 result["caller_name"] = candidate
 
     if summary_text:
@@ -337,7 +368,8 @@ def generate_summary_from_transcript(
 
     el_summary_fields = analysis.get("data_collection_results", {}) if analysis else {}
 
-    caller_name = el_summary_fields.get("caller_name", {}).get("value", "")
+    raw_caller_name = el_summary_fields.get("caller_name", {}).get("value", "")
+    caller_name = raw_caller_name if _is_valid_caller_name(raw_caller_name) else ""
     reason = el_summary_fields.get("reason_for_calling", {}).get("value", "")
     callback_phone = el_summary_fields.get("callback_number", {}).get("value", "")
     urgency_text = el_summary_fields.get("urgency_level", {}).get("value", "")
@@ -351,7 +383,8 @@ def generate_summary_from_transcript(
     if not (caller_name and reason):
         inferred = _extract_from_transcript(transcript_turns, el_transcript_summary or "")
         if not caller_name:
-            caller_name = inferred.get("caller_name", "")
+            inferred_name = inferred.get("caller_name", "")
+            caller_name = inferred_name if _is_valid_caller_name(inferred_name) else ""
         if not reason:
             reason = inferred.get("reason", "")
         if not callback_phone:
@@ -905,9 +938,23 @@ async def create_memory_items(
 
     caller_name = structured_extraction.get("caller_name", "")
     if caller_name:
-        result = await _upsert("caller_display_name", caller_name, caller_name, 0.8)
-        if result:
-            items.append(result)
+        skip_name = False
+        if caller_phone_hash:
+            from app.models.contact_profile import ContactProfile
+            contact = (await db.execute(
+                select(ContactProfile).where(
+                    ContactProfile.owner_user_id == user_id,
+                    ContactProfile.phone_hash == caller_phone_hash,
+                    ContactProfile.deleted_at.is_(None),
+                )
+            )).scalar_one_or_none()
+            if contact and contact.display_name:
+                skip_name = True
+
+        if not skip_name:
+            result = await _upsert("caller_display_name", caller_name, caller_name, 0.8)
+            if result:
+                items.append(result)
 
     callback_window = structured_extraction.get("best_callback_window", "")
     if callback_window:

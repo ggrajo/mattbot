@@ -74,6 +74,8 @@ export interface CallDetail {
   is_blocked?: boolean;
   caller_display_name?: string | null;
   caller_relationship?: string | null;
+  caller_category?: string | null;
+  caller_contact_id?: string | null;
   booked_calendar_event_id?: string | null;
   booked_calendar_event_summary?: string | null;
   booked_appointment_date?: string | null;

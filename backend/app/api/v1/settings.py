@@ -1,5 +1,6 @@
 """User settings CRUD with optimistic concurrency."""
 
+import logging
 from datetime import UTC, datetime, time
 
 from fastapi import APIRouter, Depends
@@ -17,6 +18,8 @@ from app.schemas.settings import (
     SettingsResponse,
 )
 from app.services import audit_service
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -331,17 +334,28 @@ async def patch_settings(
         "language_primary",
         "transcript_disclosure_mode",
         "handoff_trigger",
-        "max_call_length_seconds",
-        "calendar_default_duration_minutes",
-        "assistant_name",
-        "calendar_booking_window_days",
         "handoff_enabled",
+        "max_call_length_seconds",
+        "vip_max_call_length_seconds",
+        "calendar_default_duration_minutes",
+        "calendar_booking_window_days",
+        "calendar_booking_enabled",
+        "assistant_name",
         "greeting_template",
         "temperament_preset",
         "swearing_rule",
         "recording_announcement_required",
         "recording_enabled",
-        "calendar_booking_enabled",
+        "call_objective_mode",
+        "business_hours_enabled",
+        "business_hours_start",
+        "business_hours_end",
+        "business_hours_days",
+        "quiet_hours_enabled",
+        "quiet_hours_start",
+        "quiet_hours_end",
+        "quiet_hours_days",
+        "quiet_hours_allow_vip",
     }
 
     if _agent_sync_keys & set(changed_keys):
@@ -357,11 +371,14 @@ async def patch_settings(
                 agent,
                 current_user.user_id,
             )
+            logger.info(
+                "ElevenLabs agent synced after settings change: %s",
+                [k for k in changed_keys if k in _agent_sync_keys],
+            )
         except Exception:
-            import logging
-
-            logging.getLogger(__name__).exception(
-                "Failed to sync ElevenLabs agent after settings update"
+            logger.exception(
+                "Failed to sync ElevenLabs agent after settings update for user %s",
+                str(current_user.user_id)[:8],
             )
 
     return SettingsPatchResponse(

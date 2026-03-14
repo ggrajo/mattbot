@@ -152,6 +152,48 @@ export function RegisterScreen({ navigation }: Props) {
     }
   }
 
+  if (successMessage) {
+    return (
+      <ScreenWrapper scroll={false}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: spacing.xl }}>
+          <Animated.View entering={FadeInDown.duration(500)} style={{ alignItems: 'center' }}>
+            <View
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: radii.full,
+                backgroundColor: (colors.success ?? '#10B981') + '20',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: spacing.xl,
+              }}
+            >
+              <Icon name="email-check-outline" size={40} color={colors.success ?? '#10B981'} />
+            </View>
+            <Text style={{ ...typography.h2, color: colors.textPrimary, textAlign: 'center', marginBottom: spacing.md }} allowFontScaling>
+              Check your email
+            </Text>
+            <Text style={{ ...typography.body, color: colors.textSecondary, textAlign: 'center', lineHeight: 22, marginBottom: spacing.sm }} allowFontScaling>
+              We sent a verification link to
+            </Text>
+            <Text style={{ ...typography.body, color: colors.primary, fontWeight: '700', textAlign: 'center', marginBottom: spacing.xl }} allowFontScaling>
+              {email}
+            </Text>
+            <Text style={{ ...typography.bodySmall, color: colors.textSecondary, textAlign: 'center', lineHeight: 20, marginBottom: spacing.xxl }} allowFontScaling>
+              Open the link in the email to verify your account. If you don't see it, check your spam folder.
+            </Text>
+            <Button
+              title="Go to Sign In"
+              icon="login"
+              onPress={() => navigation.navigate('Login')}
+              style={{ width: '100%' }}
+            />
+          </Animated.View>
+        </View>
+      </ScreenWrapper>
+    );
+  }
+
   return (
     <ScreenWrapper>
       {/* Header */}
@@ -190,48 +232,6 @@ export function RegisterScreen({ navigation }: Props) {
       {apiError && (
         <Animated.View entering={FadeInDown.duration(300)} style={{ marginBottom: spacing.md }}>
           <ErrorMessage message={apiError} />
-        </Animated.View>
-      )}
-
-      {successMessage && (
-        <Animated.View
-          entering={FadeInDown.duration(400)}
-          style={{
-            backgroundColor: colors.successContainer ?? '#D1FAE5',
-            borderRadius: radii.md,
-            padding: spacing.lg,
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: spacing.md,
-            marginBottom: spacing.lg,
-          }}
-        >
-          <View
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: radii.full,
-              backgroundColor: colors.success,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Icon name="check" size="md" color="#FFFFFF" />
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text
-              style={{ ...typography.bodySmall, fontWeight: '600', color: colors.success ?? '#10B981' }}
-              allowFontScaling
-            >
-              Verification email sent
-            </Text>
-            <Text
-              style={{ ...typography.caption, color: colors.success ?? '#10B981', marginTop: 2 }}
-              allowFontScaling
-            >
-              {successMessage}
-            </Text>
-          </View>
         </Animated.View>
       )}
 

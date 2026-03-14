@@ -21,8 +21,8 @@ class User(Base):
     company_name: Mapped[str | None] = mapped_column(Text)
     role_title: Mapped[str | None] = mapped_column(Text)
     ai_greeting_instructions: Mapped[str | None] = mapped_column(Text)
-    default_timezone: Mapped[str] = mapped_column(Text, nullable=False)
-    language_code: Mapped[str] = mapped_column(String(10), nullable=False)
+    default_timezone: Mapped[str] = mapped_column(Text, nullable=False, server_default=text("'UTC'"))
+    language_code: Mapped[str] = mapped_column(String(10), nullable=False, server_default=text("'en'"))
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
     created_at: Mapped[datetime] = mapped_column(
         DateTime, nullable=False, server_default=text("now()")

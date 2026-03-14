@@ -41,6 +41,11 @@ def _webhook_voice_url() -> str:
     return f"{base}/webhooks/twilio/voice/inbound"
 
 
+def _webhook_status_url() -> str:
+    base = app_settings.TWILIO_WEBHOOK_BASE_URL or ""
+    return f"{base}/webhooks/twilio/voice/status"
+
+
 def _suspended_twiml_url() -> str:
     base = app_settings.TWILIO_WEBHOOK_BASE_URL or ""
     return f"{base}/webhooks/twilio/voice/suspended"
@@ -197,6 +202,8 @@ async def _provision_twilio_number(db: AsyncSession, user_id: uuid.UUID) -> Numb
         if app_settings.TWILIO_WEBHOOK_BASE_URL:
             create_kwargs["voice_url"] = webhook
             create_kwargs["voice_method"] = "POST"
+            create_kwargs["status_callback"] = _webhook_status_url()
+            create_kwargs["status_callback_method"] = "POST"
 
         purchased = client.incoming_phone_numbers.create(**create_kwargs)
         twilio_sid = purchased.sid
@@ -274,6 +281,8 @@ async def configure_number_webhooks(
         client.incoming_phone_numbers(sid).update(
             voice_url=url,
             voice_method="POST",
+            status_callback=_webhook_status_url(),
+            status_callback_method="POST",
         )
 
         number.webhook_url = url

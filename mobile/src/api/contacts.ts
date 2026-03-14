@@ -16,6 +16,8 @@ export interface ContactItem {
   ai_greeting_template: string | null;
   ai_swearing_rule: string | null;
   ai_max_call_length_seconds: number | null;
+  ai_greeting_instructions: string | null;
+  ai_custom_instructions: string | null;
   has_custom_greeting: boolean;
   has_custom_instructions: boolean;
   created_at: string;

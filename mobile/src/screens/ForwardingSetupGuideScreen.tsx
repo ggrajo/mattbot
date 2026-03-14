@@ -15,7 +15,8 @@ import {
   type CarrierGuide,
 } from '../api/telephony';
 import { extractApiError } from '../api/client';
-import { hapticLight } from '../utils/haptics';
+import { hapticLight, hapticMedium } from '../utils/haptics';
+import { useSettingsStore } from '../store/settingsStore';
 import { OnboardingProgress } from '../components/onboarding/OnboardingProgress';
 import { RootStackParamList } from '../navigation/types';
 
@@ -24,6 +25,8 @@ type Props = NativeStackScreenProps<RootStackParamList, 'ForwardingSetupGuide'>;
 export function ForwardingSetupGuideScreen({ route, navigation }: Props) {
   const isOnboarding = route.params?.onboarding ?? false;
   const { colors, spacing, typography, radii } = useTheme();
+  const { completeStep } = useSettingsStore();
+  const [skipping, setSkipping] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [guide, setGuide] = useState<ForwardingGuide | null>(null);
@@ -298,15 +301,31 @@ export function ForwardingSetupGuideScreen({ route, navigation }: Props) {
         </FadeIn>
       )}
 
-      <Button
-        title="Next: Verify Forwarding"
-        icon="arrow-right"
-        onPress={() => {
-          hapticLight();
-          navigation.navigate('ForwardingVerify', { onboarding: isOnboarding || undefined });
-        }}
-        accessibilityLabel="Proceed to forwarding verification"
-      />
+      <View style={{ gap: spacing.sm }}>
+        <Button
+          title="Next: Verify Forwarding"
+          icon="arrow-right"
+          onPress={() => {
+            hapticLight();
+            navigation.navigate('ForwardingVerify', { onboarding: isOnboarding || undefined });
+          }}
+          accessibilityLabel="Proceed to forwarding verification"
+        />
+        {isOnboarding && (
+          <Button
+            title="Skip for Now"
+            variant="ghost"
+            loading={skipping}
+            onPress={async () => {
+              setSkipping(true);
+              hapticMedium();
+              await completeStep('forwarding_configured');
+              navigation.navigate('CallModes', { onboarding: true });
+            }}
+            accessibilityLabel="Skip forwarding and continue"
+          />
+        )}
+      </View>
     </ScreenWrapper>
   );
 }

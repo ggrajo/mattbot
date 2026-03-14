@@ -52,7 +52,7 @@ async def get_onboarding(
         try:
             state = OnboardingState(
                 owner_user_id=current_user.user_id,
-                current_step="privacy_review",
+                current_step="settings_configured",
                 steps_completed=["account_created", "email_verified", "mfa_enrolled"],
             )
             db.add(state)

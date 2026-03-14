@@ -178,6 +178,8 @@ class ContactResponse(BaseModel):
     ai_greeting_template: str | None = None
     ai_swearing_rule: str | None = None
     ai_max_call_length_seconds: int | None = None
+    ai_greeting_instructions: str | None = None
+    ai_custom_instructions: str | None = None
     has_custom_greeting: bool = False
     has_custom_instructions: bool = False
     created_at: datetime

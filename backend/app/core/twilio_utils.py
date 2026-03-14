@@ -17,6 +17,9 @@ def validate_twilio_signature(request: Request, form_params: dict[str, str]) -> 
     """Validate X-Twilio-Signature for an incoming webhook request.
 
     Reconstructs the URL using TWILIO_WEBHOOK_BASE_URL to handle ALB/proxy.
+    For GET requests the signature covers the full URL (with query string)
+    and an empty POST body.  For POST the signature covers the base URL
+    plus sorted form parameters.
     Fails closed: returns False on any error.
     """
 
@@ -30,13 +33,26 @@ def validate_twilio_signature(request: Request, form_params: dict[str, str]) -> 
         return False
 
     base_url = settings.TWILIO_WEBHOOK_BASE_URL
-    url = base_url.rstrip("/") + request.url.path if base_url else str(request.url).split("?")[0]
+
+    if request.method == "GET":
+        if base_url:
+            url = base_url.rstrip("/") + str(request.url).split(request.url.path, 1)[-1]
+            url = base_url.rstrip("/") + request.url.path
+            qs = str(request.url).split("?", 1)
+            if len(qs) > 1:
+                url = url + "?" + qs[1]
+        else:
+            url = str(request.url)
+        params_for_validation: dict[str, str] = {}
+    else:
+        url = base_url.rstrip("/") + request.url.path if base_url else str(request.url).split("?")[0]
+        params_for_validation = form_params
 
     try:
         from twilio.request_validator import RequestValidator
 
         validator = RequestValidator(auth_token)
-        return bool(validator.validate(url, form_params, signature))
+        return bool(validator.validate(url, params_for_validation, signature))
     except ImportError:
         logger.error("twilio package not installed; cannot validate signature")
         return False

@@ -12,7 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.config import settings
 from app.core.clock import utcnow
 from app.core.dependencies import CurrentUser, get_current_user
-from app.core.encryption import encrypt_field
+from app.core.encryption import decrypt_field, encrypt_field
 from app.core.rate_limiter import check_rate_limit
 from app.core.twilio_utils import extract_last4, hash_phone
 from app.database import get_db
@@ -68,6 +68,28 @@ async def _validate_contact_category(db: AsyncSession, user_id: uuid.UUID, categ
 
 
 def _to_response(c: ContactProfile) -> ContactResponse:
+    greeting_instructions: str | None = None
+    if c.ai_greeting_instructions_ciphertext is not None:
+        try:
+            greeting_instructions = decrypt_field(
+                c.ai_greeting_instructions_ciphertext,
+                c.ai_greeting_instructions_nonce,
+                c.ai_greeting_instructions_key_version,
+            ).decode("utf-8")
+        except Exception:
+            pass
+
+    custom_instructions: str | None = None
+    if c.ai_custom_instructions_ciphertext is not None:
+        try:
+            custom_instructions = decrypt_field(
+                c.ai_custom_instructions_ciphertext,
+                c.ai_custom_instructions_nonce,
+                c.ai_custom_instructions_key_version,
+            ).decode("utf-8")
+        except Exception:
+            pass
+
     return ContactResponse(
         **{
             "id": str(c.id),
@@ -85,6 +107,8 @@ def _to_response(c: ContactProfile) -> ContactResponse:
             "ai_greeting_template": c.ai_greeting_template,
             "ai_swearing_rule": c.ai_swearing_rule,
             "ai_max_call_length_seconds": c.ai_max_call_length_seconds,
+            "ai_greeting_instructions": greeting_instructions,
+            "ai_custom_instructions": custom_instructions,
             "has_custom_greeting": c.ai_greeting_instructions_ciphertext is not None,
             "has_custom_instructions": c.ai_custom_instructions_ciphertext is not None,
             "created_at": c.created_at,

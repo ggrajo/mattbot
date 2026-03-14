@@ -87,6 +87,7 @@ export function ContactDetailScreen({ navigation, route }: Props) {
   const [aiGreeting, setAiGreeting] = useState('');
   const [aiSwearing, setAiSwearing] = useState('');
   const [aiMaxCall, setAiMaxCall] = useState('');
+  const [aiGreetingInstructions, setAiGreetingInstructions] = useState('');
   const [aiCustomInstructions, setAiCustomInstructions] = useState('');
 
   const loadContact = useCallback(async () => {
@@ -112,6 +113,8 @@ export function ContactDetailScreen({ navigation, route }: Props) {
           ? String(c.ai_max_call_length_seconds)
           : '',
       );
+      setAiGreetingInstructions(c.ai_greeting_instructions ?? '');
+      setAiCustomInstructions(c.ai_custom_instructions ?? '');
     } catch (e: unknown) {
       setError(extractApiError(e));
     } finally {
@@ -142,9 +145,11 @@ export function ContactDetailScreen({ navigation, route }: Props) {
       ai_swearing_rule: aiSwearing || undefined,
       ai_max_call_length_seconds:
         aiMaxCall && Number(aiMaxCall) >= 60 ? Number(aiMaxCall) : undefined,
+      ai_greeting_instructions: aiGreetingInstructions.trim() || undefined,
       ai_custom_instructions: aiCustomInstructions.trim() || undefined,
       clear_ai_temperament: !aiTemperament,
       clear_ai_greeting_template: !aiGreeting,
+      clear_ai_greeting_instructions: !aiGreetingInstructions.trim(),
       clear_ai_swearing_rule: !aiSwearing,
       clear_ai_max_call_length: !aiMaxCall,
       clear_ai_custom_instructions: !aiCustomInstructions.trim(),
@@ -596,6 +601,14 @@ export function ContactDetailScreen({ navigation, route }: Props) {
                 onChangeText={(v) => setAiMaxCall(v.replace(/[^0-9]/g, ''))}
                 placeholder="e.g. 180 (leave empty for default)"
                 keyboardType="numeric"
+              />
+              <TextInput
+                label="Custom Greeting Instructions"
+                value={aiGreetingInstructions}
+                onChangeText={setAiGreetingInstructions}
+                placeholder="How the AI should greet this caller..."
+                multiline
+                numberOfLines={3}
               />
               <TextInput
                 label="Custom AI Instructions"

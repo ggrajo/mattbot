@@ -138,7 +138,7 @@ export function CalendarBookingSettingsScreen({ navigation, route }: Props) {
       <SuccessModal visible={!!successModal} title={successModal?.title ?? ''} message={successModal?.message} onDismiss={() => setSuccessModal(null)} />
 
       {isOnboarding && (
-        <OnboardingProgress currentStep={4} totalSteps={7} label="Calendar" />
+        <OnboardingProgress currentStep={4} totalSteps={6} label="Calendar" />
       )}
 
       <Text

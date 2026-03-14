@@ -153,6 +153,7 @@ export function PlanSelectionScreen({ route, navigation }: Props) {
     setProcessingPlan(null);
     if (ok && isOnboarding) {
       await completeStep('plan_selected');
+      await completeStep('payment_method_added');
       navigation.navigate('NumberProvision', { onboarding: true });
     } else if (ok) {
       navigation.navigate('SubscriptionStatus');
@@ -187,6 +188,7 @@ export function PlanSelectionScreen({ route, navigation }: Props) {
 
     if (ok && isOnboarding) {
       await completeStep('plan_selected');
+      await completeStep('payment_method_added');
       navigation.navigate('NumberProvision', { onboarding: true });
     } else if (ok) {
       showToast(`Switched to ${planName}`, 'success');
@@ -227,7 +229,7 @@ export function PlanSelectionScreen({ route, navigation }: Props) {
       )}
 
       {isOnboarding && (
-        <OnboardingProgress currentStep={5} totalSteps={7} label="Plan & Payment" />
+        <OnboardingProgress currentStep={5} totalSteps={6} label="Plan & Payment" />
       )}
 
       <ConfirmSheet

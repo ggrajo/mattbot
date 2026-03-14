@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
 import { ScreenWrapper } from '../components/ui/ScreenWrapper';
@@ -34,7 +34,6 @@ export function NumberProvisionScreen({ route, navigation }: Props) {
   const [provisioning, setProvisioning] = useState(false);
   const [existingNumber, setExistingNumber] = useState<ProvisionedNumber | null>(null);
   const [numberRevealed, setNumberRevealed] = useState(false);
-  const [areaCode, setAreaCode] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
@@ -82,7 +81,7 @@ export function NumberProvisionScreen({ route, navigation }: Props) {
   function handleContinue() {
     hapticLight();
     if (isOnboarding) {
-      navigation.navigate('ForwardingSetupGuide', { onboarding: true });
+      navigation.navigate('CallModes', { onboarding: true });
     } else {
       navigation.goBack();
     }
@@ -103,7 +102,7 @@ export function NumberProvisionScreen({ route, navigation }: Props) {
       <Toast message={toast} type={toastType} visible={!!toast} onDismiss={() => setToast('')} />
 
       {isOnboarding && (
-        <OnboardingProgress currentStep={6} totalSteps={7} label="Phone Number" />
+        <OnboardingProgress currentStep={5} totalSteps={6} label="Phone Number" />
       )}
 
       <View style={{ alignItems: 'center', marginBottom: spacing.xl }}>
@@ -195,55 +194,14 @@ export function NumberProvisionScreen({ route, navigation }: Props) {
           </Card>
         </FadeIn>
       ) : (
-        <>
-          <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
-            <View style={{ gap: spacing.md }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
-                <Icon name="map-marker-outline" size="md" color={colors.primary} />
-                <Text
-                  style={{ ...typography.h3, color: colors.textPrimary, flex: 1 }}
-                  allowFontScaling
-                >
-                  Area Code (Optional)
-                </Text>
-              </View>
-              <Text
-                style={{ ...typography.bodySmall, color: colors.textSecondary }}
-                allowFontScaling
-              >
-                Enter a preferred area code, or leave blank for automatic assignment.
-              </Text>
-              <TextInput
-                value={areaCode}
-                onChangeText={(text) => setAreaCode(text.replace(/[^0-9]/g, '').slice(0, 3))}
-                placeholder="e.g. 415"
-                placeholderTextColor={colors.textDisabled}
-                keyboardType="number-pad"
-                maxLength={3}
-                style={{
-                  ...typography.body,
-                  color: colors.textPrimary,
-                  backgroundColor: colors.surfaceVariant,
-                  borderRadius: radii.md,
-                  paddingHorizontal: spacing.md,
-                  paddingVertical: spacing.md,
-                  borderWidth: 1,
-                  borderColor: colors.border,
-                }}
-                accessibilityLabel="Area code input"
-              />
-            </View>
-          </Card>
-
-          <Button
-            title="Provision Number"
-            icon="phone-plus-outline"
-            onPress={handleProvision}
-            loading={provisioning}
-            disabled={provisioning}
-            accessibilityLabel="Provision a new AI phone number"
-          />
-        </>
+        <Button
+          title="Provision Number"
+          icon="phone-plus-outline"
+          onPress={handleProvision}
+          loading={provisioning}
+          disabled={provisioning}
+          accessibilityLabel="Provision a new AI phone number"
+        />
       )}
 
       {existingNumber && (

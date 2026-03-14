@@ -316,25 +316,12 @@ export function ForwardingVerifyScreen({ route, navigation }: Props) {
         )}
 
         {status === 'failed' && (
-          <>
-            <Button
-              title="Try Again"
-              icon="refresh"
-              onPress={handleRetry}
-              accessibilityLabel="Retry forwarding verification"
-            />
-            {isOnboarding && (
-              <Button
-                title="Skip for Now"
-                onPress={() => {
-                  hapticLight();
-                  navigation.navigate('CallModes', { onboarding: true });
-                }}
-                variant="ghost"
-                accessibilityLabel="Skip verification and continue"
-              />
-            )}
-          </>
+          <Button
+            title="Try Again"
+            icon="refresh"
+            onPress={handleRetry}
+            accessibilityLabel="Retry forwarding verification"
+          />
         )}
 
         {status === 'success' && (
@@ -343,6 +330,19 @@ export function ForwardingVerifyScreen({ route, navigation }: Props) {
             icon={isOnboarding ? 'check-all' : 'check'}
             onPress={handleContinue}
             accessibilityLabel={isOnboarding ? 'Complete onboarding' : 'Go back'}
+          />
+        )}
+
+        {isOnboarding && status !== 'success' && (
+          <Button
+            title="Skip for Now"
+            onPress={async () => {
+              hapticLight();
+              await completeStep('forwarding_configured');
+              navigation.navigate('CallModes', { onboarding: true });
+            }}
+            variant="ghost"
+            accessibilityLabel="Skip verification and continue"
           />
         )}
       </View>

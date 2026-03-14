@@ -39,7 +39,7 @@ export type RootStackParamList = {
   CallDetail: { callId: string };
   LiveTranscript: { callId: string };
   Calendar: { date?: string } | undefined;
-  AddContact: { autoVip?: boolean; autoBlocked?: boolean } | undefined;
+  AddContact: { autoVip?: boolean; autoBlocked?: boolean; prefillPhone?: string; prefillName?: string } | undefined;
   ContactsList: undefined;
   ContactDetail: { contactId: string };
   BlockList: undefined;

@@ -246,12 +246,7 @@ async def ensure_elevenlabs_agent(
         for_sync=True,
     )
 
-    greeting = build_greeting_block(
-        settings_row.greeting_template if settings_row else "standard",
-        agent_name,
-        user_display,
-        gi,
-    )
+    greeting = "{{greeting_text}}"
 
     provider_voice_id = None
     if agent.config and agent.config.voice_id:
@@ -377,6 +372,8 @@ def resolve_contact_ai_settings(
             ).decode("utf-8")
         except Exception:
             logger.warning("Failed to decrypt greeting instructions for contact %s", contact.id)
+    if not greeting_instructions and cat_defaults.get("greeting_instructions"):
+        greeting_instructions = cat_defaults["greeting_instructions"]
 
     custom_instructions: str | None = None
     if contact and contact.ai_custom_instructions_ciphertext is not None:
@@ -388,6 +385,8 @@ def resolve_contact_ai_settings(
             ).decode("utf-8")
         except Exception:
             logger.warning("Failed to decrypt custom instructions for contact %s", contact.id)
+    if not custom_instructions and cat_defaults.get("custom_instructions"):
+        custom_instructions = cat_defaults["custom_instructions"]
 
     return {
         "temperament_preset": _pick(

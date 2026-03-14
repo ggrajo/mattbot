@@ -172,6 +172,7 @@ async def _register_elevenlabs_call(
     to_number: str,
     timezone: str = "UTC",
     extra_dynamic_variables: dict[str, str] | None = None,
+    first_message_override: str | None = None,
 ) -> str | None:
     """Register a call with ElevenLabs Twilio integration and return raw TwiML body.
 
@@ -179,6 +180,7 @@ async def _register_elevenlabs_call(
     Per-call context (VIP name, memory, etc.) is passed via
     ``extra_dynamic_variables`` which ElevenLabs substitutes into
     ``{{variable_name}}`` placeholders in the synced agent prompt.
+    ``first_message_override`` overrides the agent's default greeting for this call.
     """
     from datetime import datetime as _dt
     from zoneinfo import ZoneInfo
@@ -210,24 +212,40 @@ async def _register_elevenlabs_call(
     if extra_dynamic_variables:
         dyn_vars.update(extra_dynamic_variables)
 
+    if first_message_override:
+        dyn_vars["greeting_text"] = first_message_override
+
+    client_data: dict = {
+        "dynamic_variables": dyn_vars,
+    }
+
+    logger.info(
+        "Dynamic vars keys: %s, greeting_text len: %d",
+        list(dyn_vars.keys()),
+        len(dyn_vars.get("greeting_text", "")),
+    )
+
     payload = {
         "agent_id": elevenlabs_agent_id,
         "from_number": from_number,
         "to_number": to_number,
         "direction": "inbound",
-        "conversation_initiation_client_data": {
-            "dynamic_variables": dyn_vars,
-        },
+        "conversation_initiation_client_data": client_data,
     }
+
+    import json as _json
+    logger.info("ElevenLabs register-call payload: %s", _json.dumps(payload, default=str)[:1000])
 
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
             resp = await client.post(url, headers=headers, json=payload)
             if resp.status_code == 200:
                 logger.info(
-                    "ElevenLabs register-call success: agent=%s",
+                    "ElevenLabs register-call success: agent=%s resp_len=%d",
                     elevenlabs_agent_id[:12],
+                    len(resp.text),
                 )
+                logger.info("ElevenLabs TwiML response: %s", resp.text[:500])
                 return resp.text
             else:
                 logger.error(
@@ -268,13 +286,16 @@ async def stripe_webhook(
     )
 
 
-@router.post("/twilio/voice/inbound")
+@router.api_route("/twilio/voice/inbound", methods=["GET", "POST"])
 async def twilio_voice_inbound(
     request: Request,
     db: AsyncSession = Depends(get_db),
 ) -> Response:
-    form = await request.form()
-    params = {k: str(v) for k, v in form.items()}
+    if request.method == "POST":
+        form = await request.form()
+        params = {k: str(v) for k, v in form.items()}
+    else:
+        params = {k: str(v) for k, v in request.query_params.items()}
 
     call_sid = params.get("CallSid", "")
     to_number = params.get("To", "")
@@ -549,11 +570,13 @@ async def twilio_voice_inbound(
         _load_caller_memory,
         resolve_contact_ai_settings,
     )
+    from app.services.agent_service import _extract_caller_name_from_memory
     from app.services.prompts import (
         SWEARING_BLOCKS,
         TEMPERAMENT_BLOCKS,
         build_caller_context_block,
         build_contact_instructions_block,
+        build_greeting_block,
         build_memory_block,
         build_time_limit_block,
     )
@@ -583,7 +606,18 @@ async def twilio_voice_inbound(
         )
 
     caller_ctx = build_caller_context_block(_is_vip, vip_info)
-    contact_instr_block = build_contact_instructions_block(resolved.get("custom_instructions"))
+    _ci = resolved.get("custom_instructions")
+    logger.info(
+        "Resolved AI settings: temperament=%s, greeting_tpl=%s, swearing=%s, "
+        "greeting_instr=%s, custom_instr=%s, category=%s",
+        resolved.get("temperament_preset"),
+        resolved.get("greeting_template"),
+        resolved.get("swearing_rule"),
+        repr(resolved.get("greeting_instructions", "")[:60]) if resolved.get("greeting_instructions") else "None",
+        repr(_ci[:60]) if _ci else "None",
+        resolved.get("category"),
+    )
+    contact_instr_block = build_contact_instructions_block(_ci)
     caller_ctx = caller_ctx + contact_instr_block
 
     memory_ctx = build_memory_block(memory_items, vip_info, repeat_caller_ctx)
@@ -612,8 +646,34 @@ async def twilio_voice_inbound(
             "information, and end the call quickly if the caller cannot provide a legitimate reason."
         )
 
+    from app.models.user import User
+
+    vip_name = vip_info.get("display_name") if vip_info else None
+    memory_caller_name = _extract_caller_name_from_memory(memory_items)
+    gi = resolved.get("greeting_instructions") or (
+        agent.config.greeting_instructions if agent and agent.config else None
+    )
+    greeting_tpl = resolved.get("greeting_template", "standard")
+    _user_row = await db.get(User, user_id)
+    user_display = (_user_row.display_name or _user_row.nickname or "the user") if _user_row else "the user"
+    agent_name = (
+        (settings_row.assistant_name if settings_row and settings_row.assistant_name else None)
+        or (agent.display_name if agent else "Call Screener")
+    )
+    per_call_greeting = build_greeting_block(
+        greeting_tpl,
+        agent_name,
+        user_display,
+        gi,
+        vip_name=vip_name,
+        caller_name_from_memory=memory_caller_name,
+    )
+
+    full_caller_ctx = caller_ctx + ("\n" + spam_ctx if spam_ctx else "")
+    logger.info("caller_context dynamic var (len=%d): %s", len(full_caller_ctx), full_caller_ctx[:200])
+
     extra_dyn = {
-        "caller_context": caller_ctx + ("\n" + spam_ctx if spam_ctx else ""),
+        "caller_context": full_caller_ctx,
         "memory_context": memory_ctx,
         "temperament_block": temperament_text,
         "swearing_block": swearing_text,
@@ -660,12 +720,19 @@ async def twilio_voice_inbound(
 
         return Response(content=twiml_body, media_type="application/xml")
 
+    logger.info(
+        "Per-call greeting (len=%d): %s",
+        len(per_call_greeting),
+        per_call_greeting[:100],
+    )
+
     el_twiml = await _register_elevenlabs_call(
         elevenlabs_agent_id=el_agent_id,
         from_number=from_number,
         to_number=to_number,
         timezone=user_tz,
         extra_dynamic_variables=extra_dyn,
+        first_message_override=per_call_greeting,
     )
 
     if el_twiml:
@@ -692,13 +759,16 @@ async def twilio_voice_inbound(
     return _twiml_response(_FALLBACK_TWIML)
 
 
-@router.post("/twilio/voice/status")
+@router.api_route("/twilio/voice/status", methods=["GET", "POST"])
 async def twilio_voice_status(
     request: Request,
     db: AsyncSession = Depends(get_db),
 ) -> Response:
-    form = await request.form()
-    params = {k: str(v) for k, v in form.items()}
+    if request.method == "POST":
+        form = await request.form()
+        params = {k: str(v) for k, v in form.items()}
+    else:
+        params = {k: str(v) for k, v in request.query_params.items()}
 
     call_sid = params.get("CallSid", "")
     call_status = params.get("CallStatus", "")
@@ -753,6 +823,13 @@ async def twilio_voice_status(
 
     provider_event.call_id = call.id
     provider_event.owner_user_id = call.owner_user_id
+
+    logger.info(
+        "Twilio status callback: sid=%s status=%s duration=%s",
+        call_sid[:10] if call_sid else "N/A",
+        call_status,
+        call_duration or "N/A",
+    )
 
     internal_status = call_service.map_twilio_status(call_status)
     if internal_status is None:

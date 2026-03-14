@@ -193,7 +193,7 @@ export function RootNavigator() {
             <Stack.Screen
               name="OnboardingSettings"
               component={OnboardingSettingsScreen}
-              options={{ headerShown: true, title: 'Basic Settings', headerBackVisible: false }}
+              options={{ headerShown: true, title: 'Profile Setup', headerBackVisible: false }}
             />
             <Stack.Screen
               name="PlanSelection"

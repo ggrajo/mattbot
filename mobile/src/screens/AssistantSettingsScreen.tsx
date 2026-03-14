@@ -44,6 +44,14 @@ type Temperament =
 
 type SwearingRule = 'no_swearing' | 'mirror_caller' | 'allow';
 
+type TextApprovalMode = 'always_approve' | 'auto_send' | 'never';
+
+const TEXT_APPROVAL_OPTIONS: { value: TextApprovalMode; label: string; desc: string }[] = [
+  { value: 'always_approve', label: 'Always Approve', desc: 'Review and approve every text before sending' },
+  { value: 'auto_send', label: 'Auto Send', desc: 'Automatically send texts without approval' },
+  { value: 'never', label: 'Never Send', desc: 'Never send texts on your behalf' },
+];
+
 const TEMPERAMENT_OPTIONS: { value: Temperament; label: string; icon: string }[] = [
   { value: 'professional_polite', label: 'Professional', icon: 'briefcase-outline' },
   { value: 'casual_friendly', label: 'Casual', icon: 'emoticon-happy-outline' },
@@ -104,6 +112,7 @@ export function AssistantSettingsScreen({ navigation, route }: Props) {
   const [primaryLanguage, setPrimaryLanguage] = useState('en');
   const [customGreeting, setCustomGreeting] = useState('');
   const [customInstructions, setCustomInstructions] = useState('');
+  const [textApprovalMode, setTextApprovalMode] = useState<TextApprovalMode>('always_approve');
   const [agentId, setAgentId] = useState<string | null>(null);
 
   const [voices, setVoices] = useState<VoiceOption[]>([]);
@@ -133,6 +142,7 @@ export function AssistantSettingsScreen({ navigation, route }: Props) {
       setTemperament((settings.temperament_preset as Temperament) ?? 'professional_polite');
       setSwearingRule((settings.swearing_rule as SwearingRule) ?? 'no_swearing');
       setPrimaryLanguage(settings.language_primary ?? 'en');
+      setTextApprovalMode((settings.text_approval_mode as TextApprovalMode) ?? 'always_approve');
     }
   }, [settings]);
 
@@ -187,6 +197,7 @@ export function AssistantSettingsScreen({ navigation, route }: Props) {
         temperament_preset: temperament,
         swearing_rule: swearingRule,
         language_primary: primaryLanguage,
+        text_approval_mode: textApprovalMode,
       });
 
       const agentPatch: Record<string, unknown> = {};
@@ -223,6 +234,7 @@ export function AssistantSettingsScreen({ navigation, route }: Props) {
         temperament_preset: temperament,
         swearing_rule: swearingRule,
         language_primary: primaryLanguage,
+        text_approval_mode: textApprovalMode,
       });
 
       if (agentId) {
@@ -279,7 +291,7 @@ export function AssistantSettingsScreen({ navigation, route }: Props) {
       <SuccessModal visible={!!successModal} title={successModal?.title ?? ''} message={successModal?.message} onDismiss={() => setSuccessModal(null)} />
 
       {isOnboarding && (
-        <OnboardingProgress currentStep={3} totalSteps={7} label="AI Assistant" />
+        <OnboardingProgress currentStep={3} totalSteps={6} label="AI Assistant" />
       )}
 
       <Text
@@ -674,6 +686,78 @@ export function AssistantSettingsScreen({ navigation, route }: Props) {
           <Text style={{ ...typography.caption, color: colors.textDisabled }} allowFontScaling>
             {customInstructions.length} / 2000 characters
           </Text>
+        </View>
+      </Card>
+
+      {/* Text Approval */}
+      <Card variant="elevated" style={{ marginBottom: spacing.xl }}>
+        <View style={{ gap: spacing.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+            <Icon name="message-text-outline" size="md" color={colors.primary} />
+            <Text style={{ ...typography.h3, color: colors.textPrimary, flex: 1 }} allowFontScaling>
+              Text Approval
+            </Text>
+          </View>
+          <Text style={{ ...typography.bodySmall, color: colors.textSecondary }} allowFontScaling>
+            Control whether texts sent on your behalf require approval.
+          </Text>
+          {TEXT_APPROVAL_OPTIONS.map((opt) => {
+            const selected = textApprovalMode === opt.value;
+            return (
+              <TouchableOpacity
+                key={opt.value}
+                onPress={() => { hapticLight(); setTextApprovalMode(opt.value); markDirty(); }}
+                activeOpacity={0.7}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: spacing.md,
+                  paddingVertical: spacing.md,
+                  paddingHorizontal: spacing.md,
+                  borderRadius: radii.md,
+                  borderWidth: 1.5,
+                  borderColor: selected ? colors.primary : colors.border,
+                  backgroundColor: selected ? colors.primary + '14' : 'transparent',
+                }}
+                accessibilityRole="radio"
+                accessibilityState={{ checked: selected }}
+                accessibilityLabel={opt.label}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={{
+                      ...typography.body,
+                      color: colors.textPrimary,
+                      fontWeight: selected ? '600' : '400',
+                    }}
+                    allowFontScaling
+                  >
+                    {opt.label}
+                  </Text>
+                  <Text style={{ ...typography.caption, color: colors.textSecondary }} allowFontScaling>
+                    {opt.desc}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    width: 22,
+                    height: 22,
+                    borderRadius: 11,
+                    borderWidth: 2,
+                    borderColor: selected ? colors.primary : colors.border,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {selected && (
+                    <View
+                      style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: colors.primary }}
+                    />
+                  )}
+                </View>
+              </TouchableOpacity>
+            );
+          })}
         </View>
       </Card>
 
