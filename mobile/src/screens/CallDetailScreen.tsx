@@ -1180,7 +1180,7 @@ export function CallDetailScreen() {
                   Transcript unavailable
                 </Text>
               </View>
-              <TouchableOpacity onPress={() => retryTranscript(callId)}>
+              <TouchableOpacity onPress={handleRefreshTranscript}>
                 <Text style={{ ...typography.bodySmall, color: colors.primary }} allowFontScaling>
                   Retry
                 </Text>
